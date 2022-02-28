@@ -1,2 +1,2 @@
 # machineblocks
-SCAD library for creating custom 3D-printable LEGO compatible building blocks.
+SCAD library for creating 3D printable LEGO-compatible building blocks that can contain electronics, mechanics and more.
