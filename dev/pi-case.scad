@@ -283,7 +283,9 @@ module lid(){
     }
 }
 
-//body();
+objectX = 0;
+
+body();
 translate([-objectX - drawDistance, 0, -innerWallHeight - lidHeight + blockHeight]){
-    lid();
+    //lid();
 }

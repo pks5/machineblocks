@@ -6,6 +6,6 @@ window_block(
     top=true, 
     brickHeight=2, 
     grid=[3,4], 
-    logoText="\uf0b2",
+    logoText="\uf0e7",
     logoFont="Font Awesome 5 Free Solid"
 );

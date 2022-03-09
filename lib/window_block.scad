@@ -60,6 +60,7 @@ holderLength=8,
 holderThickness=1,
 holderTipRadius=0.5,
 holderGap=3,
+withPcbHolders=true,
 platerSize=3,
 platerHeight=2,
 pcbHeight=3,
@@ -195,55 +196,57 @@ logoDepth=0.5
             }
         }
         
-        color("green")
-        translate([0, 0, floorHeight]){
-            translate([0, holderStartY + 0.5 * holderThickness, 0.5*holderHeight]){
-                holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
-            }   
-            
-            translate([0, holderStartY - pcbY - 0.5 * holderThickness, 0.5*holderHeight]){
-                rotate([0,0,180])
+        if(withPcbHolders){
+            color("green")
+            translate([0, 0, floorHeight]){
+                translate([0, holderStartY + 0.5 * holderThickness, 0.5*holderHeight]){
                     holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
-            }
-            
-            translate([0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
-                rotate([0,0,-90])
-                    holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
-            }
-            
-            translate([-0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
-                rotate([0,0, 90]){
-                    holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
+                }   
+                
+                translate([0, holderStartY - pcbY - 0.5 * holderThickness, 0.5*holderHeight]){
+                    rotate([0,0,180])
+                        holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
                 }
+                
+                translate([0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
+                    rotate([0,0,-90])
+                        holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
+                }
+                
+                translate([-0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
+                    rotate([0,0, 90]){
+                        holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
+                    }
+                }
+                
+                translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                    cube([platerSize, platerSize, platerHeight], center=true);
+                }
+                
+                translate([+0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                    cube([platerSize, platerSize, platerHeight], center=true);
+                }
+                
+                translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                    cube([platerSize, platerSize, platerHeight], center=true);
+                }
+                
+                translate([0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                    cube([platerSize, platerSize, platerHeight], center=true);
+                }
+                
+                /*
+                translate([-0.5*(finalWindowWidth)+windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
+                    color("cyan")
+                    cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
+                }
+                
+                translate([0.5*(finalWindowWidth)-windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
+                    color("cyan")
+                    cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
+                }
+                */
             }
-            
-            translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
-                cube([platerSize, platerSize, platerHeight], center=true);
-            }
-            
-            translate([+0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
-                cube([platerSize, platerSize, platerHeight], center=true);
-            }
-            
-            translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
-                cube([platerSize, platerSize, platerHeight], center=true);
-            }
-            
-            translate([0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
-                cube([platerSize, platerSize, platerHeight], center=true);
-            }
-            
-            /*
-            translate([-0.5*(finalWindowWidth)+windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
-                color("cyan")
-                cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
-            }
-            
-            translate([0.5*(finalWindowWidth)-windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
-                color("cyan")
-                cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
-            }
-            */
         }
         
     }
