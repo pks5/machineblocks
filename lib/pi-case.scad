@@ -1,7 +1,7 @@
 echo(version=version());
 
-include <../lib/block-v2.scad>;
-include <../lib/prism.scad>;
+include <./block-v2.scad>;
+include <./prism.scad>;
 
 baseSideLength=8;
 brickHeight = 3;
@@ -39,7 +39,7 @@ module foot(footX, footY, withHole){
     }
 }
 
-module body(){
+module pi_case_body(){
     //Body
     translate([0, 0, 0.5*blockHeight]){
         union(){
@@ -198,5 +198,3 @@ module body(){
         }
     }
 }
-
-body();

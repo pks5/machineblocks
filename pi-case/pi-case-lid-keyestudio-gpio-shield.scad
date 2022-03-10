@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <./pi-case-lid.scad>;
+include <../lib/pi-case-lid.scad>;
 
 baseSideLength=8;
 brickHeight = 3;
