@@ -1,3 +1,15 @@
+/**
+* Machine Blocks
+* https://machinemania.net/blocks 
+*
+* Module for simple prisms
+* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+*
+* Published under license:
+* Creative Commons Attribution-NonCommercial 4.0 International
+* https://creativecommons.org/licenses/by-nc/4.0/legalcode
+*
+*/
 module prism(l, w, h){
     translate([-0.5*l, -0.5*w, -0.5*h])
        polyhedron(

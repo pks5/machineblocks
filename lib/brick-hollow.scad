@@ -1,3 +1,15 @@
+/**
+* Machine Blocks
+* https://machinemania.net/blocks 
+*
+* Brick Hollow
+* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+*
+* Published under license:
+* Creative Commons Attribution-NonCommercial 4.0 International
+* https://creativecommons.org/licenses/by-nc/4.0/legalcode
+*
+*/
 echo(version=version());
 
 module brickHollow(height=9.3, fade=2.5, minSize=[4.6,4.6], maxSize=[5.2, 5.2], center = false){
