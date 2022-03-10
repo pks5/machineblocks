@@ -71,6 +71,7 @@ module block(
         logoText="\uf0eb",
         logoSize=7,
         logoDepth=0.5,
+        logoSide=1,
         center = false){
             
     knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
@@ -324,10 +325,19 @@ module block(
             
             if(withLogo){
                 color("red")
-                translate([0, -0.5 * objectSizeY + logoDepth, 0])
-                rotate([90,0,0])
-                linear_extrude(2*logoDepth) {
-                    text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                if(logoSide>2){
+                    translate([(logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - logoDepth, 0, 0])
+                    rotate([90,0,90])
+                        linear_extrude(2*logoDepth) {
+                            text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                        }
+                }
+                else{
+                    translate([0, (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + logoDepth, 0])
+                        rotate([90,0,0])
+                            linear_extrude(2*logoDepth) {
+                                text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                            }
                 }
             }
         };

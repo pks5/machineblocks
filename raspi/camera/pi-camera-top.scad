@@ -28,6 +28,7 @@ difference(){
         alwaysOnFloor=true,
         grid=[2,4],
         withLogo=true,
+        logoSide=4,
         logoText="\uf030",
         logoFont="Font Awesome 5 Free Solid"
     );

@@ -124,6 +124,7 @@ logoDepth=0.5
                 logoFont = logoFont,
                 logoText = logoText,
                 logoSize = logoSize,
+                logoSide=logoSide,
                 logoDepth = logoDepth
             );
             

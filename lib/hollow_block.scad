@@ -54,6 +54,7 @@ withLogo=false,
 logoFont="Font Awesome 5 Free Regular",
 logoText="\uf0eb",
 logoSize=7,
+logoSide=1,
 logoDepth=0.5
 ){
     
@@ -146,6 +147,7 @@ logoDepth=0.5
                             logoFont=logoFont,
                             logoText=logoText,
                             logoSize=logoSize,
+                            logoSide=logoSide,
                             logoDepth=logoDepth
                         );
                     
