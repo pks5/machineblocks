@@ -66,6 +66,11 @@ module block(
         knobGaps = [],
         roundingRadius = 0.1,
         roundingResolution = 15,
+        withLogo=false,
+        logoFont="Font Awesome 5 Free Regular",
+        logoText="\uf0eb",
+        logoSize=7,
+        logoDepth=0.5,
         center = false){
             
     knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
@@ -317,8 +322,18 @@ module block(
                 }
             }
             
+            if(withLogo){
+                color("red")
+                translate([0, -0.5 * objectSizeY + logoDepth, 0])
+                rotate([90,0,0])
+                linear_extrude(2*logoDepth) {
+                    text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                }
+            }
         };
         //End difference
+        
+        
         
         //ZHoles with holders
         if(withBaseHoles && !withZHoles){

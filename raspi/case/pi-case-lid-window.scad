@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <../lib/pi-case-lid.scad>;
+include <../../lib/pi-case-lid.scad>;
 
 difference(){
     pi_case_lid(knobGaps = [[0,3,6,10]]);

@@ -17,7 +17,8 @@ include <../../lib/window_block.scad>;
 window_block(
     top=true, 
     brickHeight=2, 
-    grid=[3,4], 
+    grid=[3,4],
+    withLogo=true, 
     logoText="\uf0e7",
     logoFont="Font Awesome 5 Free Solid"
 );

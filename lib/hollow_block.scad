@@ -50,7 +50,7 @@ withKnobsFilled=true,
 knobGaps=[],
 blockMinWallThickness=1.4,
 blockMaxWallThickness=1.6,
-withLogo=true,
+withLogo=false,
 logoFont="Font Awesome 5 Free Regular",
 logoText="\uf0eb",
 logoSize=7,
@@ -130,18 +130,29 @@ logoDepth=0.5
             union(){
                 difference(){
                     translate([0, 0, 0.5*totalTopHeight])
-                        block(baseHeight = resultingBlockHeight, minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, withBaseHoles=false, grid=grid, withKnobs=withKnobs,withKnobsFilled=withKnobsFilled, knobGaps=knobGaps, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true);
+                        block(
+                            baseHeight = resultingBlockHeight, 
+                            minWallThickness=blockMinWallThickness, 
+                            maxWallThickness=blockMaxWallThickness, 
+                            withBaseHoles=false, 
+                            grid=grid, 
+                            withKnobs=withKnobs,
+                            withKnobsFilled=withKnobsFilled, 
+                            knobGaps=knobGaps, 
+                            adjustSizeX=adjustSizeX, 
+                            adjustSizeY=adjustSizeY, 
+                            center=true,
+                            withLogo=withLogo,
+                            logoFont=logoFont,
+                            logoText=logoText,
+                            logoSize=logoSize,
+                            logoDepth=logoDepth
+                        );
+                    
                     cube([innerX, innerY, 2*innerZ], center=true);
                     cube([topX, topY, 2*(floorHeight + floorHeightTolerance)], center=true);
                     
-                    if(withLogo){
-                        color("red")
-                        translate([0, -0.5 * finalObjectSizeY + logoDepth, 0.5*resultingBlockHeight])
-                        rotate([90,0,0])
-                        linear_extrude(2*logoDepth) {
-                            text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
-                        }
-                    }
+                    
                 }
                 
                 if(withBarrier){

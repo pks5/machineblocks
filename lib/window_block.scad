@@ -89,7 +89,7 @@ plugBorderDepth=0.5,
 stablerSize=2,
 stablerThickness=1,
 
-withLogo=true,
+withLogo=false,
 logoFont="Font Awesome 5 Free Regular",
 logoText="\uf0eb",
 logoSize=7,
