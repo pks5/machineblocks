@@ -1,6 +1,7 @@
 echo(version=version());
 
 include <../lib/block-v2.scad>;
+include <../lib/prism.scad>;
 
 baseSideLength=8;
 brickHeight = 3;
@@ -50,135 +51,6 @@ plugBorderDepth=0.5;
 
 showHelpers=false;
 
-module pins(pins=[0,-1,0,0]){
-    union(){
-        translate([0.5*(plugWidth+plugTolerance),-0.5*(plugWidth+plugTolerance),0])
-        for (a = [ 0 : 1 : len(pins) - 1 ]){
-            translate([a*plugWidth,pins[a]*0.5*plugWidth,0]){
-                color("green")
-                cube([plugWidth+plugTolerance, plugWidth+plugTolerance,1.1*(lidHeight+innerWallHeight)], center=true);
-                
-                color("orange")
-                translate([0,0,0.5*(lidHeight+innerWallHeight)])
-                    cube([plugWidth+plugTolerance+plugBorderSize, plugWidth+plugTolerance+plugBorderSize,2*plugBorderDepth], center=true);
-            }
-        }    
-    }
-}
-
-module helpers(){
-    color("purple")
-        translate([7.25,-1.5, 0])
-            cube([14.5, 3, 2.2], center=true);
-    
-    
-    color("purple")
-        translate([1,-10.5, 0])
-            cube([2, 21, 2.2], center=true);
-    
-    color("blue")
-    translate([1,-26.5, 0])
-            cube([2, 53, 2.1], center=true);
-    
-    color("yellow")
-    translate([7.25,-26.5, 0])
-            cube([14.5, 53, 2], center=true);
-    
-    color("green")
-    translate([13.25,-26.5, 0])
-            cube([26.5, 53, 1.8], center=true);
-    
-    color("magenta")
-    translate([11,-17.25, 0])
-            cube([22, 34.5, 1.9], center=true);
-    
-    color("purple")
-        translate([3.5,-29, 0])
-            cube([7, 58, 1.6], center=true);
-}
-
-module pin_holes(){
-    
-    gpioX = 39.5;
-    gpioY = 0;
-    
-    gpioHeight = 5.5;
-    gpioWidth = 57.5;
-    
-    analogX = 12.8;
-    analogY = -1.8;
-    analogGap = 0.8;
-    
-    digitalGap = 0.55;
-    digital1X = 0.8;
-    digital1Y = -(1.5*plugWidth+plugTolerance+0.55) - 14.6;
-    echo(digital1Y); //-19.15
-    
-    digital2X = 13;
-    digital2Y = -14.6;
-    
-    digital3X = 25.3;
-    digital3Y = digital2Y;
-    
-    
-    serialX = digital3X;
-    serialY = -56.1;
-    
-    mosiX = 5.4;
-    mosiY = serialY;
-    
-    //GPIO
-    translate([gpioX, gpioY, 0])
-        translate([0.5*gpioHeight,-0.5*gpioWidth, 0])
-            cube([gpioHeight, gpioWidth, 1.1*(lidHeight+innerWallHeight)], center=true);
-    
-    //Analog
-    translate([analogX, analogY, 0]){
-        
-            for (a = [ 0 : 1 : 4 ]){
-                translate([a * (1.5*plugWidth+2*plugTolerance + analogGap), 0, 0])
-                    translate([0,-4*(plugWidth+plugTolerance),0])
-                        rotate([0,0,90])
-                            pins([0,0,-1,0]);
-            
-            }
-    }
-    
-    //Digital 1
-    translate([digital1X, digital1Y,0]){
-        for (a = [ 0 : 1 : 7 ]){
-            translate([0, -a * (1.5*plugWidth+plugTolerance+digitalGap), 0])
-                pins();
-        }
-    }
-    
-    //Digital 1
-    translate([digital2X, digital2Y, 0]){
-        for (a = [ 0 : 1 : 8 ]){
-            translate([0, -a * (1.5*plugWidth+plugTolerance+digitalGap), 0])
-                pins();
-        }
-    }
-    
-    //Digital 1
-    translate([digital3X, digital3Y, 0]){
-        for (a = [ 0 : 1 : 8 ]){
-            translate([0, -a * (1.5*plugWidth+plugTolerance+digitalGap), 0])
-                pins();
-        }
-    }
-    
-    //Serial
-    translate([serialX, serialY, 0]){
-        pins([0,-1,-1,0]);
-    }
-    
-    //Mosi
-    translate([mosiX, mosiY, 0]){
-        pins([0,-1,-1,0,-1,-1,0]);
-    }
-}
-
 module foot(footX, footY, withHole){
     footSize = 6;
     footHoleSize = 2.2;
@@ -221,16 +93,18 @@ module body(){
                 //Cut hole for contents
                 difference(){
                     translate([0, 0.5 * (wallY1Thickness - wallThickness), 0.5*blockHeight]){
-                        cube([finalObjectSizeX - 2*wallThickness, finalObjectSizeY - (wallThickness + wallY1Thickness), 2*(blockHeight - floorHeight) + cutSpace], center=true);
+                        cube([finalObjectSizeX - 2*wallThickness, finalObjectSizeY - (wallThickness + wallY1Thickness), 2*(blockHeight - floorHeight)], center=true);
                     }
                     //Memory Card Additional Wall
-                    translate([0, 44.75, -0.5*blockHeight+10.6]){
-                        cube([18, 2.5 , 15], center=true);
+                    //TODO create variables
+                    translate([0, 44, -0.5*blockHeight+10.6]){
+                        cube([18, 4 , 15], center=true);
                     }
                 }
                 
                 
                 //LAN
+                //TODO create variables
                 translate([-19.12, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 14.05])
@@ -241,6 +115,7 @@ module body(){
                 }
                 
                 //USB1
+                //TODO create variables
                 translate([-0.35, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 15.1])
@@ -251,6 +126,7 @@ module body(){
                 }
                 
                 //USB2
+                //TODO create variables
                 translate([17.6, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 15.1])
@@ -261,13 +137,15 @@ module body(){
                 }
                 
                 //Audio
-                translate([-31, -13.07, -0.5*blockHeight + 9.93]){
+                //TODO create variables
+                translate([-31, -13.07, -0.5*blockHeight + 9.4]){
                     rotate([0, -90, 180])
                         cylinder(h=2.7, r1=0.5*7.1, r2=0.5*7.1, center=true, $fn=20);
                 }
                 
                 //USB Power
-                translate([-31, 32.6, -0.5*blockHeight + 8.32]){
+                //TODO create variables
+                translate([-31, 32.6, -0.5*blockHeight + 7.8]){
                     union(){
                         rotate([0, -90, 180])
                             cylinder(h=2.7, r1=0.5*4.1, r2=0.5*4.1, center=true, $fn=20);
@@ -280,11 +158,12 @@ module body(){
                 }
                 
                 //HDMI
-                translate([-31, 8.56, -0.5*blockHeight + 11.05]){
+                //TODO create variables
+                translate([-31, 8.56, -0.5*blockHeight + 10.75]){
                     union(){
                         color("green")
-                        roundedcube([2.7, 16.6, 5.97], true, 1.3, "x");
-                        translate([0, 0, -2.7])
+                        roundedcube([2.7, 16.6, 5.5], true, 1.3, "x");
+                        translate([0, 0, -2.2])
                             color("blue")
                         
                             roundedcube([2.7, 13.48, 3.5], true, 1.2, "x");
@@ -292,20 +171,22 @@ module body(){
                 }
                 
                 //MemoryCard
+                //TODO create variables
                 translate([0, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, 49.5, 10.1])
-                            roundedcube([16, 9, 14], true, 2, "y");
-                        translate([0, 44.25, 15.6])
+                            roundedcube([16, 13.5, 14], true, 2, "y");
+                        translate([0, 42, 15.6])
                             cube([16, 1.5 + 0.05, 3], center=true);
-                        translate([0, 44.25, 4.6])
-                            cube([16, 1.5 + 0.05, 3], center=true);
+                        translate([-1.5, 42, 4.6])
+                            cube([11.6, 1.5 + 0.05, 3], center=true);
                     }
                 }
                 
             }
             
             //Feet
+            //TODO create variables
             color("red")
             translate([0, 0, -0.5*blockHeight+floorHeight]){
                 foot(-25.93, 37.03, true);
@@ -316,9 +197,25 @@ module body(){
                 foot(16.83, 0, false);
             }
             
+            //Holders for PI Hats
+            color("green")
+            translate([-29, -20.78, -0.5*blockHeight+15.7]){
+                rotate([0,180,90])
+                    prism(6.5, 2, 2);
+                translate([0,0,1.5])
+                cube([2, 6.5, 1], center=true);
+            }
             
+            color("green")
+            translate([-29, 38.12, -0.5*blockHeight+15.7]){
+                rotate([0,180,90])
+                    prism(6.5, 2, 2);
+                translate([0,0,1.5])
+                cube([2, 6.5, 1], center=true);
+            }
             
             //Memory Card Gap Filler
+            //TODO create variables
             color("red")
             translate([0, 41, -0.5*blockHeight+3.5]){
                 cube([18, 2 , 0.8], center=true);
@@ -329,75 +226,4 @@ module body(){
     }
 }
 
-
-module lid(){
-    //Lid
-    
-    translate([0.5 * (finalObjectSizeX + drawDistance), 0, 0*(0.5 * totalLidHeight + innerWallHeight)]){
-        difference(){
-            color("red")
-            union(){
-                difference(){
-                    //Lid block with knobs
-                    block(baseHeight = lidHeight, withBaseHoles=false, grid=grid, withKnobs=true, withKnobsFilled=withKnobsFilled, knobSize=knobSize, knobGaps=resultingKnobGaps, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true);
-                    
-                    //Cut border to fit as lid
-                    difference(){
-                        cube([finalObjectSizeX+cutSpace, finalObjectSizeY+cutSpace, 2*totalLidHeight], center=true);
-                        cube([finalObjectSizeX-doubleThinWallThickness, finalObjectSizeY-doubleThinWallThickness, 2*totalLidHeight+cutSpace], center=true);
-                    };
-                };
-                
-                translate([0, 0.5 * (wallY1Thickness - wallThickness), -0.5 * (totalLidHeight + innerWallHeight)]){
-                    cube([finalObjectSizeX-2*wallThickness, finalObjectSizeY - (wallThickness + wallY1Thickness), innerWallHeight], center=true);
-                    roundedcube_simple(size = [finalObjectSizeX-2*wallThickness + 2*innerWallHolderThickness, finalObjectSizeY - (wallThickness + wallY1Thickness) + 2*innerWallHolderThickness, innerWallHolderHeight], 
-                                        center = true, 
-                                        radius=roundingRadius, 
-                                        resolution=roundingResolution); 
-                }
-                /*
-                translate([0, (wallY1Thickness - wallThickness), -0.5 * (totalLidHeight + innerWallHeight)]){
-                    difference(){
-                        cube([finalObjectSizeX-2*wallThickness, finalObjectSizeY-2*wallThickness-1, innerWallHeight], center=true);
-                        cube([finalObjectSizeX-3*wallThickness, finalObjectSizeY-3*wallThickness-1, innerWallHeight+cutSpace], center=true);
-                    }
-                }
-                */
-            }
-            
-            if(withWindow){
-                //Hole for GPIO Shield
-                translate([-0.5*baseSideLength, baseSideLength, - 0.5*knobHeight])
-                    roundedcube([6*baseSideLength, 8*baseSideLength, totalLidHeight+innerWallHeight+cutSpace], true, lidHoleRadius, "z");
-            }
-            else{
-                translate([-3.5*baseSideLength, 5*baseSideLength, -innerWallHeight])
-                    pin_holes();
-                
-                //translate([3*baseSideLength+-0.5, baseSideLength, innerWallHeight-1])
-                //    cube([1, 8*baseSideLength, 2], center=true);
-                //translate([0, -3*baseSideLength+0.5, innerWallHeight-1])
-                //            cube([6*baseSideLength, 1, 2], center=true);
-            }
-            
-            
-        }
-        
-        
-        
-        if(showHelpers){
-            translate([-3.5*baseSideLength, 5*baseSideLength, -innerWallHeight]){
-                helpers();
-            }   
-            
-            
-        }
-    }
-}
-
-objectX = 0;
-
 body();
-translate([-objectX - drawDistance, 0, -innerWallHeight - lidHeight + blockHeight]){
-    //lid();
-}
