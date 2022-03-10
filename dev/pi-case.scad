@@ -9,7 +9,6 @@ blockHeight = 28.40;
 floorHeight = 3.1;
 lidHeight = 3;
 lidHeightTolerance = 0.1;
-lidSpacing = 0.3;
 grid = [8, 12];
 halfGrid=[8, 0.5*grid[1]];
 plateHeight = 0.6;
@@ -17,39 +16,13 @@ wallThickness = 2;
 wallY1Thickness = 3;
 
 wallInset = 1;
-innerWallHeight=2;
-knobSize=5;
-knobHeight = 1.9;
-knobGaps=[[2,4,5,10],[1,3,4,8], [0,4,0,8]];
-lidHoleRadius=2;
-drawDistance = 20;
-cutSpace=1;
+doubleThinWallThickness = 2*(wallThickness - wallInset);
 
 adjustSizeX = 0;
 adjustSizeY = 0;
 
 finalObjectSizeX = (halfGrid[0] * baseSideLength) + adjustSizeX;
 finalObjectSizeY = 2* ((halfGrid[1] * baseSideLength) + adjustSizeY);
-
-doubleThinWallThickness = 2*(wallThickness - wallInset);
-totalLidHeight = lidHeight + knobHeight;
-
-innerWallHolderHeight = 0.6;
-innerWallHolderThickness = 0.1;
-
-roundingRadius = 0.25;
-roundingResolution = 15;
-withWindow=false;
-withKnobsFilled=true;
-
-resultingKnobGaps = knobGaps;//withWindow ? knobGaps : [];
-
-plugWidth=2.6;
-plugTolerance=0.1;
-plugBorderSize=0.5;
-plugBorderDepth=0.5;
-
-showHelpers=false;
 
 module foot(footX, footY, withHole){
     footSize = 6;
@@ -60,7 +33,7 @@ module foot(footX, footY, withHole){
         difference(){
             cylinder(h=footSizeZ, r1=0.5*footSize, r2=0.5*footSize, center=true, $fn=20);
             if(withHole){
-                cylinder(h=footSizeZ + cutSpace, r1=0.5*footHoleSize, r2=0.5*footHoleSize, center=true, $fn=20);
+                cylinder(h=footSizeZ + 0.1, r1=0.5*footHoleSize, r2=0.5*footHoleSize, center=true, $fn=20);
             }
         }
     }
@@ -68,7 +41,7 @@ module foot(footX, footY, withHole){
 
 module body(){
     //Body
-    translate([-0.5 * (finalObjectSizeX + drawDistance), 0, 0.5*blockHeight]){
+    translate([0, 0, 0.5*blockHeight]){
         union(){
             difference(){
                 union(){
