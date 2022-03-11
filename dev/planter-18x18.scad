@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/block.scad>;
+include <../lib/block-v2.scad>;
 
 baseSideSize = 7.95;
 baseHeight = 3.15;
@@ -13,7 +13,9 @@ union(){
 block(baseLayers=3, grid=grid, withKnobs=false, plateHeight=2*baseHeight);
 
 translate([0,0,3*baseHeight])
-block(baseLayers=heightLayers, grid=[grid[0],1], withBaseHoles=false); 
+block(baseLayers=heightLayers, grid=[grid[0],1], logoSide=3,logoSize=12,withBaseHoles=false,withLogo=true,
+    logoText="\uf0eb",
+    logoFont="Font Awesome 5 Free Solid"); 
 
 translate([0, (grid[0]-1)*baseSideSize, 3*baseHeight])
 block(baseLayers=heightLayers, grid=[grid[0],1], withBaseHoles=false);

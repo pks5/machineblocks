@@ -93,6 +93,7 @@ withLogo=false,
 logoFont="Font Awesome 5 Free Regular",
 logoText="\uf0eb",
 logoSize=7,
+logoSide=1,
 logoDepth=0.5
 ){
 
