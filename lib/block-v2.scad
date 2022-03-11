@@ -326,14 +326,14 @@ module block(
             if(withLogo){
                 color("red")
                 if(logoSide>2){
-                    translate([(logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - logoDepth, 0, 0])
+                    translate([centerX + (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - logoDepth, centerY, centerZ])
                     rotate([90,0,90])
                         linear_extrude(2*logoDepth) {
                             text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
                         }
                 }
                 else{
-                    translate([0, (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + logoDepth, 0])
+                    translate([centerX, centerY + (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + logoDepth, centerZ])
                         rotate([90,0,0])
                             linear_extrude(2*logoDepth) {
                                 text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
