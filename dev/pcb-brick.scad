@@ -1,9 +1,9 @@
 echo(version=version());
 
-include <../lib/window_block.scad>;
+include <../lib/pcb_block.scad>;
 
 translate([0, 0, 38])
-window_block(
+pcb_block(
     top=true, 
     brickHeight=2, 
     grid=[4,4], 

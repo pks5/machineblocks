@@ -45,7 +45,7 @@ module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, hol
     
 }
 
-module window_block(
+module pcb_block(
 top=false,
 grid=[4,4],
 
@@ -78,6 +78,7 @@ platerHeight=2,
 pcbHeight=3,
 pcbY=20,
 pcbX=16.5,
+pcbTolerance=0.5,
 pinHeight=5.3,
 pins=[0,-1,-1,-1],
 withPinHoleSupport=true,
@@ -111,6 +112,9 @@ logoDepth=0.5
 
     finalWindowWidth=windowWidth-2*wallThicknessTolerance;
     finalWindowHeight=windowHeight-wallThicknessTolerance;
+    
+    finalPcbX = pcbX + pcbTolerance;
+    finalPcbY = pcbY + pcbTolerance;
 
     if(top){
         difference(){
@@ -217,35 +221,35 @@ logoDepth=0.5
                     holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
                 }   
                 
-                translate([0, holderStartY - pcbY - 0.5 * holderThickness, 0.5*holderHeight]){
+                translate([0, holderStartY - finalPcbY - 0.5 * holderThickness, 0.5*holderHeight]){
                     rotate([0,0,180])
                         holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
                 }
                 
-                translate([0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
+                translate([0.5*(finalPcbX + holderThickness), holderStartY - 0.5*finalPcbY, 0.5*holderHeight]){
                     rotate([0,0,-90])
                         holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
                 }
                 
-                translate([-0.5*(pcbX + holderThickness), holderStartY - 0.5*pcbY, 0.5*holderHeight]){
+                translate([-0.5*(finalPcbX + holderThickness), holderStartY - 0.5*finalPcbY, 0.5*holderHeight]){
                     rotate([0,0, 90]){
                         holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight);
                     }
                 }
                 
-                translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                translate([-0.5*finalPcbX + (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
                     cube([platerSize, platerSize, platerHeight], center=true);
                 }
                 
-                translate([+0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                translate([+0.5*finalPcbX - (0.5*platerSize-holderThickness), holderStartY - (0.5*platerSize-holderThickness), 0.5*platerHeight]){
                     cube([platerSize, platerSize, platerHeight], center=true);
                 }
                 
-                translate([-0.5*pcbX + (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                translate([-0.5*finalPcbX + (0.5*platerSize-holderThickness), holderStartY  - finalPcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
                     cube([platerSize, platerSize, platerHeight], center=true);
                 }
                 
-                translate([0.5*pcbX - (0.5*platerSize-holderThickness), holderStartY  - pcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
+                translate([0.5*finalPcbX - (0.5*platerSize-holderThickness), holderStartY  - finalPcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
                     cube([platerSize, platerSize, platerHeight], center=true);
                 }
                 

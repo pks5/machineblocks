@@ -12,6 +12,6 @@
 */
 echo(version=version());
 
-include <../../lib/pi-case.scad>;
+include <../../lib/pi_case_body.scad>;
 
 pi_case_body();

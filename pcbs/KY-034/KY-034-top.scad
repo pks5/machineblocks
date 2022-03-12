@@ -12,6 +12,6 @@
 */
 echo(version=version());
 
-include <../../lib/window_block.scad>;
+include <../../lib/pcb_block.scad>;
 
-window_block(top=true, grid=[3,4], brickHeight=2, withLogo=true);
+pcb_block(top=true, grid=[3,4], brickHeight=2, withLogo=true);

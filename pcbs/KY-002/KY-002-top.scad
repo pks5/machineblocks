@@ -12,9 +12,9 @@
 */
 echo(version=version());
 
-include <../../lib/window_block.scad>;
+include <../../lib/pcb_block.scad>;
 
-window_block(
+pcb_block(
     top=true, 
     brickHeight=2, 
     grid=[3,4],
