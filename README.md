@@ -1,5 +1,5 @@
-# machineblocks
-SCAD library for creating 3D printable LEGO-compatible building blocks that can contain electronics, mechanics and more. [OpenSCAD](https://openscad.org/) must be installed to open SCAD files and export them to STL.
+# Machine Blocks
+Toolkit for creating 3D-printable and LEGO-compatible building blocks that can contain electronics, mechanics and anything else. [OpenSCAD](https://openscad.org/) must be installed.
 
 ## Website
 https://machinemania.net
