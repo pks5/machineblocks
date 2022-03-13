@@ -17,5 +17,5 @@ include <../../lib/plug.scad>;
 
 plug(
     pins=[0,0,0],
-    height = 7
+    height = 5
 );

@@ -22,7 +22,7 @@ pins=[0,0,0]
 difference(){
         
     for (a = [ 0 : 1 : len(pins) - 1 ]){
-        translate([a*plugWidth,pins[a]*0.5*plugWidth,-0.5*cableEndHeight]){
+        translate([a*plugWidth,pins[a]*0.25*plugWidth,-0.5*cableEndHeight]){
             cube([outerWidth, outerWidth, height], center=true);
             
             if(cableEndHeight > 0){
@@ -34,7 +34,7 @@ difference(){
     }
 
     for (a = [ 0 : 1 : len(pins) - 1 ]){
-        translate([a*plugWidth,pins[a]*0.5*plugWidth,0]){
+        translate([a*plugWidth,pins[a]*0.25*plugWidth,0]){
             cube([plugWidth*1.01, plugWidth*1.01, (height + cableEndHeight)*1.1], center=true);
         }
     }
