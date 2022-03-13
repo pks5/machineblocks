@@ -18,6 +18,6 @@ pcb_block(
     top=false, 
     pins=[0,0,0],
     grid=[3,4], 
-    pcbY=19.2, 
+    pcbY=19.3, 
     pcbX=16.6 
 );

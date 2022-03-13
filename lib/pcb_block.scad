@@ -83,12 +83,13 @@ platerHeight=2,
 pcbHeight=3,
 pcbY=20,
 pcbX=16.5,
-pcbTolerance=0.5,
+pcbTolerance=0.1,
 pinHeight=5.3,
 pins=[0,-1,-1,-1],
 withPlugSupport=true,
 plugSupportGap=1.4,
 plugWidth=2.8,
+plugDepth=7.3,
 plugTolerance=0.2,
 plugBorderSize=0.5,
 plugBorderDepth=0.5,
@@ -108,16 +109,15 @@ logoDepth=0.5
     finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
 
     windowThickness = wallThickness + wallThicknessTolerance;
-    echo(windowThickness = windowThickness);
     windowThicknessBottom = outerWallThickness + wallThicknessTolerance;
-    totalWindowThickness = windowThickness + innerWallThickness + holderGap - holderThickness;
-
+    
+    stablerStartY=0.5 * finalObjectSizeY - windowThickness - innerWallThickness;
+    
     holderPrismHeight = 2*holderTipRadius;
     holderPrismWidth = 0.5 * (holderPrismHeight) + holderThickness;
     holderHeight=pcbHeight + 2*holderPrismHeight;
-    holderStartY=0.5 * finalObjectSizeY - windowThickness - innerWallThickness - holderGap;
-    stablerStartY=0.5 * finalObjectSizeY - windowThickness - innerWallThickness;
-
+    holderStartY=0.5 * finalObjectSizeY - plugDepth - holderThickness;
+    
     finalWindowWidth=windowWidth-2*wallThicknessTolerance;
     finalWindowHeight=windowHeight-wallThicknessTolerance;
     
@@ -154,9 +154,9 @@ logoDepth=0.5
         difference(){
             //color("red")
             translate([0, 0.5 * (finalObjectSizeY - windowThickness), 0.5*(finalWindowHeight + floorHeight)]){
-                    translate([0,-0.5 * (totalWindowThickness - windowThickness),0])
+                    translate([0,-0.5 * (plugDepth - windowThickness),0])
                         color("blue")
-                        cube([finalWindowWidth, totalWindowThickness, finalWindowHeight - floorHeight], center=true);
+                        cube([finalWindowWidth, plugDepth, finalWindowHeight - floorHeight], center=true);
                 
                     translate([0, 0.5 * (windowThickness - windowThicknessBottom), -0.5*finalWindowHeight])
                         color("green")
@@ -172,8 +172,8 @@ logoDepth=0.5
                 translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                     for (a = [ 0 : 1 : len(pins) - 1 ]){
                         translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
-                            translate([0,-0.5 * (totalWindowThickness - windowThickness),0])
-                                cube([plugWidth+plugTolerance, 1.1*(totalWindowThickness), plugWidth+plugTolerance], center=true);
+                            translate([0,-0.5 * (plugDepth - windowThickness),0])
+                                cube([plugWidth+plugTolerance, 1.1*(plugDepth), plugWidth+plugTolerance], center=true);
                             
                             color("orange")
                             translate([0,0.5*windowThickness + innerWallThickness,0])
@@ -185,7 +185,7 @@ logoDepth=0.5
         }
         
         if(withPlugSupport){
-            supportRowCount = floor(totalWindowThickness / (0.3 + plugSupportGap)) + 1;
+            supportRowCount = floor(plugDepth / (0.3 + plugSupportGap)) + 1;
             translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                 for (a = [ 0 : 1 : len(pins) - 1 ]){
                     translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
@@ -254,18 +254,6 @@ logoDepth=0.5
                 translate([0.5*finalPcbX - (0.5*platerSize-holderThickness), holderStartY  - finalPcbY + (0.5*platerSize-holderThickness), 0.5*platerHeight]){
                     cube([platerSize, platerSize, platerHeight], center=true);
                 }
-                
-                /*
-                translate([-0.5*(finalWindowWidth)+windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
-                    color("cyan")
-                    cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
-                }
-                
-                translate([0.5*(finalWindowWidth)-windowOverlap, stablerStartY - (0.5*stablerThickness), 0.5*(finalWindowHeight - floorHeight + windowOverlap)]){
-                    color("cyan")
-                    cube([stablerSize, stablerThickness, finalWindowHeight - floorHeight + windowOverlap], center=true);
-                }
-                */
             }
         }
         
