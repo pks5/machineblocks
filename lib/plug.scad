@@ -14,7 +14,7 @@ module plug(
 outerWidth = 4.4,
 cableEndWidth = 3.8,
 plugWidth = 2.6,
-height = 7,
+height = 3,
 cableEndHeight=0,
 pins=[0,0,0]
 ){

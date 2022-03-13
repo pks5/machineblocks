@@ -45,6 +45,11 @@ module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, hol
     
 }
 
+module plug_support(x, y, plugWidth, plugTolerance){
+    translate([x,y,0])
+        cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
+}
+
 module pcb_block(
 top=false,
 grid=[4,4],
@@ -71,7 +76,7 @@ windowOverlap=1,
 holderLength=8,
 holderThickness=1,
 holderTipRadius=0.5,
-holderGap=3,
+holderGap=6,
 withPcbHolders=true,
 platerSize=3,
 platerHeight=2,
@@ -81,7 +86,8 @@ pcbX=16.5,
 pcbTolerance=0.5,
 pinHeight=5.3,
 pins=[0,-1,-1,-1],
-withPinHoleSupport=true,
+withPlugSupport=true,
+plugSupportGap=1.4,
 plugWidth=2.8,
 plugTolerance=0.2,
 plugBorderSize=0.5,
@@ -102,7 +108,9 @@ logoDepth=0.5
     finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
 
     windowThickness = wallThickness + wallThicknessTolerance;
+    echo(windowThickness = windowThickness);
     windowThicknessBottom = outerWallThickness + wallThicknessTolerance;
+    totalWindowThickness = windowThickness + innerWallThickness + holderGap - holderThickness;
 
     holderPrismHeight = 2*holderTipRadius;
     holderPrismWidth = 0.5 * (holderPrismHeight) + holderThickness;
@@ -144,15 +152,18 @@ logoDepth=0.5
         
         hollowBlock(brickHeight=brickHeight, grid=grid, alwaysOnFloor=true, top=false);
         difference(){
-            color("red")
+            //color("red")
             translate([0, 0.5 * (finalObjectSizeY - windowThickness), 0.5*(finalWindowHeight + floorHeight)]){
-                    translate([0,-1,0])
-                        cube([finalWindowWidth, windowThickness+2, finalWindowHeight - floorHeight], center=true);
+                    translate([0,-0.5 * (totalWindowThickness - windowThickness),0])
+                        color("blue")
+                        cube([finalWindowWidth, totalWindowThickness, finalWindowHeight - floorHeight], center=true);
                 
                     translate([0, 0.5 * (windowThickness - windowThicknessBottom), -0.5*finalWindowHeight])
+                        color("green")
                         cube([finalWindowWidth, windowThicknessBottom, floorHeight], center=true);
                 
                     translate([0, - 0.5*(windowThickness + innerWallThickness), 0.5 * (windowOverlap + innerWallHeight)])
+                        color("magenta")
                         cube([finalWindowWidth + 2*windowOverlap, innerWallThickness, finalWindowHeight - floorHeight - innerWallHeight + windowOverlap], center=true);
             }
             
@@ -161,8 +172,8 @@ logoDepth=0.5
                 translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                     for (a = [ 0 : 1 : len(pins) - 1 ]){
                         translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
-                            translate([0,-1,0])
-                                cube([plugWidth+plugTolerance, 1.1*(windowThickness + innerWallThickness + 2), plugWidth+plugTolerance], center=true);
+                            translate([0,-0.5 * (totalWindowThickness - windowThickness),0])
+                                cube([plugWidth+plugTolerance, 1.1*(totalWindowThickness), plugWidth+plugTolerance], center=true);
                             
                             color("orange")
                             translate([0,0.5*windowThickness + innerWallThickness,0])
@@ -173,39 +184,30 @@ logoDepth=0.5
             }
         }
         
-        if(withPinHoleSupport){
+        if(withPlugSupport){
+            supportRowCount = floor(totalWindowThickness / (0.3 + plugSupportGap)) + 1;
             translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                 for (a = [ 0 : 1 : len(pins) - 1 ]){
                     translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
                          if((a > 0) && (pins[a] < pins[a-1])){
                             rotate([0,-20,0]){
-                                translate([-0.2,-2.1,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                                translate([-0.2,-0.75,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                                translate([-0.2,0.5,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                                
+                                for (s = [ 0 : 1 : supportRowCount-1 ]){
+                                    plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                                }
                             }
                          }
                          
                          if((a == 0) || (pins[a] == pins[a-1])){
-                             translate([-0.2,-2.1,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                             translate([-0.2,-0.75,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                             translate([-0.2,0.5,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
+                             for (s = [ 0 : 1 : supportRowCount-1 ]){
+                                plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                             }
                          }
                          
                          if((a < len(pins)-1) && (pins[a+1] > pins[a])){
                             rotate([0,20,0]){
-                                translate([0.2,-2.1,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4,center=true, $fn=20);
-                                translate([0.2,-0.75,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
-                                translate([0.2,0.5,0])
-                                    cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4,center=true, $fn=20);
+                                for (s = [ 0 : 1 : supportRowCount-1 ]){
+                                    plug_support(0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                                }
                                 
                             }
                         } 

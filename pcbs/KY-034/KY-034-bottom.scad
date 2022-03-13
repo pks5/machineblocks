@@ -14,9 +14,10 @@ echo(version=version());
 
 include <../../lib/pcb_block.scad>;
 
-pcb_block(top=false, 
-        grid=[3,4], 
-        pcbY=19.2, 
-        pcbX=16.6, 
-        pins=[0,0,0]
+pcb_block(
+    top=false, 
+    pins=[0,0,0],
+    grid=[3,4], 
+    pcbY=19.2, 
+    pcbX=16.6 
 );

@@ -13,13 +13,9 @@
 
 echo(version=version());
 
-include <../lib/plug.scad>;
+include <../../lib/plug.scad>;
 
 plug(
-    outerWidth = 4.4,
-    cableEndWidth = 3.8,
-    plugWidth = 2.6,
-    height = 7,
-    cableEndHeight=0,
-    pins=[0,0,0]
+    pins=[0,0,0],
+    height = 7
 );
