@@ -171,7 +171,7 @@ logoDepth=0.5
             union(){
                 translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                     for (a = [ 0 : 1 : len(pins) - 1 ]){
-                        translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
+                        translate([a*plugWidth,0,pins[a]*0.25*plugWidth]){
                             translate([0,-0.5 * (plugDepth - windowThickness),0])
                                 cube([plugWidth+plugTolerance, 1.1*(plugDepth), plugWidth+plugTolerance], center=true);
                             
@@ -188,7 +188,7 @@ logoDepth=0.5
             supportRowCount = floor(plugDepth / (0.3 + plugSupportGap)) + 1;
             translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                 for (a = [ 0 : 1 : len(pins) - 1 ]){
-                    translate([a*plugWidth,0,pins[a]*0.5*plugWidth]){
+                    translate([a*plugWidth,0,pins[a]*0.25*plugWidth]){
                          if((a > 0) && (pins[a] < pins[a-1])){
                             rotate([0,-20,0]){
                                 for (s = [ 0 : 1 : supportRowCount-1 ]){
@@ -197,9 +197,9 @@ logoDepth=0.5
                             }
                          }
                          
-                         if((a == 0) || (pins[a] == pins[a-1])){
+                         if( ( (a==0) || (pins[a-1] <= pins[a])) && ((a+1 == len(pins)) || (pins[a+1] <= pins[a])) ){
                              for (s = [ 0 : 1 : supportRowCount-1 ]){
-                                plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                               plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
                              }
                          }
                          
