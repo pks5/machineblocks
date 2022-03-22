@@ -2,13 +2,15 @@ echo(version=version());
 
 include <../lib/block-v2.scad>;
 
-text="Hello";
-textSize=5;
-textFont="DINPro-Bold";
-textDepth=0.5;
+text="WOOD IS GOOD";
+//text="\uf004";
+textSize=6;
+textFont="DINPro-Bold:style=Bold";
+//textFont="Font Awesome 6 Free Regular";
+textDepth=0.7;
 
 color("blue")
-block(baseLayers=3, grid=[4,2], withKnobsFilled=true, withText=true, textSize=textSize, text=text, textFont=textFont); 
+block(baseLayers=3, grid=[8,2], withText=true, textSize=textSize, text=text, textFont=textFont, textDepth=textDepth, center=false); 
 
 /*
 translate([-20,0,0])
