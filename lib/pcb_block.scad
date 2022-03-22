@@ -102,7 +102,9 @@ textFont="Font Awesome 5 Free Regular",
 text="\uf0eb",
 textSize=7,
 textSide=1,
-textDepth=0.5
+textDepth=0.5,
+textSpacing=1,
+textOffsetZ=-0.1
 ){
 
     finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
@@ -138,7 +140,9 @@ textDepth=0.5
                 text = text,
                 textSize = textSize,
                 textSide=textSide,
-                textDepth = textDepth
+                textDepth = textDepth,
+                textSpacing = textSpacing,
+                textOffsetZ = textOffsetZ
             );
             
             //Window

@@ -73,6 +73,7 @@ module block(
         textDepth=0.5,
         textSide=1,
         textOffsetZ=-0.1,
+        textSpacing=1,
         center = false){
             
     knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
@@ -330,14 +331,14 @@ module block(
                     translate([centerX + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, centerY, centerZ + textOffsetZ])
                     rotate([90,0,90])
                         linear_extrude(2*textDepth) {
-                            text(text, size = textSize, font = textFont, halign = "center", valign = "center", $fn = 64);
+                            text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
                         }
                 }
                 else{
                     translate([centerX, centerY + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + textDepth, centerZ + textOffsetZ])
                         rotate([90,0,0])
                             linear_extrude(2*textDepth) {
-                                text(text, size = textSize, font = textFont, halign = "center", valign = "center", $fn = 64);
+                                text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
                             }
                 }
             }
