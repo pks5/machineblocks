@@ -66,12 +66,12 @@ module block(
         knobGaps = [],
         roundingRadius = 0.1,
         roundingResolution = 15,
-        withLogo=false,
-        logoFont="Font Awesome 5 Free Regular",
-        logoText="\uf0eb",
-        logoSize=7,
-        logoDepth=0.5,
-        logoSide=1,
+        withText=false,
+        textFont="Font Awesome 5 Free Regular",
+        text="\uf0eb",
+        textSize=7,
+        textDepth=0.5,
+        textSide=1,
         center = false){
             
     knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
@@ -323,20 +323,20 @@ module block(
                 }
             }
             
-            if(withLogo){
+            if(withText){
                 color("red")
-                if(logoSide>2){
-                    translate([centerX + (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - logoDepth, centerY, centerZ])
+                if(textSide>2){
+                    translate([centerX + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, centerY, centerZ])
                     rotate([90,0,90])
-                        linear_extrude(2*logoDepth) {
-                            text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                        linear_extrude(2*textDepth) {
+                            text(text, size = textSize, font = textFont, halign = "center", valign = "center", $fn = 64);
                         }
                 }
                 else{
-                    translate([centerX, centerY + (logoSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + logoDepth, centerZ])
+                    translate([centerX, centerY + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + textDepth, centerZ])
                         rotate([90,0,0])
-                            linear_extrude(2*logoDepth) {
-                                text(logoText, size = logoSize, font = logoFont, halign = "center", valign = "center", $fn = 64);
+                            linear_extrude(2*textDepth) {
+                                text(text, size = textSize, font = textFont, halign = "center", valign = "center", $fn = 64);
                             }
                 }
             }

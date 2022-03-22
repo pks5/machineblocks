@@ -13,9 +13,9 @@ union(){
 block(baseLayers=3, grid=grid, withKnobs=false, plateHeight=2*baseHeight);
 
 translate([0,0,3*baseHeight])
-block(baseLayers=heightLayers, grid=[grid[0],1], logoSide=1,logoSize=40,withBaseHoles=false,withLogo=true,
-    logoText="\uf0eb",
-    logoFont="Font Awesome 5 Free Solid"); 
+block(baseLayers=heightLayers, grid=[grid[0],1], logoSide=1,logoSize=40,withBaseHoles=false,withText=true,
+    text="\uf0eb",
+    textFont="Font Awesome 5 Free Solid"); 
 
 translate([0, (grid[0]-1)*baseSideSize, 3*baseHeight])
 block(baseLayers=heightLayers, grid=[grid[0],1], withBaseHoles=false);

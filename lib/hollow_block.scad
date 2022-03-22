@@ -50,12 +50,12 @@ withKnobsFilled=true,
 knobGaps=[],
 blockMinWallThickness=1.4,
 blockMaxWallThickness=1.6,
-withLogo=false,
-logoFont="Font Awesome 5 Free Regular",
-logoText="\uf0eb",
-logoSize=7,
-logoSide=1,
-logoDepth=0.5
+withText=false,
+textFont="Font Awesome 5 Free Regular",
+text="\uf0eb",
+textSize=7,
+textSide=1,
+textDepth=0.5
 ){
     
     resultingBlockHeight = blockHeight > 0 ? blockHeight : (brickHeight * baseHeight * 3);
@@ -143,12 +143,12 @@ logoDepth=0.5
                             adjustSizeX=adjustSizeX, 
                             adjustSizeY=adjustSizeY, 
                             center=true,
-                            withLogo=withLogo,
-                            logoFont=logoFont,
-                            logoText=logoText,
-                            logoSize=logoSize,
-                            logoSide=logoSide,
-                            logoDepth=logoDepth
+                            withText=withText,
+                            textFont=textFont,
+                            text=text,
+                            textSize=textSize,
+                            textSide=textSide,
+                            textDepth=textDepth
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

@@ -97,12 +97,12 @@ plugBorderDepth=0.5,
 stablerSize=2,
 stablerThickness=1,
 
-withLogo=false,
-logoFont="Font Awesome 5 Free Regular",
-logoText="\uf0eb",
-logoSize=7,
-logoSide=1,
-logoDepth=0.5
+withText=false,
+textFont="Font Awesome 5 Free Regular",
+text="\uf0eb",
+textSize=7,
+textSide=1,
+textDepth=0.5
 ){
 
     finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
@@ -133,12 +133,12 @@ logoDepth=0.5
                 top=true, 
                 withKnobs=withKnobs, 
                 withKnobsFilled=withKnobsFilled,
-                withLogo = withLogo,
-                logoFont = logoFont,
-                logoText = logoText,
-                logoSize = logoSize,
-                logoSide=logoSide,
-                logoDepth = logoDepth
+                withText = withText,
+                textFont = textFont,
+                text = text,
+                textSize = textSize,
+                textSide=textSide,
+                textDepth = textDepth
             );
             
             //Window

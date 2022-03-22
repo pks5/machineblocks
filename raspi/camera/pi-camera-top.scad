@@ -27,10 +27,10 @@ difference(){
         center=true,
         alwaysOnFloor=true,
         grid=[2,4],
-        withLogo=true,
-        logoSide=4,
-        logoText="\uf030",
-        logoFont="Font Awesome 5 Free Solid"
+        withText=true,
+        textSide=4,
+        text="\uf030",
+        textFont="Font Awesome 5 Free Solid"
     );
     
     translate([5, 0, 6.25]){

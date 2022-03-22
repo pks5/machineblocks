@@ -14,4 +14,4 @@ echo(version=version());
 
 include <../../lib/pcb_block.scad>;
 
-pcb_block(top=true, grid=[3,4], brickHeight=2, withLogo=true);
+pcb_block(top=true, grid=[3,4], brickHeight=2, withText=true);
