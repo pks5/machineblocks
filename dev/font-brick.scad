@@ -1,15 +1,19 @@
-echo(version=version());
-
 include <../lib/block-v2.scad>;
 
-//text="WOOD IS GOOD";
-text="\uf1e2\ue4dc\uf714";
-textSize=6;
-//textFont="DINPro-Bold:style=Bold";
-textFont="Font Awesome 6 Free Solid";
-textDepth=0.7;
+text="TEXT";
+//text="[";
+//text="\uf1e2\ue4dc\uf714";
 
-block(baseLayers=3, grid=[4,2], withText=true, textSize=textSize, text=text, textFont=textFont, textDepth=textDepth, textSpacing=1.1, center=false); 
+textFont="Segoe UI:style=Bold";
+//textFont="Wingdings";
+//textFont="Font Awesome 6 Free Solid";
+
+textSize=6;
+textDepth=0.7;
+textSpacing=1.1;
+grid=[4,2];
+
+block(baseLayers=3, grid=grid, withText=true, textSize=textSize, text=text, textFont=textFont, textDepth=textDepth, textSpacing=textSpacing, center=false); 
 
 /*
 translate([-20,0,0])
