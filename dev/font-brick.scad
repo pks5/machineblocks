@@ -1,12 +1,12 @@
 include <../lib/block-v2.scad>;
 
-text="TEXT";
+//text="TEXT";
 //text="[";
-//text="\uf1e2\ue4dc\uf714";
+text="\uf1e2\ue4dc\uf714";
 
-textFont="Segoe UI:style=Bold";
+//textFont="Segoe UI:style=Bold";
 //textFont="Wingdings";
-//textFont="Font Awesome 6 Free Solid";
+textFont="Font Awesome 6 Free Solid";
 
 textSize=6;
 textDepth=0.7;
