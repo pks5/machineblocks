@@ -27,7 +27,7 @@ plateHelperHeight = 0.2,
 floorHeight = 3.5,
 floorHeightTolerance=0.2,
 plateHeight = 0.6,
-knobHeight = 2,
+knobHeight = 1.9,
 baseHeight = 3.1,
 brickHeight = 2,
 blockHeight = 0,
@@ -128,6 +128,8 @@ textOffsetZ=-0.1
     if(top){
         translateTop = center ? [0, 0, alwaysOnFloor ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
         
+        echo(resultingBlockHeight=resultingBlockHeight, translateTop=translateTop, totalTopHeight=totalTopHeight);
+        
         //Top
         translate(translateTop){
             union(){
@@ -141,6 +143,7 @@ textOffsetZ=-0.1
                             grid=grid, 
                             withKnobs=withKnobs,
                             withKnobsFilled=withKnobsFilled, 
+                            knobHeight=knobHeight,
                             knobGaps=knobGaps, 
                             adjustSizeX=adjustSizeX, 
                             adjustSizeY=adjustSizeY, 

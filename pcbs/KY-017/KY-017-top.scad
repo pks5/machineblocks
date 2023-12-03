@@ -2,7 +2,7 @@
 * Machine Blocks
 * https://machinemania.net/blocks 
 *
-* Block for KY-002 module (bottom)
+* Block for KY-016 module (top)
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -14,4 +14,12 @@ echo(version=version());
 
 include <../../lib/pcb_block.scad>;
 
-pcb_block(top=false, brickHeight=2, grid=[3,4], pcbY=20, pcbX=15.5, pins=[0,0,0]);
+pcb_block(
+    top=true, 
+    grid=[3,5], 
+    brickHeight=2, 
+    withText=true,
+    withKnobs=true,
+    text="\uf24e",
+    textFont="Font Awesome 6 Free Solid"
+);

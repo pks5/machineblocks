@@ -45,9 +45,10 @@ module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, hol
     
 }
 
-module plug_support(x, y, plugWidth, plugTolerance){
+module plug_support(x, y, plugWidth, plugTolerance, plugSupportColumnWidth){
     translate([x,y,0])
-        cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
+        //cylinder(h=1.3*(plugWidth+plugTolerance), r1=0.3, r2=0.4, center=true, $fn=20);
+        cube([plugSupportColumnWidth, plugSupportColumnWidth, 1.3*(plugWidth+plugTolerance)], center=true);
 }
 
 module pcb_block(
@@ -72,11 +73,16 @@ wallThicknessTolerance = 0.2,
 windowHeight=15,
 windowWidth=15,
 windowOverlap=1,
+windowHelperHeight=0.4,
+
+bedSupportWidth=4.5,
 
 holderLength=8,
 holderThickness=1.2,
 holderTipRadius=0.5,
 holderGap=6,
+holderOffsetX=0,
+holderOffsetY=0,
 withPcbHolders=true,
 platerSize=3,
 platerHeight=2,
@@ -88,6 +94,7 @@ pinHeight=5.3,
 pins=[0,-1,-1,-1],
 withPlugSupport=true,
 plugSupportGap=1.4,
+plugSupportColumnWidth=0.4,
 plugWidth=2.8,
 plugDepth=7.3,
 plugTolerance=0.2,
@@ -118,7 +125,7 @@ textOffsetZ=-0.1
     holderPrismHeight = 2*holderTipRadius;
     holderPrismWidth = 0.5 * (holderPrismHeight) + holderThickness;
     holderHeight=pcbHeight + 2*holderPrismHeight;
-    holderStartY=0.5 * finalObjectSizeY - plugDepth - holderThickness;
+    holderStartY=0.5 * finalObjectSizeY - plugDepth - holderThickness + holderOffsetY;
     
     finalWindowWidth=windowWidth-2*wallThicknessTolerance;
     finalWindowHeight=windowHeight-wallThicknessTolerance;
@@ -132,6 +139,7 @@ textOffsetZ=-0.1
                 brickHeight=brickHeight, 
                 grid=grid, 
                 alwaysOnFloor=true, 
+                center=true,
                 top=true, 
                 withKnobs=withKnobs, 
                 withKnobsFilled=withKnobsFilled,
@@ -146,9 +154,33 @@ textOffsetZ=-0.1
             );
             
             //Window
-            translate([0, 0.5 * finalObjectSizeY, 0]){
-                cube([windowWidth, 4.5, 2*windowHeight], center=true);
+            translate([0, 0.5 * finalObjectSizeY, 0.5 * windowHeight]){
+                cube([windowWidth, 4.5, windowHeight], center=true);
             }
+            
+            
+        }
+        
+        translate([0, 0.5 * (finalObjectSizeY-wallThickness), 0.5 * (windowHeight + windowHelperHeight)]){
+            cube([windowWidth, wallThickness, windowHelperHeight], center=true);
+        }
+        
+        translate([0, 0.5 * (finalObjectSizeY-wallThickness), 0.5 * windowHelperHeight]){
+            cube([windowWidth, bedSupportWidth, windowHelperHeight], center=true);
+        }
+        
+        translate([0, 0, 0.5 * windowHelperHeight]){
+            cube([finalObjectSizeX - 2*outerWallThickness, bedSupportWidth, windowHelperHeight], center=true);
+        }
+        
+        xTemp = 0.5 * sqrt(2) * windowWidth; 
+        translate([0.5*(windowWidth - xTemp  + 0.75*windowHelperHeight), 0.5 * (finalObjectSizeY-wallThickness), 0.5 *(windowHeight + windowHeight - xTemp + 0.75*windowHelperHeight)]){
+            rotate([0, 45,0])
+                cube([windowWidth, wallThickness, windowHelperHeight], center=true);
+        }
+        translate([-0.5*(windowWidth - xTemp  + 0.75*windowHelperHeight), 0.5 * (finalObjectSizeY-wallThickness), 0.5 *(windowHeight + windowHeight - xTemp  + 0.75*windowHelperHeight)]){
+            rotate([0, -45,0])
+                cube([windowWidth, wallThickness, windowHelperHeight], center=true);
         }
     }
 
@@ -189,28 +221,30 @@ textOffsetZ=-0.1
         }
         
         if(withPlugSupport){
-            supportRowCount = floor(plugDepth / (0.3 + plugSupportGap)) + 1;
+            supportRowCount = 5;//floor(plugDepth / (plugSupportColumnWidth + plugSupportGap)) + 1;
+            plugSupportGap = 0.25 * (plugDepth - plugBorderDepth - supportRowCount * plugSupportColumnWidth) + plugSupportColumnWidth;
+            supportStartY = 0.5*(windowThickness + innerWallThickness - plugSupportColumnWidth - plugBorderDepth);
             translate([-0.5*(len(pins)-1)*plugWidth, 0.5 * (finalObjectSizeY - windowThickness - innerWallThickness), floorHeight + pcbHeight + pinHeight]){
                 for (a = [ 0 : 1 : len(pins) - 1 ]){
                     translate([a*plugWidth,0,pins[a]*0.25*plugWidth]){
                          if((a > 0) && (pins[a] < pins[a-1])){
                             rotate([0,-20,0]){
                                 for (s = [ 0 : 1 : supportRowCount-1 ]){
-                                    plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                                    plug_support(-0.2, supportStartY - s*plugSupportGap, plugWidth, plugTolerance, plugSupportColumnWidth);
                                 }
                             }
                          }
                          
                          if( ( (a==0) || (pins[a-1] <= pins[a])) && ((a+1 == len(pins)) || (pins[a+1] <= pins[a])) ){
                              for (s = [ 0 : 1 : supportRowCount-1 ]){
-                               plug_support(-0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                               plug_support(-0.2, supportStartY - s*plugSupportGap, plugWidth, plugTolerance, plugSupportColumnWidth);
                              }
                          }
                          
                          if((a < len(pins)-1) && (pins[a+1] > pins[a])){
                             rotate([0,20,0]){
                                 for (s = [ 0 : 1 : supportRowCount-1 ]){
-                                    plug_support(0.2, 0.5 - s*plugSupportGap, plugWidth, plugTolerance);
+                                    plug_support(0.2, supportStartY - s*plugSupportGap, plugWidth, plugTolerance, plugSupportColumnWidth);
                                 }
                                 
                             }

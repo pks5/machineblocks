@@ -36,10 +36,10 @@ module block(
         xyHolesInsetDepth = 0.9,
         withYHoles = false,
         withZHoles = false,
-        zHolesOuterSize = 6.45,
+        zHolesOuterSize = 6.6, //6.45
         zHolesInnerSize = 5.1,
-        zHolesHolderOuterSize = 5.5,
-        zHolesHolderInnerSize = 5.2,
+        zHolesHolderOuterSize = 5.1, //5.5
+        zHolesHolderInnerSize = 4.9, //5.2
         holeResolution = 30,
         baseHeight = 3.1,
         baseLayers = 1,
@@ -101,6 +101,7 @@ module block(
     resultingPlateHeight = withBaseHoles ? plateHeight : resultingBaseHeight;        
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);        
     
+    
     posZBaseHoles = withBaseHoles ? (center ? -0.5 * (totalHeight - baseHoleDepth) : 0.5 * baseHoleDepth) : 0;        
     posZPlate = posZBaseHoles + (withBaseHoles ? 0.5 * resultingBaseHeight : (center ? -0.5 * (totalHeight - resultingPlateHeight) : 0.5 * resultingPlateHeight));
     posZKnobs = posZPlate + 0.5 * (resultingPlateHeight + knobCylinderHeight);
@@ -118,6 +119,8 @@ module block(
     
     zHolesZ = withZHoles ? centerZ : posZBaseHoles;
     zHolesHeight = withZHoles ? resultingBaseHeight : baseHoleDepth;
+    
+    echo (posZPlate=posZPlate, totalHeight = totalHeight, resultingPlateHeight=resultingPlateHeight, posZKnobs=posZKnobs, knobHeight = knobHeight);
             
     function posX(a) = (a - offsetX) * baseSideLength + 0.5*adjustSizeX;
     function posY(b) = (b - offsetY) * baseSideLength + 0.5*adjustSizeY;
@@ -255,7 +258,7 @@ module block(
 
                 };
                 //End union
-
+/*
                 //Hull with rounding
                 translate([0, 0, translateRoundingZ]){
                     if(withBaseHoles && withKnobs){
@@ -271,7 +274,7 @@ module block(
                                     apply_to=roundingApply,
                                     resolution=roundingResolution);
                     }
-                };
+                };*/
             }
             //End intersection
             
