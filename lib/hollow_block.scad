@@ -93,7 +93,7 @@ textOffsetZ=-0.1
         translate(translateBottom){
             union(){
                 difference(){
-                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true);
+                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true, alwaysOnFloor=false);
                     difference(){
                         cube([finalObjectSizeX + 1, finalObjectSizeY + 1, floorHeight + 1], center=true);
                         cube([bottomSizeX, bottomSizeY, floorHeight + 2], center=true);
@@ -155,7 +155,7 @@ textOffsetZ=-0.1
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffsetZ=textOffsetZ
+                            textOffsetZ=textOffsetZ, alwaysOnFloor=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);
