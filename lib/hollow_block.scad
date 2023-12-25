@@ -27,7 +27,7 @@ plateHelperHeight = 0.2,
 floorHeight = 3.5,
 floorHeightTolerance=0.2,
 plateHeight = 0.6,
-knobHeight = 2,
+knobHeight = 1.9,
 baseHeight = 3.1,
 brickHeight = 2,
 blockHeight = 0,
@@ -93,7 +93,7 @@ textOffsetZ=-0.1
         translate(translateBottom){
             union(){
                 difference(){
-                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true);
+                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true, alwaysOnFloor=false);
                     difference(){
                         cube([finalObjectSizeX + 1, finalObjectSizeY + 1, floorHeight + 1], center=true);
                         cube([bottomSizeX, bottomSizeY, floorHeight + 2], center=true);
@@ -128,6 +128,8 @@ textOffsetZ=-0.1
     if(top){
         translateTop = center ? [0, 0, alwaysOnFloor ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
         
+        echo(resultingBlockHeight=resultingBlockHeight, translateTop=translateTop, totalTopHeight=totalTopHeight);
+        
         //Top
         translate(translateTop){
             union(){
@@ -141,6 +143,7 @@ textOffsetZ=-0.1
                             grid=grid, 
                             withKnobs=withKnobs,
                             withKnobsFilled=withKnobsFilled, 
+                            knobHeight=knobHeight,
                             knobGaps=knobGaps, 
                             adjustSizeX=adjustSizeX, 
                             adjustSizeY=adjustSizeY, 
@@ -152,7 +155,7 @@ textOffsetZ=-0.1
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffsetZ=textOffsetZ
+                            textOffsetZ=textOffsetZ, alwaysOnFloor=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

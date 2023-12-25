@@ -1,8 +1,8 @@
 include <../lib/block-v2.scad>;
 
-//text="Text on a Lego Brick";
+//text="TEXT";
 //text="[";
-text="\uf135";
+text="\uf1e2\ue4dc\uf714";
 
 //textFont="Segoe UI:style=Bold";
 //textFont="Wingdings";

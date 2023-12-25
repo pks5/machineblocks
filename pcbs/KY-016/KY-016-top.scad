@@ -20,5 +20,5 @@ pcb_block(
     brickHeight=2, 
     withText=true,
     text="\uf0eb",
-    textFont="Font Awesome 5 Free Solid"
+    textFont="Font Awesome 6 Free Solid"
 );
