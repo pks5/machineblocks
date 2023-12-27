@@ -1,8 +1,7 @@
 /**
-* Machine Blocks
-* https://machinemania.net/blocks 
+* MachineBlocks Plate 6x6
+* https://machineblocks.com 
 *
-* Plate 6x6
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:

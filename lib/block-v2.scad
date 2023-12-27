@@ -365,13 +365,7 @@ module block(
                         for (b = [ startY : 1 : endY - 1 ]){
                             if(drawZHole(a, b)){
                                 translate([posX(a + 0.5), posY(b+0.5), zHolesZ]){
-                                    //if(withZHoles){
-                                        cylinder(h=zHolesHeight, r=0.5 * zHolesInnerSize, center=true, $fn=holeResolution);
-                                    //}
-                                    //else{
-                                        //TODO remove this after testing
-                                        //cylinder(h=zHolesHeight, r=0.99 * 0.5 * zHolesOuterSize, center=true, $fn=holeResolution);
-                                    //}
+                                    cylinder(h=zHolesHeight, r=0.5 * zHolesInnerSize, center=true, $fn=holeResolution);
                                 };
                             }
                         }
@@ -399,87 +393,39 @@ module block(
             //End difference
             
             
-            
-            //ZHoles with holders
-            //TODO remove this after testing
-            /*
-            if(withBaseHoles && !withZHoles){
-                for (a = [ startX : 1 : endX - 1 ]){
-                    for (b = [ startY : 1 : endY - 1 ]){
-                        if(drawZHole(a, b)){
-                            translate([posX(a + 0.5),posY(b+0.5),zHolesZ]){
-                                difference(){
-                                    cylinder(h=zHolesHeight, r=0.5 * zHolesOuterSize, center=true, $fn=holeResolution);
-                                    
-                                    intersection(){
-                                        cylinder(h=zHolesHeight*1.1, r=0.5 * zHolesHolderOuterSize, center=true, $fn=holeResolution);
-                                        cube([zHolesHolderInnerSize, zHolesHolderInnerSize, zHolesHeight*1.1], center=true);
-                                    };
-                                }
-                            };
-                        }
-                    }
-                }
-            }
-            */
-            
-            
             //With knobs
             if(withKnobs){
                 for (a = [ startX : 1 : endX ]){
                     for (b = [ startY : 1 : endY ]){
                         if(drawKnob(a,b, 0)){
-                            
                             translate([posX(a), posY(b), posZKnobs]){ 
                                 //Knob Cylinder
-                                //union(){
-                                    if(withKnobsFilled){
-                                        cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
-                                        
-                                        translate([0, 0, 0.5 * knobHeight]){ 
-                                           cylinder(h=knobRoundingHeight, r=knobHoleSize / 2 + knobRoundingHeight, center=true, $fn=knobResolution);
-                                        };
-                                    }
-                                    else{
-                                        /*
-                                        //TODO remove this after testing
-                                        difference(){
-                                            cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
-                                            cylinder(h=knobCylinderHeight * 1.1, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                        };
-                                        
-                                        //Holder for small poles
-                                        //TODO remove this after testing
-                                        intersection(){
-                                            cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
-                                            difference(){
-                                                cube([knobSize, knobSize, knobCylinderHeight], center=true);
-                                                cube([knobHoleSize-knobHolderSize, knobHoleSize-knobHolderSize, knobCylinderHeight*1.1], center=true);
-                                            };
-                                        };
-                                        */
-                                        
-                                        difference(){
-                                            cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
-                                            intersection(){
-                                                cylinder(h=knobCylinderHeight * 1.1, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                                cube([knobHolderSize, knobHolderSize, knobCylinderHeight*1.1], center=true);
-                                            }
-                                        };
-                                    }
+                                if(withKnobsFilled){
+                                    cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                     
-                                    //Knob Rounding
-                                    translate([0, 0, 0.5 * knobCylinderHeight]){ 
-                                        torus(2 * knobRoundingHeight, knobSize, knobResolution);
+                                    translate([0, 0, 0.5 * knobHeight]){ 
+                                       cylinder(h=knobRoundingHeight, r=knobHoleSize / 2 + knobRoundingHeight, center=true, $fn=knobResolution);
                                     };
-                                //};
-                                //End union
+                                }
+                                else{
+                                    difference(){
+                                        cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
+                                        intersection(){
+                                            cylinder(h=knobCylinderHeight * 1.1, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
+                                            cube([knobHolderSize, knobHolderSize, knobCylinderHeight*1.1], center=true);
+                                        }
+                                    };
+                                }
                                 
+                                //Knob Rounding
+                                translate([0, 0, 0.5 * knobCylinderHeight]){ 
+                                    torus(2 * knobRoundingHeight, knobSize, knobResolution);
+                                };
                             };
                         }
                     }
                 }
-            } //End with knobs
+            } //End withKnobs
             
         } //End union
         
