@@ -5,7 +5,7 @@ include <../../lib/hollow_block.scad>;
 floorHeight = 3.8;
 plateHeight = 1.3;
 brickHeight = 2;
-withTop=false;
+withTop=true;
 withBottom=true;
 
 if(withBottom){

@@ -19,11 +19,19 @@ color("yellow")
         block(baseLayers=3, grid=[2,1], withXHoles=true, withKnobsFilled=false);
        
 color("blue")
-    translate([-30, -36, 0])
+    translate([-30, -26, 0])
         block(grid=[4,2], withKnobsFilled=true, withZHoles = true);        
 
 color("magenta")
-    translate([-30, -70, 0])
+    translate([-30, -50, 0])
         block(baseLayers=3, grid=[1,3], withYHoles=true, withKnobsFilled=false);
+        
+color("orange")
+    translate([-30, -80, 0])
+        block(baseLayers=3, grid=[2,4], withYHoles=true, withKnobsFilled=false);
+        
+color("silver")
+    translate([-30, -110, 0])
+        block(baseLayers=3, grid=[2,3], withZHoles=true, withYHoles=true, withKnobsFilled=false);
       
   

@@ -1,19 +1,16 @@
 /**
-* Machine Blocks
-* https://machinemania.net/blocks 
+* MachineBlocks Brick 4x2
+* https://machineblocks.com 
 *
-* Brick 4x2
-* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+* Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
-*
 */
-echo(version=version());
 
+//Include the library
 include <../../lib/block-v2.scad>;
 
-//4x2 Brick
-translate([0,0,0])
-    block(baseLayers=3);
+//Generate 4x2 Brick
+block(grid=[4,2], withZHoles=false, withXHoles=false, baseLayers=3);
