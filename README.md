@@ -11,7 +11,7 @@ https://makermaker.me/machineblocks
 https://youtube.com/@machineblocks
 
 ## TikTok
-https://tiktok.com/@machine.blocks
+https://tiktok.com/@machineblocks.com
 
 ## Instagram
 https://instagram.com/machineblocks
