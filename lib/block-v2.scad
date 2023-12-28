@@ -90,6 +90,7 @@ module block(
         textSide=1,
         textOffsetZ=-0.1,
         textSpacing=1,
+        cutOffset=0.2,
         center = true,
         alwaysOnFloor = true){
             
@@ -309,8 +310,8 @@ module block(
                                     
                                     if(plateOffset > 0){
                                         color("green")
-                                        translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.2])
-                                            cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset+0.4], center = true);
+                                        translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.5 * cutOffset])
+                                            cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset + cutOffset], center = true);
                                         
                                         color("red")
                                         translate([0, 0, 0.5*(brimHeight - plateOffset - plateHeight) ])
@@ -329,29 +330,44 @@ module block(
                                 
                                 
                                     for (a = [ startX : 1 : endX ]){
-                                        if(drawWallGapX(a, 0, 0)){
-                                            translate([posX(a), -0.5*objectSizeYAdjusted, posZBaseHoles - centerZ - 0.1]){
-                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + 0.2], center=true);   
-                                            }
-                                        }
-                                        
-                                        if(drawWallGapX(a, 1, 0)){
-                                            translate([posX(a), +0.5*objectSizeYAdjusted, posZBaseHoles - centerZ - 0.1]){
-                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + 0.2], center=true);   
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            if(drawWallGapX(a, side, 0)){
+                                                translate([posX(a), (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
+                                                     difference(){
+                                                        translate([0, 0, -0.5 * cutOffset])
+                                                            cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + cutOffset], center=true); 
+                                                        if(a == startX){
+                                                            translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness-wallThickness), 2*brimThickness*1.1, brimHeight+cutOffset], center=true);
+                                                        }
+                                                        if(a == endX){
+                                                            translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness-wallThickness), 2*brimThickness*1.1, brimHeight+cutOffset], center=true);
+                                                        }
+                                                     }  
+                                                }
                                             }
                                         }
                                     }
                                     
                                     for (b = [ startY : 1 : endY ]){
-                                        if(drawWallGapY(b, 0, 0)){
-                                            translate([-0.5*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ - 0.1]){
-                                                 cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + 0.2], center=true);   
-                                            }
-                                        }
-                                        
-                                        if(drawWallGapY(b, 1, 0)){
-                                            translate([0.5*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ - 0.1]){
-                                                 cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + 0.2], center=true);   
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            if(drawWallGapY(b, side, 0)){
+                                                translate([(side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
+                                                    difference(){
+                                                        translate([0,0, -0.5 * cutOffset])
+                                                            cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + cutOffset], center=true);   
+                                                        
+                                                        if(b == startY){
+                                                            translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*brimThickness*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset], center=true);
+                                                        }
+                                                        if(b == endY){
+                                                            translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*brimThickness*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset], center=true);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
