@@ -91,6 +91,7 @@ module block(
         textOffsetZ=-0.1,
         textSpacing=1,
         cutOffset=0.2,
+        cutMultiplier=1.1,
         center = true,
         alwaysOnFloor = true){
             
@@ -218,7 +219,7 @@ module block(
                                                    if(drawPillar(a, b)){
                                                         //TODO more precise cut height
                                                         translate([posX(a + 0.5), posY(b + 0.5), -0.5 * helperOffset]){
-                                                            cylinder(h=1.1 * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize*0.9, center=true, $fn=holeResolution);
+                                                            cylinder(h=cutMultiplier * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize*0.9, center=true, $fn=holeResolution);
                                                         };
                                                    }
                                                 }   
@@ -291,8 +292,8 @@ module block(
                                                     cylinder(h=baseHoleDepth, r=0.5 * zHolesOuterSize, center=true, $fn=holeResolution);
                                                     
                                                     intersection(){
-                                                        cylinder(h=baseHoleDepth*1.1, r=0.5 * zHolesHolderOuterSize, center=true, $fn=holeResolution);
-                                                        cube([zHolesHolderInnerSize, zHolesHolderInnerSize, baseHoleDepth*1.1], center=true);
+                                                        cylinder(h=baseHoleDepth*cutMultiplier, r=0.5 * zHolesHolderOuterSize, center=true, $fn=holeResolution);
+                                                        cube([zHolesHolderInnerSize, zHolesHolderInnerSize, baseHoleDepth*cutMultiplier], center=true);
                                                     };
                                                 }
                                             };
@@ -331,11 +332,11 @@ module block(
                                                             
                                                             
                                                                 translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*1.1, brimHeight+cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+0.01], center=true);
                                                             
                                                             
                                                                 translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*1.1, brimHeight+cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+0.01], center=true);
                                                             
                                                             
                                                          }  
@@ -356,11 +357,11 @@ module block(
                                                             
                                                             
                                                                 translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
                                                             
                                                             
                                                                 translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
                                                             
                                                         }
                                                     }
@@ -371,7 +372,7 @@ module block(
                                     
                                     color("blue")
                                     translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
-                                        cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*1.1], center = true);
+                                        cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*cutMultiplier], center = true);
                                 
                                 }
                                 
@@ -428,7 +429,7 @@ module block(
                     for (a = [ startX : 1 : endX - 1 ]){
                         translate([posX(a + 0.5), xyzHolesY, xyHolesZ]){
                             rotate([90, 0, 0]){ 
-                                cylinder(h=objectSizeY*1.1, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=objectSizeY*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
                                 translate([0, 0, 0.5 * objectSizeY])
                                     cylinder(h=2*xyHolesInsetDepth, r=0.5 * xyHolesInsetSize, center=true, $fn=holeResolution);
@@ -444,7 +445,7 @@ module block(
                     for (b = [ startY : 1 : endY - 1 ]){
                         translate([xyzHolesX, posY(b + 0.5), xyHolesZ]){
                             rotate([0, 90, 0]){ 
-                                cylinder(h=objectSizeX*1.1, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=objectSizeX*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
                                 translate([0, 0, 0.5 * objectSizeX])
                                     cylinder(h=2*xyHolesInsetDepth, r=0.5 * xyHolesInsetSize, center=true, $fn=holeResolution);
@@ -460,7 +461,7 @@ module block(
                     for (a = [ startX : 1 : endX - 1 ]){
                         for (b = [ startY : 1 : endY - 1 ]){
                             translate([posX(a + 0.5), posY(b+0.5), centerZ]){
-                                cylinder(h=resultingBaseHeight*1.1, r=0.5 * zHolesInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * zHolesInnerSize, center=true, $fn=holeResolution);
                             };
                         }
                     }
@@ -506,8 +507,8 @@ module block(
                                         difference(){
                                             cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                             intersection(){
-                                                cylinder(h=knobCylinderHeight * 1.1, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                                cube([knobHolderSize, knobHolderSize, knobCylinderHeight*1.1], center=true);
+                                                cylinder(h=knobCylinderHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
+                                                cube([knobHolderSize, knobHolderSize, knobCylinderHeight*cutMultiplier], center=true);
                                             }
                                         };
                                     }
@@ -531,7 +532,7 @@ module block(
                                             radius=0.5, 
                                             apply_to="z",
                                             resolution=roundingResolution);
-                            cube([knobRectX - 0.5*knobSize, knobRectY - 0.5*knobSize, knobHeight*1.1], center=true);
+                            cube([knobRectX - 0.5*knobSize, knobRectY - 0.5*knobSize, knobHeight*cutMultiplier], center=true);
                         }
                     }
                 }
