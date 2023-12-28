@@ -93,7 +93,7 @@ textOffsetZ=-0.1
         translate(translateBottom){
             union(){
                 difference(){
-                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  minWallThickness=blockMinWallThickness, maxWallThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true, alwaysOnFloor=false);
+                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  wallThickness=blockMinWallThickness, brimThickness=blockMaxWallThickness, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true, alwaysOnFloor=false);
                     difference(){
                         cube([finalObjectSizeX + 1, finalObjectSizeY + 1, floorHeight + 1], center=true);
                         cube([bottomSizeX, bottomSizeY, floorHeight + 2], center=true);
@@ -137,8 +137,8 @@ textOffsetZ=-0.1
                     translate([0, 0, 0.5*totalTopHeight])
                         block(
                             baseHeight = resultingBlockHeight, 
-                            minWallThickness=blockMinWallThickness, 
-                            maxWallThickness=blockMaxWallThickness, 
+                            wallThickness=blockMinWallThickness, 
+                            brimThickness=blockMaxWallThickness, 
                             withBaseHoles=false, 
                             grid=grid, 
                             withKnobs=withKnobs,
