@@ -13,4 +13,4 @@
 include <../../lib/block-v2.scad>;
 
 //Generate 4x2 Brick
-block(grid=[4,2], baseLayers=3, plateOffset=6.6);
+block(grid=[4,2], baseLayers=3, wallGapsX=[[0, 0]]);

@@ -61,7 +61,7 @@ module pi_case_lid(
             union(){
                 difference(){
                     //Lid block with knobs
-                    block(baseHeight = lidHeight, withBaseHoles=false, grid=grid, withKnobs=true, withKnobsFilled=withKnobsFilled, knobSize=knobSize, knobGaps=knobGaps, adjustSizeX=adjustSizeX, adjustSizeY=adjustSizeY, center=true, alwaysOnFloor=false);
+                    block(baseHeight = lidHeight, withBaseHoles=false, grid=grid, withKnobs=true, withKnobsFilled=withKnobsFilled, knobSize=knobSize, knobGaps=knobGaps, adjustSize=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], center=true, alwaysOnFloor=false);
                     
                     //Cut border to fit as lid
                     difference(){

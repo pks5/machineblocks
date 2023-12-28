@@ -1,9 +1,8 @@
 /**
-* Machine Blocks
-* https://machinemania.net/blocks 
+* MachineBlocks Block Base Module
+* https://machineblocks.com 
 *
-* Building Block Module
-* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+* Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
@@ -62,6 +61,8 @@ module block(
         plateHelperHeight = 0.2,
         wallThickness = 1.2,
         upperWallThickness = 2.65,
+        wallGapsX = [],
+        wallGapsY = [],
         
         middlePinSize = 3.2,
         helperOffset=0.2,
@@ -69,8 +70,7 @@ module block(
         helperHeight = 0.4,
         helperThickness = 0.8,
         grid = [4, 2],
-        adjustSizeX = -0.2,
-        adjustSizeY = -0.2,
+        adjustSize = [-0.1, -0.1, -0.1, -0.1],
         brickOffset = [0, 0, 0],
         withKnobsFilled = true,
         withBaseRounding = true,
@@ -96,8 +96,11 @@ module block(
     knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
     knobCylinderHeight = knobHeight - knobRoundingHeight;
 
-    objectSizeX = baseSideLength * grid[0] + adjustSizeX;
-    objectSizeY = baseSideLength * grid[1] + adjustSizeY;
+    objectSizeX = baseSideLength * grid[0];
+    objectSizeY = baseSideLength * grid[1];
+            
+    objectSizeXAdjusted = objectSizeX + adjustSize[0] + adjustSize[1];
+    objectSizeYAdjusted = objectSizeY + adjustSize[2] + adjustSize[3];
     
     resultingBaseHeight = baseLayers * baseHeight;
     baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - plateOffset : 0;
@@ -134,14 +137,14 @@ module block(
     
     roundingApply = withBaseHoles ? (drawKnobs ? "all" : "zmin") : (drawKnobs ? "zmax" : "z");
     
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : 0.5*objectSizeX);
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : 0.5*objectSizeY);
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : 0.5*objectSizeX) - 0.5*(objectSizeXAdjusted - objectSizeX);
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : 0.5*objectSizeY) - 0.5*(objectSizeYAdjusted - objectSizeY);
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     echo (baseHoleDepth=baseHoleDepth, posZPlate=posZPlate, totalHeight = totalHeight, resultingPlateHeight=resultingPlateHeight, posZKnobs=posZKnobs, knobHeight = knobHeight);
             
-    function posX(a) = (a - offsetX) * baseSideLength;// + 0.5*adjustSizeX;
-    function posY(b) = (b - offsetY) * baseSideLength;// + 0.5*adjustSizeY;
+    function posX(a) = (a - offsetX) * baseSideLength;
+    function posY(b) = (b - offsetY) * baseSideLength;
     
     function isCornerZone(value, i) = (value < maxBaseHoleNonGap) || (value >= grid[i] - (maxBaseHoleNonGap + 1)); 
     function isMiddleZone(value, i) = (grid[i] >= middleBaseHoleGapLimit) && (value>=mid[i]-1) && (value<=mid[i]+1);
@@ -155,6 +158,8 @@ module block(
     function drawPillar(a, b) = !withBaseHoleGaps || withZHoles || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
     function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
+    
+    function drawWallGapX(a, side, i) = (i < len(wallGapsX)) && ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) || drawWallGapX(a, side, i+1)); 
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         union(){
@@ -294,9 +299,10 @@ module block(
                             }
                             
                             //Base Holes 
-                            translate([centerX, centerY, centerZ]){ 
+                            translate([0, 0, centerZ]){ 
                                 difference() {
-                                    cube([objectSizeX, objectSizeY, resultingBaseHeight], center = true);
+                                    translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0])
+                                        cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                                     
                                     
                                     if(plateOffset > 0){
@@ -318,6 +324,23 @@ module block(
                                     translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
                                         cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*1.1], center = true);
                                     
+                                
+                                
+                                for (a = [ startX : 1 : endX ]){
+                                    //for (b = [ startY : 1 : endY ]){
+                                        if(drawWallGapX(a, 0, 0)){
+                                            translate([posX(a), -0.5*objectSizeYAdjusted, posZBaseHoles]){
+                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth], center=true);   
+                                            }
+                                        }
+                                        
+                                        if(drawWallGapX(a, 1, 0)){
+                                            translate([posX(a), +0.5*objectSizeYAdjusted, posZBaseHoles]){
+                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth], center=true);   
+                                            }
+                                        }
+                                    //}
+                                }
                                 };
                             }
                             /*
@@ -329,8 +352,8 @@ module block(
                         }
                         else{
                             //Draw a solid block
-                            translate([centerX, centerY, centerZ]){ 
-                                cube([objectSizeX, objectSizeY, resultingBaseHeight], center = true);
+                            translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){ 
+                                cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                             }
                         }
                         //End withBaseHoles
@@ -343,15 +366,15 @@ module block(
     
                     if(withHullRounding){
                         //Hull with rounding
-                        translate([0, 0, centerZ]){
+                        translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){
                             if(withBaseHoles && drawKnobs){
-                                roundedcube_simple(size = [objectSizeX, objectSizeY, resultingBaseHeight], 
+                                roundedcube_simple(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
                                             center = true, 
                                             radius=roundingRadius, 
                                             resolution=roundingResolution);    
                             }
                             else{
-                                roundedcube(size = [objectSizeX, objectSizeY, resultingBaseHeight], 
+                                roundedcube(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
                                             center = true, 
                                             radius=roundingRadius, 
                                             apply_to=roundingApply,
