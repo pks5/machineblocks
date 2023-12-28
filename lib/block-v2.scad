@@ -60,7 +60,7 @@ module block(
         plateHelperThickness = 0.4,
         plateHelperHeight = 0.2,
         wallThickness = 1.2,
-        upperWallThickness = 2.65,
+        upperWallThickness = 2.6,
         wallGapsX = [],
         wallGapsY = [],
         
@@ -80,6 +80,9 @@ module block(
         knobHolderSize = 3,
         knobResolution = 30,
         knobGaps = [],
+        bigKnobWallThickness = 1.2,
+        bigKnobWallTolerance = 0.1,
+        
         roundingRadius = 0.1,
         roundingResolution = 15,
         withText=false,
@@ -92,6 +95,7 @@ module block(
         textSpacing=1,
         cutOffset=0.2,
         cutMultiplier=1.1,
+        cutTolerance=0.01,
         center = true,
         alwaysOnFloor = true){
             
@@ -219,7 +223,7 @@ module block(
                                                    if(drawPillar(a, b)){
                                                         //TODO more precise cut height
                                                         translate([posX(a + 0.5), posY(b + 0.5), -0.5 * helperOffset]){
-                                                            cylinder(h=cutMultiplier * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize*0.9, center=true, $fn=holeResolution);
+                                                            cylinder(h=cutMultiplier * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
                                                         };
                                                    }
                                                 }   
@@ -327,16 +331,16 @@ module block(
                                                     translate([posX(a), 0.5*(adjustSize[3] - adjustSize[2]) + (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
                                                          difference(){
                                                             translate([0, 0, -0.5 * cutOffset])
-                                                                cube([baseSideLength-2*wallThickness+0.01, 2*(brimThickness + adjustSize[2 + side]+0.01), baseHoleDepth + cutOffset], center=true); 
+                                                                cube([baseSideLength-2*wallThickness+cutTolerance, 2*(brimThickness + adjustSize[2 + side]+cutTolerance), baseHoleDepth + cutOffset], center=true); 
                                                              
                                                             
                                                             
                                                                 translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
                                                             
                                                             
                                                                 translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
                                                             
                                                             
                                                          }  
@@ -352,16 +356,16 @@ module block(
                                                     translate([0.5*(adjustSize[1] - adjustSize[0]) + (side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
                                                         difference(){
                                                             translate([0, 0, -0.5 * cutOffset])
-                                                                cube([2*(brimThickness+ adjustSize[side]+0.01), baseSideLength-2*wallThickness+0.01, baseHoleDepth + cutOffset], center=true);   
+                                                                cube([2*(brimThickness+ adjustSize[side]+cutTolerance), baseSideLength-2*wallThickness+cutTolerance, baseHoleDepth + cutOffset], center=true);   
                                                             
                                                             
                                                             
                                                                 translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
                                                             
                                                             
                                                                 translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
                                                             
                                                         }
                                                     }
@@ -523,8 +527,8 @@ module block(
                     }
                 }
                 else{
-                    knobRectX = posX(endX) - posX(startX) + knobSize;
-                    knobRectY = posY(endY) - posY(startY) + knobSize;
+                    knobRectX = posX(endX) - posX(startX) + knobSize - 2*bigKnobWallTolerance;
+                    knobRectY = posY(endY) - posY(startY) + knobSize - 2*bigKnobWallTolerance;
                     translate([0, 0, posZKnobs + 0.5*knobRoundingHeight]){ 
                         difference(){
                             roundedcube(size=[knobRectX, knobRectY, knobHeight], 
@@ -532,7 +536,7 @@ module block(
                                             radius=0.5, 
                                             apply_to="z",
                                             resolution=roundingResolution);
-                            cube([knobRectX - 0.5*knobSize, knobRectY - 0.5*knobSize, knobHeight*cutMultiplier], center=true);
+                            cube([knobRectX - 2*bigKnobWallThickness, knobRectY - 2*bigKnobWallThickness, knobHeight*cutMultiplier], center=true);
                         }
                     }
                 }
