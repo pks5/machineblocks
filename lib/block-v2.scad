@@ -163,12 +163,7 @@ module block(
             difference(){
                 intersection(){
                     union(){
-                        
-                        
-                        
                         if(withBaseHoles){
-                            
-                            
                             //Base Holes 
                             translate([centerX, centerY, centerZ]){ 
                                 difference() {
