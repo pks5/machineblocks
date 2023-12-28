@@ -301,78 +301,86 @@ module block(
                                 }
                             }
                             
+                            
                             //Base Holes 
                             translate([0, 0, centerZ]){ 
                                 difference() {
-                                    translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0])
+                                    translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0]){
                                         cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
-                                    
+                                    }
                                     
                                     if(plateOffset > 0){
                                         color("green")
                                         translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.5 * cutOffset])
                                             cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset + cutOffset], center = true);
-                                        
-                                        color("red")
-                                        translate([0, 0, 0.5*(brimHeight - plateOffset - plateHeight) ])
-                                            cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - plateHeight - plateOffset - brimHeight], center = true);
-                                    }
-                                    else{
-                                        color("red")
-                                        translate([0, 0, 0.5*(brimHeight - plateHeight) ])
-                                            cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - plateHeight - brimHeight], center = true);    
                                     }
                                     
-                                    color("blue")
-                                    translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
-                                        cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*1.1], center = true);
+                                    union(){
+                                        color("red")
+                                        translate([0, 0, 0.5*(brimHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight) ])
+                                            cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight - brimHeight], center = true);    
                                     
-                                
-                                
-                                    for (a = [ startX : 1 : endX ]){
-                                        for (side = [ 0 : 1 : 1 ]){
-                                            if(drawWallGapX(a, side, 0)){
-                                                translate([posX(a), (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
-                                                     difference(){
-                                                        translate([0, 0, -0.5 * cutOffset])
-                                                            cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + cutOffset], center=true); 
-                                                        if(a == startX){
-                                                            translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                cube([2*(brimThickness-wallThickness), 2*brimThickness*1.1, brimHeight+cutOffset], center=true);
-                                                        }
-                                                        if(a == endX){
-                                                            translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                cube([2*(brimThickness-wallThickness), 2*brimThickness*1.1, brimHeight+cutOffset], center=true);
-                                                        }
-                                                     }  
+                                        for (a = [ startX : 1 : endX ]){
+                                            for (side = [ 0 : 1 : 1 ]){
+                                                if(drawWallGapX(a, side, 0)){
+                                                    translate([posX(a), 0.5*(adjustSize[3] - adjustSize[2]) + (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
+                                                         difference(){
+                                                            translate([0, 0, -0.5 * cutOffset])
+                                                                cube([baseSideLength-2*wallThickness+0.01, 2*(brimThickness + adjustSize[2 + side]+0.01), baseHoleDepth + cutOffset], center=true); 
+                                                             
+                                                            
+                                                            
+                                                                translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*1.1, brimHeight+cutOffset+0.01], center=true);
+                                                            
+                                                            
+                                                                translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*1.1, brimHeight+cutOffset+0.01], center=true);
+                                                            
+                                                            
+                                                         }  
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    
-                                    for (b = [ startY : 1 : endY ]){
-                                        for (side = [ 0 : 1 : 1 ]){
-                                            if(drawWallGapY(b, side, 0)){
-                                                translate([(side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
-                                                    difference(){
-                                                        translate([0,0, -0.5 * cutOffset])
-                                                            cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + cutOffset], center=true);   
-                                                        
-                                                        if(b == startY){
-                                                            translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                cube([2*brimThickness*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset], center=true);
-                                                        }
-                                                        if(b == endY){
-                                                            translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                cube([2*brimThickness*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset], center=true);
+                                        
+                                        
+                                        for (b = [ startY : 1 : endY ]){
+                                            for (side = [ 0 : 1 : 1 ]){
+                                                if(drawWallGapY(b, side, 0)){
+                                                    translate([0.5*(adjustSize[1] - adjustSize[0]) + (side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
+                                                        difference(){
+                                                            translate([0, 0, -0.5 * cutOffset])
+                                                                cube([2*(brimThickness+ adjustSize[side]+0.01), baseSideLength-2*wallThickness+0.01, baseHoleDepth + cutOffset], center=true);   
+                                                            
+                                                            
+                                                            
+                                                                translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                    cube([2*(brimThickness+adjustSize[side])*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                            
+                                                            
+                                                                translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                    cube([2*(brimThickness+adjustSize[side])*1.1, 2*(brimThickness-wallThickness), brimHeight + cutOffset+0.01], center=true);
+                                                            
                                                         }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                };
+                                    
+                                    color("blue")
+                                    translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
+                                        cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*1.1], center = true);
+                                
+                                }
+                                
+                                
                             }
+                            
+                            
+                            
+                            
                             /*
                             translate([centerX, centerY, posZPlate]){
                                 //Plate
