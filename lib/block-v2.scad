@@ -137,8 +137,8 @@ module block(
     
     roundingApply = withBaseHoles ? (drawKnobs ? "all" : "zmin") : (drawKnobs ? "zmax" : "z");
     
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : 0.5*objectSizeX) - 0.5*(objectSizeXAdjusted - objectSizeX);
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : 0.5*objectSizeY) - 0.5*(objectSizeYAdjusted - objectSizeY);
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : -0.5*objectSizeX + objectSizeXAdjusted);
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : -0.5*objectSizeY + objectSizeYAdjusted);
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     echo (baseHoleDepth=baseHoleDepth, posZPlate=posZPlate, totalHeight = totalHeight, resultingPlateHeight=resultingPlateHeight, posZKnobs=posZKnobs, knobHeight = knobHeight);
@@ -160,6 +160,8 @@ module block(
     function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) && ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) || drawWallGapX(a, side, i+1)); 
+    
+    function drawWallGapY(a, side, i) = (i < len(wallGapsY)) && ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) || drawWallGapY(a, side, i+1)); 
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         union(){
@@ -326,21 +328,33 @@ module block(
                                     
                                 
                                 
-                                for (a = [ startX : 1 : endX ]){
-                                    //for (b = [ startY : 1 : endY ]){
+                                    for (a = [ startX : 1 : endX ]){
                                         if(drawWallGapX(a, 0, 0)){
-                                            translate([posX(a), -0.5*objectSizeYAdjusted, posZBaseHoles]){
-                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth], center=true);   
+                                            translate([posX(a), -0.5*objectSizeYAdjusted, posZBaseHoles - centerZ - 0.1]){
+                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + 0.2], center=true);   
                                             }
                                         }
                                         
                                         if(drawWallGapX(a, 1, 0)){
-                                            translate([posX(a), +0.5*objectSizeYAdjusted, posZBaseHoles]){
-                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth], center=true);   
+                                            translate([posX(a), +0.5*objectSizeYAdjusted, posZBaseHoles - centerZ - 0.1]){
+                                                 cube([baseSideLength-2*wallThickness, 2*brimThickness, baseHoleDepth + 0.2], center=true);   
                                             }
                                         }
-                                    //}
-                                }
+                                    }
+                                    
+                                    for (b = [ startY : 1 : endY ]){
+                                        if(drawWallGapY(b, 0, 0)){
+                                            translate([-0.5*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ - 0.1]){
+                                                 cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + 0.2], center=true);   
+                                            }
+                                        }
+                                        
+                                        if(drawWallGapY(b, 1, 0)){
+                                            translate([0.5*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ - 0.1]){
+                                                 cube([2*brimThickness, baseSideLength-2*wallThickness, baseHoleDepth + 0.2], center=true);   
+                                            }
+                                        }
+                                    }
                                 };
                             }
                             /*
