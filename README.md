@@ -1,6 +1,9 @@
 # Machine Blocks
 Toolkit for creating 3D-printable and LEGO-compatible building blocks that can contain electronics, mechanics and anything else. [OpenSCAD](https://openscad.org/) must be installed.
 
+## Get Started
+https://makermaker.me/machineblocks/docs/get-started
+
 ## Website
 https://makermaker.me/machineblocks
 
@@ -8,7 +11,7 @@ https://makermaker.me/machineblocks
 https://youtube.com/@machineblocks
 
 ## TikTok
-https://tiktok.com/@machine.blocks
+https://tiktok.com/@machineblocks.com
 
 ## Instagram
 https://instagram.com/machineblocks
