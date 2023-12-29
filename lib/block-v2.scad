@@ -69,7 +69,7 @@ module block(
         withHelpers = true,
         helperHeight = 0.4,
         helperThickness = 0.8,
-        grid = [4, 2],
+        grid = [1, 1],
         adjustSize = [-0.1, -0.1, -0.1, -0.1],
         brickOffset = [0, 0, 0],
         withKnobsFilled = true,
@@ -86,10 +86,10 @@ module block(
         roundingRadius = 0.1,
         roundingResolution = 15,
         withText=false,
-        textFont="Font Awesome 5 Free Regular",
-        text="\uf0eb",
-        textSize=7,
-        textDepth=0.5,
+        textFont="Helvetica Bold",
+        text="Hi",
+        textSize=4,
+        textDepth=0.6,
         textSide=1,
         textOffsetZ=-0.1,
         textSpacing=1,
@@ -181,6 +181,7 @@ module block(
                             
                             //Plate Helper
                             if(withPlateHelper){
+                                color([0.906, 0.298, 0.235]) //e74c3c
                                 union(){
                                     translate([centerX - 0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), centerY, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
@@ -199,7 +200,8 @@ module block(
                     
                 
                             //Helpers
-                            if(withHelpers){ // && !withXHoles && !withYHoles){ 
+                            if(withHelpers){
+                                color([0.753, 0.224, 0.169]) //c0392b
                                 translate([0, 0, posZPlate - 0.5 * (plateHeight + helperHeight)]){
                                     difference(){
                                         union(){
@@ -275,7 +277,7 @@ module block(
                                 }
                             }
                             
-                            
+                            color([0.953, 0.612, 0.071]) //f39c12
                             if(withZHoles){
                                 //Z-Holes Outer
                                 for (a = [ startX : 1 : endX - 1 ]){
@@ -311,17 +313,18 @@ module block(
                             translate([0, 0, centerZ]){ 
                                 difference() {
                                     translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0]){
+                                        color([0.945, 0.769, 0.059]) //f1c40f
                                         cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                                     }
                                     
                                     if(plateOffset > 0){
-                                        color("green")
+                                        color([0.827, 0.329, 0]) //d35400
                                         translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.5 * cutOffset])
                                             cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset + cutOffset], center = true);
                                     }
                                     
                                     union(){
-                                        color("red")
+                                        color([0.953, 0.612, 0.071]) //f39c12
                                         translate([0, 0, 0.5*(brimHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight) ])
                                             cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight - brimHeight], center = true);    
                                     
@@ -374,7 +377,10 @@ module block(
                                         }
                                     }
                                     
-                                    color("blue")
+                                    /*
+                                    * Brim
+                                    */
+                                    color([0.902, 0.494, 0.133]) //e67e22
                                     translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
                                         cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*cutMultiplier], center = true);
                                 
@@ -395,6 +401,7 @@ module block(
                         }
                         else{
                             //Draw a solid block
+                            color([0.945, 0.769, 0.059]) //f1c40f
                             translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){ 
                                 cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                             }
@@ -409,6 +416,7 @@ module block(
     
                     if(withHullRounding){
                         //Hull with rounding
+                        color([0.945, 0.769, 0.059]) //f1c40f
                         translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){
                             if(withBaseHoles && drawKnobs){
                                 roundedcube_simple(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
@@ -472,7 +480,7 @@ module block(
                 }
                 
                 if(withText){
-                    color("red")
+                    color([0.173, 0.243, 0.314]) //2c3e50
                     if(textSide>2){
                         translate([centerX + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, centerY, centerZ + textOffsetZ])
                         rotate([90,0,90])
@@ -494,6 +502,7 @@ module block(
             
             //With knobs
             if(drawKnobs){
+                color([0.945, 0.769, 0.059]) //f1c40f
                 if(plateOffset == 0){
                     for (a = [ startX : 1 : endX ]){
                         for (b = [ startY : 1 : endY ]){
