@@ -23,11 +23,6 @@ module torus(r1,r2, resolution = 50){
 
 module block(
         withBaseHoles = true,
-        withKnobs = true,
-        
-        
-        withHullRounding = true,
-        
         withBaseHoleGaps = false,
         maxBaseHoleNonGap = 2,
         middleBaseHoleGapLimit = 10,
@@ -72,8 +67,9 @@ module block(
         grid = [1, 1],
         adjustSize = [-0.1, -0.1, -0.1, -0.1],
         brickOffset = [0, 0, 0],
+        
+        withKnobs = true,
         withKnobsFilled = true,
-        withBaseRounding = true,
         knobSize = 5,
         knobHeight = 1.9,
         knobHoleSize = 3.3,
@@ -83,8 +79,11 @@ module block(
         bigKnobWallThickness = 1.2,
         bigKnobWallTolerance = 0.1,
         
+        withBaseRounding = true,
+        withHullRounding = true,
         roundingRadius = 0.1,
         roundingResolution = 15,
+        
         withText=false,
         textFont="Helvetica Bold",
         text="Hi",
@@ -93,9 +92,11 @@ module block(
         textSide=1,
         textOffsetZ=-0.1,
         textSpacing=1,
+        
         cutOffset=0.2,
         cutMultiplier=1.1,
         cutTolerance=0.01,
+        
         center = true,
         alwaysOnFloor = true){
             
@@ -217,7 +218,6 @@ module block(
                                             for (a = [ startX : 1 : endX - 1 ]){
                                                 for (b = [ startY : 1 : endY - 1 ]){
                                                    if(drawPillar(a, b)){
-                                                        //TODO more precise cut height
                                                         translate([posX(a + 0.5), posY(b + 0.5), -0.5 * helperOffset]){
                                                             cylinder(h=cutMultiplier * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
                                                         };
@@ -230,7 +230,7 @@ module block(
                             }
                             
                             /*
-                            * Pins
+                            * Middle Pins
                             */
                             if(withPillars){
                                 //Middle Pin X
@@ -279,7 +279,7 @@ module block(
                             }
                             
                             /*
-                            * Pillars / Z-Holes
+                            * Pillars / Z-Holes Outer
                             */
                             color([0.953, 0.612, 0.071]) //f39c12
                             if(withZHoles){
@@ -312,12 +312,13 @@ module block(
                                 }
                             }
                             
-                            
-                            //Base Holes 
+                            /*
+                            * Base
+                            */
                             translate([0, 0, centerZ]){ 
                                 difference() {
                                     /*
-                                    * Base
+                                    * Base Block
                                     */
                                     translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0]){
                                         color([0.945, 0.769, 0.059]) //f1c40f
@@ -415,6 +416,9 @@ module block(
                     };
                     //End union
     
+                    /*
+                    * Cut Rounded Hull
+                    */
                     if(withHullRounding){
                         //Hull with rounding
                         color([0.945, 0.769, 0.059]) //f1c40f
@@ -437,7 +441,7 @@ module block(
                 }
                 //End intersection
                 
-                //XHoles
+                //Cut X-Holes
                 if(withXHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
@@ -454,7 +458,7 @@ module block(
                     }
                 }
                 
-                //YHoles
+                //Cut Y-Holes
                 if(withYHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (b = [ startY : 1 : endY - 1 ]){
@@ -471,7 +475,7 @@ module block(
                     }
                 }
                 
-                //ZHoles
+                //Cut Z-Holes
                 if(withZHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
@@ -511,6 +515,9 @@ module block(
             if(drawKnobs){
                 color([0.945, 0.769, 0.059]) //f1c40f
                 if(plateOffset == 0){
+                    /*
+                    * Normal knobs
+                    */
                     for (a = [ startX : 1 : endX ]){
                         for (b = [ startY : 1 : endY ]){
                             if(drawKnob(a,b, 0)){
@@ -543,6 +550,9 @@ module block(
                     }
                 }
                 else{
+                    /*
+                    * Draw Big Knob if plateOffset is greater than zero
+                    */
                     knobRectX = posX(endX) - posX(startX) + knobSize - 2*bigKnobWallTolerance;
                     knobRectY = posY(endY) - posY(startY) + knobSize - 2*bigKnobWallTolerance;
                     translate([0, 0, posZKnobs + 0.5*knobRoundingHeight]){ 
