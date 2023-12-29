@@ -16,7 +16,7 @@ if(withBottom){
             plateHeight=plateHeight,
             adjustSizeX=0,
             adjustSizeY=0,
-            innerWallHeight=1.2, 
+            innerWallHeight=1.6, 
             withInnerWallFilled=true, 
             top=false,
             center=true, 
