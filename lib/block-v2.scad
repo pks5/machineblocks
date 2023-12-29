@@ -235,9 +235,13 @@ module block(
                                 }
                             }
                             
+                            /*
+                            * Pins
+                            */
                             if(withPillars){
                                 //Middle Pin X
                                 if(endY == 0){
+                                    color([0.953, 0.612, 0.071]) //f39c12
                                     for (a = [ startX : 1 : endX - 1 ]){
                                         translate([posX(a + 0.5), xyzHolesY, posZBaseHoles]){
                                             cylinder(h=baseHoleDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
@@ -247,6 +251,7 @@ module block(
                                 
                                 //Middle Pin Y
                                 if(endX == 0){
+                                    color([0.953, 0.612, 0.071]) //f39c12
                                     for (b = [ startY : 1 : endY - 1 ]){
                                         translate([xyzHolesX, posY(b + 0.5), posZBaseHoles]){
                                             cylinder(h=baseHoleDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
@@ -279,6 +284,9 @@ module block(
                                 }
                             }
                             
+                            /*
+                            * Pillars / Z-Holes
+                            */
                             color([0.953, 0.612, 0.071]) //f39c12
                             if(withZHoles){
                                 //Z-Holes Outer
@@ -314,65 +322,71 @@ module block(
                             //Base Holes 
                             translate([0, 0, centerZ]){ 
                                 difference() {
+                                    /*
+                                    * Base
+                                    */
                                     translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), 0]){
                                         color([0.945, 0.769, 0.059]) //f1c40f
                                         cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                                     }
                                     
+                                    /*
+                                    * Plate Offset
+                                    */
                                     if(plateOffset > 0){
                                         color([0.827, 0.329, 0]) //d35400
                                         translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.5 * cutOffset])
                                             cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset + cutOffset], center = true);
                                     }
                                     
-                                    union(){
-                                        color([0.953, 0.612, 0.071]) //f39c12
-                                        translate([0, 0, 0.5*(brimHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight) ])
-                                            cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight - brimHeight], center = true);    
-                                    
-                                        for (a = [ startX : 1 : endX ]){
-                                            for (side = [ 0 : 1 : 1 ]){
-                                                if(drawWallGapX(a, side, 0)){
-                                                    translate([posX(a), 0.5*(adjustSize[3] - adjustSize[2]) + (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
-                                                         difference(){
-                                                            translate([0, 0, -0.5 * cutOffset])
-                                                                cube([baseSideLength-2*wallThickness+cutTolerance, 2*(brimThickness + adjustSize[2 + side]+cutTolerance), baseHoleDepth + cutOffset], center=true); 
-                                                             
-                                                            
-                                                            
-                                                                translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
-                                                            
-                                                            
-                                                                translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
-                                                            
-                                                            
-                                                         }  
-                                                    }
+                                    /*
+                                    * Bottom Hole
+                                    */
+                                    color([0.953, 0.612, 0.071]) //f39c12
+                                    translate([0, 0, 0.5*(brimHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight) ])
+                                        cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight - brimHeight], center = true);    
+                                
+                                    /*
+                                    * Wall Gaps X
+                                    */
+                                    color([0.608, 0.349, 0.714]) //9b59b6
+                                    for (a = [ startX : 1 : endX ]){
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            if(drawWallGapX(a, side, 0)){
+                                                translate([posX(a), 0.5*(adjustSize[3] - adjustSize[2]) + (side - 0.5)*objectSizeYAdjusted, posZBaseHoles - centerZ]){
+                                                     difference(){
+                                                        translate([0, 0, -0.5 * cutOffset])
+                                                            cube([baseSideLength-2*wallThickness+cutTolerance, 2*(brimThickness + adjustSize[2 + side]+cutTolerance), baseHoleDepth + cutOffset], center=true); 
+                                                         
+                                                            translate([-0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
+                                                        
+                                                        
+                                                            translate([0.5*(baseSideLength-2*wallThickness), 0, -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness-wallThickness), 2*(brimThickness+adjustSize[2 + side])*cutMultiplier, brimHeight+cutOffset+cutTolerance], center=true);
+                                                     }  
                                                 }
                                             }
                                         }
-                                        
-                                        
-                                        for (b = [ startY : 1 : endY ]){
-                                            for (side = [ 0 : 1 : 1 ]){
-                                                if(drawWallGapY(b, side, 0)){
-                                                    translate([0.5*(adjustSize[1] - adjustSize[0]) + (side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
-                                                        difference(){
-                                                            translate([0, 0, -0.5 * cutOffset])
-                                                                cube([2*(brimThickness+ adjustSize[side]+cutTolerance), baseSideLength-2*wallThickness+cutTolerance, baseHoleDepth + cutOffset], center=true);   
-                                                            
-                                                            
-                                                            
-                                                                translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
-                                                            
-                                                            
-                                                                translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                                    cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
-                                                            
-                                                        }
+                                    }
+                                    
+                                    /*
+                                    * Wall Gaps Y
+                                    */
+                                    color([0.608, 0.349, 0.714]) //9b59b6
+                                    for (b = [ startY : 1 : endY ]){
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            if(drawWallGapY(b, side, 0)){
+                                                translate([0.5*(adjustSize[1] - adjustSize[0]) + (side-0.5)*objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
+                                                    difference(){
+                                                        translate([0, 0, -0.5 * cutOffset])
+                                                            cube([2*(brimThickness+ adjustSize[side]+cutTolerance), baseSideLength-2*wallThickness+cutTolerance, baseHoleDepth + cutOffset], center=true);   
+                                                        
+                                                            translate([0, -0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
+                                                        
+                                                            translate([0, 0.5*(baseSideLength-2*wallThickness), -0.5*(baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
+                                                                cube([2*(brimThickness+adjustSize[side])*cutMultiplier, 2*(brimThickness-wallThickness), brimHeight + cutOffset+cutTolerance], center=true);
                                                     }
                                                 }
                                             }
@@ -385,24 +399,15 @@ module block(
                                     color([0.902, 0.494, 0.133]) //e67e22
                                     translate([0, 0, 0.5*(brimHeight - resultingBaseHeight)])
                                         cube([objectSizeX - 2*brimThickness, objectSizeY - 2*brimThickness, brimHeight*cutMultiplier], center = true);
-                                
                                 }
                                 
                                 
                             }
-                            
-                            
-                            
-                            
-                            /*
-                            translate([centerX, centerY, posZPlate]){
-                                //Plate
-                                color("red")
-                                cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingPlateHeight], center = true);
-                            };*/
                         }
                         else{
-                            //Draw a solid block
+                            /*
+                            * Solid Base Block
+                            */
                             color([0.945, 0.769, 0.059]) //f1c40f
                             translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){ 
                                 cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
@@ -484,6 +489,9 @@ module block(
                     }
                 }
                 
+                /*
+                * Text
+                */
                 if(withText){
                     color([0.173, 0.243, 0.314]) //2c3e50
                     if(textSide>2){
