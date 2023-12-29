@@ -22,29 +22,34 @@ module torus(r1,r2, resolution = 50){
 
 
 module block(
+        baseLayers = 1,
+        grid = [1, 1],
+        baseSideLength = 8,
+        adjustSize = [-0.1, -0.1, -0.1, -0.1],
+        brickOffset = [0, 0, 0],
+        baseHeight = 3.2,
+        defaultBaseHeight = 3.2,
         withBaseHoles = true,
-        withBaseHoleGaps = false,
+
+        withPillarGaps = false,
         maxBaseHoleNonGap = 2,
         middleBaseHoleGapLimit = 10,
+        
+        withXHoles = false,
+        withYHoles = false,
+        withZHoles = false,
+        withPillars = true,
         
         xyHolesOuterSize = 6.5,
         xyHolesInnerSize = 5.1,
         xyHolesInsetSize = 6.2,
         xyHolesInsetDepth = 0.9,
-        withXHoles = false,
-        withYHoles = false,
-        withZHoles = false,
-        withPillars = true,
         zHolesOuterSize = 6.5,
         zHolesInnerSize = 5.1,
         zHolesHolderOuterSize = 5.1,
         zHolesHolderInnerSize = 4.9,
         holeResolution = 30,
-        
-        baseHeight = 3.2,
-        defaultBaseHeight = 3.2,
-        baseLayers = 1,
-        baseSideLength = 8,
+        middlePinSize = 3.2,
         
         brimHeight=1,
         brimThickness = 1.6,
@@ -54,19 +59,17 @@ module block(
         withPlateHelper=true,
         plateHelperThickness = 0.4,
         plateHelperHeight = 0.2,
+        
         wallThickness = 1.2,
         upperWallThickness = 2.6,
         wallGapsX = [],
         wallGapsY = [],
         
-        middlePinSize = 3.2,
-        helperOffset=0.2,
         withHelpers = true,
+        helperOffset=0.2,
         helperHeight = 0.4,
         helperThickness = 0.8,
-        grid = [1, 1],
-        adjustSize = [-0.1, -0.1, -0.1, -0.1],
-        brickOffset = [0, 0, 0],
+        
         
         withKnobs = true,
         withKnobsFilled = true,
@@ -156,7 +159,7 @@ module block(
     function drawMiddlePillar(a, b) = (isMiddle(a, 0) && (isMiddleZone(b, 1) || isCornerZone(b, 1)))
                                         || (isMiddle(b, 1) && (isMiddleZone(a, 0) || isCornerZone(a, 0)));
     
-    function drawPillar(a, b) = !withBaseHoleGaps || withZHoles || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
+    function drawPillar(a, b) = !withPillarGaps || withZHoles || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
     function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
     
