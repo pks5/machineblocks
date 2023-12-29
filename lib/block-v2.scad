@@ -31,6 +31,10 @@ module block(
         defaultBaseHeight = 3.2,
         withBaseHoles = true,
 
+        withBaseRounding = true,
+        baseRoundingRadius = 0.1,
+        roundingResolution = 15,
+
         withPillarGaps = false,
         maxBaseHoleNonGap = 2,
         middleBaseHoleGapLimit = 10,
@@ -82,10 +86,7 @@ module block(
         bigKnobWallThickness = 1.2,
         bigKnobWallTolerance = 0.1,
         
-        withBaseRounding = true,
-        withHullRounding = true,
-        roundingRadius = 0.1,
-        roundingResolution = 15,
+        
         
         withText=false,
         textFont="Helvetica Bold",
@@ -422,20 +423,20 @@ module block(
                     /*
                     * Cut Rounded Hull
                     */
-                    if(withHullRounding){
+                    if(withBaseRounding){
                         //Hull with rounding
                         color([0.945, 0.769, 0.059]) //f1c40f
                         translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){
                             if(withBaseHoles && drawKnobs){
                                 roundedcube_simple(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
                                             center = true, 
-                                            radius=roundingRadius, 
+                                            radius=baseRoundingRadius, 
                                             resolution=roundingResolution);    
                             }
                             else{
                                 roundedcube(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
                                             center = true, 
-                                            radius=roundingRadius, 
+                                            radius=baseRoundingRadius, 
                                             apply_to=roundingApply,
                                             resolution=roundingResolution);
                             }
