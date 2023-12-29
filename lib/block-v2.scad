@@ -257,6 +257,7 @@ module block(
                         
                             //X-Holes Outer
                             if(withXHoles){
+                                color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
                                     translate([posX(a + 0.5), xyzHolesY, xyHolesZ]){
                                         rotate([90, 0, 0]){ 
@@ -268,6 +269,7 @@ module block(
                             
                             //Y-Holes Outer
                             if(withYHoles){
+                                color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
                                     translate([xyzHolesX, posY(b + 0.5), xyHolesZ]){
                                         rotate([0, 90, 0]){ 
@@ -438,6 +440,7 @@ module block(
                 
                 //XHoles
                 if(withXHoles){
+                    color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
                         translate([posX(a + 0.5), xyzHolesY, xyHolesZ]){
                             rotate([90, 0, 0]){ 
@@ -454,6 +457,7 @@ module block(
                 
                 //YHoles
                 if(withYHoles){
+                    color([0.945, 0.769, 0.059]) //f1c40f
                     for (b = [ startY : 1 : endY - 1 ]){
                         translate([xyzHolesX, posY(b + 0.5), xyHolesZ]){
                             rotate([0, 90, 0]){ 
@@ -470,6 +474,7 @@ module block(
                 
                 //ZHoles
                 if(withZHoles){
+                    color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
                         for (b = [ startY : 1 : endY - 1 ]){
                             translate([posX(a + 0.5), posY(b+0.5), centerZ]){

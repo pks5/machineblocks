@@ -26,12 +26,11 @@ color("magenta")
     translate([0, -50, 0])
         block(baseLayers=3, grid=[1,3], withYHoles=true, withKnobsFilled=false);
         
-color("orange")
-    translate([0, -80, 0])
+translate([0, -80, 0])
         block(baseLayers=3, grid=[2,4], withYHoles=true, withKnobsFilled=false);
         
-color("silver")
-    translate([0, -110, 0])
-        block(baseLayers=3, grid=[2,3], withZHoles=true, withYHoles=true, withKnobsFilled=false);
+
+translate([0, -110, 0])
+    block(baseLayers=3, grid=[2,3], withZHoles=true, withYHoles=true, withKnobsFilled=false);
       
   
