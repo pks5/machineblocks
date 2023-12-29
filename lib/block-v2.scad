@@ -128,12 +128,6 @@ module block(
     resultingPlateHeight = withBaseHoles ? plateHeight : resultingBaseHeight;        
     totalHeight = resultingBaseHeight + (drawKnobs ? knobHeight : 0);  
 
-    xyHolesZ = 0;
-    xyzHolesY = 0;
-    xyzHolesX = 0;
-    
-    centerX = 0;
-    centerY = 0;
     centerZ = drawKnobs ? -0.5 * knobHeight : 0;    
     
     
@@ -183,16 +177,16 @@ module block(
                             if(withPlateHelper){
                                 color([0.906, 0.298, 0.235]) //e74c3c
                                 union(){
-                                    translate([centerX - 0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), centerY, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
+                                    translate([-0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
                                     }
-                                    translate([centerX + 0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), centerY, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
+                                    translate([0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
                                     }    
-                                    translate([centerX, centerY - 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
+                                    translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
                                         cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + helperOffset], center = true);
                                     }
-                                    translate([centerX, centerY + 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
+                                    translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
                                         cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + helperOffset], center = true);
                                     } 
                                 }
@@ -207,14 +201,14 @@ module block(
                                         union(){
                                             //Helpers X
                                             for (a = [ startX : 1 : endX - 1 ]){
-                                                translate([posX(a + 0.5), xyzHolesY, -0.5 * helperOffset]){ 
+                                                translate([posX(a + 0.5), 0, -0.5 * helperOffset]){ 
                                                     cube([helperThickness, objectSizeY - 2*wallThickness, helperHeight+helperOffset], center = true);
                                                 }
                                             }
                                             
                                             //Helpers Y
                                             for (b = [ startY : 1 : endY - 1 ]){
-                                               translate([xyzHolesX, posY(b + 0.5), 0]){
+                                               translate([0, posY(b + 0.5), 0]){
                                                     cube([objectSizeX - 2*wallThickness, helperThickness, helperHeight], center = true);
                                                 };
                                             }
@@ -243,7 +237,7 @@ module block(
                                 if(endY == 0){
                                     color([0.953, 0.612, 0.071]) //f39c12
                                     for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), xyzHolesY, posZBaseHoles]){
+                                        translate([posX(a + 0.5), 0, posZBaseHoles]){
                                             cylinder(h=baseHoleDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
                                         };
                                     }
@@ -253,7 +247,7 @@ module block(
                                 if(endX == 0){
                                     color([0.953, 0.612, 0.071]) //f39c12
                                     for (b = [ startY : 1 : endY - 1 ]){
-                                        translate([xyzHolesX, posY(b + 0.5), posZBaseHoles]){
+                                        translate([0, posY(b + 0.5), posZBaseHoles]){
                                             cylinder(h=baseHoleDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
                                         };
                                     }
@@ -264,7 +258,7 @@ module block(
                             if(withXHoles){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
-                                    translate([posX(a + 0.5), xyzHolesY, xyHolesZ]){
+                                    translate([posX(a + 0.5), 0, 0]){
                                         rotate([90, 0, 0]){ 
                                             cylinder(h=objectSizeY, r=0.5 * xyHolesOuterSize, center=true, $fn=holeResolution);
                                         }
@@ -276,7 +270,7 @@ module block(
                             if(withYHoles){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([xyzHolesX, posY(b + 0.5), xyHolesZ]){
+                                    translate([0, posY(b + 0.5), 0]){
                                         rotate([0, 90, 0]){ 
                                             cylinder(h=objectSizeX, r=0.5 * xyHolesOuterSize, center=true, $fn=holeResolution);
                                         };
@@ -447,7 +441,7 @@ module block(
                 if(withXHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
-                        translate([posX(a + 0.5), xyzHolesY, xyHolesZ]){
+                        translate([posX(a + 0.5), 0, 0]){
                             rotate([90, 0, 0]){ 
                                 cylinder(h=objectSizeY*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
@@ -464,7 +458,7 @@ module block(
                 if(withYHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (b = [ startY : 1 : endY - 1 ]){
-                        translate([xyzHolesX, posY(b + 0.5), xyHolesZ]){
+                        translate([0, posY(b + 0.5), 0]){
                             rotate([0, 90, 0]){ 
                                 cylinder(h=objectSizeX*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
@@ -495,14 +489,14 @@ module block(
                 if(withText){
                     color([0.173, 0.243, 0.314]) //2c3e50
                     if(textSide>2){
-                        translate([centerX + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, centerY, centerZ + textOffsetZ])
+                        translate([(textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, 0, centerZ + textOffsetZ])
                         rotate([90,0,90])
                             linear_extrude(2*textDepth) {
                                 text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
                             }
                     }
                     else{
-                        translate([centerX, centerY + (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + textDepth, centerZ + textOffsetZ])
+                        translate([0, (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + textDepth, centerZ + textOffsetZ])
                             rotate([90,0,0])
                                 linear_extrude(2*textDepth) {
                                     text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
