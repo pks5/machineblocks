@@ -58,24 +58,24 @@ module block(
         
         brimHeight=1,
         brimThickness = 1.6,
-        
-        plateHeight = 0.6,
-        plateOffset = 0,
-        withPlateHelper=true,
-        plateHelperThickness = 0.4,
-        plateHelperHeight = 0.2,
-        withCavity=false,
-        
         wallThickness = 1.2,
-        upperWallThickness = 2.6,
+        withCavity=false,
+        cavityWallThickness = 2.6,
         wallGapsX = [],
         wallGapsY = [],
         
-        withHelpers = true,
-        helperOffset=0.2,
-        helperHeight = 0.4,
-        helperThickness = 0.8,
+        plateHeight = 0.6,
+        plateOffset = 0,
         
+        withPlateHelper=true,
+        plateHelperThickness = 0.4,
+        plateHelperHeight = 0.2,
+        plateHelperOffset=0.2,
+        
+        withPillarHelpers = true,
+        pillarHelpersOffset=0.2,
+        pillarHelpersHeight = 0.4,
+        pillarHelpersThickness = 0.8,
         
         withKnobs = true,
         withKnobsFilled = true,
@@ -181,7 +181,9 @@ module block(
                         if(withBaseHoles){
                             
                             
-                            //Plate Helper
+                            /*
+                            * Plate Helper
+                            */
                             if(withPlateHelper){
                                 color([0.906, 0.298, 0.235]) //e74c3c
                                 union(){
@@ -191,33 +193,35 @@ module block(
                                     translate([0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
                                     }    
-                                    translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
-                                        cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + helperOffset], center = true);
+                                    translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + plateHelperOffset)]){
+                                        cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
                                     }
-                                    translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + helperOffset)]){
-                                        cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + helperOffset], center = true);
+                                    translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + plateHelperOffset)]){
+                                        cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
                                     } 
                                 }
                             }
                     
                 
-                            //Helpers
-                            if(withHelpers){
+                            /*
+                            * Pillar Helpers
+                            */
+                            if(withPillarHelpers){
                                 color([0.753, 0.224, 0.169]) //c0392b
-                                translate([0, 0, posZPlate - 0.5 * (plateHeight + helperHeight)]){
+                                translate([0, 0, posZPlate - 0.5 * (plateHeight + pillarHelpersHeight)]){
                                     difference(){
                                         union(){
                                             //Helpers X
                                             for (a = [ startX : 1 : endX - 1 ]){
-                                                translate([posX(a + 0.5), 0, -0.5 * helperOffset]){ 
-                                                    cube([helperThickness, objectSizeY - 2*wallThickness, helperHeight+helperOffset], center = true);
+                                                translate([posX(a + 0.5), 0, -0.5 * pillarHelpersOffset]){ 
+                                                    cube([pillarHelpersThickness, objectSizeY - 2*wallThickness, pillarHelpersHeight+pillarHelpersOffset], center = true);
                                                 }
                                             }
                                             
                                             //Helpers Y
                                             for (b = [ startY : 1 : endY - 1 ]){
                                                translate([0, posY(b + 0.5), 0]){
-                                                    cube([objectSizeX - 2*wallThickness, helperThickness, helperHeight], center = true);
+                                                    cube([objectSizeX - 2*wallThickness, pillarHelpersThickness, pillarHelpersHeight], center = true);
                                                 };
                                             }
                                         }
@@ -225,8 +229,8 @@ module block(
                                             for (a = [ startX : 1 : endX - 1 ]){
                                                 for (b = [ startY : 1 : endY - 1 ]){
                                                    if(drawPillar(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), -0.5 * helperOffset]){
-                                                            cylinder(h=cutMultiplier * (helperHeight+helperOffset), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
+                                                        translate([posX(a + 0.5), posY(b + 0.5), -0.5 * pillarHelpersOffset]){
+                                                            cylinder(h=cutMultiplier * (pillarHelpersHeight+pillarHelpersOffset), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
                                                         };
                                                    }
                                                 }   
@@ -338,7 +342,7 @@ module block(
                                     if(withCavity){
                                         color([0.827, 0.329, 0]) //d35400
                                         translate([0, 0, 0.5*(resultingBaseHeight - resultingPlateOffset) + 0.5 * cutOffset])
-                                            cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, resultingPlateOffset + cutOffset], center = true);
+                                            cube([objectSizeX - 2*cavityWallThickness, objectSizeY - 2*cavityWallThickness, resultingPlateOffset + cutOffset], center = true);
                                     }
                                     
                                     /*
