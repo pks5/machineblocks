@@ -30,6 +30,7 @@ module block(
         baseHeight = 3.2,
         defaultBaseHeight = 3.2,
         withBaseHoles = true,
+        minBaseHoleDepth = 2.6,
 
         withBaseRounding = true,
         baseRoundingRadius = 0.1,
@@ -63,6 +64,7 @@ module block(
         withPlateHelper=true,
         plateHelperThickness = 0.4,
         plateHelperHeight = 0.2,
+        withCavity=false,
         
         wallThickness = 1.2,
         upperWallThickness = 2.6,
@@ -114,7 +116,8 @@ module block(
     objectSizeYAdjusted = objectSizeY + adjustSize[2] + adjustSize[3];
     
     resultingBaseHeight = baseLayers * baseHeight;
-    baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - plateOffset : 0;
+    resultingPlateOffset = withCavity ? (plateOffset > 0 ? plateOffset : resultingBaseHeight - plateHeight - minBaseHoleDepth) : 0;
+    baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - resultingPlateOffset : 0;
             
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -137,7 +140,7 @@ module block(
     
     
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
-    posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - plateOffset) ;
+    posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset) ;
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     
     roundingApply = withBaseHoles ? (drawKnobs ? "all" : "zmin") : (drawKnobs ? "zmax" : "z");
@@ -332,18 +335,18 @@ module block(
                                     /*
                                     * Plate Offset
                                     */
-                                    if(plateOffset > 0){
+                                    if(withCavity){
                                         color([0.827, 0.329, 0]) //d35400
-                                        translate([0, 0, 0.5*(resultingBaseHeight - plateOffset) + 0.5 * cutOffset])
-                                            cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, plateOffset + cutOffset], center = true);
+                                        translate([0, 0, 0.5*(resultingBaseHeight - resultingPlateOffset) + 0.5 * cutOffset])
+                                            cube([objectSizeX - 2*upperWallThickness, objectSizeY - 2*upperWallThickness, resultingPlateOffset + cutOffset], center = true);
                                     }
                                     
                                     /*
                                     * Bottom Hole
                                     */
                                     color([0.953, 0.612, 0.071]) //f39c12
-                                    translate([0, 0, 0.5*(brimHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight) ])
-                                        cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (plateOffset > 0 ? plateOffset : 0) - plateHeight - brimHeight], center = true);    
+                                    translate([0, 0, 0.5*(brimHeight - (withCavity ? resultingPlateOffset : 0) - plateHeight) ])
+                                        cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (withCavity ? resultingPlateOffset : 0) - plateHeight - brimHeight], center = true);    
                                 
                                     /*
                                     * Wall Gaps X
@@ -518,7 +521,7 @@ module block(
             //With knobs
             if(drawKnobs){
                 color([0.945, 0.769, 0.059]) //f1c40f
-                if(plateOffset == 0){
+                if(!withCavity){
                     /*
                     * Normal knobs
                     */
