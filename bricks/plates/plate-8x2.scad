@@ -1,17 +1,18 @@
 /**
-* Machine Blocks
-* https://machinemania.net/blocks 
+* MachineBlocks Plate 8x2
+* https://machineblocks.com 
 *
-* Plate 8x2
-* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+* Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
-*
 */
-echo(version=version());
 
+//Include the MachineBlocks library
 include <../../lib/block-v2.scad>;
 
-block(grid=[8,2]);
+//Generate the plate
+block(
+    grid=[8,2]
+);

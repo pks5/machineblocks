@@ -1,22 +1,25 @@
+/**
+* MachineBlocks Brick 4x2 with text or symbols
+* https://machineblocks.com 
+*
+* Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
+*
+* Published under license:
+* Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
+* https://creativecommons.org/licenses/by-nc-sa/4.0/
+*/
+
+//Include the MachineBlocks library
 include <../lib/block-v2.scad>;
 
-//text="TEXT";
-//text="[";
-text="\uf1e2\ue4dc\uf714";
-
-//textFont="Segoe UI:style=Bold";
-//textFont="Wingdings";
-textFont="Font Awesome 6 Free Solid";
-
-textSize=6;
-textDepth=0.7;
-textSpacing=1;
-grid=[4,2];
-
-block(baseLayers=3, grid=grid, withText=true, textSize=textSize, text=text, textFont=textFont, textDepth=textDepth, textSpacing=textSpacing, center=false); 
-
-/*
-translate([-20,0,0])
-linear_extrude(0.9*textDepth)
-    text(text, size = textSize, font = textFont,$fn = 64);
-*/
+//Generate the brick
+block(
+    baseLayers=3, 
+    grid=[4,2], 
+    withText=true, 
+    textSize=6, 
+    text="\uf1e2\ue4dc\uf714", 
+    textFont="Font Awesome 6 Free Solid", 
+    textDepth=0.7, 
+    textSpacing=1
+); 

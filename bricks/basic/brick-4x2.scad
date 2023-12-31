@@ -9,11 +9,11 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 */
 
-//Include the library
+//Include the MachineBlocks library
 include <../../lib/block-v2.scad>;
 
 //Generate 4x2 Brick
 block(
-    grid=[4,2], 
-    baseLayers=3
+    baseLayers=3,
+    grid=[4,2]
 );
