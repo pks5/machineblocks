@@ -77,6 +77,10 @@ module block(
         pillarHelpersHeight = 0.4,
         pillarHelpersThickness = 0.8,
         
+        withAdhesionHelpers = false,
+        adhesionHelpersHeight = 0.2,
+        adhesionHelpersThickness = 0.4,
+        
         withKnobs = true,
         withKnobsFilled = true,
         knobSize = 5,
@@ -179,8 +183,44 @@ module block(
                 intersection(){
                     union(){
                         if(withBaseHoles){
-                            
-                            
+                            /*
+                            * Adhesion Helpers
+                            */
+                            if(withAdhesionHelpers){
+                                color([0.753, 0.224, 0.169]) //c0392b
+                                translate([0, 0, 0.5 * (adhesionHelpersHeight - totalHeight)]){
+                                    difference(){
+                                        union(){
+                                            //Helpers X
+                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                translate([posX(a + 0.5), 0, 0]){ 
+                                                    cube([adhesionHelpersThickness, objectSizeY - 2*wallThickness, adhesionHelpersHeight], center = true);
+                                                }
+                                            }
+                                            
+                                            //Helpers Y
+                                            for (b = [ startY : 1 : endY - 1 ]){
+                                               translate([0, posY(b + 0.5), 0]){
+                                                    cube([objectSizeX - 2*wallThickness, adhesionHelpersThickness, adhesionHelpersHeight], center = true);
+                                                };
+                                            }
+                                        }
+                                        
+                                        if(withPillars){
+                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                for (b = [ startY : 1 : endY - 1 ]){
+                                                   if(drawPillar(a, b)){
+                                                        translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                            cylinder(h=cutMultiplier * (adhesionHelpersHeight), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
+                                                        };
+                                                   }
+                                                }   
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                                
                             /*
                             * Plate Helper
                             */
