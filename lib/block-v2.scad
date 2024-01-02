@@ -122,6 +122,7 @@ module block(
     resultingBaseHeight = baseLayers * baseHeight;
     resultingPlateOffset = withCavity ? (plateOffset > 0 ? plateOffset : resultingBaseHeight - plateHeight - minBaseHoleDepth) : 0;
     baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - resultingPlateOffset : 0;
+    defaultBaseHoleDepth = defaultBaseHeight - plateHeight;
             
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -174,6 +175,10 @@ module block(
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) && ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) || drawWallGapX(a, side, i+1)); 
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) && ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) || drawWallGapY(a, side, i+1)); 
+    
+    function pillarHelpersXHeight(a) = pillarHelpersHeight + ((baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    
+    function pillarHelpersYHeight(b) = pillarHelpersHeight + ((baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         union(){
@@ -248,20 +253,20 @@ module block(
                             */
                             if(withPillarHelpers){
                                 color([0.753, 0.224, 0.169]) //c0392b
-                                translate([0, 0, posZPlate - 0.5 * (plateHeight + pillarHelpersHeight)]){
+                                
                                     difference(){
                                         union(){
                                             //Helpers X
                                             for (a = [ startX : 1 : endX - 1 ]){
-                                                translate([posX(a + 0.5), 0, -0.5 * pillarHelpersOffset]){ 
-                                                    cube([pillarHelpersThickness, objectSizeY - 2*wallThickness, pillarHelpersHeight+pillarHelpersOffset], center = true);
+                                                translate([posX(a + 0.5), 0, posZPlate - 0.5 * (plateHeight + pillarHelpersXHeight(a) + pillarHelpersOffset)]){ 
+                                                    cube([pillarHelpersThickness, objectSizeY - 2*wallThickness, pillarHelpersXHeight(a)+pillarHelpersOffset], center = true);
                                                 }
                                             }
                                             
                                             //Helpers Y
                                             for (b = [ startY : 1 : endY - 1 ]){
-                                               translate([0, posY(b + 0.5), 0]){
-                                                    cube([objectSizeX - 2*wallThickness, pillarHelpersThickness, pillarHelpersHeight], center = true);
+                                               translate([0, posY(b + 0.5), posZPlate - 0.5 * (plateHeight + pillarHelpersYHeight(b))]){
+                                                    cube([objectSizeX - 2*wallThickness, pillarHelpersThickness, pillarHelpersYHeight(b)], center = true);
                                                 };
                                             }
                                         }
@@ -269,14 +274,14 @@ module block(
                                             for (a = [ startX : 1 : endX - 1 ]){
                                                 for (b = [ startY : 1 : endY - 1 ]){
                                                    if(drawPillar(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), -0.5 * pillarHelpersOffset]){
-                                                            cylinder(h=cutMultiplier * (pillarHelpersHeight+pillarHelpersOffset), r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
+                                                        translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                            cylinder(h=cutMultiplier * totalHeight, r=0.5 * zHolesOuterSize - cutTolerance, center=true, $fn=holeResolution);
                                                         };
                                                    }
                                                 }   
                                             }
                                         }
-                                    }
+                                    
                                 }
                             }
                             
