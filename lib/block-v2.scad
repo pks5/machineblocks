@@ -146,6 +146,7 @@ module block(
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
     posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset) ;
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
+    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * defaultBaseHeight + knobHeight);
     
     roundingApply = withBaseHoles ? (drawKnobs ? "all" : "zmin") : (drawKnobs ? "zmax" : "z");
     
@@ -309,7 +310,7 @@ module block(
                             if(withXHoles){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
-                                    translate([posX(a + 0.5), 0, 0]){
+                                    translate([posX(a + 0.5), 0, xyHolesZ]){
                                         rotate([90, 0, 0]){ 
                                             cylinder(h=objectSizeY, r=0.5 * xyHolesOuterSize, center=true, $fn=holeResolution);
                                         }
@@ -321,7 +322,7 @@ module block(
                             if(withYHoles){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([0, posY(b + 0.5), 0]){
+                                    translate([0, posY(b + 0.5), xyHolesZ]){
                                         rotate([0, 90, 0]){ 
                                             cylinder(h=objectSizeX, r=0.5 * xyHolesOuterSize, center=true, $fn=holeResolution);
                                         };
@@ -496,7 +497,7 @@ module block(
                 if(withXHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
-                        translate([posX(a + 0.5), 0, 0]){
+                        translate([posX(a + 0.5), 0, xyHolesZ]){
                             rotate([90, 0, 0]){ 
                                 cylinder(h=objectSizeY*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
@@ -513,7 +514,7 @@ module block(
                 if(withYHoles){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (b = [ startY : 1 : endY - 1 ]){
-                        translate([0, posY(b + 0.5), 0]){
+                        translate([0, posY(b + 0.5), xyHolesZ]){
                             rotate([0, 90, 0]){ 
                                 cylinder(h=objectSizeX*cutMultiplier, r=0.5 * xyHolesInnerSize, center=true, $fn=holeResolution);
                                 
