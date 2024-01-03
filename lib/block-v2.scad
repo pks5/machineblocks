@@ -55,17 +55,17 @@ module block(
         holeResolution = 30,
         middlePinSize = 3.2,
         
-        brimHeight=1,
-        brimThickness = 1.6,
+        plateHeight = 0.6,
         wallThickness = 1.2,
+        brimHeight=1.0,
+        brimThickness = 1.6,
+        
         withCavity=false,
         cavityDepth = 0,
         cavityWallThickness = 2.6,
+        
         wallGapsX = [],
         wallGapsY = [],
-        
-        plateHeight = 0.6,
-        
         
         withPlateHelper=true,
         plateHelperThickness = 0.4,
