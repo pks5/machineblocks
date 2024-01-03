@@ -138,18 +138,17 @@ module block(
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
     
-    drawKnobs = withKnobs;
     resultingPlateHeight = withBaseHoles ? plateHeight : resultingBaseHeight;        
-    totalHeight = resultingBaseHeight + (drawKnobs ? knobHeight : 0);  
+    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
 
-    centerZ = drawKnobs ? -0.5 * knobHeight : 0;    
+    centerZ = withKnobs ? -0.5 * knobHeight : 0;    
     
     
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
     posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset) ;
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     
-    roundingApply = withBaseHoles ? (drawKnobs ? "all" : "zmin") : (drawKnobs ? "zmax" : "z");
+    roundingApply = withBaseHoles ? (withKnobs ? "all" : "zmin") : (withKnobs ? "zmax" : "z");
     
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : -0.5*objectSizeX + objectSizeXAdjusted);
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : -0.5*objectSizeY + objectSizeYAdjusted);
@@ -480,7 +479,7 @@ module block(
                         //Hull with rounding
                         color([0.945, 0.769, 0.059]) //f1c40f
                         translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){
-                            if(withBaseHoles && drawKnobs){
+                            if(withBaseHoles && withKnobs){
                                 roundedcube_simple(size = [objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], 
                                             center = true, 
                                             radius=baseRoundingRadius, 
@@ -569,7 +568,7 @@ module block(
             
             
             //With knobs
-            if(drawKnobs){
+            if(withKnobs){
                 color([0.945, 0.769, 0.059]) //f1c40f
                 if(!withCavity){
                     /*
@@ -623,7 +622,7 @@ module block(
                         }
                     }
                 }
-            } //End drawKnobs
+            } //End withKnobs
             
         } //End union
         
