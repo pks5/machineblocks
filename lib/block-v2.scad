@@ -30,7 +30,6 @@ module block(
         baseHeight = 3.2,
         defaultBaseHeight = 3.2,
         withBaseHoles = true,
-        minBaseHoleDepth = 2.6,
 
         withBaseRounding = true,
         baseRoundingRadius = 0.1,
@@ -60,12 +59,13 @@ module block(
         brimThickness = 1.6,
         wallThickness = 1.2,
         withCavity=false,
+        cavityDepth = 0,
         cavityWallThickness = 2.6,
         wallGapsX = [],
         wallGapsY = [],
         
         plateHeight = 0.6,
-        plateOffset = 0,
+        
         
         withPlateHelper=true,
         plateHelperThickness = 0.4,
@@ -120,9 +120,10 @@ module block(
     objectSizeYAdjusted = objectSizeY + adjustSize[2] + adjustSize[3];
     
     resultingBaseHeight = baseLayers * baseHeight;
-    resultingPlateOffset = withCavity ? (plateOffset > 0 ? plateOffset : resultingBaseHeight - plateHeight - minBaseHoleDepth) : 0;
-    baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - resultingPlateOffset : 0;
     defaultBaseHoleDepth = defaultBaseHeight - plateHeight;
+    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : resultingBaseHeight - defaultBaseHeight) : 0;
+    baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - resultingPlateOffset : 0;
+    
             
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -176,9 +177,9 @@ module block(
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) && ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) || drawWallGapY(a, side, i+1)); 
     
-    function pillarHelpersXHeight(a) = pillarHelpersHeight + ((baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    function pillarHelpersXHeight(a) = pillarHelpersHeight + (!withXHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
-    function pillarHelpersYHeight(b) = pillarHelpersHeight + ((baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    function pillarHelpersYHeight(b) = pillarHelpersHeight + (!withYHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         union(){
