@@ -104,7 +104,8 @@ module block(
         textSpacing=1,
         
         center = true,
-        alwaysOnFloor = true){
+        alwaysOnFloor = true,
+        centerIncludeAdjustment = false){
             
     cutOffset=0.2;
     cutMultiplier=1.1;
@@ -150,8 +151,8 @@ module block(
     
     roundingApply = withBaseHoles ? (withKnobs ? "all" : "zmin") : (withKnobs ? "zmax" : "z");
     
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? 0 : -0.5*objectSizeX + objectSizeXAdjusted);
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? 0 : -0.5*objectSizeY + objectSizeYAdjusted);
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : -0.5*objectSizeX + objectSizeXAdjusted);
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : -0.5*objectSizeY + objectSizeYAdjusted);
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     echo (baseHoleDepth=baseHoleDepth, posZPlate=posZPlate, totalHeight = totalHeight, resultingPlateHeight=resultingPlateHeight, posZKnobs=posZKnobs, knobHeight = knobHeight);
