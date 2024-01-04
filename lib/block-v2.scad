@@ -68,10 +68,10 @@ module block(
         wallGapsX = [],
         wallGapsY = [],
         
-        withPlateHelper=true,
-        plateHelperThickness = 0.4,
-        plateHelperHeight = 0.2,
+        withPlateHelpers=true,
         plateHelperOffset=0.2,
+        plateHelperHeight = 0.2,
+        plateHelperThickness = 0.4,
         
         withPillarHelpers = true,
         pillarHelperOffset=0.2,
@@ -233,7 +233,7 @@ module block(
                             /*
                             * Plate Helper
                             */
-                            if(withPlateHelper){
+                            if(withPlateHelpers){
                                 color([0.906, 0.298, 0.235]) //e74c3c
                                 union(){
                                     translate([-0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight)]){
