@@ -125,7 +125,7 @@ module block(
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
     defaultBaseHoleDepth = defaultBaseHeight - plateHeight;
-    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : resultingBaseHeight - defaultBaseHeight) : 0;
+    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - defaultBaseHeight) : (resultingBaseHeight - plateHeight))) : 0;
     
     calculatedBaseHoleDepth = resultingBaseHeight - plateHeight - resultingPlateOffset;        
     resultingPlateHeight = plateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
@@ -386,7 +386,7 @@ module block(
                                     }
                                     
                                     /*
-                                    * Plate Offset
+                                    * Cavity
                                     */
                                     if(withCavity){
                                         color([0.827, 0.329, 0]) //d35400
@@ -463,9 +463,20 @@ module block(
                             /*
                             * Solid Base Block
                             */
-                            color([0.945, 0.769, 0.059]) //f1c40f
                             translate([0.5*(adjustSize[1] - adjustSize[0]), 0.5*(adjustSize[3] - adjustSize[2]), centerZ]){ 
-                                cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
+                                difference(){
+                                    color([0.945, 0.769, 0.059]) //f1c40f
+                                    cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
+                                    
+                                    /*
+                                    * Cavity
+                                    */
+                                    if(withCavity){
+                                        color([0.827, 0.329, 0]) //d35400
+                                        translate([0, 0, 0.5*(resultingBaseHeight - resultingPlateOffset) + 0.5 * cutOffset])
+                                            cube([objectSizeX - 2*cavityWallThickness, objectSizeY - 2*cavityWallThickness, resultingPlateOffset + cutOffset], center = true);
+                                    }
+                                }
                             }
                         }
                         //End withBaseHoles
