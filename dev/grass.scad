@@ -21,7 +21,7 @@ brimThickness=8;
 brimHeight=0.2;
 
 withTop=true;
-withBottom=false;
+withBottom=true;
 
 if(withBottom){
     block(
