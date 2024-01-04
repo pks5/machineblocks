@@ -29,6 +29,7 @@ module block(
         brickOffset = [0, 0, 0],
         baseHeight = 3.2,
         defaultBaseHeight = 3.2,
+        maxBaseHoleDepth = 9,
         withBaseHoles = true,
 
         withBaseRounding = true,
@@ -121,11 +122,17 @@ module block(
     objectSizeYAdjusted = objectSizeY + adjustSize[2] + adjustSize[3];
     
     resultingBaseHeight = baseLayers * baseHeight;
+    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
+    
     defaultBaseHoleDepth = defaultBaseHeight - plateHeight;
     resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : resultingBaseHeight - defaultBaseHeight) : 0;
-    baseHoleDepth = withBaseHoles ? resultingBaseHeight - plateHeight - resultingPlateOffset : 0;
     
-            
+    calculatedBaseHoleDepth = resultingBaseHeight - plateHeight - resultingPlateOffset;        
+    resultingPlateHeight = plateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
+    baseHoleDepth = withBaseHoles ? ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? maxBaseHoleDepth : calculatedBaseHoleDepth) : 0;
+    
+    
+    //Grid
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
     endX = grid[0] - 1;
@@ -139,12 +146,8 @@ module block(
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
     
-    resultingPlateHeight = withBaseHoles ? plateHeight : resultingBaseHeight;        
-    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
-
+    //Calculate Z Positions
     centerZ = withKnobs ? -0.5 * knobHeight : 0;    
-    
-    
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
     posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset) ;
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
@@ -152,12 +155,11 @@ module block(
     
     roundingApply = withBaseHoles ? (withKnobs ? "all" : "zmin") : (withKnobs ? "zmax" : "z");
     
+    //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : -0.5*objectSizeX + objectSizeXAdjusted);
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : -0.5*objectSizeY + objectSizeYAdjusted);
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
-    echo (baseHoleDepth=baseHoleDepth, posZPlate=posZPlate, totalHeight = totalHeight, resultingPlateHeight=resultingPlateHeight, posZKnobs=posZKnobs, knobHeight = knobHeight);
-            
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
     
@@ -234,16 +236,16 @@ module block(
                             if(withPlateHelper){
                                 color([0.906, 0.298, 0.235]) //e74c3c
                                 union(){
-                                    translate([-0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
+                                    translate([-0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
                                     }
-                                    translate([0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (plateHeight + plateHelperHeight)]){
+                                    translate([0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight)]){
                                         cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
                                     }    
-                                    translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + plateHelperOffset)]){
+                                    translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight + plateHelperOffset)]){
                                         cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
                                     }
-                                    translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (plateHeight + plateHelperHeight + plateHelperOffset)]){
+                                    translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight + plateHelperOffset)]){
                                         cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
                                     } 
                                 }
@@ -260,14 +262,14 @@ module block(
                                         union(){
                                             //Helpers X
                                             for (a = [ startX : 1 : endX - 1 ]){
-                                                translate([posX(a + 0.5), 0, posZPlate - 0.5 * (plateHeight + pillarHelpersXHeight(a) + pillarHelpersOffset)]){ 
+                                                translate([posX(a + 0.5), 0, posZPlate - 0.5 * (resultingPlateHeight + pillarHelpersXHeight(a) + pillarHelpersOffset)]){ 
                                                     cube([pillarHelpersThickness, objectSizeY - 2*wallThickness, pillarHelpersXHeight(a)+pillarHelpersOffset], center = true);
                                                 }
                                             }
                                             
                                             //Helpers Y
                                             for (b = [ startY : 1 : endY - 1 ]){
-                                               translate([0, posY(b + 0.5), posZPlate - 0.5 * (plateHeight + pillarHelpersYHeight(b))]){
+                                               translate([0, posY(b + 0.5), posZPlate - 0.5 * (resultingPlateHeight + pillarHelpersYHeight(b))]){
                                                     cube([objectSizeX - 2*wallThickness, pillarHelpersThickness, pillarHelpersYHeight(b)], center = true);
                                                 };
                                             }
@@ -396,8 +398,8 @@ module block(
                                     * Bottom Hole
                                     */
                                     color([0.953, 0.612, 0.071]) //f39c12
-                                    translate([0, 0, 0.5*(brimHeight - (withCavity ? resultingPlateOffset : 0) - plateHeight) ])
-                                        cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (withCavity ? resultingPlateOffset : 0) - plateHeight - brimHeight], center = true);    
+                                    translate([0, 0, 0.5*(brimHeight - (withCavity ? resultingPlateOffset : 0) - resultingPlateHeight) ])
+                                        cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (withCavity ? resultingPlateOffset : 0) - resultingPlateHeight - brimHeight], center = true);    
                                 
                                     /*
                                     * Wall Gaps X

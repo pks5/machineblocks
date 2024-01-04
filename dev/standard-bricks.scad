@@ -30,6 +30,13 @@ translate([-20, -80, 0])
         center=false
     );
     
+    translate([-44, -120, 0])
+    block(
+        baseLayers=3, 
+        grid=[2,14],
+        center=false
+    );
+    
 translate([-20, -120, 0])
     block(
         baseLayers=3, 
