@@ -20,7 +20,7 @@ strawOffsetY=0.2;
 brimThickness=8;
 brimHeight=0.2;
 
-withTop=false;
+withTop=true;
 withBottom=true;
 
 if(withBottom){
