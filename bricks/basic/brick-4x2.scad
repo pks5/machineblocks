@@ -16,5 +16,6 @@ include <../../lib/block-v2.scad>;
 block(
     baseLayers=3,
     grid=[4,2],
-    adjustHeight=0
+    center=false,
+    adjustSides=[2,2,1,1]
 );

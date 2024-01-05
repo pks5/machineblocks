@@ -127,7 +127,7 @@ module block(
         
         center = true,
         alwaysOnFloor = true,
-        centerIncludeAdjustment = false){
+        positionIncludeAdjustment = false){
             
     cutOffset=0.2;
     cutMultiplier=1.1;
@@ -177,8 +177,8 @@ module block(
     roundingApply = withBaseHoles ? (withKnobs ? "all" : "zmin") : (withKnobs ? "zmax" : "z");
     
     //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : -0.5*objectSizeX + objectSizeXAdjusted);
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (centerIncludeAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : -0.5*objectSizeY + objectSizeYAdjusted);
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (positionIncludeAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (positionIncludeAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (positionIncludeAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (positionIncludeAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     function posX(a) = (a - offsetX) * baseSideLength;
