@@ -104,7 +104,7 @@ module block(
         
         withKnobs = true,
         withKnobsFilled = true,
-        knobSize = 5,
+        knobSize = 4.9,
         knobHeight = 1.9,
         knobHoleSize = 3.3,
         knobHolderSize = 3,
