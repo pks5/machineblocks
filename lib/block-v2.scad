@@ -52,7 +52,6 @@ module block(
         maxBaseHoleDepth = 9,
         withBaseHoles = true,
 
-        withBaseRounding = true,
         baseRounding="all",
         baseRoundingRadius = 0.1,
         roundingResolution = 15,
@@ -170,7 +169,7 @@ module block(
     //Calculate Z Positions
     centerZ = withKnobs ? -0.5 * knobHeight : 0;    
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
-    posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset) ;
+    posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset);
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * defaultBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
     
