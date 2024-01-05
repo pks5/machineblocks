@@ -22,8 +22,8 @@ block(baseLayers=heightLayers, grid=[grid[0],1], withBaseHoles=false,withText=tr
 block(baseLayers=heightLayers, grid=[grid[0],1], withBaseHoles=false, brickOffset=[0,5.5,3]);
 
 
-block(baseLayers=heightLayers, grid=[1,grid[0]-2], withBaseHoles=false, brickOffset=[-5.5,0,3], adjustSize=[-0.1,-0.1,0.1,0.1]);
+block(baseLayers=heightLayers, grid=[1,grid[0]-2], withBaseHoles=false, brickOffset=[-5.5,0,3], adjustSides=[-0.1,-0.1,0.1,0.1]);
 
 
-block(baseLayers=heightLayers, grid=[1,grid[0]-2], withBaseHoles=false, brickOffset=[5.5,0,3], adjustSize=[-0.1,-0.1,0.1,0.1]); 
+block(baseLayers=heightLayers, grid=[1,grid[0]-2], withBaseHoles=false, brickOffset=[5.5,0,3], adjustSides=[-0.1,-0.1,0.1,0.1]); 
 }

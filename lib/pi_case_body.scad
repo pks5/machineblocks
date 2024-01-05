@@ -59,12 +59,12 @@ module pi_case_body(){
                 union(){
                     translate([0, 0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, adjustSize=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, adjustSides=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
                     }
                     
                     translate([0, -0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, adjustSize=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, adjustSides=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
                     }
                     
                     
