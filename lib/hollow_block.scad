@@ -49,7 +49,7 @@ withKnobs=true,
 withKnobsFilled=true,
 knobGaps=[],
 blockMinWallThickness=1.4,
-blockMaxWallThickness=1.6,
+clampSkirtThickness=0.2,
 withText=false,
 textFont="Font Awesome 5 Free Regular",
 text="\uf0eb",
@@ -93,7 +93,18 @@ textOffsetZ=-0.1
         translate(translateBottom){
             union(){
                 difference(){
-                    block(baseHeight=floorHeight, plateHeight=plateHeight, grid=grid, withKnobs=false,  wallThickness=blockMinWallThickness, brimThickness=blockMaxWallThickness, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], center=true, alwaysOnFloor=false);
+                    block(
+                        baseHeight=floorHeight, 
+                        plateHeight=plateHeight, 
+                        grid=grid, 
+                        withKnobs=false,  
+                        wallThickness=blockMinWallThickness, 
+                        clampSkirtThickness=clampSkirtThickness, 
+                        sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                        center=true, 
+                        alwaysOnFloor=false
+                    );
+                    
                     difference(){
                         cube([finalObjectSizeX + 1, finalObjectSizeY + 1, floorHeight + 1], center=true);
                         cube([bottomSizeX, bottomSizeY, floorHeight + 2], center=true);
@@ -108,10 +119,20 @@ textOffsetZ=-0.1
                                 cube([innerWallX, innerWallY, innerWallHeight], center=true);
                                 
                                // translate([0,0,-0.25*innerWallHeight])
-                                    roundedcube_simple(size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], center = true, radius=roundingRadius, resolution=roundingResolution);
+                                    roundedcube_simple(
+                                        size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], 
+                                        center = true, 
+                                        radius=roundingRadius, 
+                                        resolution=roundingResolution
+                                    );
                                
                                translate([0,0,0.5*(innerWallHeight-innerWallHolderHeight)])
-                                    roundedcube_simple(size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], center = true, radius=roundingRadius, resolution=roundingResolution); 
+                                    roundedcube_simple(
+                                        size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], 
+                                        center = true, 
+                                        radius=roundingRadius, 
+                                        resolution=roundingResolution
+                                    ); 
                             };
                             if(!withInnerWallFilled){
                                 cube([innerWallX - 2*innerWallThickness, innerWallY - 2*innerWallThickness, innerWallHeight+1], center=true);
@@ -138,7 +159,7 @@ textOffsetZ=-0.1
                         block(
                             baseHeight = resultingBlockHeight, 
                             wallThickness=blockMinWallThickness, 
-                            brimThickness=blockMaxWallThickness, 
+                            clampSkirtThickness=clampSkirtThickness, 
                             withBaseHoles=false, 
                             grid=grid, 
                             withKnobs=withKnobs,

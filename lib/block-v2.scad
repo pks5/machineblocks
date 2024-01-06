@@ -110,8 +110,8 @@ module block(
         knobHolderSize = 3,
         knobResolution = 30,
         knobGaps = [],
-        cavityKnobWallThickness = 1.2,
-        cavityKnobWallTolerance = 0.1,
+        cavityTongueThickness = 1.2,
+        cavityTongueSpacing = 0.1,
         
         
         
@@ -613,8 +613,8 @@ module block(
                     /*
                     * Draw Big Knob if plateOffset is greater than zero
                     */
-                    knobRectX = posX(endX) - posX(startX) + knobSize - 2*cavityKnobWallTolerance;
-                    knobRectY = posY(endY) - posY(startY) + knobSize - 2*cavityKnobWallTolerance;
+                    knobRectX = posX(endX) - posX(startX) + knobSize - 2*cavityTongueSpacing;
+                    knobRectY = posY(endY) - posY(startY) + knobSize - 2*cavityTongueSpacing;
                     translate([0, 0, posZKnobs + 0.5*knobRoundingHeight]){ 
                         difference(){
                             roundedcube(size=[knobRectX, knobRectY, knobHeight], 
@@ -622,7 +622,7 @@ module block(
                                             radius=0.5, 
                                             apply_to="z",
                                             resolution=roundingResolution);
-                            cube([knobRectX - 2*cavityKnobWallThickness, knobRectY - 2*cavityKnobWallThickness, knobHeight*cutMultiplier], center=true);
+                            cube([knobRectX - 2*cavityTongueThickness, knobRectY - 2*cavityTongueThickness, knobHeight*cutMultiplier], center=true);
                         }
                     }
                 }
