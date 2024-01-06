@@ -6,7 +6,7 @@ grid = [6,6];
 cavityWallThickness = 0.8;
 defaultBaseHeight=3.2;
 baseSideLength = 8;
-brickHeight=4;
+brickHeight=3.2;
 
 grassFitTolerance=0.1;
 grassHeight=4;
@@ -19,14 +19,18 @@ strawOffsetY=0.2;
 
 brimThickness=8;
 brimHeight=0.2;
+cavityDepth = 0.8;
 
-withTop=true;
+withTop=false;
 withBottom=true;
 
 if(withBottom){
     block(
         grid=grid,
         baseHeight=brickHeight,
+        plateHeight=0,
+        pillarHelpersHeight=1,
+        cavityDepth=0.8,
         defaultBaseHeight=defaultBaseHeight,
         baseSideLength = baseSideLength,
         cavityWallThickness = cavityWallThickness,
@@ -42,7 +46,7 @@ if(withTop){
     rowsCount = 1 + floor((grassSizeY - 2*strawOffsetY - strawThickness) / (strawThickness + preferredSpaceY));
     spaceX = (grassSizeX - 2*strawOffsetX - columnsCount*strawWidth) / (columnsCount - 1); 
     spaceY = (grassSizeY - 2*strawOffsetY - rowsCount*strawThickness) / (rowsCount - 1);
-    cavityDepth = brickHeight - defaultBaseHeight;
+    
 
     translate([60,0,0]){
         
