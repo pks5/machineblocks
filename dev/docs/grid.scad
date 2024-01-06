@@ -15,7 +15,7 @@ echo(version=version());
 include <../../lib/block-v2.scad>;
 
 color([0.376, 0.768, 0.058])
-block(grid=[2,2], adjustSize=[0,0,0,0]);
+block(grid=[4,2], sideAdjustment=[0,0,0,0]);
 
 
-block(grid=[2,2]);
+block(grid=[4,2]);
