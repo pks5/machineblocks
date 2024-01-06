@@ -105,7 +105,7 @@ module block(
         withKnobs = true,
         withKnobsFilled = true,
         knobSize = 4.9,
-        knobHeight = 1.9,
+        knobHeight = 1.8,
         knobHoleSize = 3.3,
         knobHolderSize = 3,
         knobResolution = 30,
@@ -153,6 +153,8 @@ module block(
     
     wallThicknessClampSkirt = wallThickness + clampSkirtThickness;
     
+    echo(baseHeight = resultingBaseHeight, cavityDepth = resultingPlateOffset, plateHeight = resultingPlateHeight, baseHoleDepth = baseHoleDepth);
+    
     //Grid
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -173,6 +175,8 @@ module block(
     posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset);
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * defaultBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
+    
+    echo(centerZ = centerZ, posZBaseHoles = posZBaseHoles, posZPlate = posZPlate, posZKnobs = posZKnobs, xyHolesZ = xyHolesZ);
     
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));

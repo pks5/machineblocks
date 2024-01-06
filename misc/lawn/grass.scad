@@ -1,12 +1,12 @@
 echo(version=version());
 
-include <../lib/block-v2.scad>;
+include <../../lib/block-v2.scad>;
 
 grid = [6,6];
 cavityWallThickness = 0.8;
 defaultBaseHeight=3.2;
 baseSideLength = 8;
-brickHeight=3.2;
+brickHeight=3.4;
 
 grassFitTolerance=0.1;
 grassHeight=5;
@@ -21,16 +21,16 @@ brimThickness=8;
 brimHeight=0.2;
 cavityDepth = 0.8;
 
-withTop=false;
+withTop=true;
 withBottom=true;
 
 if(withBottom){
     block(
         grid=grid,
         baseHeight=brickHeight,
-        plateHeight=0,
-        pillarHelpersHeight=1,
-        cavityDepth=0.8,
+        plateHeight=0.4,
+        pillarHelperHeight=1,
+        cavityDepth=cavityDepth,
         defaultBaseHeight=defaultBaseHeight,
         baseSideLength = baseSideLength,
         cavityWallThickness = cavityWallThickness,

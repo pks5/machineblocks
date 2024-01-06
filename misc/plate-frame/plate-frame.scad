@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/block-v2.scad>;
+include <../../lib/block-v2.scad>;
 
 //Back
 block(grid=[14,1], sideAdjustment=[0,0,0,0], baseLayers=3, withBaseHoles=false, withXHoles=true);

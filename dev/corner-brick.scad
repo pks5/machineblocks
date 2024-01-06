@@ -55,7 +55,7 @@ block(
 translate([20,-60,0]){
 block(
     grid=[12,2],
-    adjustSize=[-0.1,0.1,-0.1,-0.1]
+    sideAdjustment=[-0.1,0.1,-0.1,-0.1]
 );
     block(
     grid=[2,4],
