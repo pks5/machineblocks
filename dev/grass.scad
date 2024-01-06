@@ -9,11 +9,11 @@ baseSideLength = 8;
 brickHeight=3.2;
 
 grassFitTolerance=0.1;
-grassHeight=4;
-strawWidth=0.4;
+grassHeight=5;
+strawWidth=0.8;
 strawThickness=0.2;
-preferredSpaceX=0.4;
-preferredSpaceY=0.4;
+preferredSpaceX=0.8;
+preferredSpaceY=0.8;
 strawOffsetX=0.2;
 strawOffsetY=0.2;
 
