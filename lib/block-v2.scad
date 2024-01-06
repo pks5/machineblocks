@@ -43,13 +43,13 @@ module base(size, baseRounding, roundingRadius, roundingResolution, center=true)
 module block(
         baseLayers = 1,
         grid = [1, 1],
-        baseSideLength = 8,
-        adjustSides = [-0.1, -0.1, -0.1, -0.1],
+        baseSideLength = 8.0,
+        sideAdjustment = [-0.1, -0.1, -0.1, -0.1],
         brickOffset = [0, 0, 0],
         baseHeight = 3.2,
         defaultBaseHeight = 3.2,
-        adjustHeight=0,
-        maxBaseHoleDepth = 9,
+        heightAdjustment=0.0,
+        maxBaseHoleDepth = 9.0,
         withBaseHoles = true,
 
         baseRounding="all",
@@ -78,7 +78,7 @@ module block(
         
         plateHeight = 0.6,
         wallThickness = 1.2,
-        brimHeight=1.0,
+        brimHeight=1.2,
         brimThickness = 1.6,
         
         withCavity=false,
@@ -138,10 +138,10 @@ module block(
     objectSizeX = baseSideLength * grid[0];
     objectSizeY = baseSideLength * grid[1];
             
-    objectSizeXAdjusted = objectSizeX + adjustSides[0] + adjustSides[1];
-    objectSizeYAdjusted = objectSizeY + adjustSides[2] + adjustSides[3];
+    objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
+    objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
     
-    resultingBaseHeight = baseLayers * baseHeight + adjustHeight;
+    resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
     defaultBaseHoleDepth = defaultBaseHeight + plateHeight;
@@ -396,7 +396,7 @@ module block(
                                 /*
                                 * Base Block
                                 */
-                                translate([0.5*(adjustSides[1] - adjustSides[0]), 0.5*(adjustSides[3] - adjustSides[2]), 0]){
+                                translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
                                     color([0.945, 0.769, 0.059]) //f1c40f
                                     //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                                     
@@ -426,17 +426,17 @@ module block(
                                 for (a = [ startX : 1 : endX ]){
                                     for (side = [ 0 : 1 : 1 ]){
                                         if(drawWallGapX(a, side, 0)){
-                                            translate([posX(a), 0.5 * (adjustSides[3] - adjustSides[2]) + (side - 0.5) * objectSizeYAdjusted, posZBaseHoles - centerZ]){
+                                            translate([posX(a), 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted, posZBaseHoles - centerZ]){
                                                  difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
-                                                        cube([baseSideLength - 2*wallThickness + cutTolerance, 2 * (brimThickness + adjustSides[2 + side] + cutTolerance), baseHoleDepth + cutOffset], center=true); 
+                                                        cube([baseSideLength - 2*wallThickness + cutTolerance, 2 * (brimThickness + sideAdjustment[2 + side] + cutTolerance), baseHoleDepth + cutOffset], center=true); 
                                                      
                                                         translate([-0.5 * (baseSideLength - 2*wallThickness), 0, -0.5 * (baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                            cube([2*(brimThickness - wallThickness), 2*(brimThickness + adjustSides[2 + side]) * cutMultiplier, brimHeight + cutOffset + cutTolerance], center=true);
+                                                            cube([2*(brimThickness - wallThickness), 2*(brimThickness + sideAdjustment[2 + side]) * cutMultiplier, brimHeight + cutOffset + cutTolerance], center=true);
                                                     
                                                     
                                                         translate([0.5 * (baseSideLength - 2*wallThickness), 0, -0.5 * (baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                            cube([2*(brimThickness - wallThickness), 2*(brimThickness + adjustSides[2 + side]) * cutMultiplier, brimHeight + cutOffset + cutTolerance], center=true);
+                                                            cube([2*(brimThickness - wallThickness), 2*(brimThickness + sideAdjustment[2 + side]) * cutMultiplier, brimHeight + cutOffset + cutTolerance], center=true);
                                                  }  
                                             }
                                         }
@@ -450,16 +450,16 @@ module block(
                                 for (b = [ startY : 1 : endY ]){
                                     for (side = [ 0 : 1 : 1 ]){
                                         if(drawWallGapY(b, side, 0)){
-                                            translate([0.5 * (adjustSides[1] - adjustSides[0]) + (side-0.5) * objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
+                                            translate([0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side-0.5) * objectSizeXAdjusted, posY(b), posZBaseHoles - centerZ]){
                                                 difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
-                                                        cube([2 * (brimThickness + adjustSides[side] + cutTolerance), baseSideLength - 2 * wallThickness + cutTolerance, baseHoleDepth + cutOffset], center=true);   
+                                                        cube([2 * (brimThickness + sideAdjustment[side] + cutTolerance), baseSideLength - 2 * wallThickness + cutTolerance, baseHoleDepth + cutOffset], center=true);   
                                                     
                                                         translate([0, -0.5 * (baseSideLength - 2 * wallThickness), -0.5 * (baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                            cube([2*(brimThickness + adjustSides[side]) * cutMultiplier, 2 * (brimThickness - wallThickness), brimHeight + cutOffset + cutTolerance], center=true);
+                                                            cube([2*(brimThickness + sideAdjustment[side]) * cutMultiplier, 2 * (brimThickness - wallThickness), brimHeight + cutOffset + cutTolerance], center=true);
                                                     
                                                         translate([0, 0.5 * (baseSideLength - 2 * wallThickness), -0.5 * (baseHoleDepth - brimHeight) - 0.5 * cutOffset]) 
-                                                            cube([2 * (brimThickness + adjustSides[side]) * cutMultiplier, 2 * (brimThickness - wallThickness), brimHeight + cutOffset + cutTolerance], center=true);
+                                                            cube([2 * (brimThickness + sideAdjustment[side]) * cutMultiplier, 2 * (brimThickness - wallThickness), brimHeight + cutOffset + cutTolerance], center=true);
                                                 }
                                             }
                                         }
@@ -480,7 +480,7 @@ module block(
                     /*
                     * Solid Base Block
                     */
-                    translate([0.5*(adjustSides[1] - adjustSides[0]), 0.5*(adjustSides[3] - adjustSides[2]), centerZ]){ 
+                    translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), centerZ]){ 
                         difference(){
                             color([0.945, 0.769, 0.059]) //f1c40f
                             //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
