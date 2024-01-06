@@ -126,7 +126,7 @@ module block(
         
         center = true,
         alwaysOnFloor = true,
-        positionIncludeAdjustment = false){
+        alignWithAdjustment = false){
             
     cutOffset = 0.2;
     cutMultiplier = 1.1;
@@ -175,8 +175,8 @@ module block(
     xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * defaultBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
     
     //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (positionIncludeAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (positionIncludeAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (positionIncludeAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (positionIncludeAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
     brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     function posX(a) = (a - offsetX) * baseSideLength;
