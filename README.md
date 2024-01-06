@@ -4,6 +4,9 @@ Toolkit for creating 3D-printable and LEGO-compatible building blocks that can c
 ## Get Started
 https://makermaker.me/machineblocks/docs/get-started
 
+## Documentation
+https://makermaker.me/machineblocks/docs
+
 ## Website
 https://makermaker.me/machineblocks
 
