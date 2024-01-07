@@ -108,8 +108,8 @@ withText=false,
 textFont="Font Awesome 5 Free Regular",
 text="\uf0eb",
 textSize=7,
-textSide=1,
-textDepth=0.5,
+textSide=2,
+textDepth=-0.5,
 textSpacing=1,
 textOffsetZ=-0.1
 ){

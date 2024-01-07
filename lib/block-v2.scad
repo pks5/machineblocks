@@ -95,8 +95,8 @@ module block(
         textFont="Helvetica Bold",
         text="Hi",
         textSize=4,
-        textDepth=0.6,
-        textSide=1,
+        textDepth=-0.6,
+        textSide=0,
         textOffsetZ=-0.1,
         textSpacing=1,
         

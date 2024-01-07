@@ -7,11 +7,11 @@ block(
     withText=true,
     textSize=10,
     textFont="OldSansBlack",
-    textDepth=0.8,
+    textDepth=-0.8,
     text="ANNA"
 );
 
-translate([50,0,0])
+translate([0, 50, 0])
     block(
         grid=[6,6]
     );
