@@ -42,7 +42,7 @@ translate([26,-20,0]){
 translate([73,-16,0]){
     block(baseLayers=3, grid=[6,1], withKnobsFilled=true, wallGapsX=[[0,0]]);
 
-    block(baseLayers=3, grid=[1, 4], withKnobsFilled=true, brickOffset=[-2.5, -1.5, 0]);
+    block(baseLayers=3, grid=[1, 4], withKnobsFilled=true, wallGapsY=[[3,1]], brickOffset=[-2.5, -1.5, 0]);
 }
 
 translate([-46,-20,0]){
