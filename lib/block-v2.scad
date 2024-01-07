@@ -78,7 +78,7 @@ module block(
         
         plateHeight = 0.6,
         wallThickness = 1.2,
-        clampSkirtHeight=1.2,
+        clampSkirtHeight=1.4,
         clampSkirtThickness = 0.4,
         
         withCavity=false,
@@ -104,6 +104,7 @@ module block(
         
         withKnobs = true,
         withKnobsFilled = true,
+        withKnobsCentered = false,
         knobSize = 4.9,
         knobHeight = 1.8,
         knobHoleSize = 3.3,
@@ -378,7 +379,7 @@ module block(
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
                                     if(drawPillar(a, b)){
-                                        translate([posX(a + 0.5), posY(b+0.5), posZBaseHoles]){
+                                        translate([posX(a + 0.5), posY(b + 0.5), posZBaseHoles]){
                                             difference(){
                                                 cylinder(h=baseHoleDepth, r=0.5 * zHoleOuterSize, center=true, $fn=holeResolution);
                                                 
@@ -582,10 +583,14 @@ module block(
                     /*
                     * Normal knobs
                     */
-                    for (a = [ startX : 1 : endX ]){
-                        for (b = [ startY : 1 : endY ]){
+                    knobEndX = endX - (withKnobsCentered ? 1 : 0);
+                    knobEndY = endY - (withKnobsCentered ? 1 : 0);
+                    posOffset = withKnobsCentered ? 0.5 : 0;
+                    
+                    for (a = [ startX : 1 : knobEndX ]){
+                        for (b = [ startY : 1 : knobEndY ]){
                             if(drawKnob(a,b, 0)){
-                                translate([posX(a), posY(b), posZKnobs]){ 
+                                translate([posX(a + posOffset), posY(b + posOffset), posZKnobs]){ 
                                     //Knob Cylinder
                                     if(withKnobsFilled){
                                         cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
