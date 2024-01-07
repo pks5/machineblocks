@@ -188,8 +188,8 @@ module block(
     function sideZ(side) = centerZ + (side - 0.5) * resultingBaseHeight;
     
     textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
-    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : 0;
-    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : 0;
+    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetZ : 0);
+    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : textOffsetZ;
     textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
@@ -541,7 +541,7 @@ module block(
                 */
                 if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([textX, textY, textZ + textOffsetZ])
+                        translate([textX, textY, textZ])
                             rotate(textRotations[textSide])
                                 text3d(
                                     text = text,
@@ -559,7 +559,7 @@ module block(
             */
             if(withText && textDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([textX, textY, textZ + textOffsetZ])
+                    translate([textX, textY, textZ])
                         rotate(textRotations[textSide])
                             text3d(
                                 text = text,

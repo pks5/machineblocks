@@ -1,5 +1,4 @@
 include <roundedcube.scad>;
-include <roundedcube_simple.scad>;
 
 module base(size, baseRounding, roundingRadius, roundingResolution, center=true){
         if(baseRounding == "none"){
