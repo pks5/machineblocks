@@ -53,7 +53,7 @@ module block(
         
         plateHeight = 0.6,
         wallThickness = 1.2,
-        clampSkirtHeight=1.4,
+        clampSkirtHeight=1,
         clampSkirtThickness = 0.4,
         
         withCavity=false,
