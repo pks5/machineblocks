@@ -1,5 +1,5 @@
 /**
-* MachineBlocks Block Base Module
+* MachineBlocks Block module to create STL models of LEGO compatible bricks and enclosures optimized for 3D printing
 * https://machineblocks.com 
 *
 * Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
@@ -9,36 +9,11 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-echo(version=version());
 
 include <roundedcube.scad>;
-include <roundedcube_simple.scad>;
-
-module torus(r1,r2, resolution = 50){
-    rotate_extrude(convexity = 10, $fn = resolution)
-        translate([0.5*(r2 - r1), 0, 0])
-            circle(r = 0.5*r1, $fn = resolution);
-}
-
-module base(size, baseRounding, roundingRadius, roundingResolution, center=true){
-        if(baseRounding == "none"){
-            cube(size = size, center = center);    
-        }
-        else if(baseRounding == "all"){
-            roundedcube_simple(size = size, 
-                        center = center, 
-                        radius=roundingRadius, 
-                        resolution=roundingResolution);    
-        }
-        else{
-            roundedcube(size = size, 
-                        center = center, 
-                        radius=roundingRadius, 
-                        apply_to=baseRounding,
-                        resolution=roundingResolution);
-        }
-}
-
+include <base.scad>;
+include <torus.scad>;
+include <text3d.scad>;
 
 module block(
         baseLayers = 1,
@@ -207,6 +182,15 @@ module block(
     function pillarHelpersXHeight(a) = pillarHelperHeight + (!withXHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
     function pillarHelpersYHeight(b) = pillarHelperHeight + (!withYHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    
+    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+    function sideZ(side) = centerZ + (side - 0.5) * resultingBaseHeight;
+    
+    textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
+    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : 0;
+    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : 0;
+    textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         
@@ -551,30 +535,41 @@ module block(
                         }
                     }
                 }
-                
+           
                 /*
-                * Text
+                * Text Cut
                 */
-                if(withText){
+                if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                    if(textSide>2){
-                        translate([(textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeX) - textDepth, 0, centerZ + textOffsetZ])
-                        rotate([90,0,90])
-                            linear_extrude(2*textDepth) {
-                                text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
-                            }
-                    }
-                    else{
-                        translate([0, (textSide%2 == 1 ? 1 : -1) * (-0.5 * objectSizeY) + textDepth, centerZ + textOffsetZ])
-                            rotate([90,0,0])
-                                linear_extrude(2*textDepth) {
-                                    text(text, size = textSize, font = textFont, spacing = textSpacing, halign = "center", valign = "center", $fn = 64);
-                                }
-                    }
+                        translate([textX, textY, textZ + textOffsetZ])
+                            rotate(textRotations[textSide])
+                                text3d(
+                                    text = text,
+                                    textDepth = 2*abs(textDepth),
+                                    textSize = textSize,
+                                    textFont = textFont,
+                                    textSpacing = textSpacing,
+                                    center = true
+                                );
                 }
-            };
-            //End difference
+            } //End difference
             
+            /*
+            * Text
+            */
+            if(withText && textDepth > 0){
+                color([0.173, 0.243, 0.314]) //2c3e50
+                    translate([textX, textY, textZ + textOffsetZ])
+                        rotate(textRotations[textSide])
+                            text3d(
+                                text = text,
+                                textDepth = textDepth,
+                                textSize = textSize,
+                                textFont = textFont,
+                                textSpacing = textSpacing,
+                                center = true
+                            );
+            }
             
             //With knobs
             if(withKnobs){
