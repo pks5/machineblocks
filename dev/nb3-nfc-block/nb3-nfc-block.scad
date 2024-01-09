@@ -3,7 +3,7 @@ echo(version=version());
 include <../../lib/hollow_block.scad>;
 
 floorHeight = 3.8;
-plateHeight = 1.3;
+topPlateHeight = 1.3;
 brickHeight = 2;
 withTop=true;
 withBottom=true;
@@ -13,7 +13,7 @@ if(withBottom){
         hollowBlock(
             brickHeight=brickHeight, 
             floorHeight=floorHeight, 
-            plateHeight=plateHeight,
+            topPlateHeight=topPlateHeight,
             adjustSizeX=0,
             adjustSizeY=0,
             innerWallHeight=1.6, 
@@ -32,7 +32,7 @@ if(withTop){
             hollowBlock(
                 brickHeight=brickHeight, 
                 floorHeight=floorHeight, 
-                plateHeight=plateHeight,
+                topPlateHeight=topPlateHeight,
                 adjustSizeX=0,
                 adjustSizeY=0,
                 top=true,

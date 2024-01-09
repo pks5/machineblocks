@@ -23,7 +23,7 @@ lidHeight = 3;
 lidHeightTolerance = 0.1;
 grid = [8, 12];
 halfGrid=[8, 0.5*grid[1]];
-plateHeight = 0.6;
+topPlateHeight = 0.6;
 wallThickness = 2;
 wallY1Thickness = 3;
 
@@ -59,12 +59,12 @@ module pi_case_body(){
                 union(){
                     translate([0, 0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, topPlateHeight=blockHeight - (floorHeight - topPlateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
                     }
                     
                     translate([0, -0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, plateHeight=blockHeight - (floorHeight - plateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, topPlateHeight=blockHeight - (floorHeight - topPlateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
                     }
                     
                     

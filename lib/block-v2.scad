@@ -51,7 +51,7 @@ module block(
         holeResolution = 30,
         middlePinSize = 3.2,
         
-        plateHeight = 0.6,
+        topPlateHeight = 0.6,
         wallThickness = 1.2,
         clampSkirtHeight=1,
         clampSkirtThickness = 0.4,
@@ -63,10 +63,10 @@ module block(
         wallGapsX = [],
         wallGapsY = [],
         
-        withPlateHelpers=true,
-        plateHelperOffset=0.2,
-        plateHelperHeight = 0.2,
-        plateHelperThickness = 0.4,
+        withTopPlateHelpers=true,
+        topPlateHelperOffset=0.2,
+        topPlateHelperHeight = 0.2,
+        topPlateHelperThickness = 0.4,
         
         withPillarHelpers = true,
         pillarHelperOffset=0.2,
@@ -123,16 +123,16 @@ module block(
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
-    defaultBaseHoleDepth = originalBaseHeight + plateHeight;
-    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - originalBaseHeight) : (resultingBaseHeight - plateHeight))) : 0;
+    defaultBaseHoleDepth = originalBaseHeight + topPlateHeight;
+    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - originalBaseHeight) : (resultingBaseHeight - topPlateHeight))) : 0;
     
-    calculatedBaseHoleDepth = resultingBaseHeight - plateHeight - resultingPlateOffset;        
-    resultingPlateHeight = plateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
+    calculatedBaseHoleDepth = resultingBaseHeight - topPlateHeight - resultingPlateOffset;        
+    resultingPlateHeight = topPlateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
     baseHoleDepth = withBaseHoles ? ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? maxBaseHoleDepth : calculatedBaseHoleDepth) : 0;
     
     wallThicknessClampSkirt = wallThickness + clampSkirtThickness;
     
-    echo(baseHeight = resultingBaseHeight, cavityDepth = resultingPlateOffset, plateHeight = resultingPlateHeight, baseHoleDepth = baseHoleDepth);
+    echo(baseHeight = resultingBaseHeight, cavityDepth = resultingPlateOffset, topPlateHeight = resultingPlateHeight, baseHoleDepth = baseHoleDepth);
     
     //Grid
     startX = 0;
@@ -244,20 +244,20 @@ module block(
                         /*
                         * Plate Helpers
                         */
-                        if(withPlateHelpers){
+                        if(withTopPlateHelpers){
                             color([0.906, 0.298, 0.235]) //e74c3c
                             union(){
-                                translate([-0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight)]){
-                                    cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
+                                translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + topPlateHelperHeight)]){
+                                    cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
                                 }
-                                translate([0.5*(objectSizeX - 2*wallThickness - plateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight)]){
-                                    cube([plateHelperThickness, objectSizeY - 2*wallThickness, plateHelperHeight], center = true);
+                                translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, posZPlate - 0.5 * (resultingPlateHeight + topPlateHelperHeight)]){
+                                    cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
                                 }    
-                                translate([0, -0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight + plateHelperOffset)]){
-                                    cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
+                                translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                    cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
                                 }
-                                translate([0, 0.5*(objectSizeY - 2*wallThickness - plateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + plateHelperHeight + plateHelperOffset)]){
-                                    cube([objectSizeX - 2*wallThickness, plateHelperThickness, plateHelperHeight + plateHelperOffset], center = true);
+                                translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), posZPlate - 0.5 * (resultingPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                    cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
                                 } 
                             }
                         }

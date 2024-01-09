@@ -15,7 +15,7 @@ echo(version=version());
 include <../../lib/hollow_block.scad>;
 
 floorHeight = 3.8;
-plateHeight = 1.3;
+topPlateHeight = 1.3;
 brickHeight = 4;
 
 difference(){
@@ -23,7 +23,7 @@ difference(){
         hollowBlock(
             brickHeight=brickHeight, 
             floorHeight=floorHeight, 
-            plateHeight=plateHeight,
+            topPlateHeight=topPlateHeight,
             innerWallHeight=1.2, 
             withInnerWallFilled=true, 
             top=false,

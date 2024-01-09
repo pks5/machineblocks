@@ -28,7 +28,7 @@ if(withBottom){
     block(
         grid=grid,
         baseHeight=brickHeight,
-        plateHeight=0.4,
+        topPlateHeight=0.4,
         pillarHelperHeight=1,
         cavityDepth=cavityDepth,
         originalBaseHeight=originalBaseHeight,

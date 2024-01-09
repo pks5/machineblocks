@@ -23,7 +23,7 @@ lidHeightTolerance = 0.1;
 lidSpacing = 0.3;
 grid = [8, 12];
 halfGrid=[8, 0.5*grid[1]];
-plateHeight = 0.6;
+topPlateHeight = 0.6;
 wallThickness = 2;
 wallY1Thickness = 3;
 

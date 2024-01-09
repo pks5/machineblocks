@@ -22,11 +22,11 @@ alwaysOnFloor=false,
 baseSideLength=8,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
-plateHelperThickness = 0.5,
-plateHelperHeight = 0.2,
+topPlateHelperThickness = 0.5,
+topPlateHelperHeight = 0.2,
 floorHeight = 3.5,
 floorHeightTolerance=0.2,
-plateHeight = 0.6,
+topPlateHeight = 0.6,
 knobHeight = 1.9,
 baseHeight = 3.1,
 brickHeight = 2,
@@ -95,7 +95,7 @@ textOffsetVertical=-0.1
                 difference(){
                     block(
                         baseHeight=floorHeight, 
-                        plateHeight=plateHeight, 
+                        topPlateHeight=topPlateHeight, 
                         grid=grid, 
                         withKnobs=false,  
                         wallThickness=blockMinWallThickness, 
@@ -195,10 +195,10 @@ textOffsetVertical=-0.1
                 }
                 
                 //Plate Helper
-                translate([0, 0, innerZ - 0.5 * plateHelperHeight]){
+                translate([0, 0, innerZ - 0.5 * topPlateHelperHeight]){
                     difference() {
-                        cube([innerX, innerY, plateHelperHeight], center = true);
-                        cube([innerX - 2*plateHelperThickness, innerY - 2*plateHelperThickness, plateHelperHeight*1.1], center = true);
+                        cube([innerX, innerY, topPlateHelperHeight], center = true);
+                        cube([innerX - 2*topPlateHelperThickness, innerY - 2*topPlateHelperThickness, topPlateHelperHeight*1.1], center = true);
                     };
                     
                 }
