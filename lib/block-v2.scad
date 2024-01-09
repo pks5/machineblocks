@@ -35,9 +35,9 @@ module block(
         maxPillarNonGap = 2,
         middlePillarGapLimit = 10,
         
-        withXHoles = false,
-        withYHoles = false,
-        withZHoles = false,
+        withHolesX = false,
+        withHolesY = false,
+        withHolesZ = false,
         withPillars = true,
         
         xyHoleOuterSize = 6.5,
@@ -173,7 +173,7 @@ module block(
     function drawMiddlePillar(a, b) = (isMiddle(a, 0) && (isMiddleZone(b, 1) || isCornerZone(b, 1)))
                                         || (isMiddle(b, 1) && (isMiddleZone(a, 0) || isCornerZone(a, 0)));
     
-    function drawPillar(a, b) = !withPillarGaps || withZHoles || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
+    function drawPillar(a, b) = !withPillarGaps || withHolesZ || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
     function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
     
@@ -181,9 +181,9 @@ module block(
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function pillarHelpersXHeight(a) = pillarHelperHeight + (!withXHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    function pillarHelpersXHeight(a) = pillarHelperHeight + (!withHolesX && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
-    function pillarHelpersYHeight(b) = pillarHelperHeight + (!withYHoles && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
+    function pillarHelpersYHeight(b) = pillarHelperHeight + (!withHolesY && (baseHoleDepth > defaultBaseHoleDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseHoleDepth - defaultBaseHoleDepth : 0);
     
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -323,7 +323,7 @@ module block(
                         }
                     
                         //X-Holes Outer
-                        if(withXHoles){
+                        if(withHolesX){
                             color([0.953, 0.612, 0.071]) //f39c12
                             for (a = [ startX : 1 : endX - 1 ]){
                                 translate([posX(a + 0.5), 0, xyHolesZ]){
@@ -335,7 +335,7 @@ module block(
                         }
                         
                         //Y-Holes Outer
-                        if(withYHoles){
+                        if(withHolesY){
                             color([0.953, 0.612, 0.071]) //f39c12
                             for (b = [ startY : 1 : endY - 1 ]){
                                 translate([0, posY(b + 0.5), xyHolesZ]){
@@ -350,7 +350,7 @@ module block(
                         * Pillars / Z-Holes Outer
                         */
                         color([0.953, 0.612, 0.071]) //f39c12
-                        if(withZHoles){
+                        if(withHolesZ){
                             //Z-Holes Outer
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
@@ -495,7 +495,7 @@ module block(
                
                 
                 //Cut X-Holes
-                if(withXHoles){
+                if(withHolesX){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
                         translate([posX(a + 0.5), 0, xyHolesZ]){
@@ -512,7 +512,7 @@ module block(
                 }
                 
                 //Cut Y-Holes
-                if(withYHoles){
+                if(withHolesY){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (b = [ startY : 1 : endY - 1 ]){
                         translate([0, posY(b + 0.5), xyHolesZ]){
@@ -529,7 +529,7 @@ module block(
                 }
                 
                 //Cut Z-Holes
-                if(withZHoles){
+                if(withHolesZ){
                     color([0.945, 0.769, 0.059]) //f1c40f
                     for (a = [ startX : 1 : endX - 1 ]){
                         for (b = [ startY : 1 : endY - 1 ]){

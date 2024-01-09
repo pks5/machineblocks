@@ -23,7 +23,7 @@ block(
     grid=[7,1],
     baseLayers = 6,
     knobsFilled=false,
-    withXHoles=true
+    withHolesX=true
 );
 }
 
@@ -60,6 +60,6 @@ block(
     block(
     grid=[2,4],
     brickOffset=[7,0,0],
-    withZHoles=true
+    withHolesZ=true
 );
 }

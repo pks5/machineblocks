@@ -7,7 +7,7 @@ translate([-26, -20, 0])
         baseLayers=3, 
         grid=[6,2],
         center=false,
-        withXHoles=true
+        withHolesX=true
     );
         
 translate([-26, -40, 0])
@@ -15,7 +15,7 @@ translate([-26, -40, 0])
         baseLayers=3, 
         grid=[4,2],
         center=false,
-        withXHoles=true
+        withHolesX=true
     );
         
 translate([-26, -60, 0])
@@ -23,7 +23,7 @@ translate([-26, -60, 0])
         baseLayers=3, 
         grid=[2,2],
         center=false,
-        withXHoles=true
+        withHolesX=true
     );
         
 
@@ -35,25 +35,25 @@ translate([32,10,0]){
         translate([0, -20, 0])
             block(
                 grid=[2,2],
-                withZHoles=true
+                withHolesZ=true
             );
                 
         translate([0, -40, 0])
             block(
                 grid=[4,2],
-                withZHoles=true
+                withHolesZ=true
             );
                 
         translate([0, -60, 0])
             block(
                 grid=[6,2],
-                withZHoles=true
+                withHolesZ=true
             );
                 
         translate([0, -80, 0])
             block(
                 grid=[8,2],
-                withZHoles=true
+                withHolesZ=true
             );
         }
 
@@ -66,7 +66,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[2,1],
                 center=false,
-                withXHoles=true,
+                withHolesX=true,
                 knobsFilled=false
             );
                 
@@ -75,7 +75,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[4,1],
                 center=false,
-                withXHoles=true,
+                withHolesX=true,
                 knobsFilled=false
             );
                 
@@ -84,7 +84,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[6,1],
                 center=false,
-                withXHoles=true,
+                withHolesX=true,
                 knobsFilled=false
             );
             
@@ -93,7 +93,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[8,1],
                 center=false,
-                withXHoles=true,
+                withHolesX=true,
                 knobsFilled=false
             );
             
@@ -102,7 +102,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[16,1],
                 center=false,
-                withXHoles=true,
+                withHolesX=true,
                 knobsFilled=false
             );
     }

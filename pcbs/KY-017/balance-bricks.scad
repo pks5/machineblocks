@@ -4,27 +4,27 @@ include <../../lib/block-v2.scad>;
 
 color("yellow")
     translate([-20, 10, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
 color("yellow")
     translate([-20, 0, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
 color("yellow")
     translate([-20, -10, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
 color("yellow")
     translate([-20, -20, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
         
 color("yellow")
     translate([-20, -30, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
 color("yellow")
     translate([-20, -40, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
 
 color("blue")

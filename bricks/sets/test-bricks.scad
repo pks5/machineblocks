@@ -17,7 +17,7 @@ include <../../lib/block-v2.scad>;
 
 color("yellow")
     translate([-37, -20, 0])
-        block(baseLayers=3, grid=[2,1], withXHoles=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
 
        
 color("green")
@@ -39,13 +39,13 @@ color("red")
         
 color("white")
     translate([-30, -90, 0])
-        block(withZHoles=true, grid=[4,2], knobsFilled=true, helperStartZ=0);
+        block(withHolesZ=true, grid=[4,2], knobsFilled=true, helperStartZ=0);
   
 
 /*  
 color("magenta")
     translate([50, -20, 0])
-        block(baseLayers=3, grid=[1,3], withYHoles=true, xyHolesInsetDepth = 0.5, knobsFilled=false);
+        block(baseLayers=3, grid=[1,3], withHolesY=true, xyHolesInsetDepth = 0.5, knobsFilled=false);
 */
       
 
