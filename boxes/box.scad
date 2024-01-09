@@ -3,7 +3,7 @@ include <../lib/block-v2.scad>;
 block(
     grid=[6,6],
     baseLayers=8,
-    withCavity=true,
+    withPit=true,
     withText=true,
     textSize=10,
     textFont="OldSansBlack",

@@ -3,7 +3,7 @@ echo(version=version());
 include <../../lib/block-v2.scad>;
 
 grid = [6,6];
-cavityWallThickness = 0.8;
+pitWallThickness = 0.8;
 originalBaseHeight=3.2;
 baseSideLength = 8;
 brickHeight=3.4;
@@ -19,7 +19,7 @@ strawOffsetY=0.2;
 
 brimThickness=8;
 brimHeight=0.2;
-cavityDepth = 0.8;
+pitDepth = 0.8;
 
 withTop=true;
 withBottom=true;
@@ -30,18 +30,18 @@ if(withBottom){
         baseHeight=brickHeight,
         topPlateHeight=0.4,
         pillarHelperHeight=1,
-        cavityDepth=cavityDepth,
+        pitDepth=pitDepth,
         originalBaseHeight=originalBaseHeight,
         baseSideLength = baseSideLength,
-        cavityWallThickness = cavityWallThickness,
-        withCavity=true,
+        pitWallThickness = pitWallThickness,
+        withPit=true,
         withKnobs=false
     );
 }
 
 if(withTop){
-    grassSizeX = grid[0] * baseSideLength - 2*(cavityWallThickness + grassFitTolerance);
-    grassSizeY = grid[1] * baseSideLength - 2*(cavityWallThickness + grassFitTolerance);
+    grassSizeX = grid[0] * baseSideLength - 2*(pitWallThickness + grassFitTolerance);
+    grassSizeY = grid[1] * baseSideLength - 2*(pitWallThickness + grassFitTolerance);
     columnsCount = 1 + floor((grassSizeX - 2*strawOffsetX - strawWidth) / (strawWidth + preferredSpaceX)); 
     rowsCount = 1 + floor((grassSizeY - 2*strawOffsetY - strawThickness) / (strawThickness + preferredSpaceY));
     spaceX = (grassSizeX - 2*strawOffsetX - columnsCount*strawWidth) / (columnsCount - 1); 
@@ -53,12 +53,12 @@ if(withTop){
         translate([0,0,0.5*grassSizeY])
         rotate([90,0,0])
             union(){
-                translate([0,0,-0.5*(cavityDepth+grassHeight)])
-                    cube([grassSizeX, grassSizeY, cavityDepth], center=true);
+                translate([0,0,-0.5*(pitDepth+grassHeight)])
+                    cube([grassSizeX, grassSizeY, pitDepth], center=true);
                     
                 
-                translate([0,0,0.5*(cavityDepth+grassHeight)])
-                    cube([grassSizeX, grassSizeY, cavityDepth], center=true);
+                translate([0,0,0.5*(pitDepth+grassHeight)])
+                    cube([grassSizeX, grassSizeY, pitDepth], center=true);
                 
                 translate([-0.5*(grassSizeX-strawWidth), -0.5*(grassSizeY-strawThickness), 0])
                 for (a = [ 0 : 1 : columnsCount - 1 ]){
@@ -71,10 +71,10 @@ if(withTop){
                 
         //Brim
         color("red"){
-            translate([0,-0.5*(grassHeight+2*cavityDepth+brimThickness),0.5*brimHeight])
+            translate([0,-0.5*(grassHeight+2*pitDepth+brimThickness),0.5*brimHeight])
                     cube([grassSizeX, brimThickness, brimHeight], center=true);
                 
-            translate([0,0.5*(grassHeight+2*cavityDepth+brimThickness),0.5*brimHeight])
+            translate([0,0.5*(grassHeight+2*pitDepth+brimThickness),0.5*brimHeight])
                     cube([grassSizeX, brimThickness, brimHeight], center=true);
         }
 }

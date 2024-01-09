@@ -37,7 +37,7 @@ translate([-80, 0, 0]){
     block(
         grid=[4,4],
         baseLayers=8,
-        withCavity=true
+        withPit=true
     );
     
     translate([0, 0, 40])
