@@ -330,7 +330,7 @@ module block(
                             for (a = [ startX : 1 : endX - 1 ]){
                                 translate([posX(a + 0.5), 0, xyHolesZ]){
                                     rotate([90, 0, 0]){ 
-                                        cylinder(h=objectSizeY, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
+                                        cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
                                     }
                                 };
                             }
@@ -342,7 +342,7 @@ module block(
                             for (b = [ startY : 1 : endY - 1 ]){
                                 translate([0, posY(b + 0.5), xyHolesZ]){
                                     rotate([0, 90, 0]){ 
-                                        cylinder(h=objectSizeX, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
+                                        cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
                                     };
                                 };
                             }
