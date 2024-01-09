@@ -30,7 +30,7 @@ translate([30, 0, 0])
             );
             block(
                 grid=[2,2],
-                withBaseHoles=false,
+                baseSolid=true,
                 withKnobs=false,
                 sideAdjustment=[1,1,1,1],
                 heightAdjustment=-0.2
@@ -41,7 +41,7 @@ translate([30, 0, 0])
             grid=[2,2],
             baseLayers=6,
             alwaysOnFloor=false,
-            withBaseHoles=false,
+            baseSolid=true,
             withKnobs=false,
             sideAdjustment=[0.2,0.2,0.2,0.2]
         );

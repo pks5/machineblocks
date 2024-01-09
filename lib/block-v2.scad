@@ -25,7 +25,7 @@ module block(
         originalBaseHeight = 3.2,
         heightAdjustment=0.0,
         maxBaseHoleDepth = 9.0,
-        withBaseHoles = true,
+        baseSolid = false,
 
         baseRounding="all",
         baseRoundingRadius = 0.1,
@@ -125,11 +125,11 @@ module block(
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
     defaultBaseHoleDepth = originalBaseHeight + topPlateHeight;
-    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - originalBaseHeight) : (resultingBaseHeight - topPlateHeight))) : 0;
+    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - originalBaseHeight))) : 0;
     
     calculatedBaseHoleDepth = resultingBaseHeight - topPlateHeight - resultingPlateOffset;        
     resultingPlateHeight = topPlateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
-    baseHoleDepth = withBaseHoles ? ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? maxBaseHoleDepth : calculatedBaseHoleDepth) : 0;
+    baseHoleDepth = baseSolid ? 0 : ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? maxBaseHoleDepth : calculatedBaseHoleDepth);
     
     wallThicknessClampSkirt = wallThickness + clampSkirtThickness;
     
@@ -202,7 +202,7 @@ module block(
             //Base
             difference(){
                 
-                if(withBaseHoles){
+                if(!baseSolid){
                     union(){
                         /*
                         * Adhesion Helpers
@@ -493,7 +493,7 @@ module block(
                         }
                     }
                 }
-                //End withBaseHoles
+                //End baseSolid
                
                 
                 //Cut X-Holes
