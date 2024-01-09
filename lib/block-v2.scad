@@ -24,7 +24,7 @@ module block(
         baseHeight = 3.2,
         originalBaseHeight = 3.2,
         heightAdjustment=0.0,
-        maxBaseHoleDepth = 9.0,
+        baseCutoutMaxDepth = 9.0,
         baseSolid = false,
 
         baseRounding="all",
@@ -128,8 +128,8 @@ module block(
     resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - originalBaseHeight))) : 0;
     
     calculatedBaseHoleDepth = resultingBaseHeight - topPlateHeight - resultingPlateOffset;        
-    resultingPlateHeight = topPlateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
-    baseHoleDepth = baseSolid ? 0 : ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? maxBaseHoleDepth : calculatedBaseHoleDepth);
+    resultingPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseHoleDepth > baseCutoutMaxDepth)) ? (calculatedBaseHoleDepth - baseCutoutMaxDepth) : 0);
+    baseHoleDepth = baseSolid ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseHoleDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseHoleDepth);
     
     wallThicknessClampSkirt = wallThickness + clampSkirtThickness;
     
