@@ -78,8 +78,8 @@ module block(
         adhesionHelperThickness = 0.4,
         
         withKnobs = true,
-        withKnobsFilled = true,
-        withKnobsCentered = false,
+        knobsFilled = true,
+        knobsCentered = false,
         knobSize = 4.9,
         knobHeight = 1.8,
         knobHoleSize = 3.3,
@@ -582,16 +582,16 @@ module block(
                     /*
                     * Normal knobs
                     */
-                    knobEndX = endX - (withKnobsCentered ? 1 : 0);
-                    knobEndY = endY - (withKnobsCentered ? 1 : 0);
-                    posOffset = withKnobsCentered ? 0.5 : 0;
+                    knobEndX = endX - (knobsCentered ? 1 : 0);
+                    knobEndY = endY - (knobsCentered ? 1 : 0);
+                    posOffset = knobsCentered ? 0.5 : 0;
                     
                     for (a = [ startX : 1 : knobEndX ]){
                         for (b = [ startY : 1 : knobEndY ]){
                             if(drawKnob(a,b, 0)){
                                 translate([posX(a + posOffset), posY(b + posOffset), posZKnobs]){ 
                                     //Knob Cylinder
-                                    if(withKnobsFilled){
+                                    if(knobsFilled){
                                         cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                         
                                         translate([0, 0, 0.5 * knobHeight]){ 

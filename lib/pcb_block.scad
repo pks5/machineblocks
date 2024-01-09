@@ -61,7 +61,7 @@ adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 
 withKnobs=true,
-withKnobsFilled=true,
+knobsFilled=true,
 
 floorHeight = 3.5,
 wallThickness = 1.5,
@@ -142,7 +142,7 @@ textOffsetZ=-0.1
                 center=true,
                 top=true, 
                 withKnobs=withKnobs, 
-                withKnobsFilled=withKnobsFilled,
+                knobsFilled=knobsFilled,
                 withText = withText,
                 textFont = textFont,
                 text = text,

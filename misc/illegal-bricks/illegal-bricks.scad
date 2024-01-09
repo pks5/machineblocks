@@ -14,8 +14,8 @@ include <../../lib/block-v2.scad>;
 
 block(
     grid=[2,2],
-    withKnobsCentered = true,
-    withKnobsFilled = false,
+    knobsCentered = true,
+    knobsFilled = false,
     knobSize=5,
     heightAdjustment=-0.2
 );

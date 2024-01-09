@@ -67,7 +67,7 @@ translate([108, -110,0])
                 grid=[2,1],
                 center=false,
                 withXHoles=true,
-                withKnobsFilled=false
+                knobsFilled=false
             );
                 
         translate([0, -60, 0])
@@ -76,7 +76,7 @@ translate([108, -110,0])
                 grid=[4,1],
                 center=false,
                 withXHoles=true,
-                withKnobsFilled=false
+                knobsFilled=false
             );
                 
         translate([0, -80, 0])
@@ -85,7 +85,7 @@ translate([108, -110,0])
                 grid=[6,1],
                 center=false,
                 withXHoles=true,
-                withKnobsFilled=false
+                knobsFilled=false
             );
             
        translate([0, -100, 0])
@@ -94,7 +94,7 @@ translate([108, -110,0])
                 grid=[8,1],
                 center=false,
                 withXHoles=true,
-                withKnobsFilled=false
+                knobsFilled=false
             );
             
             translate([0, -120, 0])
@@ -103,7 +103,7 @@ translate([108, -110,0])
                 grid=[16,1],
                 center=false,
                 withXHoles=true,
-                withKnobsFilled=false
+                knobsFilled=false
             );
     }
  

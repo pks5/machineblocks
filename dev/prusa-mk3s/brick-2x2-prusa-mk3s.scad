@@ -14,8 +14,9 @@ include <../../lib/block-v2.scad>;
 
 //Generate 4x2 Brick
 block(
-    baseLayers=3,
     grid=[2,2],
     heightAdjustment=-0.2,
-    withKnobsCentered = false
+    knobsCentered = true,
+    knobsFilled=false,
+    withKnobs=false
 );
