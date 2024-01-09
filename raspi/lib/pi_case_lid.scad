@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <./block-v2.scad>;
+include <../../lib/block-v2.scad>;
 
 baseSideLength=8;
 lidHeight = 3;

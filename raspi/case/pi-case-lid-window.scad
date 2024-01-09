@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <../../lib/pi_case_lid.scad>;
+include <../lib/pi_case_lid.scad>;
 
 baseSideLength=8;
 lidHeight = 3;

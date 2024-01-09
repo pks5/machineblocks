@@ -12,8 +12,8 @@
 */
 echo(version=version());
 
-include <./block-v2.scad>;
-include <./prism.scad>;
+include <../../lib/block-v2.scad>;
+include <../../lib/prism.scad>;
 
 baseSideLength=8;
 brickHeight = 3;
