@@ -44,10 +44,10 @@ module block(
         xyHoleInnerSize = 5.1,
         xyHoleInsetSize = 6.2,
         xyHoleInsetDepth = 0.9,
-        zHoleOuterSize = 6.5,
-        zHoleInnerSize = 5.1,
-        pillarHolderOuterSize = 5.1,
-        pillarHolderInnerSize = 4.9,
+        tubeZSize = 6.5,
+        holeZSize = 5.1,
+        
+        tubeClampThickness=0.1,
         holeResolution = 30,
         middlePinSize = 3.2,
         
@@ -97,6 +97,7 @@ module block(
         textSize=4,
         textDepth=-0.6,
         textSide=0,
+        //TODO textOffsetHorizontal
         textOffsetVertical=-0.1,
         textSpacing=1,
         
@@ -230,7 +231,7 @@ module block(
                                             for (b = [ startY : 1 : endY - 1 ]){
                                                if(drawPillar(a, b)){
                                                     translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                        cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * zHoleOuterSize - cutTolerance, center=true, $fn=holeResolution);
+                                                        cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=holeResolution);
                                                     };
                                                }
                                             }   
@@ -288,7 +289,7 @@ module block(
                                         for (b = [ startY : 1 : endY - 1 ]){
                                            if(drawPillar(a, b)){
                                                 translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                    cylinder(h=cutMultiplier * totalHeight, r=0.5 * zHoleOuterSize - cutTolerance, center=true, $fn=holeResolution);
+                                                    cylinder(h=cutMultiplier * totalHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=holeResolution);
                                                 };
                                            }
                                         }   
@@ -355,7 +356,7 @@ module block(
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
                                    translate([posX(a + 0.5), posY(b + 0.5), posZBaseHoles]){
-                                        cylinder(h=baseHoleDepth, r=0.5 * zHoleOuterSize, center=true, $fn=holeResolution);
+                                        cylinder(h=baseHoleDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                     };
                                 }   
                             }
@@ -367,11 +368,11 @@ module block(
                                     if(drawPillar(a, b)){
                                         translate([posX(a + 0.5), posY(b + 0.5), posZBaseHoles]){
                                             difference(){
-                                                cylinder(h=baseHoleDepth, r=0.5 * zHoleOuterSize, center=true, $fn=holeResolution);
+                                                cylinder(h=baseHoleDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                                 
                                                 intersection(){
-                                                    cylinder(h=baseHoleDepth*cutMultiplier, r=0.5 * pillarHolderOuterSize, center=true, $fn=holeResolution);
-                                                    cube([pillarHolderInnerSize, pillarHolderInnerSize, baseHoleDepth*cutMultiplier], center=true);
+                                                    cylinder(h=baseHoleDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=holeResolution);
+                                                    cube([holeZSize-2*tubeClampThickness, holeZSize-2*tubeClampThickness, baseHoleDepth*cutMultiplier], center=true);
                                                 };
                                             }
                                         };
@@ -534,7 +535,7 @@ module block(
                     for (a = [ startX : 1 : endX - 1 ]){
                         for (b = [ startY : 1 : endY - 1 ]){
                             translate([posX(a + 0.5), posY(b+0.5), centerZ]){
-                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * zHoleInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=holeResolution);
                             };
                         }
                     }
