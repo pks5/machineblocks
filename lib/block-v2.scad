@@ -40,10 +40,10 @@ module block(
         withHolesZ = false,
         withPillars = true,
         
-        xyHoleOuterSize = 6.5,
-        xyHoleInnerSize = 5.1,
-        xyHoleInsetSize = 6.2,
-        xyHoleInsetDepth = 0.9,
+        tubeXYSize = 6.5,
+        holeXYSize = 5.1,
+        holeXYInsetSize = 6.2,
+        holeXYInsetDepth = 0.9,
         tubeZSize = 6.5,
         holeZSize = 5.1,
         
@@ -329,7 +329,7 @@ module block(
                             for (a = [ startX : 1 : endX - 1 ]){
                                 translate([posX(a + 0.5), 0, xyHolesZ]){
                                     rotate([90, 0, 0]){ 
-                                        cylinder(h=objectSizeY, r=0.5 * xyHoleOuterSize, center=true, $fn=holeResolution);
+                                        cylinder(h=objectSizeY, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
                                     }
                                 };
                             }
@@ -341,7 +341,7 @@ module block(
                             for (b = [ startY : 1 : endY - 1 ]){
                                 translate([0, posY(b + 0.5), xyHolesZ]){
                                     rotate([0, 90, 0]){ 
-                                        cylinder(h=objectSizeX, r=0.5 * xyHoleOuterSize, center=true, $fn=holeResolution);
+                                        cylinder(h=objectSizeX, r=0.5 * tubeXYSize, center=true, $fn=holeResolution);
                                     };
                                 };
                             }
@@ -501,12 +501,12 @@ module block(
                     for (a = [ startX : 1 : endX - 1 ]){
                         translate([posX(a + 0.5), 0, xyHolesZ]){
                             rotate([90, 0, 0]){ 
-                                cylinder(h=objectSizeY*cutMultiplier, r=0.5 * xyHoleInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=holeResolution);
                                 
                                 translate([0, 0, 0.5 * objectSizeY])
-                                    cylinder(h=2*xyHoleInsetDepth, r=0.5 * xyHoleInsetSize, center=true, $fn=holeResolution);
+                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=holeResolution);
                                 translate([0, 0, -0.5 * objectSizeY])
-                                    cylinder(h=2*xyHoleInsetDepth, r=0.5 * xyHoleInsetSize, center=true, $fn=holeResolution);
+                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=holeResolution);
                             };
                         };
                     }
@@ -518,12 +518,12 @@ module block(
                     for (b = [ startY : 1 : endY - 1 ]){
                         translate([0, posY(b + 0.5), xyHolesZ]){
                             rotate([0, 90, 0]){ 
-                                cylinder(h=objectSizeX*cutMultiplier, r=0.5 * xyHoleInnerSize, center=true, $fn=holeResolution);
+                                cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=holeResolution);
                                 
                                 translate([0, 0, 0.5 * objectSizeX])
-                                    cylinder(h=2*xyHoleInsetDepth, r=0.5 * xyHoleInsetSize, center=true, $fn=holeResolution);
+                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=holeResolution);
                                 translate([0, 0, -0.5 * objectSizeX])
-                                    cylinder(h=2*xyHoleInsetDepth, r=0.5 * xyHoleInsetSize, center=true, $fn=holeResolution);
+                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=holeResolution);
                             };
                         };
                     }
