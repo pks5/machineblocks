@@ -22,14 +22,14 @@ module block(
         sideAdjustment = -0.1,
         brickOffset = [0, 0, 0],
         baseHeight = 3.2,
-        defaultBaseHeight = 3.2,
+        originalBaseHeight = 3.2,
         heightAdjustment=0.0,
         maxBaseHoleDepth = 9.0,
         withBaseHoles = true,
 
         baseRounding="all",
         baseRoundingRadius = 0.1,
-        roundingResolution = 15,
+        baseResolution = 15,
 
         withPillarGaps = false,
         maxPillarNonGap = 2,
@@ -122,8 +122,8 @@ module block(
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
-    defaultBaseHoleDepth = defaultBaseHeight + plateHeight;
-    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - defaultBaseHeight) : (resultingBaseHeight - plateHeight))) : 0;
+    defaultBaseHoleDepth = originalBaseHeight + plateHeight;
+    resultingPlateOffset = withCavity ? (cavityDepth > 0 ? cavityDepth : (withBaseHoles ? (resultingBaseHeight - originalBaseHeight) : (resultingBaseHeight - plateHeight))) : 0;
     
     calculatedBaseHoleDepth = resultingBaseHeight - plateHeight - resultingPlateOffset;        
     resultingPlateHeight = plateHeight + ((maxBaseHoleDepth > 0 && (calculatedBaseHoleDepth > maxBaseHoleDepth)) ? (calculatedBaseHoleDepth - maxBaseHoleDepth) : 0);
@@ -152,14 +152,14 @@ module block(
     posZBaseHoles = -0.5 * (totalHeight - baseHoleDepth);        
     posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPlateOffset);
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
-    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * defaultBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
+    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * originalBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
     
     echo(centerZ = centerZ, posZBaseHoles = posZBaseHoles, posZPlate = posZPlate, posZKnobs = posZKnobs, xyHolesZ = xyHolesZ);
     
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
-    brickOffsetZ = brickOffset[2] * defaultBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
+    brickOffsetZ = brickOffset[2] * originalBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
@@ -392,7 +392,7 @@ module block(
                                     color([0.945, 0.769, 0.059]) //f1c40f
                                     //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
                                     
-                                    base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=roundingResolution, center = true);
+                                    base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=baseResolution, center = true);
                                 }
                                 
                                 /*
@@ -478,7 +478,7 @@ module block(
                         difference(){
                             color([0.945, 0.769, 0.059]) //f1c40f
                             //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
-                            base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=roundingResolution, center = true);
+                            base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=baseResolution, center = true);
                             
                             /*
                             * Cavity
@@ -629,7 +629,7 @@ module block(
                                             center = true, 
                                             radius=0.5, 
                                             apply_to="z",
-                                            resolution=roundingResolution);
+                                            resolution=knobResolution);
                             cube([knobRectX - 2*cavityTongueThickness, knobRectY - 2*cavityTongueThickness, knobHeight*cutMultiplier], center=true);
                         }
                     }

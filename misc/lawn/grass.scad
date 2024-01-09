@@ -4,7 +4,7 @@ include <../../lib/block-v2.scad>;
 
 grid = [6,6];
 cavityWallThickness = 0.8;
-defaultBaseHeight=3.2;
+originalBaseHeight=3.2;
 baseSideLength = 8;
 brickHeight=3.4;
 
@@ -31,7 +31,7 @@ if(withBottom){
         plateHeight=0.4,
         pillarHelperHeight=1,
         cavityDepth=cavityDepth,
-        defaultBaseHeight=defaultBaseHeight,
+        originalBaseHeight=originalBaseHeight,
         baseSideLength = baseSideLength,
         cavityWallThickness = cavityWallThickness,
         withCavity=true,
