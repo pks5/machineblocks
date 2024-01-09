@@ -111,7 +111,7 @@ textSize=7,
 textSide=2,
 textDepth=-0.5,
 textSpacing=1,
-textOffsetZ=-0.1
+textOffsetVertical=-0.1
 ){
 
     finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
@@ -150,7 +150,7 @@ textOffsetZ=-0.1
                 textSide=textSide,
                 textDepth = textDepth,
                 textSpacing = textSpacing,
-                textOffsetZ = textOffsetZ
+                textOffsetVertical = textOffsetVertical
             );
             
             //Window

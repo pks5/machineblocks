@@ -24,7 +24,7 @@ difference(){
         textFont="Font Awesome 6 Free Solid",
         textSize=7,
             textDepth=-4,
-    textOffsetZ=-2.5
+    textOffsetVertical=-2.5
     );
 
     translate([0,-20.9,11]){

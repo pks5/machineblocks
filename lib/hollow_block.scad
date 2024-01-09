@@ -57,7 +57,7 @@ textSize=7,
 textSide=1,
 textDepth=0.5,
 textSpacing=1,
-textOffsetZ=-0.1
+textOffsetVertical=-0.1
 ){
     
     resultingBlockHeight = blockHeight > 0 ? blockHeight : (brickHeight * baseHeight * 3);
@@ -175,7 +175,7 @@ textOffsetZ=-0.1
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffsetZ=textOffsetZ, alwaysOnFloor=false
+                            textOffsetVertical=textOffsetVertical, alwaysOnFloor=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);
