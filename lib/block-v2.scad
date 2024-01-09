@@ -83,7 +83,8 @@ module block(
         knobSize = 4.9,
         knobHeight = 1.8,
         knobHoleSize = 3.3,
-        knobHolderSize = 3,
+        
+        knobHoleClampThickness = 0.15,
         knobResolution = 30,
         knobGaps = [],
         cavityTongueThickness = 1.2,
@@ -604,7 +605,7 @@ module block(
                                             cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                             intersection(){
                                                 cylinder(h=knobCylinderHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                                cube([knobHolderSize, knobHolderSize, knobCylinderHeight*cutMultiplier], center=true);
+                                                cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobCylinderHeight*cutMultiplier], center=true);
                                             }
                                         };
                                     }
