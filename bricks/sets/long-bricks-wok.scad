@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 translate([10, -10, 0])
     block(baseLayers=3, grid=[8,2], withKnobs=false);

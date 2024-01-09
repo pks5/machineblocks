@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 //4x2 Plate
 translate([10,10,0])

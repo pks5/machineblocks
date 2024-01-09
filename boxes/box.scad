@@ -1,4 +1,4 @@
-include <../lib/block-v2.scad>;
+include <../lib/block.scad>;
 
 block(
     grid=[6,6],

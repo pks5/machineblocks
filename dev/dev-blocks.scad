@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/block-v2.scad>;
+include <../lib/block.scad>;
 
 color("yellow")
     translate([-20, 10, 0])

@@ -10,7 +10,7 @@
 */
 
 //Include the MachineBlocks library
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 translate([-80, 10, 0])
     block(

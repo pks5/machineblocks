@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/block-v2.scad>;
+include <../lib/block.scad>;
 
 baseSideSize = 7.95;
 baseHeight = 3.15;

@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 grid = [6,6];
 pitWallThickness = 0.8;

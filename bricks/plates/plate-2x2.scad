@@ -12,6 +12,6 @@
 */
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 block(grid=[2,2]);

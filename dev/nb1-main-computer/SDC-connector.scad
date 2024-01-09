@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 width = 16;
 height = 14;

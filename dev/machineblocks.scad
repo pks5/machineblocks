@@ -1,4 +1,4 @@
-include <../lib/block-v2.scad>;
+include <../lib/block.scad>;
 
 translate([0, 50, 0])
 block(

@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 color([0.376, 0.768, 0.058])
 block(grid=[1,1], withKnobs=false, baseHeight=9.6);

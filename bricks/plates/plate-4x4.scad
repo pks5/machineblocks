@@ -10,7 +10,7 @@
 */
 
 //Include the MachineBlocks library
-include <../../lib/block-v2.scad>;
+include <../../lib/block.scad>;
 
 //Generate the plate
 block(
