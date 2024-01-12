@@ -8,7 +8,8 @@ block(
     textSize=10,
     textFont="OldSansBlack",
     textDepth=-0.8,
-    text="ANNA"
+    text="ANNA",
+    baseSolid=false
 );
 
 translate([0, 50, 0])
