@@ -54,7 +54,7 @@ module block(
         topPlateHeight = 0.6,
         wallThickness = 1.2,
         clampSkirtHeight=1,
-        clampSkirtThickness = 0.4,
+        clampSkirtThickness = 0.5,
         
         withPit=false,
         pitDepth = 0,
