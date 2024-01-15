@@ -54,7 +54,7 @@ module block(
         topPlateHeight = 0.6,
         wallThickness = 1.2,
         clampSkirtHeight=1,
-        clampSkirtThickness = 0.4,
+        clampSkirtThickness = 0.5,
         
         withPit=false,
         pitDepth = 0,
@@ -80,11 +80,12 @@ module block(
         withKnobs = true,
         knobsFilled = true,
         knobsCentered = false,
-        knobSize = 4.9,
+        knobSize = 5.0,
         knobHeight = 1.8,
-        knobHoleSize = 3.3,
+        knobHoleSize = 3.5,
+        knobRounding=0.1,
         
-        knobHoleClampThickness = 0.15,
+        knobHoleClampThickness = 0.1,
         knobResolution = 30,
         knobGaps = [],
         pitTongueThickness = 1.2,
@@ -112,8 +113,9 @@ module block(
        
     sAdjustment = sideAdjustment[0] == undef ? [sideAdjustment, sideAdjustment, sideAdjustment, sideAdjustment] : (len(sideAdjustment) == 2 ? [sideAdjustment[0], sideAdjustment[0], sideAdjustment[1], sideAdjustment[1]] : sideAdjustment);
          
-    knobRoundingHeight = 0.25 * (knobSize - knobHoleSize);        
-    knobCylinderHeight = knobHeight - knobRoundingHeight;
+          
+    knobCylinderHeight = knobHeight - knobRounding;
+    echo(knobRounding=knobRounding);
 
     objectSizeX = baseSideLength * grid[0];
     objectSizeY = baseSideLength * grid[1];
@@ -597,22 +599,30 @@ module block(
                                         cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                         
                                         translate([0, 0, 0.5 * knobHeight]){ 
-                                           cylinder(h=knobRoundingHeight, r=knobHoleSize / 2 + knobRoundingHeight, center=true, $fn=knobResolution);
+                                           cylinder(h=knobRounding, r=0.5 * knobSize - knobRounding, center=true, $fn=knobResolution);
                                         };
                                     }
                                     else{
                                         difference(){
-                                            cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
-                                            intersection(){
-                                                cylinder(h=knobCylinderHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                                cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobCylinderHeight*cutMultiplier], center=true);
+                                            union(){
+                                                cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
+
+                                                translate([0, 0, 0.5 * knobHeight]){ 
+                                                    cylinder(h=knobRounding, r=0.5 * knobSize - knobRounding, center=true, $fn=knobResolution);
+                                                };
+                                            }
+                                            translate([0, 0, 0.5 * knobRounding]){ 
+                                                intersection(){
+                                                    cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
+                                                    cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
+                                                }
                                             }
                                         };
                                     }
                                     
                                     //Knob Rounding
                                     translate([0, 0, 0.5 * knobCylinderHeight]){ 
-                                        torus(2 * knobRoundingHeight, knobSize, knobResolution);
+                                        torus(2 * knobRounding, knobSize, knobResolution);
                                     };
                                 };
                             }
@@ -625,11 +635,11 @@ module block(
                     */
                     knobRectX = posX(endX) - posX(startX) + knobSize - 2*pitTongueSpacing;
                     knobRectY = posY(endY) - posY(startY) + knobSize - 2*pitTongueSpacing;
-                    translate([0, 0, posZKnobs + 0.5*knobRoundingHeight]){ 
+                    translate([0, 0, posZKnobs + 0.5*knobRounding]){ 
                         difference(){
                             roundedcube(size=[knobRectX, knobRectY, knobHeight], 
                                             center = true, 
-                                            radius=0.5, 
+                                            radius=knobRounding, 
                                             apply_to="z",
                                             resolution=knobResolution);
                             cube([knobRectX - 2*pitTongueThickness, knobRectY - 2*pitTongueThickness, knobHeight*cutMultiplier], center=true);

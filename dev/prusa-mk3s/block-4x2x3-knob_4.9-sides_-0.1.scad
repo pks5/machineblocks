@@ -1,5 +1,5 @@
 /**
-* MachineBlocks Brick 4x2
+* MachineBlocks Brick 4x2 optimized for Prusa MK3s and PLA filament
 * https://machineblocks.com 
 *
 * Copyright (c) 2022 Jan P. Knoeller <pk@pksoftware.de>
@@ -14,6 +14,7 @@ include <../../lib/block.scad>;
 
 //Generate 4x2 Brick
 block(
-    grid=[2,2],
-    heightAdjustment=-0.2
+    baseLayers=3,
+    grid=[4,2],
+    knobSize=4.9
 );
