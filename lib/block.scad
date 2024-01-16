@@ -49,7 +49,7 @@ module block(
         
         tubeClampThickness=0.1,
         holeResolution = 30,
-        middlePinSize = 3.2,
+        pinSize = 3.2,
         
         topPlateHeight = 0.6,
         wallThickness = 1.2,
@@ -68,10 +68,10 @@ module block(
         topPlateHelperHeight = 0.2,
         topPlateHelperThickness = 0.4,
         
-        withPillarHelpers = true,
-        pillarHelperOffset=0.2,
-        pillarHelperHeight = 0.4,
-        pillarHelperThickness = 0.8,
+        withStabilizerGrid = true,
+        stabilizerGridOffset=0.2,
+        stabilizerGridHeight = 0.4,
+        stabilizerGridThickness = 0.8,
         
         withAdhesionHelpers = false,
         adhesionHelperHeight = 0.2,
@@ -185,9 +185,9 @@ module block(
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function pillarHelpersXHeight(a) = pillarHelperHeight + (!withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersXHeight(a) = stabilizerGridHeight + (!withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
     
-    function pillarHelpersYHeight(b) = pillarHelperHeight + (!withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersYHeight(b) = stabilizerGridHeight + (!withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
     
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -269,21 +269,21 @@ module block(
                         /*
                         * Pillar Helpers
                         */
-                        if(withPillarHelpers){
+                        if(withStabilizerGrid){
                             color([0.753, 0.224, 0.169]) //c0392b
                             difference(){
                                 union(){
                                     //Helpers X
                                     for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), 0, posZPlate - 0.5 * (resultingTopPlateHeight + pillarHelpersXHeight(a) + pillarHelperOffset)]){ 
-                                            cube([pillarHelperThickness, objectSizeY - 2*wallThickness, pillarHelpersXHeight(a)+pillarHelperOffset], center = true);
+                                        translate([posX(a + 0.5), 0, posZPlate - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a) + stabilizerGridOffset)]){ 
+                                            cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)+stabilizerGridOffset], center = true);
                                         }
                                     }
                                     
                                     //Helpers Y
                                     for (b = [ startY : 1 : endY - 1 ]){
-                                       translate([0, posY(b + 0.5), posZPlate - 0.5 * (resultingTopPlateHeight + pillarHelpersYHeight(b))]){
-                                            cube([objectSizeX - 2*wallThickness, pillarHelperThickness, pillarHelpersYHeight(b)], center = true);
+                                       translate([0, posY(b + 0.5), posZPlate - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
+                                            cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
                                         };
                                     }
                                 }
@@ -310,7 +310,7 @@ module block(
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
                                     translate([posX(a + 0.5), 0, posZBaseHoles]){
-                                        cylinder(h=baseCutoutDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
+                                        cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
                             }
@@ -320,7 +320,7 @@ module block(
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
                                     translate([0, posY(b + 0.5), posZBaseHoles]){
-                                        cylinder(h=baseCutoutDepth, r=0.5 * middlePinSize, center=true, $fn=holeResolution);
+                                        cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
                             }
