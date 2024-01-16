@@ -120,21 +120,32 @@ module block(
         adhesionHelperHeight = 0.2,
         adhesionHelperThickness = 0.4){
             
+    //Variables for cutouts        
     cutOffset = 0.2;
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
        
+    //Side Adjustment
     sAdjustment = sideAdjustment[0] == undef ? [sideAdjustment, sideAdjustment, sideAdjustment, sideAdjustment] : (len(sideAdjustment) == 2 ? [sideAdjustment[0], sideAdjustment[0], sideAdjustment[1], sideAdjustment[1]] : sideAdjustment);
-         
+
+    //Object Size     
     objectSizeX = baseSideLength * grid[0];
     objectSizeY = baseSideLength * grid[1];
-            
+
+    //Object Size Adjusted      
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
     
+    //Base Height
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
-    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
+    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0); 
+
+    //Calculate Brick Offset
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
+    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0); 
     
+    //Base Cutout and Pit Depth
     originalBaseCutoutDepth = baseHeightOriginal + topPlateHeight;
     resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - baseHeightOriginal))) : 0;
     
@@ -143,9 +154,40 @@ module block(
     baseCutoutDepth = baseSolid ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
     
     baseClampWallThickness = wallThickness + baseClampThickness;
+    knobCylinderHeight = knobHeight - knobRounding;
+
+    echo(
+        baseHeight = resultingBaseHeight, 
+        topPlateHeight = resultingTopPlateHeight, 
+        baseCutoutDepth = baseCutoutDepth,
+        pitDepth = resultingPitDepth, 
+        knobHeight = knobHeight,
+        knobCylinderHeight = knobCylinderHeight,
+        wallThickness = wallThickness,
+        baseClampWallThickness = baseClampWallThickness
+    );
     
-    echo(baseHeight = resultingBaseHeight, pitDepth = resultingPitDepth, topPlateHeight = resultingTopPlateHeight, baseCutoutDepth = baseCutoutDepth);
+    //Calculate Z Positions
+    centerZ = withKnobs ? -0.5 * knobHeight : 0;    
+    baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
+    topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
+    knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
+    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * baseHeightOriginal + knobHeight); //TODO absolute value for xy-holes z-position?
     
+    echo(
+        centerZ = centerZ, 
+        baseCutoutZ = baseCutoutZ, 
+        topPlateZ = topPlateZ, 
+        knobsZ = knobsZ, 
+        xyHolesZ = xyHolesZ
+    );
+    
+    //Pre calculate text position and rotation
+    textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
+    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
+    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : textOffsetVertical;
+    textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
+
     //Grid
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -160,22 +202,9 @@ module block(
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
 
-    knobCylinderHeight = knobHeight - knobRounding;
-    
-    //Calculate Z Positions
-    centerZ = withKnobs ? -0.5 * knobHeight : 0;    
-    baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
-    topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
-    knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
-    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * baseHeightOriginal + knobHeight); //TODO absolute value for xy-holes z-position?
-    
-    echo(centerZ = centerZ, baseCutoutZ = baseCutoutZ, topPlateZ = topPlateZ, knobsZ = knobsZ, xyHolesZ = xyHolesZ);
-    
-    //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
-    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
-    
+    /*
+    * START Functions
+    */
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
     
@@ -203,11 +232,10 @@ module block(
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side) = centerZ + (side - 0.5) * resultingBaseHeight;
+    /*
+    * END Functions
+    */
     
-    textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
-    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
-    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : textOffsetVertical;
-    textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         
