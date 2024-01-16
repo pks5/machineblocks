@@ -16,13 +16,14 @@ include <torus.scad>;
 include <text3d.scad>;
 
 module block(
+        //Grid
+        grid = [1, 1],
+
         //Base
         baseSideLength = 8.0,
         baseHeight = 3.2,
         baseHeightOriginal = 3.2,
         baseLayers = 1,
-        grid = [1, 1],
-        
         baseSolid = false,
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 1,
@@ -60,7 +61,7 @@ module block(
         maxPillarNonGap = 2, //TODO find better name
         middlePillarGapLimit = 10, //TODO find better name
         
-        //Pins
+        //Pins (little tubes for blocks with 1 brick side length)
         pinSize = 3.2,
 
         //Tubes
