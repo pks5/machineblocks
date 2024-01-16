@@ -153,12 +153,12 @@ module block(
     
     //Calculate Z Positions
     centerZ = withKnobs ? -0.5 * knobHeight : 0;    
-    posZBaseHoles = -0.5 * (totalHeight - baseCutoutDepth);        
-    posZPlate = posZBaseHoles + 0.5 * (resultingBaseHeight - resultingPitDepth);
+    posZBaseCutout = -0.5 * (totalHeight - baseCutoutDepth);        
+    posZPlate = posZBaseCutout + 0.5 * (resultingBaseHeight - resultingPitDepth);
     posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * originalBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
     
-    echo(centerZ = centerZ, posZBaseHoles = posZBaseHoles, posZPlate = posZPlate, posZKnobs = posZKnobs, xyHolesZ = xyHolesZ);
+    echo(centerZ = centerZ, posZBaseCutout = posZBaseCutout, posZPlate = posZPlate, posZKnobs = posZKnobs, xyHolesZ = xyHolesZ);
     
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
@@ -267,7 +267,7 @@ module block(
                 
             
                         /*
-                        * Pillar Helpers
+                        * Stabilizers
                         */
                         if(withStabilizerGrid){
                             color([0.753, 0.224, 0.169]) //c0392b
@@ -309,7 +309,7 @@ module block(
                             if(endY == 0){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
-                                    translate([posX(a + 0.5), 0, posZBaseHoles]){
+                                    translate([posX(a + 0.5), 0, posZBaseCutout]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
@@ -319,7 +319,7 @@ module block(
                             if(endX == 0){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([0, posY(b + 0.5), posZBaseHoles]){
+                                    translate([0, posY(b + 0.5), posZBaseCutout]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
@@ -351,25 +351,25 @@ module block(
                         }
                         
                         /*
-                        * Pillars / Z-Holes Outer
+                        * Tubes / Z-Holes Outer
                         */
                         color([0.953, 0.612, 0.071]) //f39c12
                         if(withHolesZ){
                             //Z-Holes Outer
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                   translate([posX(a + 0.5), posY(b + 0.5), posZBaseHoles]){
+                                   translate([posX(a + 0.5), posY(b + 0.5), posZBaseCutout]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                     };
                                 }   
                             }
                         }
                         else if(withPillars){
-                            //Pillars with holes
+                            //Tubes with holes
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
                                     if(drawPillar(a, b)){
-                                        translate([posX(a + 0.5), posY(b + 0.5), posZBaseHoles]){
+                                        translate([posX(a + 0.5), posY(b + 0.5), posZBaseCutout]){
                                             difference(){
                                                 cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                                 
@@ -423,7 +423,7 @@ module block(
                                     for (side = [ 0 : 1 : 1 ]){
                                         gapLength = drawWallGapX(a, side, 0);
                                         if(gapLength > 0){
-                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), posZBaseHoles - centerZ]){
+                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), posZBaseCutout - centerZ]){
                                                  difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
                                                         cube([gapLength*baseSideLength - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
@@ -448,7 +448,7 @@ module block(
                                     for (side = [ 0 : 1 : 1 ]){
                                         gapLength = drawWallGapY(b, side, 0);
                                         if(gapLength > 0){
-                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), posZBaseHoles - centerZ]){
+                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), posZBaseCutout - centerZ]){
                                                 difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
                                                         cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
