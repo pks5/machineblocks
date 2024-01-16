@@ -2,7 +2,5 @@ echo(version=version());
 
 include <../lib/block.scad>;
 
-width = 21;
-height = 4;
-
-roundedcube([width, width, height], true, 2, "y");
+linear_extrude(height = 20, center = true)
+ import("images/machineblocks-qr-code.svg");

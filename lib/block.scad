@@ -14,6 +14,7 @@ include <roundedcube.scad>;
 include <base.scad>;
 include <torus.scad>;
 include <text3d.scad>;
+include <svg3d.scad>;
 
 module block(
         //Grid
@@ -99,16 +100,27 @@ module block(
         pitWallThickness = 2.6,
         
         //Text
-        withText=false,
-        textFont="Liberation Sans",
-        text="SCAD",
-        textSize=4,
-        textDepth=-0.6,
-        textSide=0,
-        //TODO textOffsetHorizontal
-        textOffsetVertical=0,
-        textSpacing=1,
-        
+        withText = false,
+        textFont = "Liberation Sans",
+        text = "SCAD",
+        textSize = 4,
+        textDepth = -0.6,
+        textSide = 0,
+        textOffsetHorizontal = 0,
+        textOffsetVertical = 0,
+        textSpacing = 1,
+
+        //SVG
+        withSvg = false,
+        svgFile = "",
+        svgOrgWidth = 100,
+        svgOrgHeight = 100,
+        svgDepth = 0.4,
+        svgSize = 1,
+        svgSide = 5,
+        svgOffsetHorizontal = 0,
+        svgOffsetVertical = 0,
+
         //Alignment
         brickOffset = [0, 0, 0],
         center = true,
@@ -183,10 +195,11 @@ module block(
     );
     
     //Pre calculate text position and rotation
-    textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
-    textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
-    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffsetVertical;
+    //textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : textOffsetHorizontal;
+    //textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
+    //textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffsetVertical;
     textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
+    svgRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
 
     //Grid
     startX = 0;
@@ -232,6 +245,10 @@ module block(
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side) = centerZ + (side - 0.5) * resultingBaseHeight;
+
+    function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal;
+    function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical : 0);
+    function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : centerZ + offsetVertical;
     /*
     * END Functions
     */
@@ -588,7 +605,7 @@ module block(
                 */
                 if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([textX, textY, textZ])
+                        translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
                             rotate(textRotations[textSide])
                                 text3d(
                                     text = text,
@@ -606,7 +623,7 @@ module block(
             */
             if(withText && textDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([textX, textY, textZ])
+                    translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
                         rotate(textRotations[textSide])
                             text3d(
                                 text = text,
@@ -614,6 +631,23 @@ module block(
                                 textSize = textSize,
                                 textFont = textFont,
                                 textSpacing = textSpacing,
+                                center = true
+                            );
+            }
+
+            /*
+            * SVG
+            */
+            if(withSvg && svgDepth > 0){
+                color([0.173, 0.243, 0.314]) //2c3e50
+                    translate([decoratorX(svgSide, svgDepth, svgOffsetHorizontal), decoratorY(svgSide, svgDepth, svgOffsetVertical), decoratorZ(svgSide, svgDepth, svgOffsetVertical)])
+                        rotate(svgRotations[svgSide])
+                            svg3d(
+                                file = svgFile,
+                                orgWidth = svgOrgWidth,
+                                orgHeight = svgOrgHeight,
+                                depth = svgDepth,
+                                size = svgSize,
                                 center = true
                             );
             }
