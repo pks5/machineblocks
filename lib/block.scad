@@ -72,6 +72,7 @@ module block(
         stabilizerGridOffset=0.2,
         stabilizerGridHeight = 0.4,
         stabilizerGridThickness = 0.8,
+        stabilizerExpansion = 2,
         
         withAdhesionHelpers = false,
         adhesionHelperHeight = 0.2,
@@ -113,10 +114,6 @@ module block(
        
     sAdjustment = sideAdjustment[0] == undef ? [sideAdjustment, sideAdjustment, sideAdjustment, sideAdjustment] : (len(sideAdjustment) == 2 ? [sideAdjustment[0], sideAdjustment[0], sideAdjustment[1], sideAdjustment[1]] : sideAdjustment);
          
-          
-    knobCylinderHeight = knobHeight - knobRounding;
-    echo(knobRounding=knobRounding);
-
     objectSizeX = baseSideLength * grid[0];
     objectSizeY = baseSideLength * grid[1];
             
@@ -150,6 +147,8 @@ module block(
     
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
+
+    knobCylinderHeight = knobHeight - knobRounding;
     
     //Calculate Z Positions
     centerZ = withKnobs ? -0.5 * knobHeight : 0;    
@@ -185,9 +184,9 @@ module block(
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function stabilizersXHeight(a) = stabilizerGridHeight + (!withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > 3) && (a%2 == 1)) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersXHeight(a) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > stabilizerExpansion+1) && ((a%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
     
-    function stabilizersYHeight(b) = stabilizerGridHeight + (!withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > 3) && (b%2 == 1)) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > stabilizerExpansion+1) && ((b%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
     
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
