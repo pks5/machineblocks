@@ -152,12 +152,12 @@ module block(
     
     //Calculate Z Positions
     centerZ = withKnobs ? -0.5 * knobHeight : 0;    
-    posZBaseCutout = -0.5 * (totalHeight - baseCutoutDepth);        
-    posZPlate = posZBaseCutout + 0.5 * (resultingBaseHeight - resultingPitDepth);
-    posZKnobs = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
+    baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
+    topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
+    knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
     xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * originalBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
     
-    echo(centerZ = centerZ, posZBaseCutout = posZBaseCutout, posZPlate = posZPlate, posZKnobs = posZKnobs, xyHolesZ = xyHolesZ);
+    echo(centerZ = centerZ, baseCutoutZ = baseCutoutZ, topPlateZ = topPlateZ, knobsZ = knobsZ, xyHolesZ = xyHolesZ);
     
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
@@ -249,16 +249,16 @@ module block(
                         if(withTopPlateHelpers){
                             color([0.906, 0.298, 0.235]) //e74c3c
                             union(){
-                                translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, posZPlate - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
+                                translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
                                     cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
                                 }
-                                translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, posZPlate - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
+                                translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
                                     cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
                                 }    
-                                translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), posZPlate - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
                                     cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
                                 }
-                                translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), posZPlate - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
                                     cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
                                 } 
                             }
@@ -274,14 +274,14 @@ module block(
                                 union(){
                                     //Helpers X
                                     for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), 0, posZPlate - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a) + stabilizerGridOffset)]){ 
+                                        translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a) + stabilizerGridOffset)]){ 
                                             cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)+stabilizerGridOffset], center = true);
                                         }
                                     }
                                     
                                     //Helpers Y
                                     for (b = [ startY : 1 : endY - 1 ]){
-                                       translate([0, posY(b + 0.5), posZPlate - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
+                                       translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
                                             cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
                                         };
                                     }
@@ -308,7 +308,7 @@ module block(
                             if(endY == 0){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (a = [ startX : 1 : endX - 1 ]){
-                                    translate([posX(a + 0.5), 0, posZBaseCutout]){
+                                    translate([posX(a + 0.5), 0, baseCutoutZ]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
@@ -318,7 +318,7 @@ module block(
                             if(endX == 0){
                                 color([0.953, 0.612, 0.071]) //f39c12
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([0, posY(b + 0.5), posZBaseCutout]){
+                                    translate([0, posY(b + 0.5), baseCutoutZ]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=holeResolution);
                                     };
                                 }
@@ -357,7 +357,7 @@ module block(
                             //Z-Holes Outer
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                   translate([posX(a + 0.5), posY(b + 0.5), posZBaseCutout]){
+                                   translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                         cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                     };
                                 }   
@@ -368,7 +368,7 @@ module block(
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
                                     if(drawPillar(a, b)){
-                                        translate([posX(a + 0.5), posY(b + 0.5), posZBaseCutout]){
+                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                             difference(){
                                                 cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=holeResolution);
                                                 
@@ -422,7 +422,7 @@ module block(
                                     for (side = [ 0 : 1 : 1 ]){
                                         gapLength = drawWallGapX(a, side, 0);
                                         if(gapLength > 0){
-                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), posZBaseCutout - centerZ]){
+                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ - centerZ]){
                                                  difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
                                                         cube([gapLength*baseSideLength - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
@@ -447,7 +447,7 @@ module block(
                                     for (side = [ 0 : 1 : 1 ]){
                                         gapLength = drawWallGapY(b, side, 0);
                                         if(gapLength > 0){
-                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), posZBaseCutout - centerZ]){
+                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ - centerZ]){
                                                 difference(){
                                                     translate([0, 0, -0.5 * cutOffset])
                                                         cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
@@ -592,7 +592,7 @@ module block(
                     for (a = [ startX : 1 : knobEndX ]){
                         for (b = [ startY : 1 : knobEndY ]){
                             if(drawKnob(a,b, 0)){
-                                translate([posX(a + posOffset), posY(b + posOffset), posZKnobs]){ 
+                                translate([posX(a + posOffset), posY(b + posOffset), knobsZ]){ 
                                     //Knob Cylinder
                                     if(knobsFilled){
                                         cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
@@ -634,7 +634,7 @@ module block(
                     */
                     knobRectX = posX(endX) - posX(startX) + knobSize - 2*knobTongueSpacing;
                     knobRectY = posY(endY) - posY(startY) + knobSize - 2*knobTongueSpacing;
-                    translate([0, 0, posZKnobs + 0.5*knobRounding]){ 
+                    translate([0, 0, knobsZ + 0.5*knobRounding]){ 
                         difference(){
                             roundedcube(size=[knobRectX, knobRectY, knobHeight], 
                                             center = true, 
