@@ -16,87 +16,91 @@ include <torus.scad>;
 include <text3d.scad>;
 
 module block(
+        //Base
+        baseSideLength = 8.0,
+        baseHeight = 3.2,
+        baseHeightOriginal = 3.2,
         baseLayers = 1,
         grid = [1, 1],
-        baseSideLength = 8.0,
-        sideAdjustment = -0.1,
-        brickOffset = [0, 0, 0],
-        baseHeight = 3.2,
-        originalBaseHeight = 3.2,
-        heightAdjustment=0.0,
-        baseCutoutMaxDepth = 9.0,
+        
         baseSolid = false,
-
-        baseRounding="all",
+        baseCutoutMaxDepth = 9.0,
+        baseClampHeight = 1,
+        baseClampThickness = 0.5,
+        baseRounding = "all",
         baseRoundingRadius = 0.1,
         baseRoundingResolution = 15,
 
-        withPillarGaps = false,
-        maxPillarNonGap = 2,
-        middlePillarGapLimit = 10,
-        
-        withHolesX = false,
-        withHolesY = false,
-        withHolesZ = false,
-        withPillars = true,
-        
-        tubeXYSize = 6.5,
-        holeXYSize = 5.1,
-        holeXYInsetSize = 6.2,
-        holeXYInsetDepth = 0.9,
-        tubeZSize = 6.5,
-        holeZSize = 5.1,
-        
-        tubeClampThickness=0.1,
-        holeResolution = 30,
-        pinSize = 3.2,
-        
-        topPlateHeight = 0.6,
+        //Base Adjustment
+        sideAdjustment = -0.1,
+        heightAdjustment = 0.0,
+
+        //Walls
         wallThickness = 1.2,
-        baseClampHeight=1,
-        baseClampThickness = 0.5,
-        
-        withPit=false,
-        pitDepth = 0,
-        pitWallThickness = 2.6,
-        
         wallGapsX = [],
         wallGapsY = [],
         
-        withTopPlateHelpers=true,
-        topPlateHelperOffset=0.2,
+        //Top Plate
+        topPlateHeight = 0.6,
+        withTopPlateHelpers = true,
+        topPlateHelperOffset = 0.2,
         topPlateHelperHeight = 0.2,
         topPlateHelperThickness = 0.4,
-        
+
+        //Stabilizers
         withStabilizerGrid = true,
-        stabilizerGridOffset=0.2,
+        stabilizerGridOffset = 0.2,
         stabilizerGridHeight = 0.4,
         stabilizerGridThickness = 0.8,
         stabilizerExpansion = 2,
         
-        withAdhesionHelpers = false,
-        adhesionHelperHeight = 0.2,
-        adhesionHelperThickness = 0.4,
+        //Pillars: Tubes and Pins
+        withPillars = true,
+        withPillarGaps = false, //TODDO rename to withTubeGaps?
+        maxPillarNonGap = 2, //TODO find better name
+        middlePillarGapLimit = 10, //TODO find better name
         
+        //Pins
+        pinSize = 3.2,
+
+        //Tubes
+        tubeXYSize = 6.5,
+        tubeZSize = 6.5,
+        tubeClampThickness = 0.1,
+
+        //Holes
+        withHolesX = false,
+        withHolesY = false,
+        holeXYSize = 5.1,
+        holeXYInsetSize = 6.2,
+        holeXYInsetDepth = 0.9,
+        withHolesZ = false,
+        holeZSize = 5.1,
+        holeResolution = 30,
+        
+        //Knobs
         withKnobs = true,
         knobsFilled = true,
         knobsCentered = false,
         knobSize = 5.0,
         knobHeight = 1.8,
         knobHoleSize = 3.5,
-        knobRounding=0.1,
-        
+        knobRounding = 0.1,
         knobHoleClampThickness = 0.1,
         knobResolution = 30,
         knobGaps = [],
         knobTongueThickness = 1.2,
         knobTongueSpacing = 0.1,
         
+        //Pit
+        withPit=false,
+        pitDepth = 0,
+        pitWallThickness = 2.6,
         
-        
+        //Text
         withText=false,
-        textFont="Helvetica Bold",
-        text="Hi",
+        textFont="Liberation Sans",
+        text="SCAD",
         textSize=4,
         textDepth=-0.6,
         textSide=0,
@@ -104,9 +108,16 @@ module block(
         textOffsetVertical=-0.1,
         textSpacing=1,
         
+        //Alignment
+        brickOffset = [0, 0, 0],
         center = true,
         alwaysOnFloor = true,
-        alignWithAdjustment = false){
+        alignWithAdjustment = false,
+        
+        //Adhesion Helpers
+        withAdhesionHelpers = false,
+        adhesionHelperHeight = 0.2,
+        adhesionHelperThickness = 0.4){
             
     cutOffset = 0.2;
     cutMultiplier = 1.1;
@@ -123,8 +134,8 @@ module block(
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
     totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0);  
     
-    originalBaseCutoutDepth = originalBaseHeight + topPlateHeight;
-    resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - originalBaseHeight))) : 0;
+    originalBaseCutoutDepth = baseHeightOriginal + topPlateHeight;
+    resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - baseHeightOriginal))) : 0;
     
     calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;        
     resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
@@ -155,14 +166,14 @@ module block(
     baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
     knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobCylinderHeight); 
-    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * originalBaseHeight + knobHeight); //TODO absolute value for xy-holes z-position?
+    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * baseHeightOriginal + knobHeight); //TODO absolute value for xy-holes z-position?
     
     echo(centerZ = centerZ, baseCutoutZ = baseCutoutZ, topPlateZ = topPlateZ, knobsZ = knobsZ, xyHolesZ = xyHolesZ);
     
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
-    brickOffsetZ = brickOffset[2] * originalBaseHeight + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
+    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0);
     
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
