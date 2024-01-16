@@ -106,7 +106,7 @@ module block(
         textDepth=-0.6,
         textSide=0,
         //TODO textOffsetHorizontal
-        textOffsetVertical=-0.1,
+        textOffsetVertical=0,
         textSpacing=1,
         
         //Alignment
@@ -185,7 +185,7 @@ module block(
     //Pre calculate text position and rotation
     textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : 0;
     textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
-    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : textOffsetVertical;
+    textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffsetVertical;
     textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
 
     //Grid
