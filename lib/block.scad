@@ -113,13 +113,11 @@ module block(
         //SVG
         withSvg = false,
         svgFile = "",
-        svgOrgWidth = 100,
-        svgOrgHeight = 100,
+        svgOrgDim = [100, 100],
         svgDepth = 0.4,
         svgSize = 1,
         svgSide = 5,
-        svgOffsetHorizontal = 0,
-        svgOffsetVertical = 0,
+        svgOffset = 0,
 
         //Alignment
         brickOffset = [0, 0, 0],
@@ -640,12 +638,12 @@ module block(
             */
             if(withSvg && svgDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(svgSide, svgDepth, svgOffsetHorizontal), decoratorY(svgSide, svgDepth, svgOffsetVertical), decoratorZ(svgSide, svgDepth, svgOffsetVertical)])
+                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])
                             svg3d(
                                 file = svgFile,
-                                orgWidth = svgOrgWidth,
-                                orgHeight = svgOrgHeight,
+                                orgWidth = svgOrgDim[0],
+                                orgHeight = svgOrgDim[1],
                                 depth = svgDepth,
                                 size = svgSize,
                                 center = true
