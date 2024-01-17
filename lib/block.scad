@@ -106,8 +106,7 @@ module block(
         textSize = 4,
         textDepth = -0.6,
         textSide = 0,
-        textOffsetHorizontal = 0,
-        textOffsetVertical = 0,
+        textOffset = [0, 0],
         textSpacing = 1,
 
         //SVG
@@ -117,7 +116,7 @@ module block(
         svgDepth = 0.4,
         svgScale = 1,
         svgSide = 5,
-        svgOffset = 0,
+        svgOffset = [0, 0],
 
         //Alignment
         brickOffset = [0, 0, 0],
@@ -193,9 +192,9 @@ module block(
     );
     
     //Pre calculate text position and rotation
-    //textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : textOffsetHorizontal;
-    //textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
-    //textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffsetVertical;
+    //textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : textOffset[0];
+    //textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffset[1] : 0);
+    //textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffset[1];
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     //svgRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
 
@@ -603,7 +602,7 @@ module block(
                 */
                 if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
+                        translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
                                 text3d(
                                     text = text,
@@ -621,7 +620,7 @@ module block(
             */
             if(withText && textDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
+                    translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])
                             text3d(
                                 text = text,

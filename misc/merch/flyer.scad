@@ -13,7 +13,14 @@ block(
     svgSide=5,
     svgDepth=0.6,
     svgOffset=[40,12],
-    knobGaps = [[1,1,14,2], [11,4,14,7]],
+    withText=true,
+    textFont="RBNo3.1 Bold",
+    text="MachineBlocks.com",
+    textSide=5,
+    textDepth=0.6,
+    textSize=7,
+    textOffset=[0, -24],
+    knobGaps = [[2,1,13,1], [11,4,14,7]],
     knobSize = 5.0, //Reduce this value if the knobs do not fit into a LEGO brick or only with great difficulty
     sideAdjustment = -0.1,
     heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
