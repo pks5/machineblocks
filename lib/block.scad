@@ -598,7 +598,7 @@ module block(
                 }
            
                 /*
-                * Text Cut
+                * Text Cutout
                 */
                 if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
@@ -606,10 +606,27 @@ module block(
                             rotate(decoratorRotations[textSide])
                                 text3d(
                                     text = text,
-                                    textDepth = 2*abs(textDepth),
+                                    textDepth = 2 * abs(textDepth),
                                     textSize = textSize,
                                     textFont = textFont,
                                     textSpacing = textSpacing,
+                                    center = true
+                                );
+                }
+
+                /*
+                * SVG Cutout
+                */
+                if(withSvg && svgDepth < 0){
+                    color([0.173, 0.243, 0.314]) //2c3e50
+                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
+                            rotate(decoratorRotations[svgSide])
+                                svg3d(
+                                    file = svgFile,
+                                    orgWidth = svgDimensions[0],
+                                    orgHeight = svgDimensions[1],
+                                    depth = 2 * abs(svgDepth),
+                                    size = svgScale,
                                     center = true
                                 );
                 }
