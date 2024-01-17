@@ -198,8 +198,8 @@ module block(
     //textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : textOffsetHorizontal;
     //textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffsetVertical : 0);
     //textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffsetVertical;
-    textRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
-    svgRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
+    decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
+    //svgRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
 
     //Grid
     startX = 0;
@@ -606,7 +606,7 @@ module block(
                 if(withText && textDepth < 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
-                            rotate(textRotations[textSide])
+                            rotate(decoratorRotations[textSide])
                                 text3d(
                                     text = text,
                                     textDepth = 2*abs(textDepth),
@@ -624,7 +624,7 @@ module block(
             if(withText && textDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(textSide, textDepth, textOffsetHorizontal), decoratorY(textSide, textDepth, textOffsetVertical), decoratorZ(textSide, textDepth, textOffsetVertical)])
-                        rotate(textRotations[textSide])
+                        rotate(decoratorRotations[textSide])
                             text3d(
                                 text = text,
                                 textDepth = textDepth,
@@ -641,7 +641,7 @@ module block(
             if(withSvg && svgDepth > 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(svgSide, svgDepth, svgOffsetHorizontal), decoratorY(svgSide, svgDepth, svgOffsetVertical), decoratorZ(svgSide, svgDepth, svgOffsetVertical)])
-                        rotate(svgRotations[svgSide])
+                        rotate(decoratorRotations[svgSide])
                             svg3d(
                                 file = svgFile,
                                 orgWidth = svgOrgWidth,
