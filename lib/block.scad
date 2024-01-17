@@ -113,9 +113,9 @@ module block(
         //SVG
         withSvg = false,
         svgFile = "",
-        svgOrgDim = [100, 100],
+        svgDimensions = [100, 100],
         svgDepth = 0.4,
-        svgSize = 1,
+        svgScale = 1,
         svgSide = 5,
         svgOffset = 0,
 
@@ -642,10 +642,10 @@ module block(
                         rotate(decoratorRotations[svgSide])
                             svg3d(
                                 file = svgFile,
-                                orgWidth = svgOrgDim[0],
-                                orgHeight = svgOrgDim[1],
+                                orgWidth = svgDimensions[0],
+                                orgHeight = svgDimensions[1],
                                 depth = svgDepth,
-                                size = svgSize,
+                                size = svgScale,
                                 center = true
                             );
             }
