@@ -12,6 +12,7 @@
 //Include the MachineBlocks library
 include <../../lib/block.scad>;
 
+//Plate with centered knob
 block(
     grid=[2,2],
     knobsCentered = true,
@@ -20,46 +21,56 @@ block(
     heightAdjustment=-0.2
 );
 
-translate([30, 0, 0])
-    difference(){
-        union(){
-            block(
-                grid=[4,4],
-                knobSize=5,
-                heightAdjustment=-0.2
-            );
-            block(
-                grid=[2,2],
-                baseSolid=true,
-                withKnobs=false,
-                sideAdjustment=[1,1,1,1],
-                heightAdjustment=-0.2
-            );   
-        }
+//Cross
+translate([24, 0, 0])
+union(){
+    block(
+        grid=[3,1], 
+        wallGapsX=[[1,2]],
+        knobSize=5,
+        heightAdjustment=-0.2
+    );
 
-        block(
-            grid=[2,2],
-            baseLayers=6,
-            alwaysOnFloor=false,
-            baseSolid=true,
-            withKnobs=false,
-            sideAdjustment=[0.2,0.2,0.2,0.2]
-        );
-    }
+    block(
+        grid=[1, 3], 
+        wallGapsY=[[1,2]],
+        knobSize=5,
+        heightAdjustment=-0.2
+    );    
+}
 
-translate([64, 0, 0])
-    union(){
-        block(
-            grid=[3,1], 
-            wallGapsX=[[1,2]],
-            knobSize=5,
-            heightAdjustment=-0.2
-        );
+//Plate with hole
+translate([56, 0, 0])
+union(){
+    block(
+        grid=[1, 4], 
+        wallGapsY=[[0,1], [3,1]],
+        knobSize=5,
+        heightAdjustment=-0.2,
+        brickOffset=[-1.5,0,0]
+    );  
 
-        block(
-            grid=[1, 3], 
-            wallGapsY=[[1,2]],
-            knobSize=5,
-            heightAdjustment=-0.2
-        );    
-    }
+    block(
+        grid=[4,1], 
+        wallGapsX=[[0,0], [3,0]],
+        knobSize=5,
+        heightAdjustment=-0.2,
+        brickOffset=[0,1.5,0]
+    );
+
+    block(
+        grid=[1, 4], 
+        wallGapsY=[[0,0], [3,0]],
+        knobSize=5,
+        heightAdjustment=-0.2,
+        brickOffset=[1.5,0,0]
+    );    
+
+    block(
+        grid=[4,1], 
+        wallGapsX=[[0,1], [3,1]],
+        knobSize=5,
+        heightAdjustment=-0.2,
+        brickOffset=[0,-1.5,0]
+    );
+}
