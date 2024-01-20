@@ -91,7 +91,7 @@ module block(
         knobHoleClampThickness = 0.1,
         knobResolution = 30,
         knobGaps = [],
-        knobTongueThickness = 1.2,
+        knobTongueThickness = 1.0,
         knobTongueSpacing = 0.1,
         
         //Pit
