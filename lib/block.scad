@@ -10,11 +10,11 @@
 *
 */
 
-include <roundedcube.scad>;
-include <base.scad>;
-include <torus.scad>;
-include <text3d.scad>;
-include <svg3d.scad>;
+use <roundedcube.scad>;
+use <base.scad>;
+use <torus.scad>;
+use <text3d.scad>;
+use <svg3d.scad>;
 
 module block(
         //Grid
@@ -81,9 +81,10 @@ module block(
         holeResolution = 30,
         
         //Knobs
-        withKnobs = true,
-        knobsFilled = true,
-        knobsCentered = false,
+        withKnobs = true, //TODO integrate into knobType (AUTO, CLASSIC, TECHNIC, TONGUE, NONE)
+        knobType = "AUTO",
+        knobsFilled = true, //TODO remove, use knobType='CLASSIC' or knobType = 'TECHNIC'
+        knobsCentered = false, //TODO change to knobCentered (singular)
         knobSize = 5.0,
         knobHeight = 1.8,
         knobHoleSize = 3.5,
@@ -191,13 +192,9 @@ module block(
         xyHolesZ = xyHolesZ
     );
     
-    //Pre calculate text position and rotation
-    //textX = textSide < 2 ? ((textDepth > 0 ? (textSide - 0.5) * textDepth : 0) + sideX(textSide)) : textOffset[0];
-    //textY = (textSide > 1 && textSide < 4) ? ((textDepth > 0 ? (textSide - 2 - 0.5) * textDepth : 0) + sideY(textSide - 2)) : (textSide > 3 && textSide < 6 ? textOffset[1] : 0);
-    //textZ = (textSide > 3 && textSide < 6) ? ((textDepth > 0 ? (textSide - 4 - 0.5) * textDepth : 0) + sideZ(textSide - 4)) : centerZ + textOffset[1];
+    //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
-    //svgRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
-
+    
     //Grid
     startX = 0;
     midX = floor(0.5 * grid[0] - 1);
@@ -445,21 +442,18 @@ module block(
                                 /*
                                 * Base Block
                                 */
-                                translate([0.5*(sAdjustment[1] - sAdjustment[0]), 0.5*(sAdjustment[3] - sAdjustment[2]), 0]){
-                                    color([0.945, 0.769, 0.059]) //f1c40f
-                                    //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
-                                    
-                                    base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=baseRoundingResolution, center = true);
-                                }
-                                
-                                /*
-                                * Pit
-                                */
-                                if(withPit){
-                                    color([0.827, 0.329, 0]) //d35400
-                                    translate([0, 0, 0.5*(resultingBaseHeight - resultingPitDepth) + 0.5 * cutOffset])
-                                        cube([objectSizeX - 2*pitWallThickness, objectSizeY - 2*pitWallThickness, resultingPitDepth + cutOffset], center = true);
-                                }
+                                color([0.945, 0.769, 0.059]) //f1c40f
+                                base(
+                                    objectSize = [objectSizeX, objectSizeY],
+                                    height = resultingBaseHeight,
+                                    sideAdjustment = sAdjustment,
+                                    baseRounding = baseRounding, 
+                                    roundingRadius = baseRoundingRadius, 
+                                    roundingResolution = baseRoundingResolution,
+                                    withPit = withPit,
+                                    pitDepth = resultingPitDepth,
+                                    pitWallThickness = pitWallThickness
+                                );
                                 
                                 /*
                                 * Bottom Hole
@@ -531,21 +525,19 @@ module block(
                     /*
                     * Solid Base Block
                     */
-                    translate([0.5*(sAdjustment[1] - sAdjustment[0]), 0.5*(sAdjustment[3] - sAdjustment[2]), centerZ]){ 
-                        difference(){
-                            color([0.945, 0.769, 0.059]) //f1c40f
-                            //cube([objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], center = true);
-                            base(size=[objectSizeXAdjusted, objectSizeYAdjusted, resultingBaseHeight], baseRounding=baseRounding, roundingRadius=baseRoundingRadius, roundingResolution=baseRoundingResolution, center = true);
-                            
-                            /*
-                            * Pit
-                            */
-                            if(withPit){
-                                color([0.827, 0.329, 0]) //d35400
-                                translate([0, 0, 0.5*(resultingBaseHeight - resultingPitDepth) + 0.5 * cutOffset])
-                                    cube([objectSizeX - 2*pitWallThickness, objectSizeY - 2*pitWallThickness, resultingPitDepth + cutOffset], center = true);
-                            }
-                        }
+                    translate([0, 0, centerZ]){ 
+                        color([0.945, 0.769, 0.059]) //f1c40f
+                            base(
+                                objectSize = [objectSizeX, objectSizeY],
+                                height = resultingBaseHeight,
+                                sideAdjustment = sAdjustment,
+                                baseRounding = baseRounding, 
+                                roundingRadius = baseRoundingRadius, 
+                                roundingResolution = baseRoundingResolution,
+                                withPit = withPit,
+                                pitDepth = resultingPitDepth,
+                                pitWallThickness = pitWallThickness
+                            );
                     }
                 }
                 //End baseSolid
@@ -668,8 +660,11 @@ module block(
             
             //With knobs
             if(withKnobs){
+                /*
+                * Classic Knobs
+                */
                 color([0.945, 0.769, 0.059]) //f1c40f
-                if(!withPit){
+                if((knobType == "AUTO" && !withPit) || knobType == "CLASSIC" || knobType == "TECHNIC"){
                     /*
                     * Normal knobs
                     */
@@ -682,14 +677,15 @@ module block(
                             if(drawKnob(a,b, 0)){
                                 translate([posX(a + posOffset), posY(b + posOffset), knobsZ]){ 
                                     //Knob Cylinder
-                                    if(knobsFilled){
+                                    if((knobType == "AUTO" && knobsFilled) || knobType == "CLASSIC"){
                                         cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
                                         
                                         translate([0, 0, 0.5 * knobHeight]){ 
                                            cylinder(h=knobRounding, r=0.5 * knobSize - knobRounding, center=true, $fn=knobResolution);
                                         };
                                     }
-                                    else{
+                                    
+                                    else if((knobType == "AUTO" && !knobsFilled) || knobType == "TECHNIC"){
                                         difference(){
                                             union(){
                                                 cylinder(h=knobCylinderHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
@@ -716,7 +712,12 @@ module block(
                         }
                     }
                 }
-                else{
+
+                /*
+                * Knob Tongue
+                */
+                color([0.945, 0.769, 0.059]) //f1c40f
+                if((knobType == "AUTO" && withPit) || knobType == "TONGUE"){
                     /*
                     * Draw Big Knob if plateOffset is greater than zero
                     */
