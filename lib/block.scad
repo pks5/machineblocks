@@ -741,16 +741,16 @@ module block(
                             );
             }
 
-            for (gap = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                side = pitWallGaps[gap][0];
+            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                gap = pitWallGaps[gapIndex];
                 cutHeight = resultingPitDepth + (withKnobs ? knobHeight : 0);
-                if(side < 2){
-                    translate([sideX(side), 0, topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
-                    cube([2*pWallThickness[side]*cutMultiplier, pitSizeY, cutHeight + cutOffset], center = true);
+                if(gap[0] < 2){
+                    translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
+                        cube([2*pWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], cutHeight + cutOffset], center = true);
                 }  
                 else{
-                    translate([0, sideY(side - 2), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
-                    cube([pitSizeX, 2*pWallThickness[side]*cutMultiplier, cutHeight + cutOffset], center = true);     
+                    translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
+                        cube([pitSizeX - gap[1] - gap[2] , 2*pWallThickness[gap[0]]*cutMultiplier, cutHeight + cutOffset], center = true);     
                 } 
             }   
 
