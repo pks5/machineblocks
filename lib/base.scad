@@ -9,7 +9,8 @@ module base(
     roundingResolution,
     withPit,
     pitWallThickness,
-    pitDepth
+    pitDepth,
+    pitWallGaps,
 ){
     //Variables for cutouts        
     cutOffset = 0.2;
@@ -21,6 +22,9 @@ module base(
     objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
+
+    //function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    //function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
     difference(){
         translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
@@ -53,16 +57,11 @@ module base(
         * Pit
         */
         if(withPit){
-            pWallThickness = pitWallThickness[0] == undef 
-                ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
-                : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
+            pitSizeX = objectSize[0] - pitWallThickness[0] - pitWallThickness[1];
+            pitSizeY = objectSize[1] - pitWallThickness[2] - pitWallThickness[3];
+            echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
-
-            pitSizeX = objectSize[0] - pWallThickness[0] - pWallThickness[1];
-            pitSizeY = objectSize[1] - pWallThickness[2] - pWallThickness[3];
-            echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pWallThickness);
-
-            translate([0.5*(pWallThickness[1] - pWallThickness[0]), 0.5*(pWallThickness[3] - pWallThickness[2]), 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+            translate([0.5*(pitWallThickness[1] - pitWallThickness[0]), 0.5*(pitWallThickness[3] - pitWallThickness[2]), 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                 cube([pitSizeX, pitSizeY, pitDepth + cutOffset], center = true);
         }
     }
