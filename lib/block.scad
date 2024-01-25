@@ -86,7 +86,7 @@ module block(
         //Knobs
         withKnobs = true, //TODO integrate into knobType (AUTO, CLASSIC, TECHNIC, TONGUE, NONE)
         knobType = "AUTO",
-        knobsCentered = false, //TODO change to knobCentered (singular)
+        knobCentered = false,
         knobSize = 5.0,
         knobHeight = 1.8,
         knobClampHeight = 0.8,
@@ -610,9 +610,9 @@ module block(
                         /*
                         * Normal knobs
                         */
-                        knobEndX = endX - (knobsCentered ? 1 : 0);
-                        knobEndY = endY - (knobsCentered ? 1 : 0);
-                        posOffset = knobsCentered ? 0.5 : 0;
+                        knobEndX = endX - (knobCentered ? 1 : 0);
+                        knobEndY = endY - (knobCentered ? 1 : 0);
+                        posOffset = knobCentered ? 0.5 : 0;
                         
                         for (a = [ startX : 1 : knobEndX ]){
                             for (b = [ startY : 1 : knobEndY ]){

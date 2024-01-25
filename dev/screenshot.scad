@@ -15,6 +15,5 @@ include <../lib/block.scad>;
 //Generate 4x2 Brick
 block(
     baseLayers=1,
-    grid=[6,6],
-    knobsCentered = false
+    grid=[6,6]
 );

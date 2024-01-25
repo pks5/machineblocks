@@ -15,7 +15,7 @@ include <../../lib/block.scad>;
 //Plate with centered knob
 block(
     grid=[2,2],
-    knobsCentered = true,
+    knobCentered = true,
     knobType = "TECHNIC",
     knobSize=5,
     heightAdjustment=-0.2
