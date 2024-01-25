@@ -26,6 +26,7 @@ module block(
         baseHeightOriginal = 3.2,
         baseLayers = 1,
         baseSolid = false,
+        baseCutoutType = "CLASSIC",
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 1,
         baseClampThickness = 0.5,
@@ -92,9 +93,13 @@ module block(
         knobHoleClampThickness = 0.1,
         knobResolution = 30,
         knobGaps = [],
-        knobTongueThickness = 1.0,
-        knobTongueSpacing = 0.1,
-        
+        knobTongueThickness = 1.2,
+        knobTongueAdjustment = -0.1,
+
+        //Groove
+        grooveDepth = 2.2,
+        grooveThickness = 1.2,
+
         //Pit
         withPit=false,
         pitDepth = 0,
@@ -171,6 +176,7 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     knobCylinderHeight = knobHeight - knobRounding;
+    
 
     echo(
         baseHeight = resultingBaseHeight, 
@@ -252,8 +258,10 @@ module block(
     /*
     * END Functions
     */
-    
-    
+
+    knobRectX = posX(endX) - posX(startX) + knobSize;
+    knobRectY = posY(endY) - posY(startY) + knobSize;
+
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         difference(){
             union(){
@@ -644,16 +652,15 @@ module block(
                         /*
                         * Draw Big Knob if plateOffset is greater than zero
                         */
-                        knobRectX = posX(endX) - posX(startX) + knobSize - 2*knobTongueSpacing;
-                        knobRectY = posY(endY) - posY(startY) + knobSize - 2*knobTongueSpacing;
+                        
                         translate([0, 0, knobsZ + 0.5*knobRounding]){ 
                             difference(){
-                                roundedcube(size=[knobRectX, knobRectY, knobHeight], 
+                                roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobHeight], 
                                                 center = true, 
                                                 radius=knobRounding, 
                                                 apply_to="z",
                                                 resolution=knobResolution);
-                                cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, knobHeight*cutMultiplier], center=true);
+                                cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, knobHeight*cutMultiplier], center=true);
                             }
                         }
                     }
@@ -741,6 +748,9 @@ module block(
                             );
             }
 
+            /*
+            * Cut pitWallGaps / knobTongueGaps
+            */
             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                 gap = pitWallGaps[gapIndex];
                 cutHeight = resultingPitDepth + (withKnobs ? knobHeight : 0);
@@ -752,8 +762,35 @@ module block(
                     translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
                         cube([pitSizeX - gap[1] - gap[2] , 2*pWallThickness[gap[0]]*cutMultiplier, cutHeight + cutOffset], center = true);     
                 } 
-            }   
+            }
 
+            /*
+            * Cut Groove
+            */
+            if(baseSolid){
+                translate([0, 0, sideZ(0)]){ 
+                    difference(){
+                        cube(size=[knobRectX, knobRectY, grooveDepth], 
+                                        center = true);
+                        cube([knobRectX - 2*grooveThickness, knobRectY - 2*grooveThickness, grooveDepth*cutMultiplier], center=true);
+
+                        /*
+                        * Cut knobGrooveGaps
+                        */
+                        for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                            gap = pitWallGaps[gapIndex];
+                            if(gap[0] < 2){
+                                translate([(-0.5 + gap[0]) * (knobRectX - grooveThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                    cube([grooveThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], grooveDepth*cutMultiplier], center = true);
+                            }  
+                            else{
+                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - grooveThickness), 0])
+                                    cube([pitSizeX - gap[1] - gap[2] , grooveThickness*cutMultiplier, grooveDepth*cutMultiplier], center = true);     
+                            } 
+                        }   
+                    }
+                }   
+            }
         }
         
     } //End translate brick offset
