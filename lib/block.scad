@@ -68,8 +68,8 @@ module block(
         pinClampThickness = 0.1,
 
         //Tubes
-        tubeXYSize = 6.5,
-        tubeZSize = 6.5,
+        tubeXYSize = 6.4,
+        tubeZSize = 6.4,
         tubeHoleClampThickness = 0.1,
         tubeClampThickness = 0.1,
 
