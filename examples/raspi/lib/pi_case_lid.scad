@@ -66,7 +66,6 @@ module pi_case_lid(
                         baseHeight = lidHeight, 
                         baseCutoutType = "NONE", 
                         grid=grid, 
-                        withKnobs=true, 
                         knobType=knobType, 
                         knobSize=knobSize, 
                         knobGaps=knobGaps, 

@@ -60,12 +60,30 @@ module pi_case_body(){
                 union(){
                     translate([0, 0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, topPlateHeight=blockHeight - (floorHeight - topPlateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(
+                            baseHeight=blockHeight, 
+                            baseSideLength=baseSideLength, 
+                            topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
+                            grid=halfGrid, 
+                            knobType = "NONE", 
+                            center=true, 
+                            alwaysOnFloor=false, 
+                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
+                        );
                     }
                     
                     translate([0, -0.25 * finalObjectSizeY, 0]){
                     //Body block with base holes
-                        block(baseHeight=blockHeight, baseSideLength=baseSideLength, topPlateHeight=blockHeight - (floorHeight - topPlateHeight), grid=halfGrid, withKnobs=false, center=true, alwaysOnFloor=false, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]);
+                        block(
+                            baseHeight=blockHeight, 
+                            baseSideLength=baseSideLength, 
+                            topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
+                            grid=halfGrid, 
+                            knobType = "NONE", 
+                            center=true, 
+                            alwaysOnFloor=false, 
+                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
+                        );
                     }
                     
                     

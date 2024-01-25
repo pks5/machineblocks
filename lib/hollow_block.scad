@@ -45,7 +45,7 @@ withBarrier = false,
 barrierTolerance = 0.2,
 barrierHeight = 1,
 barrierThickness=1,
-withKnobs=true,
+knobType = "CLASSIC",
 knobType=true,
 knobGaps=[],
 blockMinWallThickness=1.4,
@@ -59,9 +59,8 @@ textDepth=0.5,
 textSpacing=1,
 textOffset=[0,0]
 ){
-    
     resultingBlockHeight = blockHeight > 0 ? blockHeight : (brickHeight * baseHeight * 3);
-    totalTopHeight = withKnobs ? resultingBlockHeight+knobHeight : resultingBlockHeight;
+    totalTopHeight = knobType != "NONE" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
     totalBottomHeight = floorHeight + innerWallHeight;
     
     finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
@@ -97,7 +96,7 @@ textOffset=[0,0]
                         baseHeight=floorHeight, 
                         topPlateHeight=topPlateHeight, 
                         grid=grid, 
-                        withKnobs=false,  
+                        knobType="NONE",  
                         wallThickness=blockMinWallThickness, 
                         baseClampThickness=baseClampThickness, 
                         sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
@@ -162,7 +161,6 @@ textOffset=[0,0]
                             baseClampThickness=baseClampThickness, 
                             baseCutoutType = "NONE", 
                             grid=grid, 
-                            withKnobs=withKnobs,
                             knobType=knobType, 
                             knobHeight=knobHeight,
                             knobGaps=knobGaps, 

@@ -60,8 +60,7 @@ brickHeight = 3,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 
-withKnobs=true,
-knobType=true,
+knobType="CLASSIC",
 
 floorHeight = 3.5,
 wallThickness = 1.5,
@@ -141,7 +140,6 @@ textOffset=[0,0]
                 alwaysOnFloor=true, 
                 center=true,
                 top=true, 
-                withKnobs=withKnobs, 
                 knobType=knobType,
                 withText = withText,
                 textFont = textFont,

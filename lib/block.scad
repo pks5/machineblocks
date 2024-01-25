@@ -84,13 +84,12 @@ module block(
         holeResolution = 30,
         
         //Knobs
-        withKnobs = true, //TODO integrate into knobType (AUTO, CLASSIC, TECHNIC, TONGUE, NONE)
         knobType = "AUTO",
         knobCentered = false,
         knobSize = 5.0,
         knobHeight = 1.8,
         knobClampHeight = 0.8,
-        knobClampThickness = 0.1,
+        knobClampThickness = 0,
         knobHoleSize = 3.5,
         knobRounding = 0.1,
         knobHoleClampThickness = 0.1,
@@ -150,10 +149,12 @@ module block(
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
+
+    knobsPresent = knobType != "NONE";
     
     //Base Height
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
-    totalHeight = resultingBaseHeight + (withKnobs ? knobHeight : 0); 
+    totalHeight = resultingBaseHeight + (knobsPresent ? knobHeight : 0); 
 
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
@@ -188,7 +189,7 @@ module block(
     );
     
     //Calculate Z Positions
-    centerZ = withKnobs ? -0.5 * knobHeight : 0;    
+    centerZ = knobsPresent ? -0.5 * knobHeight : 0;    
     baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
     knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobHeight); 
@@ -600,76 +601,72 @@ module block(
                                 );
                 }
                 
-                //With knobs
-                if(withKnobs){
+                /*
+                * Classic Knobs
+                */
+                color([0.945, 0.769, 0.059]) //f1c40f
+                if((knobType == "AUTO" && !withPit) || knobType == "CLASSIC" || knobType == "TECHNIC"){
                     /*
-                    * Classic Knobs
+                    * Normal knobs
                     */
-                    color([0.945, 0.769, 0.059]) //f1c40f
-                    if((knobType == "AUTO" && !withPit) || knobType == "CLASSIC" || knobType == "TECHNIC"){
-                        /*
-                        * Normal knobs
-                        */
-                        knobEndX = endX - (knobCentered ? 1 : 0);
-                        knobEndY = endY - (knobCentered ? 1 : 0);
-                        posOffset = knobCentered ? 0.5 : 0;
-                        
-                        for (a = [ startX : 1 : knobEndX ]){
-                            for (b = [ startY : 1 : knobEndY ]){
-                                if(drawKnob(a,b, 0)){
-                                    translate([posX(a + posOffset), posY(b + posOffset), knobsZ]){ 
-                                        difference(){
-                                            union(){
-                                                translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
-                                                    cylinder(h=knobHeight - knobClampHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
+                    knobEndX = endX - (knobCentered ? 1 : 0);
+                    knobEndY = endY - (knobCentered ? 1 : 0);
+                    posOffset = knobCentered ? 0.5 : 0;
+                    
+                    for (a = [ startX : 1 : knobEndX ]){
+                        for (b = [ startY : 1 : knobEndY ]){
+                            if(drawKnob(a,b, 0)){
+                                translate([posX(a + posOffset), posY(b + posOffset), knobsZ]){ 
+                                    difference(){
+                                        union(){
+                                            translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
+                                                cylinder(h=knobHeight - knobClampHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
 
-                                                translate([0, 0, 0.5 * knobClampHeight])
-                                                    cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=knobResolution);
-                                                
-                                                translate([0, 0, 0.5 * (knobHeight - knobRounding)])
-                                                    cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=knobResolution);
-                                            }
+                                            translate([0, 0, 0.5 * knobClampHeight])
+                                                cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=knobResolution);
                                             
-                                            if(knobType == "TECHNIC"){
-                                                intersection(){
-                                                    cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
-                                                    cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
-                                                }
-                                            }
+                                            translate([0, 0, 0.5 * (knobHeight - knobRounding)])
+                                                cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=knobResolution);
                                         }
                                         
-                                        //Knob Rounding
-                                        translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                            torus(2 * knobRounding, knobSize + 2*knobClampThickness, knobResolution);
-                                        };
+                                        if(knobType == "TECHNIC"){
+                                            intersection(){
+                                                cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
+                                                cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=knobResolution);
+                                            }
+                                        }
+                                    }
+                                    
+                                    //Knob Rounding
+                                    translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
+                                        torus(2 * knobRounding, knobSize + 2*knobClampThickness, knobResolution);
                                     };
-                                }
+                                };
                             }
                         }
                     }
+                }
 
+                /*
+                * Knob Tongue
+                */
+                color([0.945, 0.769, 0.059]) //f1c40f
+                if((knobType == "AUTO" && withPit) || knobType == "TONGUE"){
                     /*
-                    * Knob Tongue
+                    * Draw Big Knob if plateOffset is greater than zero
                     */
-                    color([0.945, 0.769, 0.059]) //f1c40f
-                    if((knobType == "AUTO" && withPit) || knobType == "TONGUE"){
-                        /*
-                        * Draw Big Knob if plateOffset is greater than zero
-                        */
-                        
-                        translate([0, 0, knobsZ]){ 
-                            difference(){
-                                roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobHeight], 
-                                                center = true, 
-                                                radius=knobRounding, 
-                                                apply_to="z",
-                                                resolution=knobResolution);
-                                cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, knobHeight*cutMultiplier], center=true);
-                            }
+                    
+                    translate([0, 0, knobsZ]){ 
+                        difference(){
+                            roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobHeight], 
+                                            center = true, 
+                                            radius=knobRounding, 
+                                            apply_to="z",
+                                            resolution=knobResolution);
+                            cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, knobHeight*cutMultiplier], center=true);
                         }
                     }
-                } //End withKnobs
-                
+                }
             } //End union
 
             //Cut X-Holes
@@ -758,7 +755,7 @@ module block(
             if((knobType == "AUTO" && withPit) || knobType == "TONGUE"){
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                     gap = pitWallGaps[gapIndex];
-                    cutHeight = resultingPitDepth + (withKnobs ? knobHeight : 0);
+                    cutHeight = resultingPitDepth + (knobsPresent ? knobHeight : 0);
                     if(gap[0] < 2){
                         translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
                             cube([2*pWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], cutHeight + cutOffset], center = true);
