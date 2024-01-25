@@ -12,6 +12,7 @@
 */
 echo(version=version());
 
+use <../../../lib/roundedcube.scad>;
 use <../../../lib/block.scad>;
 
 baseSideLength=8;
