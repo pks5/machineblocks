@@ -620,9 +620,10 @@ module block(
                                     difference(){
                                         union(){
                                             translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
-                                                cylinder(h=knobHeight - knobClampHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
+                                                cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=knobResolution);
 
-                                            translate([0, 0, 0.5 * knobClampHeight])
+                                            
+                                            translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
                                                 cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=knobResolution);
                                             
                                             translate([0, 0, 0.5 * (knobHeight - knobRounding)])
@@ -639,7 +640,7 @@ module block(
                                     
                                     //Knob Rounding
                                     translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                        torus(2 * knobRounding, knobSize + 2*knobClampThickness, knobResolution);
+                                        torus(2*knobRounding, knobSize + 2*knobClampThickness, knobResolution);
                                     };
                                 };
                             }
