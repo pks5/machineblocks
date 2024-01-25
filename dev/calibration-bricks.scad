@@ -12,11 +12,11 @@ color("green")
 
 color("red")
     translate([10, 10, 0])
-        block(grid=[4,4], knobsFilled=true);
+        block(grid=[4,4]);
         
 color("blue")
     translate([10, -20, 0])
-        block(grid=[4,2], knobsFilled=true);        
+        block(grid=[4,2]);        
 
 
       

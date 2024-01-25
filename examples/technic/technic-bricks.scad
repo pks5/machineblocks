@@ -16,21 +16,21 @@ include <../../lib/block.scad>;
 
 color("yellow")
     translate([0, -10, 0])
-        block(baseLayers=3, grid=[2,1], withHolesX=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,1], withHolesX=true, knobType = "TECHNIC");
        
 color("blue")
     translate([0, -26, 0])
-        block(grid=[4,2], knobsFilled=true, withHolesZ = true);        
+        block(grid=[4,2], withHolesZ = true);        
 
 color("magenta")
     translate([0, -50, 0])
-        block(baseLayers=3, grid=[1,3], withHolesY=true, knobsFilled=false);
+        block(baseLayers=3, grid=[1,3], withHolesY=true, knobType = "TECHNIC");
         
 translate([0, -80, 0])
-        block(baseLayers=3, grid=[2,4], withHolesY=true, knobsFilled=false);
+        block(baseLayers=3, grid=[2,4], withHolesY=true, knobType = "TECHNIC");
         
 
 translate([0, -110, 0])
-    block(baseLayers=3, grid=[2,3], withHolesZ=true, withHolesY=true, knobsFilled=false);
+    block(baseLayers=3, grid=[2,3], withHolesZ=true, withHolesY=true, knobType = "TECHNIC");
       
   

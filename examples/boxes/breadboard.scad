@@ -10,7 +10,5 @@ block(
     pitDepth = 8.8,
     baseSolid = false,
     withKnobs = false,
-    knobType = "AUTO",
-    knobsFilled = false,
     heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
 );

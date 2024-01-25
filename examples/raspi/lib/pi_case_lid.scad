@@ -48,7 +48,7 @@ innerWallHolderThickness = 0.1;
 
 roundingRadius = 0.25;
 roundingResolution = 15;
-knobsFilled=true;
+knobType = "CLASSIC";
 
 
 module pi_case_lid(
@@ -62,7 +62,18 @@ module pi_case_lid(
             union(){
                 difference(){
                     //Lid block with knobs
-                    block(baseHeight = lidHeight, baseSolid=true, grid=grid, withKnobs=true, knobsFilled=knobsFilled, knobSize=knobSize, knobGaps=knobGaps, sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], center=true, alwaysOnFloor=false);
+                    block(
+                        baseHeight = lidHeight, 
+                        baseSolid=true, 
+                        grid=grid, 
+                        withKnobs=true, 
+                        knobType=knobType, 
+                        knobSize=knobSize, 
+                        knobGaps=knobGaps, 
+                        sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                        center=true, 
+                        alwaysOnFloor=false
+                    );
                     
                     //Cut border to fit as lid
                     difference(){

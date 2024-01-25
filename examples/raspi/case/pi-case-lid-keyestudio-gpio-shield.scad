@@ -52,7 +52,6 @@ roundingRadius = 0.25;
 roundingResolution = 15;
 withWindow=false;
 withPlugs=true;
-knobsFilled=true;
 resultingKnobGaps = withWindow ? [[0,3,6,10]] : (withPlugs ? [[2,4,5,10],[1,3,4,8], [0,4,0,8]] : []);
 
 plugWidth=2.6;

@@ -16,7 +16,7 @@ include <../../lib/block.scad>;
 block(
     grid=[2,2],
     knobsCentered = true,
-    knobsFilled = false,
+    knobType = "TECHNIC",
     knobSize=5,
     heightAdjustment=-0.2
 );
