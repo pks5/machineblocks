@@ -25,8 +25,8 @@ module block(
         baseHeight = 3.2,
         baseHeightOriginal = 3.2,
         baseLayers = 1,
-        baseSolid = false,
         baseCutoutType = "CLASSIC",
+        baseCutoutMinDepth = 2.2,
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 1,
         baseClampThickness = 0.5,
@@ -96,10 +96,6 @@ module block(
         knobTongueThickness = 1.2,
         knobTongueAdjustment = -0.1,
 
-        //Groove
-        grooveDepth = 2.2,
-        grooveThickness = 1.2,
-
         //Pit
         withPit=false,
         pitDepth = 0,
@@ -163,7 +159,7 @@ module block(
     
     //Base Cutout and Pit Depth
     originalBaseCutoutDepth = baseHeightOriginal + topPlateHeight;
-    resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (baseSolid ? (resultingBaseHeight - topPlateHeight) : (resultingBaseHeight - baseHeightOriginal))) : 0;
+    resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
                 : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
@@ -172,7 +168,7 @@ module block(
 
     calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;        
     resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
-    baseCutoutDepth = baseSolid ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
+    baseCutoutDepth = baseCutoutType == "NONE" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     knobCylinderHeight = knobHeight - knobRounding;
@@ -265,7 +261,7 @@ module block(
     translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
         difference(){
             union(){
-                if(!baseSolid){
+                if(baseCutoutType == "CLASSIC"){
                     union(){
                         /*
                         * Adhesion Helpers
@@ -553,7 +549,7 @@ module block(
                             );
                     }
                 }
-                //End baseSolid
+                //End baseCutoutType
                 
                 /*
                 * Text
@@ -751,28 +747,30 @@ module block(
             /*
             * Cut pitWallGaps / knobTongueGaps
             */
-            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                gap = pitWallGaps[gapIndex];
-                cutHeight = resultingPitDepth + (withKnobs ? knobHeight : 0);
-                if(gap[0] < 2){
-                    translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
-                        cube([2*pWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], cutHeight + cutOffset], center = true);
-                }  
-                else{
-                    translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
-                        cube([pitSizeX - gap[1] - gap[2] , 2*pWallThickness[gap[0]]*cutMultiplier, cutHeight + cutOffset], center = true);     
-                } 
+            if((knobType == "AUTO" && withPit) || knobType == "TONGUE"){
+                for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                    gap = pitWallGaps[gapIndex];
+                    cutHeight = resultingPitDepth + (withKnobs ? knobHeight : 0);
+                    if(gap[0] < 2){
+                        translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
+                            cube([2*pWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], cutHeight + cutOffset], center = true);
+                    }  
+                    else{
+                        translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), topPlateZ + 0.5*(topPlateHeight + cutHeight + cutOffset)])
+                            cube([pitSizeX - gap[1] - gap[2] , 2*pWallThickness[gap[0]]*cutMultiplier, cutHeight + cutOffset], center = true);     
+                    } 
+                }
             }
 
             /*
             * Cut Groove
             */
-            if(baseSolid){
+            if(baseCutoutType == "GROOVE"){
                 translate([0, 0, sideZ(0)]){ 
                     difference(){
-                        cube(size=[knobRectX, knobRectY, grooveDepth], 
+                        cube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, baseCutoutMinDepth], 
                                         center = true);
-                        cube([knobRectX - 2*grooveThickness, knobRectY - 2*grooveThickness, grooveDepth*cutMultiplier], center=true);
+                        cube([knobRectX - 2*knobTongueThickness  - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, baseCutoutMinDepth*cutMultiplier], center=true);
 
                         /*
                         * Cut knobGrooveGaps
@@ -780,12 +778,12 @@ module block(
                         for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                             gap = pitWallGaps[gapIndex];
                             if(gap[0] < 2){
-                                translate([(-0.5 + gap[0]) * (knobRectX - grooveThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                    cube([grooveThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], grooveDepth*cutMultiplier], center = true);
+                                translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                    cube([knobTongueThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], baseCutoutMinDepth*cutMultiplier], center = true);
                             }  
                             else{
-                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - grooveThickness), 0])
-                                    cube([pitSizeX - gap[1] - gap[2] , grooveThickness*cutMultiplier, grooveDepth*cutMultiplier], center = true);     
+                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
+                                    cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, baseCutoutMinDepth*cutMultiplier], center = true);     
                             } 
                         }   
                     }
