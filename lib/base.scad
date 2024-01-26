@@ -1,6 +1,6 @@
 use <shapes.scad>;
 
-module base(
+module mb_base(
     objectSize, 
     height, 
     sideAdjustment, 

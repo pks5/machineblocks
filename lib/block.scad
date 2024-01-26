@@ -512,7 +512,7 @@ module block(
                                 * Base Block
                                 */
                                 color([0.945, 0.769, 0.059]) //f1c40f
-                                base(
+                                mb_base(
                                     objectSize = [objectSizeX, objectSizeY],
                                     height = resultingBaseHeight,
                                     sideAdjustment = sAdjustment,
@@ -597,7 +597,7 @@ module block(
                     */
                     translate([0, 0, centerZ]){ 
                         color([0.945, 0.769, 0.059]) //f1c40f
-                            base(
+                            mb_base(
                                 objectSize = [objectSizeX, objectSizeY],
                                 height = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
@@ -620,7 +620,7 @@ module block(
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
-                                text3d(
+                                mb_text3d(
                                     text = text,
                                     textDepth = textDepth,
                                     textSize = textSize,
@@ -637,7 +637,7 @@ module block(
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                             rotate(decoratorRotations[svgSide])
-                                svg3d(
+                                mb_svg3d(
                                     file = svgFile,
                                     orgWidth = svgDimensions[0],
                                     orgHeight = svgDimensions[1],
@@ -739,7 +739,7 @@ module block(
 
                 if(withPcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
-                        pcb(
+                        mb_pcb(
                             pcbDimensions = pcbDimensions
                         );
                     }
@@ -799,7 +799,7 @@ module block(
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])
-                            text3d(
+                            mb_text3d(
                                 text = text,
                                 textDepth = 2 * abs(textDepth),
                                 textSize = textSize,
@@ -816,7 +816,7 @@ module block(
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])
-                            svg3d(
+                            mb_svg3d(
                                 file = svgFile,
                                 orgWidth = svgDimensions[0],
                                 orgHeight = svgDimensions[1],

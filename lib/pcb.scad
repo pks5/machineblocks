@@ -1,5 +1,5 @@
 
-module prism(l, w, h) {
+module mb_prism(l, w, h) {
     translate([-0.5*l,0, -0.5*h])
     rotate([0,0,-90])
        polyhedron(points=[
@@ -31,7 +31,7 @@ module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, hol
 }
 */
 
-module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight){
+module mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight){
     translate([0,0, 0])
         cube([holderLength, holderThickness, holderHeight], center=true);
     
@@ -40,17 +40,17 @@ module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, hol
     
     translate([0,0.5*holderThickness, 0.5*(holderHeight)]){
         translate([0,0, holderPlateHeight + 0.5* + holderPrismHeight])
-        prism(holderLength, holderPrismWidth, holderPrismHeight);
+        mb_prism(holderLength, holderPrismWidth, holderPrismHeight);
         
         
         translate([0, -holderThickness , -0.125*holderPrismHeight])
             rotate([0,180,0])
-                prism(holderLength, holderPrismWidth-holderThickness, 0.25*holderPrismHeight);
+                mb_prism(holderLength, holderPrismWidth-holderThickness, 0.25*holderPrismHeight);
     }   
     
 }
 
-module pcb(
+module mb_pcb(
     pcbDimensions = [30, 20, 3],
     holderThickness = 1.2,
     
@@ -65,22 +65,22 @@ module pcb(
 
     
         translate([0, 0.5 * (pcbDimensions[1] + holderThickness), 0.5*holderHeight]){
-            holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+            mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
         }   
         
         translate([0, -0.5 * (pcbDimensions[1] + holderThickness), 0.5*holderHeight]){
             rotate([0, 0, 180])
-                holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
         }
         
         translate([0.5*(pcbDimensions[0] + holderThickness), 0, 0.5*holderHeight]){
             rotate([0, 0, -90])
-                holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
         }
         
         translate([-0.5*(pcbDimensions[0] + holderThickness), 0, 0.5*holderHeight]){
             rotate([0, 0, 90]){
-                holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
             }
         }
         
