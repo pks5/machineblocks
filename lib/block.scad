@@ -367,7 +367,7 @@ module block(
                                     * Screw Hole Helpers
                                     */
                                     for (a = [ startX : 1 : endX ]){
-                                        for (b = [ startY : 1 : endY ]){ echo(a=a, b=b);
+                                        for (b = [ startY : 1 : endY ]){
                                             if(drawScrewHole(a, b, 0)){
                                                 translate([posX(a), posY(b)-0.5*(screwHoleSize + screwHoleHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight + screwHoleHelperOffset)])
                                                     cube([baseSideLength - stabilizerGridThickness, screwHoleHelperThickness, screwHoleHelperHeight + screwHoleHelperOffset], center = true);
@@ -814,7 +814,7 @@ module block(
             */
             if(withStabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
                 for (a = [ startX : 1 : endX ]){
-                    for (b = [ startY : 1 : endY ]){ echo(a=a, b=b);
+                    for (b = [ startY : 1 : endY ]){
                         if(drawScrewHole(a, b, 0)){
                             translate([posX(a), posY(b), 0])
                                 cylinder(h = totalHeight*cutMultiplier, r = 0.5*screwHoleSize, center=true, $fn=knobResolution);
