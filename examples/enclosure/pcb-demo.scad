@@ -7,6 +7,7 @@ block(
     knobType = "NONE",
     withPcb=true,
     pcbDimensions=[40,30,3],
-    pcbScrewSockets=[[-13, -15], [13, 13], [13, -15], [-9, 13]],
+    pcbMountingType = "SCREWS",
+    pcbScrewSockets = [[-13, -15], [13, 13], [13, -15], [-9, 13]],
     pcbScrewSocketHeight = 8
 );

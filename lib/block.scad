@@ -133,6 +133,7 @@ module block(
 
         //PCB
         withPcb=false,
+        pcbMountingType = "CLIPS",
         pcbDimensions = [20, 30, 3],
         pcbOffset = [0, 0],
         pcbScrewSocketSize = 5,
@@ -743,17 +744,19 @@ module block(
 
                 if(withPcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
-                        /*
-                        mb_pcb_clips(
-                            pcbDimensions = pcbDimensions
-                        );
-                        */
-                        mb_pcb_screw_sockets(
-                            screwSockets = pcbScrewSockets,
-                            screwSocketHeight = pcbScrewSocketHeight,
-                            screwSocketSize = pcbScrewSocketSize,
-                            screwSocketHoleSize = pcbScrewSocketHoleSize
-                        );
+                        if(pcbMountingType == "CLIPS"){
+                            mb_pcb_clips(
+                                pcbDimensions = pcbDimensions
+                            );
+                        }
+                        if(pcbMountingType == "SCREWS"){
+                            mb_pcb_screw_sockets(
+                                screwSockets = pcbScrewSockets,
+                                screwSocketHeight = pcbScrewSocketHeight,
+                                screwSocketSize = pcbScrewSocketSize,
+                                screwSocketHoleSize = pcbScrewSocketHoleSize
+                            );
+                        }
                     }
                 }
             } //End union
