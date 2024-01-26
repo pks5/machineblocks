@@ -2,9 +2,11 @@ include <../../lib/block.scad>;
 
 block(
     baseLayers=1,
-    grid=[8,6],
-    screwHoles = [[0, 0], [7,0], [0,5], [7,5]],
+    grid=[6,6],
+    screwHoles = [[0, 0], [5,0], [0,5], [5,5]],
     knobType = "NONE",
     withPcb=true,
-    pcbDimensions=[40,30,3]
+    pcbDimensions=[40,30,3],
+    pcbScrewSockets=[[-13, -15], [13, 13], [13, -15], [-9, 13]],
+    pcbScrewSocketHeight = 8
 );

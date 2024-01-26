@@ -134,7 +134,11 @@ module block(
         //PCB
         withPcb=false,
         pcbDimensions = [20, 30, 3],
-        pcbOffset=[0,0],
+        pcbOffset = [0, 0],
+        pcbScrewSocketSize = 5,
+        pcbScrewSocketHoleSize = 2.2,
+        pcbScrewSocketHeight = 3,
+        pcbScrewSockets = [],
         
         //Alignment
         brickOffset = [0, 0, 0],
@@ -739,8 +743,16 @@ module block(
 
                 if(withPcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
-                        mb_pcb_clip(
+                        /*
+                        mb_pcb_clips(
                             pcbDimensions = pcbDimensions
+                        );
+                        */
+                        mb_pcb_screw_sockets(
+                            screwSockets = pcbScrewSockets,
+                            screwSocketHeight = pcbScrewSocketHeight,
+                            screwSocketSize = pcbScrewSocketSize,
+                            screwSocketHoleSize = pcbScrewSocketHoleSize
                         );
                     }
                 }

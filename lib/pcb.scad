@@ -43,7 +43,33 @@ module mb_clip_holder(
     
 }
 
-module mb_pcb_clip(
+module mb_screw_socket(socketSize, socketHeight, socketHoleSize, socketResolution = 30, holeResolution = 30){
+    difference(){
+        cylinder(h=socketHeight, r=0.5 * socketSize, center=true, $fn=socketResolution);
+        if(socketHoleSize > 0){
+            cylinder(h=socketHeight * 1.1, r=0.5*socketHoleSize, center=true, $fn=holeResolution);
+        }
+    }
+}
+
+module mb_pcb_screw_sockets(
+    screwSocketSize = 5,
+    screwSocketHoleSize = 2.2,
+    screwSocketHeight = 3,
+    screwSockets = []
+){
+    translate([0, 0, 0.5 * screwSocketHeight])
+        for (a = [ 0 : 1 : len(screwSockets) - 1 ]){
+            translate([screwSockets[a][0], screwSockets[a][1], 0])
+                mb_screw_socket(
+                    socketSize = screwSocketSize,
+                    socketHeight = screwSocketHeight,
+                    socketHoleSize = screwSocketHoleSize
+                );
+        }
+}
+
+module mb_pcb_clips(
     pcbDimensions = [30, 20, 3],
     
     clipBaseThickness = 1.2,
