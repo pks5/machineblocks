@@ -123,6 +123,13 @@ module block(
         svgSide = 5,
         svgOffset = [0, 0],
 
+        //Screw Holes
+        screwHoles = [],
+        screwHoleSize = 2.2,
+        screwHoleHelperThickness = 0.8,
+        screwHoleHelperOffset = 0.2,
+        screwHoleHelperHeight = 0.2,
+        
         //Alignment
         brickOffset = [0, 0, 0],
         center = true,
@@ -243,10 +250,12 @@ module block(
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function stabilizersXHeight(a) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > stabilizerExpansion+1) && ((a%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersXHeight(a) = stabilizerExpansion == "FULL" ? baseCutoutDepth : (stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && !withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > stabilizerExpansion+1) && ((a%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0));
     
-    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > stabilizerExpansion+1) && ((b%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0);
+    function stabilizersYHeight(b) = stabilizerExpansion == "FULL" ? baseCutoutDepth : (stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > stabilizerExpansion+1) && ((b%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0));
     
+    function drawScrewHole(a, b, i) = screwHoles == "ALL" || ((i < len(screwHoles)) && ( (a == screwHoles[i][0] && b == screwHoles[i][1]) || drawScrewHole(a, b, i+1)));
+
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side) = centerZ + (side - 0.5) * resultingBaseHeight;
@@ -330,21 +339,40 @@ module block(
                         * Stabilizers
                         */
                         if(withStabilizerGrid){
-                            color([0.753, 0.224, 0.169]) //c0392b
                             difference(){
                                 union(){
                                     //Helpers X
+                                    color([0.753, 0.224, 0.169]) //c0392b
                                     for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a) + stabilizerGridOffset)]){ 
-                                            cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)+stabilizerGridOffset], center = true);
+                                        translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a))]){ 
+                                            cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)], center = true);
                                         }
                                     }
                                     
                                     //Helpers Y
+                                    color([0.753, 0.224, 0.169]) //c0392b
                                     for (b = [ startY : 1 : endY - 1 ]){
                                     translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
                                             cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
                                         };
+                                    }
+
+                                    /*
+                                    * Screw Hole Helpers
+                                    */
+                                    for (a = [ startX : 1 : endX ]){
+                                        for (b = [ startY : 1 : endY ]){ echo(a=a, b=b);
+                                            if(drawScrewHole(a, b, 0)){
+                                                translate([posX(a), posY(b)-0.5*(screwHoleSize + screwHoleHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight + screwHoleHelperOffset)])
+                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleHelperThickness, screwHoleHelperHeight + screwHoleHelperOffset], center = true);
+                                                translate([posX(a), posY(b)+0.5*(screwHoleSize + screwHoleHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight + screwHoleHelperOffset)])
+                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleHelperThickness, screwHoleHelperHeight + screwHoleHelperOffset], center = true);    
+                                                translate([posX(a)-0.5*(screwHoleSize + screwHoleHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight)])
+                                                    cube([screwHoleHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleHelperHeight], center = true);
+                                                translate([posX(a)+0.5*(screwHoleSize + screwHoleHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight)])
+                                                    cube([screwHoleHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleHelperHeight], center = true);    
+                                            } 
+                                        }
                                     }
                                 }
                                 if(withPillars){
@@ -360,7 +388,7 @@ module block(
                                 }
                             }
                         }
-                        
+
                         /*
                         * Middle Pins
                         */
@@ -748,6 +776,20 @@ module block(
                                 size = svgScale,
                                 center = true
                             );
+            }
+
+            /*
+            * Screw Holes
+            */
+            if(withStabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
+                for (a = [ startX : 1 : endX ]){
+                    for (b = [ startY : 1 : endY ]){ echo(a=a, b=b);
+                        if(drawScrewHole(a, b, 0)){
+                            translate([posX(a), posY(b), 0])
+                                cylinder(h = totalHeight*cutMultiplier, r = 0.5*screwHoleSize, center=true, $fn=knobResolution);
+                        } 
+                    }
+                }
             }
 
             /*
