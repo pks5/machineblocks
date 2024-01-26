@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-include <./block.scad>;
+use <../../../lib/block.scad>;
 
 module hollowBlock(
 grid = [6,6],

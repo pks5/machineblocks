@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-use <../../../lib/pcb_block.scad>;
+use <../lib/pcb_block.scad>;
 
 pcb_block(
     top=true, 

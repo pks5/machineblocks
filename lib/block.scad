@@ -12,7 +12,6 @@
 
 use <roundedcube.scad>;
 use <base.scad>;
-use <torus.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;
 use <pcb.scad>;
@@ -149,7 +148,7 @@ module block(
         adhesionHelperThickness = 0.4,
         
         //Preview
-        previewQuality = 0.5
+        previewQuality = 1
         ){
             
     //Variables for cutouts        
@@ -687,7 +686,12 @@ module block(
                                     
                                     //Knob Rounding
                                     translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                        torus(2*knobRounding, knobSize + 2*knobClampThickness, ($preview ? previewQuality : 1) * knobResolution);
+                                        mb_torus(
+                                            circleRadius = knobRounding, 
+                                            torusRadius = 0.5 * knobSize + knobClampThickness, 
+                                            circleResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                            torusResolution = ($preview ? previewQuality : 1) * knobResolution
+                                        );
                                     };
                                 };
                             }

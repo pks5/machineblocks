@@ -76,3 +76,9 @@ module roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, resolu
 		sphere(r = radius, $fn = resolution);
 	}
 }
+
+module mb_torus(circleRadius, torusRadius, circleResolution = 30, torusResolution = 30){
+    rotate_extrude(convexity = 10, $fn = torusResolution)
+        translate([torusRadius - circleRadius, 0, 0])
+            circle(r = circleRadius, $fn = circleResolution);
+}

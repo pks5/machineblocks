@@ -13,7 +13,7 @@
 
 echo(version=version());
 
-use <../../../lib/plug.scad>;
+use <../lib/plug.scad>;
 
 plug(
     pins=[0,0,0],

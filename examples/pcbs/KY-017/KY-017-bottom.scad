@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-use <../../../lib/pcb_block.scad>;
+use <../lib/pcb_block.scad>;
 
 translate([-30, 0, 0]){
     pcb_block(top=false, grid=[3,5], pcbY=20.6, pcbX=15.3, holderOffsetY=-1, pins=[0,0,0,0]);
