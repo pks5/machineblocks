@@ -3,7 +3,7 @@
 // Set to 0.01 for higher definition curves (renders slower)
 $fs = 0.15;
 
-module roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "all", resolution = 20) {
+module mb_roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "all", resolution = 20) {
 	// If single value, convert to [x, y, z] vector
 	size = (size[0] == undef) ? [size, size, size] : size;
 
@@ -54,7 +54,7 @@ module roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "a
 	}
 }
 
-module roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, resolution = 20) {
+module mb_roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, resolution = 20) {
 	// If single value, convert to [x, y, z] vector
 	size = (size[0] == undef) ? [size, size, size] : size;
 

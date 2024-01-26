@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-use <../../../lib/roundedcube.scad>;
+use <../../../lib/shapes.scad>;
 use <../../../lib/block.scad>;
 
 baseSideLength=8;
@@ -83,7 +83,7 @@ module pi_case_lid(
                 
                 translate([0, 0.5 * (wallY1Thickness - wallThickness), -0.5 * (totalLidHeight + innerWallHeight)]){
                     cube([finalObjectSizeX-2*wallThickness, finalObjectSizeY - (wallThickness + wallY1Thickness), innerWallHeight], center=true);
-                    roundedcube_simple(size = [finalObjectSizeX-2*wallThickness + 2*innerWallHolderThickness, finalObjectSizeY - (wallThickness + wallY1Thickness) + 2*innerWallHolderThickness, innerWallHolderHeight], 
+                    mb_roundedcube_simple(size = [finalObjectSizeX-2*wallThickness + 2*innerWallHolderThickness, finalObjectSizeY - (wallThickness + wallY1Thickness) + 2*innerWallHolderThickness, innerWallHolderHeight], 
                                         center = true, 
                                         radius=roundingRadius, 
                                         resolution=roundingResolution); 

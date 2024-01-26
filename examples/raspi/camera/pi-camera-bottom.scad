@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-use <../../../lib/hollow_block.scad>;
+use <../../pcbs/lib/hollow_block.scad>;
 
 floorHeight = 3.8;
 topPlateHeight = 1.3;

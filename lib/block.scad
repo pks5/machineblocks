@@ -10,7 +10,7 @@
 *
 */
 
-use <roundedcube.scad>;
+use <shapes.scad>;
 use <base.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;
@@ -710,7 +710,7 @@ module block(
                     
                     translate([0, 0, knobsZ]){ 
                         difference(){
-                            roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobHeight], 
+                            mb_roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobHeight], 
                                             center = true, 
                                             radius=knobRounding, 
                                             apply_to="z",

@@ -42,11 +42,11 @@ if(withTop){
             );
             
             translate([-2, -24, 7.8]){
-                roundedcube([12, 12, 3.9], true, 1, "y");
+                mb_roundedcube([12, 12, 3.9], true, 1, "y");
             }
             
             translate([-24, 2, 7.8]){
-                roundedcube([21, 21, 3.9], true, 1, "x");
+                mb_roundedcube([21, 21, 3.9], true, 1, "x");
             }
         }   
          

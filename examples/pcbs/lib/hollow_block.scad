@@ -12,6 +12,7 @@
 */
 echo(version=version());
 
+use <../../../lib/shapes.scad>;
 use <../../../lib/block.scad>;
 
 module hollowBlock(
@@ -117,7 +118,7 @@ textOffset=[0,0]
                                 cube([innerWallX, innerWallY, innerWallHeight], center=true);
                                 
                                // translate([0,0,-0.25*innerWallHeight])
-                                    roundedcube_simple(
+                                    mb_roundedcube_simple(
                                         size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], 
                                         center = true, 
                                         radius=roundingRadius, 
@@ -125,7 +126,7 @@ textOffset=[0,0]
                                     );
                                
                                translate([0,0,0.5*(innerWallHeight-innerWallHolderHeight)])
-                                    roundedcube_simple(
+                                    mb_roundedcube_simple(
                                         size = [innerWallX + 2*innerWallHolderThickness, innerWallY + 2*innerWallHolderThickness,  innerWallHolderHeight], 
                                         center = true, 
                                         radius=roundingRadius, 

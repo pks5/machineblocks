@@ -1,4 +1,4 @@
-use <roundedcube.scad>;
+use <shapes.scad>;
 
 module base(
     objectSize, 
@@ -35,7 +35,7 @@ module base(
                 );    
             }
             else if(baseRounding == "all"){
-                roundedcube_simple(
+                mb_roundedcube_simple(
                     size = size, 
                     center = true, 
                     radius = roundingRadius, 
@@ -43,7 +43,7 @@ module base(
                 );    
             }
             else{
-                roundedcube(
+                mb_roundedcube(
                     size = size, 
                     center = true, 
                     radius = roundingRadius, 

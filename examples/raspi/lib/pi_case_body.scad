@@ -12,7 +12,7 @@
 */
 echo(version=version());
 
-use <../../../lib/roundedcube.scad>;
+use <../../../lib/shapes.scad>;
 use <../../../lib/block.scad>;
 
 
@@ -120,7 +120,7 @@ module pi_case_body(){
                 translate([-19.12, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 14.05])
-                            roundedcube([17, 17, 15.2], true, 2, "y");
+                            mb_roundedcube([17, 17, 15.2], true, 2, "y");
                         translate([0, -42.5, 25])
                             cube([17, 7, 10], center=true);
                     }
@@ -131,7 +131,7 @@ module pi_case_body(){
                 translate([-0.35, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 15.1])
-                            roundedcube([15.8, 15.8, 17.3], true, 2, "y");
+                            mb_roundedcube([15.8, 15.8, 17.3], true, 2, "y");
                         translate([0, -42.5, 25])
                             cube([15.8, 7, 8], center=true);
                     }
@@ -142,7 +142,7 @@ module pi_case_body(){
                 translate([17.6, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, -47, 15.1])
-                            roundedcube([15.8, 15.8, 17.3], true, 2, "y");
+                            mb_roundedcube([15.8, 15.8, 17.3], true, 2, "y");
                         translate([0, -42.5, 25])
                             cube([15.8, 7, 8], center=true);
                     }
@@ -174,11 +174,11 @@ module pi_case_body(){
                 translate([-31, 8.56, -0.5*blockHeight + 10.75]){
                     union(){
                         color("green")
-                        roundedcube([2.7, 16.6, 5.5], true, 1.3, "x");
+                        mb_roundedcube([2.7, 16.6, 5.5], true, 1.3, "x");
                         translate([0, 0, -2.2])
                             color("blue")
                         
-                            roundedcube([2.7, 13.48, 3.5], true, 1.2, "x");
+                            mb_roundedcube([2.7, 13.48, 3.5], true, 1.2, "x");
                     }
                 }
                 
@@ -187,7 +187,7 @@ module pi_case_body(){
                 translate([0, 0, -0.5*blockHeight]){
                     union(){
                         translate([0, 49.5, 10.1])
-                            roundedcube([16, 13.5, 14], true, 2, "y");
+                            mb_roundedcube([16, 13.5, 14], true, 2, "y");
                         translate([0, 42, 15.6])
                             cube([16, 1.5 + 0.05, 3], center=true);
                         translate([-1.5, 42, 4.6])

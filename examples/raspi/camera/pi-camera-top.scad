@@ -12,7 +12,8 @@
 */
 echo(version=version());
 
-use <../../../lib/hollow_block.scad>;
+use <../../../lib/shapes.scad>;
+use <../../pcbs/lib/hollow_block.scad>;
 
 floorHeight = 3.8;
 topPlateHeight = 1.3;
@@ -34,7 +35,7 @@ difference(){
     );
     
     translate([5, 0, 6.25]){
-        roundedcube([18, 18, 2.5], true, 1, "x");
+        mb_roundedcube([18, 18, 2.5], true, 1, "x");
     }
     
     translate([-5, 0, 21.5]){
