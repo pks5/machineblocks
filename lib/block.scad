@@ -15,6 +15,7 @@ use <base.scad>;
 use <torus.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;
+use <pcb.scad>;
 
 module block(
         //Grid
@@ -125,10 +126,15 @@ module block(
 
         //Screw Holes
         screwHoles = [],
-        screwHoleSize = 2.4, //M2
+        screwHoleSize = 2.3, //M2
         screwHoleHelperThickness = 0.8,
         screwHoleHelperOffset = 0.2,
         screwHoleHelperHeight = 0.2,
+
+        //PCB
+        withPcb=false,
+        pcbDimensions = [20, 30, 3],
+        pcbOffset=[0,0],
         
         //Alignment
         brickOffset = [0, 0, 0],
@@ -711,6 +717,14 @@ module block(
                                 }  
                             }
                         }
+                    }
+                }
+
+                if(withPcb){
+                    translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
+                        pcb(
+                            pcbDimensions = pcbDimensions
+                        );
                     }
                 }
             } //End union
