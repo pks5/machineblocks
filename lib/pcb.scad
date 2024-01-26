@@ -1,5 +1,5 @@
 
-module mb_prism(l, w, h) {
+module mb_clip_prism(l, w, h) {
     translate([-0.5*l,0, -0.5*h])
     rotate([0,0,-90])
        polyhedron(points=[
@@ -16,88 +16,83 @@ module mb_prism(l, w, h) {
        ]);
 }
 
-/*
-module holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight){
+module mb_clip_holder(
+    clipLength, 
+    clipBaseHeight, 
+    clipBaseThickness, 
+    clipTopSlantThickness, 
+    clipTopSlantHeight, 
+    clipBottomSlantHeight, 
+    clipPlateHeight
+){
     translate([0,0, 0])
-        cube([holderLength, holderThickness, holderHeight], center=true);
+        cube([clipLength, clipBaseThickness, clipBaseHeight], center=true);
     
-    translate([0, -0.5*(holderPrismWidth-holderThickness), 0.5*(holderHeight + holderPlateHeight)])
-        cube([holderLength, holderPrismWidth, holderPlateHeight], center=true);
-
-    translate([0, 0.5*holderThickness, 0.5*(holderHeight + holderPrismHeight) + holderPlateHeight]){
-        prism(holderLength, holderPrismWidth, holderPrismHeight);
-    }   
+    translate([0, -0.5 * (clipTopSlantThickness - clipBaseThickness), 0.5 * (clipBaseHeight + clipPlateHeight)])
+        cube([clipLength, clipTopSlantThickness, clipPlateHeight], center=true);
     
-}
-*/
-
-module mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight){
-    translate([0,0, 0])
-        cube([holderLength, holderThickness, holderHeight], center=true);
-    
-    translate([0, -0.5*(holderPrismWidth-holderThickness), 0.5*(holderHeight + holderPlateHeight)])
-        cube([holderLength, holderPrismWidth, holderPlateHeight], center=true);
-    
-    translate([0,0.5*holderThickness, 0.5*(holderHeight)]){
-        translate([0,0, holderPlateHeight + 0.5* + holderPrismHeight])
-        mb_prism(holderLength, holderPrismWidth, holderPrismHeight);
+    translate([0, 0.5*clipBaseThickness, 0.5 * clipBaseHeight]){
+        translate([0, 0, clipPlateHeight + 0.5 * clipTopSlantHeight])
+            mb_clip_prism(clipLength, clipTopSlantThickness, clipTopSlantHeight);
         
-        
-        translate([0, -holderThickness , -0.125*holderPrismHeight])
+        //Bottom Prism
+        translate([0, -clipBaseThickness , -0.5 * clipBottomSlantHeight])
             rotate([0,180,0])
-                mb_prism(holderLength, holderPrismWidth-holderThickness, 0.25*holderPrismHeight);
+                mb_clip_prism(clipLength, clipTopSlantThickness - clipBaseThickness, clipBottomSlantHeight);
     }   
     
 }
 
-module mb_pcb(
+module mb_pcb_clip(
     pcbDimensions = [30, 20, 3],
-    holderThickness = 1.2,
     
-    holderLength = 8,
-    holderPlateHeight = 0.2,
-    platerSize = 3,
-    platerHeight = 2
+    clipBaseThickness = 1.2,
+    clipLength = 8,
+    clipPlateHeight = 0.2,
+    clipTopSlantHeight = 1,
+    clipBottomSlantHeight = 0.25,
+    clipOverhangThickness = 0.5,
+    
+    pedestalSize = 3,
+    pedestalHeight = 2
 ){    
-    holderPrismHeight = 1;
-    holderPrismWidth = 0.5 * holderPrismHeight + holderThickness;
-    holderHeight = pcbDimensions[2] + platerHeight;
+    clipBaseHeight = pcbDimensions[2] + pedestalHeight;
 
     
-        translate([0, 0.5 * (pcbDimensions[1] + holderThickness), 0.5*holderHeight]){
-            mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+        translate([0, 0.5 * (pcbDimensions[1] + clipBaseThickness), 0.5*clipBaseHeight]){
+            mb_clip_holder(clipLength, clipBaseHeight, clipBaseThickness, clipOverhangThickness + clipBaseThickness, clipTopSlantHeight, clipBottomSlantHeight, clipPlateHeight);
         }   
         
-        translate([0, -0.5 * (pcbDimensions[1] + holderThickness), 0.5*holderHeight]){
+        translate([0, -0.5 * (pcbDimensions[1] + clipBaseThickness), 0.5*clipBaseHeight]){
             rotate([0, 0, 180])
-                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_clip_holder(clipLength, clipBaseHeight, clipBaseThickness, clipOverhangThickness + clipBaseThickness, clipTopSlantHeight, clipBottomSlantHeight, clipPlateHeight);
         }
         
-        translate([0.5*(pcbDimensions[0] + holderThickness), 0, 0.5*holderHeight]){
+        translate([0.5*(pcbDimensions[0] + clipBaseThickness), 0, 0.5*clipBaseHeight]){
             rotate([0, 0, -90])
-                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_clip_holder(clipLength, clipBaseHeight, clipBaseThickness, clipOverhangThickness + clipBaseThickness, clipTopSlantHeight, clipBottomSlantHeight, clipPlateHeight);
         }
         
-        translate([-0.5*(pcbDimensions[0] + holderThickness), 0, 0.5*holderHeight]){
+        translate([-0.5*(pcbDimensions[0] + clipBaseThickness), 0, 0.5*clipBaseHeight]){
             rotate([0, 0, 90]){
-                mb_holder(holderLength, holderHeight, holderThickness, holderPrismWidth, holderPrismHeight, holderPlateHeight);
+                mb_clip_holder(clipLength, clipBaseHeight, clipBaseThickness, clipOverhangThickness + clipBaseThickness, clipTopSlantHeight, clipBottomSlantHeight, clipPlateHeight);
             }
         }
         
-        translate([-0.5 * (pcbDimensions[0] - platerSize) - holderThickness, 0.5 * (platerSize - pcbDimensions[1]) - holderThickness, 0.5*platerHeight]){
-            cube([platerSize, platerSize, platerHeight], center=true);
+        translate([-0.5 * (pcbDimensions[0] - pedestalSize) - clipBaseThickness, 0.5 * (pedestalSize - pcbDimensions[1]) - clipBaseThickness, 0.5*pedestalHeight]){
+            cube([pedestalSize, pedestalSize, pedestalHeight], center=true);
         }
         
-        translate([0.5 * (pcbDimensions[0] - platerSize) + holderThickness, 0.5 * (platerSize - pcbDimensions[1]) - holderThickness, 0.5*platerHeight]){
-            cube([platerSize, platerSize, platerHeight], center=true);
+        translate([0.5 * (pcbDimensions[0] - pedestalSize) + clipBaseThickness, 0.5 * (pedestalSize - pcbDimensions[1]) - clipBaseThickness, 0.5*pedestalHeight]){
+            cube([pedestalSize, pedestalSize, pedestalHeight], center=true);
         }
         
-        translate([-0.5 * (pcbDimensions[0] - platerSize) - holderThickness, -0.5 * (platerSize - pcbDimensions[1]) + holderThickness, 0.5*platerHeight]){
-            cube([platerSize, platerSize, platerHeight], center=true);
+        translate([-0.5 * (pcbDimensions[0] - pedestalSize) - clipBaseThickness, -0.5 * (pedestalSize - pcbDimensions[1]) + clipBaseThickness, 0.5*pedestalHeight]){
+            cube([pedestalSize, pedestalSize, pedestalHeight], center=true);
         }
         
-        translate([0.5 * (pcbDimensions[0] - platerSize) + holderThickness, -0.5 * (platerSize - pcbDimensions[1]) + holderThickness, 0.5*platerHeight]){
-            cube([platerSize, platerSize, platerHeight], center=true);
+        translate([0.5 * (pcbDimensions[0] - pedestalSize) + clipBaseThickness, -0.5 * (pedestalSize - pcbDimensions[1]) + clipBaseThickness, 0.5*pedestalHeight]){
+            cube([pedestalSize, pedestalSize, pedestalHeight], center=true);
         }
     
 }

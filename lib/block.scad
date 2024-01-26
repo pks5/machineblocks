@@ -739,7 +739,7 @@ module block(
 
                 if(withPcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
-                        mb_pcb(
+                        mb_pcb_clip(
                             pcbDimensions = pcbDimensions
                         );
                     }
