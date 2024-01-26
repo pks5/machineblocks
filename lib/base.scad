@@ -23,8 +23,8 @@ module base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
-    //function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    //function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
     difference(){
         translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
@@ -63,6 +63,18 @@ module base(
 
             translate([0.5*(pitWallThickness[1] - pitWallThickness[0]), 0.5*(pitWallThickness[3] - pitWallThickness[2]), 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                 cube([pitSizeX, pitSizeY, pitDepth + cutOffset], center = true);
+        
+            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                gap = pitWallGaps[gapIndex];
+                if(gap[0] < 2){
+                    translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), 0.5*(height - pitDepth + cutOffset)])
+                        cube([2*pitWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], pitDepth + cutOffset], center = true);
+                }  
+                else{
+                    translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
+                        cube([pitSizeX - gap[1] - gap[2] , 2*pitWallThickness[gap[0]]*cutMultiplier, pitDepth + cutOffset], center = true);     
+                } 
+            }
         }
     }
 }
