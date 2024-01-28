@@ -4,5 +4,8 @@ block(
     baseLayers=1,
     grid=[16,16],
     screwHoles = "ALL",
-    stabilizerExpansion = "FULL"
+    pillarGaps = "AUTO",
+    stabilizerExpansion = 1,
+    stabilizerExpansionOffset = 0,
+    previewQuality = 0.4
 );

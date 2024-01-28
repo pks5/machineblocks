@@ -56,11 +56,12 @@ module block(
         stabilizerGridHeight = 0.4,
         stabilizerGridThickness = 0.8,
         stabilizerExpansion = 2,
+        stabilizerExpansionOffset = 1.8,
         
         //Pillars: Tubes and Pins
         withPillars = true,
         pillarResolution = 30,
-        withPillarGaps = false, //TODDO rename to withTubeGaps?
+        pillarGaps = [],
         maxPillarNonGap = 2, //TODO find better name
         middlePillarGapLimit = 10, //TODO find better name
         
@@ -257,17 +258,21 @@ module block(
     function drawMiddlePillar(a, b) = (isMiddle(a, 0) && (isMiddleZone(b, 1) || isCornerZone(b, 1)))
                                         || (isMiddle(b, 1) && (isMiddleZone(a, 0) || isCornerZone(a, 0)));
     
-    function drawPillar(a, b) = !withPillarGaps || withHolesZ || ((a%2==0) && (b%2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
+    function drawPillarAuto(a, b) = withHolesZ || ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
+    function drawPillarG(a, b, i) = (i >= len(pillarGaps)) || (((a < pillarGaps[i][0]) || (b < pillarGaps[i][1]) || (a > pillarGaps[i][2]) || (b > pillarGaps[i][3])) && drawPillarG(a, b, i+1)); 
+    
+    function drawPillar(a, b, i) = (pillarGaps == "AUTO" && drawPillarAuto(a, b)) || (pillarGaps != "AUTO" && drawPillarG(a, b, i));
+
     function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function stabilizersXHeight(a) = stabilizerExpansion == "FULL" ? baseCutoutDepth : (stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && !withHolesX && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[0] > stabilizerExpansion+1) && ((a%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[1] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0));
+    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && !withHolesX && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
     
-    function stabilizersYHeight(b) = stabilizerExpansion == "FULL" ? baseCutoutDepth : (stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (baseCutoutDepth > originalBaseCutoutDepth) && (((grid[1] > stabilizerExpansion+1) && ((b%stabilizerExpansion) == (stabilizerExpansion-1))) || (grid[0] == 1)) ? baseCutoutDepth - originalBaseCutoutDepth : 0));
+    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
     function drawScrewHole(a, b, i) = screwHoles == "ALL" || ((i < len(screwHoles)) && ( (a == screwHoles[i][0] && b == screwHoles[i][1]) || drawScrewHole(a, b, i+1)));
 
@@ -319,7 +324,7 @@ module block(
                                     if(withPillars){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             for (b = [ startY : 1 : endY - 1 ]){
-                                                if(drawPillar(a, b)){
+                                                if(drawPillar(a, b, 0)){
                                                     translate([posX(a + 0.5), posY(b + 0.5), 0]){
                                                         cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                                     };
@@ -400,7 +405,7 @@ module block(
                                 if(withPillars){
                                     for (a = [ startX : 1 : endX - 1 ]){
                                         for (b = [ startY : 1 : endY - 1 ]){
-                                            if(drawPillar(a, b)){
+                                            if(drawPillar(a, b, 0)){
                                                     translate([posX(a + 0.5), posY(b + 0.5), 0]){
                                                         cylinder(h=cutMultiplier * totalHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                                     };
@@ -487,7 +492,7 @@ module block(
                             //Tubes with holes
                             for (a = [ startX : 1 : endX - 1 ]){
                                 for (b = [ startY : 1 : endY - 1 ]){
-                                    if(drawPillar(a, b)){
+                                    if(drawPillar(a, b, 0)){
                                         translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                             difference(){
                                                 union(){
