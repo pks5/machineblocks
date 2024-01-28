@@ -29,7 +29,7 @@ module block(
         baseCutoutMinDepth = 2.6,
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 0.8,
-        baseClampThickness = 0.5,
+        baseClampThickness = 0.1,
         baseRounding = "all",
         baseRoundingRadius = 0.1,
         baseRoundingResolution = 15,
@@ -39,7 +39,7 @@ module block(
         heightAdjustment = 0.0,
 
         //Walls
-        wallThickness = 1.2,
+        wallThickness = 1.6,
         wallGapsX = [],
         wallGapsY = [],
         
