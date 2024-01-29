@@ -203,6 +203,9 @@ module block(
 
     echo(
         baseHeight = resultingBaseHeight, 
+        totalHeight = totalHeight,
+        size = [objectSizeX, objectSizeY],
+        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
         topPlateHeight = resultingTopPlateHeight, 
         baseCutoutDepth = baseCutoutDepth,
         pitDepth = resultingPitDepth, 
