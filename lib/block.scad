@@ -734,7 +734,7 @@ module block(
                                         cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, (knobHeight - knobClampHeight)*cutMultiplier], center=true);
                                     }
                                 }
-                                translate([0, 0, 0.5 * knobClampHeight]){    
+                                translate([0, 0, 0.5 * (knobHeight-knobClampHeight)]){    
                                     difference(){       
                                         mb_roundedcube(size=[knobRectX + 2*knobClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobClampThickness + 2*knobTongueAdjustment, knobClampHeight], 
                                                         center = true, 
@@ -886,13 +886,14 @@ module block(
                 translate([0, 0, sideZ(0) + 0.5*baseCutoutMinDepth]){ 
                     difference(){
                         union(){
-                            translate([0, 0, -0.5 * (knobClampHeight - cutOffset)]){
+                            translate([0, 0, -0.5 * knobClampHeight]){
                                 difference(){
-                                        cube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, baseCutoutMinDepth - knobClampHeight + cutOffset], center = true);
+                                    cube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, baseCutoutMinDepth - knobClampHeight + 2*cutOffset], center = true);
                                     cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, (baseCutoutMinDepth - knobClampHeight + cutOffset)*cutMultiplier], center=true);
                                 }
                             }
-                            translate([0, 0, 0.5 * knobClampHeight]){    
+                            //Top Part with clamp
+                            translate([0, 0, 0.5 * (baseCutoutMinDepth - knobClampHeight)]){    
                                 difference(){       
                                     cube(size=[knobRectX + 2*knobClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobClampThickness + 2*knobTongueAdjustment, knobClampHeight], center = true);
                                     cube([knobRectX - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobClampHeight*cutMultiplier], center=true);
@@ -914,11 +915,41 @@ module block(
                                     cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, baseCutoutMinDepth*cutMultiplier], center = true);     
                             } 
                         }   
+
+                        
+                    }
+
+                    /*
+                    * Wall Gaps X
+                    */
+                    color([0.608, 0.349, 0.714]) //9b59b6
+                    for (a = [ startX : 1 : endX ]){
+                        for (side = [ 0 : 1 : 1 ]){
+                            gapLength = drawWallGapX(a, side, 0);
+                            if(gapLength > 0){
+                                translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
+                                    cube([gapLength*baseSideLength - (objectSizeX - (knobRectX + 2*knobTongueAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + 2*knobTongueAdjustment) + sAdjustment[2 + side] + cutTolerance), baseCutoutMinDepth + cutOffset], center=true); 
+                            }
+                        }
+                    }
+                    
+                    /*
+                    * Wall Gaps Y
+                    */
+                    color([0.608, 0.349, 0.714]) //9b59b6
+                    for (b = [ startY : 1 : endY ]){
+                        for (side = [ 0 : 1 : 1 ]){
+                            gapLength = drawWallGapY(b, side, 0);
+                            if(gapLength > 0){
+                                translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
+                                        cube([(objectSizeX - (knobRectX + 2*knobTongueAdjustment) + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - (objectSizeY - (knobRectY + 2*knobTongueAdjustment)) + cutTolerance, baseCutoutMinDepth + cutOffset], center=true);   
+                            }
+                        }
                     }
                 }   
             }
         }
-        
+
     } //End translate brick offset
 
 } // End module block    

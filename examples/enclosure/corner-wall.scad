@@ -29,7 +29,9 @@ block(
     }
 
 if(parts == "TOP" || parts == "ALL"){
+       
         translate([0,40,0]){
+       
             block(
             baseLayers=1, 
             grid=[3,1], 
@@ -39,7 +41,7 @@ if(parts == "TOP" || parts == "ALL"){
             knobClampThickness = 0.1,
             knobTongueAdjustment = 0,
             baseCutoutType = "GROOVE"
-        );
+        ); 
 
         block(
             baseLayers=1, 
@@ -50,6 +52,6 @@ if(parts == "TOP" || parts == "ALL"){
             knobClampThickness = 0.1,
             knobTongueAdjustment = 0,
             baseCutoutType = "GROOVE"
-        );
+        ); 
     }
 }
