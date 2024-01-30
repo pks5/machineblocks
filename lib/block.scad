@@ -97,8 +97,9 @@ module block(
         knobHoleClampThickness = 0.1,
         knobResolution = 30,
         knobGaps = [],
-        knobTongueThickness = 1.2,
+        knobTongueThickness = 1.1,
         knobTongueAdjustment = -0.1,
+        knobTongueClampThickness = 0,
 
         //Pit
         withPit=false,
@@ -731,37 +732,58 @@ module block(
                                                         radius=knobRounding, 
                                                         apply_to="z",
                                                         resolution=($preview ? previewQuality : 1) * knobResolution);
-                                        cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, (knobHeight - knobClampHeight)*cutMultiplier], center=true);
+                                        cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (knobHeight - knobClampHeight)*cutMultiplier], center=true);
+
+                                        /*
+                                        * Cut knobGrooveGaps
+                                        */
+                                        if(withPit){
+                                            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                                                gap = pitWallGaps[gapIndex];
+                                                if(gap[0] < 2){
+                                                    translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                                        cube([knobTongueThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], (knobHeight - knobClampHeight)*cutMultiplier], center = true);
+                                                }  
+                                                else{
+                                                    translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
+                                                        cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, (knobHeight - knobClampHeight)*cutMultiplier], center = true);     
+                                                } 
+                                            }  
+                                        }
                                     }
                                 }
+
+                                //Tongue Clamp
                                 translate([0, 0, 0.5 * (knobHeight-knobClampHeight)]){    
                                     difference(){       
-                                        mb_roundedcube(size=[knobRectX + 2*knobClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobClampThickness + 2*knobTongueAdjustment, knobClampHeight], 
+                                        mb_roundedcube(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobClampHeight], 
                                                         center = true, 
                                                         radius=knobRounding, 
                                                         apply_to="z",
                                                         resolution=($preview ? previewQuality : 1) * knobResolution);
-                                        cube([knobRectX - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobClampHeight*cutMultiplier], center=true);
+                                        cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, knobClampHeight*cutMultiplier], center=true);
+                                    
+                                        /*
+                                        * Cut knobGrooveGaps
+                                        */
+                                        if(withPit){
+                                            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                                                gap = pitWallGaps[gapIndex];
+                                                if(gap[0] < 2){
+                                                    translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                                        cube([(knobTongueThickness + 2*knobTongueClampThickness)*cutMultiplier, pitSizeY - gap[1] - gap[2]- 2*knobTongueClampThickness, knobClampHeight*cutMultiplier], center = true);
+                                                }  
+                                                else{
+                                                    translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
+                                                        cube([pitSizeX - gap[1] - gap[2] - 2*knobTongueClampThickness , (knobTongueThickness + 2*knobTongueClampThickness)*cutMultiplier, knobClampHeight*cutMultiplier], center = true);     
+                                                } 
+                                            }  
+                                        }
                                     }
                                 }
                             }
 
-                            /*
-                            * Cut knobGrooveGaps
-                            */
-                            if(withPit){
-                                for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                                    gap = pitWallGaps[gapIndex];
-                                    if(gap[0] < 2){
-                                        translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                            cube([knobTongueThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], 2*baseCutoutMinDepth*cutMultiplier], center = true);
-                                    }  
-                                    else{
-                                        translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
-                                            cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, 2*baseCutoutMinDepth*cutMultiplier], center = true);     
-                                    } 
-                                }  
-                            }
+                            
                         }
                     }
                 }
@@ -889,32 +911,47 @@ module block(
                             translate([0, 0, -0.5 * knobClampHeight]){
                                 difference(){
                                     cube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, baseCutoutMinDepth - knobClampHeight + 2*cutOffset], center = true);
-                                    cube([knobRectX - 2*knobTongueThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobTongueAdjustment, (baseCutoutMinDepth - knobClampHeight + cutOffset)*cutMultiplier], center=true);
+                                    cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (baseCutoutMinDepth - knobClampHeight + 2*cutOffset)*cutMultiplier], center=true);
+                                    /*
+                                    * Cut knobGrooveGaps
+                                    */
+                                    for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                                        gap = pitWallGaps[gapIndex];
+                                        if(gap[0] < 2){
+                                            translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                                cube([knobTongueThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], (baseCutoutMinDepth - knobClampHeight + 2*cutOffset)*cutMultiplier], center = true);
+                                        }  
+                                        else{
+                                            translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
+                                                cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, (baseCutoutMinDepth - knobClampHeight + 2*cutOffset)*cutMultiplier], center = true);     
+                                        } 
+                                    }   
                                 }
                             }
                             //Top Part with clamp
                             translate([0, 0, 0.5 * (baseCutoutMinDepth - knobClampHeight)]){    
                                 difference(){       
-                                    cube(size=[knobRectX + 2*knobClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobClampThickness + 2*knobTongueAdjustment, knobClampHeight], center = true);
-                                    cube([knobRectX - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobRectY - 2*knobTongueThickness - 2*knobClampThickness - 2*knobTongueAdjustment, knobClampHeight*cutMultiplier], center=true);
+                                    cube(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobClampHeight], center = true);
+                                    cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, knobClampHeight*cutMultiplier], center=true);
+                                    /*
+                                    * Cut knobGrooveGaps
+                                    */
+                                    for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                                        gap = pitWallGaps[gapIndex];
+                                        if(gap[0] < 2){
+                                            translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
+                                                cube([(knobTongueThickness + 2*knobTongueClampThickness)*cutMultiplier, pitSizeY - gap[1] - gap[2]- 2*knobTongueClampThickness, knobClampHeight*cutMultiplier], center = true);
+                                        }  
+                                        else{
+                                            translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
+                                                cube([pitSizeX - gap[1] - gap[2] - 2*knobTongueClampThickness , (knobTongueThickness + 2*knobTongueClampThickness)*cutMultiplier, knobClampHeight*cutMultiplier], center = true);     
+                                        } 
+                                    }   
                                 }
                             }
                         }
 
-                        /*
-                        * Cut knobGrooveGaps
-                        */
-                        for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                            gap = pitWallGaps[gapIndex];
-                            if(gap[0] < 2){
-                                translate([(-0.5 + gap[0]) * (knobRectX - knobTongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                    cube([knobTongueThickness*cutMultiplier, pitSizeY - gap[1] - gap[2], baseCutoutMinDepth*cutMultiplier], center = true);
-                            }  
-                            else{
-                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY - knobTongueThickness), 0])
-                                    cube([pitSizeX - gap[1] - gap[2] , knobTongueThickness*cutMultiplier, baseCutoutMinDepth*cutMultiplier], center = true);     
-                            } 
-                        }   
+                        
 
                         
                     }
