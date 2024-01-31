@@ -11,11 +11,11 @@ block(
         brickOffset=[0, 1, 0],
         withPit = true,
             pitWallGaps = [[2,0,0]],
-            screwHolesY = [[0,2], [0,3]],
+            screwHolesY = [[0,21]],
             screwHolesZ = [[0,0], [2,0]],
             knobClampThickness = 0.1
     );
-/*
+
     block(
         baseLayers=23, 
         grid=[1, 3], 
@@ -25,7 +25,7 @@ block(
             pitWallGaps= [[1,0,0]],
             screwHolesZ = [[0,0], [0,2]],
             knobClampThickness = 0.1
-    ); */
+    );
 
     }
 
