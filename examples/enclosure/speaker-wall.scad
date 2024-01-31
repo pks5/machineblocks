@@ -30,8 +30,8 @@ difference(){
             grid=[8,1],
             withPit = true,
             pitWallGaps= [[3,0,0]],
-            screwHoles = [[0,0], [7,0]],
-            screwHoleSize = 2,
+            screwHolesZ = [[0,0], [7,0]],
+            screwHoleZSize = 2,
             knobTongueClampThickness = 0.1
         );
 
@@ -67,7 +67,7 @@ if(parts == "TOP" || parts == "ALL"){
             baseLayers=1,
             grid=[8,1],
             pitWallGaps= [[3,0,0]],
-            //screwHoles = [[0,0], [7,0]],
+            //screwHolesZ = [[0,0], [7,0]],
             //screwHoleSize = 2,
             knobTongueClampThickness = 0.1,
             knobTongueAdjustment = 0,

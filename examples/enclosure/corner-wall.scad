@@ -10,8 +10,9 @@ block(
         wallGapsX=[[0,0]],
         brickOffset=[0, 1, 0],
         withPit = true,
-            pitWallGaps= [[2,0,0]],
-            screwHoles = [[0,0], [2,0]],
+            pitWallGaps = [[2,0,0]],
+            screwHolesY = [[0,21]],
+            screwHolesZ = [[0,0], [2,0]],
             knobTongueClampThickness = 0.1
     );
 
@@ -22,8 +23,8 @@ block(
         brickOffset=[-1, 0, 0],
         withPit = true,
             pitWallGaps= [[1,0,0]],
-            screwHoles = [[0,0], [0,2]],
-            knobTongueClampThickness = 0.1
+            screwHolesZ = [[0,0], [0,2]],
+            knobClampThickness = 0.1
     );
 
     }

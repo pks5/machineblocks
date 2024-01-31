@@ -90,6 +90,7 @@ module block(
         knobCentered = false,
         knobSize = 5.0,
         knobHeight = 1.8,
+        knobHeightOriginal = 1.8,
         knobClampHeight = 0.8,
         knobClampThickness = 0,
         knobHoleSize = 3.5,
@@ -100,7 +101,7 @@ module block(
         knobTongueThickness = 1.1,
         knobTongueAdjustment = -0.1,
         knobTongueClampThickness = 0,
-
+        
         //Pit
         withPit=false,
         pitDepth = 0,
@@ -127,11 +128,15 @@ module block(
         svgOffset = [0, 0],
 
         //Screw Holes
-        screwHoles = [],
-        screwHoleSize = 2.3, //M2
-        screwHoleHelperThickness = 0.8,
-        screwHoleHelperOffset = 0.2,
-        screwHoleHelperHeight = 0.2,
+        screwHolesZ = [],
+        screwHoleZSize = 2.3,
+        screwHoleZHelperThickness = 0.8,
+        screwHoleZHelperOffset = 0.2,
+        screwHoleZHelperHeight = 0.2,
+
+        screwHolesX = [],
+        screwHolesY = [],
+        screwHoleXYSize = 2.1,
 
         //PCB
         withPcb=false,
@@ -186,7 +191,6 @@ module block(
     brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * totalHeight : 0); 
     
     //Base Cutout and Pit Depth
-    originalBaseCutoutDepth = baseHeightOriginal + topPlateHeight;
     resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
@@ -220,8 +224,9 @@ module block(
     baseCutoutZ = -0.5 * (totalHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
     knobsZ = centerZ + 0.5 * (resultingBaseHeight + knobHeight); 
-    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * baseHeightOriginal + knobHeight); //TODO absolute value for xy-holes z-position?
-    
+    xyHolesZ = -0.5 * totalHeight + 0.5 * (3 * baseHeightOriginal + knobHeightOriginal); //TODO absolute value for xy-holes z-position?
+    xyScrewHolesZ = centerZ - 0.5*resultingBaseHeight + 0.5 * baseHeightOriginal; 
+
     echo(
         centerZ = centerZ, 
         baseCutoutZ = baseCutoutZ, 
@@ -278,7 +283,7 @@ module block(
     
     function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
-    function drawScrewHole(a, b, i) = screwHoles == "ALL" || ((i < len(screwHoles)) && ( (a == screwHoles[i][0] && b == screwHoles[i][1]) || drawScrewHole(a, b, i+1)));
+    function drawScrewHole(a, b, i) = screwHolesZ == "ALL" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHole(a, b, i+1)));
 
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -390,14 +395,14 @@ module block(
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
                                             if(drawScrewHole(a, b, 0)){
-                                                translate([posX(a), posY(b)-0.5*(screwHoleSize + screwHoleHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight + screwHoleHelperOffset)])
-                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleHelperThickness, screwHoleHelperHeight + screwHoleHelperOffset], center = true);
-                                                translate([posX(a), posY(b)+0.5*(screwHoleSize + screwHoleHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight + screwHoleHelperOffset)])
-                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleHelperThickness, screwHoleHelperHeight + screwHoleHelperOffset], center = true);    
-                                                translate([posX(a)-0.5*(screwHoleSize + screwHoleHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight)])
-                                                    cube([screwHoleHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleHelperHeight], center = true);
-                                                translate([posX(a)+0.5*(screwHoleSize + screwHoleHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleHelperHeight)])
-                                                    cube([screwHoleHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleHelperHeight], center = true);    
+                                                translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                    cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                    cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
                                             } 
                                         }
                                     }
@@ -888,17 +893,35 @@ module block(
             }
 
             /*
-            * Screw Holes
+            * Screw Holes Z
             */
             if(withStabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
                 for (a = [ startX : 1 : endX ]){
                     for (b = [ startY : 1 : endY ]){
                         if(drawScrewHole(a, b, 0)){
                             translate([posX(a), posY(b), 0])
-                                cylinder(h = totalHeight*cutMultiplier, r = 0.5*screwHoleSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                cylinder(h = totalHeight*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                         } 
                     }
                 }
+            }
+
+            /*
+            * Screw Holes X
+            */
+            for (b = [ 0 : 1 : len(screwHolesX) - 1]){
+                translate([posX(screwHolesX[b][0]), 0, xyScrewHolesZ + screwHolesX[b][1] * baseHeightOriginal])
+                    rotate([90, 0, 0])
+                        cylinder(h = objectSizeY*cutMultiplier, r = 0.5*screwHoleXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+            }
+
+            /*
+            * Screw Holes Y
+            */
+            for (b = [ 0 : 1 : len(screwHolesY) - 1]){
+                translate([0, posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * baseHeightOriginal])
+                    rotate([0, 90, 0])
+                        cylinder(h = objectSizeX*cutMultiplier, r = 0.5*screwHoleXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
             }
 
             /*
