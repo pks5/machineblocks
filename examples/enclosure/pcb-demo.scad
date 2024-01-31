@@ -3,7 +3,7 @@ include <../../lib/block.scad>;
 block(
     baseLayers=1,
     grid=[6,6],
-    screwHoles = [[0, 0], [5,0], [0,5], [5,5]],
+    screwHolesZ = [[0, 0], [5,0], [0,5], [5,5]],
     knobType = "NONE",
     withPcb=true,
     pcbDimensions=[40,30,3],

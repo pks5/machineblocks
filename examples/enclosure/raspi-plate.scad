@@ -7,7 +7,7 @@ block(
     pillarGaps=[[1,1,7,5]],
     stabilizerExpansion = 1,
     stabilizerExpansionOffset = 0,
-    screwHoles = [[0, 1], [9,1], [0,6], [9,6]],
+    screwHolesZ = [[0, 1], [9,1], [0,6], [9,6]],
     knobType = "NONE",
     withPcb=true,
     pcbDimensions=[40,30,3],
