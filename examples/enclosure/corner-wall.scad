@@ -1,6 +1,6 @@
 include <../../lib/block.scad>;
 
-parts = "TOP";
+parts = "ALL";
 
 
 if(parts == "WALL" || parts == "ALL"){
@@ -10,10 +10,12 @@ block(
         wallGapsX=[[0,0]],
         brickOffset=[0, 1, 0],
         withPit = true,
-            pitWallGaps = [[2,0,0]],
-            screwHolesY = [[0,21]],
-            screwHolesZ = [[0,0], [2,0]],
-            knobTongueClampThickness = 0.1
+        pitWallGaps = [[2,0,0]],
+        screwHolesZ = [[0,0], [2,0]],
+        screwHoleZSize = 2,
+        screwHolesY = [[0, 2], [0, 21]],
+        screwHoleXYSize = 2.4,
+        knobTongueClampThickness = 0.1
     );
 
     block(
@@ -22,9 +24,12 @@ block(
         wallGapsY=[[2,1]], 
         brickOffset=[-1, 0, 0],
         withPit = true,
-            pitWallGaps= [[1,0,0]],
-            screwHolesZ = [[0,0], [0,2]],
-            knobClampThickness = 0.1
+        pitWallGaps= [[1,0,0]],
+        screwHolesZ = [[0,0], [0,2]],
+        screwHoleZSize = 2,
+        screwHolesX = [[0, 2], [0, 21]],
+        screwHoleXYSize = 2.4,
+        knobClampThickness = 0.1
     );
 
     }

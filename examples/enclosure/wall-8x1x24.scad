@@ -9,8 +9,8 @@ block(
     withPit = true,
     pitWallGaps= [[3,0,0]],
     screwHolesZ = [[0,0], [7,0]],
-    screwHolesY = [[0, 2], [0, 21]],
     screwHoleZSize = 2,
+    screwHolesY = [[0, 2], [0, 21]],
     screwHoleXYSize = 2,
     knobTongueClampThickness = 0.1
 

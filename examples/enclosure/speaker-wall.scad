@@ -1,21 +1,16 @@
 include <../../lib/block.scad>;
+include <../../lib/socket.scad>;
 
-module prism(l, w, h){
-    translate([-0.5*l, -0.5*w, -0.5*h])
-       polyhedron(
-               points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
-               faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]]
-               );
-}
+
 
 parts = "ALL";
 
 wallHeight = 75.4 + 3.2;
 wallSizeY = 7.8;
 speakerSize = 46;
-speakerFrameSize = 54;
+speakerFrameSize = [54, 54];
 speakerFrameHeight = 4;
-speakerScrewHoleDistance = 43;
+speakerScrewHoleDistance = [43, 43];
 speakerScrewHoleSize = 2.2;
 pitWallThickness = 2.6;
 
@@ -32,33 +27,26 @@ difference(){
             pitWallGaps= [[3,0,0]],
             screwHolesZ = [[0,0], [7,0]],
             screwHoleZSize = 2,
+            screwHolesY = [[0, 2], [0, 21]],
+            screwHoleXYSize = 2,
             knobTongueClampThickness = 0.1
         );
 
-        translate([0,0,0.5 * wallHeight])
+        translate([0,0.5*speakerFrameHeight - 0.5*wallSizeY + pitWallThickness,0.5 * wallHeight])
             rotate([90,0,0])
-                translate([0,0,-0.5*speakerFrameHeight + 0.5*wallSizeY-pitWallThickness]){
-                    translate([0,-0.5*speakerFrameSize - 0.5*6,0])
-                        rotate([0,180,0])
-                        prism(speakerFrameSize, 6, speakerFrameHeight);
-                    difference(){
-                        cube(size = [speakerFrameSize, speakerFrameSize, speakerFrameHeight], center = true);
-                        translate([-0.5*speakerFrameSize + 0.5*(speakerFrameSize-speakerScrewHoleDistance),-0.5*speakerFrameSize + 0.5*(speakerFrameSize-speakerScrewHoleDistance),0])
-                            cylinder(r=0.5*speakerScrewHoleSize, h=speakerFrameHeight*cutMultiplier, center = true, $fn=30);
-                        translate([0.5*speakerFrameSize - 0.5*(speakerFrameSize-speakerScrewHoleDistance),-0.5*speakerFrameSize + 0.5*(speakerFrameSize-speakerScrewHoleDistance),0])
-                            cylinder(r=0.5*speakerScrewHoleSize, h=speakerFrameHeight*cutMultiplier, center = true, $fn=30);
-                        translate([-0.5*speakerFrameSize + 0.5*(speakerFrameSize-speakerScrewHoleDistance),0.5*speakerFrameSize - 0.5*(speakerFrameSize-speakerScrewHoleDistance),0])
-                            cylinder(r=0.5*speakerScrewHoleSize, h=speakerFrameHeight*cutMultiplier, center = true, $fn=30);
-                        translate([0.5*speakerFrameSize - 0.5*(speakerFrameSize-speakerScrewHoleDistance),0.5*speakerFrameSize - 0.5*(speakerFrameSize-speakerScrewHoleDistance),0])
-                            cylinder(r=0.5*speakerScrewHoleSize, h=speakerFrameHeight*cutMultiplier, center = true, $fn=30);    
-                    }
-                }
+                mb_socket_frame(
+                    frameSize = speakerFrameSize,
+                    frameHeight = speakerFrameHeight,
+                    screwHoleDistance = speakerScrewHoleDistance,
+                    screwHoleSize = speakerScrewHoleSize
+                );
+                
     }
 
     translate([0,0,0.5 * wallHeight])
         rotate([90,0,0])
-        cylinder(r = 0.5*speakerSize, h=20, center=true, $fn=30);        
-}   
+        cylinder(r = 0.5*speakerSize, h=20, center=true, $fn=30);
+    }   
 }
 
 if(parts == "TOP" || parts == "ALL"){
