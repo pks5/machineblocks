@@ -21,23 +21,23 @@ difference(){
 
         );
         
-        translate([0,0.5*0.3 - 0.5*7.8 + 2.6, 16])
+        translate([0,0.5*0.3 - 0.5*7.8 + 2.6, 32])
             rotate([90,0,0])
                 mb_socket_frame(
                     frameSize = [25.2, 10],
                     frameHeight = 0.3,
-                    screwHoleDistance = [16.8,0],
+                    screwHoleDistance = [17.6,0],
                     screwHoleSize = 2.9,
                     slopingHeight = 0.4
                 );    
     }
 
 
-    translate([0,0, 16]){
+    translate([0,0, 32]){
             rotate([90,0,0])
                 mb_socket_holes(
                     screwHoleDepth = 30,
-                    screwHoleDistance = [16.8,0],
+                    screwHoleDistance = [17.6,0],
                     screwHoleSize = 2.9
                 );
 
