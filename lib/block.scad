@@ -136,8 +136,12 @@ module block(
         screwHoleZHelperHeight = 0.2,
 
         screwHolesX = [],
+        screwHoleXSize = 2.1,
+        screwHoleXDepth = 4,
+
         screwHolesY = [],
-        screwHoleXYSize = 2.1,
+        screwHoleYSize = 2.1,
+        screwHoleYDepth = 4,
 
         //PCB
         withPcb=false,
@@ -911,18 +915,26 @@ module block(
             * Screw Holes X
             */
             for (b = [ 0 : 1 : len(screwHolesX) - 1]){
-                translate([posX(screwHolesX[b][0]), 0, xyScrewHolesZ + screwHolesX[b][1] * baseHeightOriginal])
-                    rotate([90, 0, 0])
-                        cylinder(h = objectSizeY*cutMultiplier, r = 0.5*screwHoleXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                for (s = [ 0 : 1 : 1]){
+                    if(screwHolesX[b][2] == undef || screwHolesX[b][2] == s){
+                        translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * baseHeightOriginal])
+                            rotate([90, 0, 0])
+                                cylinder(h = screwHoleXDepth + cutOffset, r = 0.5*screwHoleXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                    }
+                }
             }
 
             /*
             * Screw Holes Y
             */
             for (b = [ 0 : 1 : len(screwHolesY) - 1]){
-                translate([0, posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * baseHeightOriginal])
-                    rotate([0, 90, 0])
-                        cylinder(h = objectSizeX*cutMultiplier, r = 0.5*screwHoleXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                for (s = [ 0 : 1 : 1]){
+                    if(screwHolesY[b][2] == undef || screwHolesY[b][2] == s){
+                        translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * baseHeightOriginal])
+                            rotate([0, 90, 0])
+                                cylinder(h = screwHoleYDepth + cutOffset, r = 0.5*screwHoleYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                    }
+                }
             }
 
             /*
@@ -1011,6 +1023,7 @@ module block(
             }
         }
 
+        
     } //End translate brick offset
 
 } // End module block    

@@ -14,7 +14,7 @@ block(
         screwHolesZ = [[0,0], [2,0]],
         screwHoleZSize = 2,
         screwHolesY = [[0, 2], [0, 21]],
-        screwHoleXYSize = 2.4,
+        screwHoleYSize = 2.4,
         knobTongueClampThickness = 0.1
     );
 
@@ -28,7 +28,7 @@ block(
         screwHolesZ = [[0,0], [0,2]],
         screwHoleZSize = 2,
         screwHolesX = [[0, 2], [0, 21]],
-        screwHoleXYSize = 2.4,
+        screwHoleXSize = 2.4,
         knobClampThickness = 0.1
     );
 
