@@ -12,6 +12,7 @@ block(
     screwHoleYSize = 2,
     knobTongueClampThickness = 0.1,
     baseCutoutType = "NONE",
+    topPlateHeight = 1.0,
     brickOffset=[0,0.5,0],
     sideAdjustment=[-0.1,-0.1,0.1,-0.1]
 
@@ -26,6 +27,7 @@ block(
     screwHoleYSize = 2,
     knobTongueClampThickness = 0.1,
     baseCutoutType = "NONE",
+    topPlateHeight = 1.0,
     brickOffset=[0,-0.5,0],
     sideAdjustment=[-0.1,-0.1,-0.1,0.1]
 
