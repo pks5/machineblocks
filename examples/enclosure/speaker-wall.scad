@@ -82,6 +82,8 @@ difference(){
         rotate([90,0,0])
         cylinder(r = 0.5*speakerSize, h=20, center=true, $fn=30);
     }   
+
+
 }
 
 if(parts == "TOP" || parts == "ALL"){

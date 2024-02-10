@@ -1,4 +1,4 @@
-module prism(l, w, h){
+module mb_frame_prism(l, w, h){
     translate([-0.5*l, -0.5*w, -0.5*h])
        polyhedron(
                points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
@@ -18,7 +18,7 @@ module mb_socket_frame(
     translate([0, -0.5*frameSize[1] - 0.5*slopingHeight, 0])
         if(slopingHeight > 0){
             rotate([0,180,0])
-                prism(frameSize[0], slopingHeight, frameHeight);
+                mb_frame_prism(frameSize[0], slopingHeight, frameHeight);
         }
         difference(){
             cube(size = [frameSize[0], frameSize[1], frameHeight], center = true);
