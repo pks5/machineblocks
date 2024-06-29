@@ -31,7 +31,7 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    slantingX = baseSideLength * slanting[0] - wallThickness - (slanting[0] >= grid[0] ? wallThickness : 0) + cutOffset;
+    slantingX = baseSideLength * slanting[0] - (slanting[0] >= grid[0] ? wallThickness : 0) + cutTolerance;
 
     difference(){
         union(){
@@ -54,8 +54,8 @@ module mb_base_cutout(
         * Slanting
         */
         if(slanting[0] > 0){
-            translate([-0.5 * (objectSize[0] - 2*wallThickness - slantingX + cutOffset), 0, 0.5*slantingLowerHeight])
-                mb_slant_prism(slantingX, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight);
+            translate([-0.5 * (objectSize[0] - 2*wallThickness - slantingX + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                mb_slant_prism(slantingX, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
         }
     }
     
@@ -91,7 +91,7 @@ module mb_base(
     objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
 
-    slantingX = baseSideLength * slanting[0] + sideAdjustment[0] + (slanting[0] >= grid[0] ? sideAdjustment[1] : 0);
+    slantingX = baseSideLength * slanting[0] + sideAdjustment[0] + (slanting[0] >= grid[0] ? sideAdjustment[1] : 0) + cutTolerance;
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
@@ -132,8 +132,8 @@ module mb_base(
                 * Slanting
                 */
                 if(slanting[0] > 0){
-                    translate([-0.5 * (objectSizeXAdjusted - slantingX), 0, 0.5*slantingLowerHeight])
-                        mb_slant_prism(slantingX, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight);
+                    translate([-0.5 * (objectSizeXAdjusted - slantingX + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(slantingX, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
                 }
             }
         }

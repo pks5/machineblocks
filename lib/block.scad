@@ -52,7 +52,7 @@ module block(
 
         //Slanting
         slanting = [0,0,0,0],
-        slantingLowerHeight = 3.2,
+        slantingLowerHeight = 2,
 
         //Stabilizers
         withStabilizerGrid = true,
@@ -313,223 +313,247 @@ module block(
             union(){
                 if(baseCutoutType == "CLASSIC"){
                     union(){
-                        /*
-                        * Adhesion Helpers
-                        */
-                        if(withAdhesionHelpers){
-                            color([0.753, 0.224, 0.169]) //c0392b
-                            translate([0, 0, 0.5 * (adhesionHelperHeight - totalHeight)]){
-                                difference(){
-                                    union(){
-                                        //Helpers X
-                                        for (a = [ startX : 1 : endX - 1 ]){
-                                            translate([posX(a + 0.5), 0, 0]){ 
-                                                cube([adhesionHelperThickness, objectSizeY - 2*wallThickness, adhesionHelperHeight], center = true);
-                                            }
-                                        }
-                                        
-                                        //Helpers Y
-                                        for (b = [ startY : 1 : endY - 1 ]){
-                                        translate([0, posY(b + 0.5), 0]){
-                                                cube([objectSizeX - 2*wallThickness, adhesionHelperThickness, adhesionHelperHeight], center = true);
-                                            };
-                                        }
-                                    }
-                                    
-                                    /*
-                                    * Cut TubeZ Area
-                                    */
-                                    if(withPillars){
-                                        for (a = [ startX : 1 : endX - 1 ]){
-                                            for (b = [ startY : 1 : endY - 1 ]){
-                                                if(drawPillar(a, b, 0)){
-                                                    translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                        cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                        intersection(){
+                            union(){
+                                /*
+                                * Adhesion Helpers
+                                */
+                                if(withAdhesionHelpers){
+                                    color([0.753, 0.224, 0.169]) //c0392b
+                                    translate([0, 0, 0.5 * (adhesionHelperHeight - totalHeight)]){
+                                        difference(){
+                                            union(){
+                                                //Helpers X
+                                                for (a = [ startX : 1 : endX - 1 ]){
+                                                    translate([posX(a + 0.5), 0, 0]){ 
+                                                        cube([adhesionHelperThickness, objectSizeY - 2*wallThickness, adhesionHelperHeight], center = true);
+                                                    }
+                                                }
+                                                
+                                                //Helpers Y
+                                                for (b = [ startY : 1 : endY - 1 ]){
+                                                translate([0, posY(b + 0.5), 0]){
+                                                        cube([objectSizeX - 2*wallThickness, adhesionHelperThickness, adhesionHelperHeight], center = true);
                                                     };
                                                 }
-                                            }   
+                                            }
+                                            
+                                            /*
+                                            * Cut TubeZ Area
+                                            */
+                                            if(withPillars){
+                                                for (a = [ startX : 1 : endX - 1 ]){
+                                                    for (b = [ startY : 1 : endY - 1 ]){
+                                                        if(drawPillar(a, b, 0)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                                cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            };
+                                                        }
+                                                    }   
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        }
-                            
-                        /*
-                        * Plate Helpers
-                        */
-                        if(withTopPlateHelpers){
-                            color([0.906, 0.298, 0.235]) //e74c3c
-                            union(){
-                                translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
-                                    cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
-                                }
-                                translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
-                                    cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
-                                }    
-                                translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
-                                    cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
-                                }
-                                translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
-                                    cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
-                                } 
-                            }
-                        }
-                
-            
-                        /*
-                        * Stabilizers
-                        */
-                        if(withStabilizerGrid){
-                            difference(){
-                                union(){
-                                    //Helpers X
-                                    color([0.753, 0.224, 0.169]) //c0392b
-                                    for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a))]){ 
-                                            cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)], center = true);
-                                        }
-                                    }
                                     
-                                    //Helpers Y
-                                    color([0.753, 0.224, 0.169]) //c0392b
-                                    for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
-                                            cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
-                                        };
+                                /*
+                                * Plate Helpers
+                                */
+                                if(withTopPlateHelpers){
+                                    color([0.906, 0.298, 0.235]) //e74c3c
+                                    union(){
+                                        translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
+                                            cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
+                                        }
+                                        translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
+                                            cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
+                                        }    
+                                        translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                            cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
+                                        }
+                                        translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight + topPlateHelperOffset)]){
+                                            cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset], center = true);
+                                        } 
                                     }
+                                }
+                        
+                    
+                                /*
+                                * Stabilizers
+                                */
+                                if(withStabilizerGrid){
+                                    difference(){
+                                        union(){
+                                            //Helpers X
+                                            color([0.753, 0.224, 0.169]) //c0392b
+                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a))]){ 
+                                                    cube([stabilizerGridThickness, objectSizeY - 2*wallThickness, stabilizersXHeight(a)], center = true);
+                                                }
+                                            }
+                                            
+                                            //Helpers Y
+                                            color([0.753, 0.224, 0.169]) //c0392b
+                                            for (b = [ startY : 1 : endY - 1 ]){
+                                            translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
+                                                    cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
+                                                };
+                                            }
 
-                                    /*
-                                    * Screw Hole Helpers
-                                    */
-                                    for (a = [ startX : 1 : endX ]){
-                                        for (b = [ startY : 1 : endY ]){
-                                            if(drawScrewHole(a, b, 0)){
-                                                translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
-                                                translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                    cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
-                                                translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                    cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
-                                                translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                    cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
-                                            } 
+                                            /*
+                                            * Screw Hole Helpers
+                                            */
+                                            for (a = [ startX : 1 : endX ]){
+                                                for (b = [ startY : 1 : endY ]){
+                                                    if(drawScrewHole(a, b, 0)){
+                                                        translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                            cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                        translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                            cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                        translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                            cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                        translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                            cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
+                                                    } 
+                                                }
+                                            }
+                                        }
+
+                                        /*
+                                        * Cut TubeZ area
+                                        */
+                                        if(withPillars){
+                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                for (b = [ startY : 1 : endY - 1 ]){
+                                                    if(drawPillar(a, b, 0)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                                cylinder(h=cutMultiplier * totalHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            };
+                                                    }
+                                                }   
+                                            }
                                         }
                                     }
                                 }
 
                                 /*
-                                * Cut TubeZ area
+                                * Middle Pins
                                 */
                                 if(withPillars){
-                                    for (a = [ startX : 1 : endX - 1 ]){
+                                    //Middle Pin X
+                                    if(endY == 0){
+                                        color([0.953, 0.612, 0.071]) //f39c12
+                                        for (a = [ startX : 1 : endX - 1 ]){
+                                            translate([posX(a + 0.5), 0, baseCutoutZ]){
+                                                translate([0, 0, 0.5* baseClampHeight])
+                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                    cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                            };
+                                        }
+                                    }
+                                    
+                                    //Middle Pin Y
+                                    if(endX == 0){
+                                        color([0.953, 0.612, 0.071]) //f39c12
                                         for (b = [ startY : 1 : endY - 1 ]){
-                                            if(drawPillar(a, b, 0)){
-                                                    translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                        cylinder(h=cutMultiplier * totalHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                                    };
-                                            }
-                                        }   
+                                            translate([0, posY(b + 0.5), baseCutoutZ]){
+                                                translate([0, 0, 0.5* baseClampHeight])
+                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                    cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                            };
+                                        }
                                     }
                                 }
-                            }
-                        }
-
-                        /*
-                        * Middle Pins
-                        */
-                        if(withPillars){
-                            //Middle Pin X
-                            if(endY == 0){
-                                color([0.953, 0.612, 0.071]) //f39c12
-                                for (a = [ startX : 1 : endX - 1 ]){
-                                    translate([posX(a + 0.5), 0, baseCutoutZ]){
-                                        translate([0, 0, 0.5* baseClampHeight])
-                                            cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                        translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                            cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                    };
-                                }
-                            }
                             
-                            //Middle Pin Y
-                            if(endX == 0){
-                                color([0.953, 0.612, 0.071]) //f39c12
-                                for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([0, posY(b + 0.5), baseCutoutZ]){
-                                        translate([0, 0, 0.5* baseClampHeight])
-                                            cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                        translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                            cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                    };
-                                }
-                            }
-                        }
-                    
-                        //X-Holes Outer
-                        if(withHolesX){
-                            color([0.953, 0.612, 0.071]) //f39c12
-                            for (a = [ startX : 1 : endX - 1 ]){
-                                translate([posX(a + 0.5), 0, xyHolesZ]){
-                                    rotate([90, 0, 0]){ 
-                                        cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                    }
-                                };
-                            }
-                        }
-                        
-                        //Y-Holes Outer
-                        if(withHolesY){
-                            color([0.953, 0.612, 0.071]) //f39c12
-                            for (b = [ startY : 1 : endY - 1 ]){
-                                translate([0, posY(b + 0.5), xyHolesZ]){
-                                    rotate([0, 90, 0]){ 
-                                        cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                    };
-                                };
-                            }
-                        }
-                        
-                        /*
-                        * Tubes / Z-Holes Outer
-                        */
-                        color([0.953, 0.612, 0.071]) //f39c12
-                        if(withHolesZ){
-                            //Z-Holes Outer
-                            for (a = [ startX : 1 : endX - 1 ]){
-                                for (b = [ startY : 1 : endY - 1 ]){
-                                    translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                        translate([0, 0, 0.5* baseClampHeight])
-                                            cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                        translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                            cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                    };
-                                }   
-                            }
-                        }
-                        else if(withPillars){
-                            //Tubes with holes
-                            for (a = [ startX : 1 : endX - 1 ]){
-                                for (b = [ startY : 1 : endY - 1 ]){
-                                    if(drawPillar(a, b, 0)){
-                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                            difference(){
-                                                union(){
-                                                    translate([0, 0, 0.5* baseClampHeight])
-                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                        cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                }
-                                                //Cut Tube inner
-                                                intersection(){
-                                                    cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                                    cube([holeZSize-2*tubeHoleClampThickness, holeZSize-2*tubeHoleClampThickness, baseCutoutDepth*cutMultiplier], center=true);
-                                                };
+                                //X-Holes Outer
+                                if(withHolesX){
+                                    color([0.953, 0.612, 0.071]) //f39c12
+                                    for (a = [ startX : 1 : endX - 1 ]){
+                                        translate([posX(a + 0.5), 0, xyHolesZ]){
+                                            rotate([90, 0, 0]){ 
+                                                cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                             }
                                         };
                                     }
                                 }
+                                
+                                //Y-Holes Outer
+                                if(withHolesY){
+                                    color([0.953, 0.612, 0.071]) //f39c12
+                                    for (b = [ startY : 1 : endY - 1 ]){
+                                        translate([0, posY(b + 0.5), xyHolesZ]){
+                                            rotate([0, 90, 0]){ 
+                                                cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                            };
+                                        };
+                                    }
+                                }
+                                
+                                /*
+                                * Tubes / Z-Holes Outer
+                                */
+                                color([0.953, 0.612, 0.071]) //f39c12
+                                if(withHolesZ){
+                                    //Z-Holes Outer
+                                    for (a = [ startX : 1 : endX - 1 ]){
+                                        for (b = [ startY : 1 : endY - 1 ]){
+                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                translate([0, 0, 0.5* baseClampHeight])
+                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                    cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                            };
+                                        }   
+                                    }
+                                }
+                                else if(withPillars){
+                                    //Tubes with holes
+                                    for (a = [ startX : 1 : endX - 1 ]){
+                                        for (b = [ startY : 1 : endY - 1 ]){
+                                            if(drawPillar(a, b, 0)){
+                                                translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                    difference(){
+                                                        union(){
+                                                            translate([0, 0, 0.5* baseClampHeight])
+                                                                cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                            translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                        }
+                                                        //Cut Tube inner
+                                                        intersection(){
+                                                            cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            cube([holeZSize-2*tubeHoleClampThickness, holeZSize-2*tubeHoleClampThickness, baseCutoutDepth*cutMultiplier], center=true);
+                                                        };
+                                                    }
+                                                };
+                                            }
+                                        }
+                                    }
+                                }
+                            } //End Union of tubes, helpers, etc
+
+                            //Cut off overlapping parts of tubes
+                            if(slanting[0] > 0){
+                                translate([0, 0, centerZ]){ 
+                                    mb_base_cutout(
+                                        grid = grid,
+                                        baseSideLength = baseSideLength,
+                                        objectSize = [objectSizeX, objectSizeY],
+                                        baseHeight = resultingBaseHeight,
+                                        wallThickness = wallThickness,
+                                        topPlateHeight = resultingTopPlateHeight,
+                                        baseClampHeight = baseClampHeight,
+                                        baseClampThickness = baseClampThickness,
+                                        withPit = withPit,
+                                        pitDepth = resultingPitDepth,
+                                        slanting = slanting,
+                                        slantingLowerHeight = slantingLowerHeight
+                                    );
+                                }
                             }
-                        }
+                        } //End interception (for slanting only)
                         
                         /*
                         * Base
