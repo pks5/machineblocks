@@ -1,3 +1,4 @@
+//TODO use shapes/mb_prism
 module mb_frame_prism(l, w, h){
     translate([-0.5*l, -0.5*w, -0.5*h])
        polyhedron(

@@ -50,6 +50,10 @@ module block(
         topPlateHelperHeight = 0.2,
         topPlateHelperThickness = 0.4,
 
+        //Slanting
+        slanting = [0,0,0,0],
+        slantingLowerHeight = 3.2,
+
         //Stabilizers
         withStabilizerGrid = true,
         stabilizerGridOffset = 0.2,
@@ -278,7 +282,7 @@ module block(
     
     function drawPillar(a, b, i) = (pillarGaps == "AUTO" && drawPillarAuto(a, b)) || (pillarGaps != "AUTO" && drawPillarG(a, b, i));
 
-    function drawKnob(a, b, i) = (i >= len(knobGaps)) || (((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1)); 
+    function drawKnob(a, b, i) = (a >= slanting[0]) && (((i >= len(knobGaps)) || ((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1))); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
@@ -537,6 +541,8 @@ module block(
                                 */
                                 color([0.945, 0.769, 0.059]) //f1c40f
                                 mb_base(
+                                    grid = grid,
+                                    baseSideLength = baseSideLength,
                                     objectSize = [objectSizeX, objectSizeY],
                                     height = resultingBaseHeight,
                                     sideAdjustment = sAdjustment,
@@ -546,16 +552,26 @@ module block(
                                     withPit = withPit,
                                     pitDepth = resultingPitDepth,
                                     pitWallThickness = pWallThickness,
-                                    pitWallGaps = pitWallGaps
+                                    pitWallGaps = pitWallGaps,
+                                    slanting = slanting,
+                                    slantingLowerHeight = slantingLowerHeight
+                                );
+
+                                mb_base_cutout(
+                                    grid = grid,
+                                    baseSideLength = baseSideLength,
+                                    objectSize = [objectSizeX, objectSizeY],
+                                    baseHeight = resultingBaseHeight,
+                                    wallThickness = wallThickness,
+                                    topPlateHeight = resultingTopPlateHeight,
+                                    baseClampHeight = baseClampHeight,
+                                    baseClampThickness = baseClampThickness,
+                                    withPit = withPit,
+                                    pitDepth = resultingPitDepth,
+                                    slanting = slanting,
+                                    slantingLowerHeight = slantingLowerHeight
                                 );
                                 
-                                /*
-                                * Bottom Hole
-                                */
-                                color([0.953, 0.612, 0.071]) //f39c12
-                                translate([0, 0, 0.5*(baseClampHeight - (withPit ? resultingPitDepth : 0) - resultingTopPlateHeight) ])
-                                    cube([objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness, resultingBaseHeight - (withPit ? resultingPitDepth : 0) - resultingTopPlateHeight - baseClampHeight], center = true);    
-                            
                                 /*
                                 * Wall Gaps X
                                 */
@@ -604,13 +620,6 @@ module block(
                                         }
                                     }
                                 }
-                                
-                                /*
-                                * Clamp Skirt
-                                */
-                                color([0.902, 0.494, 0.133]) //e67e22
-                                translate([0, 0, 0.5*(baseClampHeight - resultingBaseHeight)])
-                                    cube([objectSizeX - 2 * baseClampWallThickness, objectSizeY - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true);
                             }
                         }
                     } //End union
@@ -622,6 +631,8 @@ module block(
                     translate([0, 0, centerZ]){ 
                         color([0.945, 0.769, 0.059]) //f1c40f
                             mb_base(
+                                grid = grid,
+                                baseSideLength = baseSideLength,
                                 objectSize = [objectSizeX, objectSizeY],
                                 height = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
@@ -631,7 +642,9 @@ module block(
                                 withPit = withPit,
                                 pitDepth = resultingPitDepth,
                                 pitWallThickness = pWallThickness,
-                                pitWallGaps = pitWallGaps
+                                pitWallGaps = pitWallGaps,
+                                slanting = slanting,
+                                slantingLowerHeight = slantingLowerHeight
                             );
                     }
                 }

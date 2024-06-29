@@ -1,6 +1,70 @@
 use <shapes.scad>;
 
+
+
+module mb_slant_prism(l, w, h){
+    translate([-0.5*l, -0.5*w, -0.5*h])
+       polyhedron(
+               points=[[0,0,h], [l,0,h], [l,w,h], [0,w,h], [0,w,0], [0,0,0]],
+               faces=[[1,2,4,5],[3,2,1,0],[5,4,3,0],[0,1,5],[2,3,4]]
+               );
+}
+
+module mb_base_cutout(
+    grid,
+    baseSideLength,
+    objectSize,
+    baseHeight,
+    wallThickness,
+    topPlateHeight,
+    baseClampHeight,
+    baseClampThickness,
+    withPit,
+    pitDepth,
+    slanting,
+    slantingLowerHeight
+){
+    baseClampWallThickness = wallThickness + baseClampThickness;
+
+    //Variables for cutouts        
+    cutOffset = 0.2;
+    cutMultiplier = 1.1;
+    cutTolerance = 0.01;
+
+    slantingX = baseSideLength * slanting[0] - wallThickness - (slanting[0] >= grid[0] ? wallThickness : 0) + cutOffset;
+
+    difference(){
+        union(){
+            /*
+            * Bottom Hole
+            */
+            color([0.953, 0.612, 0.071]) //f39c12
+            translate([0, 0, 0.5*(baseClampHeight - (withPit ? pitDepth : 0) - topPlateHeight) ])
+                cube([objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (withPit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true);    
+
+            /*
+            * Clamp Skirt
+            */
+            color([0.902, 0.494, 0.133]) //e67e22
+            translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
+                cube([objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true);
+        }
+
+        /*
+        * Slanting
+        */
+        if(slanting[0] > 0){
+            translate([-0.5 * (objectSize[0] - 2*wallThickness - slantingX + cutOffset), 0, 0.5*slantingLowerHeight])
+                mb_slant_prism(slantingX, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight);
+        }
+    }
+    
+
+}
+
 module mb_base(
+    grid,
+    baseSideLength,
     objectSize, 
     height, 
     sideAdjustment, 
@@ -11,45 +75,66 @@ module mb_base(
     pitWallThickness,
     pitDepth,
     pitWallGaps,
+    slanting,
+    slantingLowerHeight
 ){
     //Variables for cutouts        
     cutOffset = 0.2;
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
+    //Object Size     
+    objectSizeX = baseSideLength * grid[0];
+    objectSizeY = baseSideLength * grid[1];
+
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
 
+    slantingX = baseSideLength * slanting[0] + sideAdjustment[0] + (slanting[0] >= grid[0] ? sideAdjustment[1] : 0);
+
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
+
+    function posX(a) = (a - offsetX) * baseSideLength;
+    function posY(b) = (b - offsetY) * baseSideLength;
 
     function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
     difference(){
         translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
-            if(baseRounding == "none"){
-                cube(
-                    size = size, 
-                    center = true
-                );    
-            }
-            else if(baseRounding == "all"){
-                mb_roundedcube_simple(
-                    size = size, 
-                    center = true, 
-                    radius = roundingRadius, 
-                    resolution = roundingResolution
-                );    
-            }
-            else{
-                mb_roundedcube(
-                    size = size, 
-                    center = true, 
-                    radius = roundingRadius, 
-                    apply_to = baseRounding,
-                    resolution = roundingResolution
-                );
+            difference(){
+                if(baseRounding == "none"){
+                    cube(
+                        size = size, 
+                        center = true
+                    );    
+                }
+                else if(baseRounding == "all"){
+                    mb_roundedcube_simple(
+                        size = size, 
+                        center = true, 
+                        radius = roundingRadius, 
+                        resolution = roundingResolution
+                    );
+                }
+                else{
+                    mb_roundedcube(
+                        size = size, 
+                        center = true, 
+                        radius = roundingRadius, 
+                        apply_to = baseRounding,
+                        resolution = roundingResolution
+                    );
+                }
+
+                /*
+                * Slanting
+                */
+                if(slanting[0] > 0){
+                    translate([-0.5 * (objectSizeXAdjusted - slantingX), 0, 0.5*slantingLowerHeight])
+                        mb_slant_prism(slantingX, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight);
+                }
             }
         }
 
