@@ -1,3 +1,3 @@
 include <../lib/block.scad>;
 
-block(baseLayers=3, grid=[2,4], slanting=[1,0,0,0], heightAdjustment=-0.2);
+block(baseLayers=3, grid=[6,4], slanting=[2,2,1,1], heightAdjustment=-0.2, knobSize=5.1);

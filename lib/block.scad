@@ -282,7 +282,8 @@ module block(
     
     function drawPillar(a, b, i) = (pillarGaps == "AUTO" && drawPillarAuto(a, b)) || (pillarGaps != "AUTO" && drawPillarG(a, b, i));
 
-    function drawKnob(a, b, i) = (a >= slanting[0]) && (((i >= len(knobGaps)) || ((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1))); 
+    function drawKnob(a, b, i) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
+                                    && (((i >= len(knobGaps)) || ((a < knobGaps[i][0]) || (b < knobGaps[i][1]) || (a > knobGaps[i][2]) || (b > knobGaps[i][3])) && drawKnob(a, b, i+1))); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
@@ -535,13 +536,14 @@ module block(
                             } //End Union of tubes, helpers, etc
 
                             //Cut off overlapping parts of tubes
-                            if(slanting[0] > 0){
+                            if(slanting[0] + slanting[1] + slanting[2] + slanting[3] > 0){
                                 translate([0, 0, centerZ]){ 
                                     mb_base_cutout(
                                         grid = grid,
                                         baseSideLength = baseSideLength,
                                         objectSize = [objectSizeX, objectSizeY],
                                         baseHeight = resultingBaseHeight,
+                                        sideAdjustment = sAdjustment,
                                         wallThickness = wallThickness,
                                         topPlateHeight = resultingTopPlateHeight,
                                         baseClampHeight = baseClampHeight,
@@ -586,6 +588,7 @@ module block(
                                     baseSideLength = baseSideLength,
                                     objectSize = [objectSizeX, objectSizeY],
                                     baseHeight = resultingBaseHeight,
+                                    sideAdjustment = sAdjustment,
                                     wallThickness = wallThickness,
                                     topPlateHeight = resultingTopPlateHeight,
                                     baseClampHeight = baseClampHeight,

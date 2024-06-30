@@ -2,12 +2,15 @@ use <shapes.scad>;
 
 
 
-module mb_slant_prism(l, w, h){
-    translate([-0.5*l, -0.5*w, -0.5*h])
-       polyhedron(
-               points=[[0,0,h], [l,0,h], [l,w,h], [0,w,h], [0,w,0], [0,0,0]],
-               faces=[[1,2,4,5],[3,2,1,0],[5,4,3,0],[0,1,5],[2,3,4]]
-               );
+module mb_slant_prism(side, l, w, h){
+    rotations = [[0,0,0], [0,0,180], [0,0,90], [0,0,270],];
+
+    rotate(rotations[side])
+        translate([-0.5*l, -0.5*w, -0.5*h])
+            polyhedron(
+                    points=[[0,0,h], [l,0,h], [l,w,h], [0,w,h], [0,w,0], [0,0,0]],
+                    faces=[[1,2,4,5],[3,2,1,0],[5,4,3,0],[0,1,5],[2,3,4]]
+                    );
 }
 
 module mb_base_cutout(
@@ -15,6 +18,7 @@ module mb_base_cutout(
     baseSideLength,
     objectSize,
     baseHeight,
+    sideAdjustment, 
     wallThickness,
     topPlateHeight,
     baseClampHeight,
@@ -31,7 +35,11 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    slantingX = baseSideLength * slanting[0] - (slanting[0] >= grid[0] ? wallThickness : 0) + cutTolerance;
+    //Object Size Adjusted      
+    objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
+    objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
+
+    function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (baseSideLength * slanting[side] + sideAdjustment[side])) + cutTolerance;
 
     difference(){
         union(){
@@ -54,8 +62,27 @@ module mb_base_cutout(
         * Slanting
         */
         if(slanting[0] > 0){
-            translate([-0.5 * (objectSize[0] - 2*wallThickness - slantingX + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                mb_slant_prism(slantingX, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
+            slanting0 = slantingSize(0);
+            translate([-0.5 * (objectSize[0] - 2*wallThickness - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                mb_slant_prism(0, slanting0, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
+        }
+
+        if(slanting[1] > 0){
+            slanting1 = slantingSize(1);
+            translate([0.5 * (objectSize[0] - 2*wallThickness - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                mb_slant_prism(1, slanting1, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
+        }
+
+        if(slanting[2] > 0){
+            slanting2 = slantingSize(2);
+            translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                mb_slant_prism(2, slanting2, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
+        }
+        
+        if(slanting[3] > 0){
+            slanting3 = slantingSize(3);
+            translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                mb_slant_prism(3, slanting3, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance);
         }
     }
     
@@ -91,15 +118,12 @@ module mb_base(
     objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
 
-    slantingX = baseSideLength * slanting[0] + sideAdjustment[0] + (slanting[0] >= grid[0] ? sideAdjustment[1] : 0) + cutTolerance;
-
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
-
-    function posX(a) = (a - offsetX) * baseSideLength;
-    function posY(b) = (b - offsetY) * baseSideLength;
 
     function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+
+    function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (baseSideLength * slanting[side] + sideAdjustment[side])) + cutTolerance;
 
     difference(){
         translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
@@ -132,8 +156,27 @@ module mb_base(
                 * Slanting
                 */
                 if(slanting[0] > 0){
-                    translate([-0.5 * (objectSizeXAdjusted - slantingX + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                        mb_slant_prism(slantingX, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
+                    slanting0 = slantingSize(0);
+                    translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
+                }
+
+                if(slanting[1] > 0){
+                    slanting1 = slantingSize(1);
+                    translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
+                }
+
+                if(slanting[2] > 0){
+                    slanting2 = slantingSize(2);
+                    translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
+                }
+
+                if(slanting[3] > 0){
+                    slanting3 = slantingSize(3);
+                    translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance);
                 }
             }
         }
