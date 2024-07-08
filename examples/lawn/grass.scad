@@ -29,9 +29,9 @@ if(withBottom){
         grid=grid,
         baseHeight=brickHeight,
         topPlateHeight=0.4,
-        pillarHelperHeight=1,
+        stabilizerGridHeight=1,
         pitDepth=pitDepth,
-        originalBaseHeight=originalBaseHeight,
+        baseHeightOriginal=originalBaseHeight,
         baseSideLength = baseSideLength,
         pitWallThickness = pitWallThickness,
         withPit=true,
@@ -47,8 +47,8 @@ if(withTop){
     spaceX = (grassSizeX - 2*strawOffsetX - columnsCount*strawWidth) / (columnsCount - 1); 
     spaceY = (grassSizeY - 2*strawOffsetY - rowsCount*strawThickness) / (rowsCount - 1);
     
-
-    translate([60,0,0]){
+color([0.945, 0.769, 0.059])
+    translate([0,40,0]){
         
         translate([0,0,0.5*grassSizeY])
         rotate([90,0,0])
@@ -70,12 +70,12 @@ if(withTop){
             }
                 
         //Brim
-        color("red"){
+        //color("red"){
             translate([0,-0.5*(grassHeight+2*pitDepth+brimThickness),0.5*brimHeight])
                     cube([grassSizeX, brimThickness, brimHeight], center=true);
                 
             translate([0,0.5*(grassHeight+2*pitDepth+brimThickness),0.5*brimHeight])
                     cube([grassSizeX, brimThickness, brimHeight], center=true);
-        }
+        //}
 }
 }

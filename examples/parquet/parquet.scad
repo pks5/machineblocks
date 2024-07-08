@@ -26,7 +26,7 @@ block(
 */
 translate([0,40,0])
     block(
-        grid=[3,2],
+        grid=[6,1],
         knobType="NONE", 
         wallThickness = 1.4
     );
