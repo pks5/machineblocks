@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/pcb_block.scad>;
+include <../examples/pcbs/lib/pcb_block.scad>;
 
 translate([0, 0, 30])
     pcb_block(

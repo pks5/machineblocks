@@ -3,6 +3,7 @@ use <../../lib/block.scad>;
 block(
     grid=[6,6],
     baseLayers=8,
+    tongue=true,
     withPit=true,
     withText=true,
     textSize=10,
