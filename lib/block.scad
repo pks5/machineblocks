@@ -85,7 +85,8 @@ module block(
         holeXYSize = 5.1,
         holeXYInsetSize = 6.2,
         holeXYInsetDepth = 0.9,
-        withHolesZ = false,
+
+        holesZ = false,
         holeZSize = 5.1,
         holeResolution = 30,
         
@@ -282,18 +283,20 @@ module block(
     function drawMiddlePillar(a, b) = (isMiddle(a, 0) && (isMiddleZone(b, 1) || isCornerZone(b, 1)))
                                         || (isMiddle(b, 1) && (isMiddleZone(a, 0) || isCornerZone(a, 0)));
     
-    function drawPillarAuto(a, b) = withHolesZ || ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
+    function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
     function drawPillarG(a, b, i) = (i >= len(pillarGaps)) || (((a < pillarGaps[i][0]) || (b < pillarGaps[i][1]) || (a > pillarGaps[i][2]) || (b > pillarGaps[i][3])) && drawPillarG(a, b, i+1)); 
     
-    function drawPillar(a, b, i) = (pillarGaps == "AUTO" && drawPillarAuto(a, b)) || (pillarGaps != "AUTO" && drawPillarG(a, b, i));
+    function drawPillar(a, b, i) = !drawHoleZ(a,b) && ((pillarGaps == "AUTO" && drawPillarAuto(a, b)) || (pillarGaps != "AUTO" && drawPillarG(a, b, i)));
 
     function inRect(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]);
 
-    function drawConfiguredKnob(a, b, i, prev) = (i >= len(knobs)) ? prev : drawConfiguredKnob(a, b, i+1, knobs[i][0] == undef ? knobs[i] : (inRect(a, b, knobs[i]) ? (knobs[i][4] == true ? false : true) : prev));
+    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inRect(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
 
     function drawKnob(a, b) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
-                                    && (knobs == true || drawConfiguredKnob(a, b, 0, false)); 
+                                    && drawGridItem(knobs, a, b, 0, false); 
+
+    function drawHoleZ(a, b) = drawGridItem(holesZ, a, b, 0, false); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
@@ -503,23 +506,24 @@ module block(
                                 }
                                 
                                 /*
-                                * Tubes / Z-Holes Outer
+                                * Z-Holes Outer
                                 */
                                 color([0.953, 0.612, 0.071]) //f39c12
-                                if(withHolesZ){
-                                    //Z-Holes Outer
-                                    for (a = [ startX : 1 : endX - 1 ]){
-                                        for (b = [ startY : 1 : endY - 1 ]){
+                                for (a = [ startX : 1 : endX - 1 ]){
+                                    for (b = [ startY : 1 : endY - 1 ]){
+                                        if(drawHoleZ(a, b)){
                                             translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                                 translate([0, 0, 0.5* baseClampHeight])
                                                     cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                 translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
                                                     cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                             };
-                                        }   
-                                    }
+                                        }
+                                    }   
                                 }
-                                else if(withPillars){
+                                
+                                
+                                if(withPillars){
                                     //Tubes with holes
                                     for (a = [ startX : 1 : endX - 1 ]){
                                         for (b = [ startY : 1 : endY - 1 ]){
@@ -899,17 +903,17 @@ module block(
             }
             
             //Cut Z-Holes
-            if(withHolesZ){
-                color([0.945, 0.769, 0.059]) //f1c40f
-                for (a = [ startX : 1 : endX - 1 ]){
-                    for (b = [ startY : 1 : endY - 1 ]){
+            color([0.945, 0.769, 0.059]) //f1c40f
+            for (a = [ startX : 1 : endX - 1 ]){
+                for (b = [ startY : 1 : endY - 1 ]){
+                    if(drawHoleZ(a, b)){
                         translate([posX(a + 0.5), posY(b+0.5), centerZ]){
                             cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                         };
                     }
                 }
             }
-        
+            
             /*
             * Text Cutout
             */
