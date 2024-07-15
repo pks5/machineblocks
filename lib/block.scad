@@ -90,6 +90,7 @@ module block(
         holeResolution = 30,
         
         //Knobs
+        knobs = true,
         knobType = "CLASSIC",
         knobCentered = false,
         knobSize = 5.0,
@@ -101,8 +102,7 @@ module block(
         knobHoleClampThickness = 0.1,
         knobRounding = 0.1,
         knobResolution = 30,
-        knobGaps = [],
-
+        
         //Tongue
         tongue = false,
         tongueHeight = 1.8,
@@ -194,7 +194,7 @@ module block(
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
 
-    knobsPresent = knobType != "NONE";
+    knobsPresent = knobs != false;
     
     //Base Height
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
@@ -290,10 +290,10 @@ module block(
 
     function inRect(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]);
 
-    function drawConfiguredKnob(a, b, i, prev) = (i >= len(knobGaps)) ? prev : drawConfiguredKnob(a, b, i+1, knobGaps[i] == "NONE" ? false : inRect(a, b, knobGaps[i]) ? (knobGaps[i][4] == true ? true : false) : prev);
+    function drawConfiguredKnob(a, b, i, prev) = (i >= len(knobs)) ? prev : drawConfiguredKnob(a, b, i+1, knobs[i][0] == undef ? knobs[i] : (inRect(a, b, knobs[i]) ? (knobs[i][4] == true ? false : true) : prev));
 
     function drawKnob(a, b) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
-                                    && drawConfiguredKnob(a, b, 0, true); 
+                                    && (knobs == true || drawConfiguredKnob(a, b, 0, false)); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
@@ -725,7 +725,7 @@ module block(
                 * Classic Knobs
                 */
                 color([0.945, 0.769, 0.059]) //f1c40f
-                if(knobType == "CLASSIC" || knobType == "TECHNIC"){
+                if(knobs != false){
                     /*
                     * Normal knobs
                     */

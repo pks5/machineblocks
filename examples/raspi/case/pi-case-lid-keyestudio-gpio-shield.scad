@@ -52,7 +52,7 @@ roundingRadius = 0.25;
 roundingResolution = 15;
 withWindow=false;
 withPlugs=true;
-resultingKnobGaps = withWindow ? [[0,3,6,10]] : (withPlugs ? [[2,4,5,10],[1,3,4,8], [0,4,0,8]] : []);
+resultingKnobGaps = withWindow ? [true, [0,3,6,10, true]] : (withPlugs ? [true, [2,4,5,10, true],[1,3,4,8, true], [0,4,0,8, true]] : true);
 
 plugWidth=2.6;
 plugTolerance=0.1;
@@ -213,7 +213,7 @@ module lid(){
     
     
         difference(){
-            pi_case_lid(knobGaps = [[2,4,5,10],[1,3,4,8], [0,4,0,8]]);
+            pi_case_lid(knobs = [true, [2,4,5,10, true],[1,3,4,8, true], [0,4,0,8, true]]);
             
            translate([-3.5*baseSideLength, 5*baseSideLength, -innerWallHeight])
                pin_holes();

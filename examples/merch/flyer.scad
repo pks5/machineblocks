@@ -20,7 +20,7 @@ block(
     textDepth=0.6,
     textSize=7,
     textOffset=[0, -24],
-    knobGaps = [[2,1,13,1], [11,4,14,7]],
+    knobs = [true, [2,1,13,1, true], [11,4,14,7, true]],
     knobSize = 5.0, //Reduce this value if the knobs do not fit into a LEGO brick or only with great difficulty
     sideAdjustment = -0.1,
     heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high

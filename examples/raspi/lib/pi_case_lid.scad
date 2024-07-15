@@ -52,7 +52,7 @@ knobType = "CLASSIC";
 
 
 module pi_case_lid(
-    knobGaps = []
+    knobs = true
 ){
     //Lid
     
@@ -68,7 +68,7 @@ module pi_case_lid(
                         grid=grid, 
                         knobType=knobType, 
                         knobSize=knobSize, 
-                        knobGaps=knobGaps, 
+                        knobs=knobs, 
                         sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                         center=true, 
                         alwaysOnFloor=false

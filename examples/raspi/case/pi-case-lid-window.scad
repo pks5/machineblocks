@@ -23,7 +23,7 @@ totalLidHeight = lidHeight + knobHeight;
 lidHoleRadius=4;
 
 difference(){
-    pi_case_lid(knobGaps = [[0,3,6,10]]);
+    pi_case_lid(knobs = [true, [0,3,6,10, true]]);
     translate([-0.5*baseSideLength, baseSideLength, - 0.5*knobHeight])
         mb_roundedcube([6*baseSideLength, 8*baseSideLength, 1.1*totalLidHeight+innerWallHeight], true, lidHoleRadius, "z");
 }

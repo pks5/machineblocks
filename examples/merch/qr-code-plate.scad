@@ -13,7 +13,7 @@ block(
     svgSize=0.2,
     svgSide=5,
     svgDepth=0.6,
-    knobGaps = [[1,1,4,4]],
+    knobs = [true, [1,1,4,4, true]],
     knobSize = 5.0, //Reduce this value if the knobs do not fit into a LEGO brick or only with great difficulty
     sideAdjustment = -0.1,
     heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
