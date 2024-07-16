@@ -73,7 +73,7 @@ module pi_case_body(){
                             baseSideLength=baseSideLength, 
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
-                            knobType = "NONE", 
+                            knobs = false, 
                             center=true, 
                             alwaysOnFloor=false, 
                             sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
@@ -87,7 +87,7 @@ module pi_case_body(){
                             baseSideLength=baseSideLength, 
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
-                            knobType = "NONE", 
+                            knobs = false, 
                             center=true, 
                             alwaysOnFloor=false, 
                             sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]

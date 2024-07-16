@@ -4,7 +4,7 @@ block(
     baseLayers=1,
     grid=[4,6],
     screwHolesZ = [[1, 0], [2,0], [1,5], [2,5]],
-    knobType = "NONE",
+    knobs = false,
     withPcb=true,
     pcbDimensions=[40,30,3],
     pcbMountingType = "SCREWS",

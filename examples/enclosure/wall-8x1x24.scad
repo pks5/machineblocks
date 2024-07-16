@@ -19,7 +19,7 @@ if(parts == "WALL" || parts == "ALL"){
     block(
         baseLayers = 11,
         grid=[2,1],
-        knobType = "NONE",
+        knobs = false,
         baseCutoutType = "NONE",
         brickOffset=[0,0,12],
         screwHolesX=[[0,9,1],[1,9,1],[0,7,1],[1,7,1],[0,5,1],[1,5,1], [0,3,1],[1,3,1],[0,1,1],[1,1,1]],

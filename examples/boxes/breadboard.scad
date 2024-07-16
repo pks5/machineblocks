@@ -8,6 +8,6 @@ block(
     pitWallThickness = [5.9, 4.6],
     baseCutoutMaxDepth=2.6,
     pitDepth = 8.8,
-    knobType = "NONE",
+    knobs = false,
     heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
 );

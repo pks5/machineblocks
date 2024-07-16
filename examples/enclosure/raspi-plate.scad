@@ -8,7 +8,7 @@ block(
     stabilizerExpansion = 1,
     stabilizerExpansionOffset = 0,
     screwHolesZ = [[0, 1], [9,1], [0,6], [9,6]],
-    knobType = "NONE",
+    knobs = false,
     withPcb=true,
     pcbDimensions=[40,30,3],
     pcbMountingType = "SCREWS",
