@@ -15,5 +15,5 @@ include <../../lib/block.scad>;
 //Generate the plate
 block(
     grid=[8,2], 
-    knobType="NONE"
+    knobs=false
 );

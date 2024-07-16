@@ -53,3 +53,109 @@ block(
     holesZ = [[2,3,2,3], [2,9,2,9], [2,15,2,15], [8,3,8,3], [8,9,8,9], [8,15,8,15], [14,3,14,3], [14,9,14,9], [14,15,14,15]],
     holeZSize=25
 );
+
+difference(){
+
+block(
+    sideAdjustment=0.1,
+    baseLayers=1,
+    grid=[20,20],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    holesZ = [[3,4,3,4], [3,10,3,10], [3,16,3,16], [9,4,9,4], [9,10,9,10], [9,16,9,16], [15,4,15,4], [15,10,15,10], [15,16,15,16]],
+    holeZSize=25,
+    brickOffset=[0,0,1]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[-6,-8,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[-6,-2,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[-6,4,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[0,-8,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[0,-2,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[0,4,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[6,-8,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[6,-2,0.8]
+);
+
+block(
+    sideAdjustment=0.4,
+    baseLayers=3,
+    grid=[4,2],
+    baseCutoutType = "NONE",
+    knobs = false,
+    previewQuality = 0.4,
+    brickOffset=[6,4,0.8]
+);
+
+}

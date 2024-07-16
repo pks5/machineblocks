@@ -7,7 +7,7 @@ block(
     grid = [16, 9],
     brickOffset = [7, 0, 0],
     withSvg=true,
-    svgFile="../misc/merch/images/mb.svg",
+    svgFile="../examples/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,
     svgSide=5,

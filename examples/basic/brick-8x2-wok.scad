@@ -16,5 +16,5 @@ include <../../lib/block.scad>;
 block(
     baseLayers=3, 
     grid=[8,2], 
-    knobType="NONE"
+    knobs=false
 );

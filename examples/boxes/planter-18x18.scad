@@ -10,7 +10,7 @@ height=8;
 heightLayers = height*3;
 
 union(){
-block(baseLayers=3, grid=grid, knobType="NONE");
+block(baseLayers=3, grid=grid, knobs=false);
 
 
 block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE",withText=true,

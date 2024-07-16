@@ -35,7 +35,7 @@ if(withBottom){
         baseSideLength = baseSideLength,
         pitWallThickness = pitWallThickness,
         withPit=true,
-        knobType="NONE"
+        knobs=false
     );
 }
 

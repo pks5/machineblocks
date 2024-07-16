@@ -15,7 +15,7 @@ include <../../lib/block.scad>;
 //Generate the brick
 block(
     grid=[14,2], 
-    knobType="NONE",
+    knobs=false,
     withText=true, 
     textSize=7, 
     textSide=5,
