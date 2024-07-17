@@ -217,21 +217,6 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     
-    
-
-    echo(
-        baseHeight = resultingBaseHeight, 
-        heightWithKnobs = resultingBaseHeight + knobHeight,
-        size = [objectSizeX, objectSizeY],
-        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-        topPlateHeight = resultingTopPlateHeight, 
-        baseCutoutDepth = baseCutoutDepth,
-        pitDepth = resultingPitDepth, 
-        knobHeight = knobHeight,
-        wallThickness = wallThickness,
-        baseClampWallThickness = baseClampWallThickness
-    );
-    
     //Calculate Z Positions
        
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -241,6 +226,17 @@ module block(
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     echo(
+        grid=grid,
+        baseHeight = resultingBaseHeight, 
+        heightWithKnobs = resultingBaseHeight + knobHeight,
+        size = [objectSizeX, objectSizeY],
+        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+        topPlateHeight = resultingTopPlateHeight, 
+        baseCutoutDepth = baseCutoutDepth,
+        pitDepth = resultingPitDepth, 
+        knobHeight = knobHeight,
+        wallThickness = wallThickness,
+        baseClampWallThickness = baseClampWallThickness,
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
         xyHolesZ = xyHolesZ,
@@ -351,17 +347,19 @@ module block(
                                                 }
                                             }
                                             
-                                            /*
-                                            * Cut TubeZ Area
-                                            */
-                                            for (a = [ startX : 1 : endX - 1 ]){
-                                                for (b = [ startY : 1 : endY - 1 ]){
-                                                    if(drawPillar(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                            cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                                        };
-                                                    }
-                                                }   
+                                            if(pillars != false){
+                                                /*
+                                                * Cut TubeZ Area
+                                                */
+                                                for (a = [ startX : 1 : endX - 1 ]){
+                                                    for (b = [ startY : 1 : endY - 1 ]){
+                                                        if(drawPillar(a, b)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                                cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            };
+                                                        }
+                                                    }   
+                                                }
                                             }
                                         }
                                     }
@@ -430,50 +428,54 @@ module block(
                                             }
                                         }
 
-                                        /*
-                                        * Cut TubeZ area
-                                        */
-                                        for (a = [ startX : 1 : endX - 1 ]){
-                                            for (b = [ startY : 1 : endY - 1 ]){
-                                                if(drawPillar(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                            cylinder(h=cutMultiplier * resultingBaseHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                                        };
-                                                }
-                                            }   
+                                        if(pillars != false){
+                                            /*
+                                            * Cut TubeZ area
+                                            */
+                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                for (b = [ startY : 1 : endY - 1 ]){
+                                                    if(drawPillar(a, b)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), 0]){
+                                                                cylinder(h=cutMultiplier * resultingBaseHeight, r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            };
+                                                    }
+                                                }   
+                                            }
                                         }
                                     }
                                 }
 
-                                /*
-                                * Middle Pins
-                                */
-                                //Middle Pin X
-                                if(endY == 0){
-                                    color([0.953, 0.612, 0.071]) //f39c12
-                                    for (a = [ startX : 1 : endX - 1 ]){
-                                        if(drawPillar(a, 0)){
-                                            translate([posX(a + 0.5), 0, baseCutoutZ]){
-                                                translate([0, 0, 0.5* baseClampHeight])
-                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                    cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                            };
+                                if(pillars != false){
+                                    /*
+                                    * Middle Pins
+                                    */
+                                    //Middle Pin X
+                                    if(endY == 0){
+                                        color([0.953, 0.612, 0.071]) //f39c12
+                                        for (a = [ startX : 1 : endX - 1 ]){
+                                            if(drawPillar(a, 0)){
+                                                translate([posX(a + 0.5), 0, baseCutoutZ]){
+                                                    translate([0, 0, 0.5* baseClampHeight])
+                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                };
+                                            }
                                         }
                                     }
-                                }
-                                
-                                //Middle Pin Y
-                                if(endX == 0){
-                                    color([0.953, 0.612, 0.071]) //f39c12
-                                    for (b = [ startY : 1 : endY - 1 ]){
-                                        if(drawPillar(0, b)){
-                                            translate([0, posY(b + 0.5), baseCutoutZ]){
-                                                translate([0, 0, 0.5* baseClampHeight])
-                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                    cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                            };
+                                    
+                                    //Middle Pin Y
+                                    if(endX == 0){
+                                        color([0.953, 0.612, 0.071]) //f39c12
+                                        for (b = [ startY : 1 : endY - 1 ]){
+                                            if(drawPillar(0, b)){
+                                                translate([0, posY(b + 0.5), baseCutoutZ]){
+                                                    translate([0, 0, 0.5* baseClampHeight])
+                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                };
+                                            }
                                         }
                                     }
                                 }
@@ -502,43 +504,46 @@ module block(
                                     }
                                 }
                                 
-                                /*
-                                * Z-Holes Outer
-                                */
-                                color([0.953, 0.612, 0.071]) //f39c12
-                                for (a = [ startX : 1 : endX - 1 ]){
-                                    for (b = [ startY : 1 : endY - 1 ]){
-                                        if(drawHoleZ(a, b)){
-                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                translate([0, 0, 0.5* baseClampHeight])
-                                                    cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                    cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                            };
-                                        }
-                                    }   
+                                if(holesZ != false){
+                                    /*
+                                    * Z-Holes Outer
+                                    */
+                                    color([0.953, 0.612, 0.071]) //f39c12
+                                    for (a = [ startX : 1 : endX - 1 ]){
+                                        for (b = [ startY : 1 : endY - 1 ]){
+                                            if(drawHoleZ(a, b)){
+                                                translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                    translate([0, 0, 0.5* baseClampHeight])
+                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                };
+                                            }
+                                        }   
+                                    }
                                 }
                                 
-                                
-                                //Tubes with holes
-                                for (a = [ startX : 1 : endX - 1 ]){
-                                    for (b = [ startY : 1 : endY - 1 ]){
-                                        if(drawPillar(a, b)){
-                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                difference(){
-                                                    union(){
-                                                        translate([0, 0, 0.5* baseClampHeight])
-                                                            cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
-                                                        translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                            cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                if(pillars != false){
+                                    //Tubes with holes
+                                    for (a = [ startX : 1 : endX - 1 ]){
+                                        for (b = [ startY : 1 : endY - 1 ]){
+                                            if(drawPillar(a, b)){
+                                                translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                    difference(){
+                                                        union(){
+                                                            translate([0, 0, 0.5* baseClampHeight])
+                                                                cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                            translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                        }
+                                                        //Cut Tube inner
+                                                        intersection(){
+                                                            cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                                            cube([holeZSize-2*tubeHoleClampThickness, holeZSize-2*tubeHoleClampThickness, baseCutoutDepth*cutMultiplier], center=true);
+                                                        };
                                                     }
-                                                    //Cut Tube inner
-                                                    intersection(){
-                                                        cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                                        cube([holeZSize-2*tubeHoleClampThickness, holeZSize-2*tubeHoleClampThickness, baseCutoutDepth*cutMultiplier], center=true);
-                                                    };
-                                                }
-                                            };
+                                                };
+                                            }
                                         }
                                     }
                                 }
@@ -893,14 +898,16 @@ module block(
                 }
             }
             
-            //Cut Z-Holes
-            color([0.945, 0.769, 0.059]) //f1c40f
-            for (a = [ startX : 1 : endX - 1 ]){
-                for (b = [ startY : 1 : endY - 1 ]){
-                    if(drawHoleZ(a, b)){
-                        translate([posX(a + 0.5), posY(b+0.5), 0]){
-                            cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                        };
+            if(holesZ != false){
+                //Cut Z-Holes
+                color([0.945, 0.769, 0.059]) //f1c40f
+                for (a = [ startX : 1 : endX - 1 ]){
+                    for (b = [ startY : 1 : endY - 1 ]){
+                        if(drawHoleZ(a, b)){
+                            translate([posX(a + 0.5), posY(b+0.5), 0]){
+                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                            };
+                        }
                     }
                 }
             }
