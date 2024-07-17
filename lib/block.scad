@@ -241,7 +241,7 @@ module block(
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
     xyHolesZ = -0.5 * resultingBaseHeight + 0.5 * (3 * baseHeightOriginal + knobHeightOriginal); //TODO absolute value for xy-holes z-position?
-    xyScrewHolesZ = 0.5 * resultingBaseHeight + 0.5 * baseHeightOriginal;
+    xyScrewHolesZ = -0.5 * resultingBaseHeight + 0.5 * baseHeightOriginal;
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     echo(
