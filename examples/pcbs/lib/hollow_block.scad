@@ -19,7 +19,7 @@ module hollowBlock(
 grid = [6,6],
 top = true,
 center=true,
-alwaysOnFloor=false,
+alignBottom=false,
 baseSideLength=8,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
@@ -85,7 +85,7 @@ textOffset=[0,0]
     
     if(!top){
         onFloorZ = 0.5*floorHeight;
-        translateBottom = center ? [0, 0, alwaysOnFloor ? onFloorZ : 0.5 * (floorHeight - totalBottomHeight)] : [-0.5 * bottomSizeX, -0.5 * bottomSizeY, onFloorZ];
+        translateBottom = center ? [0, 0, alignBottom ? onFloorZ : 0.5 * (floorHeight - totalBottomHeight)] : [-0.5 * bottomSizeX, -0.5 * bottomSizeY, onFloorZ];
         
         //Bottom
         color("orange")
@@ -101,7 +101,7 @@ textOffset=[0,0]
                         baseClampThickness=baseClampThickness, 
                         sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                         center=true, 
-                        alwaysOnFloor=false
+                        alignBottom=false
                     );
                     
                     difference(){
@@ -146,7 +146,7 @@ textOffset=[0,0]
     }
 
     if(top){
-        translateTop = center ? [0, 0, alwaysOnFloor ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
+        translateTop = center ? [0, 0, alignBottom ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
         
         echo(resultingBlockHeight=resultingBlockHeight, translateTop=translateTop, totalTopHeight=totalTopHeight);
         
@@ -173,7 +173,7 @@ textOffset=[0,0]
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffset=textOffset, alwaysOnFloor=false
+                            textOffset=textOffset, alignBottom=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

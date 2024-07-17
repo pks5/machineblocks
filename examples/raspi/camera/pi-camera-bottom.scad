@@ -28,7 +28,7 @@ difference(){
             withInnerWallFilled=true, 
             top=false,
             center=true, 
-            alwaysOnFloor=true,
+            alignBottom=true,
             grid=[2,4]
         );
         

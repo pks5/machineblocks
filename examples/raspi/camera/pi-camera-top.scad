@@ -26,7 +26,7 @@ difference(){
         topPlateHeight=topPlateHeight,
         top=true,
         center=true,
-        alwaysOnFloor=true,
+        alignBottom=true,
         grid=[2,4],
         withText=true,
         textSide=4,

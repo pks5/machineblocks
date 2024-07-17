@@ -13,6 +13,6 @@ pcb_block(
 );
 
 translate([0, 0, 0])
-hollowBlock(brickHeight=2, grid=[4,4], alwaysOnFloor=true, top=false);
+hollowBlock(brickHeight=2, grid=[4,4], alignBottom=true, top=false);
 
 

@@ -137,7 +137,7 @@ textOffset=[0,0]
             hollowBlock(
                 brickHeight=brickHeight, 
                 grid=grid, 
-                alwaysOnFloor=true, 
+                alignBottom=true, 
                 center=true,
                 top=true, 
                 knobType=knobType,
@@ -184,7 +184,7 @@ textOffset=[0,0]
 
     if(!top){
         
-        hollowBlock(brickHeight=brickHeight, grid=grid, alwaysOnFloor=true, top=false);
+        hollowBlock(brickHeight=brickHeight, grid=grid, alignBottom=true, top=false);
         difference(){
             //color("red")
             translate([0, 0.5 * (finalObjectSizeY - windowThickness), 0.5*(finalWindowHeight + floorHeight)]){

@@ -75,7 +75,7 @@ module pi_case_body(){
                             grid=halfGrid, 
                             knobs = false, 
                             center=true, 
-                            alwaysOnFloor=false, 
+                            alignBottom=false, 
                             sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }
@@ -89,7 +89,7 @@ module pi_case_body(){
                             grid=halfGrid, 
                             knobs = false, 
                             center=true, 
-                            alwaysOnFloor=false, 
+                            alignBottom=false, 
                             sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }

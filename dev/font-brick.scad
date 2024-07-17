@@ -24,6 +24,6 @@ block(
     textFont="Font Awesome 6 Free Solid", 
     textDepth=0.7, 
     textSpacing=1,
-    alwaysOnFloor=false,
+    alignBottom=false,
     knobs=[true, [0,1,3,2,true]]
 ); 

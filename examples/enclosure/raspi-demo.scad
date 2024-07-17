@@ -4,7 +4,7 @@ include <../../lib/block.scad>;
 block(
     baseLayers=1,
     grid=[10,8],
-    pillarGaps=[[1,1,7,5]],
+    pillars=[true,[1,1,7,5,true]],
     stabilizerExpansion = 1,
     stabilizerExpansionOffset = 0,
     screwHolesZ = [[0, 1], [9,1], [0,6], [9,6]],
