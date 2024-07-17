@@ -20,7 +20,7 @@ color("yellow")
        
 color("blue")
     translate([0, -26, 0])
-        block(grid=[4,2], withHolesZ = true);        
+        block(grid=[4,2], holesZ = true);        
 
 color("magenta")
     translate([0, -50, 0])
@@ -31,6 +31,6 @@ translate([0, -80, 0])
         
 
 translate([0, -110, 0])
-    block(baseLayers=3, grid=[2,3], withHolesZ=true, withHolesY=true, knobType = "TECHNIC");
+    block(baseLayers=3, grid=[2,3], holesZ=true, withHolesY=true, knobType = "TECHNIC");
       
   

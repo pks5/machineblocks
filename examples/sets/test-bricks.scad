@@ -39,7 +39,7 @@ color("red")
         
 color("white")
     translate([-30, -90, 0])
-        block(withHolesZ=true, grid=[4,2], helperStartZ=0);
+        block(holesZ=true, grid=[4,2], helperStartZ=0);
   
 
 /*  

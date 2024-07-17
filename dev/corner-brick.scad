@@ -60,6 +60,6 @@ block(
     block(
     grid=[2,4],
     brickOffset=[7,0,0],
-    withHolesZ=true
+    holesZ=true
 );
 }

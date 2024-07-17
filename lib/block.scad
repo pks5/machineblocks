@@ -168,8 +168,8 @@ module block(
         //Alignment
         brickOffset = [0, 0, 0],
         center = true,
-        alwaysOnFloor = true,
-        alignWithAdjustment = false,
+        alwaysOnFloor = true, //TODO rename to alignOnFloor
+        alignUnadjusted = true,
         
         //Adhesion Helpers
         withAdhesionHelpers = false,
@@ -203,8 +203,8 @@ module block(
     totalHeight = resultingBaseHeight + (knobsPresent ? knobHeight : 0); 
 
     //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeXAdjusted - objectSizeX) : 0) : (alignWithAdjustment ?  0.5*objectSizeXAdjusted : 0.5*objectSizeX));
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignWithAdjustment ? 0.5*(objectSizeYAdjusted - objectSizeY) : 0) : (alignWithAdjustment ?  0.5*objectSizeYAdjusted : 0.5*objectSizeY));
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignUnadjusted ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignUnadjusted ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
     brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * resultingBaseHeight : (knobsPresent ? -0.5 * knobHeight : 0)); 
     
     //Base Cutout and Pit Depth

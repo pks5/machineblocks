@@ -35,25 +35,25 @@ translate([32,10,0]){
         translate([0, -20, 0])
             block(
                 grid=[2,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -40, 0])
             block(
                 grid=[4,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -60, 0])
             block(
                 grid=[6,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -80, 0])
             block(
                 grid=[8,2],
-                withHolesZ=true
+                holesZ=true
             );
         }
 
