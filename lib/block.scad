@@ -39,7 +39,7 @@ module block(
         heightAdjustment = 0.0,
 
         //Walls
-        wallThickness = 1.6,
+        wallThickness = 1.5,
         wallGapsX = [],
         wallGapsY = [],
         
