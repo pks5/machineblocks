@@ -65,6 +65,7 @@ block(
     sideAdjustment=0.2,
     knobType = knobType,
     knobs = false,
+    stabilizerExpansion=0,
     brickOffset=[0,0,0]
 );
 
@@ -105,6 +106,16 @@ block(
     knobType = knobType,
     knobs = false,
     brickOffset=[2,-5,0]
+);
+
+block(
+    baseLayers=1,
+    grid=[2,1],
+    baseCutoutType="NONE",
+    sideAdjustment=0.2,
+    knobType = knobType,
+    knobs = false,
+    brickOffset=[0,-3.5,0]
 );
 
 difference(){
