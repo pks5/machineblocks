@@ -196,16 +196,13 @@ module block(
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
 
-    knobsPresent = knobs != false;
-    
     //Base Height
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
-    totalHeight = resultingBaseHeight + (knobsPresent ? knobHeight : 0); 
 
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignUnadjusted ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignUnadjusted ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
-    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * resultingBaseHeight : (knobsPresent ? -0.5 * knobHeight : 0)); 
+    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alwaysOnFloor ? 0.5 * resultingBaseHeight : 0); 
     
     //Base Cutout and Pit Depth
     resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
@@ -225,7 +222,7 @@ module block(
 
     echo(
         baseHeight = resultingBaseHeight, 
-        totalHeight = totalHeight,
+        heightWithKnobs = resultingBaseHeight + knobHeight,
         size = [objectSizeX, objectSizeY],
         sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
         topPlateHeight = resultingTopPlateHeight, 
@@ -957,7 +954,7 @@ module block(
                     for (b = [ startY : 1 : endY ]){
                         if(drawScrewHole(a, b, 0)){
                             translate([posX(a), posY(b), 0])
-                                cylinder(h = totalHeight*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                cylinder(h = (resultingBaseHeight + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                         } 
                     }
                 }
