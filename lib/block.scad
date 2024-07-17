@@ -209,9 +209,9 @@ module block(
     
     //Base Cutout and Pit Depth
     resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
-    pWallThickness = withPit ? (pitWallThickness[0] == undef 
+    pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
-                : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness)) : [0,0,0,0];
+                : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
     pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * baseSideLength;
     pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * baseSideLength;
 
@@ -294,10 +294,10 @@ module block(
     function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inRect(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
 
     function drawKnob(a, b) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
-                                && (inPit(a, b) || (a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)  )
+                                && (!withPit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
                                     && drawGridItem(knobs, a, b, 0, false); 
 
-    function inPit(a,b) = (a >= ceil(pWallThickness[0])) && (a < grid[0] - ceil(pWallThickness[1])) && (b >= ceil(pWallThickness[2])) && (b < grid[1] - ceil(pWallThickness[3]));                                
+    function inPit(a,b) = withPit && (a >= ceil(pWallThickness[0])) && (a < grid[0] - ceil(pWallThickness[1])) && (b >= ceil(pWallThickness[2])) && (b < grid[1] - ceil(pWallThickness[3]));                                
 
     function knobZ(a, b) = inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
 

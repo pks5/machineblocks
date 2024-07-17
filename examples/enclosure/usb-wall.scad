@@ -11,6 +11,7 @@ difference(){
         baseLayers=23,
         grid=[8,1],
         withPit = true,
+        tongue=true,
         pitWallGaps= [[3,0,0]],
         screwHolesZ = [[0,0], [7,0]],
         screwHoleZSize = 2,

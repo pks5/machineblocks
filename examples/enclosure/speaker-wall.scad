@@ -25,6 +25,7 @@ difference(){
             baseLayers=23,
             grid=[8,1],
             withPit = true,
+            tongue = true,
             pitWallGaps= [[3,0,0]],
             screwHolesZ = [[0,0], [7,0]],
             screwHoleZSize = 2,
@@ -39,6 +40,7 @@ difference(){
             baseLayers=23,
             grid=[1,4],
             withPit = true,
+            tongue = true,
             pitWallGaps= [[0,0,0]],
             screwHolesZ = [[0,0], [7,0]],
             screwHoleZSize = 2,
@@ -55,6 +57,7 @@ difference(){
             baseLayers=23,
             grid=[1,4],
             withPit = true,
+            tongue = true,
             pitWallGaps= [[1,0,0]],
             screwHolesZ = [[0,0], [7,0]],
             screwHoleZSize = 2,
@@ -128,6 +131,6 @@ if(parts == "TOP" || parts == "ALL"){
             brickOffset=[-3.5,1.5,0],
             baseCutoutType = "GROOVE",
             wallGapsY=[[0,1]]
-        );
+        ); 
     }
 }
