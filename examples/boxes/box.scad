@@ -5,6 +5,7 @@ block(
     baseLayers=8,
     tongue=true,
     withPit=true,
+    pitWallThickness = [0.3,1],
     withText=true,
     textSize=10,
     textFont="OldSansBlack",

@@ -185,22 +185,22 @@ module mb_base(
         * Pit
         */
         if(withPit){
-            pitSizeX = objectSize[0] - pitWallThickness[0] - pitWallThickness[1];
-            pitSizeY = objectSize[1] - pitWallThickness[2] - pitWallThickness[3];
+            pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * baseSideLength;
+            pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * baseSideLength;
             echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
-            translate([0.5*(pitWallThickness[1] - pitWallThickness[0]), 0.5*(pitWallThickness[3] - pitWallThickness[2]), 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+            translate([0.5 * (pitWallThickness[1] - pitWallThickness[0]) * baseSideLength, 0.5 * (pitWallThickness[3] - pitWallThickness[2]) * baseSideLength, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                 cube([pitSizeX, pitSizeY, pitDepth + cutOffset], center = true);
         
             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                 gap = pitWallGaps[gapIndex];
                 if(gap[0] < 2){
                     translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), 0.5*(height - pitDepth + cutOffset)])
-                        cube([2*pitWallThickness[gap[0]]*cutMultiplier, pitSizeY - gap[1] - gap[2], pitDepth + cutOffset], center = true);
+                        cube([2 * pitWallThickness[gap[0]] * baseSideLength * cutMultiplier, pitSizeY - gap[1] - gap[2], pitDepth + cutOffset], center = true);
                 }  
                 else{
                     translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
-                        cube([pitSizeX - gap[1] - gap[2] , 2*pitWallThickness[gap[0]]*cutMultiplier, pitDepth + cutOffset], center = true);     
+                        cube([pitSizeX - gap[1] - gap[2] , 2 * pitWallThickness[gap[0]] * baseSideLength * cutMultiplier, pitDepth + cutOffset], center = true);     
                 } 
             }
         }
