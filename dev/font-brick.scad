@@ -16,7 +16,6 @@ include <../lib/block.scad>;
 block(
     baseLayers=6, 
     grid=[4,4], 
-    knobs=false,
     withText=true, 
     textSize=6, 
     textSide=5,
@@ -24,5 +23,7 @@ block(
     text="\uf1e2\ue4dc\uf714", 
     textFont="Font Awesome 6 Free Solid", 
     textDepth=0.7, 
-    textSpacing=1
+    textSpacing=1,
+    alwaysOnFloor=false,
+    knobs=[true, [0,1,3,2,true]]
 ); 
