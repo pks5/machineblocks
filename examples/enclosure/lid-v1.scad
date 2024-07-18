@@ -8,7 +8,10 @@ block(
     wallGapsX=[[0,0], [15,0]],
     brickOffset=[0,7.5,0],
     knobType = knobType,
-    knobs = false
+    knobs = false,
+    baseRounding = true,
+    baseRoundingRadius = [0, 0, [0,4,4,0]],
+    baseCutoutRoundingRadius = [0,2.7,2.7,0]
 );
 
 block(
@@ -17,7 +20,10 @@ block(
     wallGapsY=[[0,0], [15,0]],
     brickOffset=[7.5,0,0],
     knobType = knobType,
-    knobs = false
+    knobs = false,
+    baseRounding = true,
+    baseRoundingRadius = [0, 0, [0,0,4,4]],
+    baseCutoutRoundingRadius = [0,0,2.7,2.7]
 );
 
 block(
@@ -26,7 +32,10 @@ block(
     wallGapsY=[[0,1], [15,1]],
     brickOffset=[-7.5,0,0],
     knobType = knobType,
-    knobs = false
+    knobs = false,
+    baseRounding = true,
+    baseRoundingRadius = [0, 0, [4,4,0,0]],
+    baseCutoutRoundingRadius = [2.7,2.7,0,0]
 );
 
 block(
@@ -35,7 +44,10 @@ block(
     wallGapsX=[[0,1], [15,1]],
     brickOffset=[0,-7.5,0],
     knobType = knobType,
-    knobs = false
+    knobs = false,
+    baseRounding = true,
+    baseRoundingRadius = [0, 0, [4,0,0,4]],
+    baseCutoutRoundingRadius = [2.7,0,0,2.7]
 );
 
 block(
@@ -66,7 +78,8 @@ block(
     knobType = knobType,
     knobs = false,
     stabilizerExpansion=0,
-    brickOffset=[0,0,0]
+    brickOffset=[0,0,0],
+    withStabilizerGrid=false
 );
 
 block(
@@ -119,11 +132,14 @@ block(
 );
 
 difference(){
-    union(){
-        block(
+    block(
             baseLayers=1,
             baseCutoutType="NONE",
             grid=[16,16],
+
+            baseRounding = true,
+            baseRoundingRadius = [0,0,4],
+            baseCutoutRoundingRadius = 2.7,
             
             brickOffset=[0,0,1],
             knobType = knobType,
@@ -136,21 +152,17 @@ difference(){
             textFont="Space Age", 
             textDepth=0.8, 
             textSpacing=1.1,
-            textOffset=[5,-56.3],
+            textOffset=[5,-52-0.3],
 
             withSvg = true,
             svgFile = "../../martian/martian-logo.svg",
             svgDimensions = [640, 640],
             svgSide = 5,
             svgScale = 0.01,
-            svgOffset = [-25, -56],
+            svgOffset = [-25, -52],
             svgDepth = 0.8
         );
 
-        translate([0,0,2*3.2 + 0.4])
-        cylinder(r=36, h=0.8, center=true);
-    }
-
     translate([0,0,2*3.2])
-    cylinder(r=32, h=2, center=true);
+    cylinder(r=32, h=3.2, center=true);
 }

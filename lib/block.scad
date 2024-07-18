@@ -31,8 +31,8 @@ module block(
         baseClampHeight = 0.8,
         baseClampThickness = 0.1,
         baseRounding = false,
-        baseRoundingRadius = 0,
-        baseCutoutRoundingRadius = 0,
+        baseRoundingRadius = [0, 0, 4],
+        baseCutoutRoundingRadius = 2.7,
         baseRoundingResolution = 30,
         
         //Base Adjustment
@@ -550,7 +550,7 @@ module block(
                             } //End Union of tubes, helpers, etc
 
                             //Cut off overlapping parts of tubes
-                            if(slanting[0] + slanting[1] + slanting[2] + slanting[3] > 0){
+                            if((baseRounding && baseCutoutRoundingRadius != 0) || ((slanting[0] + slanting[1] + slanting[2] + slanting[3]) > 0)){
                                 mb_base_cutout(
                                     grid = grid,
                                     baseSideLength = baseSideLength,

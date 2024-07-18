@@ -6,8 +6,6 @@ block(
     grid=[4,2],
     baseLayers=3,
     baseRounding=true,
-    baseRoundingRadius = [0, 0, 4],
-    baseCutoutRoundingRadius = 2.7, 
     sideAdjustment=0
 );
   

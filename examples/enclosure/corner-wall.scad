@@ -17,8 +17,9 @@ block(
         screwHolesY = [[0, 2], [0, 21]],
         screwHoleYSize = 2.4,
         knobTongueClampThickness = 0.1,
-        baseRounding="MB",
-        baseRoundingRadius=[0,0,[0.01, 4,0.01,0.01]]
+        baseRounding=true,
+        baseRoundingRadius=[0,0,[0, 4,0,0]],
+        baseCutoutRoundingRadius=[0,2.7,0,0]
     );
 
     block(
@@ -34,8 +35,9 @@ block(
         screwHolesX = [[0, 2], [0, 21]],
         screwHoleXSize = 2.4,
         knobClampThickness = 0.1,
-        baseRounding="MB",
-        baseRoundingRadius=[0,0,[0.01, 4,0.01,0.01]]
+        baseRounding=true,
+        baseRoundingRadius=[0,0,[0, 4,0,0]],
+        baseCutoutRoundingRadius=[0,2.7,0,0]
     );
 
     }
@@ -52,7 +54,9 @@ if(parts == "TOP" || parts == "ALL"){
             pitWallGaps= [[2,0,0]],
             knobTongueClampThickness = 0.1,
             knobTongueAdjustment = 0,
-            baseCutoutType = "GROOVE"
+            baseCutoutType = "GROOVE",
+            baseRounding=true,
+            baseRoundingRadius=[0,0,[0, 4,0,0]]
         );
 
         block(
@@ -63,7 +67,9 @@ if(parts == "TOP" || parts == "ALL"){
             pitWallGaps= [[1,0,0]],
             knobTongueClampThickness = 0.1,
             knobTongueAdjustment = -0.1,
-            baseCutoutType = "GROOVE"
+            baseCutoutType = "GROOVE",
+            baseRounding=true,
+            baseRoundingRadius=[0,0,[0, 4,0,0]]
         ); 
     }
 }
