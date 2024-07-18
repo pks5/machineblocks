@@ -307,9 +307,9 @@ module block(
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side) = (side - 0.5) * resultingBaseHeight;
 
-    function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal;
-    function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical : 0);
-    function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical;
+    function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal * baseSideLength;
+    function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical*baseSideLength : 0);
+    function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical * baseHeightOriginal;
     /*
     * END Functions
     */
@@ -698,7 +698,7 @@ module block(
                 */
                 if(withText && textDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([decoratorX(textSide, textDepth, textOffset[0]*baseSideLength), decoratorY(textSide, textDepth, textOffset[1]*baseSideLength), decoratorZ(textSide, textDepth, textOffset[1]*baseSideLength)])
+                        translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
                                 mb_text3d(
                                     text = text,
@@ -715,7 +715,7 @@ module block(
                 */
                 if(withSvg && svgDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]*baseSideLength), decoratorY(svgSide, svgDepth, svgOffset[1]*baseSideLength), decoratorZ(svgSide, svgDepth, svgOffset[1]*baseSideLength)])
+                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                             rotate(decoratorRotations[svgSide])
                                 mb_svg3d(
                                     file = svgFile,
@@ -923,7 +923,7 @@ module block(
             */
             if(withText && textDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(textSide, textDepth, textOffset[0]*baseSideLength), decoratorY(textSide, textDepth, textOffset[1]*baseSideLength), decoratorZ(textSide, textDepth, textOffset[1]*baseSideLength)])
+                    translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])
                             mb_text3d(
                                 text = text,
@@ -940,7 +940,7 @@ module block(
             */
             if(withSvg && svgDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]*baseSideLength), decoratorY(svgSide, svgDepth, svgOffset[1]*baseSideLength), decoratorZ(svgSide, svgDepth, svgOffset[1]*baseSideLength)])
+                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])
                             mb_svg3d(
                                 file = svgFile,
