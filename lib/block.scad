@@ -57,7 +57,7 @@ module block(
         //Stabilizers
         withStabilizerGrid = true,
         stabilizerGridOffset = 0.2,
-        stabilizerGridHeight = 0.4,
+        stabilizerGridHeight = 0.8,
         stabilizerGridThickness = 0.8,
         stabilizerExpansion = 2,
         stabilizerExpansionOffset = 1.8,
@@ -217,7 +217,7 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     
-    baseCutoutRoundingRadius = baseRounding ? ([0,0, baseRoundingRadius[2][0] == undef ? ((baseRoundingRadius[2] / baseSideLength) * (baseSideLength-baseClampWallThickness))
+    baseCutoutRoundingRadius = baseRounding ? ([0,0, baseRoundingRadius[2][0] == undef ? (baseRoundingRadius[2] / baseSideLength) * (baseSideLength-baseClampWallThickness)
                                             : [(baseRoundingRadius[2][0] / baseSideLength) * (baseSideLength-baseClampWallThickness),
                                                 (baseRoundingRadius[2][1] / baseSideLength) * (baseSideLength-baseClampWallThickness),
                                                 (baseRoundingRadius[2][2] / baseSideLength) * (baseSideLength-baseClampWallThickness),

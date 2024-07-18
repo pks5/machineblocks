@@ -5,8 +5,8 @@ include <../lib/block.scad>;
 block(
     grid=[4,2],
     baseLayers=3,
-    baseRounding="MB",
-    baseRoundingRadius=[1, 1, 4]
+    baseRounding=true,
+    baseRoundingRadius=[0, 0, 4]
 );
   
 
