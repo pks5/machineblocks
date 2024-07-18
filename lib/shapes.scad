@@ -77,6 +77,78 @@ module mb_roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, res
 	}
 }
 
+module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, resolution = 20) {
+	// If single value, convert to [x, y, z] vector
+	size = (size[0] == undef) ? [size, size, size] : size;
+
+	obj_translate = (center == false) ?
+		[0, 0, 0] : [
+			-(size[0] / 2),
+			-(size[1] / 2),
+			-(size[2] / 2)
+		];
+
+	translate(v = obj_translate) {
+		if(radius == 0){
+			cube(size=size);
+		}
+		else{
+			radius = (radius[0] == undef) ? [radius, radius, radius, radius] : radius;
+			hull() {
+				for (i = [ 0 : 1 : 3 ]){
+					cornerRadius = radius[i] == 0 ? 0.1 : radius[i];
+					translateX = i < 2 ? cornerRadius : size[0] - cornerRadius;
+					translateY = (i == 0) || (i == 3) ? cornerRadius : size[1] - cornerRadius;
+				
+					translate_min = cornerRadius;
+					translate_zmax = size[2] - cornerRadius;						
+
+					for (translate_z = [translate_min, translate_zmax]) {
+						translate(v = [translateX, translateY, translate_z]){
+							if(radius[i] == 0)
+								cube(size = cornerRadius * 2, center = true);
+							else
+								cylinder(h = cornerRadius * 2, r = cornerRadius, center = true, $fn = resolution);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+module mb_rounded_block(size, resolution, center=true, radius = [0, 0, [4, 4, 4, 4]]){
+	size = (size[0] == undef) ? [size, size, size] : size;
+	intersection() {
+    	
+		//X-Axis
+		rotate([0,90,0])     
+			mb_roundedcube_custom(
+				size = [size[2], size[1], size[0]], 
+				center = center, 
+				radius = radius[0], 
+				resolution = resolution
+			);
+
+		//Y-Axis
+		rotate([90,0,0]) 
+			mb_roundedcube_custom(
+				size = [size[0], size[2], size[1]], 
+				center = center, 
+				radius = radius[1], 
+				resolution = resolution
+			);
+ 
+		//Z-Axis
+		mb_roundedcube_custom(
+			size = size, 
+			center = center, 
+			radius = radius[2], 
+			resolution = resolution
+		);
+	}
+}
+
 module mb_torus(circleRadius, torusRadius, circleResolution = 30, torusResolution = 30){
     rotate_extrude(convexity = 10, $fn = torusResolution)
         translate([torusRadius - circleRadius, 0, 0])

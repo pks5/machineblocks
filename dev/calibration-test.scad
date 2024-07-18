@@ -2,10 +2,13 @@ echo(version=version());
 
 include <../lib/block.scad>;
 
-color("red")
-    translate([10, 10, 0])
-        block(grid=[6,6], adjustSize=[0,0,0,0], zHolesOuterSize = 6.45, knobSize=4.95);
-
-
-      
+block(
+    grid=[4,2],
+    baseLayers=3,
+    baseRounding="MB",
+    baseRoundingRadius=[1, 1, 4]
+);
   
+
+//translate([0, 50,0])
+//    mb_rounded_block(size=[32,16,9.6], resolution=30, center=true, radius=[0,0,[4,0,0,0]]);

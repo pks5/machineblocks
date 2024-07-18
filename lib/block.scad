@@ -30,9 +30,9 @@ module block(
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 0.8,
         baseClampThickness = 0.1,
-        baseRounding = "all",
+        baseRounding = false,
         baseRoundingRadius = 0.1,
-        baseRoundingResolution = 15,
+        baseRoundingResolution = 30,
 
         //Base Adjustment
         sideAdjustment = -0.1,
@@ -217,6 +217,12 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     
+    baseCutoutRoundingRadius = baseRounding ? ([0,0, baseRoundingRadius[2][0] == undef ? ((baseRoundingRadius[2] / baseSideLength) * (baseSideLength-baseClampWallThickness))
+                                            : [(baseRoundingRadius[2][0] / baseSideLength) * (baseSideLength-baseClampWallThickness),
+                                                (baseRoundingRadius[2][1] / baseSideLength) * (baseSideLength-baseClampWallThickness),
+                                                (baseRoundingRadius[2][2] / baseSideLength) * (baseSideLength-baseClampWallThickness),
+                                                (baseRoundingRadius[2][3] / baseSideLength) * (baseSideLength-baseClampWallThickness)]]) : 0;
+    echo (baseCutoutRoundingRadius = baseCutoutRoundingRadius);
     //Calculate Z Positions
        
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -557,6 +563,9 @@ module block(
                                     objectSize = [objectSizeX, objectSizeY],
                                     baseHeight = resultingBaseHeight,
                                     sideAdjustment = sAdjustment,
+                                    baseRounding = baseRounding, 
+                                    roundingRadius = baseCutoutRoundingRadius, 
+                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     wallThickness = wallThickness,
                                     topPlateHeight = resultingTopPlateHeight,
                                     baseClampHeight = baseClampHeight,
@@ -601,6 +610,9 @@ module block(
                                 objectSize = [objectSizeX, objectSizeY],
                                 baseHeight = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
+                                baseRounding = baseRounding, 
+                                roundingRadius = baseCutoutRoundingRadius, 
+                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 wallThickness = wallThickness,
                                 topPlateHeight = resultingTopPlateHeight,
                                 baseClampHeight = baseClampHeight,
@@ -763,7 +775,7 @@ module block(
                                         mb_torus(
                                             circleRadius = knobRounding, 
                                             torusRadius = 0.5 * knobSize + knobClampThickness, 
-                                            circleResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                            circleResolution = ($preview ? previewQuality : 1) * knobResolution,
                                             torusResolution = ($preview ? previewQuality : 1) * knobResolution
                                         );
                                     };
