@@ -144,10 +144,11 @@ difference(){
             brickOffset=[0,0,1],
             knobType = knobType,
             knobs = false,
+            sideAdjustment=[0,0,0,0],
+            
             withText=true, 
             textSize=6, 
             textSide=5,
-            sideAdjustment=[0,0,0,0],
             text="martian", 
             textFont="Space Age", 
             textDepth=0.8, 
