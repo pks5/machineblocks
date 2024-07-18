@@ -117,35 +117,41 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 	}
 }
 
-module mb_rounded_block(size, resolution, center=true, radius = [0, 0, [4, 4, 4, 4]]){
-	size = (size[0] == undef) ? [size, size, size] : size;
-	intersection() {
-    	
-		//X-Axis
-		rotate([0,90,0])     
-			mb_roundedcube_custom(
-				size = [size[2], size[1], size[0]], 
-				center = center, 
-				radius = radius[0], 
-				resolution = resolution
-			);
+module mb_rounded_block(size, resolution, center=true, radius = 0){
+	if(radius == 0){
+		cube(size = size, center = center);
+	}
+	else{
+		radius = (radius[0] == undef) ? [radius, radius, radius] : radius;
+		size = (size[0] == undef) ? [size, size, size] : size;
+		intersection() {
+			
+			//X-Axis
+			rotate([0,90,0])     
+				mb_roundedcube_custom(
+					size = [size[2], size[1], size[0]], 
+					center = center, 
+					radius = radius[0], 
+					resolution = resolution
+				);
 
-		//Y-Axis
-		rotate([90,0,0]) 
+			//Y-Axis
+			rotate([90,0,0]) 
+				mb_roundedcube_custom(
+					size = [size[0], size[2], size[1]], 
+					center = center, 
+					radius = radius[1], 
+					resolution = resolution
+				);
+	
+			//Z-Axis
 			mb_roundedcube_custom(
-				size = [size[0], size[2], size[1]], 
+				size = size, 
 				center = center, 
-				radius = radius[1], 
+				radius = radius[2], 
 				resolution = resolution
 			);
- 
-		//Z-Axis
-		mb_roundedcube_custom(
-			size = size, 
-			center = center, 
-			radius = radius[2], 
-			resolution = resolution
-		);
+		}
 	}
 }
 

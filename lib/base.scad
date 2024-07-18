@@ -52,14 +52,14 @@ module mb_base_cutout(
                 */
                 color([0.953, 0.612, 0.071]) //f39c12
                 translate([0, 0, 0.5*(baseClampHeight - (withPit ? pitDepth : 0) - topPlateHeight) ])
-                    mb_rounded_block(size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (withPit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true, radius=roundingRadius, resolution=roundingResolution);    
+                    mb_rounded_block(size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (withPit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);    
 
                 /*
                 * Clamp Skirt
                 */
                 color([0.902, 0.494, 0.133]) //e67e22
                 translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
-                    mb_rounded_block(size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true, radius=roundingRadius, resolution=roundingResolution);
+                    mb_rounded_block(size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);
             }
             else{
                 /*
