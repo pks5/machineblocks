@@ -698,7 +698,7 @@ module block(
                 */
                 if(withText && textDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                        translate([decoratorX(textSide, textDepth, textOffset[0]*baseSideLength), decoratorY(textSide, textDepth, textOffset[1]*baseSideLength), decoratorZ(textSide, textDepth, textOffset[1]*baseSideLength)])
                             rotate(decoratorRotations[textSide])
                                 mb_text3d(
                                     text = text,
@@ -715,7 +715,7 @@ module block(
                 */
                 if(withSvg && svgDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
-                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
+                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]*baseSideLength), decoratorY(svgSide, svgDepth, svgOffset[1]*baseSideLength), decoratorZ(svgSide, svgDepth, svgOffset[1]*baseSideLength)])
                             rotate(decoratorRotations[svgSide])
                                 mb_svg3d(
                                     file = svgFile,
@@ -923,7 +923,7 @@ module block(
             */
             if(withText && textDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                    translate([decoratorX(textSide, textDepth, textOffset[0]*baseSideLength), decoratorY(textSide, textDepth, textOffset[1]*baseSideLength), decoratorZ(textSide, textDepth, textOffset[1]*baseSideLength)])
                         rotate(decoratorRotations[textSide])
                             mb_text3d(
                                 text = text,
@@ -940,7 +940,7 @@ module block(
             */
             if(withSvg && svgDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
-                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
+                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]*baseSideLength), decoratorY(svgSide, svgDepth, svgOffset[1]*baseSideLength), decoratorZ(svgSide, svgDepth, svgOffset[1]*baseSideLength)])
                         rotate(decoratorRotations[svgSide])
                             mb_svg3d(
                                 file = svgFile,

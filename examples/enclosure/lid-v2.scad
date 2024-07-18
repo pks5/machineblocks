@@ -89,14 +89,14 @@ difference(){
             textFont="Space Age", 
             textDepth=0.8, 
             textSpacing=1.1,
-            textOffset=[5,-64-0.3],
+            textOffset=[5/8, -8.5 -0.3/8],
 
             withSvg = true,
             svgFile = "../../martian/martian-logo.svg",
             svgDimensions = [640, 640],
             svgSide = 5,
             svgScale = 0.01,
-            svgOffset = [-25, -64],
+            svgOffset = [-25/8, -8.5],
             svgDepth = 0.8
         );
 

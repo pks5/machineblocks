@@ -173,7 +173,8 @@ textOffset=[0,0]
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffset=textOffset, alignBottom=false
+                            textOffset=textOffset, 
+                            alignBottom=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

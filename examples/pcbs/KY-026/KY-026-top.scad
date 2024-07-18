@@ -23,8 +23,8 @@ difference(){
         text="\uf06d",
         textFont="Font Awesome 6 Free Solid",
         textSize=7,
-            textDepth=-4,
-    textOffsetVertical=-2.5
+        textDepth=-4,
+        textOffset=[0, -0.3333]
     );
 
     translate([0,-20.9,11]){
