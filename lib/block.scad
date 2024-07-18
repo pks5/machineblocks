@@ -108,6 +108,8 @@ module block(
         tongue = false,
         tongueHeight = 1.8,
         tongueKnobSize = 5.0,
+        tongueRoundingRadius = 1.2,
+        tongueRoundingResolution = 10,
         knobTongueThickness = 1.1, //Rename to tongueThickness
         knobTongueAdjustment = -0.1, //Rename to tongueAdjustment
         tongueClampHeight = 0.8,
@@ -789,11 +791,10 @@ module block(
                             union(){
                                 translate([0, 0, -0.5 * tongueClampHeight]){
                                     difference(){
-                                            mb_roundedcube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, tongueHeight - tongueClampHeight], 
+                                            mb_rounded_block(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, tongueHeight - tongueClampHeight], 
                                                         center = true, 
-                                                        radius=knobRounding, 
-                                                        apply_to="z",
-                                                        resolution=($preview ? previewQuality : 1) * knobResolution);
+                                                        radius=[0,0,tongueRoundingRadius], 
+                                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution);
                                         cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (tongueHeight - tongueClampHeight)*cutMultiplier], center=true);
 
                                         /*
@@ -818,11 +819,10 @@ module block(
                                 //Tongue Clamp
                                 translate([0, 0, 0.5 * (tongueHeight-tongueClampHeight)]){    
                                     difference(){       
-                                        mb_roundedcube(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
+                                        mb_rounded_block(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
                                                         center = true, 
-                                                        radius=knobRounding, 
-                                                        apply_to="z",
-                                                        resolution=($preview ? previewQuality : 1) * knobResolution);
+                                                        radius=[0,0,tongueRoundingRadius], 
+                                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution);
                                         cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], center=true);
                                     
                                         /*
@@ -1001,7 +1001,12 @@ module block(
                         union(){
                             translate([0, 0, -0.5 * tongueClampHeight]){
                                 difference(){
-                                    cube(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobGrooveDepth - tongueClampHeight + 2*cutOffset], center = true);
+                                    mb_rounded_block(
+                                        size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobGrooveDepth - tongueClampHeight + 2*cutOffset], 
+                                        center = true,
+                                        radius = [0,0,tongueRoundingRadius], 
+                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution
+                                    );
                                     cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (knobGrooveDepth - tongueClampHeight + 2*cutOffset)*cutMultiplier], center=true);
                                     /*
                                     * Cut knobGrooveGaps
@@ -1022,7 +1027,12 @@ module block(
                             //Top Part with clamp
                             translate([0, 0, 0.5 * (knobGrooveDepth - tongueClampHeight)]){    
                                 difference(){       
-                                    cube(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], center = true);
+                                    mb_rounded_block(
+                                        size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
+                                        center = true,
+                                        radius = [0,0,tongueRoundingRadius], 
+                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution
+                                    );
                                     cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], center=true);
                                     /*
                                     * Cut knobGrooveGaps
