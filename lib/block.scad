@@ -108,8 +108,7 @@ module block(
         tongue = false,
         tongueHeight = 1.8,
         tongueKnobSize = 5.0,
-        tongueRoundingRadius = 1.2,
-        tongueRoundingResolution = 10,
+        tongueRoundingRadius = 3.4,
         knobTongueThickness = 1.1, //Rename to tongueThickness
         knobTongueAdjustment = -0.1, //Rename to tongueAdjustment
         tongueClampHeight = 0.8,
@@ -795,11 +794,18 @@ module block(
                             union(){
                                 translate([0, 0, -0.5 * tongueClampHeight]){
                                     difference(){
-                                            mb_rounded_block(size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, tongueHeight - tongueClampHeight], 
-                                                        center = true, 
-                                                        radius=[0,0,tongueRoundingRadius], 
-                                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution);
-                                        cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (tongueHeight - tongueClampHeight)*cutMultiplier], center=true);
+                                            mb_rounded_block(
+                                                size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, tongueHeight - tongueClampHeight], 
+                                                center = true, 
+                                                radius=[0,0,tongueRoundingRadius], 
+                                                resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                            );
+                                            mb_rounded_block(
+                                                size = [knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (tongueHeight - tongueClampHeight)*cutMultiplier], 
+                                                center=true,
+                                                radius=[0,0,pitRoundingRadius], 
+                                                resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                            );
 
                                         /*
                                         * Cut knobGrooveGaps
@@ -823,11 +829,18 @@ module block(
                                 //Tongue Clamp
                                 translate([0, 0, 0.5 * (tongueHeight-tongueClampHeight)]){    
                                     difference(){       
-                                        mb_rounded_block(size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
-                                                        center = true, 
-                                                        radius=[0,0,tongueRoundingRadius], 
-                                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution);
-                                        cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], center=true);
+                                        mb_rounded_block(
+                                            size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
+                                            center = true, 
+                                            radius=[0,0,tongueRoundingRadius], 
+                                            resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                        );
+                                        mb_rounded_block(
+                                            size = [knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], 
+                                            center=true, 
+                                            radius=[0,0,pitRoundingRadius], 
+                                            resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                        );
                                     
                                         /*
                                         * Cut knobGrooveGaps
@@ -1009,9 +1022,14 @@ module block(
                                         size=[knobRectX + 2*knobTongueAdjustment, knobRectY + 2*knobTongueAdjustment, knobGrooveDepth - tongueClampHeight + 2*cutOffset], 
                                         center = true,
                                         radius = [0,0,tongueRoundingRadius], 
-                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution
+                                        resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                     );
-                                    cube([knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (knobGrooveDepth - tongueClampHeight + 2*cutOffset)*cutMultiplier], center=true);
+                                    mb_rounded_block(
+                                        size = [knobRectX - 2*knobTongueThickness, knobRectY - 2*knobTongueThickness, (knobGrooveDepth - tongueClampHeight + 2*cutOffset)*cutMultiplier], 
+                                        center=true,
+                                        radius = [0,0,pitRoundingRadius], 
+                                        resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                    );
                                     /*
                                     * Cut knobGrooveGaps
                                     */
@@ -1035,9 +1053,14 @@ module block(
                                         size=[knobRectX + 2*knobTongueClampThickness + 2*knobTongueAdjustment, knobRectY + 2*knobTongueClampThickness + 2*knobTongueAdjustment, tongueClampHeight], 
                                         center = true,
                                         radius = [0,0,tongueRoundingRadius], 
-                                        resolution=($preview ? previewQuality : 1) * tongueRoundingResolution
+                                        resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                     );
-                                    cube([knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], center=true);
+                                    mb_rounded_block(
+                                        size = [knobRectX - 2*knobTongueThickness - 2*knobTongueClampThickness, knobRectY - 2*knobTongueThickness - 2*knobTongueClampThickness, tongueClampHeight*cutMultiplier], 
+                                        center=true,
+                                        radius = [0,0,pitRoundingRadius], 
+                                        resolution=($preview ? previewQuality : 1) * baseRoundingResolution
+                                    );
                                     /*
                                     * Cut knobGrooveGaps
                                     */
