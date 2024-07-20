@@ -4,7 +4,7 @@ include <../../lib/block.scad>;
 block(
             baseLayers=3,
             grid=[2,1],
-            withPit=true,
+            pit=true,
             tongue=true,
             pitWallGaps= [[3,0,0]],
             screwHolesX=[[0,1], [1,1]],

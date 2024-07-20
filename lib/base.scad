@@ -26,7 +26,7 @@ module mb_base_cutout(
     topPlateHeight,
     baseClampHeight,
     baseClampThickness,
-    withPit,
+    pit,
     pitDepth,
     slanting,
     slantingLowerHeight
@@ -51,8 +51,8 @@ module mb_base_cutout(
                 * Bottom Hole
                 */
                 color([0.953, 0.612, 0.071]) //f39c12
-                translate([0, 0, 0.5*(baseClampHeight - (withPit ? pitDepth : 0) - topPlateHeight) ])
-                    mb_rounded_block(size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (withPit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);    
+                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                    mb_rounded_block(size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);    
 
                 /*
                 * Clamp Skirt
@@ -66,8 +66,8 @@ module mb_base_cutout(
                 * Bottom Hole
                 */
                 color([0.953, 0.612, 0.071]) //f39c12
-                translate([0, 0, 0.5*(baseClampHeight - (withPit ? pitDepth : 0) - topPlateHeight) ])
-                    cube([objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (withPit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true);    
+                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                    cube([objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true);    
 
                 /*
                 * Clamp Skirt
@@ -119,7 +119,8 @@ module mb_base(
     roundingRadius, 
     roundingRadiusZ,
     roundingResolution,
-    withPit,
+    pit,
+    pitRoundingRadius,
     pitWallThickness,
     pitDepth,
     pitWallGaps,
@@ -196,13 +197,13 @@ module mb_base(
         /*
         * Pit
         */
-        if(withPit){
+        if(pit){
             pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * baseSideLength;
             pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * baseSideLength;
             echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
             translate([0.5 * (pitWallThickness[1] - pitWallThickness[0]) * baseSideLength, 0.5 * (pitWallThickness[3] - pitWallThickness[2]) * baseSideLength, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
-                cube([pitSizeX, pitSizeY, pitDepth + cutOffset], center = true);
+                mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
         
             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                 gap = pitWallGaps[gapIndex];

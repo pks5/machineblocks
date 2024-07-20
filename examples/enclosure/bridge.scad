@@ -6,7 +6,7 @@ if(parts == "WALL" || parts == "ALL"){
 block(
     baseLayers=7,
     grid=[11,1],
-    withPit = true,
+    pit = true,
     tongue=true,
     pitWallGaps= [[3,0,0]],
     screwHolesY = [[0, 5], [0, 3], [0, 1]],
@@ -22,7 +22,7 @@ block(
 block(
     baseLayers=7,
     grid=[11,1],
-    withPit = true,
+    pit = true,
     tongue=true,
     pitWallGaps= [[2,0,0]],
     screwHolesY = [[0, 5], [0, 3], [0, 1]],

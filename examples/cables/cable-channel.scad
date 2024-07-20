@@ -3,7 +3,7 @@ include <../../lib/block.scad>;
 block(
     baseLayers=3,
     grid=[4,2],
-    withPit = true,
+    pit = true,
     pitWallGaps= [[0,0,0], [1,0,0]],
     knobTongueClampThickness = 0,
     knobSize=5.1,

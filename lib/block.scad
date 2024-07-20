@@ -46,7 +46,7 @@ module block(
         
         //Top Plate
         topPlateHeight = 0.6,
-        withTopPlateHelpers = true,
+        topPlateHelpers = true,
         topPlateHelperOffset = 0.2,
         topPlateHelperHeight = 0.2,
         topPlateHelperThickness = 0.4,
@@ -64,8 +64,8 @@ module block(
         stabilizerExpansionOffset = 1.8,
         
         //Pillars: Tubes and Pins
-        pillarResolution = 30,
         pillars = true,
+        pillarResolution = 30,
         maxPillarNonGap = 2, //TODO find better name
         middlePillarGapLimit = 10, //TODO find better name
         
@@ -117,7 +117,8 @@ module block(
         knobGrooveDepth = 2.6, //Rename to tongueGrooveDepth
         
         //Pit
-        withPit=false,
+        pit=false,
+        pitRoundingRadius = 2.7,
         pitDepth = 0,
         pitWallThickness = 0.333, //Unit: 1x1 Brick
         pitKnobs=true,
@@ -169,8 +170,8 @@ module block(
         //Alignment
         brickOffset = [0, 0, 0],
         center = true,
-        alignBottom = true,
-        alignUnadjusted = true,
+        alignBottom = true, //Whether the brick should be always aligned on floor
+        alignIgnoreAdjustment = true, //Whether sideAdjustment should be ignored when aligning the brick
         
         //Adhesion Helpers
         adhesionHelpers = false,
@@ -201,12 +202,12 @@ module block(
     resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
 
     //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignUnadjusted ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignUnadjusted ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignUnadjusted ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
+    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
+    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
     brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
     
     //Base Cutout and Pit Depth
-    resultingPitDepth = withPit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
+    resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
                 : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
@@ -287,10 +288,10 @@ module block(
     function drawPillar(a, b) = !drawHoleZ(a, b) && ((pillars == "AUTO" && drawPillarAuto(a, b)) || (pillars != "AUTO" && drawGridItem(pillars, a, b, 0, false)));
 
     function drawKnob(a, b) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
-                                && (!withPit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
+                                && (!pit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
                                     && drawGridItem(knobs, a, b, 0, false); 
 
-    function inPit(a,b) = withPit && (a >= ceil(pWallThickness[0])) && (a < grid[0] - ceil(pWallThickness[1])) && (b >= ceil(pWallThickness[2])) && (b < grid[1] - ceil(pWallThickness[3]));                                
+    function inPit(a,b) = pit && (a >= ceil(pWallThickness[0])) && (a < grid[0] - ceil(pWallThickness[1])) && (b >= ceil(pWallThickness[2])) && (b < grid[1] - ceil(pWallThickness[3]));                                
 
     function knobZ(a, b) = inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
 
@@ -371,7 +372,7 @@ module block(
                                 /*
                                 * Plate Helpers
                                 */
-                                if(withTopPlateHelpers){
+                                if(topPlateHelpers){
                                     color([0.906, 0.298, 0.235]) //e74c3c
                                     union(){
                                         translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
@@ -567,7 +568,7 @@ module block(
                                     topPlateHeight = resultingTopPlateHeight,
                                     baseClampHeight = baseClampHeight,
                                     baseClampThickness = baseClampThickness,
-                                    withPit = withPit,
+                                    pit = pit,
                                     pitDepth = resultingPitDepth,
                                     slanting = slanting,
                                     slantingLowerHeight = slantingLowerHeight
@@ -593,7 +594,8 @@ module block(
                                 baseRounding = baseRounding, 
                                 roundingRadius = baseRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                withPit = withPit,
+                                pit = pit,
+                                pitRoundingRadius = pitRoundingRadius,
                                 pitDepth = resultingPitDepth,
                                 pitWallThickness = pWallThickness,
                                 pitWallGaps = pitWallGaps,
@@ -614,7 +616,7 @@ module block(
                                 topPlateHeight = resultingTopPlateHeight,
                                 baseClampHeight = baseClampHeight,
                                 baseClampThickness = baseClampThickness,
-                                withPit = withPit,
+                                pit = pit,
                                 pitDepth = resultingPitDepth,
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight
@@ -686,7 +688,8 @@ module block(
                             baseRounding = baseRounding, 
                             roundingRadius = baseRoundingRadius, 
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                            withPit = withPit,
+                            pit = pit,
+                            pitRoundingRadius = pitRoundingRadius,
                             pitDepth = resultingPitDepth,
                             pitWallThickness = pWallThickness,
                             pitWallGaps = pitWallGaps,
@@ -801,7 +804,7 @@ module block(
                                         /*
                                         * Cut knobGrooveGaps
                                         */
-                                        if(withPit){
+                                        if(pit){
                                             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                                 gap = pitWallGaps[gapIndex];
                                                 if(gap[0] < 2){
@@ -829,7 +832,7 @@ module block(
                                         /*
                                         * Cut knobGrooveGaps
                                         */
-                                        if(withPit){
+                                        if(pit){
                                             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                                 gap = pitWallGaps[gapIndex];
                                                 if(gap[0] < 2){

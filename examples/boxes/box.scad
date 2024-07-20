@@ -5,7 +5,7 @@ block(
     baseLayers=8,
     knobs=false,
     tongue=true,
-    withPit=true,
+    pit=true,
     withText=true,
     textSize=10,
     textFont="OldSansBlack",

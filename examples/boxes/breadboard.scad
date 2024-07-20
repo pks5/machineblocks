@@ -4,7 +4,7 @@ use <../../lib/block.scad>;
 block(
     baseLayers = 4,
     grid = [12, 8],
-    withPit=true,
+    pit=true,
     pitWallThickness = [5.9/8, 4.6/8],
     baseCutoutMaxDepth=2.6,
     pitDepth = 8.8,

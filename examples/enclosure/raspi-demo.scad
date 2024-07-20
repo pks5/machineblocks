@@ -21,7 +21,7 @@ block(
 block(
     baseLayers=12,
     grid=[8,1],
-    withPit = true,
+    pit = true,
     tongue = true,
     pitWallGaps= [[3,0,0]],
     screwHolesZ = [[0,0], [7,0]],
@@ -31,7 +31,7 @@ block(
 block(
     baseLayers=12,
     grid=[8,1],
-    withPit = true,
+    pit = true,
     tongue = true,
     pitWallGaps= [[2,0,0]],
     screwHolesZ = [[0,0], [7,0]],
@@ -41,7 +41,7 @@ block(
 block(
     baseLayers=12,
     grid=[1,8],
-    withPit = true,
+    pit = true,
     tongue = true,
     pitWallGaps= [[0,0,0]],
     screwHolesZ = [[0,0], [7,0]],
@@ -51,7 +51,7 @@ block(
 block(
     baseLayers=12,
     grid=[1,8],
-    withPit = true,
+    pit = true,
     tongue = true,
     pitWallGaps= [[1,0,0]],
     screwHolesZ = [[0,0], [7,0]],
