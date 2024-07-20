@@ -19,7 +19,6 @@ module mb_base_cutout(
     objectSize,
     baseHeight,
     sideAdjustment, 
-    baseRounding, 
     roundingRadius, 
     roundingResolution,
     wallThickness,
@@ -46,36 +45,29 @@ module mb_base_cutout(
 
     difference(){
         union(){
-            if(baseRounding){
-/*
-                * Bottom Hole
-                */
-                color([0.953, 0.612, 0.071]) //f39c12
-                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                    mb_rounded_block(size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);    
+            /*
+            * Bottom Hole
+            */
+            color([0.953, 0.612, 0.071]) //f39c12
+            translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                mb_rounded_block(
+                    size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], 
+                    center = true, 
+                    radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                    resolution=roundingResolution
+                );    
 
-                /*
-                * Clamp Skirt
-                */
-                color([0.902, 0.494, 0.133]) //e67e22
-                translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
-                    mb_rounded_block(size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true, radius=[0,0,roundingRadius], resolution=roundingResolution);
-            }
-            else{
-                /*
-                * Bottom Hole
-                */
-                color([0.953, 0.612, 0.071]) //f39c12
-                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                    cube([objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], center = true);    
-
-                /*
-                * Clamp Skirt
-                */
-                color([0.902, 0.494, 0.133]) //e67e22
-                translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
-                    cube([objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], center = true);
-            }
+            /*
+            * Clamp Skirt
+            */
+            color([0.902, 0.494, 0.133]) //e67e22
+            translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
+                mb_rounded_block(
+                    size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
+                    center = true, 
+                    radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                    resolution=roundingResolution
+                );
         }
 
         /*
@@ -115,7 +107,6 @@ module mb_base(
     objectSize, 
     height, 
     sideAdjustment, 
-    baseRounding, 
     roundingRadius, 
     roundingRadiusZ,
     roundingResolution,
@@ -150,20 +141,12 @@ module mb_base(
     difference(){
         translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0]){
             difference(){
-                if(baseRounding){
-                    mb_rounded_block(
-                        size = size, 
-                        center=true, 
-                        resolution = roundingResolution,
-                        radius = roundingRadius
-                    );
-                }
-                else{
-                    cube(
-                        size = size, 
-                        center = true
-                    );    
-                }
+                mb_rounded_block(
+                    size = size, 
+                    center=true, 
+                    resolution = roundingResolution,
+                    radius = roundingRadius
+                );
                 
                 /*
                 * Slanting

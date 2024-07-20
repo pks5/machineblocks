@@ -118,7 +118,7 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 }
 
 module mb_rounded_block(size, resolution, center=true, radius = 0){
-	if(radius == 0){
+	if((radius == 0) || (radius == [0, 0, 0])){
 		cube(size = size, center = center);
 	}
 	else{

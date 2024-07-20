@@ -12,7 +12,6 @@ difference(){
             knobType = knobType,
             knobs = false,
             pillars=[true, [6,0,8,0,true]],
-            baseRounding = true,
             baseRoundingRadius = [0, 0, [0,4,4,0]],
             baseCutoutRoundingRadius = [0,2.7,2.7,0]
         );
@@ -24,7 +23,6 @@ difference(){
             brickOffset=[7.5,0,0],
             knobType = knobType,
             knobs = false,
-            baseRounding = true,
             baseRoundingRadius = [0, 0, [0,0,4,4]],
             baseCutoutRoundingRadius = [0,0,2.7,2.7]
         );
@@ -36,7 +34,6 @@ difference(){
             brickOffset=[-7.5,0,0],
             knobType = knobType,
             knobs = false,
-            baseRounding = true,
             baseRoundingRadius = [0, 0, [4,4,0,0]],
             baseCutoutRoundingRadius = [2.7,2.7,0,0]
         );
@@ -48,7 +45,6 @@ difference(){
             brickOffset=[0,-7.5,0],
             knobType = knobType,
             knobs = false,
-            baseRounding = true,
             baseRoundingRadius = [0, 0, [4,0,0,4]],
             baseCutoutRoundingRadius = [2.7,0,0,2.7]
         );

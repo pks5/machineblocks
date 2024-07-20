@@ -30,9 +30,8 @@ module block(
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 0.8,
         baseClampThickness = 0.1,
-        baseRounding = false,
-        baseRoundingRadius = [0, 0, 4],
-        baseCutoutRoundingRadius = 2.7,
+        baseRoundingRadius = 0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
+        baseCutoutRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 30,
         
         //Base Adjustment
@@ -108,7 +107,7 @@ module block(
         tongue = false,
         tongueHeight = 1.8,
         tongueKnobSize = 5.0,
-        tongueRoundingRadius = 3.4,
+        tongueRoundingRadius = 0, //e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         knobTongueThickness = 1.1, //Rename to tongueThickness
         knobTongueAdjustment = -0.1, //Rename to tongueAdjustment
         tongueClampHeight = 0.8,
@@ -117,7 +116,7 @@ module block(
         
         //Pit
         pit=false,
-        pitRoundingRadius = 2.7,
+        pitRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
         pitDepth = 0,
         pitWallThickness = 0.333, //Unit: 1x1 Brick
         pitKnobs=true,
@@ -553,14 +552,13 @@ module block(
                             } //End Union of tubes, helpers, etc
 
                             //Cut off overlapping parts of tubes
-                            if((baseRounding && baseCutoutRoundingRadius != 0) || ((slanting[0] + slanting[1] + slanting[2] + slanting[3]) > 0)){
+                            if((baseCutoutRoundingRadius != 0) || ((slanting[0] + slanting[1] + slanting[2] + slanting[3]) > 0)){
                                 mb_base_cutout(
                                     grid = grid,
                                     baseSideLength = baseSideLength,
                                     objectSize = [objectSizeX, objectSizeY],
                                     baseHeight = resultingBaseHeight,
                                     sideAdjustment = sAdjustment,
-                                    baseRounding = baseRounding, 
                                     roundingRadius = baseCutoutRoundingRadius, 
                                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     wallThickness = wallThickness,
@@ -590,7 +588,6 @@ module block(
                                 objectSize = [objectSizeX, objectSizeY],
                                 height = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
-                                baseRounding = baseRounding, 
                                 roundingRadius = baseRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 pit = pit,
@@ -608,7 +605,6 @@ module block(
                                 objectSize = [objectSizeX, objectSizeY],
                                 baseHeight = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
-                                baseRounding = baseRounding, 
                                 roundingRadius = baseCutoutRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 wallThickness = wallThickness,
@@ -684,7 +680,6 @@ module block(
                             objectSize = [objectSizeX, objectSizeY],
                             height = resultingBaseHeight,
                             sideAdjustment = sAdjustment,
-                            baseRounding = baseRounding, 
                             roundingRadius = baseRoundingRadius, 
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                             pit = pit,

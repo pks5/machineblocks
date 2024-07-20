@@ -7,7 +7,6 @@ block(
     tongue=true,
     pit=true,
     baseCutoutType="NONE",
-    baseRounding=true,
     baseRoundingRadius=[0,0,4]
 );
 
@@ -22,6 +21,5 @@ translate([0, 50, 0])
         textFont="OldSansBlack",
         textDepth=0.8,
         text="MEDS",
-        baseRounding=true,
         baseRoundingRadius=[0,0,4]
     );

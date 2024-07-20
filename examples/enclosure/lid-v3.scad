@@ -9,7 +9,6 @@ block(
     brickOffset=[0,7.5,0],
     knobType = knobType,
     knobs = false,
-    baseRounding = true,
     baseRoundingRadius = [0, 0, [0,4,4,0]],
     baseCutoutRoundingRadius = [0,2.7,2.7,0]
 );
@@ -21,7 +20,6 @@ block(
     brickOffset=[7.5,0,0],
     knobType = knobType,
     knobs = false,
-    baseRounding = true,
     baseRoundingRadius = [0, 0, [0,0,4,4]],
     baseCutoutRoundingRadius = [0,0,2.7,2.7]
 );
@@ -33,7 +31,6 @@ block(
     brickOffset=[-7.5,0,0],
     knobType = knobType,
     knobs = false,
-    baseRounding = true,
     baseRoundingRadius = [0, 0, [4,4,0,0]],
     baseCutoutRoundingRadius = [2.7,2.7,0,0]
 );
@@ -45,7 +42,6 @@ block(
     brickOffset=[0,-7.5,0],
     knobType = knobType,
     knobs = false,
-    baseRounding = true,
     baseRoundingRadius = [0, 0, [4,0,0,4]],
     baseCutoutRoundingRadius = [2.7,0,0,2.7]
 );
@@ -137,7 +133,6 @@ difference(){
             baseCutoutType="NONE",
             grid=[16,16],
 
-            baseRounding = true,
             baseRoundingRadius = [0,0,4],
             baseCutoutRoundingRadius = 2.7,
             

@@ -17,6 +17,5 @@ block(
     baseLayers=3,
     grid=[4,2],
     heightAdjustment=-0.2,
-    knobSize=5.0,
-    baseRounding="none"
+    knobSize=5.0
 );

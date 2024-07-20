@@ -1,6 +1,6 @@
 include <../../lib/block.scad>;
 
-parts = "ALL";
+parts = "WALL";
 
 
 if(parts == "WALL" || parts == "ALL"){
@@ -11,18 +11,20 @@ block(
         brickOffset=[0, 1, 0],
         pit = true,
         tongue = true,
+        tongueRoundingRadius = [0.5, 2.7, 0.5, 0.5],
         pitWallGaps = [[2,0,0]],
+
+        pitRoundingRadius=[0, 1.2, 0, 0],
         screwHolesZ = [[0,0], [2,0]],
         screwHoleZSize = 2,
         screwHolesY = [[0, 2], [0, 21]],
         screwHoleYSize = 2.4,
         knobTongueClampThickness = 0.1,
-        baseRounding=true,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
         baseCutoutRoundingRadius=[0,2.7,0,0],
-        previewQuality=0.5
+        previewQuality=1
     );
-
+/*
     block(
         baseLayers=23, 
         grid=[1, 3], 
@@ -36,11 +38,10 @@ block(
         screwHolesX = [[0, 2], [0, 21]],
         screwHoleXSize = 2.4,
         knobClampThickness = 0.1,
-        baseRounding=true,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
         baseCutoutRoundingRadius=[0,2.7,0,0],
         previewQuality=0.5
-    );
+    ); */
 
     }
 
@@ -57,7 +58,6 @@ if(parts == "TOP" || parts == "ALL"){
             knobTongueClampThickness = 0.1,
             knobTongueAdjustment = 0,
             baseCutoutType = "GROOVE",
-            baseRounding=true,
             baseRoundingRadius=[0,0,[0, 4,0,0]],
             previewQuality=0.5
         );
@@ -71,7 +71,6 @@ if(parts == "TOP" || parts == "ALL"){
             knobTongueClampThickness = 0.1,
             knobTongueAdjustment = -0.1,
             baseCutoutType = "GROOVE",
-            baseRounding=true,
             baseRoundingRadius=[0,0,[0, 4,0,0]],
             previewQuality=0.5
         ); 
