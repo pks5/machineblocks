@@ -32,5 +32,13 @@ translate([0, -80, 0])
 
 translate([0, -110, 0])
     block(baseLayers=3, grid=[2,3], holesZ=true, withHolesY=true, knobType = "TECHNIC");
+
+color("green")
+    translate([20, -110, 0])
+        block(baseLayers=9, grid=[1,6], withHolesY=true, knobType = "TECHNIC");
+
+color("green")
+    translate([-200, -110, 0])
+        block(baseLayers=9, grid=[6,1], withHolesX=true, knobType = "TECHNIC");        
       
   

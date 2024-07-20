@@ -24,7 +24,7 @@ block(
         baseCutoutRoundingRadius=[0,2.7,0,0],
         previewQuality=1
     );
-/*
+
     block(
         baseLayers=23, 
         grid=[1, 3], 
@@ -32,7 +32,9 @@ block(
         brickOffset=[-1, 0, 0],
         pit = true,
         tongue = true,
+        tongueRoundingRadius = [0.5, 2.7, 0.5, 0.5],
         pitWallGaps= [[1,0,0]],
+        pitRoundingRadius=[0, 1.2, 0, 0],
         screwHolesZ = [[0,0], [0,2]],
         screwHoleZSize = 2,
         screwHolesX = [[0, 2], [0, 21]],
@@ -41,7 +43,7 @@ block(
         baseRoundingRadius=[0,0,[0, 4,0,0]],
         baseCutoutRoundingRadius=[0,2.7,0,0],
         previewQuality=0.5
-    ); */
+    ); 
 
     }
 
