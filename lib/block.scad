@@ -571,7 +571,6 @@ module block(
                                 mb_base_cutout(
                                     grid = grid,
                                     baseSideLength = baseSideLength,
-                                    objectSize = [objectSizeX, objectSizeY],
                                     baseHeight = resultingBaseHeight,
                                     sideAdjustment = sAdjustment,
                                     roundingRadius = baseCutoutRoundingRadius, 
@@ -617,7 +616,6 @@ module block(
                             mb_base_cutout(
                                 grid = grid,
                                 baseSideLength = baseSideLength,
-                                objectSize = [objectSizeX, objectSizeY],
                                 baseHeight = resultingBaseHeight,
                                 sideAdjustment = sAdjustment,
                                 roundingRadius = baseCutoutRoundingRadius, 

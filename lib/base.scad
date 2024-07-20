@@ -17,7 +17,6 @@ module mb_slant_prism(side, l, w, h, inv){
 module mb_base_cutout(
     grid,
     baseSideLength,
-    objectSize,
     baseHeight,
     sideAdjustment, 
     roundingRadius, 
@@ -38,37 +37,49 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
+    objectSizeX = baseSideLength * (grid[0] + slanting(slanting[0]) + slanting(slanting[1]));
+    objectSizeY = baseSideLength * (grid[1] + slanting(slanting[2]) + slanting(slanting[3]));
+    objectSize=[objectSizeX, objectSizeY];
+
+    offsetX = -0.5* slanting(slanting[0]) * baseSideLength;
+    offsetY = -0.5* slanting(slanting[2]) * baseSideLength;
+
+    echo(slanting=slanting, offsetY = offsetY);
+
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
 
     function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (baseSideLength * slanting[side] + sideAdjustment[side])) + cutTolerance;
+    function slanting(s) = s > 0 ? 0 : s;
 
     difference(){
         union(){
-            /*
-            * Bottom Hole
-            */
-            color([0.953, 0.612, 0.071]) //f39c12
-            translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                mb_rounded_block(
-                    size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], 
-                    center = true, 
-                    radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
-                    resolution=roundingResolution
-                );    
+            translate([offsetX, offsetY, 0]){ 
+                /*
+                * Bottom Hole
+                */
+                color([0.953, 0.612, 0.071]) //f39c12
+                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                    mb_rounded_block(
+                        size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], 
+                        center = true, 
+                        radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                        resolution=roundingResolution
+                    );    
 
-            /*
-            * Clamp Skirt
-            */
-            color([0.902, 0.494, 0.133]) //e67e22
-            translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
-                mb_rounded_block(
-                    size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
-                    center = true, 
-                    radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
-                    resolution=roundingResolution
-                );
+                /*
+                * Clamp Skirt
+                */
+                color([0.902, 0.494, 0.133]) //e67e22
+                translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
+                    mb_rounded_block(
+                        size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
+                        center = true, 
+                        radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                        resolution=roundingResolution
+                    );
+            }
         }
 
         /*
