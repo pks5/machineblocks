@@ -51,7 +51,7 @@ module block(
         topPlateHelperThickness = 0.4,
 
         //Slanting
-        slanting = [0,0,0,0],
+        slanting = false,
         slantingLowerHeight = 2,
 
         //Stabilizers
@@ -278,9 +278,12 @@ module block(
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
 
-    function inRect(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]);
+    function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
 
-    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inRect(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
+    function slanting(s) = s < 0 ? 0 : s;
+    function inSlantedArea(a, b) = (slanting != false) && !inGridArea(a, b, [slanting(slanting[0]), slanting(slanting[2]), grid[0] - slanting(slanting[1]) - 1, grid[1] - slanting(slanting[3]) - 1]);
+
+    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
 
     function isCornerZone(value, i) = (value < maxPillarNonGap) || (value >= grid[i] - (maxPillarNonGap + 1)); 
     function isMiddleZone(value, i) = (grid[i] >= middlePillarGapLimit) && (value>=mid[i]-1) && (value<=mid[i]+1);
@@ -295,7 +298,7 @@ module block(
     
     function drawPillar(a, b) = !drawHoleZ(a, b) && ((pillars == "AUTO" && drawPillarAuto(a, b)) || (pillars != "AUTO" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawKnob(a, b) = ((a >= slanting[0]) && (a < grid[0] - slanting[1]) && (b >= slanting[2]) && (b < grid[1] - slanting[3])) 
+    function drawKnob(a, b) = !inSlantedArea(a, b) 
                                 && (!pit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
                                     && drawGridItem(knobs, a, b, 0, false); 
 
@@ -564,7 +567,7 @@ module block(
                             } //End Union of tubes, helpers, etc
 
                             //Cut off overlapping parts of tubes
-                            if((baseCutoutRoundingRadius != 0) || ((slanting[0] + slanting[1] + slanting[2] + slanting[3]) > 0)){
+                            if((baseCutoutRoundingRadius != 0) || (slanting != false)){
                                 mb_base_cutout(
                                     grid = grid,
                                     baseSideLength = baseSideLength,
