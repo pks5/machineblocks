@@ -19,7 +19,8 @@ block(
         knobTongueClampThickness = 0.1,
         baseRounding=true,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
-        baseCutoutRoundingRadius=[0,2.7,0,0]
+        baseCutoutRoundingRadius=[0,2.7,0,0],
+        previewQuality=0.5
     );
 
     block(
@@ -37,7 +38,8 @@ block(
         knobClampThickness = 0.1,
         baseRounding=true,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
-        baseCutoutRoundingRadius=[0,2.7,0,0]
+        baseCutoutRoundingRadius=[0,2.7,0,0],
+        previewQuality=0.5
     );
 
     }
@@ -56,7 +58,8 @@ if(parts == "TOP" || parts == "ALL"){
             knobTongueAdjustment = 0,
             baseCutoutType = "GROOVE",
             baseRounding=true,
-            baseRoundingRadius=[0,0,[0, 4,0,0]]
+            baseRoundingRadius=[0,0,[0, 4,0,0]],
+            previewQuality=0.5
         );
 
         block(
@@ -69,7 +72,8 @@ if(parts == "TOP" || parts == "ALL"){
             knobTongueAdjustment = -0.1,
             baseCutoutType = "GROOVE",
             baseRounding=true,
-            baseRoundingRadius=[0,0,[0, 4,0,0]]
+            baseRoundingRadius=[0,0,[0, 4,0,0]],
+            previewQuality=0.5
         ); 
     }
 }
