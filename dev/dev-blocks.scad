@@ -33,4 +33,4 @@ color("blue")
 
 color("green")
     translate([10, -80, 0])
-        block(grid=[3, 14], withAdhesionHelpers=true);
+        block(grid=[3, 14], adhesionHelpers=true);

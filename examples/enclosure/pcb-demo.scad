@@ -5,7 +5,7 @@ block(
     grid=[4,6],
     screwHolesZ = [[1, 0], [2,0], [1,5], [2,5]],
     knobs = false,
-    withPcb=true,
+    pcb=true,
     pcbDimensions=[40,30,3],
     pcbMountingType = "SCREWS",
     pcbOffset=[0, 1,0],

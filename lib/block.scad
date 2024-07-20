@@ -56,7 +56,7 @@ module block(
         slantingLowerHeight = 2,
 
         //Stabilizers
-        withStabilizerGrid = true,
+        stabilizerGrid = true,
         stabilizerGridOffset = 0.2,
         stabilizerGridHeight = 0.8,
         stabilizerGridThickness = 0.8,
@@ -119,28 +119,27 @@ module block(
         //Pit
         withPit=false,
         pitDepth = 0,
-        pitWallThickness = 0.333,
+        pitWallThickness = 0.333, //Unit: 1x1 Brick
         pitKnobs=true,
         pitWallGaps = [],
         
         //Text
         withText = false,
-        textFont = "Liberation Sans",
         text = "SCAD",
-        textSize = 4,
-        textDepth = -0.6,
         textSide = 0,
-        textOffset = [0, 0],
+        textDepth = -0.6,
+        textFont = "Liberation Sans",
+        textSize = 4,
         textSpacing = 1,
+        textOffset = [0, 0], //Unit: 1x1 Brick
 
         //SVG
-        withSvg = false,
-        svgFile = "",
-        svgDimensions = [100, 100],
-        svgDepth = 0.4,
-        svgScale = 1,
+        svg = "",
         svgSide = 5,
-        svgOffset = [0, 0],
+        svgDepth = 0.4,
+        svgDimensions = [100, 100],
+        svgScale = 1,
+        svgOffset = [0, 0], //Unit: 1x1 Brick
 
         //Screw Holes
         screwHolesZ = [],
@@ -158,7 +157,7 @@ module block(
         screwHoleYDepth = 4,
 
         //PCB
-        withPcb=false,
+        pcb=false,
         pcbMountingType = "CLIPS",
         pcbDimensions = [20, 30, 3],
         pcbOffset = [0, 0],
@@ -174,7 +173,7 @@ module block(
         alignUnadjusted = true,
         
         //Adhesion Helpers
-        withAdhesionHelpers = false,
+        adhesionHelpers = false,
         adhesionHelperHeight = 0.2,
         adhesionHelperThickness = 0.4,
         
@@ -265,6 +264,8 @@ module block(
     /*
     * START Functions
     */
+    function isEmptyString(s) = (s == undef) || len(s) == 0;
+
     function posX(a) = (a - offsetX) * baseSideLength;
     function posY(b) = (b - offsetY) * baseSideLength;
 
@@ -329,7 +330,7 @@ module block(
                                 /*
                                 * Adhesion Helpers
                                 */
-                                if(withAdhesionHelpers){
+                                if(adhesionHelpers){
                                     color([0.753, 0.224, 0.169]) //c0392b
                                     translate([0, 0, 0.5 * (adhesionHelperHeight - resultingBaseHeight)]){
                                         difference(){
@@ -392,7 +393,7 @@ module block(
                                 /*
                                 * Stabilizers
                                 */
-                                if(withStabilizerGrid){
+                                if(stabilizerGrid){
                                     difference(){
                                         union(){
                                             //Helpers X
@@ -715,12 +716,12 @@ module block(
                 /*
                 * SVG
                 */
-                if(withSvg && svgDepth > 0){
+                if(!isEmptyString(svg) && svgDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                             rotate(decoratorRotations[svgSide])
                                 mb_svg3d(
-                                    file = svgFile,
+                                    file = svg,
                                     orgWidth = svgDimensions[0],
                                     orgHeight = svgDimensions[1],
                                     depth = svgDepth,
@@ -851,7 +852,7 @@ module block(
                 }
 
                 //PCB
-                if(withPcb){
+                if(pcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
                         if(pcbMountingType == "CLIPS"){
                             mb_pcb_clips(
@@ -938,12 +939,12 @@ module block(
             /*
             * SVG Cutout
             */
-            if(withSvg && svgDepth < 0){
+            if(!isEmptyString(svg) && svgDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])
                             mb_svg3d(
-                                file = svgFile,
+                                file = svg,
                                 orgWidth = svgDimensions[0],
                                 orgHeight = svgDimensions[1],
                                 depth = 2 * abs(svgDepth),
@@ -955,7 +956,7 @@ module block(
             /*
             * Screw Holes Z
             */
-            if(withStabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
+            if(stabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
                 for (a = [ startX : 1 : endX ]){
                     for (b = [ startY : 1 : endY ]){
                         if(drawScrewHole(a, b, 0)){

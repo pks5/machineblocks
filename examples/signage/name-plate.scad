@@ -26,8 +26,7 @@ block(
     textSpacing=1.1,
     textOffset=[10/8, -0.6/8],
 
-    withSvg = true,
-    svgFile = "../../martian/martian-logo.svg",
+    svg = "../../martian/martian-logo.svg",
     svgDimensions = [640, 640],
     svgSide = 5,
     svgScale = 0.02,
@@ -51,8 +50,7 @@ block(
     textSpacing=1.1,
     textOffset=[5/8, -0.3/8],
 
-    withSvg = true,
-    svgFile = "../../martian/martian-logo.svg",
+    svg = "../../martian/martian-logo.svg",
     svgDimensions = [640, 640],
     svgSide = 5,
     svgScale = 0.01,

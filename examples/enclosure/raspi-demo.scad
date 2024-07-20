@@ -9,7 +9,7 @@ block(
     stabilizerExpansionOffset = 0,
     screwHolesZ = [[0, 1], [9,1], [0,6], [9,6]],
     knobs = false,
-    withPcb=true,
+    pcb=true,
     pcbDimensions=[40,30,3],
     pcbMountingType = "SCREWS",
     pcbScrewSockets = [[-25.93, 29.03], [22.83, 29.03], [-25.93, -28.97], [22.83, -28.97]],
