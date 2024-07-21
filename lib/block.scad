@@ -280,8 +280,8 @@ module block(
 
     function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
 
-    function slanting(s) = s < 0 ? 0 : s;
-    function inSlantedArea(a, b) = (slanting != false) && !inGridArea(a, b, [slanting(slanting[0]), slanting(slanting[2]), grid[0] - slanting(slanting[1]) - 1, grid[1] - slanting(slanting[3]) - 1]);
+    function slanting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
+    function inSlantedArea(a, b, inv) = (slanting != false) && !inGridArea(a, b, [slanting(slanting[0], inv), slanting(slanting[2], inv), grid[0] - slanting(slanting[1], inv) - (inv ? 2 : 1), grid[1] - slanting(slanting[3], inv) - (inv ? 2 : 1)]);
 
     function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
 
@@ -296,9 +296,11 @@ module block(
     
     function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
-    function drawPillar(a, b) = !drawHoleZ(a, b) && ((pillars == "AUTO" && drawPillarAuto(a, b)) || (pillars != "AUTO" && drawGridItem(pillars, a, b, 0, false)));
+    function drawPillar(a, b) = !drawHoleZ(a, b) 
+                                && !inSlantedArea(a, b, true) 
+                                && ((pillars == "AUTO" && drawPillarAuto(a, b)) || (pillars != "AUTO" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawKnob(a, b) = !inSlantedArea(a, b) 
+    function drawKnob(a, b) = !inSlantedArea(a, b, false) 
                                 && (!pit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
                                     && drawGridItem(knobs, a, b, 0, false); 
 
