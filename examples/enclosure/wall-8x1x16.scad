@@ -7,5 +7,5 @@ block(
     tongue = true,
     pitWallGaps= [[2,0,0]],
     screwHolesZ = [[0,0], [7,0]],
-    knobTongueClampThickness = 0.1
+    tongueClampThickness = 0.1
 );

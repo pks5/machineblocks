@@ -17,7 +17,7 @@ difference(){
         screwHoleZSize = 2,
         screwHolesY = [[0, 2], [0, 21]],
         screwHoleYSize = 2,
-        knobTongueClampThickness = 0.1,
+        tongueClampThickness = 0.1,
         topPlateHeight = 2.4
 
         );
@@ -57,8 +57,8 @@ if(parts == "TOP" || parts == "ALL"){
             pitWallGaps= [[3,0,0]],
             //screwHolesZ = [[0,0], [7,0]],
             //screwHoleZSize = 2,
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
             baseCutoutType = "GROOVE"
         );
 }

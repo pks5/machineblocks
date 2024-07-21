@@ -20,7 +20,7 @@ if(parts == "WALL" || parts == "ALL"){
                 screwHoleZSize = 2,
                 screwHolesY = [[0, 2], [0, 21]],
                 screwHoleYSize = 2,
-                knobTongueClampThickness = 0.1
+                tongueClampThickness = 0.1
             );
 
             block(
@@ -75,8 +75,8 @@ if(parts == "TOP" || parts == "ALL"){
             wallGapsX=[[0,0]],
             brickOffset=[0, 1.5, 0],
             pitWallGaps= [[2,0,0]],
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
             baseCutoutType = "GROOVE"
         );
 
@@ -86,8 +86,8 @@ if(parts == "TOP" || parts == "ALL"){
             wallGapsY=[[3,1]], 
             brickOffset=[-1.5, 0, 0],
             pitWallGaps= [[1,0,0]],
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = -0.1,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = -0.1,
             baseCutoutType = "GROOVE"
         ); 
     }

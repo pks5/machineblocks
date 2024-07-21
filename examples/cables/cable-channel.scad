@@ -5,7 +5,7 @@ block(
     grid=[4,2],
     pit = true,
     pitWallGaps= [[0,0,0], [1,0,0]],
-    knobTongueClampThickness = 0,
+    tongueClampThickness = 0,
     knobSize=5.1,
     pitWallThickness = 2.55
 );
@@ -15,8 +15,8 @@ block(
             baseLayers=1,
             grid=[4,2],
             pitWallGaps= [[0,0,0], [1,0,0]],
-            knobTongueClampThickness = 0,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0,
+            tongueAdjustment = 0,
             baseCutoutType = "GROOVE",
             knobSize=5.1,
             pitWallThickness = 2.55

@@ -10,5 +10,5 @@ block(
             screwHolesX=[[0,1], [1,1]],
             //screwHolesZ = [[0,0], [7,0]],
             //screwHoleSize = 2,
-            knobTongueClampThickness = 0.1
+            tongueClampThickness = 0.1
         );

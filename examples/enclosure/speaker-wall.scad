@@ -31,7 +31,7 @@ difference(){
             screwHoleZSize = 2,
             screwHolesY = [[0, 2, mountingSide], [0, 21, mountingSide]],
             screwHoleYSize = 2,
-            knobTongueClampThickness = 0.1,
+            tongueClampThickness = 0.1,
             wallGapsX=[[0,1], [7,1]]
         );
 
@@ -48,7 +48,7 @@ difference(){
             screwHoleXSize = 2,
             screwHolesY = mountingSide == 1 ? [[0, 2, 1], [0, 21, 1], [3, 2, 1], [3, 21, 1]] : [],
             screwHoleYSize = 2,
-            knobTongueClampThickness = 0.1,
+            tongueClampThickness = 0.1,
             brickOffset=[3.5,1.5,0],
             wallGapsY=[[0,0]]
         );
@@ -65,7 +65,7 @@ difference(){
             screwHoleXSize = 2,
             screwHolesY = mountingSide == 1 ? [] : [[0, 2, 0], [0, 21, 0], [3, 2, 0], [3, 21, 0]],
             screwHoleYSize = 2,
-            knobTongueClampThickness = 0.1,
+            tongueClampThickness = 0.1,
             brickOffset=[-3.5,1.5,0],
             wallGapsY=[[0,1]]
         );
@@ -97,8 +97,8 @@ if(parts == "TOP" || parts == "ALL"){
             pitWallGaps= [[3,0,0]],
             //screwHolesZ = [[0,0], [7,0]],
             //screwHoleSize = 2,
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
             baseCutoutType = "GROOVE",
             wallGapsX=[[0,1], [7,1]]
         );
@@ -111,8 +111,8 @@ if(parts == "TOP" || parts == "ALL"){
             //screwHoleZSize = 2,
             screwHolesY = [[0, 2], [0, 21]],
             screwHoleYSize = 2,
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
             brickOffset=[3.5,1.5,0],
             baseCutoutType = "GROOVE",
             wallGapsY=[[0,0]]
@@ -126,8 +126,8 @@ if(parts == "TOP" || parts == "ALL"){
             //screwHoleZSize = 2,
             screwHolesY = [[0, 2], [0, 21]],
             screwHoleYSize = 2,
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
             brickOffset=[-3.5,1.5,0],
             baseCutoutType = "GROOVE",
             wallGapsY=[[0,1]]

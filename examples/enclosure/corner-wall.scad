@@ -1,6 +1,6 @@
 include <../../lib/block.scad>;
 
-parts = "WALL";
+parts = "ALL";
 
 
 if(parts == "WALL" || parts == "ALL"){
@@ -15,11 +15,11 @@ block(
         pitWallGaps = [[2,0,0]],
 
         pitRoundingRadius=[0, 1.2, 0, 0],
-        screwHolesZ = [[0,0], [2,0]],
-        screwHoleZSize = 2,
-        screwHolesY = [[0, 2], [0, 21]],
-        screwHoleYSize = 2.4,
-        knobTongueClampThickness = 0.1,
+        // screwHolesZ = [[0,0], [2,0]],
+        // screwHoleZSize = 2,
+        // screwHolesY = [[0, 2], [0, 21]],
+        // screwHoleYSize = 2.4,
+        tongueClampThickness = 0.1,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
         baseCutoutRoundingRadius=[0,2.7,0,0],
         previewQuality=1
@@ -35,10 +35,10 @@ block(
         tongueRoundingRadius = [0.5, 2.7, 0.5, 0.5],
         pitWallGaps= [[1,0,0]],
         pitRoundingRadius=[0, 1.2, 0, 0],
-        screwHolesZ = [[0,0], [0,2]],
-        screwHoleZSize = 2,
-        screwHolesX = [[0, 2], [0, 21]],
-        screwHoleXSize = 2.4,
+        // screwHolesZ = [[0,0], [0,2]],
+        // screwHoleZSize = 2,
+        // screwHolesX = [[0, 2], [0, 21]],
+        // screwHoleXSize = 2.4,
         knobClampThickness = 0.1,
         baseRoundingRadius=[0,0,[0, 4,0,0]],
         baseCutoutRoundingRadius=[0,2.7,0,0],
@@ -57,8 +57,10 @@ if(parts == "TOP" || parts == "ALL"){
             wallGapsX=[[0,0]],
             brickOffset=[0, 1, 0],
             pitWallGaps= [[2,0,0]],
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = 0,
+            pitRoundingRadius=[0, 1.2, 0, 0],
+            tongueClampThickness = 0.1,
+            tongueAdjustment = 0,
+            tongueRoundingRadius = [0.5, 2.7, 0.5, 0.5],
             baseCutoutType = "GROOVE",
             baseRoundingRadius=[0,0,[0, 4,0,0]],
             previewQuality=0.5
@@ -70,8 +72,10 @@ if(parts == "TOP" || parts == "ALL"){
             wallGapsY=[[2,1]], 
             brickOffset=[-1, 0, 0],
             pitWallGaps= [[1,0,0]],
-            knobTongueClampThickness = 0.1,
-            knobTongueAdjustment = -0.1,
+            pitRoundingRadius=[0, 1.2, 0, 0],
+            tongueClampThickness = 0.1,
+            tongueAdjustment = -0.1,
+            tongueRoundingRadius = [0.5, 2.7, 0.5, 0.5],
             baseCutoutType = "GROOVE",
             baseRoundingRadius=[0,0,[0, 4,0,0]],
             previewQuality=0.5
