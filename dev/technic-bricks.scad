@@ -7,7 +7,7 @@ translate([-26, -20, 0])
         baseLayers=3, 
         grid=[6,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 translate([-26, -40, 0])
@@ -15,7 +15,7 @@ translate([-26, -40, 0])
         baseLayers=3, 
         grid=[4,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 translate([-26, -60, 0])
@@ -23,7 +23,7 @@ translate([-26, -60, 0])
         baseLayers=3, 
         grid=[2,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 
@@ -66,7 +66,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[2,1],
                 center=false,
-                withHolesX=true,
+                holesX=true,
                 knobType = "TECHNIC"
             );
                 
@@ -75,7 +75,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[4,1],
                 center=false,
-                withHolesX=true,
+                holesX=true,
                 knobType = "TECHNIC"
             );
                 
@@ -84,7 +84,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[6,1],
                 center=false,
-                withHolesX=true,
+                holesX=true,
                 knobType = "TECHNIC"
             );
             
@@ -93,7 +93,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[8,1],
                 center=false,
-                withHolesX=true,
+                holesX=true,
                 knobType = "TECHNIC"
             );
             
@@ -102,7 +102,7 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[16,1],
                 center=false,
-                withHolesX=true,
+                holesX=true,
                 knobType = "TECHNIC"
             );
     }

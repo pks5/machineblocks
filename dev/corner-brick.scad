@@ -23,7 +23,7 @@ translate([50,10,0]){
         grid=[7,1],
         baseLayers = 6,
         knobType = "TECHNIC",
-        withHolesX=true
+        holesX=true
     );
 }
 

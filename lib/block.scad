@@ -79,8 +79,8 @@ module block(
         tubeClampThickness = 0.1,
 
         //Holes
-        withHolesX = false,
-        withHolesY = false,
+        holesX = false,
+        holesY = false,
         holeXYSize = 5.1,
         holeXYInsetSize = 6.2,
         holeXYInsetDepth = 0.9,
@@ -308,15 +308,17 @@ module block(
 
     function knobZ(a, b) = inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
 
+    function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
+    function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
     function drawHoleZ(a, b) = drawGridItem(holesZ, a, b, 0, false); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
-    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && !withHolesX && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holesX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
     
-    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && !withHolesY && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
+    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
     function drawScrewHole(a, b, i) = screwHolesZ == "ALL" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHole(a, b, i+1)));
 
@@ -498,27 +500,33 @@ module block(
                                 }
                                 
                                 //X-Holes Outer
-                                if(withHolesX){
+                                if(holesX != false){
                                     color([0.953, 0.612, 0.071]) //f39c12
-                                    for (a = [ startX : 1 : endX - 1 ]){
-                                        translate([posX(a + 0.5), 0, xyHolesZ]){
-                                            rotate([90, 0, 0]){ 
-                                                cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                    for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                                        for (a = [ startX : 1 : endX - 1 ]){
+                                            if(drawHoleX(a, r)){
+                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                                    rotate([90, 0, 0]){ 
+                                                        cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                    }
+                                                };
                                             }
-                                        };
+                                        }
                                     }
                                 }
                                 
                                 //Y-Holes Outer
-                                if(withHolesY){
+                                if(holesY != false){
                                     color([0.953, 0.612, 0.071]) //f39c12
                                     for(r = [ 0 : 1 : holeXYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
-                                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
-                                                rotate([0, 90, 0]){ 
-                                                    cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                            if(drawHoleY(b, r)){
+                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                                    rotate([0, 90, 0]){ 
+                                                        cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                    };
                                                 };
-                                            };
+                                            }
                                         }
                                     }
                                 }
@@ -898,37 +906,43 @@ module block(
             } //End union
 
             //Cut X-Holes
-            if(withHolesX){
+            if(holesX != false){
                 color([0.945, 0.769, 0.059]) //f1c40f
-                for (a = [ startX : 1 : endX - 1 ]){
-                    translate([posX(a + 0.5), 0, xyHolesZ]){
-                        rotate([90, 0, 0]){ 
-                            cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                            
-                            translate([0, 0, 0.5 * objectSizeY])
-                                cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                            translate([0, 0, -0.5 * objectSizeY])
-                                cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                        };
-                    };
+                for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                    for (a = [ startX : 1 : endX - 1 ]){
+                        if(drawHoleX(a, r)){
+                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                rotate([90, 0, 0]){ 
+                                    cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    
+                                    translate([0, 0, 0.5 * objectSizeY])
+                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    translate([0, 0, -0.5 * objectSizeY])
+                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                };
+                            };
+                        }
+                    }
                 }
             }
             
             //Cut Y-Holes
-            if(withHolesY){
+            if(holesY != false){
                 color([0.945, 0.769, 0.059]) //f1c40f
                 for(r = [ 0 : 1 : holeXYMaxRows-1]){
                     for (b = [ startY : 1 : endY - 1 ]){
-                        translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
-                            rotate([0, 90, 0]){ 
-                                cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                
-                                translate([0, 0, 0.5 * objectSizeX])
-                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
-                                translate([0, 0, -0.5 * objectSizeX])
-                                    cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                        if(drawHoleY(b, r)){
+                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                rotate([0, 90, 0]){ 
+                                    cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    
+                                    translate([0, 0, 0.5 * objectSizeX])
+                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    translate([0, 0, -0.5 * objectSizeX])
+                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                };
                             };
-                        };
+                        }
                     }
                 }
             }
