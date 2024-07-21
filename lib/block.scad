@@ -73,7 +73,8 @@ module block(
         pinClampThickness = 0.1,
 
         //Tubes
-        tubeXYSize = 6.4,
+        tubeXSize = 6.4,
+        tubeYSize = 6.4,
         tubeZSize = 6.4,
         tubeHoleClampThickness = 0.1,
         tubeClampThickness = 0.1,
@@ -81,12 +82,20 @@ module block(
         //Holes
         holesX = false,
         holesY = false,
-        holeXYSize = 5.1,
-        holeXYInsetSize = 6.2,
-        holeXYInsetDepth = 0.9,
-        holeXYGridOffset = 5.7,
-        holeXYGridSize = 9.6,
-        holeXYTopMargin = 0.8,
+        
+        holeXSize = 5.1,
+        holeXInsetSize = 6.2,
+        holeXInsetDepth = 0.9,
+        holeXGridOffset = 5.7,
+        holeXGridSize = 9.6,
+        holeXTopMargin = 0.8,
+
+        holeYSize = 5.1,
+        holeYInsetSize = 6.2,
+        holeYInsetDepth = 0.9,
+        holeYGridOffset = 5.7,
+        holeYGridSize = 9.6,
+        holeYTopMargin = 0.8,
 
         holesZ = false,
         holeZSize = 5.1,
@@ -223,13 +232,15 @@ module block(
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
-    xyHolesZ = -0.5 * resultingBaseHeight + holeXYGridOffset;
     xyScrewHolesZ = -0.5 * resultingBaseHeight + 0.5 * baseHeightOriginal;
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
-    //holeXY
-    holeXYBottomMargin = holeXYGridOffset - 0.5*holeXYInsetSize;
-    holeXYMaxRows = ceil((resultingBaseHeight - holeXYBottomMargin - holeXYTopMargin) / holeXYGridSize); 
+    //Holes XY
+    holeXBottomMargin = holeXGridOffset - 0.5*holeXInsetSize;
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / holeXGridSize); 
+
+    holeYBottomMargin = holeYGridOffset - 0.5*holeYInsetSize;
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / holeYGridSize); 
 
     echo(
         grid=grid,
@@ -245,12 +256,7 @@ module block(
         baseClampWallThickness = baseClampWallThickness,
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
-        xyHolesZ = xyHolesZ,
-        xyHolesOffset = 0.5*resultingBaseHeight + 0.9,
-        xyScrewHolesZ = xyScrewHolesZ,
-        holeXYTopMargin = holeXYTopMargin,
-        holeXYBottomMargin = holeXYBottomMargin, 
-        holeXYMaxRows = holeXYMaxRows
+        xyScrewHolesZ = xyScrewHolesZ
     );
     
     //Decorator Rotations
@@ -502,12 +508,12 @@ module block(
                                 //X-Holes Outer
                                 if(holesX != false){
                                     color([0.953, 0.612, 0.071]) //f39c12
-                                    for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                                    for(r = [ 0 : 1 : holeXMaxRows-1]){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawHoleX(a, r)){
-                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffset + r * holeXGridSize]){
                                                     rotate([90, 0, 0]){ 
-                                                        cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                        cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     }
                                                 };
                                             }
@@ -518,12 +524,12 @@ module block(
                                 //Y-Holes Outer
                                 if(holesY != false){
                                     color([0.953, 0.612, 0.071]) //f39c12
-                                    for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                                    for(r = [ 0 : 1 : holeYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleY(b, r)){
-                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffset + r * holeYGridSize]){
                                                     rotate([0, 90, 0]){ 
-                                                        cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeXYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
+                                                        cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     };
                                                 };
                                             }
@@ -908,17 +914,17 @@ module block(
             //Cut X-Holes
             if(holesX != false){
                 color([0.945, 0.769, 0.059]) //f1c40f
-                for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                for(r = [ 0 : 1 : holeXMaxRows-1]){
                     for (a = [ startX : 1 : endX - 1 ]){
                         if(drawHoleX(a, r)){
-                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffset + r * holeXGridSize]){
                                 rotate([90, 0, 0]){ 
-                                    cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
                                     translate([0, 0, 0.5 * objectSizeY])
-                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * holeXInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     translate([0, 0, -0.5 * objectSizeY])
-                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * holeXInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                 };
                             };
                         }
@@ -929,17 +935,17 @@ module block(
             //Cut Y-Holes
             if(holesY != false){
                 color([0.945, 0.769, 0.059]) //f1c40f
-                for(r = [ 0 : 1 : holeXYMaxRows-1]){
+                for(r = [ 0 : 1 : holeYMaxRows-1]){
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleY(b, r)){
-                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeXYGridOffset + r * holeXYGridSize]){
+                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffset + r * holeYGridSize]){
                                 rotate([0, 90, 0]){ 
-                                    cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeXYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                    cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
                                     translate([0, 0, 0.5 * objectSizeX])
-                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeYInsetDepth, r=0.5 * holeYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     translate([0, 0, -0.5 * objectSizeX])
-                                        cylinder(h=2*holeXYInsetDepth, r=0.5 * holeXYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeYInsetDepth, r=0.5 * holeYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                 };
                             };
                         }
