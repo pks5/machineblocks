@@ -38,7 +38,7 @@ color("green")
         block(baseLayers=9, grid=[1,6], withHolesY=true, knobType = "TECHNIC");
 
 color("green")
-    translate([-200, -110, 0])
+    translate([-50, -110, 0])
         block(baseLayers=9, grid=[6,1], withHolesX=true, knobType = "TECHNIC");        
       
   

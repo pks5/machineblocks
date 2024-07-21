@@ -37,12 +37,12 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    objectSizeX = baseSideLength * (grid[0] + slanting(slanting[0]) + slanting(slanting[1]));
-    objectSizeY = baseSideLength * (grid[1] + slanting(slanting[2]) + slanting(slanting[3]));
+    objectSizeX = baseSideLength * (grid[0] + (slanting != false ? slanting(slanting[0]) + slanting(slanting[1]) : 0)); //todo support slanting undef
+    objectSizeY = baseSideLength * (grid[1] + (slanting != false ? slanting(slanting[2]) + slanting(slanting[3]) : 0));
     objectSize=[objectSizeX, objectSizeY];
 
-    offsetX = -0.5* slanting(slanting[0]) * baseSideLength;
-    offsetY = -0.5* slanting(slanting[2]) * baseSideLength;
+    offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * baseSideLength;
+    offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * baseSideLength;
 
     echo(slanting=slanting, offsetY = offsetY);
 
@@ -85,28 +85,30 @@ module mb_base_cutout(
         /*
         * Slanting
         */
-        if(slanting[0] > 0){
-            slanting0 = slantingSize(0);
-            translate([-0.5 * (objectSize[0] - 2*wallThickness - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                mb_slant_prism(0, slanting0, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-        }
+        if(slanting != false){
+            if(slanting[0] > 0){
+                slanting0 = slantingSize(0);
+                translate([-0.5 * (objectSize[0] - 2*wallThickness - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                    mb_slant_prism(0, slanting0, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+            }
 
-        if(slanting[1] > 0){
-            slanting1 = slantingSize(1);
-            translate([0.5 * (objectSize[0] - 2*wallThickness - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                mb_slant_prism(1, slanting1, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-        }
+            if(slanting[1] > 0){
+                slanting1 = slantingSize(1);
+                translate([0.5 * (objectSize[0] - 2*wallThickness - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                    mb_slant_prism(1, slanting1, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+            }
 
-        if(slanting[2] > 0){
-            slanting2 = slantingSize(2);
-            translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
-                mb_slant_prism(2, slanting2, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-        }
-        
-        if(slanting[3] > 0){
-            slanting3 = slantingSize(3);
-            translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
-                mb_slant_prism(3, slanting3, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+            if(slanting[2] > 0){
+                slanting2 = slantingSize(2);
+                translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                    mb_slant_prism(2, slanting2, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+            }
+            
+            if(slanting[3] > 0){
+                slanting3 = slantingSize(3);
+                translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                    mb_slant_prism(3, slanting3, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+            }
         }
     }
     
@@ -163,28 +165,30 @@ module mb_base(
                 /*
                 * Slanting
                 */
-                if(slanting[0] != 0){
-                    slanting0 = slantingSize(0);
-                    translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
-                        mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
-                }
+                if(slanting != false){
+                    if(slanting[0] != 0){
+                        slanting0 = slantingSize(0);
+                        translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
+                            mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
+                    }
 
-                if(slanting[1] != 0){
-                    slanting1 = slantingSize(1);
-                    translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
-                        mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
-                }
+                    if(slanting[1] != 0){
+                        slanting1 = slantingSize(1);
+                        translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
+                            mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
+                    }
 
-                if(slanting[2] != 0){
-                    slanting2 = slantingSize(2);
-                    translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
-                        mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
-                }
+                    if(slanting[2] != 0){
+                        slanting2 = slantingSize(2);
+                        translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
+                            mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
+                    }
 
-                if(slanting[3] != 0){
-                    slanting3 = slantingSize(3);
-                    translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
-                        mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
+                    if(slanting[3] != 0){
+                        slanting3 = slantingSize(3);
+                        translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
+                            mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
+                    }
                 }
             }
         }
