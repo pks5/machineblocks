@@ -13,7 +13,7 @@ union(){
 block(baseLayers=3, grid=grid, knobs=false);
 
 
-block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE",withText=true,
+block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE",
     text="\ue5aa",
     textSide=2,
     textSize=40,

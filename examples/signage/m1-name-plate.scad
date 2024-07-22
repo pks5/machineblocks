@@ -17,7 +17,6 @@ block(
     grid=[14,3], 
     knobs=false,
     wallThickness=1.4,
-    withText=true, 
     textSize=12, 
     textSide=5,
     sideAdjustment=[0,0,0,0],

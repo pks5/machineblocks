@@ -123,7 +123,7 @@ module block(
         tongueAdjustment = -0.1,
         tongueClampHeight = 0.8,
         tongueClampThickness = 0,
-        tongueGrooveDepth = 2.6, //Rename to tongueGrooveDepth
+        tongueGrooveDepth = 2.6,
         
         //Pit
         pit=false,
@@ -134,7 +134,6 @@ module block(
         pitWallGaps = [],
         
         //Text
-        withText = false,
         text = "SCAD",
         textSide = 0,
         textDepth = -0.6,
@@ -725,7 +724,7 @@ module block(
                 /*
                 * Text
                 */
-                if(withText && textDepth > 0){
+                if(!isEmptyString(text) && textDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
@@ -970,7 +969,7 @@ module block(
             /*
             * Text Cutout
             */
-            if(withText && textDepth < 0){
+            if(!isEmptyString(text) && textDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])

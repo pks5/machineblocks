@@ -78,7 +78,6 @@ difference(){
             knobs = false,
             brickOffset=[0,1.5,0],
 
-            withText=true, 
             textSize=6, 
             textSide=5,
             text="martian", 

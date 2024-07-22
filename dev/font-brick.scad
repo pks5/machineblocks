@@ -16,7 +16,6 @@ include <../lib/block.scad>;
 block(
     baseLayers=6, 
     grid=[4,4], 
-    withText=true, 
     textSize=6, 
     textSide=5,
     sideAdjustment=[0,0,0,0],

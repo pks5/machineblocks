@@ -15,7 +15,6 @@ translate([0, 50, 0])
         grid=[6,6],
         baseCutoutType="GROOVE",
         knobs=false,
-        withText=true,
         textSide=5,
         textSize=10,
         textFont="OldSansBlack",

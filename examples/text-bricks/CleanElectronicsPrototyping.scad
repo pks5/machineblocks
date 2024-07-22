@@ -16,7 +16,6 @@ include <../../lib/block.scad>;
 block(
     grid=[4,2], 
     knobs=false,
-    withText=true, 
     textSize=7, 
     textSide=5,
     sideAdjustment=[0,0,0,0],
@@ -30,7 +29,6 @@ translate([0, -20, 0])
 block(
     grid=[8,2], 
     knobs=false,
-    withText=true, 
     textSize=7, 
     textSide=5,
     sideAdjustment=[0,0,0,0],
@@ -44,7 +42,6 @@ translate([0, -40, 0])
 block(
     grid=[10,2], 
     knobs=false,
-    withText=true, 
     textSize=7, 
     textSide=5,
     sideAdjustment=[0,0,0,0],

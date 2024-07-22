@@ -141,7 +141,6 @@ difference(){
             knobs = false,
             sideAdjustment=[0,0,0,0],
 
-            withText=true, 
             textSize=6, 
             textSide=5,
             text="martian", 

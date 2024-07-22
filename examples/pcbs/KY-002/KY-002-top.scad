@@ -18,7 +18,6 @@ pcb_block(
     top=true, 
     brickHeight=2, 
     grid=[3,4],
-    withText=true, 
     text="\uf6de",
     textFont="Font Awesome 6 Free Solid"
 );

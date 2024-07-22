@@ -6,7 +6,6 @@ block(
     knobs=false,
     tongue=true,
     pit=true,
-    withText=true,
     textSize=10,
     textFont="OldSansBlack",
     textDepth=-0.8,

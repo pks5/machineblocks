@@ -19,7 +19,6 @@ difference(){
         top=true, 
         brickHeight=3, 
         grid=[3,6],
-        withText=true, 
         text="\uf06d",
         textFont="Font Awesome 6 Free Solid",
         textSize=7,

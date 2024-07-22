@@ -16,7 +16,6 @@ include <../../lib/block.scad>;
 block(
     grid=[10,2], 
     knobs=false,
-    withText=true, 
     textSize=7, 
     textSide=5,
     sideAdjustment=[0,0,0,0],

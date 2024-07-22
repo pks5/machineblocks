@@ -12,7 +12,6 @@ block(
     svgSide=5,
     svgDepth=0.6,
     svgOffset=[5,1.5],
-    withText=true,
     textFont="RBNo3.1 Bold",
     text="MachineBlocks.com",
     textSide=5,
