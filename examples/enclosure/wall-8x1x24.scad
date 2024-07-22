@@ -2,10 +2,12 @@ include <../../lib/block.scad>;
 include <../../lib/socket.scad>;
 
 parts = "ALL";
+heightLayers = 23;
+fromTop = 4;
 
 if(parts == "WALL" || parts == "ALL"){
     block(
-        baseLayers=23,
+        baseLayers=heightLayers,
         grid=[8,1],
         pit = true,
         tongue = true,
@@ -22,10 +24,16 @@ if(parts == "WALL" || parts == "ALL"){
         grid=[2,2],
         knobs = [[0,1,1,1]],
         baseCutoutType = "NONE",
-        brickOffset=[0,0.5,13],
+        brickOffset=[0,0.5, heightLayers - 6 - fromTop],
         slanting=[0,0,0,-2]
-        //screwHolesX=[[0,9,1],[1,9,1],[0,7,1],[1,7,1],[0,5,1],[1,5,1], [0,3,1],[1,3,1],[0,1,1],[1,1,1]],
-        //screwHoleXSize=2.0
+    );
+
+    block(
+        baseLayers = 1,
+        grid=[2,1],
+        knobs = false,
+        baseCutoutType = "NONE",
+        brickOffset=[0,0, heightLayers - fromTop]
     );
 }
 
