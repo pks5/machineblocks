@@ -19,11 +19,11 @@ use <pcb.scad>;
 module block(
         //Grid
         grid = [1, 1],
-
+        baseSideLength = 8.0, //TODO Rename to gridSizeXY
+        gridSizeZ = 3.2,
+        
         //Base
-        baseSideLength = 8.0,
         baseHeight = 3.2,
-        baseHeightOriginal = 3.2,
         baseLayers = 1,
         baseCutoutType = "CLASSIC",
         baseCutoutMinDepth = 2.6,
@@ -86,15 +86,15 @@ module block(
         holeXSize = 5.1,
         holeXInsetSize = 6.2,
         holeXInsetDepth = 0.9,
-        holeXGridOffset = 5.7,
-        holeXGridSize = 9.6,
+        holeXGridOffsetZ = 5.7,
+        holeXGridSizeZ = 9.6,
         holeXTopMargin = 0.8,
 
         holeYSize = 5.1,
         holeYInsetSize = 6.2,
         holeYInsetDepth = 0.9,
-        holeYGridOffset = 5.7,
-        holeYGridSize = 9.6,
+        holeYGridOffsetZ = 5.7,
+        holeYGridSizeZ = 9.6,
         holeYTopMargin = 0.8,
 
         holesZ = false,
@@ -213,7 +213,7 @@ module block(
     //Calculate Brick Offset
     brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
     brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
-    brickOffsetZ = brickOffset[2] * baseHeightOriginal + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
+    brickOffsetZ = brickOffset[2] * gridSizeZ + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
@@ -232,15 +232,15 @@ module block(
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
-    xyScrewHolesZ = -0.5 * resultingBaseHeight + 0.5 * baseHeightOriginal;
+    xyScrewHolesZ = -0.5 * resultingBaseHeight + 0.5 * gridSizeZ;
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     //Holes XY
-    holeXBottomMargin = holeXGridOffset - 0.5*holeXInsetSize;
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / holeXGridSize); 
+    holeXBottomMargin = holeXGridOffsetZ - 0.5*holeXInsetSize;
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / holeXGridSizeZ); 
 
-    holeYBottomMargin = holeYGridOffset - 0.5*holeYInsetSize;
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / holeYGridSize); 
+    holeYBottomMargin = holeYGridOffsetZ - 0.5*holeYInsetSize;
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / holeYGridSizeZ); 
 
     echo(
         grid=grid,
@@ -334,7 +334,7 @@ module block(
 
     function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal * baseSideLength;
     function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical*baseSideLength : 0);
-    function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical * baseHeightOriginal;
+    function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical * gridSizeZ;
     /*
     * END Functions
     */
@@ -511,7 +511,7 @@ module block(
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawHoleX(a, r)){
-                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffset + r * holeXGridSize]){
+                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ]){
                                                     rotate([90, 0, 0]){ 
                                                         cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     }
@@ -527,7 +527,7 @@ module block(
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleY(b, r)){
-                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffset + r * holeYGridSize]){
+                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ]){
                                                     rotate([0, 90, 0]){ 
                                                         cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     };
@@ -917,7 +917,7 @@ module block(
                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                     for (a = [ startX : 1 : endX - 1 ]){
                         if(drawHoleX(a, r)){
-                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffset + r * holeXGridSize]){
+                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ]){
                                 rotate([90, 0, 0]){ 
                                     cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
@@ -938,7 +938,7 @@ module block(
                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleY(b, r)){
-                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffset + r * holeYGridSize]){
+                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ]){
                                 rotate([0, 90, 0]){ 
                                     cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
@@ -1021,7 +1021,7 @@ module block(
             for (b = [ 0 : 1 : len(screwHolesX) - 1]){
                 for (s = [ 0 : 1 : 1]){
                     if(screwHolesX[b][2] == undef || screwHolesX[b][2] == s){
-                        translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * baseHeightOriginal])
+                        translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * gridSizeZ])
                             rotate([90, 0, 0])
                                 cylinder(h = screwHoleXDepth + cutOffset, r = 0.5*screwHoleXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                     }
@@ -1034,7 +1034,7 @@ module block(
             for (b = [ 0 : 1 : len(screwHolesY) - 1]){
                 for (s = [ 0 : 1 : 1]){
                     if(screwHolesY[b][2] == undef || screwHolesY[b][2] == s){
-                        translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * baseHeightOriginal])
+                        translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * gridSizeZ])
                             rotate([0, 90, 0])
                                 cylinder(h = screwHoleYDepth + cutOffset, r = 0.5*screwHoleYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                     }
