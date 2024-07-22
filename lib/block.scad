@@ -134,7 +134,7 @@ module block(
         pitWallGaps = [],
         
         //Text
-        text = "SCAD",
+        text = "",
         textSide = 0,
         textDepth = -0.6,
         textFont = "Liberation Sans",
