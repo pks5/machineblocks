@@ -21,12 +21,13 @@ module block(
         grid = [1, 1],
         baseSideLength = 8.0, //TODO Rename to gridSizeXY
         gridSizeZ = 3.2,
+        brickOffset = [0, 0, 0], //TODO Rename to gridAlignment
         
         //Base
         baseHeight = 3.2,
         baseLayers = 1,
         baseCutoutType = "CLASSIC",
-        baseCutoutMinDepth = 2.6,
+        baseCutoutMinDepth = 2.4,
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 0.8,
         baseClampThickness = 0.1,
@@ -44,7 +45,7 @@ module block(
         wallGapsY = [],
         
         //Top Plate
-        topPlateHeight = 0.6,
+        topPlateHeight = 0.8,
         topPlateHelpers = true,
         topPlateHelperOffset = 0.2,
         topPlateHelperHeight = 0.2,
@@ -84,14 +85,14 @@ module block(
         holesY = false,
         
         holeXSize = 5.1,
-        holeXInsetSize = 6.2,
+        holeXInsetThickness = 0.55,
         holeXInsetDepth = 0.9,
         holeXGridOffsetZ = 5.7,
         holeXGridSizeZ = 9.6,
         holeXTopMargin = 0.8,
 
         holeYSize = 5.1,
-        holeYInsetSize = 6.2,
+        holeYInsetThickness = 0.55,
         holeYInsetDepth = 0.9,
         holeYGridOffsetZ = 5.7,
         holeYGridSizeZ = 9.6,
@@ -123,7 +124,7 @@ module block(
         tongueAdjustment = -0.1,
         tongueClampHeight = 0.8,
         tongueClampThickness = 0,
-        tongueGrooveDepth = 2.6,
+        tongueGrooveDepth = 2.4,
         
         //Pit
         pit=false,
@@ -176,7 +177,6 @@ module block(
         pcbScrewSockets = [],
         
         //Alignment
-        brickOffset = [0, 0, 0],
         center = true,
         alignBottom = true, //Whether the brick should be always aligned on floor
         alignIgnoreAdjustment = true, //Whether sideAdjustment should be ignored when aligning the brick
@@ -235,10 +235,10 @@ module block(
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     //Holes XY
-    holeXBottomMargin = holeXGridOffsetZ - 0.5*holeXInsetSize;
+    holeXBottomMargin = holeXGridOffsetZ - 0.5*(holeXSize + 2*holeXInsetThickness);
     holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / holeXGridSizeZ); 
 
-    holeYBottomMargin = holeYGridOffsetZ - 0.5*holeYInsetSize;
+    holeYBottomMargin = holeYGridOffsetZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / holeYGridSizeZ); 
 
     echo(
@@ -325,7 +325,7 @@ module block(
     
     function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
-    function drawScrewHole(a, b, i) = screwHolesZ == "ALL" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHole(a, b, i+1)));
+    function drawScrewHoleZ(a, b, i) = screwHolesZ == "ALL" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHoleZ(a, b, i+1)));
 
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -438,7 +438,7 @@ module block(
                                             */
                                             for (a = [ startX : 1 : endX ]){
                                                 for (b = [ startY : 1 : endY ]){
-                                                    if(drawScrewHole(a, b, 0)){
+                                                    if(drawScrewHoleZ(a, b, 0)){
                                                         translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
                                                             cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
                                                         translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
@@ -921,9 +921,9 @@ module block(
                                     cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
                                     translate([0, 0, 0.5 * objectSizeY])
-                                        cylinder(h=2*holeXInsetDepth, r=0.5 * holeXInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     translate([0, 0, -0.5 * objectSizeY])
-                                        cylinder(h=2*holeXInsetDepth, r=0.5 * holeXInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                 };
                             };
                         }
@@ -942,9 +942,9 @@ module block(
                                     cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
                                     translate([0, 0, 0.5 * objectSizeX])
-                                        cylinder(h=2*holeYInsetDepth, r=0.5 * holeYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     translate([0, 0, -0.5 * objectSizeX])
-                                        cylinder(h=2*holeYInsetDepth, r=0.5 * holeYInsetSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
+                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                 };
                             };
                         }
@@ -1006,8 +1006,8 @@ module block(
             if(stabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
                 for (a = [ startX : 1 : endX ]){
                     for (b = [ startY : 1 : endY ]){
-                        if(drawScrewHole(a, b, 0)){
-                            translate([posX(a), posY(b), 0])
+                        if(drawScrewHoleZ(a, b, 0)){
+                            translate([posX(a), posY(b), 0.5*knobHeight])
                                 cylinder(h = (resultingBaseHeight + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                         } 
                     }

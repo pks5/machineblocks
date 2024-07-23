@@ -78,7 +78,6 @@ module mb_roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, res
 }
 
 module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, resolution = 20) {
-	// If single value, convert to [x, y, z] vector
 	size = (size[0] == undef) ? [size, size, size] : size;
 
 	obj_translate = (center == false) ?
@@ -89,7 +88,7 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 		];
 
 	translate(v = obj_translate) {
-		if(radius == 0){
+		if(radius == 0 || radius == [0,0,0,0]){
 			cube(size=size);
 		}
 		else{
@@ -127,30 +126,36 @@ module mb_rounded_block(size, resolution, center=true, radius = 0){
 		intersection() {
 			
 			//X-Axis
-			rotate([0,90,0])     
-				mb_roundedcube_custom(
-					size = [size[2], size[1], size[0]], 
-					center = center, 
-					radius = radius[0], 
-					resolution = resolution
-				);
+			//if(radius[0] != 0 && radius[0] != [0,0,0,0]){
+				rotate([0,90,0])     
+					mb_roundedcube_custom(
+						size = [size[2], size[1], size[0]], 
+						center = center, 
+						radius = radius[0], 
+						resolution = resolution
+					);
+			//}
 
 			//Y-Axis
-			rotate([90,0,0]) 
+			//if(radius[1] != 0 && radius[1] != [0,0,0,0]){
+				rotate([90,0,0]) 
+					mb_roundedcube_custom(
+						size = [size[0], size[2], size[1]], 
+						center = center, 
+						radius = radius[1], 
+						resolution = resolution
+					);
+			//}
+	
+			//if(radius[2] != 0 && radius[2] != [0,0,0,0]){
+				//Z-Axis
 				mb_roundedcube_custom(
-					size = [size[0], size[2], size[1]], 
+					size = size, 
 					center = center, 
-					radius = radius[1], 
+					radius = radius[2], 
 					resolution = resolution
 				);
-	
-			//Z-Axis
-			mb_roundedcube_custom(
-				size = size, 
-				center = center, 
-				radius = radius[2], 
-				resolution = resolution
-			);
+			//}
 		}
 	}
 }
