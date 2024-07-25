@@ -12,7 +12,8 @@ translate([0,50,0])
 block(
     grid=[6,6],
     baseLayers=1,
-    screwHolesZ=[[0,0], [0,1], [0,2]]
+    screwHolesZ=[[0,0], [0,1], [0,2]],
+    pillars = true
 );
 
 

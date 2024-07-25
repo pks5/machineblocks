@@ -346,6 +346,95 @@ module block(
             union(){
                 if(baseCutoutType == "CLASSIC"){
                     union(){
+                        difference() {
+                            /*
+                            * Base Block
+                            */
+                            color([0.945, 0.769, 0.059]) //f1c40f
+                            mb_base(
+                                grid = grid,
+                                baseSideLength = baseSideLength,
+                                objectSize = [objectSizeX, objectSizeY],
+                                height = resultingBaseHeight,
+                                sideAdjustment = sAdjustment,
+                                roundingRadius = baseRoundingRadius, 
+                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                pit = pit,
+                                pitRoundingRadius = pitRoundingRadius,
+                                pitDepth = resultingPitDepth,
+                                pitWallThickness = pWallThickness,
+                                pitWallGaps = pitWallGaps,
+                                slanting = slanting,
+                                slantingLowerHeight = slantingLowerHeight
+                            );
+
+                            mb_base_cutout(
+                                grid = grid,
+                                baseSideLength = baseSideLength,
+                                baseHeight = resultingBaseHeight,
+                                sideAdjustment = sAdjustment,
+                                roundingRadius = baseCutoutRoundingRadius, 
+                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                wallThickness = wallThickness,
+                                topPlateHeight = resultingTopPlateHeight,
+                                baseClampHeight = baseClampHeight,
+                                baseClampThickness = baseClampThickness,
+                                pit = pit,
+                                pitDepth = resultingPitDepth,
+                                slanting = slanting,
+                                slantingLowerHeight = slantingLowerHeight
+                            );
+                            
+                            /*
+                            * Wall Gaps X
+                            */
+                            color([0.608, 0.349, 0.714]) //9b59b6
+                            for (a = [ startX : 1 : endX ]){
+                                for (side = [ 0 : 1 : 1 ]){
+                                    gapLength = drawWallGapX(a, side, 0);
+                                    if(gapLength > 0){
+                                        translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
+                                            difference(){
+                                                translate([0, 0, -0.5 * cutOffset])
+                                                    cube([gapLength*baseSideLength - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
+                                                
+                                                    translate([-0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                                
+                                                
+                                                    translate([0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                            }  
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            /*
+                            * Wall Gaps Y
+                            */
+                            color([0.608, 0.349, 0.714]) //9b59b6
+                            for (b = [ startY : 1 : endY ]){
+                                for (side = [ 0 : 1 : 1 ]){
+                                    gapLength = drawWallGapY(b, side, 0);
+                                    if(gapLength > 0){
+                                        translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
+                                            difference(){
+                                                translate([0, 0, -0.5 * cutOffset])
+                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
+                                                
+                                                    translate([0, -0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                                
+                                                    translate([0, 0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
                         intersection(){
                             union(){
                                 /*
@@ -601,100 +690,6 @@ module block(
                                 );
                             }
                         } //End interception (for slanting only)
-                        
-                        /*
-                        * Base
-                        */
-                        
-                        difference() {
-                            /*
-                            * Base Block
-                            */
-                            color([0.945, 0.769, 0.059]) //f1c40f
-                            mb_base(
-                                grid = grid,
-                                baseSideLength = baseSideLength,
-                                objectSize = [objectSizeX, objectSizeY],
-                                height = resultingBaseHeight,
-                                sideAdjustment = sAdjustment,
-                                roundingRadius = baseRoundingRadius, 
-                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                pit = pit,
-                                pitRoundingRadius = pitRoundingRadius,
-                                pitDepth = resultingPitDepth,
-                                pitWallThickness = pWallThickness,
-                                pitWallGaps = pitWallGaps,
-                                slanting = slanting,
-                                slantingLowerHeight = slantingLowerHeight
-                            );
-
-                            mb_base_cutout(
-                                grid = grid,
-                                baseSideLength = baseSideLength,
-                                baseHeight = resultingBaseHeight,
-                                sideAdjustment = sAdjustment,
-                                roundingRadius = baseCutoutRoundingRadius, 
-                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                wallThickness = wallThickness,
-                                topPlateHeight = resultingTopPlateHeight,
-                                baseClampHeight = baseClampHeight,
-                                baseClampThickness = baseClampThickness,
-                                pit = pit,
-                                pitDepth = resultingPitDepth,
-                                slanting = slanting,
-                                slantingLowerHeight = slantingLowerHeight
-                            );
-                            
-                            /*
-                            * Wall Gaps X
-                            */
-                            color([0.608, 0.349, 0.714]) //9b59b6
-                            for (a = [ startX : 1 : endX ]){
-                                for (side = [ 0 : 1 : 1 ]){
-                                    gapLength = drawWallGapX(a, side, 0);
-                                    if(gapLength > 0){
-                                        translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
-                                            difference(){
-                                                translate([0, 0, -0.5 * cutOffset])
-                                                    cube([gapLength*baseSideLength - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
-                                                
-                                                    translate([-0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                                
-                                                
-                                                    translate([0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                            }  
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            /*
-                            * Wall Gaps Y
-                            */
-                            color([0.608, 0.349, 0.714]) //9b59b6
-                            for (b = [ startY : 1 : endY ]){
-                                for (side = [ 0 : 1 : 1 ]){
-                                    gapLength = drawWallGapY(b, side, 0);
-                                    if(gapLength > 0){
-                                        translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
-                                            difference(){
-                                                translate([0, 0, -0.5 * cutOffset])
-                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
-                                                
-                                                    translate([0, -0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                                
-                                                    translate([0, 0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        
                     } //End union
                 }
                 else{
