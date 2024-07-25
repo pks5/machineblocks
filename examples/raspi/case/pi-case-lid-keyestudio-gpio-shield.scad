@@ -14,7 +14,7 @@ echo(version=version());
 
 use <../lib/pi_case_lid.scad>;
 
-baseSideLength=8;
+gridSizeXY=8;
 brickHeight = 3;
 blockHeight = 28.40;
 floorHeight = 3.1;
@@ -39,8 +39,8 @@ cutSpace=1;
 adjustSizeX = 0;
 adjustSizeY = 0;
 
-finalObjectSizeX = (halfGrid[0] * baseSideLength) + adjustSizeX;
-finalObjectSizeY = 2* ((halfGrid[1] * baseSideLength) + adjustSizeY);
+finalObjectSizeX = (halfGrid[0] * gridSizeXY) + adjustSizeX;
+finalObjectSizeY = 2* ((halfGrid[1] * gridSizeXY) + adjustSizeY);
 
 doubleThinWallThickness = 2*(wallThickness - wallInset);
 totalLidHeight = lidHeight + knobHeight;
@@ -215,14 +215,14 @@ module lid(){
         difference(){
             pi_case_lid(knobs = [true, [2,4,5,10, true],[1,3,4,8, true], [0,4,0,8, true]]);
             
-           translate([-3.5*baseSideLength, 5*baseSideLength, -innerWallHeight])
+           translate([-3.5*gridSizeXY, 5*gridSizeXY, -innerWallHeight])
                pin_holes();
         }
         
          
         
         if(showHelpers){
-            translate([-3.5*baseSideLength, 5*baseSideLength, innerWallHeight]){
+            translate([-3.5*gridSizeXY, 5*gridSizeXY, innerWallHeight]){
                 helpers();
             }   
         }

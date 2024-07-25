@@ -18,7 +18,7 @@ block(
     knobCentered = true,
     knobType = "TECHNIC",
     knobSize=5,
-    heightAdjustment=-0.2
+    baseHeightAdjustment=-0.2
 );
 
 //Cross
@@ -28,14 +28,14 @@ union(){
         grid=[3,1], 
         wallGapsX=[[1,2]],
         knobSize=5,
-        heightAdjustment=-0.2
+        baseHeightAdjustment=-0.2
     );
 
     block(
         grid=[1, 3], 
         wallGapsY=[[1,2]],
         knobSize=5,
-        heightAdjustment=-0.2
+        baseHeightAdjustment=-0.2
     );    
 }
 
@@ -46,31 +46,31 @@ union(){
         grid=[1, 4], 
         wallGapsY=[[0,1], [3,1]],
         knobSize=5,
-        heightAdjustment=-0.2,
-        brickOffset=[-1.5,0,0]
+        baseHeightAdjustment=-0.2,
+        gridOffset=[-1.5,0,0]
     );  
 
     block(
         grid=[4,1], 
         wallGapsX=[[0,0], [3,0]],
         knobSize=5,
-        heightAdjustment=-0.2,
-        brickOffset=[0,1.5,0]
+        baseHeightAdjustment=-0.2,
+        gridOffset=[0,1.5,0]
     );
 
     block(
         grid=[1, 4], 
         wallGapsY=[[0,0], [3,0]],
         knobSize=5,
-        heightAdjustment=-0.2,
-        brickOffset=[1.5,0,0]
+        baseHeightAdjustment=-0.2,
+        gridOffset=[1.5,0,0]
     );    
 
     block(
         grid=[4,1], 
         wallGapsX=[[0,1], [3,1]],
         knobSize=5,
-        heightAdjustment=-0.2,
-        brickOffset=[0,-1.5,0]
+        baseHeightAdjustment=-0.2,
+        gridOffset=[0,-1.5,0]
     );
 }

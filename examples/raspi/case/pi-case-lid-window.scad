@@ -15,7 +15,7 @@ echo(version=version());
 use <../../../lib/shapes.scad>;
 use <../lib/pi_case_lid.scad>;
 
-baseSideLength=8;
+gridSizeXY=8;
 lidHeight = 3;
 knobHeight = 1.9;
 innerWallHeight=2;
@@ -24,6 +24,6 @@ lidHoleRadius=4;
 
 difference(){
     pi_case_lid(knobs = [true, [0,3,6,10, true]]);
-    translate([-0.5*baseSideLength, baseSideLength, - 0.5*knobHeight])
-        mb_roundedcube([6*baseSideLength, 8*baseSideLength, 1.1*totalLidHeight+innerWallHeight], true, lidHoleRadius, "z");
+    translate([-0.5*gridSizeXY, gridSizeXY, - 0.5*knobHeight])
+        mb_roundedcube([6*gridSizeXY, 8*gridSizeXY, 1.1*totalLidHeight+innerWallHeight], true, lidHoleRadius, "z");
 }

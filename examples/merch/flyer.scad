@@ -5,7 +5,7 @@ use <../../lib/block.scad>;
 block(
     baseLayers = 1,
     grid = [16, 9],
-    brickOffset = [7, 0, 0],
+    gridOffset = [7, 0, 0],
     svg="../examples/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,
@@ -20,6 +20,6 @@ block(
     textOffset=[0, -3],
     knobs = [true, [2,1,13,1, true], [11,4,14,7, true]],
     knobSize = 5.0, //Reduce this value if the knobs do not fit into a LEGO brick or only with great difficulty
-    sideAdjustment = -0.1,
-    heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
+    baseSideAdjustment = -0.1,
+    baseHeightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
 );

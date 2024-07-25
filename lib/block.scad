@@ -19,9 +19,9 @@ use <pcb.scad>;
 module block(
         //Grid
         grid = [1, 1],
-        baseSideLength = 8.0, //TODO Rename to gridSizeXY
+        gridSizeXY = 8.0,
         gridSizeZ = 3.2,
-        brickOffset = [0, 0, 0], //TODO Rename to gridAlignment
+        gridOffset = [0, 0, 0], //Multipliers of gridSizeXY and gridSizeZ
         
         //Base
         baseHeight = 3.2,
@@ -36,8 +36,8 @@ module block(
         baseRoundingResolution = 30,
         
         //Base Adjustment
-        sideAdjustment = -0.1,
-        heightAdjustment = 0.0,
+        baseSideAdjustment = -0.1,
+        baseHeightAdjustment = 0.0,
 
         //Walls
         wallThickness = 1.5,
@@ -66,8 +66,8 @@ module block(
         //Pillars: Tubes and Pins
         pillars = true,
         pillarResolution = 30,
-        maxPillarNonGap = 2, //TODO find better name
-        middlePillarGapLimit = 10, //TODO find better name
+        pillarGapCornerLength = 2,
+        pillarGapMiddle = 10,
         
         //Pins (little tubes for blocks with 1 brick side length)
         pinSize = 3.2,
@@ -87,15 +87,15 @@ module block(
         holeXSize = 5.1,
         holeXInsetThickness = 0.55,
         holeXInsetDepth = 0.9,
-        holeXGridOffsetZ = 5.7,
-        holeXGridSizeZ = 9.6,
+        holeXGridOffsetZ = 5.7, //TODO multiplier of gridSizeZ
+        holeXGridSizeZ = 3,
         holeXTopMargin = 0.8,
 
         holeYSize = 5.1,
         holeYInsetThickness = 0.55,
         holeYInsetDepth = 0.9,
-        holeYGridOffsetZ = 5.7,
-        holeYGridSizeZ = 9.6,
+        holeYGridOffsetZ = 5.7, //TODO multiplier of gridSizeZ
+        holeYGridSizeZ = 3,
         holeYTopMargin = 0.8,
 
         holesZ = false,
@@ -130,7 +130,7 @@ module block(
         pit=false,
         pitRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
         pitDepth = 0,
-        pitWallThickness = 0.333, //Unit: 1x1 Brick
+        pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
         pitWallGaps = [],
         
@@ -141,7 +141,7 @@ module block(
         textFont = "Liberation Sans",
         textSize = 4,
         textSpacing = 1,
-        textOffset = [0, 0], //Unit: 1x1 Brick
+        textOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
         //SVG
         svg = "",
@@ -149,7 +149,7 @@ module block(
         svgDepth = 0.4,
         svgDimensions = [100, 100],
         svgScale = 1,
-        svgOffset = [0, 0], //Unit: 1x1 Brick
+        svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
         //Screw Holes
         screwHolesZ = [],
@@ -179,7 +179,7 @@ module block(
         //Alignment
         center = true,
         alignBottom = true, //Whether the brick should be always aligned on floor
-        alignIgnoreAdjustment = true, //Whether sideAdjustment should be ignored when aligning the brick
+        alignIgnoreAdjustment = true, //Whether baseSideAdjustment should be ignored when aligning the brick
         
         //Adhesion Helpers
         adhesionHelpers = false,
@@ -196,31 +196,31 @@ module block(
     cutTolerance = 0.01;
        
     //Side Adjustment
-    sAdjustment = sideAdjustment[0] == undef ? [sideAdjustment, sideAdjustment, sideAdjustment, sideAdjustment] : (len(sideAdjustment) == 2 ? [sideAdjustment[0], sideAdjustment[0], sideAdjustment[1], sideAdjustment[1]] : sideAdjustment);
+    sAdjustment = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);
 
     //Object Size     
-    objectSizeX = baseSideLength * grid[0];
-    objectSizeY = baseSideLength * grid[1];
+    objectSizeX = gridSizeXY * grid[0];
+    objectSizeY = gridSizeXY * grid[1];
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
 
     //Base Height
-    resultingBaseHeight = baseLayers * baseHeight + heightAdjustment;
+    resultingBaseHeight = baseLayers * baseHeight + baseHeightAdjustment;
 
     //Calculate Brick Offset
-    brickOffsetX = brickOffset[0] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
-    brickOffsetY = brickOffset[1] * baseSideLength + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
-    brickOffsetZ = brickOffset[2] * gridSizeZ + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
+    gridOffsetX = gridOffset[0] * gridSizeXY + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
+    gridOffsetY = gridOffset[1] * gridSizeXY + (center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted));
+    gridOffsetZ = gridOffset[2] * gridSizeZ + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
                 : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
-    pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * baseSideLength;
-    pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * baseSideLength;
+    pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * gridSizeXY;
+    pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * gridSizeXY;
 
     calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;        
     resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
@@ -236,10 +236,10 @@ module block(
 
     //Holes XY
     holeXBottomMargin = holeXGridOffsetZ - 0.5*(holeXSize + 2*holeXInsetThickness);
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / holeXGridSizeZ); 
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / (holeXGridSizeZ*gridSizeZ)); 
 
     holeYBottomMargin = holeYGridOffsetZ - 0.5*(holeYSize + 2*holeYInsetThickness);
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / holeYGridSizeZ); 
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
     echo(
         grid=grid,
@@ -280,8 +280,8 @@ module block(
     */
     function isEmptyString(s) = (s == undef) || len(s) == 0;
 
-    function posX(a) = (a - offsetX) * baseSideLength;
-    function posY(b) = (b - offsetY) * baseSideLength;
+    function posX(a) = (a - offsetX) * gridSizeXY;
+    function posY(b) = (b - offsetY) * gridSizeXY;
 
     function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
 
@@ -290,9 +290,9 @@ module block(
 
     function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
 
-    function isCornerZone(value, i) = (value < maxPillarNonGap) || (value >= grid[i] - (maxPillarNonGap + 1)); 
-    function isMiddleZone(value, i) = (grid[i] >= middlePillarGapLimit) && (value>=mid[i]-1) && (value<=mid[i]+1);
-    function isMiddle(value, i) = (grid[i] >= middlePillarGapLimit) && (value == mid[i]);
+    function isCornerZone(value, i) = (value < pillarGapCornerLength) || (value >= grid[i] - (pillarGapCornerLength + 1)); 
+    function isMiddleZone(value, i) = (grid[i] >= pillarGapMiddle) && (value>=mid[i]-1) && (value<=mid[i]+1);
+    function isMiddle(value, i) = (grid[i] >= pillarGapMiddle) && (value == mid[i]);
     
     function drawCornerPillar(a, b) = isCornerZone(a, 0) && isCornerZone(b, 1);
     
@@ -331,8 +331,8 @@ module block(
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side) = (side - 0.5) * resultingBaseHeight;
 
-    function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal * baseSideLength;
-    function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical*baseSideLength : 0);
+    function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal * gridSizeXY;
+    function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical*gridSizeXY : 0);
     function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical * gridSizeZ;
     /*
     * END Functions
@@ -341,7 +341,7 @@ module block(
     knobRectX = posX(endX) - posX(startX) + tongueKnobSize;
     knobRectY = posY(endY) - posY(startY) + tongueKnobSize;
 
-    translate([brickOffsetX, brickOffsetY, brickOffsetZ]){
+    translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
         difference(){
             union(){
                 if(baseCutoutType == "CLASSIC"){
@@ -353,10 +353,10 @@ module block(
                             color([0.945, 0.769, 0.059]) //f1c40f
                             mb_base(
                                 grid = grid,
-                                baseSideLength = baseSideLength,
+                                gridSizeXY = gridSizeXY,
                                 objectSize = [objectSizeX, objectSizeY],
                                 height = resultingBaseHeight,
-                                sideAdjustment = sAdjustment,
+                                baseSideAdjustment = sAdjustment,
                                 roundingRadius = baseRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 pit = pit,
@@ -370,9 +370,9 @@ module block(
 
                             mb_base_cutout(
                                 grid = grid,
-                                baseSideLength = baseSideLength,
+                                gridSizeXY = gridSizeXY,
                                 baseHeight = resultingBaseHeight,
-                                sideAdjustment = sAdjustment,
+                                baseSideAdjustment = sAdjustment,
                                 roundingRadius = baseCutoutRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 wallThickness = wallThickness,
@@ -396,13 +396,13 @@ module block(
                                         translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
                                             difference(){
                                                 translate([0, 0, -0.5 * cutOffset])
-                                                    cube([gapLength*baseSideLength - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
+                                                    cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
                                                 
-                                                    translate([-0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                    translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
                                                         cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
                                                 
                                                 
-                                                    translate([0.5 * (gapLength*baseSideLength - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                    translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
                                                         cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
                                             }  
                                         }
@@ -421,12 +421,12 @@ module block(
                                         translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
                                             difference(){
                                                 translate([0, 0, -0.5 * cutOffset])
-                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
+                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
                                                 
-                                                    translate([0, -0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                    translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
                                                         cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
                                                 
-                                                    translate([0, 0.5 * (gapLength*baseSideLength - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
+                                                    translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
                                                         cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
                                             }
                                         }
@@ -529,13 +529,13 @@ module block(
                                                 for (b = [ startY : 1 : endY ]){
                                                     if(drawScrewHoleZ(a, b, 0)){
                                                         translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                            cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                            cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
                                                         translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                            cube([baseSideLength - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                            cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
                                                         translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                            cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                            cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
                                                         translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                            cube([screwHoleZHelperThickness, baseSideLength - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
+                                                            cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
                                                     } 
                                                 }
                                             }
@@ -599,7 +599,7 @@ module block(
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawHoleX(a, r)){
-                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ]){
+                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ*gridSizeZ]){
                                                     rotate([90, 0, 0]){ 
                                                         cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     }
@@ -615,7 +615,7 @@ module block(
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleY(b, r)){
-                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ]){
+                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ*gridSizeZ]){
                                                     rotate([0, 90, 0]){ 
                                                         cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     };
@@ -674,9 +674,9 @@ module block(
                             if((baseCutoutRoundingRadius != 0) || (slanting != false)){
                                 mb_base_cutout(
                                     grid = grid,
-                                    baseSideLength = baseSideLength,
+                                    gridSizeXY = gridSizeXY,
                                     baseHeight = resultingBaseHeight,
-                                    sideAdjustment = sAdjustment,
+                                    baseSideAdjustment = sAdjustment,
                                     roundingRadius = baseCutoutRoundingRadius, 
                                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     wallThickness = wallThickness,
@@ -699,10 +699,10 @@ module block(
                     color([0.945, 0.769, 0.059]) //f1c40f
                         mb_base(
                             grid = grid,
-                            baseSideLength = baseSideLength,
+                            gridSizeXY = gridSizeXY,
                             objectSize = [objectSizeX, objectSizeY],
                             height = resultingBaseHeight,
-                            sideAdjustment = sAdjustment,
+                            baseSideAdjustment = sAdjustment,
                             roundingRadius = baseRoundingRadius, 
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                             pit = pit,
@@ -911,7 +911,7 @@ module block(
                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                     for (a = [ startX : 1 : endX - 1 ]){
                         if(drawHoleX(a, r)){
-                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ]){
+                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ*gridSizeZ]){
                                 rotate([90, 0, 0]){ 
                                     cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
@@ -932,7 +932,7 @@ module block(
                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleY(b, r)){
-                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ]){
+                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ*gridSizeZ]){
                                 rotate([0, 90, 0]){ 
                                     cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
@@ -1119,7 +1119,7 @@ module block(
                             gapLength = drawWallGapX(a, side, 0);
                             if(gapLength > 0){
                                 translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
-                                    cube([gapLength*baseSideLength - (objectSizeX - (knobRectX + 2*tongueAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + 2*tongueAdjustment) + sAdjustment[2 + side] + cutTolerance), tongueGrooveDepth + cutOffset], center=true); 
+                                    cube([gapLength*gridSizeXY - (objectSizeX - (knobRectX + 2*tongueAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + 2*tongueAdjustment) + sAdjustment[2 + side] + cutTolerance), tongueGrooveDepth + cutOffset], center=true); 
                             }
                         }
                     }
@@ -1133,7 +1133,7 @@ module block(
                             gapLength = drawWallGapY(b, side, 0);
                             if(gapLength > 0){
                                 translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
-                                        cube([(objectSizeX - (knobRectX + 2*tongueAdjustment) + sAdjustment[side] + cutTolerance), gapLength*baseSideLength - (objectSizeY - (knobRectY + 2*tongueAdjustment)) + cutTolerance, tongueGrooveDepth + cutOffset], center=true);   
+                                        cube([(objectSizeX - (knobRectX + 2*tongueAdjustment) + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - (objectSizeY - (knobRectY + 2*tongueAdjustment)) + cutTolerance, tongueGrooveDepth + cutOffset], center=true);   
                             }
                         }
                     }

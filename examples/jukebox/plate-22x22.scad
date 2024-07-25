@@ -6,7 +6,7 @@ block(
     baseLayers=1,
     grid=[1,20],
     wallGapsY=[[0,0], [19,0]],
-    brickOffset=[9.5,0,0],
+    gridOffset=[9.5,0,0],
     knobType = knobType,
     knobs = false
 );
@@ -16,7 +16,7 @@ block(
     baseLayers=1,
     grid=[20,1],
     wallGapsX=[[0,0], [19,0]],
-    brickOffset=[0,9.5,0],
+    gridOffset=[0,9.5,0],
     knobType = knobType,
     knobs = false
 );
@@ -27,7 +27,7 @@ block(
     baseLayers=1,
     grid=[1,20],
     wallGapsY=[[0,1], [19,1]],
-    brickOffset=[-9.5,0,0],
+    gridOffset=[-9.5,0,0],
     knobType = knobType,
     knobs = false
 );
@@ -36,14 +36,14 @@ block(
     baseLayers=1,
     grid=[20,1],
     wallGapsX=[[0,1], [19,1]],
-    brickOffset=[0,-9.5,0],
+    gridOffset=[0,-9.5,0],
     knobType = knobType,
     knobs = false
 );
 
 
 block(
-    sideAdjustment=0.1,
+    baseSideAdjustment=0.1,
     baseLayers=1,
     grid=[18,18],
     baseCutoutType = "NONE",
@@ -57,7 +57,7 @@ block(
 difference(){
 
 block(
-    sideAdjustment=0.1,
+    baseSideAdjustment=0.1,
     baseLayers=1,
     grid=[20,20],
     baseCutoutType = "NONE",
@@ -65,97 +65,97 @@ block(
     previewQuality = 0.4,
     holesZ = [[3,4,3,4], [3,10,3,10], [3,16,3,16], [9,4,9,4], [9,10,9,10], [9,16,9,16], [15,4,15,4], [15,10,15,10], [15,16,15,16]],
     holeZSize=25,
-    brickOffset=[0,0,1]
+    gridOffset=[0,0,1]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[-6,-8,0.8]
+    gridOffset=[-6,-8,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[-6,-2,0.8]
+    gridOffset=[-6,-2,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[-6,4,0.8]
+    gridOffset=[-6,4,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[0,-8,0.8]
+    gridOffset=[0,-8,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[0,-2,0.8]
+    gridOffset=[0,-2,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[0,4,0.8]
+    gridOffset=[0,4,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[6,-8,0.8]
+    gridOffset=[6,-8,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[6,-2,0.8]
+    gridOffset=[6,-2,0.8]
 );
 
 block(
-    sideAdjustment=0.4,
+    baseSideAdjustment=0.4,
     baseLayers=3,
     grid=[4,2],
     baseCutoutType = "NONE",
     knobs = false,
     previewQuality = 0.4,
-    brickOffset=[6,4,0.8]
+    gridOffset=[6,4,0.8]
 );
 
 }

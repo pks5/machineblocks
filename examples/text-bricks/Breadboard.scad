@@ -18,7 +18,7 @@ block(
     knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="Breadboard", 
     textFont="RBNo3.1 Black", 
     textDepth=0.6, 

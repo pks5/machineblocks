@@ -18,7 +18,7 @@ block(
     grid=[4,4], 
     textSize=6, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="\uf1e2\ue4dc\uf714", 
     textFont="Font Awesome 6 Free Solid", 
     textDepth=0.7, 

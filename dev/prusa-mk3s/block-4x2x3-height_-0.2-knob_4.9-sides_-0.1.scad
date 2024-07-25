@@ -16,5 +16,5 @@ include <../../lib/block.scad>;
 block(
     baseLayers=3,
     grid=[4,2],
-    heightAdjustment=-0.2
+    baseHeightAdjustment=-0.2
 );

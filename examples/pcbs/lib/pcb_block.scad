@@ -55,7 +55,7 @@ module pcb_block(
 top=false,
 grid=[4,4],
 
-baseSideLength=8,
+gridSizeXY=8,
 brickHeight = 3,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
@@ -112,8 +112,8 @@ textSpacing=1,
 textOffset=[0,0]
 ){
 
-    finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
-    finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
+    finalObjectSizeX = (grid[0] * gridSizeXY) + adjustSizeX;
+    finalObjectSizeY = (grid[1] * gridSizeXY) + adjustSizeY;
 
     windowThickness = wallThickness + wallThicknessTolerance;
     windowThicknessBottom = outerWallThickness + wallThicknessTolerance;

@@ -20,7 +20,7 @@ grid = [6,6],
 top = true,
 center=true,
 alignBottom=false,
-baseSideLength=8,
+gridSizeXY=8,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 topPlateHelperThickness = 0.5,
@@ -62,8 +62,8 @@ textOffset=[0,0]
     totalTopHeight = resultingBlockHeight; //knobType != "NONE" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
     totalBottomHeight = floorHeight + innerWallHeight;
     
-    finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
-    finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
+    finalObjectSizeX = (grid[0] * gridSizeXY) + adjustSizeX;
+    finalObjectSizeY = (grid[1] * gridSizeXY) + adjustSizeY;
     
     doubleWallThickness = 2 * wallThickness;
     
@@ -98,7 +98,7 @@ textOffset=[0,0]
                         knobs=false,  
                         wallThickness=blockMinWallThickness, 
                         baseClampThickness=baseClampThickness, 
-                        sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                        baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                         center=true, 
                         alignBottom=false
                     );
@@ -163,7 +163,7 @@ textOffset=[0,0]
                             knobType=knobType, 
                             knobHeight=knobHeight,
                             knobs=knobs, 
-                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                            baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                             center=true,
                             textFont=textFont,
                             text=text,

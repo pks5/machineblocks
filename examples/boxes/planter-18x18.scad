@@ -17,14 +17,14 @@ block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE",
     text="\ue5aa",
     textSide=2,
     textSize=40,
-    textFont="Font Awesome 6 Free Solid", brickOffset=[0,-5.5,3]); 
+    textFont="Font Awesome 6 Free Solid", gridOffset=[0,-5.5,3]); 
 
 
-block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE", brickOffset=[0,5.5,3]);
+block(baseLayers=heightLayers, grid=[grid[0],1], baseCutoutType = "NONE", gridOffset=[0,5.5,3]);
 
 
-block(baseLayers=heightLayers, grid=[1,grid[0]-2], baseCutoutType = "NONE", brickOffset=[-5.5,0,3], sideAdjustment=[-0.1,-0.1,0.1,0.1]);
+block(baseLayers=heightLayers, grid=[1,grid[0]-2], baseCutoutType = "NONE", gridOffset=[-5.5,0,3], baseSideAdjustment=[-0.1,-0.1,0.1,0.1]);
 
 
-block(baseLayers=heightLayers, grid=[1,grid[0]-2], baseCutoutType = "NONE", brickOffset=[5.5,0,3], sideAdjustment=[-0.1,-0.1,0.1,0.1]); 
+block(baseLayers=heightLayers, grid=[1,grid[0]-2], baseCutoutType = "NONE", gridOffset=[5.5,0,3], baseSideAdjustment=[-0.1,-0.1,0.1,0.1]); 
 }
