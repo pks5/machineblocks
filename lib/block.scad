@@ -172,7 +172,7 @@ module block(
         pcb=false,
         pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3], //mm
-        pcbOffset = [0, 0], //TODO multipliers of gridSizeXY
+        pcbOffset = [0, 0], //Multipliers of gridSizeXY
         pcbScrewSocketSize = 5, //mm
         pcbScrewSocketHoleSize = 2.2, //mm
         pcbScrewSocketHeight = 3, //mm
@@ -891,7 +891,7 @@ module block(
 
                 //PCB
                 if(pcb){
-                    translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
+                    translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, topPlateZ + 0.5*topPlateHeight]){
                         if(pcbMountingType == "clips"){
                             mb_pcb_clips(
                                 pcbDimensions = pcbDimensions
