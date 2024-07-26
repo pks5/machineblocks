@@ -217,7 +217,7 @@ module block(
     gridOffsetZ = gridOffset[2] * gridSizeZ + (!center || alignBottom ? 0.5 * resultingBaseHeight : 0); 
     
     //Base Cutout and Pit Depth
-    resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "NONE" ? 0 : baseCutoutMinDepth))) : 0;
+    resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
                 : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
@@ -226,7 +226,7 @@ module block(
 
     calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;        
     resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
-    baseCutoutDepth = baseCutoutType == "NONE" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
+    baseCutoutDepth = baseCutoutType == "none" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     
@@ -1004,7 +1004,7 @@ module block(
             /*
             * Screw Holes Z
             */
-            if(stabilizerGrid || (baseCutoutType == "NONE") || (baseCutoutType == "GROOVE")){
+            if(stabilizerGrid || (baseCutoutType == "none") || (baseCutoutType == "groove")){
                 for (a = [ startX : 1 : endX ]){
                     for (b = [ startY : 1 : endY ]){
                         if(drawScrewHoleZ(a, b, 0)){
@@ -1044,7 +1044,7 @@ module block(
             /*
             * Cut Groove
             */
-            if(baseCutoutType == "GROOVE"){
+            if(baseCutoutType == "groove"){
                 translate([0, 0, sideZ(0) + 0.5*tongueGrooveDepth]){ 
                     difference(){
                         union(){

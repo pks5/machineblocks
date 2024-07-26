@@ -17,7 +17,7 @@ block(
             pitWallGaps= [[0,0,0], [1,0,0]],
             tongueClampThickness = 0,
             tongueAdjustment = 0,
-            baseCutoutType = "GROOVE",
+            baseCutoutType = "groove",
             knobSize=5.1,
             pitWallThickness = 2.55
         );

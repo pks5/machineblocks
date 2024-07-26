@@ -59,7 +59,7 @@ textSpacing=1,
 textOffset=[0,0]
 ){
     resultingBlockHeight = blockHeight > 0 ? blockHeight : (brickHeight * baseHeight * 3);
-    totalTopHeight = resultingBlockHeight; //knobType != "NONE" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
+    totalTopHeight = resultingBlockHeight; //knobType != "none" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
     totalBottomHeight = floorHeight + innerWallHeight;
     
     finalObjectSizeX = (grid[0] * gridSizeXY) + adjustSizeX;
@@ -158,7 +158,7 @@ textOffset=[0,0]
                             baseHeight = resultingBlockHeight, 
                             wallThickness=blockMinWallThickness, 
                             baseClampThickness=baseClampThickness, 
-                            baseCutoutType = "NONE", 
+                            baseCutoutType = "none", 
                             grid=grid, 
                             knobType=knobType, 
                             knobHeight=knobHeight,

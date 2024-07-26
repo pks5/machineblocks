@@ -6,14 +6,14 @@ block(
     knobs=false,
     tongue=true,
     pit=true,
-    baseCutoutType="NONE",
+    baseCutoutType="none",
     baseRoundingRadius=[0,0,4]
 );
 
 translate([0, 50, 0])
     block(
         grid=[6,6],
-        baseCutoutType="GROOVE",
+        baseCutoutType="groove",
         knobs=false,
         textSide=5,
         textSize=10,
