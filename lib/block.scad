@@ -19,49 +19,49 @@ use <pcb.scad>;
 module block(
         //Grid
         grid = [1, 1],
-        gridSizeXY = 8.0,
-        gridSizeZ = 3.2,
+        gridSizeXY = 8.0, //mm
+        gridSizeZ = 3.2, //mm
         gridOffset = [0, 0, 0], //Multipliers of gridSizeXY and gridSizeZ
         
         //Base
-        baseHeight = 3.2,
+        baseHeight = 3.2, //mm
         baseLayers = 1,
         baseCutoutType = "classic",
-        baseCutoutMinDepth = 2.4,
-        baseCutoutMaxDepth = 9.0,
-        baseClampHeight = 0.8,
-        baseClampThickness = 0.1,
+        baseCutoutMinDepth = 2.4, //mm
+        baseCutoutMaxDepth = 9.0, //mm
+        baseClampHeight = 0.8, //mm
+        baseClampThickness = 0.1, //mm
         baseRoundingRadius = 0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 30,
         
         //Base Adjustment
-        baseSideAdjustment = -0.1,
-        baseHeightAdjustment = 0.0,
+        baseSideAdjustment = -0.1, //mm
+        baseHeightAdjustment = 0.0, //mm
 
         //Walls
-        wallThickness = 1.5,
+        wallThickness = 1.5, //mm
         wallGapsX = [],
         wallGapsY = [],
         
         //Top Plate
-        topPlateHeight = 0.8,
+        topPlateHeight = 0.8, //mm
         topPlateHelpers = true,
-        topPlateHelperOffset = 0.2,
-        topPlateHelperHeight = 0.2,
-        topPlateHelperThickness = 0.4,
+        topPlateHelperOffset = 0.2, //mm
+        topPlateHelperHeight = 0.2, //mm
+        topPlateHelperThickness = 0.4, //mm
 
         //Slanting
         slanting = false,
-        slantingLowerHeight = 2,
+        slantingLowerHeight = 2, //mm
 
         //Stabilizers
         stabilizerGrid = true,
-        stabilizerGridOffset = 0.2,
-        stabilizerGridHeight = 0.8,
-        stabilizerGridThickness = 0.8,
+        stabilizerGridOffset = 0.2, //mm
+        stabilizerGridHeight = 0.8, //mm
+        stabilizerGridThickness = 0.8, //mm
         stabilizerExpansion = 2,
-        stabilizerExpansionOffset = 1.8,
+        stabilizerExpansionOffset = 1.8, //mm
         
         //Pillars: Tubes and Pins
         pillars = true,
@@ -70,61 +70,61 @@ module block(
         pillarGapMiddle = 10,
         
         //Pins (little tubes for blocks with 1 brick side length)
-        pinSize = 3.2,
-        pinClampThickness = 0.1,
+        pinSize = 3.2, //mm
+        pinClampThickness = 0.1, //mm
 
         //Tubes
-        tubeXSize = 6.4,
-        tubeYSize = 6.4,
-        tubeZSize = 6.4,
-        tubeHoleClampThickness = 0.1,
-        tubeClampThickness = 0.1,
+        tubeXSize = 6.4, //mm
+        tubeYSize = 6.4, //mm
+        tubeZSize = 6.4, //mm
+        tubeHoleClampThickness = 0.1, //mm
+        tubeClampThickness = 0.1, //mm
 
         //Holes
         holesX = false,
         holesY = false,
         
-        holeXSize = 5.1,
-        holeXInsetThickness = 0.55,
-        holeXInsetDepth = 0.9,
-        holeXGridOffsetZ = 5.7, //TODO multiplier of gridSizeZ
-        holeXGridSizeZ = 3,
-        holeXTopMargin = 0.8,
+        holeXSize = 5.1, //mm
+        holeXInsetThickness = 0.55, //mm
+        holeXInsetDepth = 0.9, //mm
+        holeXGridOffsetZ = 1.75, //Multiplier of gridSizeZ
+        holeXGridSizeZ = 3, //Multiplier of gridSizeZ
+        holeXTopMargin = 0.8, //mm
 
-        holeYSize = 5.1,
-        holeYInsetThickness = 0.55,
-        holeYInsetDepth = 0.9,
-        holeYGridOffsetZ = 5.7, //TODO multiplier of gridSizeZ
-        holeYGridSizeZ = 3,
-        holeYTopMargin = 0.8,
+        holeYSize = 5.1, //mm
+        holeYInsetThickness = 0.55, //mm
+        holeYInsetDepth = 0.9, //mm
+        holeYGridOffsetZ = 1.75, //Multiplier of gridSizeZ
+        holeYGridSizeZ = 3, //Multiplier of gridSizeZ
+        holeYTopMargin = 0.8, //mm
 
         holesZ = false,
-        holeZSize = 5.1,
+        holeZSize = 5.1, //mm
         holeResolution = 30,
         
         //Knobs
         knobs = true,
         knobType = "classic",
         knobCentered = false,
-        knobSize = 5.0,
-        knobHeight = 1.8,
-        knobClampHeight = 0.8,
-        knobClampThickness = 0,
-        knobHoleSize = 3.5,
-        knobHoleClampThickness = 0.1,
-        knobRounding = 0.1,
+        knobSize = 5.0, //mm
+        knobHeight = 1.8, //mm
+        knobClampHeight = 0.8, //mm
+        knobClampThickness = 0, //mm
+        knobHoleSize = 3.5, //mm
+        knobHoleClampThickness = 0.1, //mm
+        knobRounding = 0.1, //mm
         knobResolution = 30,
         
         //Tongue
         tongue = false,
-        tongueHeight = 1.8,
-        tongueKnobSize = 5.0,
+        tongueHeight = 1.8, //mm
+        tongueKnobSize = 5.0, //mm
         tongueRoundingRadius = 0, //e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
-        tongueThickness = 1.1,
-        tongueAdjustment = -0.1,
-        tongueClampHeight = 0.8,
-        tongueClampThickness = 0,
-        tongueGrooveDepth = 2.4,
+        tongueThickness = 1.1, //mm
+        tongueAdjustment = -0.1, //mm
+        tongueClampHeight = 0.8, //mm
+        tongueClampThickness = 0, //mm
+        tongueGrooveDepth = 2.4, //mm
         
         //Pit
         pit=false,
@@ -136,8 +136,8 @@ module block(
         
         //Text
         text = "",
-        textSide = 0,
-        textDepth = -0.6,
+        textSide = 0, //Side
+        textDepth = -0.6, //mm
         textFont = "Liberation Sans",
         textSize = 4,
         textSpacing = 1,
@@ -147,26 +147,26 @@ module block(
 
         //SVG
         svg = "",
-        svgSide = 5,
-        svgDepth = 0.4,
+        svgSide = 5, //Side
+        svgDepth = 0.4, //mm
         svgDimensions = [100, 100],
         svgScale = 1,
         svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
         //Screw Holes
         screwHolesZ = [],
-        screwHoleZSize = 2.3,
-        screwHoleZHelperThickness = 0.8,
-        screwHoleZHelperOffset = 0.2,
-        screwHoleZHelperHeight = 0.2,
+        screwHoleZSize = 2.3, //mm
+        screwHoleZHelperThickness = 0.8, //mm
+        screwHoleZHelperOffset = 0.2, //mm
+        screwHoleZHelperHeight = 0.2, //mm
 
         screwHolesX = [],
-        screwHoleXSize = 2.1,
-        screwHoleXDepth = 4,
+        screwHoleXSize = 2.1, //mm
+        screwHoleXDepth = 4, //mm
 
         screwHolesY = [],
-        screwHoleYSize = 2.1,
-        screwHoleYDepth = 4,
+        screwHoleYSize = 2.1, //mm
+        screwHoleYDepth = 4, //mm
 
         //PCB
         pcb=false,
@@ -174,8 +174,8 @@ module block(
         pcbDimensions = [20, 30, 3],
         pcbOffset = [0, 0],
         pcbScrewSocketSize = 5,
-        pcbScrewSocketHoleSize = 2.2,
-        pcbScrewSocketHeight = 3,
+        pcbScrewSocketHoleSize = 2.2, //mm
+        pcbScrewSocketHeight = 3, //mm
         pcbScrewSockets = [],
         
         //Alignment
@@ -185,11 +185,11 @@ module block(
         
         //Adhesion Helpers
         adhesionHelpers = false,
-        adhesionHelperHeight = 0.2,
-        adhesionHelperThickness = 0.4,
+        adhesionHelperHeight = 0.2, //mm
+        adhesionHelperThickness = 0.4, //mm
         
         //Preview
-        previewQuality = 1
+        previewQuality = 1 //Between 0.0 and 1.0
         ){
             
     //Variables for cutouts        
@@ -237,10 +237,10 @@ module block(
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     //Holes XY
-    holeXBottomMargin = holeXGridOffsetZ - 0.5*(holeXSize + 2*holeXInsetThickness);
+    holeXBottomMargin = holeXGridOffsetZ*gridSizeZ - 0.5*(holeXSize + 2*holeXInsetThickness);
     holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXTopMargin) / (holeXGridSizeZ*gridSizeZ)); 
 
-    holeYBottomMargin = holeYGridOffsetZ - 0.5*(holeYSize + 2*holeYInsetThickness);
+    holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
     echo(
@@ -601,7 +601,7 @@ module block(
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawHoleX(a, r)){
-                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ*gridSizeZ]){
+                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                                     rotate([90, 0, 0]){ 
                                                         cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     }
@@ -617,7 +617,7 @@ module block(
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleY(b, r)){
-                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ*gridSizeZ]){
+                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                                     rotate([0, 90, 0]){ 
                                                         cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarResolution);
                                                     };
@@ -915,7 +915,7 @@ module block(
                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                     for (a = [ startX : 1 : endX - 1 ]){
                         if(drawHoleX(a, r)){
-                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ + r * holeXGridSizeZ*gridSizeZ]){
+                            translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                 rotate([90, 0, 0]){ 
                                     cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
@@ -936,7 +936,7 @@ module block(
                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleY(b, r)){
-                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ + r * holeYGridSizeZ*gridSizeZ]){
+                            translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                 rotate([0, 90, 0]){ 
                                     cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeResolution);
                                     
