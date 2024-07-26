@@ -1,6 +1,6 @@
 include <../../lib/block.scad>;
 
-knobType = "CLASSIC";
+knobType = "classic";
 
 block(
     baseLayers=1,

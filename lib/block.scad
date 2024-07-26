@@ -26,7 +26,7 @@ module block(
         //Base
         baseHeight = 3.2,
         baseLayers = 1,
-        baseCutoutType = "CLASSIC",
+        baseCutoutType = "classic",
         baseCutoutMinDepth = 2.4,
         baseCutoutMaxDepth = 9.0,
         baseClampHeight = 0.8,
@@ -104,7 +104,7 @@ module block(
         
         //Knobs
         knobs = true,
-        knobType = "CLASSIC",
+        knobType = "classic",
         knobCentered = false,
         knobSize = 5.0,
         knobHeight = 1.8,
@@ -141,6 +141,8 @@ module block(
         textFont = "Liberation Sans",
         textSize = 4,
         textSpacing = 1,
+        textVerticalAlign = "center",
+        textHorizontalAlign = "center",
         textOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
         //SVG
@@ -168,7 +170,7 @@ module block(
 
         //PCB
         pcb=false,
-        pcbMountingType = "CLIPS",
+        pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3],
         pcbOffset = [0, 0],
         pcbScrewSocketSize = 5,
@@ -325,7 +327,7 @@ module block(
     
     function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
-    function drawScrewHoleZ(a, b, i) = screwHolesZ == "ALL" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHoleZ(a, b, i+1)));
+    function drawScrewHoleZ(a, b, i) = screwHolesZ == "all" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHoleZ(a, b, i+1)));
 
     function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -344,7 +346,7 @@ module block(
     translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
         difference(){
             union(){
-                if(baseCutoutType == "CLASSIC"){
+                if(baseCutoutType == "classic"){
                     union(){
                         difference() {
                             /*
@@ -729,6 +731,8 @@ module block(
                                     textSize = textSize,
                                     textFont = textFont,
                                     textSpacing = textSpacing,
+                                    textVerticalAlign = textVerticalAlign,
+                                    textHorizontalAlign = textHorizontalAlign,
                                     center = true
                                 );
                 }
@@ -779,7 +783,7 @@ module block(
                                                 cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobResolution);
                                         }
                                         
-                                        if(knobType == "TECHNIC"){
+                                        if(knobType == "technic"){
                                             intersection(){
                                                 cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
                                                 cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobResolution);
@@ -888,12 +892,12 @@ module block(
                 //PCB
                 if(pcb){
                     translate([pcbOffset[0], pcbOffset[1], topPlateZ + 0.5*topPlateHeight]){
-                        if(pcbMountingType == "CLIPS"){
+                        if(pcbMountingType == "clips"){
                             mb_pcb_clips(
                                 pcbDimensions = pcbDimensions
                             );
                         }
-                        if(pcbMountingType == "SCREWS"){
+                        if(pcbMountingType == "screws"){
                             mb_pcb_screw_sockets(
                                 screwSockets = pcbScrewSockets,
                                 screwSocketHeight = pcbScrewSocketHeight,
@@ -974,6 +978,8 @@ module block(
                                 textSize = textSize,
                                 textFont = textFont,
                                 textSpacing = textSpacing,
+                                textVerticalAlign = textVerticalAlign,
+                                textHorizontalAlign = textHorizontalAlign,
                                 center = true
                             );
             }

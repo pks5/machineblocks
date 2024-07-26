@@ -48,7 +48,7 @@ innerWallHolderThickness = 0.1;
 
 roundingRadius = 0.25;
 roundingResolution = 15;
-knobType = "CLASSIC";
+knobType = "classic";
 
 
 module pi_case_lid(

@@ -60,7 +60,7 @@ brickHeight = 3,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 
-knobType="CLASSIC",
+knobType="classic",
 
 floorHeight = 3.5,
 wallThickness = 1.5,

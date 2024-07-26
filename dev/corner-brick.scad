@@ -22,7 +22,7 @@ translate([50,10,0]){
     block(
         grid=[7,1],
         baseLayers = 6,
-        knobType = "TECHNIC",
+        knobType = "technic",
         holesX=true
     );
 }
