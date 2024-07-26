@@ -31,8 +31,8 @@ module block(
         baseCutoutMaxDepth = 9.0, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
-        baseRoundingRadius = 0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
-        baseCutoutRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
+        baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
+        baseCutoutRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 30,
         
         //Base Adjustment
@@ -109,7 +109,7 @@ module block(
         knobSize = 5.0, //mm
         knobHeight = 1.8, //mm
         knobClampHeight = 0.8, //mm
-        knobClampThickness = 0, //mm
+        knobClampThickness = 0.0, //mm
         knobHoleSize = 3.5, //mm
         knobHoleClampThickness = 0.1, //mm
         knobRounding = 0.1, //mm
@@ -119,17 +119,17 @@ module block(
         tongue = false,
         tongueHeight = 1.8, //mm
         tongueKnobSize = 5.0, //mm
-        tongueRoundingRadius = 0, //e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueRoundingRadius = 0.0, //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueThickness = 1.1, //mm
         tongueAdjustment = -0.1, //mm
         tongueClampHeight = 0.8, //mm
-        tongueClampThickness = 0, //mm
+        tongueClampThickness = 0.0, //mm
         tongueGrooveDepth = 2.4, //mm
         
         //Pit
         pit=false,
-        pitRoundingRadius = 0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
-        pitDepth = 0,
+        pitRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
+        pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
         pitWallGaps = [],
@@ -171,9 +171,9 @@ module block(
         //PCB
         pcb=false,
         pcbMountingType = "clips",
-        pcbDimensions = [20, 30, 3],
-        pcbOffset = [0, 0],
-        pcbScrewSocketSize = 5,
+        pcbDimensions = [20, 30, 3], //mm
+        pcbOffset = [0, 0], //TODO multipliers of gridSizeXY
+        pcbScrewSocketSize = 5, //mm
         pcbScrewSocketHoleSize = 2.2, //mm
         pcbScrewSocketHeight = 3, //mm
         pcbScrewSockets = [],
