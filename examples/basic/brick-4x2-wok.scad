@@ -16,4 +16,4 @@ include <../../lib/block.scad>;
 
 //4x2 Brick
 translate([0,0,0])
-    block(baseLayers=3, knobType="NONE");
+    block(baseLayers=3, knobs=false);

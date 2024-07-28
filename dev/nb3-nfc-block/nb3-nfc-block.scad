@@ -20,7 +20,7 @@ if(withBottom){
             withInnerWallFilled=true, 
             top=false,
             center=true, 
-            alwaysOnFloor=true,
+            alignBottom=true,
             grid=[6,6]
         );
     }
@@ -37,7 +37,7 @@ if(withTop){
                 adjustSizeY=0,
                 top=true,
                 center=true,
-                alwaysOnFloor=true,
+                alignBottom=true,
                 grid=[6,6]
             );
             

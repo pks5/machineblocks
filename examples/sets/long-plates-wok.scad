@@ -15,31 +15,31 @@ echo(version=version());
 include <../../lib/block.scad>;
 
 translate([10, -10, 0])
-    block(grid=[8,2], knobType="NONE");
+    block(grid=[8,2], knobs=false);
         
 translate([10, -30, 0])
-    block(grid=[10,2], knobType="NONE");
+    block(grid=[10,2], knobs=false);
 
 translate([10, -50, 0])
-    block(grid=[12,2], knobType="NONE");
+    block(grid=[12,2], knobs=false);
 
 translate([10, -70, 0])
-    block(grid=[16,2], knobType="NONE");
+    block(grid=[16,2], knobs=false);
 
 translate([10, -90, 0])
-    block(grid=[20,2], knobType="NONE");
+    block(grid=[20,2], knobs=false);
         
 translate([10, 10, 0])
-    block(grid=[8,1], knobType="NONE");
+    block(grid=[8,1], knobs=false);
         
 translate([10, 20, 0])
-    block(grid=[10,1], knobType="NONE");
+    block(grid=[10,1], knobs=false);
 
 translate([10, 30, 0])
-    block(grid=[12,1], knobType="NONE");
+    block(grid=[12,1], knobs=false);
 
 translate([10, 40, 0])
-    block(grid=[16,1], knobType="NONE");
+    block(grid=[16,1], knobs=false);
 
 translate([10, 50, 0])
-    block(grid=[20,1], knobType="NONE");        
+    block(grid=[20,1], knobs=false);        

@@ -14,4 +14,4 @@ echo(version=version());
 
 include <../../lib/block.scad>;
 
-block(grid=[1,1], knobType="NONE");
+block(grid=[1,1], knobs=false);

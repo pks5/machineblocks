@@ -15,7 +15,7 @@ echo(version=version());
 use <../../../lib/shapes.scad>;
 use <../../../lib/block.scad>;
 
-baseSideLength=8;
+gridSizeXY=8;
 lidHeight = 3;
 lidHeightTolerance = 0.1;
 lidSpacing = 0.3;
@@ -37,8 +37,8 @@ cutSpace=1;
 adjustSizeX = 0;
 adjustSizeY = 0;
 
-finalObjectSizeX = (halfGrid[0] * baseSideLength) + adjustSizeX;
-finalObjectSizeY = 2* ((halfGrid[1] * baseSideLength) + adjustSizeY);
+finalObjectSizeX = (halfGrid[0] * gridSizeXY) + adjustSizeX;
+finalObjectSizeY = 2* ((halfGrid[1] * gridSizeXY) + adjustSizeY);
 
 doubleThinWallThickness = 2*(wallThickness - wallInset);
 totalLidHeight = lidHeight + knobHeight;
@@ -48,11 +48,11 @@ innerWallHolderThickness = 0.1;
 
 roundingRadius = 0.25;
 roundingResolution = 15;
-knobType = "CLASSIC";
+knobType = "classic";
 
 
 module pi_case_lid(
-    knobGaps = []
+    knobs = true
 ){
     //Lid
     
@@ -64,14 +64,14 @@ module pi_case_lid(
                     //Lid block with knobs
                     block(
                         baseHeight = lidHeight, 
-                        baseCutoutType = "NONE", 
+                        baseCutoutType = "none", 
                         grid=grid, 
                         knobType=knobType, 
                         knobSize=knobSize, 
-                        knobGaps=knobGaps, 
-                        sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                        knobs=knobs, 
+                        baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                         center=true, 
-                        alwaysOnFloor=false
+                        alignBottom=false
                     );
                     
                     //Cut border to fit as lid

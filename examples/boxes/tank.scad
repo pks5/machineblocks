@@ -9,11 +9,11 @@ union(){
 block(baseLayers=3, grid=grid, withKnobs=true);
 
 
-block(baseHeight=totalHeight, grid=[grid[0],1], baseCutoutType = "NONE", brickOffset=[0,-5.5,3]); 
+block(baseHeight=totalHeight, grid=[grid[0],1], baseCutoutType = "none", gridOffset=[0,-5.5,3]); 
 
-block(baseHeight=totalHeight, grid=[grid[0],1], baseCutoutType = "NONE", brickOffset=[0,5.5,3]);
+block(baseHeight=totalHeight, grid=[grid[0],1], baseCutoutType = "none", gridOffset=[0,5.5,3]);
 
-block(baseHeight=totalHeight, grid=[1,grid[1]-2], baseCutoutType = "NONE", brickOffset=[-3.5,0,3], sideAdjustment=[-0.1,-0,1,0.1,0.1]);
+block(baseHeight=totalHeight, grid=[1,grid[1]-2], baseCutoutType = "none", gridOffset=[-3.5,0,3], baseSideAdjustment=[-0.1,-0,1,0.1,0.1]);
 
-block(baseHeight=totalHeight, grid=[1,grid[1]-2], baseCutoutType = "NONE", brickOffset=[3.5,0,3], sideAdjustment=[-0.1,-0,1,0.1,0.1]); 
+block(baseHeight=totalHeight, grid=[1,grid[1]-2], baseCutoutType = "none", gridOffset=[3.5,0,3], baseSideAdjustment=[-0.1,-0,1,0.1,0.1]); 
 }

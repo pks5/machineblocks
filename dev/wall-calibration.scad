@@ -8,11 +8,11 @@ color("yellow")
 
 
 translate([20, 0, 0])
-    block(baseLayers=3, grid=[1,1], knobType="NONE");
+    block(baseLayers=3, grid=[1,1], knobs=false);
 
 /*    
 translate([-20, 0, 0])
-    block(baseLayers=3, grid=[2,1], knobType="NONE");
+    block(baseLayers=3, grid=[2,1], knobs=false);
 */
 
 //brickHollow(height=9.57, minSize=[4.6,4.6], maxSize=[5.2,5.2], center=true);

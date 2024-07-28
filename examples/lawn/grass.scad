@@ -5,7 +5,7 @@ include <../../lib/block.scad>;
 grid = [6,6];
 pitWallThickness = 0.8;
 originalBaseHeight=3.2;
-baseSideLength = 8;
+gridSizeXY = 8;
 brickHeight=3.4;
 
 grassFitTolerance=0.1;
@@ -32,16 +32,16 @@ if(withBottom){
         stabilizerGridHeight=1,
         pitDepth=pitDepth,
         baseHeightOriginal=originalBaseHeight,
-        baseSideLength = baseSideLength,
+        gridSizeXY = gridSizeXY,
         pitWallThickness = pitWallThickness,
-        withPit=true,
-        knobType="NONE"
+        pit=true,
+        knobs=false
     );
 }
 
 if(withTop){
-    grassSizeX = grid[0] * baseSideLength - 2*(pitWallThickness + grassFitTolerance);
-    grassSizeY = grid[1] * baseSideLength - 2*(pitWallThickness + grassFitTolerance);
+    grassSizeX = grid[0] * gridSizeXY - 2*(pitWallThickness + grassFitTolerance);
+    grassSizeY = grid[1] * gridSizeXY - 2*(pitWallThickness + grassFitTolerance);
     columnsCount = 1 + floor((grassSizeX - 2*strawOffsetX - strawWidth) / (strawWidth + preferredSpaceX)); 
     rowsCount = 1 + floor((grassSizeY - 2*strawOffsetY - strawThickness) / (strawThickness + preferredSpaceY));
     spaceX = (grassSizeX - 2*strawOffsetX - columnsCount*strawWidth) / (columnsCount - 1); 

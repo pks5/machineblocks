@@ -16,7 +16,7 @@ use <../../../lib/shapes.scad>;
 use <../../../lib/block.scad>;
 
 
-baseSideLength=8;
+gridSizeXY=8;
 brickHeight = 3;
 blockHeight = 28.40;
 floorHeight = 3.1;
@@ -34,8 +34,8 @@ doubleThinWallThickness = 2*(wallThickness - wallInset);
 adjustSizeX = 0;
 adjustSizeY = 0;
 
-finalObjectSizeX = (halfGrid[0] * baseSideLength) + adjustSizeX;
-finalObjectSizeY = 2* ((halfGrid[1] * baseSideLength) + adjustSizeY);
+finalObjectSizeX = (halfGrid[0] * gridSizeXY) + adjustSizeX;
+finalObjectSizeY = 2* ((halfGrid[1] * gridSizeXY) + adjustSizeY);
 
 module prism(l, w, h){
     translate([-0.5*l, -0.5*w, -0.5*h])
@@ -70,13 +70,13 @@ module pi_case_body(){
                     //Body block with base holes
                         block(
                             baseHeight=blockHeight, 
-                            baseSideLength=baseSideLength, 
+                            gridSizeXY=gridSizeXY, 
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
-                            knobType = "NONE", 
+                            knobs = false, 
                             center=true, 
-                            alwaysOnFloor=false, 
-                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
+                            alignBottom=false, 
+                            baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }
                     
@@ -84,13 +84,13 @@ module pi_case_body(){
                     //Body block with base holes
                         block(
                             baseHeight=blockHeight, 
-                            baseSideLength=baseSideLength, 
+                            gridSizeXY=gridSizeXY, 
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
-                            knobType = "NONE", 
+                            knobs = false, 
                             center=true, 
-                            alwaysOnFloor=false, 
-                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
+                            alignBottom=false, 
+                            baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }
                     

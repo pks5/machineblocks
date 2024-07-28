@@ -16,13 +16,13 @@ include <../lib/block.scad>;
 block(
     baseLayers=6, 
     grid=[4,4], 
-    knobType="NONE",
-    withText=true, 
     textSize=6, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="\uf1e2\ue4dc\uf714", 
     textFont="Font Awesome 6 Free Solid", 
     textDepth=0.7, 
-    textSpacing=1
+    textSpacing=1,
+    alignBottom=false,
+    knobs=[true, [0,1,3,2,true]]
 ); 

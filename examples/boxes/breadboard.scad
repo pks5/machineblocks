@@ -4,10 +4,10 @@ use <../../lib/block.scad>;
 block(
     baseLayers = 4,
     grid = [12, 8],
-    withPit=true,
-    pitWallThickness = [5.9, 4.6],
+    pit=true,
+    pitWallThickness = [5.9/8, 4.6/8],
     baseCutoutMaxDepth=2.6,
     pitDepth = 8.8,
-    knobType = "NONE",
-    heightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
+    knobs = false,
+    baseHeightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
 );

@@ -19,8 +19,8 @@ module hollowBlock(
 grid = [6,6],
 top = true,
 center=true,
-alwaysOnFloor=false,
-baseSideLength=8,
+alignBottom=false,
+gridSizeXY=8,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 topPlateHelperThickness = 0.5,
@@ -46,13 +46,12 @@ withBarrier = false,
 barrierTolerance = 0.2,
 barrierHeight = 1,
 barrierThickness=1,
-knobType = "CLASSIC",
-knobGaps=[],
+knobType = "classic",
+knobs=true,
 blockMinWallThickness=1.4,
 baseClampThickness=0.2,
-withText=false,
 textFont="Font Awesome 5 Free Regular",
-text="\uf0eb",
+text="",
 textSize=7,
 textSide=1,
 textDepth=0.5,
@@ -60,11 +59,11 @@ textSpacing=1,
 textOffset=[0,0]
 ){
     resultingBlockHeight = blockHeight > 0 ? blockHeight : (brickHeight * baseHeight * 3);
-    totalTopHeight = knobType != "NONE" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
+    totalTopHeight = resultingBlockHeight; //knobType != "none" ? resultingBlockHeight+knobHeight : resultingBlockHeight;
     totalBottomHeight = floorHeight + innerWallHeight;
     
-    finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
-    finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
+    finalObjectSizeX = (grid[0] * gridSizeXY) + adjustSizeX;
+    finalObjectSizeY = (grid[1] * gridSizeXY) + adjustSizeY;
     
     doubleWallThickness = 2 * wallThickness;
     
@@ -85,7 +84,7 @@ textOffset=[0,0]
     
     if(!top){
         onFloorZ = 0.5*floorHeight;
-        translateBottom = center ? [0, 0, alwaysOnFloor ? onFloorZ : 0.5 * (floorHeight - totalBottomHeight)] : [-0.5 * bottomSizeX, -0.5 * bottomSizeY, onFloorZ];
+        translateBottom = center ? [0, 0, alignBottom ? onFloorZ : 0.5 * (floorHeight - totalBottomHeight)] : [-0.5 * bottomSizeX, -0.5 * bottomSizeY, onFloorZ];
         
         //Bottom
         color("orange")
@@ -96,12 +95,12 @@ textOffset=[0,0]
                         baseHeight=floorHeight, 
                         topPlateHeight=topPlateHeight, 
                         grid=grid, 
-                        knobType="NONE",  
+                        knobs=false,  
                         wallThickness=blockMinWallThickness, 
                         baseClampThickness=baseClampThickness, 
-                        sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                        baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                         center=true, 
-                        alwaysOnFloor=false
+                        alignBottom=false
                     );
                     
                     difference(){
@@ -146,7 +145,7 @@ textOffset=[0,0]
     }
 
     if(top){
-        translateTop = center ? [0, 0, alwaysOnFloor ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
+        translateTop = center ? [0, 0, alignBottom ? 0 : -0.5*totalTopHeight] : [-0.5 * finalObjectSizeX, -0.5 * finalObjectSizeY, 0];
         
         echo(resultingBlockHeight=resultingBlockHeight, translateTop=translateTop, totalTopHeight=totalTopHeight);
         
@@ -159,21 +158,21 @@ textOffset=[0,0]
                             baseHeight = resultingBlockHeight, 
                             wallThickness=blockMinWallThickness, 
                             baseClampThickness=baseClampThickness, 
-                            baseCutoutType = "NONE", 
+                            baseCutoutType = "none", 
                             grid=grid, 
                             knobType=knobType, 
                             knobHeight=knobHeight,
-                            knobGaps=knobGaps, 
-                            sideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
+                            knobs=knobs, 
+                            baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
                             center=true,
-                            withText=withText,
                             textFont=textFont,
                             text=text,
                             textSize=textSize,
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffset=textOffset, alwaysOnFloor=false
+                            textOffset=textOffset, 
+                            alignBottom=false
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

@@ -7,7 +7,7 @@ translate([-26, -20, 0])
         baseLayers=3, 
         grid=[6,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 translate([-26, -40, 0])
@@ -15,7 +15,7 @@ translate([-26, -40, 0])
         baseLayers=3, 
         grid=[4,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 translate([-26, -60, 0])
@@ -23,7 +23,7 @@ translate([-26, -60, 0])
         baseLayers=3, 
         grid=[2,2],
         center=false,
-        withHolesX=true
+        holesX=true
     );
         
 
@@ -35,25 +35,25 @@ translate([32,10,0]){
         translate([0, -20, 0])
             block(
                 grid=[2,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -40, 0])
             block(
                 grid=[4,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -60, 0])
             block(
                 grid=[6,2],
-                withHolesZ=true
+                holesZ=true
             );
                 
         translate([0, -80, 0])
             block(
                 grid=[8,2],
-                withHolesZ=true
+                holesZ=true
             );
         }
 
@@ -66,8 +66,8 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[2,1],
                 center=false,
-                withHolesX=true,
-                knobType = "TECHNIC"
+                holesX=true,
+                knobType = "technic"
             );
                 
         translate([0, -60, 0])
@@ -75,8 +75,8 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[4,1],
                 center=false,
-                withHolesX=true,
-                knobType = "TECHNIC"
+                holesX=true,
+                knobType = "technic"
             );
                 
         translate([0, -80, 0])
@@ -84,8 +84,8 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[6,1],
                 center=false,
-                withHolesX=true,
-                knobType = "TECHNIC"
+                holesX=true,
+                knobType = "technic"
             );
             
        translate([0, -100, 0])
@@ -93,8 +93,8 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[8,1],
                 center=false,
-                withHolesX=true,
-                knobType = "TECHNIC"
+                holesX=true,
+                knobType = "technic"
             );
             
             translate([0, -120, 0])
@@ -102,8 +102,8 @@ translate([108, -110,0])
                 baseLayers=3, 
                 grid=[16,1],
                 center=false,
-                withHolesX=true,
-                knobType = "TECHNIC"
+                holesX=true,
+                knobType = "technic"
             );
     }
  

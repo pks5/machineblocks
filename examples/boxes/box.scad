@@ -3,8 +3,9 @@ use <../../lib/block.scad>;
 block(
     grid=[6,6],
     baseLayers=8,
-    withPit=true,
-    withText=true,
+    knobs=false,
+    tongue=true,
+    pit=true,
     textSize=10,
     textFont="OldSansBlack",
     textDepth=-0.8,

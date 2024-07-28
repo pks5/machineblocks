@@ -15,11 +15,10 @@ include <../../lib/block.scad>;
 //Generate the brick
 block(
     grid=[4,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="Clean", 
     textFont="RBNo3.1 Black", 
     textDepth=0.6, 
@@ -29,11 +28,10 @@ block(
 translate([0, -20, 0])
 block(
     grid=[8,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="Electronics", 
     textFont="RBNo3.1 Black", 
     textDepth=0.6, 
@@ -43,11 +41,10 @@ block(
 translate([0, -40, 0])
 block(
     grid=[10,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="Prototyping", 
     textFont="RBNo3.1 Black", 
     textDepth=0.6, 

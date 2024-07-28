@@ -55,12 +55,12 @@ module pcb_block(
 top=false,
 grid=[4,4],
 
-baseSideLength=8,
+gridSizeXY=8,
 brickHeight = 3,
 adjustSizeX = -0.2,
 adjustSizeY = -0.2,
 
-knobType="CLASSIC",
+knobType="classic",
 
 floorHeight = 3.5,
 wallThickness = 1.5,
@@ -103,9 +103,8 @@ plugBorderDepth=0.5,
 stablerSize=2,
 stablerThickness=1,
 
-withText=false,
 textFont="Font Awesome 5 Free Regular",
-text="\uf0eb",
+text="",
 textSize=7,
 textSide=2,
 textDepth=-0.5,
@@ -113,8 +112,8 @@ textSpacing=1,
 textOffset=[0,0]
 ){
 
-    finalObjectSizeX = (grid[0] * baseSideLength) + adjustSizeX;
-    finalObjectSizeY = (grid[1] * baseSideLength) + adjustSizeY;
+    finalObjectSizeX = (grid[0] * gridSizeXY) + adjustSizeX;
+    finalObjectSizeY = (grid[1] * gridSizeXY) + adjustSizeY;
 
     windowThickness = wallThickness + wallThicknessTolerance;
     windowThicknessBottom = outerWallThickness + wallThicknessTolerance;
@@ -137,11 +136,10 @@ textOffset=[0,0]
             hollowBlock(
                 brickHeight=brickHeight, 
                 grid=grid, 
-                alwaysOnFloor=true, 
+                alignBottom=true, 
                 center=true,
                 top=true, 
                 knobType=knobType,
-                withText = withText,
                 textFont = textFont,
                 text = text,
                 textSize = textSize,
@@ -184,7 +182,7 @@ textOffset=[0,0]
 
     if(!top){
         
-        hollowBlock(brickHeight=brickHeight, grid=grid, alwaysOnFloor=true, top=false);
+        hollowBlock(brickHeight=brickHeight, grid=grid, alignBottom=true, top=false);
         difference(){
             //color("red")
             translate([0, 0.5 * (finalObjectSizeY - windowThickness), 0.5*(finalWindowHeight + floorHeight)]){

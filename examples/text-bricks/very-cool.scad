@@ -15,11 +15,10 @@ include <../../lib/block.scad>;
 //Generate the brick
 block(
     grid=[4,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="VERY", 
     textFont="OldSansBlack", 
     textDepth=0.6, 
@@ -29,11 +28,10 @@ block(
 translate([0, -20, 0])
 block(
     grid=[4,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="COOL", 
     textFont="OldSansBlack", 
     textDepth=0.6, 

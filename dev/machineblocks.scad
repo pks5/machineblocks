@@ -4,7 +4,6 @@ translate([0, 50, 0])
 block(
     baseLayers=3,
     grid=[8,2],
-    withText=true,
     text="machineblocks.com",
     textFont="RBNo3.1 Black"
 );

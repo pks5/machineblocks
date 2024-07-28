@@ -26,9 +26,8 @@ difference(){
         topPlateHeight=topPlateHeight,
         top=true,
         center=true,
-        alwaysOnFloor=true,
+        alignBottom=true,
         grid=[2,4],
-        withText=true,
         textSide=4,
         text="\uf030",
         textFont="Font Awesome 5 Free Solid"

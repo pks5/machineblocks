@@ -15,11 +15,10 @@ include <../../lib/block.scad>;
 //Generate the brick
 block(
     grid=[14,2], 
-    knobType="NONE",
-    withText=true, 
+    knobs=false,
     textSize=7, 
     textSide=5,
-    sideAdjustment=[0,0,0,0],
+    baseSideAdjustment=[0,0,0,0],
     text="MachineBlocks.com", 
     textFont="RBNo3.1 Black", 
     textDepth=0.6, 
