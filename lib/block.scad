@@ -31,7 +31,7 @@ module block(
         baseCutoutMaxDepth = 9.0, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
-        baseClampOffset = 0.2, //mm
+        baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 30,
@@ -73,6 +73,8 @@ module block(
         //Pins (little tubes for blocks with 1 brick side length)
         pinSize = 3.2, //mm
         pinClampThickness = 0.1, //mm
+        pinClampOffset = 0.4, //mm
+        pinClampHeight = 0.8, //mm
 
         //Tubes
         tubeXSize = 6.4, //mm
@@ -403,12 +405,12 @@ module block(
                                                 translate([0, 0, -0.5 * cutOffset])
                                                     cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
                                                 
-                                                    translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                                
-                                                
-                                                    translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                                translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
+                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                            
+                                            
+                                                translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
+                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                             }  
                                         }
                                     }
@@ -428,11 +430,11 @@ module block(
                                                 translate([0, 0, -0.5 * cutOffset])
                                                     cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
                                                 
-                                                    translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
-                                                
-                                                    translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), -0.5 * (baseCutoutDepth - baseClampHeight) - 0.5 * cutOffset]) 
-                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + cutOffset + cutTolerance], center=true);
+                                                translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
+                                                    cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                            
+                                                translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
+                                                    cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                             }
                                         }
                                     }
@@ -573,10 +575,9 @@ module block(
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawPillar(a, 0)){
                                                 translate([posX(a + 0.5), 0, baseCutoutZ]){
-                                                    translate([0, 0, 0.5* baseClampHeight])
-                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                 };
                                             }
                                         }
@@ -588,10 +589,9 @@ module block(
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawPillar(0, b)){
                                                 translate([0, posY(b + 0.5), baseCutoutZ]){
-                                                    translate([0, 0, 0.5* baseClampHeight])
-                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                 };
                                             }
                                         }
