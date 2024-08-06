@@ -31,6 +31,7 @@ module block(
         baseCutoutMaxDepth = 9.0, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
+        baseClampOffset = 0.2, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 30,
@@ -79,6 +80,8 @@ module block(
         tubeZSize = 6.4, //mm
         tubeInnerClampThickness = 0.1, //mm
         tubeOuterClampThickness = 0.1, //mm
+        tubeOuterClampOffset = 0.4, //mm
+        tubeOuterClampHeight = 0.8, //mm
 
         //Holes
         holesX = false,
@@ -380,6 +383,7 @@ module block(
                                 topPlateHeight = resultingTopPlateHeight,
                                 baseClampHeight = baseClampHeight,
                                 baseClampThickness = baseClampThickness,
+                                baseClampOffset = baseClampOffset,
                                 pit = pit,
                                 pitDepth = resultingPitDepth,
                                 slanting = slanting,
@@ -635,10 +639,11 @@ module block(
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleZ(a, b)){
                                                 translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                    translate([0, 0, 0.5* baseClampHeight])
-                                                        cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                    translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                        cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                    
+                                                    //Clamp
+                                                    translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
+                                                        cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                 };
                                             }
                                         }   
@@ -653,10 +658,11 @@ module block(
                                                 translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                                     difference(){
                                                         union(){
-                                                            translate([0, 0, 0.5* baseClampHeight])
-                                                                cylinder(h=baseCutoutDepth - baseClampHeight, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            translate([0, 0, 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                                cylinder(h=baseClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                            cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                            
+                                                            //Clamp
+                                                            translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
+                                                                cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                         }
                                                         //Cut Tube inner
                                                         intersection(){
@@ -684,6 +690,7 @@ module block(
                                     topPlateHeight = resultingTopPlateHeight,
                                     baseClampHeight = baseClampHeight,
                                     baseClampThickness = baseClampThickness,
+                                    baseClampOffset = baseClampOffset,
                                     pit = pit,
                                     pitDepth = resultingPitDepth,
                                     slanting = slanting,

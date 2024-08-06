@@ -25,6 +25,7 @@ module mb_base_cutout(
     topPlateHeight,
     baseClampHeight,
     baseClampThickness,
+    baseClampOffset,
     pit,
     pitDepth,
     slanting,
@@ -44,7 +45,7 @@ module mb_base_cutout(
     offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
     offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
 
-    echo(slanting=slanting, offsetY = offsetY);
+    echo(slanting=slanting, offsetY = offsetY, baseHeight=baseHeight, topPlateHeight = topPlateHeight, baseClampOffset=baseClampOffset);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -60,9 +61,9 @@ module mb_base_cutout(
                 * Bottom Hole
                 */
                 color([0.953, 0.612, 0.071]) //f39c12
-                translate([0, 0, 0.5*(baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
                     mb_rounded_block(
-                        size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight], 
+                        size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
                         center = true, 
                         radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
                         resolution=roundingResolution
@@ -72,13 +73,27 @@ module mb_base_cutout(
                 * Clamp Skirt
                 */
                 color([0.902, 0.494, 0.133]) //e67e22
-                translate([0, 0, 0.5*(baseClampHeight - baseHeight)])
+                translate([0, 0, baseClampOffset + 0.5*(baseClampHeight - baseHeight)])
                     mb_rounded_block(
                         size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
                         center = true, 
                         radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
                         resolution=roundingResolution
                     );
+
+                /*
+                * Clamp Offset
+                */
+                if(baseClampOffset > 0){
+                    color([0.902, 0.494, 0.133]) //e67e22
+                    translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
+                        mb_rounded_block(
+                            size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                            center = true, 
+                            radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                            resolution=roundingResolution
+                        );
+                }
             }
         }
 
