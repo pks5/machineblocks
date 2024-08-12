@@ -16,5 +16,10 @@ include <../../lib/block.scad>;
 block(
     baseLayers=3,
     grid=[4,2],
-    baseClampOffset=0.4
+    
+    baseHeightAdjustment = 0.0,
+    baseSideAdjustment = -0.1,
+    knobSize = 5.1,
+    wallThickness = 1.5,
+    tubeZSize = 6.2
 );

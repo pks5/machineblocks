@@ -2,7 +2,7 @@ echo(version=version());
 
 include <../lib/block.scad>;
 
-textFont = "RBNo3.1 Black";
+textFont = "Arial Black";
 
 block(
     grid = [9, 1],
