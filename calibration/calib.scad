@@ -46,6 +46,7 @@ module calib_knobSize(numberOfSamples, valueStart, valueStep, vOffset){
     for(i = [0 : numberOfSamples-1]){
         block(
             baseCutoutType = "none",
+            baseHeight = 0.8,
             knobSize = valueStart + i * valueStep,
             gridOffset=[2* (i - floor(0.5 * numberOfSamples)),vOffset,0.5]
         );
