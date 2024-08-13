@@ -5,6 +5,9 @@ block(
     baseLayers=8,
     knobs=false,
     tongue=true,
+    tongueHeight=1.8,
+    tongueClampThickness=0,
+    tongueOuterAdjustment=-0.2,
     pit=true,
     baseCutoutType="none",
     baseRoundingRadius=[0,0,4]
