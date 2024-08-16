@@ -823,7 +823,7 @@ module block(
                             union(){
                                 difference(){
                                     mb_rounded_block(
-                                        size=[knobRectX + tongueOuterAdjustment, knobRectY + tongueOuterAdjustment, tongueHeight], 
+                                        size=[knobRectX + 2 * tongueOuterAdjustment, knobRectY + 2 * tongueOuterAdjustment, tongueHeight], 
                                         center = true, 
                                         radius=[0,0,tongueRoundingRadius], 
                                         resolution=($preview ? previewQuality : 1) * baseRoundingResolution
@@ -858,7 +858,7 @@ module block(
                                 translate([0, 0, 0.5 * (tongueHeight - tongueClampHeight) - tongueClampOffset]){    
                                     difference(){       
                                         mb_rounded_block(
-                                            size=[knobRectX + 2*tongueClampThickness + tongueOuterAdjustment, knobRectY + 2*tongueClampThickness + tongueOuterAdjustment, tongueClampHeight], 
+                                            size=[knobRectX + 2*tongueClampThickness + 2 * tongueOuterAdjustment, knobRectY + 2*tongueClampThickness + 2 * tongueOuterAdjustment, tongueClampHeight], 
                                             center = true, 
                                             radius=[0,0,tongueRoundingRadius], 
                                             resolution=($preview ? previewQuality : 1) * baseRoundingResolution
@@ -1057,7 +1057,7 @@ module block(
                             translate([0, 0, 0.5 * tongueGrooveDepth - 0.5 * cutOffset]){
                                 difference(){
                                     mb_rounded_block(
-                                        size=[knobRectX + tongueOuterAdjustment, knobRectY + tongueOuterAdjustment, tongueGrooveDepth + cutOffset], 
+                                        size=[knobRectX + 2 * tongueOuterAdjustment, knobRectY + 2 * tongueOuterAdjustment, tongueGrooveDepth + cutOffset], 
                                         center = true,
                                         radius = [0,0,tongueRoundingRadius], 
                                         resolution=($preview ? previewQuality : 1) * baseRoundingResolution
@@ -1089,7 +1089,7 @@ module block(
                             translate([0, 0, tongueHeight - tongueClampOffset - 0.5 * tongueClampHeight]){    
                                 difference(){       
                                     mb_rounded_block(
-                                        size=[knobRectX + 2*tongueClampThickness + tongueOuterAdjustment, knobRectY + 2*tongueClampThickness + tongueOuterAdjustment, tongueClampHeight], 
+                                        size=[knobRectX + 2*tongueClampThickness + 2 * tongueOuterAdjustment, knobRectY + 2*tongueClampThickness + 2 * tongueOuterAdjustment, tongueClampHeight], 
                                         center = true,
                                         radius = [0,0,tongueRoundingRadius], 
                                         resolution=($preview ? previewQuality : 1) * baseRoundingResolution
@@ -1129,7 +1129,7 @@ module block(
                                 gapLength = drawWallGapX(a, side, 0);
                                 if(gapLength > 0){
                                     translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
-                                        cube([gapLength*gridSizeXY - (objectSizeX - (knobRectX + tongueOuterAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + tongueOuterAdjustment) + sAdjustment[2 + side] + cutTolerance), tongueGrooveDepth + cutOffset], center=true); 
+                                        cube([gapLength*gridSizeXY - (objectSizeX - (knobRectX + 2 * tongueOuterAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + 2 * tongueOuterAdjustment) + sAdjustment[2 + side] + cutTolerance), tongueGrooveDepth + cutOffset], center=true); 
                                 }
                             }
                         }
@@ -1143,7 +1143,7 @@ module block(
                                 gapLength = drawWallGapY(b, side, 0);
                                 if(gapLength > 0){
                                     translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
-                                            cube([(objectSizeX - (knobRectX + tongueOuterAdjustment) + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - (objectSizeY - (knobRectY + tongueOuterAdjustment)) + cutTolerance, tongueGrooveDepth + cutOffset], center=true);   
+                                            cube([(objectSizeX - (knobRectX + 2 * tongueOuterAdjustment) + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - (objectSizeY - (knobRectY + 2 * tongueOuterAdjustment)) + cutTolerance, tongueGrooveDepth + cutOffset], center=true);   
                                 }
                             }
                         }

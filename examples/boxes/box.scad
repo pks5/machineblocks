@@ -7,7 +7,7 @@ block(
     tongue=true,
     tongueHeight=1.8,
     tongueClampThickness=0,
-    tongueOuterAdjustment=-0.2,
+    tongueOuterAdjustment=-0.1,
     pit=true,
     textSize=10,
     textFont="OldSansBlack",

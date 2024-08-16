@@ -7,7 +7,7 @@ block(
     tongue=true,
     tongueHeight=1.8,
     tongueClampThickness=0,
-    tongueOuterAdjustment=-0.2,
+    tongueOuterAdjustment=-0.1,
     pit=true,
     baseCutoutType="none",
     baseRoundingRadius=[0,0,4]
