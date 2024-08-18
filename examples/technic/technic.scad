@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../lib/block.scad>;
+include <../../lib/block.scad>;
 
 translate([-26, -20, 0])
     block(
