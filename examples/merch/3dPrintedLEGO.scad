@@ -16,37 +16,37 @@ include <../../lib/block.scad>;
 block(
     grid=[3,2], 
     knobs=false,
-    textSize=7, 
+    textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
-    text="3D", 
+    text="Print", 
     textFont="RBNo3.1 Black", 
-    textDepth=0.6, 
-    textSpacing=1.1
+    textDepth=0.8, 
+    textSpacing=1
 ); 
 
 translate([0, -20, 0])
 block(
     grid=[7,2], 
     knobs=false,
-    textSize=7, 
+    textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
-    text="PRINTED", 
+    text="Your Own", 
     textFont="RBNo3.1 Black", 
-    textDepth=0.6, 
-    textSpacing=1.1
+    textDepth=0.8, 
+    textSpacing=1
 ); 
 
 translate([0, -40, 0])
 block(
-    grid=[4,2], 
+    grid=[5,2], 
     knobs=false,
-    textSize=7, 
+    textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
-    text="LEGO", 
+    text="Bricks", 
     textFont="RBNo3.1 Black", 
-    textDepth=0.6, 
-    textSpacing=1.1
+    textDepth=0.8, 
+    textSpacing=1
 ); 
