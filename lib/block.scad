@@ -897,7 +897,7 @@ module block(
 
                 //PCB
                 if(pcb){
-                    translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, topPlateZ + 0.5*topPlateHeight]){
+                    translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, pitFloorZ]){
                         if(pcbMountingType == "clips"){
                             mb_pcb_clips(
                                 pcbDimensions = pcbDimensions
