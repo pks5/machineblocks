@@ -3,7 +3,7 @@ use <shapes.scad>;
 //Dupont plug grid size is 2.54 mm
 module mb_dupont_plug(
     gridSize = 2.54,
-    plugSize = 2.6,
+    plugSize = 2.8,
     borderWidth = 0.8,
     borderRadius = 0.8,
     blindHoleDiameter = 1.2,
@@ -14,8 +14,8 @@ module mb_dupont_plug(
     blinds=[]
 ){
 
-    totalWidth = grid[0] * gridSize + 2 * borderWidth;
-    totalHeight = grid[1] * gridSize + 2 * borderWidth;
+    totalWidth = grid[0] * gridSize + 2 * borderWidth + plugSize - gridSize;
+    totalHeight = grid[1] * gridSize + 2 * borderWidth + plugSize - gridSize;
 
     function is_blind(a, b, i) = (i < len(blinds)) && (((a == blinds[i][0]) && (b == blinds[i][1])) || is_blind(a, b, i + 1)); 
 
