@@ -18,4 +18,4 @@ translate([-20, -60, 0])
  */       
  
  translate([-20, -40, 0])
-        block(baseLayers=3, grid=[3,2], baseHeightAdjustment=-0.2, wallThickness = 1.5);        
+        block(grid=[12,2], wallGapsX=[[0,2,3]]);        
