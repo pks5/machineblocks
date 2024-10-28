@@ -3,39 +3,39 @@ echo(version=version());
 include <../../lib/block.scad>;
 
 grid = [6,6];
-pitWallThickness = 0.8;
-originalBaseHeight=3.2;
+pitWallThickness = 0.8 / 8;
+gridSizeZ = 3.2;
 gridSizeXY = 8;
-brickHeight=3.4;
+brickHeight = 3.4;
 
-grassFitTolerance=0.1;
-grassHeight=5;
-strawWidth=0.8;
-strawThickness=0.2;
-preferredSpaceX=0.8;
-preferredSpaceY=0.8;
-strawOffsetX=0.2;
-strawOffsetY=0.2;
+grassFitTolerance = 0.1;
+grassHeight = 5;
+strawWidth = 0.8;
+strawThickness = 0.2;
+preferredSpaceX = 0.8;
+preferredSpaceY = 0.8;
+strawOffsetX = 0.2;
+strawOffsetY = 0.2;
 
-brimThickness=8;
-brimHeight=0.2;
+brimThickness = 8;
+brimHeight = 0.2;
 pitDepth = 0.8;
 
-withTop=true;
-withBottom=true;
+withTop = true;
+withBottom = true;
 
 if(withBottom){
     block(
-        grid=grid,
-        baseHeight=brickHeight,
-        topPlateHeight=0.4,
-        stabilizerGridHeight=1,
-        pitDepth=pitDepth,
-        baseHeightOriginal=originalBaseHeight,
+        grid = grid,
+        baseHeight = brickHeight,
+        topPlateHeight = 0.4,
+        stabilizerGridHeight = 1,
+        pitDepth = pitDepth,
+        gridSizeZ = gridSizeZ,
         gridSizeXY = gridSizeXY,
         pitWallThickness = pitWallThickness,
-        pit=true,
-        knobs=false
+        pit = true,
+        knobs = false
     );
 }
 
@@ -77,5 +77,5 @@ color([0.945, 0.769, 0.059])
             translate([0,0.5*(grassHeight+2*pitDepth+brimThickness),0.5*brimHeight])
                     cube([grassSizeX, brimThickness, brimHeight], center=true);
         //}
-}
+    }
 }
