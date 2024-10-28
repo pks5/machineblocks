@@ -1,4 +1,4 @@
-include <../lib/block.scad>;
+include <../../lib/block.scad>;
 
 module calib_base(type, numberOfSamples, valueStart, valueStep, labelSize, font, fontSize, vOffset){
     block(
