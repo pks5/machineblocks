@@ -2,7 +2,7 @@
 * Machine Blocks
 * https://machinemania.net/blocks 
 *
-* Brick 4x2 without knobs
+* Brick 2x2 without knobs
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -14,6 +14,9 @@ echo(version=version());
 
 include <../../lib/block.scad>;
 
-//4x2 Brick
-translate([0,0,0])
-    block(baseLayers=3, knobs=false);
+//2x2 Brick    
+block(
+    baseLayers=3, 
+    grid=[2,2], 
+    knobs=false
+);
