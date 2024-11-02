@@ -1,6 +1,6 @@
 /**
 * Machine Blocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/technic-bricks
 *
 * Technic Brick 4x2 Z
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>

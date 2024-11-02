@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* https://machineblocks.com/examples/technic-bricks
+* https://machineblocks.com/examples/boxes-enclosures
 *
-* Technic Brick 24x1
+* Box 2x2
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -10,20 +10,14 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-
-//Include the library
 use <../../lib/block.scad>;
 
 //Grid Size X-direction
-gridX = 24; 
+gridX = 2; 
 //Grid Size Y-direction
-gridY = 1; 
+gridY = 2; 
 //Number of layers
-baseLayers = 3;
-//KnobType
-knobType = "technic";
-//Technic Holes
-holesX = true;
+baseLayers = 4;
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -36,12 +30,32 @@ wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-//Generate the block
+//Generate 2x2 Box
 block(
-    grid = [gridX, gridY],
-    baseLayers = baseLayers,
-    knobType = knobType,
-    holesX = holesX,
+    baseLayers = baseLayers - 1,
+    grid = [gridX, gridX],
+    
+    pit = true,
+    pitKnobs = false,
+    
+    tongue = true,
+    tongueHeight=1.8,
+    tongueClampThickness=0,
+    tongueOuterAdjustment=-0.1,
+
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize
+);
+
+//Generate 2x2 Lid
+block(
+    baseLayers = 1,
+    grid = [gridX, gridX],
+    gridOffset = [gridX + 1, 0, 0],
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

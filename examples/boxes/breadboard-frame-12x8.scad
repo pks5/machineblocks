@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* https://machineblocks.com/examples/technic-bricks
+* https://machineblocks.com/examples/boxes-enclosures
 *
-* Technic Brick 24x1
+* Breadboard Frame 12x8
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -10,20 +10,14 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-
-//Include the library
 use <../../lib/block.scad>;
 
 //Grid Size X-direction
-gridX = 24; 
+gridX = 12; 
 //Grid Size Y-direction
-gridY = 1; 
+gridY = 8; 
 //Number of layers
-baseLayers = 3;
-//KnobType
-knobType = "technic";
-//Technic Holes
-holesX = true;
+baseLayers = 4;
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -36,12 +30,15 @@ wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-//Generate the block
 block(
-    grid = [gridX, gridY],
     baseLayers = baseLayers,
-    knobType = knobType,
-    holesX = holesX,
+    grid = [gridX, gridY],
+    pit = true,
+    pitWallThickness = [5.9/8, 4.6/8],
+    pitDepth = 8.8,
+    baseCutoutMaxDepth = 2.6,
+    knobs = false,
+
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

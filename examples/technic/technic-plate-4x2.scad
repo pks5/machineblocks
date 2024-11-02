@@ -1,6 +1,6 @@
 /**
 * Machine Blocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/technic-bricks
 *
 * Technic Plate 4x2
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>

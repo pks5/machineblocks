@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* https://machineblocks.com/examples/technic-bricks
+* https://machineblocks.com/examples/boxes-enclosures
 *
-* Technic Brick 24x1
+* Box 6x6
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -10,20 +10,14 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-
-//Include the library
 use <../../lib/block.scad>;
 
 //Grid Size X-direction
-gridX = 24; 
+gridX = 6; 
 //Grid Size Y-direction
-gridY = 1; 
+gridY = 6; 
 //Number of layers
-baseLayers = 3;
-//KnobType
-knobType = "technic";
-//Technic Holes
-holesX = true;
+baseLayers = 9;
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -36,15 +30,37 @@ wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-//Generate the block
 block(
-    grid = [gridX, gridY],
-    baseLayers = baseLayers,
-    knobType = knobType,
-    holesX = holesX,
+    grid=[gridX, gridY],
+    baseLayers = baseLayers - 1,
+    
+    tongue = true,
+    tongueHeight = 1.8,
+    tongueClampThickness = 0,
+    tongueOuterAdjustment = -0.1,
+    
+    knobs=false,
+    pit=true,
+    
+    textSize = 10,
+    textFont = "OldSansBlack",
+    textDepth = -0.8,
+    text = "Jewelry",
+
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize
 );
+
+block(
+    grid=[gridX, gridY],
+    gridOffset = [gridX + 1, 0, 0],
+
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize
+);   

@@ -2,7 +2,7 @@
 * Machine Blocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Breadboard Frame 12x8
+* Water Tank 8x12
 * Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -13,7 +13,7 @@
 use <../../lib/block.scad>;
 
 //Grid Size X-direction
-gridX = 12; 
+gridX = 8; 
 //Grid Size Y-direction
 gridY = 12; 
 //Number of layers
@@ -50,10 +50,6 @@ union(){
         baseLayers = baseLayers - floorLayers, 
         grid = [gridX, 1], 
         baseCutoutType = "none",
-        text="\ue5aa",
-        textSide = 2,
-        textSize = 40,
-        textFont = "Font Awesome 6 Free Solid", 
         gridOffset = [0, -0.5 * (gridY - 1), floorLayers],
 
         baseHeightAdjustment = baseHeightAdjustment,

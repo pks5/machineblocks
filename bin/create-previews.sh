@@ -9,6 +9,8 @@ DIR_SETS="../sets"
 DIR_EXAMPLES="../examples"
 DIR_CLASSIC_BRICKS="../examples/classic"
 DIR_TECHNIC_BRICKS="../examples/technic"
+DIR_BOXES="../examples/boxes"
+DIR_TEXT="../examples/text"
 
 IMAGE_WIDTH=1200
 IMAGE_HEIGHT=900
@@ -16,7 +18,7 @@ IMAGE_BORDER=30
 IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 
-declare -a arr=("$DIR_CLASSIC_BRICKS" "$DIR_TECHNIC_BRICKS")
+declare -a arr=("$DIR_BOXES" "$DIR_TEXT")
 
 echo
 echo Creating preview images ...
