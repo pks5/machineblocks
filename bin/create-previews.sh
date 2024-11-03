@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
-PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
+#PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 
 PATH_TO_MAGICK="magick"
 
@@ -21,7 +21,7 @@ IMAGE_BORDER=30
 IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 
-declare -a arr=("$DIR_SLANTED" "$DIR_TEXT")
+declare -a arr=("$DIR_SETS" "$DIR_EXAMPLES")
 
 echo
 echo Creating preview images ...
@@ -38,6 +38,7 @@ do
             label="$(basename ${file})"
             label=${label//-/ }
             label=${label/.scad/}
+            label=$(sed -e "s/\b\(.\)/\u\1/g" <<< ${label})
 
             "$PATH_TO_OPENSCAD" --o "${file/scad/png}" --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"
             

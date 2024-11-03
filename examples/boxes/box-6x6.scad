@@ -34,19 +34,9 @@ block(
     grid=[gridX, gridY],
     baseLayers = baseLayers - 1,
     
-    tongue = true,
-    tongueHeight = 1.8,
-    tongueClampThickness = 0,
-    tongueOuterAdjustment = -0.1,
-    
-    knobs=false,
     pit=true,
+    pitWallThickness = 1,
     
-    textSize = 10,
-    textFont = "OldSansBlack",
-    textDepth = -0.8,
-    text = "Jewelry",
-
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
