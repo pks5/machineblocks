@@ -10,7 +10,7 @@
 */
 
 //Include the MachineBlocks library
-include <../lib/block.scad>;
+include <../../lib/block.scad>;
 
 //Generate the brick
 block(
