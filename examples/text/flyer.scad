@@ -6,7 +6,7 @@ block(
     baseLayers = 1,
     grid = [16, 9],
     gridOffset = [7, 0, 0],
-    svg="../examples/merch/images/mb.svg",
+    svg="../examples/text/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,
     svgSide=5,
