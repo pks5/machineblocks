@@ -36,7 +36,15 @@ color("blue")
 
 color("green")
     translate([10, -80, 0])
-        block(grid=[3, 14], adhesionHelpers=true);
+        block(
+                grid=[2,2],
+             //   tubeZSize = valueStart + i * valueStep,
+              //  gridOffset=[2* (i - floor(0.5 * numberOfSamples)),-vOffset,-1.5],
+                knobs=false,
+             //   baseSideAdjustment=-4,
+                stabilizerGrid=false,
+                topPlateHelpers=false
+            );
 
 translate([10, -180, 0])
 mb_rounded_block(

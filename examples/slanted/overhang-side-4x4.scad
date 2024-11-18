@@ -39,7 +39,7 @@ block(
     grid = [gridX, gridY],
     baseLayers = baseLayers,
     knobs = knobs,
-    slanting=[0,0,-3,0], 
+    slanting=[-1,-2,0,0], 
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
