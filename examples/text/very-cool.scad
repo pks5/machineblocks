@@ -20,7 +20,7 @@ block(
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
     text="VERY", 
-    textFont="OldSansBlack", 
+    textFont="RBNo3.1 Black", 
     textDepth=0.6, 
     textSpacing=1.1
 ); 
@@ -33,7 +33,7 @@ block(
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
     text="COOL", 
-    textFont="OldSansBlack", 
+    textFont="RBNo3.1 Black", 
     textDepth=0.6, 
     textSpacing=1.1
 ); 

@@ -26,6 +26,8 @@ knobs = true;
 text = "Hello";
 //Text side
 textSide = 2;
+//Text Font
+textFont = "RBNo3.1 Black";
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -45,6 +47,7 @@ block(
     knobs = knobs,
     textSide = textSide,
     text=text,
+    textFont = textFont,
 
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,

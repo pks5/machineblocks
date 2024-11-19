@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
-#PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+#PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
+PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 
 PATH_TO_MAGICK="magick"
 
@@ -35,15 +35,17 @@ for i in "${arr[@]}"
 do
    find "$i" -name "*.scad" -print0 | while read -d $'\0' file
         do
+            echo "Creating preview for ${file} ..."
             label="$(basename ${file})"
             label=${label//-/ }
             label=${label/.scad/}
-            label=$(sed -e "s/\b\(.\)/\u\1/g" <<< ${label})
+            label=`python3 -c "print('${label}'.title())"`
+            image_file="${file/scad/png}"
 
-            "$PATH_TO_OPENSCAD" --o "${file/scad/png}" --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"
+            "$PATH_TO_OPENSCAD" --o "$image_file" --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"
             
             "$PATH_TO_MAGICK" \
-             \( "${file/scad/png}" -fill '#000000d0' -pointsize 70 -gravity northeast -bordercolor '#e5e5ce' -border ${IMAGE_BORDER} -font 'RBNo3.1-Book' -annotate '+60 +60' 'STL' \) \
+             \( "$image_file" -fill '#000000d0' -pointsize 70 -gravity northeast -bordercolor '#e5e5ce' -border ${IMAGE_BORDER} -font 'RBNo3.1-Book' -annotate '+60 +60' 'STL' \) \
              \( -size ${IMAGE_WIDTH_FULL}x${IMAGE_HEIGHT_FULL} canvas:none -fill '#000000d0' -pointsize 35 -gravity northeast -font 'RBNo3.1-Book' -annotate '+60 +140' "3D printable" \) \
              \( -size ${IMAGE_WIDTH_FULL}x${IMAGE_HEIGHT_FULL} canvas:none -fill '#000000d0' -pointsize 70 -gravity northwest -font 'RBNo3.1-Book' -annotate '+60 +60' "${label}" \) \
              \( -size ${IMAGE_WIDTH_FULL}x${IMAGE_HEIGHT_FULL} canvas:none -fill '#000000d0' -pointsize 35 -gravity northwest -font 'RBNo3.1-Book' -annotate '+60 +140' "LEGO® compatible" \) \
@@ -51,7 +53,8 @@ do
              \( -size ${IMAGE_WIDTH_FULL}x${IMAGE_HEIGHT_FULL} canvas:none -fill '#000000d0' -pointsize 35 -gravity southwest -font 'RBNo3.1-Book' -annotate '+60 +140' "generated with" \) \
              -layers flatten -quality 80 "${file/scad/webp}"
 
-             rm "${file/scad/png}"
+             rm "$image_file"
+             echo "Created preview ${image_file} for scad file ${file}"
         done
 done
 

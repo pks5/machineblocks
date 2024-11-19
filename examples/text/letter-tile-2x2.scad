@@ -46,6 +46,7 @@ block(
     textSize = 9,
     text=letter,
     textDepth=letterDepth,
+    textFont="RBNo3.1 Black",
 
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
