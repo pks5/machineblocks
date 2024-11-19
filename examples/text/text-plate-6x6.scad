@@ -40,7 +40,7 @@ block(
     baseLayers = baseLayers,
     knobs = [true, [0,2,5,3, true]],
 
-    textFont="Liberation Sans",
+    textFont="RBNo3.1 Black",
     text=text,
     textSize=10,
     textSide=5,
