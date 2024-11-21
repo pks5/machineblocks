@@ -1,10 +1,10 @@
 echo(version=version());
 
 include <../../lib/block.scad>;
-include <calib.scad>;
+include <./calib.scad>;
 
 numberOfSamples = 5;
-font = "Arial Black";
+font = "RBNo3.1";
 fontSize = 3;
 labelSize = 5;
 
