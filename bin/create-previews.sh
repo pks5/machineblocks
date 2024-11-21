@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
-PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
+#PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 
 PATH_TO_MAGICK="magick"
 
@@ -39,7 +39,7 @@ do
             label="$(basename ${file})"
             label=${label//-/ }
             label=${label/.scad/}
-            label=`python3 -c "print('${label}'.title())"`
+            label=`python -c "print('${label}'.title())"`
             image_file="${file/scad/png}"
 
             "$PATH_TO_OPENSCAD" --o "$image_file" --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"
