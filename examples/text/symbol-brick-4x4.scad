@@ -19,10 +19,10 @@ block(
     textSize=6, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
-    text="\uf1e2\ue4dc\uf714", 
+    text="\uf004\uf004\uf004", 
     textFont="Font Awesome 6 Free Solid", 
     textDepth=0.7, 
-    textSpacing=1,
+    textSpacing=1.1,
     alignBottom=false,
     knobs=[true, [0,1,3,2,true]]
 ); 
