@@ -20,7 +20,9 @@ gridY = 8;
 //Number of layers
 baseLayers = 12;
 //Text on lid
-lidText = "Meds";
+lidText = "Jewelry";
+//Text Font
+textFont = "RBNo3.1";
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -65,6 +67,7 @@ block(
     textSize = 10,
     textDepth = 0.8,
     text = lidText,
+    textFont = textFont,
     baseRoundingRadius = [0,0,4],
 
     baseHeightAdjustment = baseHeightAdjustment,
