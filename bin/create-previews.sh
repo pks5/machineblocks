@@ -5,6 +5,7 @@ PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
 
 PATH_TO_MAGICK="magick"
 
+DIR_DOCS="../docs"
 DIR_SETS="../sets"
 DIR_EXAMPLES="../examples"
 DIR_CLASSIC="../examples/classic"
@@ -21,7 +22,8 @@ IMAGE_BORDER=30
 IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 
-declare -a arr=("$DIR_SETS" "$DIR_EXAMPLES")
+#declare -a arr=("$DIR_SETS" "$DIR_EXAMPLES")
+declare -a arr=("$DIR_DOCS")
 
 echo
 echo Creating preview images ...
