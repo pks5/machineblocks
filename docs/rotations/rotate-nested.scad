@@ -15,8 +15,8 @@ rX = 45;
 
 // Create Sphere and rotate Cylinder and Cube by 'rX'
 // Then rotate Cube again by 'rX'
-// The inner rotation does not need {} around
-// if you only rotate one shape
+// We rotated the Cube by 90 degrees in total
+// Which does nothing with a Cube
 sphere(r = sphereRadius);
 rotate([rX, 0, 0]){
     cylinder(d = cyDia, h = cyHei, center = true);
