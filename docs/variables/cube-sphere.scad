@@ -1,3 +1,6 @@
+// Set fragment number for roundings
+$fn = $preview ? 32 : 64;
+
 // Create your own naming convention!
 // You are the one who has to keep an eye on things
 

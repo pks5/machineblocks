@@ -1,3 +1,6 @@
+// Set fragment number for roundings
+$fn = $preview ? 32 : 64;
+
 // Size of the Cube (all directions)
 cuSize = 10;
 

@@ -15,33 +15,38 @@
 include <../../lib/block.scad>;
 
 //Grid Size X-direction
-gridX = 4; 
+gridX = 8; // [1:32]
 //Grid Size Y-direction
-gridY = 4; 
+gridY = 8; // [1:32]
+//Border Size
+borderSize = 2; // [1:8]
 //Number of layers
-baseLayers = 1;
+baseLayers = 1; // [1:48]
 //Draw Knobs
 knobs = true;
+//Knob Type
+knobType = "classic"; // [classic, technic]
 
 //Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
+baseHeightAdjustment = 0.0; // .1
 //Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
+baseSideAdjustment = -0.1; // .1
 //Diameter of the knobs (mm)
-knobSize = 5.0;
+knobSize = 5.0; // .1
 //Thickness of the walls (mm)
-wallThickness = 1.5;
+wallThickness = 1.5; // .1
 //Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
+tubeZSize = 6.4; // .1
 
 //Plate with hole
 union(){
     block(
-        grid=[1, gridY], 
+        grid=[borderSize, gridY], 
         knobs=knobs,
+        knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsY=[[0,1], [gridY-1,1]],
-        gridOffset=[-0.5*(gridX-1),0,0],
+        wallGapsY=[[0,1,borderSize], [gridY-borderSize,1,borderSize]],
+        gridOffset=[-0.5*(gridX-borderSize),0,0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -50,11 +55,12 @@ union(){
     );  
 
     block(
-        grid=[gridX,1],
+        grid=[gridX,borderSize],
         knobs=knobs,
+        knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsX=[[0,0], [gridX-1,0]],
-        gridOffset=[0,0.5*(gridY-1),0],
+        wallGapsX=[[0,0,borderSize], [gridX-borderSize,0,borderSize]],
+        gridOffset=[0,0.5*(gridY-borderSize),0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -63,11 +69,12 @@ union(){
     );
 
     block(
-        grid=[1, gridY], 
+        grid=[borderSize, gridY], 
         knobs=knobs,
+        knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsY=[[0,0], [gridY-1,0]],
-        gridOffset=[0.5*(gridX-1),0,0],
+        wallGapsY=[[0,0,borderSize], [gridY-borderSize,0,borderSize]],
+        gridOffset=[0.5*(gridX-borderSize),0,0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -76,11 +83,12 @@ union(){
     );    
 
     block(
-        grid=[gridX,1], 
+        grid=[gridX,borderSize], 
         knobs=knobs,
+        knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsX=[[0,1], [gridX-1,1]],
-        gridOffset=[0,-0.5*(gridY-1),0],
+        wallGapsX=[[0,1,borderSize], [gridX-borderSize,1,borderSize]],
+        gridOffset=[0,-0.5*(gridY-borderSize),0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,

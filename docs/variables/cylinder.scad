@@ -1,4 +1,8 @@
-// Variable names can be abbreviated!
+// Variables starting with $ are special
+// You cannot rename it
+$fn = $preview ? 32 : 64;
+
+// Other variables can be abbreviated!
 
 // The diameter of the Cylinder
 dia = 10;
