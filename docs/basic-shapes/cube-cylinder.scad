@@ -1,3 +1,6 @@
+// Set fragment number for roundings
+$fn = $preview ? 32 : 64;
+
 // Cube and Cylinder combined
 // The Cube is 10mm wide
 // The Cylinder has a diameter of 10mm

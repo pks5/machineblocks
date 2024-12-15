@@ -1,3 +1,6 @@
+// Set fragment number for roundings
+$fn = $preview ? 32 : 64;
+
 // Name variables so you know what they are for!
 
 // Size of the Cube in the X-direction (width)
