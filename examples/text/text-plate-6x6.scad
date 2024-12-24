@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 6; 
 //Grid Size Y-direction
@@ -22,6 +24,8 @@ gridY = 6;
 baseLayers = 1;
 //Text
 text = "Love";
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

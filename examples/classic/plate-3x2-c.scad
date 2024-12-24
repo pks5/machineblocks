@@ -14,14 +14,24 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 3; 
 //Grid Size Y-direction
 gridY = 2; 
 //Number of layers
 baseLayers = 1;
+//Base Cutout Type
+baseCutoutType = "classic"; // [none, classic]
 //Draw Knobs
 knobs = true;
+//Knob Centered
+knobCentered = true;
+//Knob Type
+knobType = "technic"; // [classic, technic]
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -38,10 +48,11 @@ tubeZSize = 6.4;
 block(
     grid = [gridX, gridY],
     baseLayers = baseLayers,
+    baseCutoutType = baseCutoutType,
     knobs = knobs,
-    knobCentered = true,
-    knobType = "technic",
-
+    knobCentered = knobCentered,
+    knobType = knobType,
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

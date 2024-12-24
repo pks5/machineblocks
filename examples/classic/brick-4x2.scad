@@ -14,14 +14,41 @@
 //Include the library
 use <../../lib/block.scad>;
 
-//Grid Size X-direction
-gridX = 4; 
-//Grid Size Y-direction
-gridY = 2; 
-//Number of layers
-baseLayers = 3;
-//Draw Knobs
+/* [Size] */
+
+// Brick size in X-direction specified as multiple of an 1x1 brick.
+brickSizeX = 4; // [1:32]  
+// Brick size in Y-direction specified as multiple of an 1x1 brick.
+brickSizeY = 2; // [1:32]  
+// Height of brick specified as number of layers. Each layer has the height of one plate.
+baseLayers = 3; // [1:24]
+
+/* [Appearance] */
+
+// Type of cut-out on the underside.
+baseCutoutType = "classic"; // [none, classic]
+// Whether to draw knobs.
 knobs = true;
+// Whether knobs should be centered.
+knobCentered = false;
+// Type of the knobs
+knobType = "classic"; // [classic, technic]
+// Whether to draw pillars.
+pillars = true;
+// Whether brick should have Technic holes along X-axis.
+holesX = false;
+// Whether brick should have Technic holes along Y-axis.
+holesY = false;
+// Whether brick should have Technic holes along Z-axis.
+holesZ = false;
+// Whether brick should have a pit
+pit = false;
+// Whether knobs should be drawn inside pit
+pitKnobs = false;
+// Pit wall thickness as multiple of one brick side length
+pitWallThickness = 0.333;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -36,9 +63,20 @@ tubeZSize = 6.4;
 
 //Generate the block
 block(
-    grid = [gridX, gridY],
+    grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
+    baseCutoutType = baseCutoutType,
     knobs = knobs,
+    knobCentered = knobCentered,
+    knobType = knobType,
+    pillars = pillars,
+    holesX = holesX,
+    holesY = holesY,
+    holesZ = holesZ,
+    pit = pit,
+    pitKnobs = pitKnobs,
+    pitWallThickness = pitWallThickness,
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

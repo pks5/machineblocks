@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 12; 
 //Grid Size Y-direction
@@ -27,6 +29,8 @@ holesX1 = 0;
 holesZ1 = 0;
 holesX2 = 2;
 holesZ2 = 2;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

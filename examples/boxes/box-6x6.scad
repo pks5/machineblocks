@@ -12,12 +12,16 @@
 */
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 6; 
 //Grid Size Y-direction
 gridY = 6; 
 //Number of layers
 baseLayers = 9;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

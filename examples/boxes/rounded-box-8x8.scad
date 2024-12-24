@@ -13,6 +13,8 @@
 
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 8; 
 //Grid Size Y-direction
@@ -23,6 +25,8 @@ baseLayers = 12;
 lidText = "Jewelry";
 //Text Font
 textFont = "RBNo3.1";
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

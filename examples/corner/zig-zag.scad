@@ -14,10 +14,14 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Number of layers
 baseLayers = 3;
 //Draw Knobs
 knobs = true;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

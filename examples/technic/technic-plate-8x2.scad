@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 8; 
 //Grid Size Y-direction
@@ -24,6 +26,8 @@ baseLayers = 1;
 knobType = "classic";
 //Technic Holes
 holesZ = true;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

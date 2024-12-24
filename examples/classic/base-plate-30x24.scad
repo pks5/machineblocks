@@ -14,16 +14,24 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
-gridX = 30; // [1:64] 
+gridX = 30; // [1:32] 
 //Grid Size Y-direction
-gridY = 24; // [1:64] 
+gridY = 24; // [1:32] 
 //Number of layers
-baseLayers = 1; // [1:64]
-//Draw Knobs
-knobs = true;
+baseLayers = 1; // [1:24]
 //Base Cutout Type
 baseCutoutType = "none"; // [none, classic]
+//Draw Knobs
+knobs = true;
+//Knob Centered
+knobCentered = false;
+//Knob Type
+knobType = "classic"; // [classic, technic]
+
+/* [Calibration] */
 
 //Diameter of the knobs (mm)
 knobSize = 5.0;
@@ -40,8 +48,10 @@ baseSideAdjustment = -0.1;
 block(
     grid = [gridX, gridY],
     baseLayers = baseLayers,
-    knobs = knobs,
     baseCutoutType = baseCutoutType,
+    knobs = knobs,
+    knobCentered = knobCentered,
+    knobType = knobType,
 
     knobSize = knobSize,
     wallThickness = wallThickness,

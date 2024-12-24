@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/duo.scad>;
 
+/* [Appearance] */
+
 //Brick 1 Grid Size X-direction
 brick1GridX=9;  // [1:32]
 //Brick 1 Grid Size Y-direction
@@ -36,6 +38,8 @@ baseLayers = 3; // [1:48]
 knobs = true;
 //Knob Type
 knobType = "classic"; // [classic, technic]
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0; // .1
