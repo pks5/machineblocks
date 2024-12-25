@@ -1,0 +1,17 @@
+{
+    "examples" : [
+        {
+            "targetDirectory" : "../examples/classic",
+            "url": "https://machineblocks.com/examples/classic-bricks",
+            "bricks" : [
+                {
+                    "name": "Brick 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2
+                    }
+                }
+            ]
+        }
+    ]
+}
