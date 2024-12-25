@@ -23,6 +23,13 @@ baseLayers = 24;
 //Floor layers
 floorLayers = 3;
 
+/* [Quality] */
+
+// Preview quality
+previewQuality = 0.5; // [0.1:0.1:1]
+// Number of drawn fragments for roundings in the final render.
+roundingResolution = 64; // [16:8:128]
+
 /* [Calibration] */
 
 //Adjustment of the height (mm)

@@ -1,0 +1,10 @@
+{
+    "parameterSets":
+    {
+        "BestQuality": {
+            "previewQuality": "1",
+            "roundingResolution": "128"
+        }
+    },
+    "fileFormatVersion": "1"
+}

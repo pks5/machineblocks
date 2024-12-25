@@ -34,7 +34,7 @@ module block(
         baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
-        baseRoundingResolution = 32,
+        baseRoundingResolution = 64,
         
         //Base Adjustment
         baseSideAdjustment = -0.1, //mm
@@ -254,6 +254,7 @@ module block(
 
     echo(
         preview= $preview,
+        previewQuality = previewQuality,
         grid=grid,
         baseHeight = resultingBaseHeight, 
         heightWithKnobs = resultingBaseHeight + knobHeight,
