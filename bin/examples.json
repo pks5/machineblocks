@@ -8,7 +8,9 @@
                     "name": "Brick 3x2",
                     "parameters": {
                         "brickSizeX": 3,
-                        "brickSizeY": 2
+                        "brickSizeY": 2,
+                        "pillars": true,
+                        "knobType": "technic"
                     }
                 }
             ]
