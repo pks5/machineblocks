@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 4; 
 //Grid Size Y-direction
@@ -22,6 +24,8 @@ gridY = 2;
 baseLayers = 3;
 //Draw Knobs
 knobs = true;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

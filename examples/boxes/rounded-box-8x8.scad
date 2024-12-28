@@ -13,6 +13,8 @@
 
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 8; 
 //Grid Size Y-direction
@@ -23,6 +25,15 @@ baseLayers = 12;
 lidText = "Jewelry";
 //Text Font
 textFont = "RBNo3.1";
+
+/* [Quality] */
+
+// Quality of the preview in relation to the final rendering.
+previewQuality = 0.5; // [0.1:0.1:1]
+// Number of drawn fragments for roundings in the final rendering.
+roundingResolution = 64; // [16:8:128]
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

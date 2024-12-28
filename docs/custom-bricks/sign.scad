@@ -1,6 +1,8 @@
 //Include the MachineBlocks library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 8; 
 //Grid Size Y-direction
@@ -13,6 +15,12 @@ gridSizeZ = 3.2;
 baseLayers = 1;
 //Draw Knobs
 knobs = false;
+//Log Height
+logHeight = 48;
+//Log Radius
+logRadius = 4;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -25,8 +33,7 @@ wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-logHeight = 48;
-logRadius = 4;
+
 
 block(
     grid = [gridX, gridY],

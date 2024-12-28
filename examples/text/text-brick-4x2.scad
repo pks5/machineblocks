@@ -14,6 +14,8 @@
 //Include the library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 4; 
 //Grid Size Y-direction
@@ -28,6 +30,8 @@ text = "Hello";
 textSide = 2;
 //Text Font
 textFont = "RBNo3.1 Black";
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

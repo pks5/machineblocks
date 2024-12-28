@@ -34,7 +34,7 @@ module block(
         baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
-        baseRoundingResolution = 30,
+        baseRoundingResolution = 64,
         
         //Base Adjustment
         baseSideAdjustment = -0.1, //mm
@@ -66,7 +66,7 @@ module block(
         
         //Pillars: Tubes and Pins
         pillars = true,
-        pillarRoundingResolution = 30,
+        pillarRoundingResolution = 64,
         pillarGapCornerLength = 2,
         pillarGapMiddle = 10,
         
@@ -104,7 +104,7 @@ module block(
 
         holesZ = false,
         holeZSize = 5.1, //mm
-        holeRoundingResolution = 30,
+        holeRoundingResolution = 64,
         
         //Knobs
         knobs = true,
@@ -117,7 +117,7 @@ module block(
         knobHoleSize = 3.5, //mm
         knobHoleClampThickness = 0.1, //mm
         knobRounding = 0.1, //mm
-        knobRoundingResolution = 30,
+        knobRoundingResolution = 64,
         
         //Tongue
         tongue = false,
@@ -194,7 +194,7 @@ module block(
         adhesionHelperThickness = 0.4, //mm
         
         //Preview
-        previewQuality = 1 //Between 0.0 and 1.0
+        previewQuality = 0.5 //Between 0.0 and 1.0
         ){
             
     //Variables for cutouts        
@@ -253,6 +253,8 @@ module block(
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
     echo(
+        preview= $preview,
+        previewQuality = previewQuality,
         grid=grid,
         baseHeight = resultingBaseHeight, 
         heightWithKnobs = resultingBaseHeight + knobHeight,

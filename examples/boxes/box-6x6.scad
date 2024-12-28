@@ -12,12 +12,23 @@
 */
 use <../../lib/block.scad>;
 
+/* [Size] */
+
 //Grid Size X-direction
 gridX = 6; 
 //Grid Size Y-direction
 gridY = 6; 
 //Number of layers
 baseLayers = 9;
+
+/* [Quality] */
+
+// Quality of the preview in relation to the final rendering.
+previewQuality = 0.5; // [0.1:0.1:1]
+// Number of drawn fragments for roundings in the final rendering.
+roundingResolution = 64; // [16:8:128]
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;

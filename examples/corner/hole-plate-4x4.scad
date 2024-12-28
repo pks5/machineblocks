@@ -14,6 +14,8 @@
 //Include the MachineBlocks library
 include <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 4; // [1:32]
 //Grid Size Y-direction
@@ -26,6 +28,8 @@ baseLayers = 1; // [1:48]
 knobs = true;
 //Knob Type
 knobType = "classic"; // [classic, technic]
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0; // .1

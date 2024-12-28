@@ -1,6 +1,8 @@
 //Include the MachineBlocks library
 use <../../lib/block.scad>;
 
+/* [Appearance] */
+
 //Grid Size X-direction
 gridX = 6; 
 //Grid Size Y-direction
@@ -13,6 +15,14 @@ gridSizeZ = 3.2;
 baseLayers = 1;
 //Draw Knobs
 knobs = [true, [1, 1, gridX - 2, gridY - 2, true]];
+// Log Height
+logHeight = 30;
+// Log Radius
+logRadius = 8;
+// Tree Radius
+treeRadius = 32;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
@@ -24,10 +34,6 @@ knobSize = 5.0;
 wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
-
-logHeight = 30;
-logRadius = 8;
-treeRadius = 32;
 
 block(
     grid = [gridX, gridY],

@@ -12,7 +12,9 @@
 */
 
 //Include the MachineBlocks library
-include <../../lib/block.scad>;
+use <../../lib/block.scad>;
+
+/* [Calibration] */
 
 //Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
