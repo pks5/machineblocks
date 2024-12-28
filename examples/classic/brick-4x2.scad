@@ -1,9 +1,9 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/classic-bricks
 *
 * Brick 4x2
-* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+* Copyright (c) 2022 - 2024 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
@@ -11,7 +11,7 @@
 *
 */
 
-//Include the library
+// Include the library
 use <../../lib/block.scad>;
 
 /* [Size] */
@@ -57,18 +57,18 @@ roundingResolution = 64; // [16:8:128]
 
 /* [Calibration] */
 
-//Adjustment of the height (mm)
+// Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
+// Adjustment of each side (mm)
 baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
+// Diameter of the knobs (mm)
 knobSize = 5.0;
-//Thickness of the walls (mm)
+// Thickness of the walls (mm)
 wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
+// Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-//Generate the block
+// Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,

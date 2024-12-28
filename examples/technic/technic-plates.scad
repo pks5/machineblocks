@@ -23,6 +23,13 @@ knobs = true;
 // Whether to draw pillars.
 pillars = true;
 
+/* [Quality] */
+
+// Quality of the preview in relation to the final rendering.
+previewQuality = 0.5; // [0.1:0.1:1]
+// Number of drawn fragments for roundings in the final rendering.
+roundingResolution = 64; // [16:8:128]
+
 /* [Calibration] */
 
 // Adjustment of the height (mm)
@@ -42,6 +49,12 @@ translate([ 10, -20, 0 ]) block(grid = [ 4, 2 ],
                                 knobs = knobs,
                                 pillars = pillars,
 
+                                previewQuality = previewQuality,
+                                baseRoundingResolution = roundingResolution,
+                                holeRoundingResolution = roundingResolution,
+                                knobRoundingResolution = roundingResolution,
+                                pillarRoundingResolution = roundingResolution,
+
                                 baseHeightAdjustment = baseHeightAdjustment,
                                 baseSideAdjustment = baseSideAdjustment,
                                 knobSize = knobSize,
@@ -53,6 +66,12 @@ translate([ 10, -40, 0 ]) block(grid = [ 6, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+
+                                previewQuality = previewQuality,
+                                baseRoundingResolution = roundingResolution,
+                                holeRoundingResolution = roundingResolution,
+                                knobRoundingResolution = roundingResolution,
+                                pillarRoundingResolution = roundingResolution,
 
                                 baseHeightAdjustment = baseHeightAdjustment,
                                 baseSideAdjustment = baseSideAdjustment,
@@ -66,6 +85,12 @@ translate([ 10, -60, 0 ]) block(grid = [ 8, 2 ],
                                 knobs = knobs,
                                 pillars = pillars,
 
+                                previewQuality = previewQuality,
+                                baseRoundingResolution = roundingResolution,
+                                holeRoundingResolution = roundingResolution,
+                                knobRoundingResolution = roundingResolution,
+                                pillarRoundingResolution = roundingResolution,
+
                                 baseHeightAdjustment = baseHeightAdjustment,
                                 baseSideAdjustment = baseSideAdjustment,
                                 knobSize = knobSize,
@@ -77,6 +102,12 @@ translate([ 10, -80, 0 ]) block(grid = [ 10, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+
+                                previewQuality = previewQuality,
+                                baseRoundingResolution = roundingResolution,
+                                holeRoundingResolution = roundingResolution,
+                                knobRoundingResolution = roundingResolution,
+                                pillarRoundingResolution = roundingResolution,
 
                                 baseHeightAdjustment = baseHeightAdjustment,
                                 baseSideAdjustment = baseSideAdjustment,
@@ -90,6 +121,12 @@ translate([ 10, -100, 0 ]) block(grid = [ 12, 2 ],
                                  knobs = knobs,
                                  pillars = pillars,
 
+                                 previewQuality = previewQuality,
+                                 baseRoundingResolution = roundingResolution,
+                                 holeRoundingResolution = roundingResolution,
+                                 knobRoundingResolution = roundingResolution,
+                                 pillarRoundingResolution = roundingResolution,
+
                                  baseHeightAdjustment = baseHeightAdjustment,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
@@ -102,6 +139,12 @@ translate([ 10, -120, 0 ]) block(grid = [ 16, 2 ],
                                  knobs = knobs,
                                  pillars = pillars,
 
+                                 previewQuality = previewQuality,
+                                 baseRoundingResolution = roundingResolution,
+                                 holeRoundingResolution = roundingResolution,
+                                 knobRoundingResolution = roundingResolution,
+                                 pillarRoundingResolution = roundingResolution,
+
                                  baseHeightAdjustment = baseHeightAdjustment,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
@@ -113,6 +156,12 @@ translate([ 10, -140, 0 ]) block(grid = [ 20, 2 ],
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  pillars = pillars,
+
+                                 previewQuality = previewQuality,
+                                 baseRoundingResolution = roundingResolution,
+                                 holeRoundingResolution = roundingResolution,
+                                 knobRoundingResolution = roundingResolution,
+                                 pillarRoundingResolution = roundingResolution,
 
                                  baseHeightAdjustment = baseHeightAdjustment,
                                  baseSideAdjustment = baseSideAdjustment,
