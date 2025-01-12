@@ -158,6 +158,13 @@ module block(
         svgScale = 1,
         svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
+        connectors = [],
+        connectorHeight = 3.2,
+        connectorDepth = 1.4,
+        connectorSize = 4.0,
+        connectorDepthTolerance = 0.2,
+        connectorSideTolerance = 0.1,
+
         //Screw Holes
         screwHolesZ = [],
         screwHoleZSize = 2.3, //mm
@@ -382,7 +389,13 @@ module block(
                                 pitWallThickness = pWallThickness,
                                 pitWallGaps = pitWallGaps,
                                 slanting = slanting,
-                                slantingLowerHeight = slantingLowerHeight
+                                slantingLowerHeight = slantingLowerHeight,
+                                connectors = connectors,
+                                connectorHeight = connectorHeight,
+                                connectorDepth = connectorDepth,
+                                connectorSize = connectorSize,
+                                connectorDepthTolerance = connectorDepthTolerance,
+                                connectorSideTolerance = connectorSideTolerance
                             );
 
                             mb_base_cutout(
@@ -781,7 +794,13 @@ module block(
                             pitWallThickness = pWallThickness,
                             pitWallGaps = pitWallGaps,
                             slanting = slanting,
-                            slantingLowerHeight = slantingLowerHeight
+                            slantingLowerHeight = slantingLowerHeight,
+                            connectors = connectors,
+                            connectorHeight = connectorHeight,
+                            connectorDepth = connectorDepth,
+                            connectorSize = connectorSize,
+                            connectorDepthTolerance = connectorDepthTolerance,
+                            connectorSideTolerance = connectorSideTolerance
                         );
                 }
                 //End baseCutoutType

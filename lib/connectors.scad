@@ -38,8 +38,7 @@ mb_connectors(side, grid, height, size, depth, gs)
 
         side < 2 ? sigs[side] * t0X : t0Y,
         side < 2 ? t0Y : sigs[side] * t0X,
-        0.5 *
-        height
+        0
       ]) mb_connector_prism(side, height, size);
   }
 }
@@ -54,9 +53,9 @@ module mb_connector_grooves(side, grid, baseHeight, height, tolerance, size, dep
     for (i = [0:1:grid[gY[side]] - 1]) {
       translate([
         (-(0.5 * grid[gY[side]] - 0.5) * gs + i * gs),
-        up ? -baseHeight+height : height,
+        up ? -0.5*baseHeight+height : 0,
         sigs[side]*(-0.5 * grid[gX[side]] * gs + 0.5 *
-        depth + 0.02)
+        depth - 0.02)
       ]) mb_connector_prism(3,
                             depth + 0.02,
                             size);

@@ -53,22 +53,9 @@ wallThickness = 1.5;
 // Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-// GridXY Size
 gridSizeXY = 8.0;
-
-// Vertical plate height
-connectorDepth = 1.4;
-
-// Grid Size Z
-connectorHeight = 3.2;
-connectorSize = 4;
-connectorDepthTolerance = 0.2;
-connectorSideTolerance = 0.1;
-
 assembled = false;
 
-//translate([0,0,-8])
-//rotate([90,0,0])
 union()
 {
   block(grid = [ brickSizeX, brickSizeY ],
@@ -78,51 +65,24 @@ union()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
+        connectors=[[2,0]],
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize);
-
-  conSize = connectorSize - 2*connectorSideTolerance;
-  conDepth = connectorDepth - connectorSideTolerance;
-
-  mb_connectors(0,
-                [ brickSizeX, brickSizeY ],
-                connectorHeight,
-                conSize,
-                conDepth,
-                gridSizeXY);
-
-  mb_connectors(1,
-                [ brickSizeX, brickSizeY ],
-                connectorHeight,
-                conSize,
-                conDepth,
-                gridSizeXY);
-
-  mb_connectors(2,
-                [ brickSizeX, brickSizeY ],
-                connectorHeight,
-                conSize,
-                conDepth,
-                gridSizeXY);
-
-  mb_connectors(3,
-                [ brickSizeX, brickSizeY ],
-                connectorHeight,
-                conSize,
-                conDepth,
-                gridSizeXY);
+  
 }
 
-translate([ 30, 0, 0 ])
+
+translate([ assembled ? 0: (brickSizeX+0.5)*gridSizeXY, assembled ? -0.5*brickSizeY*gridSizeXY : 0, assembled ? 0.5*brickSizeVerticalY*gridSizeXY:0 ])
+rotate(assembled ? [90,0,0]: [0,0,0])
 difference()
 {
 
   block(grid = [ brickSizeX, brickSizeVerticalY ],
-        baseLayers = 3,
+        baseLayers = 1,
         baseCutoutType = baseCutoutType,
         knobs = knobs,
         knobType = knobType,
@@ -132,20 +92,14 @@ difference()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
+        connectors=[[2,1],[3,0]],
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment =
-          [ baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, 0 ],
+          [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize);
 
-  mb_connector_grooves(side = 2,
-                       grid = [ brickSizeX, brickSizeVerticalY ],
-                       depth = connectorHeight + connectorDepthTolerance,
-                       baseHeight = 3*3.2,
-                       up=false,
-                       size = connectorSize,
-                       height = connectorDepth,
-                       gs = gridSizeXY);
+  
 }
