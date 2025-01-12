@@ -71,7 +71,7 @@ union()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
-        connectors = [[ 2, 0 ]],
+        connectors = [[ 2, 1 ], [ 3, 0 ]],
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
@@ -88,7 +88,7 @@ translate([
 {
 
   block(grid = [ brickSizeX, brickSizeVerticalY ],
-        baseLayers = 1,
+        baseHeight = 1.8,
         baseCutoutType = baseCutoutType,
         knobs = knobs,
         knobType = knobType,
@@ -98,7 +98,7 @@ translate([
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
-        connectors = [ [ 2, 1 ], [ 3, 0 ] ],
+        connectors = [ [ 2, 2 ], [ 3, 2 ] ],
         connectorHeight = 3.2,
 
         baseHeightAdjustment = baseHeightAdjustment,

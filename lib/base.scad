@@ -168,9 +168,6 @@ module mb_base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
-    conSize = connectorSize - 2*connectorSideTolerance;
-    conDepth = connectorDepth - connectorSideTolerance;
-
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
@@ -243,12 +240,22 @@ module mb_base(
             }
 
             for (con = [ 0 : 1 : len(connectors)-1 ]){
-                if(connectors[con][1] > 0){
+                if(connectors[con][1] == 1){
+                    mb_connectors(side = connectors[con][0],
+                            grid = grid,
+                            height = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
+                            baseHeight = height,
+                            inverse=true,
+                            size = connectorSize,
+                            depth = connectorDepth,
+                            gs = gridSizeXY);
+                }
+                else if(connectors[con][1] > 1){
                     mb_connector_grooves(side = connectors[con][0],
                         grid = grid,
                         depth = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
                         baseHeight = height,
-                        up=connectors[con][1]>1,
+                        inverse=connectors[con][1]==3,
                         size = connectorSize,
                         height = connectorDepth,
                         gs = gridSizeXY);
@@ -269,8 +276,9 @@ module mb_base(
                         grid = grid,
                         height = (connectorHeight == 0 ? height : connectorHeight),
                         baseHeight = height,
-                        size = conSize,
-                        depth = conDepth,
+                        inverse=connectors[con][1]==1,
+                        size = connectorSize - 2*connectorSideTolerance,
+                        depth = connectorDepth - connectorSideTolerance,
                         gs = gridSizeXY);
             }
         }
