@@ -15,6 +15,10 @@
 use <../../lib/block.scad>;
 use <../../lib/connectors.scad>;
 
+/* [Preview] */
+// Whether assembly view should be active
+assembled = false;
+
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
@@ -53,8 +57,10 @@ wallThickness = 1.5;
 // Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
+/* [Hidden] */
+
+// Grid Size XY
 gridSizeXY = 8.0;
-assembled = false;
 
 union()
 {
@@ -65,20 +71,20 @@ union()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
-        connectors=[[2,0]],
+        connectors = [[ 2, 0 ]],
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize);
-  
 }
 
-
-translate([ assembled ? 0: (brickSizeX+0.5)*gridSizeXY, assembled ? -0.5*brickSizeY*gridSizeXY : 0, assembled ? 0.5*brickSizeVerticalY*gridSizeXY:0 ])
-rotate(assembled ? [90,0,0]: [0,0,0])
-difference()
+translate([
+  assembled ? 0 : (brickSizeX + 0.5) * gridSizeXY,
+  assembled ? -0.5 * brickSizeY* gridSizeXY : 0,
+  assembled ? 0.5 * brickSizeVerticalY* gridSizeXY : 0
+]) rotate(assembled ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
 {
 
   block(grid = [ brickSizeX, brickSizeVerticalY ],
@@ -92,7 +98,8 @@ difference()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
-        connectors=[[2,1],[3,0]],
+        connectors = [ [ 2, 1 ], [ 3, 0 ] ],
+        connectorHeight = 3.2,
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment =
@@ -100,6 +107,4 @@ difference()
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize);
-
-  
 }

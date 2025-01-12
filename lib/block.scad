@@ -159,7 +159,7 @@ module block(
         svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
         connectors = [],
-        connectorHeight = 3.2,
+        connectorHeight = 0,
         connectorDepth = 1.4,
         connectorSize = 4.0,
         connectorDepthTolerance = 0.2,
