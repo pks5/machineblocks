@@ -13,6 +13,7 @@
 
 // Include the library
 use <../../lib/block.scad>;
+use <../../lib/connectors.scad>;
 
 /* [Size] */
 
@@ -54,39 +55,20 @@ tubeZSize = 6.4;
 
 // GridXY Size
 gridSizeXY = 8.0;
-// Grid Size Z
-gridSizeZ = 3.2;
-// Vertical plate height
-verticalPlateHeight = 1.8;
 
+// Vertical plate height
+connectorDepth = 1.4;
+
+// Grid Size Z
+connectorHeight = 3.2;
 connectorSize = 4;
-connectorCoverHeight = 0.4;
 connectorDepthTolerance = 0.2;
-connectorSideTolerance = 0.2;
+connectorSideTolerance = 0.1;
 
 assembled = false;
 
-module
-prism(l, w, h)
-{
-  translate([ -0.5 * l, -0.5 * w, -0.5 * h ]) polyhedron(points =
-                                                           [
-                                                             [ 0, 0, 0 ],
-                                                             [ l, 0, 0 ],
-                                                             [ l, w, 0 ],
-                                                             [ 0, w, 0 ],
-                                                             [ 0, w, h ],
-                                                             [ l, w, h ]
-                                                           ],
-                                                         faces = [
-                                                           [ 0, 1, 2, 3 ],
-                                                           [ 5, 4, 3, 2 ],
-                                                           [ 0, 4, 5, 1 ],
-                                                           [ 0, 3, 4 ],
-                                                           [ 5, 2, 1 ]
-                                                         ]);
-}
-
+//translate([0,0,-8])
+//rotate([90,0,0])
 union()
 {
   block(grid = [ brickSizeX, brickSizeY ],
@@ -103,51 +85,67 @@ union()
         wallThickness = wallThickness,
         tubeZSize = tubeZSize);
 
-  for (i = [0:1:brickSizeX - 1]) {
-    color([ 0.945, 0.769, 0.059 ]) // f1c40f
-      translate([
-        -(0.5 * brickSizeX - 0.5) * gridSizeXY + i * gridSizeXY,
-        0.5 * brickSizeY * gridSizeXY + verticalPlateHeight -
-          (connectorCoverHeight - 0.5 * connectorSideTolerance),
-        0.5 *
-        gridSizeZ
-      ]) rotate([ 90, 90, 225 ]) prism(gridSizeZ, connectorSize - connectorSideTolerance, connectorSize - connectorSideTolerance);
-  }
+  conSize = connectorSize - 2*connectorSideTolerance;
+  conDepth = connectorDepth - connectorSideTolerance;
+
+  mb_connectors(0,
+                [ brickSizeX, brickSizeY ],
+                connectorHeight,
+                conSize,
+                conDepth,
+                gridSizeXY);
+
+  mb_connectors(1,
+                [ brickSizeX, brickSizeY ],
+                connectorHeight,
+                conSize,
+                conDepth,
+                gridSizeXY);
+
+  mb_connectors(2,
+                [ brickSizeX, brickSizeY ],
+                connectorHeight,
+                conSize,
+                conDepth,
+                gridSizeXY);
+
+  mb_connectors(3,
+                [ brickSizeX, brickSizeY ],
+                connectorHeight,
+                conSize,
+                conDepth,
+                gridSizeXY);
 }
 
-translate(assembled ? [0,0.5*brickSizeY * gridSizeXY,0.25 * (brickSizeY + brickSizeVerticalY) * gridSizeXY] : [ 0, 0.5 * (brickSizeY + brickSizeVerticalY + 0.5) * gridSizeXY, 0 ])
-  rotate(assembled ? [0,0,0] : [ 90, 0, 0 ])
-// union()
+translate([ 30, 0, 0 ])
+difference()
 {
-  difference()
-  {
 
-    rotate([ -90, 0, 0 ]) block(grid = [ brickSizeX, brickSizeVerticalY ],
-                                baseHeight = verticalPlateHeight,
-                                baseCutoutType = baseCutoutType,
-                                knobs = knobs,
-                                knobType = knobType,
+  block(grid = [ brickSizeX, brickSizeVerticalY ],
+        baseLayers = 3,
+        baseCutoutType = baseCutoutType,
+        knobs = knobs,
+        knobType = knobType,
 
-                                previewQuality = previewQuality,
-                                baseRoundingResolution = roundingResolution,
-                                holeRoundingResolution = roundingResolution,
-                                knobRoundingResolution = roundingResolution,
-                                pillarRoundingResolution = roundingResolution,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        knobRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution,
 
-                                baseHeightAdjustment = baseHeightAdjustment,
-                                baseSideAdjustment = [baseSideAdjustment,baseSideAdjustment,baseSideAdjustment,0],
-                                knobSize = knobSize,
-                                wallThickness = wallThickness,
-                                tubeZSize = tubeZSize);
+        baseHeightAdjustment = baseHeightAdjustment,
+        baseSideAdjustment =
+          [ baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, 0 ],
+        knobSize = knobSize,
+        wallThickness = wallThickness,
+        tubeZSize = tubeZSize);
 
-    for (i = [0:1:brickSizeX - 1]) {
-      translate([
-        -(0.5 * brickSizeX - 0.5) * gridSizeXY + i * gridSizeXY,
-        verticalPlateHeight - connectorCoverHeight,
-        -0.5 * brickSizeVerticalY * gridSizeXY + 0.5 *
-        gridSizeZ
-      ]) rotate([ 90, 90, 225 ])
-        prism(gridSizeZ + 2 * connectorDepthTolerance, connectorSize, connectorSize);
-    }
-  }
+  mb_connector_grooves(side = 2,
+                       grid = [ brickSizeX, brickSizeVerticalY ],
+                       depth = connectorHeight + connectorDepthTolerance,
+                       baseHeight = 3*3.2,
+                       up=false,
+                       size = connectorSize,
+                       height = connectorDepth,
+                       gs = gridSizeXY);
 }
