@@ -24,8 +24,8 @@ IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 IMAGE_WIDTH_HALF=$((IMAGE_WIDTH_FULL / 2))
 
 #declare -a arr=("$DIR_SETS" "$DIR_EXAMPLES")
-declare -a arr=("$DIR_TECHNIC")
-#declare -a arr=("$DIR_CORNER")
+#declare -a arr=("$DIR_TECHNIC")
+declare -a arr=("$DIR_CORNER")
 
 echo
 echo Creating preview images ...

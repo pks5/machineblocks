@@ -3,7 +3,8 @@
     {
         "BestQuality": {
             "previewQuality": "1",
-            "roundingResolution": "128"
+            "roundingResolution": "128",
+            "assembled": "true"
         }
     },
     "fileFormatVersion": "1"

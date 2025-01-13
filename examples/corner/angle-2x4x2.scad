@@ -1,8 +1,8 @@
 /**
  * MachineBlocks
- * https://machineblocks.com/examples/classic-bricks
+ * https://machineblocks.com/examples/corner
  *
- * Centered Plate 4x4
+ * Angle 2x4x2
  * Copyright (c) 2022 - 2024 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -22,9 +22,9 @@ assembled = false;
 /* [Size] */
 
 // Both bricks' size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 3; // [1:32]
+brickSizeX = 2; // [1:32]
 // First brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick1SizeY = 2; // [1:32]
+brick1SizeY = 4; // [1:32]
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick2SizeY = 2; // [1:32]
 

@@ -1,8 +1,8 @@
 /**
  * MachineBlocks
- * https://machineblocks.com/examples/classic-bricks
+ * {URL}
  *
- * Centered Plate 4x4
+ * {BRICK_NAME}
  * Copyright (c) 2022 - 2024 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
