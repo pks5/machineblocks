@@ -9,13 +9,18 @@ args = parser.parse_args()
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-with open(dir_path + '/' + args.example_file) as f:
+example_file_path = os.path.abspath(os.path.join(dir_path, args.example_file))
+
+with open(example_file_path) as f:
     d = json.load(f)
 
 for example in d['examples']:
-    target_dir = example['targetDirectory']
+    target_dir = os.path.abspath(os.path.join(example_file_path, '..', example['targetDirectory']))
     url = example['url']
-    file = open(dir_path + '/' + example['template'], "r")
+
+    template_file_path = os.path.abspath(os.path.join(example_file_path, '..', example['template']))
+
+    file = open(template_file_path, "r")
     brick_template = file.read()
     file.close()
 
