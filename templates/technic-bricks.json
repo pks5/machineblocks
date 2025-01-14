@@ -1,7 +1,7 @@
 {
     "examples" : [
         {
-            "template": "brick-template.scad",
+            "template": "./brick-template.scad",
             "targetDirectory" : "../examples/technic",
             "url": "https://machineblocks.com/examples/technic-bricks",
             "bricks" : [

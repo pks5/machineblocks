@@ -1,7 +1,7 @@
 {
     "examples" : [
         {
-            "template": "brick-template.scad",
+            "template": "./brick-template.scad",
             "targetDirectory" : "../examples/classic",
             "url": "https://machineblocks.com/examples/classic-bricks",
             "bricks" : [

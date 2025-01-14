@@ -7,9 +7,14 @@ parser = argparse.ArgumentParser("create-examples")
 parser.add_argument("example_file", help="A JSON file with examples to create.", type=str)
 args = parser.parse_args()
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+#dir_path = os.path.dirname(os.path.realpath(__file__))
+#example_file_path = os.path.abspath(os.path.join(dir_path, args.example_file))
 
-example_file_path = os.path.abspath(os.path.join(dir_path, args.example_file))
+example_file_path = os.path.abspath(os.path.relpath(args.example_file, start=os.curdir))
+
+if(not os.path.exists(example_file_path)):
+    print("Cannot open file: " + example_file_path)
+    exit(0)
 
 with open(example_file_path) as f:
     d = json.load(f)
