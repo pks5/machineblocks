@@ -203,6 +203,49 @@
                     }
                 }
             ]
+        },
+
+        {
+            "template": "./hole-plate-template.scad",
+            "targetDirectory": "../examples/corner",
+            "url": "https://machineblocks.com/examples/corner",
+            "bricks": [
+                {
+                    "name": "Hole Plate 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "borderSize": 1
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "borderSize": 1
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 8x8",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "borderSize": 1
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 10x10",
+                    "parameters": {
+                        "brickSizeX": 10,
+                        "brickSizeY": 10,
+                        "borderSize": 1
+                    }
+                }
+            ]
         }
     ]
 }
