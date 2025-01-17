@@ -211,7 +211,7 @@
             "url": "https://machineblocks.com/examples/corner",
             "bricks": [
                 {
-                    "name": "Hole Plate 4x4",
+                    "name": "Hole Plate 4x4 B1",
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
@@ -220,7 +220,7 @@
                 },
 
                 {
-                    "name": "Hole Plate 6x6",
+                    "name": "Hole Plate 6x6 B1",
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 6,
@@ -229,7 +229,7 @@
                 },
 
                 {
-                    "name": "Hole Plate 8x8",
+                    "name": "Hole Plate 8x8 B1",
                     "parameters": {
                         "brickSizeX": 8,
                         "brickSizeY": 8,
@@ -238,11 +238,106 @@
                 },
 
                 {
-                    "name": "Hole Plate 10x10",
+                    "name": "Hole Plate 10x10 B1",
                     "parameters": {
                         "brickSizeX": 10,
                         "brickSizeY": 10,
                         "borderSize": 1
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 6x6 B2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "borderSize": 2
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 8x8 B2",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "borderSize": 2
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 10x10 B2",
+                    "parameters": {
+                        "brickSizeX": 10,
+                        "brickSizeY": 10,
+                        "borderSize": 2
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 8x8 B3",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "borderSize": 3
+                    }
+                },
+
+                {
+                    "name": "Hole Plate 10x10 B3",
+                    "parameters": {
+                        "brickSizeX": 10,
+                        "brickSizeY": 10,
+                        "borderSize": 3
+                    }
+                },
+
+                {
+                    "name": "Hole Brick 4x4 B1",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "borderSize": 1,
+                        "baseLayers": 3
+                    }
+                },
+
+                {
+                    "name": "Hole Brick 6x6 B1",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "borderSize": 1,
+                        "baseLayers": 3
+                    }
+                }
+            ]
+        },
+
+        {
+            "template": "./cross-template.scad",
+            "targetDirectory": "../examples/corner",
+            "url": "https://machineblocks.com/examples/corner",
+            "bricks": [
+                {
+                    "name": "Cross 3x3 B1",
+                    "parameters": {
+                        "brick1SizeX": 3,
+                        "brick1SizeY": 1,
+                        "brick1OffsetY": 1,
+                        "brick2SizeX": 1,
+                        "brick2SizeY": 3,
+                        "brick2OffsetX": 1
+                    }
+                },
+                {
+                    "name": "Cross 5x5 B1",
+                    "parameters": {
+                        "brick1SizeX": 5,
+                        "brick1SizeY": 1,
+                        "brick1OffsetY": 2,
+                        "brick2SizeX": 1,
+                        "brick2SizeY": 5,
+                        "brick2OffsetX": 2
                     }
                 }
             ]

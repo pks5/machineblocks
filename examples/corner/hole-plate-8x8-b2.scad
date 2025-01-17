@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* {URL}
+* https://machineblocks.com/examples/corner
 *
-* {BRICK_NAME}
+* Hole Plate 8x8 B2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -17,11 +17,11 @@ include <../../lib/block.scad>;
 /* [Appearance] */
 
 //Grid Size X-direction
-brickSizeX = 4; // [1:32]
+brickSizeX = 8; // [1:32]
 //Grid Size Y-direction
-brickSizeY = 4; // [1:32]
+brickSizeY = 8; // [1:32]
 //Border Size
-borderSize = 1; // [1:8]
+borderSize = 2; // [1:8]
 //Number of layers
 baseLayers = 1; // [1:48]
 //Draw Knobs

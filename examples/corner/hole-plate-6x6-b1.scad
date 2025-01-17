@@ -2,8 +2,8 @@
 * Machine Blocks
 * https://machineblocks.com/examples/corner
 *
-* Plate with Hole 4x4
-* Copyright (c) 2022 Jan Philipp Knoeller <pk@pksoftware.de>
+* Hole Plate 6x6 B1
+* Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
@@ -17,9 +17,9 @@ include <../../lib/block.scad>;
 /* [Appearance] */
 
 //Grid Size X-direction
-gridX = 4; // [1:32]
+brickSizeX = 6; // [1:32]
 //Grid Size Y-direction
-gridY = 4; // [1:32]
+brickSizeY = 6; // [1:32]
 //Border Size
 borderSize = 1; // [1:8]
 //Number of layers
@@ -45,12 +45,12 @@ tubeZSize = 6.4; // .1
 //Plate with hole
 union(){
     block(
-        grid=[borderSize, gridY], 
+        grid=[borderSize, brickSizeY], 
         knobs=knobs,
         knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsY=[[0,1,borderSize], [gridY-borderSize,1,borderSize]],
-        gridOffset=[-0.5*(gridX-borderSize),0,0],
+        wallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
+        gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -59,12 +59,12 @@ union(){
     );  
 
     block(
-        grid=[gridX,borderSize],
+        grid=[brickSizeX,borderSize],
         knobs=knobs,
         knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsX=[[0,0,borderSize], [gridX-borderSize,0,borderSize]],
-        gridOffset=[0,0.5*(gridY-borderSize),0],
+        wallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
+        gridOffset=[0,0.5*(brickSizeY-borderSize),0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -73,12 +73,12 @@ union(){
     );
 
     block(
-        grid=[borderSize, gridY], 
+        grid=[borderSize, brickSizeY], 
         knobs=knobs,
         knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsY=[[0,0,borderSize], [gridY-borderSize,0,borderSize]],
-        gridOffset=[0.5*(gridX-borderSize),0,0],
+        wallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
+        gridOffset=[0.5*(brickSizeX-borderSize),0,0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -87,12 +87,12 @@ union(){
     );    
 
     block(
-        grid=[gridX,borderSize], 
+        grid=[brickSizeX,borderSize], 
         knobs=knobs,
         knobType=knobType,
         baseLayers = baseLayers,
-        wallGapsX=[[0,1,borderSize], [gridX-borderSize,1,borderSize]],
-        gridOffset=[0,-0.5*(gridY-borderSize),0],
+        wallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
+        gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,

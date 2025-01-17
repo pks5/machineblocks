@@ -3,7 +3,7 @@
  * https://machineblocks.com/examples/corner
  *
  * Angle 2x4x1
- * Copyright (c) 2022 - 2024 Jan Philipp Knoeller <pk@pksoftware.de>
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International

@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* {URL}
+* https://machineblocks.com/examples/corner
 *
-* {BRICK_NAME}
+* Hole Brick 6x6 B1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -17,13 +17,13 @@ include <../../lib/block.scad>;
 /* [Appearance] */
 
 //Grid Size X-direction
-brickSizeX = 4; // [1:32]
+brickSizeX = 6; // [1:32]
 //Grid Size Y-direction
-brickSizeY = 4; // [1:32]
+brickSizeY = 6; // [1:32]
 //Border Size
 borderSize = 1; // [1:8]
 //Number of layers
-baseLayers = 1; // [1:48]
+baseLayers = 3; // [1:48]
 //Draw Knobs
 knobs = true;
 //Knob Type
