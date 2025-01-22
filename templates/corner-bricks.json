@@ -319,7 +319,7 @@
             "url": "https://machineblocks.com/examples/corner",
             "bricks": [
                 {
-                    "name": "Cross 3x3 B1",
+                    "name": "Cross Plate 3x3 B1",
                     "parameters": {
                         "brick1SizeX": 3,
                         "brick1SizeY": 1,
@@ -330,13 +330,24 @@
                     }
                 },
                 {
-                    "name": "Cross 5x5 B1",
+                    "name": "Cross Plate 5x5 B1",
                     "parameters": {
                         "brick1SizeX": 5,
                         "brick1SizeY": 1,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 1,
                         "brick2SizeY": 5,
+                        "brick2OffsetX": 2
+                    }
+                },
+                {
+                    "name": "Cross Plate 6x6 B2",
+                    "parameters": {
+                        "brick1SizeX": 6,
+                        "brick1SizeY": 2,
+                        "brick1OffsetY": 2,
+                        "brick2SizeX": 2,
+                        "brick2SizeY": 6,
                         "brick2OffsetX": 2
                     }
                 }
