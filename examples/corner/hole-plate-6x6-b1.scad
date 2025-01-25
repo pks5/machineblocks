@@ -12,7 +12,7 @@
 */
 
 //Include the MachineBlocks library
-include <../../lib/block.scad>;
+use <../../lib/block.scad>;
 
 /* [Appearance] */
 
