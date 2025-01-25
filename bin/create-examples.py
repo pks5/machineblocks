@@ -36,13 +36,13 @@ for example in d['examples']:
         for param in brick['parameters']:
             val = brick['parameters'][param]
             if(isinstance(val, str)):
-                print('Replaced string param ' + param + ' with value ' + str(val).lower())
-                scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]+\"\s*;', param + ' = "' + str(val).lower() + '";', scad)
+                print('Replaced string param ' + param + ' with value ' + str(val))
+                scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]+\"\s*;', param + ' = "' + str(val) + '";', scad)
             elif(isinstance(val, bool)):
                 print('Replaced bool param ' + param + ' with value ' + str(val).lower())
                 scad = re.sub(param + r'\s*=\s*((true)|(false))\s*;', param + ' = ' + str(val).lower() + ';', scad)
             elif(isinstance(val, int)):
-                print('Replaced integer param ' + param + ' with value ' + str(val).lower())
+                print('Replaced integer param ' + param + ' with value ' + str(val))
                 scad = re.sub(param + r'\s*=\s*[0-9\.]+\s*;', param + ' = ' + str(val) + ';', scad)
             
         f = open(target_dir + "/" + file_name, "w")

@@ -1,0 +1,219 @@
+{
+    "examples": [
+        {
+            "template": "./text-template.scad",
+            "targetDirectory": "../examples/text",
+            "url": "https://machineblocks.com/examples/text",
+            "bricks": [
+                {
+                    "name": "Text Tile A 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "A"
+                    }
+                },
+                {
+                    "name": "Text Tile B 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "B"
+                    }
+                },
+                {
+                    "name": "Text Tile C 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "C"
+                    }
+                },
+                {
+                    "name": "Text Tile D 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "D"
+                    }
+                },
+                {
+                    "name": "Text Tile E 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "E"
+                    }
+                },
+                {
+                    "name": "Text Tile F 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "F"
+                    }
+                },
+                {
+                    "name": "Text Tile G 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "G"
+                    }
+                },
+                {
+                    "name": "Text Tile H 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "H"
+                    }
+                },
+                {
+                    "name": "Text Tile I 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "I"
+                    }
+                },
+                {
+                    "name": "Text Tile J 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "J"
+                    }
+                },
+                {
+                    "name": "Text Tile K 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "K"
+                    }
+                },
+                {
+                    "name": "Text Tile L 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "L"
+                    }
+                },
+                {
+                    "name": "Text Tile M 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "M"
+                    }
+                },
+                {
+                    "name": "Text Tile N 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "N"
+                    }
+                },
+                {
+                    "name": "Text Tile O 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "O"
+                    }
+                },
+                {
+                    "name": "Text Tile P 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "P"
+                    }
+                },
+                {
+                    "name": "Text Tile Q 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "Q"
+                    }
+                },
+                {
+                    "name": "Text Tile R 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "R"
+                    }
+                },
+                {
+                    "name": "Text Tile S 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "S"
+                    }
+                },
+                {
+                    "name": "Text Tile T 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "T"
+                    }
+                },
+                {
+                    "name": "Text Tile U 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "U"
+                    }
+                },
+                {
+                    "name": "Text Tile V 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "V"
+                    }
+                },
+                {
+                    "name": "Text Tile W 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "W"
+                    }
+                },
+                {
+                    "name": "Text Tile X 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "X"
+                    }
+                },
+                {
+                    "name": "Text Tile Y 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "Y"
+                    }
+                },
+                {
+                    "name": "Text Tile Z 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "text": "Z"
+                    }
+                }
+            ]
+        }
+    ]
+}
