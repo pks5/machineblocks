@@ -16,7 +16,7 @@ IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 IMAGE_WIDTH_HALF=$((IMAGE_WIDTH_FULL / 2))
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -lt 1 ]; then
     echo "Usage: bash create-previews.sh [diretory1] [directory2] ..."
     exit 1
 fi

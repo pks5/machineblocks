@@ -14,35 +14,38 @@
 //Include the MachineBlocks library
 use <../../lib/block.scad>;
 
+/* [Size] */
+
+// Brick size in X-direction specified as multiple of an 1x1 brick.
+brickSizeX = 4; // [1:32]  
+// Brick size in Y-direction specified as multiple of an 1x1 brick.
+brickSizeY = 4; // [1:32]  
+// Height of brick specified as number of layers. Each layer has the height of one plate.
+baseLayers = 3; // [1:24]
+// Border Size as multiple of an 1x1 brick.
+borderSize = 1; // [1:8]
+
 /* [Appearance] */
 
-//Grid Size X-direction
-brickSizeX = 4; // [1:32]
-//Grid Size Y-direction
-brickSizeY = 4; // [1:32]
-//Border Size
-borderSize = 1; // [1:8]
-//Number of layers
-baseLayers = 3; // [1:48]
-//Draw Knobs
+// Whether to draw knobs.
 knobs = true;
-//Knob Type
+// Type of the knobs
 knobType = "classic"; // [classic, technic]
 
 /* [Calibration] */
 
-//Adjustment of the height (mm)
+// Adjustment of the height (mm)
 baseHeightAdjustment = 0.0; // .1
-//Adjustment of each side (mm)
+// Adjustment of each side (mm)
 baseSideAdjustment = -0.1; // .1
-//Diameter of the knobs (mm)
+// Diameter of the knobs (mm)
 knobSize = 5.0; // .1
-//Thickness of the walls (mm)
+// Thickness of the walls (mm)
 wallThickness = 1.5; // .1
-//Diameter of the Z-Tubes (mm)
+// Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4; // .1
 
-//Plate with hole
+// Generate the block
 union(){
     block(
         grid=[borderSize, brickSizeY], 

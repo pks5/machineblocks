@@ -66,6 +66,7 @@ tubeZSize = 6.4;
 // Grid Size XY
 gridSizeXY = 8.0;
 
+// Generate the block
 union()
 {
   block(grid = [ brickSizeX, brick1SizeY ],

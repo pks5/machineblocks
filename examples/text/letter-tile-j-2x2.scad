@@ -16,42 +16,42 @@ use <../../lib/block.scad>;
 
 /* [Size] */
 
-//Grid Size X-direction
-brickSizeX = 2; // [1:32] 
-//Grid Size Y-direction
-brickSizeY = 2; // [1:32] 
-//Number of layers
-baseLayers = 1; // [1:48]
+// Brick size in X-direction specified as multiple of an 1x1 brick.
+brickSizeX = 2; // [1:32]  
+// Brick size in Y-direction specified as multiple of an 1x1 brick.
+brickSizeY = 2; // [1:32]  
+// Height of brick specified as number of layers. Each layer has the height of one plate.
+baseLayers = 1; // [1:24]
 
 /* [Text] */
 
-//Letter
+// Text to write on the brick.
 text = "J";
-//Letter Depth
-textDepth = 1.2; // [0.2:0.2:3.2]
+// Side of the brick on which text is written.
+textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
+// Letter Depth
+textDepth = 1.2; // [-3.2:0.2:3.2]
+// Text Size
+textSize = 9; // [1:32]
 // Font
 textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
 // Text Style
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
-//Text Size
-textSize = 9; // [1:32]
-//Text Side
-textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 
 /* [Calibration] */
 
-//Adjustment of the height (mm)
+// Adjustment of the height (mm)
 baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
+// Adjustment of each side (mm)
 baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
+// Diameter of the knobs (mm)
 knobSize = 5.0;
-//Thickness of the walls (mm)
+// Thickness of the walls (mm)
 wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
+// Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-//Generate the block
+// Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
