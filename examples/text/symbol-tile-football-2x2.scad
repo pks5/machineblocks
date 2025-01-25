@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* {URL}
+* https://machineblocks.com/examples/text
 *
-* {BRICK_NAME}
+* Symbol Tile Football 2x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -26,15 +26,15 @@ baseLayers = 1; // [1:48]
 /* [Text] */
 
 //Letter
-text = "Z";
+text = "";
 //Letter Depth
 textDepth = 1.2; // [0.2:0.2:3.2]
 // Font
-textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+textFont = "Font Awesome 6 Free Solid"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
 // Text Style
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
 //Text Size
-textSize = 9; // [1:32]
+textSize = 8; // [1:32]
 //Text Side
 textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 

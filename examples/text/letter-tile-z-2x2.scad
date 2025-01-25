@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* {URL}
+* https://machineblocks.com/examples/text
 *
-* {BRICK_NAME}
+* Letter Tile Z 2x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:

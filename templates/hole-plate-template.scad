@@ -14,7 +14,7 @@
 //Include the MachineBlocks library
 use <../../lib/block.scad>;
 
-/* [Appearance] */
+/* [Size] */
 
 //Grid Size X-direction
 brickSizeX = 4; // [1:32]
@@ -24,6 +24,9 @@ brickSizeY = 4; // [1:32]
 borderSize = 1; // [1:8]
 //Number of layers
 baseLayers = 1; // [1:48]
+
+/* [Appearance] */
+
 //Draw Knobs
 knobs = true;
 //Knob Type

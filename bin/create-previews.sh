@@ -37,7 +37,7 @@ do
             label="$(basename ${file})"
             label=${label//-/ }
             label=${label/.scad/}
-            label=`python -c "print('${label}'.title())"`
+            label=`python -c "print('${label}'[:28].title())"`
             image_file="${file/scad/png}"
 
             "$PATH_TO_OPENSCAD" --o "$image_file" --p "preview-parameters.json" --P BestQuality --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"

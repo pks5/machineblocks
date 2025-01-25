@@ -1,8 +1,8 @@
 /**
 * Machine Blocks
-* {URL}
+* https://machineblocks.com/examples/text
 *
-* {BRICK_NAME}
+* Letter Tile L 2x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -26,7 +26,7 @@ baseLayers = 1; // [1:48]
 /* [Text] */
 
 //Letter
-text = "Z";
+text = "L";
 //Letter Depth
 textDepth = 1.2; // [0.2:0.2:3.2]
 // Font
