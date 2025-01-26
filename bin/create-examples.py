@@ -46,10 +46,11 @@ for example in d['examples']:
             elif(isinstance(val, bool)):
                 print('Replaced bool param ' + param + ' with value: ' + str(val).lower())
                 scad = re.sub(param + r'\s*=\s*((true)|(false))\s*;', param + ' = ' + str(val).lower() + ';', scad)
-            elif(isinstance(val, int)):
+            elif(isinstance(val, (int, float))):
                 print('Replaced integer param ' + param + ' with value: ' + str(val))
-                scad = re.sub(param + r'\s*=\s*[0-9\.]+\s*;', param + ' = ' + str(val) + ';', scad)
-            
+                scad = re.sub(param + r'\s*=\s*[0-9\.\-]+\s*;', param + ' = ' + str(val) + ';', scad)
+            else:
+                print('Did not replace param ' + param + ': unknown type!')
         f = open(target_dir + "/" + file_name, "w", encoding="utf-8")
         f.write(scad)
         f.close()

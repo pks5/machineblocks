@@ -23,6 +23,19 @@ brickSizeY = 2; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
+/* [Appearance] */
+
+// Type of cut-out on the underside.
+baseCutoutType = "classic"; // [none, classic]
+// Whether to draw knobs
+knobs = false;
+// Whether knobs should be centered.
+knobCentered = false;
+// Type of the knobs
+knobType = "classic"; // [classic, technic]
+// Whether to draw pillars.
+pillars = true;
+
 /* [Text] */
 
 // Text to write on the brick.
@@ -37,6 +50,8 @@ textSize = 8; // [1:32]
 textFont = "Font Awesome 6 Free Solid"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
 // Text Style
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
+// Spacing of the letters
+textSpacing = 1; // [0.1:0.1:4]
 
 /* [Calibration] */
 
@@ -54,13 +69,18 @@ tubeZSize = 6.4;
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
+    baseCutoutType = baseCutoutType,
     baseLayers = baseLayers,
-    knobs = false,
+    knobs = knobs,
+    knobCentered = knobCentered,
+    knobType = knobType,
+    pillars = pillars,
 
     textSide = textSide,
     textSize = textSize,
     text=text,
     textDepth=textDepth,
+    textSpacing = textSpacing,
     textFont=str(textFont, (textStyle == "" ? "" : str(":style=", textStyle))),
 
     baseHeightAdjustment = baseHeightAdjustment,
