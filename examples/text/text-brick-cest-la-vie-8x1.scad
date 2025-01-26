@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/text
 *
 * Text Brick Cest La Vie 8x1

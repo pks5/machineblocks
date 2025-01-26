@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/text
 *
 * Letter Tile D 1x1

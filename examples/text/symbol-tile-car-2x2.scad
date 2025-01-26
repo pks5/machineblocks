@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/text
 *
 * Symbol Tile Car 2x2

@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/text
 *
 * Text Tile Rot 3x2
