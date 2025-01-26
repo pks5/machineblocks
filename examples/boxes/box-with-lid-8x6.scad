@@ -12,6 +12,10 @@
 */
 use <../../lib/block.scad>;
 
+/* [View] */
+// How to view the brick in the editor
+viewMode = "cover"; // [print, assembled, cover]
+
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
@@ -24,7 +28,7 @@ boxLayers = 9; // [1:24]
 /* [Appearance] */
 
 // Whether the box should have to open sides to use it as channel
-boxChannel = false;
+boxType = "box";
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
@@ -83,7 +87,7 @@ block(
     knobType = baseKnobType,
     
     pit=true,
-    pitWallGaps = boxChannel ? [ [ 0, 0, 0 ], [ 1, 0, 0 ] ] : [],
+    pitWallGaps = boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
 
@@ -101,23 +105,23 @@ block(
 );
 
 if(lid){
-    block(
-        grid=[boxSizeX, boxSizeY],
-        gridOffset = [boxSizeX + 1, 0, 0],
-        baseLayers = lidLayers,
-        baseCutoutType = lidPermanent ? "groove" : "classic",
+    translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
+        block(
+            grid=[boxSizeX, boxSizeY],
+            baseLayers = lidLayers,
+            baseCutoutType = lidPermanent ? "groove" : "classic",
 
-        knobs = lidKnobs,
-        knobType = lidKnobType,
-        knobCentered = lidKnobCentered,
+            knobs = lidKnobs,
+            knobType = lidKnobType,
+            knobCentered = lidKnobCentered,
 
-        pillars = lidPillars,
-        pitWallGaps = boxChannel ? [ [ 0, 0, 0 ], [ 1, 0, 0 ] ] : [],
+            pillars = lidPillars,
+            pitWallGaps = boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
 
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize
-    );
+            baseHeightAdjustment = baseHeightAdjustment,
+            baseSideAdjustment = baseSideAdjustment,
+            knobSize = knobSize,
+            wallThickness = wallThickness,
+            tubeZSize = tubeZSize
+        );
 }

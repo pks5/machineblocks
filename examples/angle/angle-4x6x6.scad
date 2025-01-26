@@ -15,9 +15,9 @@
 use <../../lib/block.scad>;
 use <../../lib/connectors.scad>;
 
-/* [Preview] */
-// Whether assembly view should be active
-assembled = false;
+/* [View] */
+// How to view the brick in the editor
+viewMode = "cover"; // [print, assembled, cover]
 
 /* [Size] */
 
@@ -88,31 +88,28 @@ union()
         tubeZSize = tubeZSize);
 }
 
-translate([
-  assembled ? 0 : (brickSizeX + 0.5) * gridSizeXY,
-  assembled ? -0.5 * brick1SizeY* gridSizeXY : 0,
-  assembled ? 0.5 * brick2SizeY* gridSizeXY : 0
-]) rotate(assembled ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
-{
+translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY + (viewMode == "cover" ? gridSizeXY : 0)] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
+  rotate(viewMode != "print" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
+  {
 
-  block(grid = [ brickSizeX, brick2SizeY ],
-        baseHeight = 1.8,
-        baseCutoutType = "none",
-        knobs = brick2Knobs,
-        knobType = brick2KnobType,
-        connectors = [ [ 2, 2 ] ],
-        connectorHeight = 3.2,
+    block(grid = [ brickSizeX, brick2SizeY ],
+          baseHeight = 1.8,
+          baseCutoutType = "none",
+          knobs = brick2Knobs,
+          knobType = brick2KnobType,
+          connectors = [ [ 2, 2 ] ],
+          connectorHeight = 3.2,
 
-        previewQuality = previewQuality,
-        baseRoundingResolution = roundingResolution,
-        holeRoundingResolution = roundingResolution,
-        knobRoundingResolution = roundingResolution,
-        pillarRoundingResolution = roundingResolution,
-        
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment =
-          [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize);
-}
+          previewQuality = previewQuality,
+          baseRoundingResolution = roundingResolution,
+          holeRoundingResolution = roundingResolution,
+          knobRoundingResolution = roundingResolution,
+          pillarRoundingResolution = roundingResolution,
+          
+          baseHeightAdjustment = baseHeightAdjustment,
+          baseSideAdjustment =
+            [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
+          knobSize = knobSize,
+          wallThickness = wallThickness,
+          tubeZSize = tubeZSize);
+  }

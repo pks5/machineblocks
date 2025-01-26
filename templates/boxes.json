@@ -32,7 +32,7 @@
                     "parameters": {
                         "boxSizeX": 4,
                         "boxSizeY": 4,
-                        "boxLayers": 9
+                        "boxLayers": 12
                     }
                 },
                 {
@@ -71,6 +71,124 @@
                 },
 
                 {
+                    "name": "Box No Lid 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 9,
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Box No Lid 12x6",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 6,
+                        "boxLayers": 9,
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Box 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 9,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Box 8x8",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 12,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Box 8x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 18,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Box 18x6",
+                    "parameters": {
+                        "boxSizeX": 18,
+                        "boxSizeY": 6,
+                        "boxLayers": 24,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Channel 2x2",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 2x2",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel_corner",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 3x3",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 3x3",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel_corner",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
                     "name": "Channel 4x2",
                     "parameters": {
                         "boxSizeX": 4,
@@ -79,7 +197,105 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxChannel": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 4x3",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 6x2",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 6x3",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 8x2",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 8x3",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 12x2",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel 12x3",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxType": "channel",
                         "lidPermanent": true
                     }
                 }
