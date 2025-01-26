@@ -23,6 +23,9 @@ boxLayers = 5; // [1:24]
 
 /* [Appearance] */
 
+// Whether the box should have to open sides to use it as channel
+boxChannel = false;
+
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether the base should have knobs
@@ -48,6 +51,8 @@ lidKnobType = "classic"; // [classic, technic]
 lidKnobCentered = false;
 // Whether lid should have pillars
 lidPillars = true;
+// Whether lid should be permanent (non removable)
+lidPermanent = false;
 
 /* [Quality] */
 
@@ -78,13 +83,15 @@ block(
     knobType = baseKnobType,
     
     pit=true,
+    pitWallGaps = boxChannel ? [ [ 0, 0, 0 ], [ 1, 0, 0 ] ] : [],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
 
     tongue = baseTongue,
-    tongueHeight = 1.8,
-    tongueClampThickness = 0,
-    tongueOuterAdjustment = -0.1,
+    tongueHeight = lidPermanent ? 2.0 : 1.8,
+    tongueClampThickness = lidPermanent ? 0.1 : 0,
+    tongueOuterAdjustment = lidPermanent ? 0.0 : -0.1,
+    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -98,12 +105,14 @@ if(lid){
         grid=[boxSizeX, boxSizeY],
         gridOffset = [boxSizeX + 1, 0, 0],
         baseLayers = lidLayers,
+        baseCutoutType = lidPermanent ? "groove" : "classic",
 
         knobs = lidKnobs,
         knobType = lidKnobType,
         knobCentered = lidKnobCentered,
 
         pillars = lidPillars,
+        pitWallGaps = boxChannel ? [ [ 0, 0, 0 ], [ 1, 0, 0 ] ] : [],
 
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,

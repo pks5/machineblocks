@@ -68,6 +68,20 @@
                         "lidLayers": 3,
                         "basePitKnobs": true
                     }
+                },
+
+                {
+                    "name": "Channel 4x2",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "boxChannel": true,
+                        "lidPermanent": true
+                    }
                 }
             ]
         }

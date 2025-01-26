@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Box with Lid 6x6
+* Channel 4x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -15,29 +15,29 @@ use <../../lib/block.scad>;
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 6; // [1:32] 
+boxSizeX = 4; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 6; // [1:32] 
+boxSizeY = 2; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 9; // [1:24]
+boxLayers = 5; // [1:24]
 
 /* [Appearance] */
 
 // Whether the box should have to open sides to use it as channel
-boxChannel = false;
+boxChannel = true;
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether the base should have knobs
-baseKnobs = true;
+baseKnobs = false;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
 // Whether the pit should contain knobs
 basePitKnobs = false;
 // Pit wall thickness
-basePitWallThickness = 1;
+basePitWallThickness = 0.333;
 // Whether the base should have a tongue
-baseTongue = false;
+baseTongue = true;
 
 // Whether the box should have a lid
 lid = true;
@@ -52,7 +52,7 @@ lidKnobCentered = false;
 // Whether lid should have pillars
 lidPillars = true;
 // Whether lid should be permanent (non removable)
-lidPermanent = false;
+lidPermanent = true;
 
 /* [Quality] */
 
