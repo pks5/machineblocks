@@ -17,7 +17,7 @@ use <../../lib/connectors.scad>;
 
 /* [View] */
 // How to view the brick in the editor
-viewMode = "cover"; // [print, assembled, cover]
+viewMode = "print"; // [print, assembled, cover]
 
 /* [Size] */
 
