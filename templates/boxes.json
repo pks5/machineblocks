@@ -1,0 +1,75 @@
+{
+    "examples": [
+        {
+            "template": "./box-template.scad",
+            "targetDirectory": "../examples/boxes",
+            "url": "https://machineblocks.com/examples/boxes-enclosures",
+            "bricks": [
+                {
+                    "name": "Box with Lid 2x2",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 2,
+                        "boxLayers": 4,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true
+                    }
+                },
+                {
+                    "name": "Box with Lid 4x2",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true
+                    }
+                },
+                {
+                    "name": "Box with Lid 4x4",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 4,
+                        "boxLayers": 9
+                    }
+                },
+                {
+                    "name": "Box with Lid 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 9
+                    }
+                },
+                {
+                    "name": "Box with Lid 8x6",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 6,
+                        "boxLayers": 9
+                    }
+                },
+                {
+                    "name": "Box with Lid 6x12",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 12,
+                        "boxLayers": 12
+                    }
+                },
+                {
+                    "name": "Box with Lid 12x20",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 20,
+                        "boxLayers": 24,
+                        "lidLayers": 3,
+                        "basePitKnobs": true
+                    }
+                }
+            ]
+        }
+    ]
+}

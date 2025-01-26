@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * {URL}
 *
 * {BRICK_NAME}
