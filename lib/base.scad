@@ -223,7 +223,7 @@ module mb_base(
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
                 echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
-                translate([0.5 * (pitWallThickness[1] - pitWallThickness[0]) * gridSizeXY, 0.5 * (pitWallThickness[3] - pitWallThickness[2]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+                translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                     mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
             
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){

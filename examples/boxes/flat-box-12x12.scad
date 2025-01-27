@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Channel 3x1
+* Flat Box 12x12
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,21 +19,21 @@ viewMode = "print"; // [print, assembled, cover]
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 3; // [1:32] 
+boxSizeX = 12; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 1; // [1:32] 
+boxSizeY = 12; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 5; // [1:24]
+boxLayers = 3; // [1:24]
 
 /* [Appearance] */
 
 // Whether the box should have to open sides to use it as channel
-boxType = "channel";
+boxType = "box";
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether the base should have knobs
-baseKnobs = false;
+baseKnobs = true;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
@@ -45,12 +45,12 @@ basePitKnobType = "classic"; // [classic, technic]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = false;
 // Pit wall thickness
-basePitWallThickness = 0.333;
+basePitWallThickness = [1, 2, 3, 4];
 // Whether the base should have a tongue
-baseTongue = true;
+baseTongue = false;
 
 // Whether the box should have a lid
-lid = true;
+lid = false;
 // Lid height specified as number of layers. Each layer has the height of one plate.
 lidLayers = 1; // [1:24]
 // Whether the lid should have knobs
@@ -62,7 +62,7 @@ lidKnobCentered = false;
 // Whether lid should have pillars
 lidPillars = true;
 // Whether lid should be permanent (non removable)
-lidPermanent = true;
+lidPermanent = false;
 
 /* [Quality] */
 

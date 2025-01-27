@@ -30,7 +30,7 @@ baseKnobs = true;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
 // Whether the pit should contain knobs
-basePitKnobs = false;
+basePitKnobs = true;
 // Pit wall thickness
 basePitWallThickness = 1;
 
@@ -64,7 +64,7 @@ block(
     knobCentered = false,
     
     pit=true,
-    pitWallGaps = [ [ 0, 1.333, 1.333 ] ],
+    pitWallGaps = [ [ 0, .333, .333 ] ],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
 

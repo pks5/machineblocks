@@ -49,6 +49,9 @@ for example in d['examples']:
             elif(isinstance(val, (int, float))):
                 print('Replaced integer param ' + param + ' with value: ' + str(val))
                 scad = re.sub(param + r'\s*=\s*[0-9\.\-]+\s*;', param + ' = ' + str(val) + ';', scad)
+            elif(isinstance(val, list)):
+                print('Replaced list param ' + param + ' with value: ' + json.dumps(val))
+                scad = re.sub(param + r'\s*=\s*((\"[a-zA-Z0-9\.\-_\s]+\")|([0-9\.\-]+)|((true)|(false)))\s*;', param + ' = ' + json.dumps(val) + ';', scad)
             else:
                 print('Did not replace param ' + param + ': unknown type!')
         f = open(target_dir + "/" + file_name, "w", encoding="utf-8")

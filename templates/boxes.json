@@ -6,6 +6,42 @@
             "url": "https://machineblocks.com/examples/boxes-enclosures",
             "bricks": [
                 {
+                    "name": "Flat Box 8x8",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Flat Box 12x12",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 12,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [1,2,3,4],
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Flat Box 16x16",
+                    "parameters": {
+                        "boxSizeX": 16,
+                        "boxSizeY": 16,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [1,2,3,4],
+                        "basePitKnobs": true,
+                        "basePitKnobType": "technic",
+                        "basePitKnobCentered": true,
+                        "lid" : false
+                    }
+                },
+
+                {
                     "name": "Box with Lid 2x2",
                     "parameters": {
                         "boxSizeX": 2,

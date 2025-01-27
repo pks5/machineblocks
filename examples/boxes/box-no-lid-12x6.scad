@@ -36,8 +36,14 @@ baseCutoutType = "classic"; // [none, classic]
 baseKnobs = false;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
+// Whether base knobs should be centered.
+baseKnobCentered = false;
 // Whether the pit should contain knobs
 basePitKnobs = false;
+// Type of the base pit knobs
+basePitKnobType = "classic"; // [classic, technic]
+// Whether base pit knobs should be centered.
+basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 1;
 // Whether the base should have a tongue
@@ -85,11 +91,14 @@ block(
 
     knobs = baseKnobs,
     knobType = baseKnobType,
+    knobCentered = baseKnobCentered,
     
     pit=true,
     pitWallGaps = boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
+    pitKnobType = basePitKnobType,
+    pitKnobCentered = basePitKnobCentered,
 
     tongue = baseTongue,
     tongueHeight = lidPermanent ? 2.0 : 1.8,

@@ -137,6 +137,8 @@ module block(
         pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
+        pitKnobType = "classic",
+        pitKnobCentered = false,
         pitWallGaps = [],
         
         //Text
@@ -329,14 +331,13 @@ module block(
                                 && !inSlantedArea(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawKnob(a, b, posOffset) = !inSlantedArea(a, b, false, 2) 
-                                && (!pit || (inPit(a, b, posOffset) ? pitKnobs : onPitBorder(a, b, posOffset) ) )
-                                    && drawGridItem(knobs, a, b, 0, false); 
+    function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) && drawGridItem(knobs, a, b, 0, false); 
 
     function onPitBorder(a, b, posOffset) = ((ceil(a + posOffset) < floor(pWallThickness[0])) || (floor(a + posOffset) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b + posOffset) < floor(pWallThickness[2])) || (floor(b + posOffset) > grid[1] - floor(pWallThickness[3]) - 1));
     function inPit(a, b, posOffset) = pit && (floor(a + posOffset) >= ceil(pWallThickness[0])) && (ceil(a + posOffset) < grid[0] - ceil(pWallThickness[1])) && (floor(b + posOffset) >= ceil(pWallThickness[2])) && (ceil(b + posOffset) < grid[1] - ceil(pWallThickness[3]));                                
 
     function knobZ(a, b, posOffset) = inPit(a, b, posOffset) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
+    function knobType(a, b, posOffset) = inPit(a, b, posOffset) ? pitKnobType : knobType;
 
     function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
     function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
@@ -852,43 +853,48 @@ module block(
                     */
                     knobEndX = endX - (knobCentered ? 1 : 0);
                     knobEndY = endY - (knobCentered ? 1 : 0);
-                    posOffset = knobCentered ? 0.5 : 0;
                     
                     for (a = [ startX : 1 : knobEndX ]){
                         for (b = [ startY : 1 : knobEndY ]){
-                            if(drawKnob(a, b, posOffset)){
-                                translate([posX(a + posOffset), posY(b + posOffset), knobZ(a, b, posOffset)]){ 
-                                    difference(){
-                                        union(){
-                                            translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
-                                                cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                            
+                            if(drawKnob(a, b)){
+                                inPit = !pit || pitKnobs && inPit(a, b, pitKnobCentered ? 0.5 : 0);
+                                onPitBorder = !pit || onPitBorder(a, b, knobCentered ? 0.5 : 0);
+                                if(onPitBorder || inPit){
+                                    posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
+                                    translate([posX(a + posOffset), posY(b + posOffset), knobZ(a, b, posOffset)]){ 
+                                        difference(){
+                                            union(){
+                                                translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
+                                                    cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
 
+                                                
+                                                translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
+                                                    cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                
+                                                translate([0, 0, 0.5 * (knobHeight - knobRounding)])
+                                                    cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                            }
                                             
-                                            translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
-                                                cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                            
-                                            translate([0, 0, 0.5 * (knobHeight - knobRounding)])
-                                                cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                        }
-                                        
-                                        if(knobType == "technic"){
-                                            intersection(){
-                                                cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
-                                                cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                            if(knobType(a, b, posOffset) == "technic"){
+                                                intersection(){
+                                                    cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
+                                                    cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                }
                                             }
                                         }
-                                    }
-                                    
-                                    //Knob Rounding
-                                    translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                        mb_torus(
-                                            circleRadius = knobRounding, 
-                                            torusRadius = 0.5 * knobSize + knobClampThickness, 
-                                            circleResolution = ($preview ? previewQuality : 1) * knobRoundingResolution,
-                                            torusResolution = ($preview ? previewQuality : 1) * knobRoundingResolution
-                                        );
+                                        
+                                        //Knob Rounding
+                                        translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
+                                            mb_torus(
+                                                circleRadius = knobRounding, 
+                                                torusRadius = 0.5 * knobSize + knobClampThickness, 
+                                                circleResolution = ($preview ? previewQuality : 1) * knobRoundingResolution,
+                                                torusResolution = ($preview ? previewQuality : 1) * knobRoundingResolution
+                                            );
+                                        };
                                     };
-                                };
+                                }
                             }
                         }
                     }
