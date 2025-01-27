@@ -329,13 +329,14 @@ module block(
                                 && !inSlantedArea(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) 
-                                && (!pit || (inPit(a, b) ? pitKnobs : ((a < floor(pWallThickness[0])) || (a > grid[0] - floor(pWallThickness[1]) - 1) || (b < floor(pWallThickness[2])) || (b > grid[1] - floor(pWallThickness[3]) - 1)) ) )
+    function drawKnob(a, b, posOffset) = !inSlantedArea(a, b, false, 2) 
+                                && (!pit || (inPit(a, b, posOffset) ? pitKnobs : onPitBorder(a, b, posOffset) ) )
                                     && drawGridItem(knobs, a, b, 0, false); 
 
-    function inPit(a,b) = pit && (a >= ceil(pWallThickness[0])) && (a < grid[0] - ceil(pWallThickness[1])) && (b >= ceil(pWallThickness[2])) && (b < grid[1] - ceil(pWallThickness[3]));                                
+    function onPitBorder(a, b, posOffset) = ((ceil(a + posOffset) < floor(pWallThickness[0])) || (floor(a + posOffset) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b + posOffset) < floor(pWallThickness[2])) || (floor(b + posOffset) > grid[1] - floor(pWallThickness[3]) - 1));
+    function inPit(a, b, posOffset) = pit && (floor(a + posOffset) >= ceil(pWallThickness[0])) && (ceil(a + posOffset) < grid[0] - ceil(pWallThickness[1])) && (floor(b + posOffset) >= ceil(pWallThickness[2])) && (ceil(b + posOffset) < grid[1] - ceil(pWallThickness[3]));                                
 
-    function knobZ(a, b) = inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
+    function knobZ(a, b, posOffset) = inPit(a, b, posOffset) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
 
     function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
     function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
@@ -855,8 +856,8 @@ module block(
                     
                     for (a = [ startX : 1 : knobEndX ]){
                         for (b = [ startY : 1 : knobEndY ]){
-                            if(drawKnob(a,b)){
-                                translate([posX(a + posOffset), posY(b + posOffset), knobZ(a, b)]){ 
+                            if(drawKnob(a, b, posOffset)){
+                                translate([posX(a + posOffset), posY(b + posOffset), knobZ(a, b, posOffset)]){ 
                                     difference(){
                                         union(){
                                             translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
