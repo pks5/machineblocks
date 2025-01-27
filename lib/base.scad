@@ -45,7 +45,7 @@ module mb_base_cutout(
     offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
     offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
 
-    echo(slanting=slanting, offsetY = offsetY, baseHeight=baseHeight, topPlateHeight = topPlateHeight, baseClampOffset=baseClampOffset);
+    echo(slanting=slanting, offsetX = offsetX, offsetY = offsetY, baseHeight=baseHeight, topPlateHeight = topPlateHeight, baseClampOffset=baseClampOffset);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -54,9 +54,9 @@ module mb_base_cutout(
     function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slanting[side] + baseSideAdjustment[side])) + cutTolerance;
     function slanting(s) = s > 0 ? 0 : s;
 
-    difference(){
-        union(){
-            translate([offsetX, offsetY, 0]){ 
+    translate([offsetX, offsetY, 0]){ 
+        difference(){
+            union(){
                 /*
                 * Bottom Hole
                 */
@@ -95,38 +95,39 @@ module mb_base_cutout(
                         );
                 }
             }
+
+            /*
+            * Slanting
+            */
+            if(slanting != false){
+                
+                if(slanting[0] > 0){
+                    slanting0 = slantingSize(0);
+                    translate([-0.5 * (objectSize[0] - 2*wallThickness - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(0, slanting0, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+                }
+
+                if(slanting[1] > 0){
+                    slanting1 = slantingSize(1);
+                    translate([0.5 * (objectSize[0] - 2*wallThickness - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(1, slanting1, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+                }
+
+                if(slanting[2] > 0){
+                    slanting2 = slantingSize(2);
+                    translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(2, slanting2, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+                }
+                
+                if(slanting[3] > 0){
+                    slanting3 = slantingSize(3);
+                    translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
+                        mb_slant_prism(3, slanting3, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
+                }
+                
+            }
         }
-
-        /*
-        * Slanting
-        */
-        if(slanting != false){
-            if(slanting[0] > 0){
-                slanting0 = slantingSize(0);
-                translate([-0.5 * (objectSize[0] - 2*wallThickness - slanting0 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                    mb_slant_prism(0, slanting0, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-            }
-
-            if(slanting[1] > 0){
-                slanting1 = slantingSize(1);
-                translate([0.5 * (objectSize[0] - 2*wallThickness - slanting1 + cutTolerance), 0, 0.5*(slantingLowerHeight + cutTolerance)])
-                    mb_slant_prism(1, slanting1, objectSize[1] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-            }
-
-            if(slanting[2] > 0){
-                slanting2 = slantingSize(2);
-                translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slanting2 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
-                    mb_slant_prism(2, slanting2, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-            }
-            
-            if(slanting[3] > 0){
-                slanting3 = slantingSize(3);
-                translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slanting3 + cutTolerance), 0.5*(slantingLowerHeight + cutTolerance)])
-                    mb_slant_prism(3, slanting3, objectSize[0] * cutMultiplier, baseHeight - slantingLowerHeight + cutTolerance, false);
-            }
-        }
-    }
-    
+    } 
 
 }
 
