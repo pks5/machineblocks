@@ -229,12 +229,12 @@ module mb_base(
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                     gap = pitWallGaps[gapIndex];
                     if(gap[0] < 2){
-                        translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]), 0.5*(height - pitDepth + cutOffset)])
-                            cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - gap[1] - gap[2], pitDepth + cutOffset], center = true);
+                        translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
+                            cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
                     }  
                     else{
-                        translate([-0.5 * (gap[2] - gap[1]), sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
-                            cube([pitSizeX - gap[1] - gap[2] , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
+                        translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
+                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
                     } 
                 }
             }

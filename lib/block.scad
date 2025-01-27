@@ -922,12 +922,12 @@ module block(
                                         for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                             gap = pitWallGaps[gapIndex];
                                             if(gap[0] < 2){
-                                                translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                                    cube([(tongueThickness + tongueOuterAdjustment)*cutMultiplier, pitSizeY - gap[1] - gap[2], tongueHeight * cutMultiplier], center = true);
+                                                translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                                    cube([(tongueThickness + tongueOuterAdjustment)*cutMultiplier, pitSizeY  - (gap[1] + gap[2]) * gridSizeXY, tongueHeight * cutMultiplier], center = true);
                                             }  
                                             else{
-                                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY + 2 * tongueOuterAdjustment - tongueThickness), 0])
-                                                    cube([pitSizeX - gap[1] - gap[2] , (tongueThickness + tongueOuterAdjustment)*cutMultiplier, tongueHeight * cutMultiplier], center = true);     
+                                                translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2 * tongueOuterAdjustment - tongueThickness), 0])
+                                                    cube([pitSizeX  - (gap[1] + gap[2]) * gridSizeXY , (tongueThickness + tongueOuterAdjustment)*cutMultiplier, tongueHeight * cutMultiplier], center = true);     
                                             } 
                                         }  
                                     }
@@ -958,12 +958,12 @@ module block(
                                                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                                     gap = pitWallGaps[gapIndex];
                                                     if(gap[0] < 2){
-                                                        translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                                            cube([(tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, pitSizeY - gap[1] - gap[2]- 2*tongueClampThickness, tongueClampHeight*cutMultiplier], center = true);
+                                                        translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                                            cube([(tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, pitSizeY  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness, tongueClampHeight*cutMultiplier], center = true);
                                                     }  
                                                     else{
-                                                        translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY + 2 * tongueOuterAdjustment - tongueThickness), 0])
-                                                            cube([pitSizeX - gap[1] - gap[2] - 2*tongueClampThickness , (tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, tongueClampHeight*cutMultiplier], center = true);     
+                                                        translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2 * tongueOuterAdjustment - tongueThickness), 0])
+                                                            cube([pitSizeX  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness , (tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, tongueClampHeight*cutMultiplier], center = true);     
                                                     } 
                                                 }  
                                             }
@@ -1156,12 +1156,12 @@ module block(
                                     for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                         gap = pitWallGaps[gapIndex];
                                         if(gap[0] < 2){
-                                            translate([(-0.5 + gap[0]) * (knobRectX + 2*tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                                cube([(tongueThickness + tongueOuterAdjustment)*cutMultiplier, pitSizeY - gap[1] - gap[2], (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);
+                                            translate([(-0.5 + gap[0]) * (knobRectX + 2*tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                                cube([(tongueThickness + tongueOuterAdjustment)*cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);
                                         }  
                                         else{
-                                            translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment - tongueThickness), 0])
-                                                cube([pitSizeX - gap[1] - gap[2] , (tongueThickness + tongueOuterAdjustment)*cutMultiplier, (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);     
+                                            translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment - tongueThickness), 0])
+                                                cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , (tongueThickness + tongueOuterAdjustment)*cutMultiplier, (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);     
                                         } 
                                     }   
                                 }
@@ -1189,12 +1189,12 @@ module block(
                                         for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                             gap = pitWallGaps[gapIndex];
                                             if(gap[0] < 2){
-                                                translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment + 2 * tongueClampThickness - tongueThickness), -0.5 * (gap[2] - gap[1]), 0])
-                                                    cube([(tongueThickness + tongueOuterAdjustment + 2 * tongueClampThickness)*cutMultiplier, pitSizeY - gap[1] - gap[2]- 2 * tongueClampThickness, tongueClampHeight*cutMultiplier], center = true);
+                                                translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment + 2 * tongueClampThickness - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                                    cube([(tongueThickness + tongueOuterAdjustment + 2 * tongueClampThickness)*cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY - 2 * tongueClampThickness, tongueClampHeight*cutMultiplier], center = true);
                                             }  
                                             else{
-                                                translate([-0.5 * (gap[2] - gap[1]), (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment + 2*tongueClampThickness - tongueThickness), 0])
-                                                    cube([pitSizeX - gap[1] - gap[2] - 2*tongueClampThickness , (tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, tongueClampHeight*cutMultiplier], center = true);     
+                                                translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment + 2*tongueClampThickness - tongueThickness), 0])
+                                                    cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness , (tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, tongueClampHeight*cutMultiplier], center = true);     
                                             } 
                                         }   
                                     }
