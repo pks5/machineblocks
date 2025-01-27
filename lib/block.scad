@@ -333,17 +333,20 @@ module block(
 
     function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) && drawGridItem(knobs, a, b, 0, false); 
 
-    function onPitBorder(a, b, posOffset) = ((ceil(a + posOffset) < floor(pWallThickness[0])) || (floor(a + posOffset) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b + posOffset) < floor(pWallThickness[2])) || (floor(b + posOffset) > grid[1] - floor(pWallThickness[3]) - 1));
-    function inPit(a, b, posOffset) = (floor(a + posOffset) >= ceil(pWallThickness[0])) && (ceil(a + posOffset) < grid[0] - ceil(pWallThickness[1])) && (floor(b + posOffset) >= ceil(pWallThickness[2])) && (ceil(b + posOffset) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a,b,posOffset,0);                                
+    function onPitBorder(a, b) = ((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
+    function inPit(a, b) = (floor(a) >= ceil(pWallThickness[0])) && (ceil(a) < grid[0] - ceil(pWallThickness[1])) && (floor(b) >= ceil(pWallThickness[2])) && (ceil(b) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a, b, false, 0);                                
     
-    function inPitWallGaps(a, b, posOffset, i) = (i < len(pitWallGaps)) && (inPitWallGap0(a, b, posOffset, pitWallGaps[0]) || inPitWallGap1(a, b, posOffset, pitWallGaps[1]) || inPitWallGap2(a, b, posOffset, pitWallGaps[2]) || inPitWallGap3(a, b, posOffset, pitWallGaps[3]));
-    function inPitWallGap0(a, b, posOffset, gap) = (floor(a + posOffset) >= 0) && (ceil(a + posOffset) < floor(pWallThickness[0])) && (floor(b + posOffset) >= ceil(pWallThickness[2] + gap[1])) && (ceil(b + posOffset) < grid[1] - ceil(pWallThickness[3] + gap[2]));                                
-    function inPitWallGap1(a, b, posOffset, gap) = (floor(a + posOffset) >= grid[0] - ceil(pWallThickness[1])) && (ceil(a + posOffset) < grid[0]) && (floor(b + posOffset) >= ceil(pWallThickness[2] + gap[1])) && (ceil(b + posOffset) < grid[1] - ceil(pWallThickness[3] + gap[2]));                                
-    function inPitWallGap2(a, b, posOffset, gap) = (floor(b + posOffset) >= 0) && (ceil(b + posOffset) < floor(pWallThickness[2])) && (floor(a + posOffset) >= ceil(pWallThickness[0] + gap[1])) && (ceil(a + posOffset) < grid[0] - ceil(pWallThickness[1] + gap[2]));                                
-    function inPitWallGap3(a, b, posOffset, gap) = (floor(b + posOffset) >= grid[1] - ceil(pWallThickness[3])) && (ceil(b + posOffset) < grid[1]) && (floor(a + posOffset) >= ceil(pWallThickness[0] + gap[1])) && (ceil(a + posOffset) < grid[0] - ceil(pWallThickness[1] + gap[2]));                                
+    function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
-    function knobZ(a, b, posOffset) = pit && inPit(a, b, posOffset) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
-    function knobType(a, b, posOffset) = pit && inPit(a, b, posOffset) ? pitKnobType : knobType;
+    function mxRound(v, mx) = mx ? floor(v) : ceil(v);
+    function inPitWallGap(a, b, gap, mx) = ((gap[0] == 0) && inPitWallGap0(a, b, gap, mx)) || ((gap[0] == 1) && inPitWallGap1(a, b, gap, mx)) || ((gap[0] == 2) && inPitWallGap2(a, b, gap, mx)) || ((gap[0] == 3) && inPitWallGap3(a, b, gap, mx));
+    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < grid[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
+    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= grid[0] - ceil(pWallThickness[1])) && (ceil(a) < grid[0]) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < grid[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
+    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
+    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= grid[1] - ceil(pWallThickness[3])) && (ceil(b) < grid[1]) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
+    
+    function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
+    function knobType(a, b) = pit && inPit(a, b) ? pitKnobType : knobType;
 
     function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
     function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
@@ -864,11 +867,13 @@ module block(
                         for (b = [ startY : 1 : knobEndY ]){
                             
                             if(drawKnob(a, b)){
-                                inPit = pit && pitKnobs && inPit(a, b, pitKnobCentered ? 0.5 : 0);
-                                onPitBorder = !pit || onPitBorder(a, b, knobCentered ? 0.5 : 0);
+                                pitKnobOffset = pitKnobCentered ? 0.5 : 0;
+                                inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
+                                knobOffset = knobCentered ? 0.5 : 0;
+                                onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
                                 if(onPitBorder || inPit){
                                     posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
-                                    translate([posX(a + posOffset), posY(b + posOffset), knobZ(a, b, posOffset)]){ 
+                                    translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                         difference(){
                                             union(){
                                                 translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
@@ -882,7 +887,7 @@ module block(
                                                     cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                             }
                                             
-                                            if(knobType(a, b, posOffset) == "technic"){
+                                            if(knobType(a + posOffset, b + posOffset) == "technic"){
                                                 intersection(){
                                                     cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
                                                     cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);

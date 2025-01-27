@@ -61,10 +61,10 @@ block(
 
     knobs = baseKnobs,
     knobType = baseKnobType,
-    knobCentered = false,
+    pitKnobCentered = true,
     
     pit=true,
-    pitWallGaps = [ [ 0, 1.333, 1.333 ], [ 1, 2.333, 2.333 ], [ 2, 1.333, 1.333 ], [ 3, .333, .333 ] ],
+    pitWallGaps = [ [ 0, 1.333, 1.333 ], [ 1, 1.333, 3.333 ], [ 1, 3.333, 1.333 ], [ 2, 1.333, 1.333 ], [ 3, .333, .333 ] ],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
 
