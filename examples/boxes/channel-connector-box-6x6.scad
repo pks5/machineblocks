@@ -15,9 +15,9 @@ use <../../lib/block.scad>;
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 6; // [1:32] 
+boxSizeX = 8; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 6; // [1:32] 
+boxSizeY = 8; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
 boxLayers = 3; // [1:24]
 
@@ -64,7 +64,7 @@ block(
     knobCentered = false,
     
     pit=true,
-    pitWallGaps = [ [ 0, .333, .333 ] ],
+    pitWallGaps = [ [ 0, 1.333, 1.333 ], [ 1, 2.333, 2.333 ], [ 2, 1.333, 1.333 ], [ 3, .333, .333 ] ],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
 
