@@ -40,14 +40,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S1 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slantingX0": 1
-                    }
-                },
+                
                 
                 
 
@@ -90,15 +83,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S1.1 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1
-                    }
-                },
+               
                 
                 {
                     "name": "Slanted Brick S1.1.1.1 2x2",
@@ -200,15 +185,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S1.1 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingX1": 1
-                    }
-                },
+               
                 
                 
 
@@ -247,14 +224,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S2 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slantingX0": 2
-                    }
-                },
+               
                 
                
 
@@ -339,17 +309,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S2 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slantingX0": 2
-                    }
-                },
                 
-                
-
 
                 {
                     "name": "Slanted Brick S1 1x4",
@@ -439,15 +399,7 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1
-                    }
-                },
+                
 
                 {
                     "name": "Slanted Brick S1.1.1.1 2x4",
@@ -642,14 +594,6 @@
                     }
                 },
                 
-                {
-                    "name": "Slanted Brick S2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slantingX0": 2
-                    }
-                },
                 
                
 
@@ -805,14 +749,7 @@
                     }
                 },
                 
-                {
-                    "name": "Overhang Brick O1 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slantingX0": -1
-                    }
-                },
+                
                 
                 
 
@@ -859,23 +796,9 @@
                     }
                 },
 
-                {
-                    "name": "Overhang Brick O1 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slantingX0": -1
-                    }
-                },
+               
                 
-                {
-                    "name": "Overhang Brick O1 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slantingX0": -1
-                    }
-                },
+                
                 
                 {
                     "name": "Overhang Brick O1.0.2 6x3",
@@ -943,15 +866,7 @@
                     }
                 },
                 
-                {
-                    "name": "Overhang Brick O2 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slantingX0": -2
-                    }
-                },
-                
+               
                
 
                 
@@ -996,17 +911,7 @@
                     }
                 },
                 
-                {
-                    "name": "Overhang Brick O2 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slantingX0": -2
-                    }
-                },
-                
-                
-
+               
 
                 
                 {
@@ -1018,14 +923,7 @@
                     }
                 },
 
-                {
-                    "name": "Overhang Brick O1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slantingX0": -1
-                    }
-                },
+                
                 
                 {
                     "name": "Overhang Brick O1.0.2 4x4",
@@ -1222,17 +1120,7 @@
                     }
                 },
                 
-                {
-                    "name": "Overhang Brick O2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slantingX0": -2
-                    }
-                },
                 
-               
-
                 
                 
                 {
