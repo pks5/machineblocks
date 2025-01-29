@@ -550,6 +550,62 @@
                         "basePitWallGaps": [ [ 0, 0.333, 4.333 ], [ 0, 4.333, 0.333 ], [ 1, 0.333, 4.333 ], [ 1, 4.333, 0.333 ] ],
                         "lid" : false
                     }
+                },
+
+                {
+                    "name": "Case Wall 2x1",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 1,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Case Wall 4x1",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 1,
+                        "boxLayers": 9,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Case Wall 6x1",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 1,
+                        "boxLayers": 9,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Case Wall 8x1",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 1,
+                        "boxLayers": 12,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
                 }
             ]
         }

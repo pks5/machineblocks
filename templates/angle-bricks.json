@@ -73,7 +73,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brick1SizeY": 4,
-                        "brick2SizeY": 4
+                        "brick2SizeY": 4,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -100,7 +101,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brick1SizeY": 4,
-                        "brick2SizeY": 4
+                        "brick2SizeY": 4,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -127,7 +129,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brick1SizeY": 6,
-                        "brick2SizeY": 4
+                        "brick2SizeY": 4,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -136,7 +139,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brick1SizeY": 6,
-                        "brick2SizeY": 6
+                        "brick2SizeY": 6,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -163,7 +167,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brick1SizeY": 4,
-                        "brick2SizeY": 4
+                        "brick2SizeY": 4,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -190,7 +195,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brick1SizeY": 6,
-                        "brick2SizeY": 4
+                        "brick2SizeY": 4,
+                        "brick1BaseLayers":3
                     }
                 },
 
@@ -199,7 +205,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brick1SizeY": 6,
-                        "brick2SizeY": 6
+                        "brick2SizeY": 6,
+                        "brick1BaseLayers":3
                     }
                 }
             ]

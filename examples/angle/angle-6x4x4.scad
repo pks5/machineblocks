@@ -27,6 +27,10 @@ brickSizeX = 6; // [1:32]
 brick1SizeY = 4; // [1:32]
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick2SizeY = 4; // [1:32]
+// First brick's height specified as number of layers. Each layer has the height of one plate.
+brick1BaseLayers = 3; // [1:24]
+// Second brick's base height in mm
+brick2BaseHeight = 1.8;
 
 /* [Appearance] */
 
@@ -65,11 +69,14 @@ tubeZSize = 6.4;
 
 // Grid Size XY
 gridSizeXY = 8.0;
+// Grid Size Z
+gridSizeZ = 3.2;
 
 // Generate the block
 union()
 {
   block(grid = [ brickSizeX, brick1SizeY ],
+        baseLayers = brick1BaseLayers,
         baseCutoutType = brick1BaseCutoutType,
         connectors = [[ 2, 0 ] ],
         knobs = brick1Knobs,
@@ -88,17 +95,17 @@ union()
         tubeZSize = tubeZSize);
 }
 
-translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY + (viewMode == "cover" ? gridSizeXY : 0)] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
+translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY + (viewMode == "cover" ? (brick1BaseLayers + 2) * gridSizeZ : 0)] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
   rotate(viewMode != "print" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
   {
 
     block(grid = [ brickSizeX, brick2SizeY ],
-          baseHeight = 1.8,
+          baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           knobs = brick2Knobs,
           knobType = brick2KnobType,
           connectors = [ [ 2, 2 ] ],
-          connectorHeight = 3.2,
+          connectorHeight = brick1BaseLayers * gridSizeZ,
 
           previewQuality = previewQuality,
           baseRoundingResolution = roundingResolution,
