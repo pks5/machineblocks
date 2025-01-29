@@ -177,7 +177,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -191,7 +191,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -205,7 +205,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -219,7 +219,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -233,7 +233,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -247,7 +247,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -261,7 +261,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -275,7 +275,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -289,7 +289,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -303,7 +303,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -317,7 +317,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -331,7 +331,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -345,7 +345,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -359,7 +359,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -373,7 +373,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -387,7 +387,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -401,7 +401,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -415,7 +415,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -429,7 +429,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -443,7 +443,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -457,7 +457,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -471,7 +471,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -485,7 +485,7 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
                     }
                 },
@@ -499,8 +499,32 @@
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
-                        "boxType": "channel_corner",
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
                         "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Channel Box 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 1.333, 1.333 ] ],
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Channel Box 8x8",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 0.333, 4.333 ], [ 0, 4.333, 0.333 ] ],
+                        "lid" : false
                     }
                 }
             ]

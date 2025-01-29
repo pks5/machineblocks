@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Box No Lid 12x6
+* Channel Box 6x6
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,18 +19,18 @@ viewMode = "print"; // [print, assembled, cover]
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 12; // [1:32] 
+boxSizeX = 6; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
 boxSizeY = 6; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 9; // [1:24]
+boxLayers = 3; // [1:24]
 
 /* [Appearance] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether the base should have knobs
-baseKnobs = false;
+baseKnobs = true;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
@@ -44,7 +44,7 @@ basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 1;
 // Pit wall gaps
-basePitWallGaps = [];
+basePitWallGaps = [[0, 1.333, 1.333]];
 // Whether the base should have a tongue
 baseTongue = false;
 

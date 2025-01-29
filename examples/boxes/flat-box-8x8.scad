@@ -27,9 +27,6 @@ boxLayers = 3; // [1:24]
 
 /* [Appearance] */
 
-// Whether the box should have to open sides to use it as channel
-boxType = "box";
-
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether the base should have knobs
@@ -46,6 +43,8 @@ basePitKnobType = "classic"; // [classic, technic]
 basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 1;
+// Pit wall gaps
+basePitWallGaps = [];
 // Whether the base should have a tongue
 baseTongue = false;
 
@@ -94,7 +93,7 @@ block(
     knobCentered = baseKnobCentered,
     
     pit=true,
-    pitWallGaps = boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+    pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
     pitKnobType = basePitKnobType,
@@ -125,7 +124,7 @@ if(lid){
             knobCentered = lidKnobCentered,
 
             pillars = lidPillars,
-            pitWallGaps = boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+            pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
 
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
