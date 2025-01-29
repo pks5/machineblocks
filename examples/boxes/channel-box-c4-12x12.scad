@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Flat Box 8x8
+* Channel Box C4 12x12
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -44,7 +44,7 @@ basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 1;
 // Pit wall gaps
-basePitWallGaps = [];
+basePitWallGaps = [[0, 0.333, 4.333], [0, 4.333, 0.333], [1, 0.333, 4.333], [1, 4.333, 0.333]];
 // Whether the base should have a tongue
 baseTongue = false;
 

@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Flat Box 16x16
+* Channel Box C2 6x6
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ viewMode = "print"; // [print, assembled, cover]
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 16; // [1:32] 
+boxSizeX = 6; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 16; // [1:32] 
+boxSizeY = 6; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
 boxLayers = 3; // [1:24]
 
@@ -36,15 +36,15 @@ baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // Whether the pit should contain knobs
-basePitKnobs = true;
+basePitKnobs = false;
 // Type of the base pit knobs
-basePitKnobType = "technic"; // [classic, technic]
+basePitKnobType = "classic"; // [classic, technic]
 // Whether base pit knobs should be centered.
-basePitKnobCentered = true;
+basePitKnobCentered = false;
 // Pit wall thickness
-basePitWallThickness = [1, 2, 3, 4];
+basePitWallThickness = 1;
 // Pit wall gaps
-basePitWallGaps = [];
+basePitWallGaps = [[0, 1.333, 1.333], [2, 1.333, 1.333]];
 // Whether the base should have a tongue
 baseTongue = false;
 

@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Flat Box 12x12
+* Pool 16x16
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,11 +19,11 @@ viewMode = "print"; // [print, assembled, cover]
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 12; // [1:32] 
+boxSizeX = 16; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 12; // [1:32] 
+boxSizeY = 16; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 3; // [1:24]
+boxLayers = 6; // [1:24]
 
 /* [Appearance] */
 
@@ -36,13 +36,13 @@ baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // Whether the pit should contain knobs
-basePitKnobs = false;
+basePitKnobs = true;
 // Type of the base pit knobs
-basePitKnobType = "classic"; // [classic, technic]
+basePitKnobType = "technic"; // [classic, technic]
 // Whether base pit knobs should be centered.
-basePitKnobCentered = false;
+basePitKnobCentered = true;
 // Pit wall thickness
-basePitWallThickness = [1, 2, 3, 4];
+basePitWallThickness = [2, 2, 3, 4];
 // Pit wall gaps
 basePitWallGaps = [];
 // Whether the base should have a tongue

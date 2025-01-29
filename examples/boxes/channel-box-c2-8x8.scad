@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Channel Box 6x6
+* Channel Box C2 8x8
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ viewMode = "print"; // [print, assembled, cover]
 /* [Size] */
 
 // Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 6; // [1:32] 
+boxSizeX = 8; // [1:32] 
 // Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 6; // [1:32] 
+boxSizeY = 8; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
 boxLayers = 3; // [1:24]
 
@@ -44,7 +44,7 @@ basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 1;
 // Pit wall gaps
-basePitWallGaps = [[0, 1.333, 1.333]];
+basePitWallGaps = [[0, 0.333, 4.333], [0, 4.333, 0.333]];
 // Whether the base should have a tongue
 baseTongue = false;
 
