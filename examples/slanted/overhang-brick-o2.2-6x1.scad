@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/slanted
 *
-* Overhang Brick O1.1 6x4
+* Overhang Brick O2.2 6x1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,7 +19,7 @@ use <../../lib/block.scad>;
 // Brick size in X-direction specified as multiple of an 1x1 brick.
 brickSizeX = 6; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 4; // [1:32]  
+brickSizeY = 1; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 3; // [1:24]
 
@@ -52,9 +52,9 @@ pitKnobs = false;
 pitWallThickness = 0.333;
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = -1;
+slantingX0 = -2;
 // Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = -1;
+slantingX1 = -2;
 // Slanting size on Y0 side specified as multiple of an 1x1 brick.
 slantingY0 = 0;
 // Slanting size on Y1 side specified as multiple of an 1x1 brick.
