@@ -1,20 +1,13 @@
 #!/bin/bash
 
-PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
-#PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+# TODO Support Linux
+if [[ "$OSTYPE" == "darwin"* ]]; then
+   PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+else
+   PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
+fi
 
 PATH_TO_MAGICK="magick"
-
-DIR_DOCS="../docs"
-DIR_SETS="../sets"
-DIR_EXAMPLES="../examples"
-DIR_CLASSIC="../examples/classic"
-DIR_TECHNIC="../examples/technic"
-DIR_BOXES="../examples/boxes"
-DIR_TEXT="../examples/text"
-DIR_CUSTOM="../examples/custom"
-DIR_CORNER="../examples/corner"
-DIR_SLANTED="../examples/slanted"
 
 IMAGE_WIDTH=2400
 IMAGE_HEIGHT=1800
@@ -23,27 +16,28 @@ IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 IMAGE_WIDTH_HALF=$((IMAGE_WIDTH_FULL / 2))
 
-#declare -a arr=("$DIR_SETS" "$DIR_EXAMPLES")
-declare -a arr=("$DIR_TECHNIC")
-#declare -a arr=("$DIR_CORNER")
-
-echo
-echo Creating preview images ...
-echo
+if [ "$#" -lt 1 ]; then
+    echo "Usage: bash create-previews.sh [diretory1] [directory2] ..."
+    exit 1
+fi
 
 curDir=$(pwd)
 
 cd "$(dirname "$0")"
 
-for i in "${arr[@]}"
+for i in "$@"
 do
+   echo
+   echo "Creating preview images for folder '$i' ..."
+   echo
+
    find "$i" -name "*.scad" -print0 | while read -d $'\0' file
         do
             echo "Creating preview for ${file} ..."
             label="$(basename ${file})"
             label=${label//-/ }
             label=${label/.scad/}
-            label=`python -c "print('${label}'.title())"`
+            label=`python -c "print('${label}'[:28].title())"`
             image_file="${file/scad/png}"
 
             "$PATH_TO_OPENSCAD" --o "$image_file" --p "preview-parameters.json" --P BestQuality --csglimit 3000000 --imgsize ${IMAGE_WIDTH},${IMAGE_HEIGHT} --autocenter "$file"

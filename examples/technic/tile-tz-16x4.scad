@@ -3,7 +3,7 @@
 * https://machineblocks.com/examples/technic-bricks
 *
 * Tile TZ 16x4
-* Copyright (c) 2022 - 2024 Jan Philipp Knoeller <pk@pksoftware.de>
+* Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
 * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International 
@@ -33,20 +33,32 @@ knobs = false;
 knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
+
 // Whether to draw pillars.
 pillars = true;
+
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = true;
+
 // Whether brick should have a pit
 pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 0.333;
+
+// Slanting size on X0 side specified as multiple of an 1x1 brick.
+slantingX0 = 0;
+// Slanting size on X1 side specified as multiple of an 1x1 brick.
+slantingX1 = 0;
+// Slanting size on Y0 side specified as multiple of an 1x1 brick.
+slantingY0 = 0;
+// Slanting size on Y1 side specified as multiple of an 1x1 brick.
+slantingY1 = 0;
 
 /* [Quality] */
 
@@ -73,17 +85,23 @@ block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
+    
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
+    
     pillars = pillars,
+    
     holesX = holesX,
     holesY = holesY,
     holesZ = holesZ,
+    
     pit = pit,
     pitKnobs = pitKnobs,
     pitWallThickness = pitWallThickness,
     
+    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
+
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,

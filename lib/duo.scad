@@ -1,13 +1,13 @@
 use <./block.scad>;
 
+//DEPRECATED: WILL BE REMOVED
+
 module mb_duo(
-    brick1GridX = 3,
-    brick1GridY = 1,
+    brick1Grid = [3,1],
     brick1OffsetY = 1,
-    brick2GridX = 1,
-    brick2GridY = 3,
-    brick2OffsetX = 1,
     
+    brick2Grid = [1, 3],
+    brick2OffsetX = 1,
     
     knobs = true,
     knobType = "classic",
@@ -23,9 +23,9 @@ module mb_duo(
     //Duo
     union(){
         block(
-            grid=[brick1GridX, brick1GridY], 
-            gridOffset=[0, brick1OffsetY - 0.5*(brick2GridY-brick1GridY), 0],
-            wallGapsX=[[brick2OffsetX, 2, brick2GridX]],
+            grid=brick1Grid, 
+            gridOffset=[0, brick1OffsetY - 0.5*(brick2Grid[1]-brick1Grid[1]), 0],
+            wallGapsX=[[brick2OffsetX, 2, brick2Grid[0]]],
             baseLayers = baseLayers,
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
@@ -37,9 +37,9 @@ module mb_duo(
         );
 
         block(
-            grid=[brick2GridX, brick2GridY], 
-            gridOffset=[brick2OffsetX - 0.5*(brick1GridX-brick2GridX), 0, 0],
-            wallGapsY=[[brick1OffsetY, 2, brick1GridY]],
+            grid=brick2Grid, 
+            gridOffset=[brick2OffsetX - 0.5*(brick1Grid[0]-brick2Grid[0]), 0, 0],
+            wallGapsY=[[brick1OffsetY, 2, brick1Grid[1]]],
             baseLayers = baseLayers,
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
