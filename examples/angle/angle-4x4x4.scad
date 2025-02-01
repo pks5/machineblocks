@@ -13,7 +13,6 @@
 
 // Include the library
 use <../../lib/block.scad>;
-use <../../lib/connectors.scad>;
 
 /* [View] */
 // How to view the brick in the editor

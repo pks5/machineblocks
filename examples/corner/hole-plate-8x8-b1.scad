@@ -1,5 +1,5 @@
 /**
-* Machine Blocks
+* MachineBlocks
 * https://machineblocks.com/examples/corner
 *
 * Hole Plate 8x8 B1
@@ -21,7 +21,7 @@ brickSizeX = 8; // [1:32]
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
 brickSizeY = 8; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 3; // [1:24]
+baseLayers = 1; // [1:24]
 // Border Size as multiple of an 1x1 brick.
 borderSize = 1; // [1:8]
 
