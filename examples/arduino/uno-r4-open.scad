@@ -34,16 +34,26 @@ wallThickness = 1.5;
 // Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
+/* [Hidden] */
+frameSizeX = 8;
+frameSizeY = 7;
+middleX=3;
+
+//Shift of the frame (grid multiple)
+shiftX = (0.5*frameSizeX-0.5) - middleX;
+//Offset of the pcb in mm
+pcbOffsetX = 7;
+
 // Generate the block
 block(
-    grid = [1, 7],
+    grid = [1, frameSizeY],
     baseLayers = 1,
     
     knobs = false,
-    wallGapsY=[[0,2,1], [6,2,1]],
+    wallGapsY=[[0,2,1], [frameSizeY-1,2,1]],
 
     pcb = true,
-    pcbScrewSockets = [[0,0],[-26 + 6, -24],[-25 + 6, 24],[26 + 6, 9], [26 + 6, -18]],
+    pcbScrewSockets = [[0,0],[-26 + pcbOffsetX, -24],[-25 + pcbOffsetX, 24],[26 + pcbOffsetX, 9], [26 + pcbOffsetX, -19]],
     pcbMountingType = "screws",
     
     previewQuality = previewQuality,
@@ -60,13 +70,13 @@ block(
 );
 
 block(
-    grid = [9, 1],
-    gridOffset=[0, -3,0],
+    grid = [frameSizeX, 1],
+    gridOffset=[shiftX, -(0.5*frameSizeY-0.5),0],
     baseLayers = 1,
     
     knobs = false,
 
-    wallGapsX=[[0,1,1], [4,1,1], [8,1,1]],
+    wallGapsX=[[0,1,1], [middleX,1,1], [frameSizeX-1,1,1]],
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -82,12 +92,12 @@ block(
 );
 
 block(
-    grid = [1, 7],
-    gridOffset=[-4, 0,0],
+    grid = [1, frameSizeY],
+    gridOffset=[shiftX-(0.5*frameSizeX-0.5), 0,0],
     baseLayers = 1,
     
     knobs = false,
-    wallGapsY=[[0,1,1], [6,1,1]],
+    wallGapsY=[[0,1,1], [frameSizeY-1,1,1]],
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -103,12 +113,12 @@ block(
 );
 
 block(
-    grid = [9, 1],
-    gridOffset=[0, 3,0],
+    grid = [frameSizeX, 1],
+    gridOffset=[shiftX, (0.5*frameSizeY-0.5),0],
     baseLayers = 1,
     
     knobs = false,
-    wallGapsX=[[0,0,1], [4,0,1], [8,0,1]],
+    wallGapsX=[[0,0,1], [middleX,0,1], [frameSizeX-1,0,1]],
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -124,12 +134,12 @@ block(
 );
 
 block(
-    grid = [1, 7],
-    gridOffset=[4, 0,0],
+    grid = [1, frameSizeY],
+    gridOffset=[shiftX + (0.5*frameSizeX-0.5), 0,0],
     baseLayers = 1,
     
     knobs = false,
-    wallGapsY=[[0,0,1], [6,0,1]],
+    wallGapsY=[[0,0,1], [frameSizeY-1,0,1]],
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
