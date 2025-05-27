@@ -2,55 +2,38 @@ echo(version=version());
 
 include <../lib/block.scad>;
 
-color("yellow")
-    translate([-20, 10, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
+/* [Hidden] */
 
-color("yellow")
-    translate([-20, 0, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
+grid = [1, 1];
+gridSizeXY = 8.0;
+gridSizeZ = 3.2;
+offsetX = 0.5 * (grid[0] - 1);
+holeXGridOffsetZ = 1.75;
+holeXGridSizeZ = 3;
+tubeXSize = 6.4;
+holeXSize = 5.1;
+wallThickness = 1.5;
+pillarRoundingResolution = 64;
+objectSizeY = gridSizeXY * grid[1];
+holeXInsetDepth = 0.9;
+holeRoundingResolution = 64;
+holeXInsetThickness = 0.55;
 
-color("yellow")
-    translate([-20, -10, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
+function posX(a) = (a - offsetX) * gridSizeXY;
 
-color("yellow")
-    translate([-20, -20, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
-        
-color("yellow")
-    translate([-20, -30, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
-
-color("yellow")
-    translate([-20, -40, 0])
-        block(baseLayers=3, grid=[2,1], holesX=true, knobType = "technic");
-
-
-color("blue")
-    translate([-20, -60, 0])
-        block(baseLayers=3, grid=[3,2], baseRoundingRadius=[0,0,[0,0,4,0]]);        
-color("blue")
-    translate([-20, -80, 0])
-        block(baseLayers=3, grid=[3,2], baseRoundingRadius=[0,0,[4,4,4,0]]);        
-
-color("green")
-    translate([10, -80, 0])
-        block(
-                grid=[2,2],
-             //   tubeZSize = valueStart + i * valueStep,
-              //  gridOffset=[2* (i - floor(0.5 * numberOfSamples)),-vOffset,-1.5],
-                knobs=false,
-             //   baseSideAdjustment=-4,
-                stabilizerGrid=false,
-                topPlateHelpers=false
-            );
-
-translate([10, -180, 0])
-mb_rounded_block(
-				radius = [0, 0, [4, 4, 4, 4]], size = [63.8, 7.8, 3.2],
-				center = true, 
-				resolution = 30
-			);
- 
+difference(){
+    block(baseLayers=3, baseCutoutMaxDepth=2.4, grid=grid, knobType = "technic", alignBottom=true);
+    
+    a=0;
+    translate([posX(a), 0, holeXGridOffsetZ*gridSizeZ]){
+        rotate([90, 0, 0]){ 
+            cylinder(h=objectSizeY + 2*wallThickness, r=0.5 * holeXSize, center=true, $fn=pillarRoundingResolution);
+            translate([0, 0, 0.5 * objectSizeY])
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=holeRoundingResolution);
+                                    translate([0, 0, -0.5 * objectSizeY])
+                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=holeRoundingResolution);
+        }
+    };
+    
+}
         
