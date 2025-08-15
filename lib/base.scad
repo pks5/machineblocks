@@ -21,13 +21,26 @@ module mb_base_cutout(
     baseSideAdjustment, 
     roundingRadius, 
     roundingResolution,
+    baseRoundingRadius,
     wallThickness,
+    //Top Plate
+    topPlateZ,
     topPlateHeight,
+    topPlateHelpers,
+    topPlateHelperOffset,
+    topPlateHelperHeight,
+    topPlateHelperThickness,
+    topPlateHelperRing,
+    topPlateHelperRingHeight,
+    topPlateHelperRingThickness,
+    //Base Clamp
     baseClampHeight,
     baseClampThickness,
     baseClampOffset,
+    //Pit
     pit,
     pitDepth,
+    //Slanting
     slanting,
     slantingLowerHeight
 ){
@@ -97,6 +110,47 @@ module mb_base_cutout(
             }
 
             /*
+            * Plate Helpers
+            */
+            if(topPlateHelpers){
+                color([0.906, 0.298, 0.235]) //e74c3c
+                union(){
+                    translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                        cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
+                    }
+                    translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                        cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
+                    }    
+                    translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight + topPlateHelperOffset) + 0.5 * cutOffset]){
+                        cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
+                    }
+                    translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight + topPlateHelperOffset) + 0.5 * cutOffset]){
+                        cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
+                    } 
+
+                    if(topPlateHelperRing){
+                        translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperRingHeight) + 0.5 * cutOffset]){
+                            difference(){
+                                mb_rounded_block(
+                                    size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, topPlateHelperRingHeight + cutOffset], 
+                                    center=true, 
+                                    resolution = roundingResolution,
+                                    radius = baseRoundingRadius
+                                );
+
+                                mb_rounded_block(
+                                    size = [objectSizeXAdjusted - 2*topPlateHelperRingThickness, objectSizeYAdjusted - 2*topPlateHelperRingThickness, cutMultiplier * topPlateHelperRingHeight + cutOffset], 
+                                    center=true, 
+                                    resolution = roundingResolution,
+                                    radius = baseRoundingRadius
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*
             * Slanting
             */
             if(slanting != false){
@@ -138,7 +192,6 @@ module mb_base(
     height, 
     baseSideAdjustment, 
     roundingRadius, 
-    roundingRadiusZ,
     roundingResolution,
     pit,
     pitRoundingRadius,

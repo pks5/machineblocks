@@ -13,6 +13,7 @@
 
 // Include the library
 use <../lib/block.scad>;
+use <../lib/axis.scad>;
 
 /* [Size] */
 
@@ -85,7 +86,12 @@ block(
         baseLayers = baseLayers,
         baseCutoutType = "classic",
         baseRoundingRadius=[0,0,[8,8,8,8]],
-        baseCutoutMaxDepth=2.0,
+        baseCutoutMaxDepth=2.2,
+        topPlateHelpers=true,
+        topPlateHelperOffset=0,
+        topPlateHelperHeight=0.2,
+        topPlateHelperRing=true,
+        stabilizerGrid=true,
         
         knobs = knobs,
         knobCentered = knobCentered,
@@ -104,4 +110,9 @@ block(
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize
+    );
+    
+    translate([14,0,0])
+    mb_axis(
+        capHeight = 0
     );

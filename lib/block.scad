@@ -51,6 +51,9 @@ module block(
         topPlateHelperOffset = 0.2, //mm
         topPlateHelperHeight = 0.2, //mm
         topPlateHelperThickness = 0.4, //mm
+        topPlateHelperRing = false,
+        topPlateHelperRingHeight = 0.4, //mm
+        topPlateHelperRingThickness = 0.4, //mm
 
         //Slanting
         slanting = false,
@@ -415,10 +418,19 @@ module block(
                                 gridSizeXY = gridSizeXY,
                                 baseHeight = resultingBaseHeight,
                                 baseSideAdjustment = sAdjustment,
+                                baseRoundingRadius = baseRoundingRadius,
                                 roundingRadius = baseCutoutRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 wallThickness = wallThickness,
+                                topPlateZ = topPlateZ,
                                 topPlateHeight = resultingTopPlateHeight,
+                                topPlateHelpers = topPlateHelpers,
+                                topPlateHelperOffset = topPlateHelperOffset,
+                                topPlateHelperHeight = topPlateHelperHeight,
+                                topPlateHelperThickness = topPlateHelperThickness,
+                                topPlateHelperRing = topPlateHelperRing,
+                                topPlateHelperRingHeight = topPlateHelperRingHeight,
+                                topPlateHelperRingThickness = topPlateHelperRingThickness,
                                 baseClampHeight = baseClampHeight,
                                 baseClampThickness = baseClampThickness,
                                 baseClampOffset = baseClampOffset,
@@ -530,8 +542,8 @@ module block(
                                             /*
                                             * Plate Helpers
                                             */
-                                            if(topPlateHelpers){
-                                                color([0.906, 0.298, 0.235]) //e74c3c
+                                            if(false && topPlateHelpers){
+                                                color([0.106, 0.298, 0.235]) //e74c3c
                                                 union(){
                                                     translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight)]){
                                                         cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight], center = true);
@@ -771,10 +783,19 @@ module block(
                                     gridSizeXY = gridSizeXY,
                                     baseHeight = resultingBaseHeight,
                                     baseSideAdjustment = sAdjustment,
+                                    baseRoundingRadius = baseRoundingRadius,
                                     roundingRadius = baseCutoutRoundingRadius, 
                                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     wallThickness = wallThickness,
+                                    topPlateZ = topPlateZ,
                                     topPlateHeight = resultingTopPlateHeight,
+                                    topPlateHelpers = topPlateHelpers,
+                                    topPlateHelperOffset = topPlateHelperOffset,
+                                    topPlateHelperHeight = topPlateHelperHeight,
+                                    topPlateHelperThickness = topPlateHelperThickness,
+                                    topPlateHelperRing = topPlateHelperRing,
+                                    topPlateHelperRingHeight = topPlateHelperRingHeight,
+                                    topPlateHelperRingThickness = topPlateHelperRingThickness,
                                     baseClampHeight = baseClampHeight,
                                     baseClampThickness = baseClampThickness,
                                     baseClampOffset = baseClampOffset,
