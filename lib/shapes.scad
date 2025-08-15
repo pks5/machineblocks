@@ -107,7 +107,7 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 							else
 							rotate([0,0,rots[i]])
 								translate([0,0,-0.5*size[2]])
-									rotate_extrude(angle=90) 
+									rotate_extrude(angle=90, $fn = resolution) 
 										square([cornerRadius, size[2]]);
 							//cylinder(h = size[2], r = cornerRadius, center = true, $fn = resolution);
 					}

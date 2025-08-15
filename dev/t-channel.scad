@@ -10,7 +10,7 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-use <../../lib/block.scad>;
+use <../lib/block.scad>;
 
 /* [View] */
 // How to view the brick in the editor
@@ -43,8 +43,7 @@ basePitKnobType = "classic"; // [classic, technic]
 basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 0.333;
-// Pit wall gaps
-basePitWallGaps = [[2, 0, 2], [1, 0.666, 0]];
+
 // Whether the base should have a tongue
 baseTongue = true;
 
@@ -85,6 +84,7 @@ tubeZSize = 6.4;
 
 block(
     grid=[boxSizeX, boxSizeY],
+    gridOffset=[0, -0.5*boxSizeX + 1,0],
     baseLayers = boxLayers - (lid ? lidLayers : 0),
     baseCutoutType = baseCutoutType,
 
@@ -93,7 +93,7 @@ block(
     knobCentered = baseKnobCentered,
     
     pit=true,
-    pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+    pitWallGaps = [[0, 0, 0], [1, 0, 0], [3,0.5*(boxSizeX-2),0.5*(boxSizeX-2)]],
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
     pitKnobType = basePitKnobType,
@@ -109,13 +109,46 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
+    wallGapsX = [[1, 1, boxSizeY]],
+    tubeZSize = tubeZSize
+);
+
+block(
+    grid=[boxSizeY, boxSizeX],
+    gridOffset=[-0.5*boxSizeX + 2, 0,0],
+    baseLayers = boxLayers - (lid ? lidLayers : 0),
+    baseCutoutType = baseCutoutType,
+
+    knobs = baseKnobs,
+    knobType = baseKnobType,
+    knobCentered = baseKnobCentered,
+    
+    pit=true,
+    pitWallGaps = [[2, 0, 0], [3, 0, 0], [0,0,boxSizeX-2], [1,0,boxSizeX-2]],
+    pitWallThickness = basePitWallThickness,
+    pitKnobs = basePitKnobs,
+    pitKnobType = basePitKnobType,
+    pitKnobCentered = basePitKnobCentered,
+
+    tongue = baseTongue,
+    tongueHeight = lidPermanent ? 2.0 : 1.8,
+    tongueClampThickness = lidPermanent ? 0.1 : 0,
+    tongueOuterAdjustment = lidPermanent ? 0.0 : 0.0,
+    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
+    
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    wallGapsY = [[0, 2, boxSizeY]],
     tubeZSize = tubeZSize
 );
 
 if(lid){
-    translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
+    translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [0, -(boxSizeX + 0.5) * 8.0, 0]){
         block(
             grid=[boxSizeX, boxSizeY],
+            gridOffset=[0, -0.5*boxSizeX + 1,0],
             baseLayers = lidLayers,
             baseCutoutType = "groove",
 
@@ -124,12 +157,35 @@ if(lid){
             knobCentered = lidKnobCentered,
 
             pillars = lidPillars,
-            pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
-
+            pitWallGaps = [[0, 0, 0],[1, 0, 0], [3,0.5*(boxSizeX-2),0.5*(boxSizeX-2)]],
+    
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
             knobSize = knobSize,
             wallThickness = wallThickness,
+            wallGapsX = [[1, 1, boxSizeY]],
             tubeZSize = tubeZSize
         );
+        
+        block(
+            grid=[boxSizeY, boxSizeX],
+            gridOffset=[-0.5*boxSizeX + 2, 0,0],
+            baseLayers = lidLayers,
+            baseCutoutType = "groove",
+
+            knobs = lidKnobs,
+            knobType = lidKnobType,
+            knobCentered = lidKnobCentered,
+
+            pillars = lidPillars,
+            pitWallGaps = [[3, 0, 0], [1,0,boxSizeX-2]],
+    
+            baseHeightAdjustment = baseHeightAdjustment,
+            baseSideAdjustment = baseSideAdjustment,
+            knobSize = knobSize,
+            wallThickness = wallThickness,
+            wallGapsY = [[0, 2, boxSizeY]],
+            tubeZSize = tubeZSize
+        );
+    }
 }

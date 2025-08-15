@@ -277,7 +277,8 @@ module block(
         baseClampWallThickness = baseClampWallThickness,
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
-        xyScrewHolesZ = xyScrewHolesZ
+        xyScrewHolesZ = xyScrewHolesZ,
+        pitFloorZ = pitFloorZ
     );
     
     //Decorator Rotations
@@ -935,6 +936,7 @@ module block(
 
                                     /*
                                     * Cut knobGrooveGaps
+                                    * TODO cutMultiplier is too small!
                                     */
                                     if(pit){
                                         for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
@@ -971,6 +973,7 @@ module block(
                                         
                                             /*
                                             * Cut knobGrooveGaps
+                                            * TODO why we cut here again, could be cut both in one step
                                             */
                                             if(pit){
                                                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){

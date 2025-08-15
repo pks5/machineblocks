@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/classic-bricks
 *
-* Tall Plate 16x8
+* Slim Plate 2x1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -12,35 +12,59 @@
 */
 
 // Include the library
-use <../../lib/block.scad>;
+use <../lib/block.scad>;
 
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 22; // [1:32]  
+brickSizeX = 6; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 17; // [1:32]  
+brickSizeY = 6; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseHeight = 8; // [1:24]
+baseLayers = 6; // [1:24]
 
 /* [Appearance] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether to draw knobs.
-knobs = false;
+knobs = true;
+// Whether knobs should be centered.
+knobCentered = false;
+// Type of the knobs
+knobType = "classic"; // [classic, technic]
 
 // Whether to draw pillars.
-pillars = false;
+pillars = true;
 
-stabilizerGrid = true;
+pcb = true;
+pcbDimensions = [15, 17, 3];
+pcbOffset = [0,0];
+
+tongue=true;
+
+// Whether brick should have Technic holes along X-axis.
+holesX = false;
+// Whether brick should have Technic holes along Y-axis.
+holesY = false;
+// Whether brick should have Technic holes along Z-axis.
+holesZ = [[2,0,2,0]];
 
 // Whether brick should have a pit
-pit = false;
+pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 0.333;
+
+// Slanting size on X0 side specified as multiple of an 1x1 brick.
+slantingX0 = 0;
+// Slanting size on X1 side specified as multiple of an 1x1 brick.
+slantingX1 = 0;
+// Slanting size on Y0 side specified as multiple of an 1x1 brick.
+slantingY0 = 0;
+// Slanting size on Y1 side specified as multiple of an 1x1 brick.
+slantingY1 = 0;
 
 /* [Quality] */
 
@@ -63,21 +87,33 @@ wallThickness = 1.5;
 tubeZSize = 6.4;
 
 // Generate the block
-difference(){
-block(
+*block(
     grid = [brickSizeX, brickSizeY],
-    baseHeight = baseHeight,
+    baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
     
     knobs = knobs,
+    knobCentered = knobCentered,
+    knobType = knobType,
+    
+    tongue = tongue,
     
     pillars = pillars,
-    stabilizerGrid = stabilizerGrid,
+    
+    holesX = holesX,
+    holesY = holesY,
+    holesZ = holesZ,
     
     pit = pit,
     pitKnobs = pitKnobs,
     pitWallThickness = pitWallThickness,
     
+    pcb = pcb,
+    pcbDimensions = pcbDimensions,
+    pcbOffset = pcbOffset,
+    
+    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
+
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
@@ -93,10 +129,25 @@ block(
 
 block(
     grid = [brickSizeX, brickSizeY],
-    baseLayers=3,
-    knobs=false,
-    baseCutoutType = "none",
-    baseSideAdjustment = [baseSideAdjustment-8,baseSideAdjustment-3,baseSideAdjustment-18,baseSideAdjustment-18]
+    gridOffset = [brickSizeX + 1, 0, 0],
+    baseLayers = 1,
+    baseCutoutType = "groove",
     
+    knobs = false,
+    knobCentered = knobCentered,
+    knobType = knobType,
+    
+    pillars = pillars,
+    
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
+
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize
 );
-}
