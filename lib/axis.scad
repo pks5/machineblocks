@@ -2,13 +2,14 @@ module mb_axis(
     gridSizeXY = 8.0,
     size = 5.0,
     thickness = 1.6,
-    height = 4,
+    studs = 4,
+    height = undef,
     capHeight = 0.4,
     roundingResolution = 64,
     center = true,
     alignBottom = true //Whether the brick should be always aligned on floor
 ){
-    resultingHeight = height * gridSizeXY;
+    resultingHeight = height != undef ? height : studs * gridSizeXY;
 
     translate([0,0, alignBottom ? 0.5 * resultingHeight : 0]){
         intersection() {

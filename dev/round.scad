@@ -96,6 +96,9 @@ block(
         knobs = knobs,
         knobCentered = knobCentered,
         knobType = knobType,
+
+        holesZ = holesZ,
+        holesZType = "axis",
         
         pillars = pillars,
         
@@ -110,9 +113,4 @@ block(
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize
-    );
-    
-    translate([14,0,0])
-    mb_axis(
-        capHeight = 0
     );

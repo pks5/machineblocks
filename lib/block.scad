@@ -15,6 +15,7 @@ use <base.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;
 use <pcb.scad>;
+use <axis.scad>;
 
 module block(
         //Grid
@@ -90,6 +91,7 @@ module block(
 
         //Holes
         holesX = false,
+        holesXType = "circle",
         holeXSize = 5.1, //mm
         holeXInsetThickness = 0.6, //mm
         holeXInsetDepth = 0.9, //mm
@@ -98,6 +100,7 @@ module block(
         holeXMinTopMargin = 0.8, //mm
 
         holesY = false,
+        holesYType = "circle",
         holeYSize = 5.1, //mm
         holeYInsetThickness = 0.55, //mm
         holeYInsetDepth = 0.9, //mm
@@ -106,6 +109,7 @@ module block(
         holeYMinTopMargin = 0.8, //mm
 
         holesZ = false,
+        holesZType = "circle",
         holeZSize = 5.1, //mm
         holeRoundingResolution = 64,
         
@@ -1088,7 +1092,12 @@ module block(
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleZ(a, b)){
                             translate([posX(a + 0.5), posY(b+0.5), 0]){
-                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                if(holesZType == "circle"){
+                                    cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                }
+                                else if(holesZType == "axis"){
+                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                }
                             };
                         }
                     }
