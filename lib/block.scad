@@ -418,6 +418,7 @@ module block(
                             );
 
                             union(){
+                                color([0.945, 0.769, 0.059]) //f1c40f
                                 mb_base_cutout(
                                     grid = grid,
                                     gridSizeXY = gridSizeXY,
@@ -515,8 +516,8 @@ module block(
                                             }
                                         }
                                     }
-                                }
-                            }
+                                } // End Pillars Cutouts
+                            } // End Union Base Cutout
                             
                             /*
                             * Wall Gaps X
@@ -569,8 +570,8 @@ module block(
                             }
 
                             
-                            //End difference
-                        }
+                            
+                        } // End difference
                         
                         //intersection(){
                             union(){
@@ -863,8 +864,13 @@ module block(
                             connectorDepthTolerance = connectorDepthTolerance,
                             connectorSideTolerance = connectorSideTolerance
                         );
-                }
-                //End baseCutoutType
+                } //End baseCutoutType
+                
+
+                /*
+                * GENERAL AREA
+                * Starting from here, everything affects both solid and cutout blocks
+                */
                 
                 /*
                 * Text

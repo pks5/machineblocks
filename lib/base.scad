@@ -93,7 +93,6 @@ module mb_base_cutout(
                 /*
                 * Bottom Hole
                 */
-                color([0.953, 0.612, 0.071]) //f39c12
                 translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
                     mb_rounded_block(
                         size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
@@ -105,7 +104,6 @@ module mb_base_cutout(
                 /*
                 * Clamp Skirt
                 */
-                color([0.902, 0.494, 0.133]) //e67e22
                 translate([0, 0, baseClampOffset + 0.5*(baseClampHeight - baseHeight)])
                     mb_rounded_block(
                         size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
@@ -118,7 +116,6 @@ module mb_base_cutout(
                 * Clamp Offset
                 */
                 if(baseClampOffset > 0){
-                    color([0.902, 0.494, 0.133]) //e67e22
                     translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
                         mb_rounded_block(
                             size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
@@ -133,8 +130,7 @@ module mb_base_cutout(
             * Plate Helpers
             */
             if(topPlateHelpers){
-                color([0.906, 0.298, 0.235]) //e74c3c
-                union(){
+                
                     /*
                     translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                         cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
@@ -153,7 +149,6 @@ module mb_base_cutout(
                     if(stabilizerGrid){
                                         
                         //Helpers X
-                        color([0.753, 0.224, 0.169]) //c0392b
                         for (a = [ 0 : 1 : grid[0] - 2 ]){
                             translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (topPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
                                 cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
@@ -161,7 +156,6 @@ module mb_base_cutout(
                         }
                         
                         //Helpers Y
-                        color([0.753, 0.224, 0.169]) //c0392b
                         for (b = [ 0 : 1 : grid[1] - 2 ]){
                         translate([0, posY(b + 0.5), topPlateZ - 0.5 * (topPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
                                 cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
@@ -188,7 +182,7 @@ module mb_base_cutout(
                             }
                         }
                     }
-                }
+                
             }
 
             /*
