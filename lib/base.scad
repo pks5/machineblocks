@@ -155,16 +155,16 @@ module mb_base_cutout(
                         //Helpers X
                         color([0.753, 0.224, 0.169]) //c0392b
                         for (a = [ 0 : 1 : grid[0] - 2 ]){
-                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (topPlateHeight + stabilizersXHeight(a))]){ 
-                                cube([stabilizerGridThickness, objectSizeY - 2 * wallThickness, stabilizersXHeight(a)], center = true);
+                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (topPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
+                                cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
                             }
                         }
                         
                         //Helpers Y
                         color([0.753, 0.224, 0.169]) //c0392b
                         for (b = [ 0 : 1 : grid[1] - 2 ]){
-                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (topPlateHeight + stabilizersYHeight(b))]){
-                                cube([objectSizeX - 2 * wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
+                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (topPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
+                                cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                             };
                         }
                     }
