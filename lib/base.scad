@@ -17,12 +17,19 @@ module mb_slant_prism(side, l, w, h, inv){
 module mb_base_cutout(
     grid,
     gridSizeXY,
+    
     baseHeight,
     baseSideAdjustment, 
+    baseCutoutDepth,
+    baseRoundingRadius,
+    baseClampHeight,
+    baseClampThickness,
+    baseClampOffset,
+    
     roundingRadius, 
     roundingResolution,
-    baseRoundingRadius,
     wallThickness,
+    
     //Top Plate
     topPlateZ,
     topPlateHeight,
@@ -30,16 +37,22 @@ module mb_base_cutout(
     topPlateHelperOffset,
     topPlateHelperHeight,
     topPlateHelperThickness,
+
     topPlateHelperRing,
     topPlateHelperRingHeight,
     topPlateHelperRingThickness,
-    //Base Clamp
-    baseClampHeight,
-    baseClampThickness,
-    baseClampOffset,
+
+    stabilizerGrid,
+    stabilizerGridOffset,
+    stabilizerGridHeight,
+    stabilizerGridThickness,
+    stabilizerExpansion,
+    stabilizerExpansionOffset,
+
     //Pit
     pit,
     pitDepth,
+    
     //Slanting
     slanting,
     slantingLowerHeight
@@ -64,8 +77,15 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
+    function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
+    function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
+
     function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slanting[side] + baseSideAdjustment[side])) + cutTolerance;
     function slanting(s) = s > 0 ? 0 : s;
+
+    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
+    
 
     translate([offsetX, offsetY, 0]){ 
         difference(){
@@ -115,6 +135,7 @@ module mb_base_cutout(
             if(topPlateHelpers){
                 color([0.906, 0.298, 0.235]) //e74c3c
                 union(){
+                    /*
                     translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                         cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
                     }
@@ -127,22 +148,42 @@ module mb_base_cutout(
                     translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight + topPlateHelperOffset) + 0.5 * cutOffset]){
                         cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
                     } 
+                    */
 
-                    if(false && topPlateHelperRing){
+                    if(stabilizerGrid){
+                                        
+                        //Helpers X
+                        color([0.753, 0.224, 0.169]) //c0392b
+                        for (a = [ 0 : 1 : grid[0] - 2 ]){
+                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (topPlateHeight + stabilizersXHeight(a))]){ 
+                                cube([stabilizerGridThickness, objectSizeY - 2 * wallThickness, stabilizersXHeight(a)], center = true);
+                            }
+                        }
+                        
+                        //Helpers Y
+                        color([0.753, 0.224, 0.169]) //c0392b
+                        for (b = [ 0 : 1 : grid[1] - 2 ]){
+                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (topPlateHeight + stabilizersYHeight(b))]){
+                                cube([objectSizeX - 2 * wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
+                            };
+                        }
+                    }
+
+                    if(topPlateHelperRing){
                         translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperRingHeight) + 0.5 * cutOffset]){
                             difference(){
                                 mb_rounded_block(
-                                    size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, topPlateHelperRingHeight + cutOffset], 
+                                    size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], topPlateHelperRingHeight + cutOffset], 
                                     center=true, 
                                     resolution = roundingResolution,
                                     radius = baseRoundingRadius
                                 );
 
                                 mb_rounded_block(
-                                    size = [objectSizeXAdjusted - 2*topPlateHelperRingThickness, objectSizeYAdjusted - 2*topPlateHelperRingThickness, cutMultiplier * topPlateHelperRingHeight + cutOffset], 
+                                    size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperRingThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperRingThickness, cutMultiplier * topPlateHelperRingHeight + cutOffset], 
                                     center=true, 
                                     resolution = roundingResolution,
-                                    radius = baseRoundingRadius
+                                    radius = roundingRadius
                                 );
                             }
                         }

@@ -420,26 +420,41 @@ module block(
                             mb_base_cutout(
                                 grid = grid,
                                 gridSizeXY = gridSizeXY,
+                                
                                 baseHeight = resultingBaseHeight,
                                 baseSideAdjustment = sAdjustment,
                                 baseRoundingRadius = baseRoundingRadius,
+                                baseCutoutDepth = baseCutoutDepth,
+                                baseClampHeight = baseClampHeight,
+                                baseClampThickness = baseClampThickness,
+                                baseClampOffset = baseClampOffset,
+                                
                                 roundingRadius = baseCutoutRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                
                                 wallThickness = wallThickness,
+                                
                                 topPlateZ = topPlateZ,
                                 topPlateHeight = resultingTopPlateHeight,
                                 topPlateHelpers = topPlateHelpers,
                                 topPlateHelperOffset = topPlateHelperOffset,
                                 topPlateHelperHeight = topPlateHelperHeight,
                                 topPlateHelperThickness = topPlateHelperThickness,
+                                
                                 topPlateHelperRing = topPlateHelperRing,
                                 topPlateHelperRingHeight = topPlateHelperRingHeight,
                                 topPlateHelperRingThickness = topPlateHelperRingThickness,
-                                baseClampHeight = baseClampHeight,
-                                baseClampThickness = baseClampThickness,
-                                baseClampOffset = baseClampOffset,
+                                
+                                stabilizerGrid = stabilizerGrid,
+                                stabilizerGridOffset = stabilizerGridOffset,
+                                stabilizerGridHeight = stabilizerGridHeight,
+                                stabilizerGridThickness = stabilizerGridThickness,
+                                stabilizerExpansion = stabilizerExpansion,
+                                stabilizerExpansionOffset = stabilizerExpansionOffset,
+                                
                                 pit = pit,
                                 pitDepth = resultingPitDepth,
+                                
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight
                             );
@@ -495,7 +510,7 @@ module block(
                             }
                         }
                         
-                        intersection(){
+                        //intersection(){
                             union(){
                                 /*
                                 * Adhesion Helpers
@@ -568,7 +583,7 @@ module block(
                                             * Stabilizers
                                             */
                                             if(stabilizerGrid){
-                                        
+                                                /*
                                                 //Helpers X
                                                 color([0.753, 0.224, 0.169]) //c0392b
                                                 for (a = [ startX : 1 : endX - 1 ]){
@@ -583,7 +598,7 @@ module block(
                                                 translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b))]){
                                                         cube([objectSizeX - 2*wallThickness, stabilizerGridThickness, stabilizersYHeight(b)], center = true);
                                                     };
-                                                }
+                                                }*/
 
                                                 /*
                                                 * Screw Hole Helpers
@@ -780,6 +795,7 @@ module block(
                                 }
                             } //End Union of tubes, helpers, etc
 
+                            /*
                             //Cut off overlapping parts of tubes
                             if((baseCutoutRoundingRadius != 0) || (slanting != false)){
                                 mb_base_cutout(
@@ -808,8 +824,8 @@ module block(
                                     slanting = slanting,
                                     slantingLowerHeight = slantingLowerHeight
                                 );
-                            }
-                        } //End interception (for slanting only)
+                            }*/
+                        //} //End interception (for slanting only)
                     } //End union
                 }
                 else{
