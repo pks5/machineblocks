@@ -128,7 +128,7 @@ module mb_base_cutout(
                         cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
                     } 
 
-                    if(topPlateHelperRing){
+                    if(false && topPlateHelperRing){
                         translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperRingHeight) + 0.5 * cutOffset]){
                             difference(){
                                 mb_rounded_block(
