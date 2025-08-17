@@ -309,7 +309,7 @@ module block(
     /*
     * START Functions
     */
-    function isEmptyString(s) = (s == undef) || len(s) == 0;
+    
 
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
@@ -365,11 +365,9 @@ module block(
     function drawHoleZ(a, b) = drawGridItem(holesZ, a, b, 0, false); 
     
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
-    
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
     function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holesX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
-    
     function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
     function drawScrewHoleZ(a, b, i) = screwHolesZ == "all" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHoleZ(a, b, i+1)));
@@ -765,7 +763,7 @@ module block(
                 /*
                 * Text
                 */
-                if(!isEmptyString(text) && textDepth > 0){
+                if(!mb_is_empty_string(text) && textDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
@@ -784,7 +782,7 @@ module block(
                 /*
                 * SVG
                 */
-                if(!isEmptyString(svg) && svgDepth > 0){
+                if(!mb_is_empty_string(svg) && svgDepth > 0){
                     color([0.173, 0.243, 0.314]) //2c3e50
                         translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                             rotate(decoratorRotations[svgSide])
@@ -1033,7 +1031,7 @@ module block(
             /*
             * Text Cutout
             */
-            if(!isEmptyString(text) && textDepth < 0){
+            if(!mb_is_empty_string(text) && textDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])
@@ -1052,7 +1050,7 @@ module block(
             /*
             * SVG Cutout
             */
-            if(!isEmptyString(svg) && svgDepth < 0){
+            if(!mb_is_empty_string(svg) && svgDepth < 0){
                 color([0.173, 0.243, 0.314]) //2c3e50
                     translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])

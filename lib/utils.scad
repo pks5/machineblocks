@@ -22,3 +22,8 @@ function mb_base_cutout_radius(cutoutRadius, baseRadiusZ) = cutoutRadius == 0 ? 
         mb_calc_rounding_radius(cutoutRadius[3], baseRadiusZ[3])   
     ]);
 function mb_calc_rounding_radius(radius, baseRadius) = radius < 0 ? max(0, baseRadius + radius) : radius;
+
+/*
+* Whether a given string is empty
+*/
+function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
