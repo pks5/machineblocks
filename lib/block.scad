@@ -314,13 +314,26 @@ module block(
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
 
-    function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
+    function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+    function sideZ(side) = (side - 0.5) * resultingBaseHeight;
 
+    /*
+    * Grid
+    */
+    function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
+    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
+
+    /*
+    * Slanting
+    */
     function slanting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
     function inSlantedArea(a, b, inv, qx, qy) = (slanting != false) && !inGridArea(a, b, [slanting(slanting[0], inv), slanting(slanting[2], inv), grid[0] - slanting(slanting[1], inv) - (inv ? qx : 1), grid[1] - slanting(slanting[3], inv) - (inv ? qy : 1)]);
 
-    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
-
+    
+    /*
+    * Pillars / Pins
+    */
     function isCornerZone(value, i) = (value < pillarGapCornerLength) || (value >= grid[i] - (pillarGapCornerLength + 1)); 
     function isMiddleZone(value, i) = (grid[i] >= pillarGapMiddle) && (value>=mid[i]-1) && (value<=mid[i]+1);
     function isMiddle(value, i) = (grid[i] >= pillarGapMiddle) && (value == mid[i]);
@@ -340,11 +353,17 @@ module block(
                                 && !inSlantedArea(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) && drawGridItem(knobs, a, b, 0, false) && !inRoundingArea(zRadius[0], a, b, 0); 
+    
+    /*
+    * Round Bricks
+    */ 
+    function inRoundingTriangle(t, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - 1 - i : i) && a >= 0 && a < t[i]) || inRoundingTriangle(t, a, b, x, y, i+1));
+    function inRoundingCorner(r, a, b, x, y, i) = (i < len(roundingAreas)) && ((r > roundingAreas[i][0] && inRoundingTriangle(roundingAreas[i][1], a, b,x, y, 0)) || inRoundingCorner(r, a, b, x, y, i + 1));
+    function inRoundingArea(a, b) = inRoundingCorner(zRadius[0], a, b, false, false, 0) || inRoundingCorner(zRadius[1], a, b, false, true, 0);
 
-    function inRoundingTriangle(t, a, b, i) = (i < len(t)) && ((b == i && a >= 0 && a < t[i]) || inRoundingTriangle(t, a, b, i+1));
-    function inRoundingArea(r, a, b, i) = (i < len(roundingAreas)) && ((r > roundingAreas[i][0] && inRoundingTriangle(roundingAreas[i][1], a, b, 0)) || inRoundingArea(r, a, b, i + 1));
-
+    /*
+    * Pit
+    */
     function onPitBorder(a, b) = ((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
     function inPit(a, b) = (floor(a) >= ceil(pWallThickness[0])) && (ceil(a) < grid[0] - ceil(pWallThickness[1])) && (floor(b) >= ceil(pWallThickness[2])) && (ceil(b) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a, b, false, 0);                                
     
@@ -357,28 +376,45 @@ module block(
     function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
     function inPitWallGap3(a, b, gap, mx) = (floor(b) >= grid[1] - ceil(pWallThickness[3])) && (ceil(b) < grid[1]) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
     
+    /*
+    * Knobs
+    */ 
+    function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) && drawGridItem(knobs, a, b, 0, false) && !inRoundingArea(a, b); 
+
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
     function knobType(a, b) = pit && inPit(a, b) ? pitKnobType : knobType;
 
+    /*
+    * XYZ Holes
+    */
     function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
     function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
     function drawHoleZ(a, b) = drawGridItem(holesZ, a, b, 0, false); 
     
+    /*
+    * Wall Gaps
+    */
     function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
+    /*
+    * Stabilizer Grid
+    */
     function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holesX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
     function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
+    /*
+    * Screw Holes
+    */
     function drawScrewHoleZ(a, b, i) = screwHolesZ == "all" || ((i < len(screwHolesZ)) && ( (a == screwHolesZ[i][0] && b == screwHolesZ[i][1]) || drawScrewHoleZ(a, b, i+1)));
 
-    function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
-    function sideZ(side) = (side - 0.5) * resultingBaseHeight;
-
+    /*
+    * Decorators
+    */
     function decoratorX(side, depth, offsetHorizontal) = side < 2 ? ((depth > 0 ? (side - 0.5) * depth : 0) + sideX(side)) : offsetHorizontal * gridSizeXY;
     function decoratorY(side, depth, offsetVertical) = (side > 1 && side < 4) ? ((depth > 0 ? (side - 2 - 0.5) * depth : 0) + sideY(side - 2)) : (side > 3 && side < 6 ? offsetVertical*gridSizeXY : 0);
     function decoratorZ(side, depth, offsetVertical) = (side > 3 && side < 6) ? ((depth > 0 ? (side - 4 - 0.5) * depth : 0) + sideZ(side - 4)) : offsetVertical * gridSizeZ;
+    
     /*
     * END Functions
     */
