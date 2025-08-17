@@ -470,12 +470,11 @@ module block(
         difference(){
             union(){
                 if(baseCutoutType == "classic"){
-                    
+                    color([0.945, 0.769, 0.059]) //f1c40f
                     difference() {
                         /*
                         * Base Block
                         */
-                        color([0.945, 0.769, 0.059]) //f1c40f
                         mb_base(
                             grid = grid,
                             gridSizeXY = gridSizeXY,
@@ -504,7 +503,7 @@ module block(
                         */
                         difference(){
                             union(){
-                                color([0.945, 0.769, 0.059]) //f1c40f
+                                
                                 mb_base_cutout(
                                     grid = grid,
                                     gridSizeXY = gridSizeXY,
@@ -764,7 +763,7 @@ module block(
                         /*
                         * Wall Gaps X
                         */
-                        color([0.608, 0.349, 0.714]) //9b59b6
+                        //color([0.608, 0.349, 0.714]) //9b59b6
                         for (a = [ startX : 1 : endX ]){
                             for (side = [ 0 : 1 : 1 ]){
                                 gapLength = drawWallGapX(a, side, 0);
@@ -790,7 +789,7 @@ module block(
                         /*
                         * Wall Gaps Y
                         */
-                        color([0.608, 0.349, 0.714]) //9b59b6
+                        //color([0.608, 0.349, 0.714]) //9b59b6
                         for (b = [ startY : 1 : endY ]){
                             for (side = [ 0 : 1 : 1 ]){
                                 gapLength = drawWallGapY(b, side, 0);
