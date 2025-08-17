@@ -298,10 +298,13 @@ module block(
     offsetY = 0.5 * (grid[1] - 1);
 
     roundingAreas = [
-        [32, [4,2,1,1]]
+        [39, [4,2,1,1]],
+        [29, [3,2,1]],
+        [19, [2,1]],
+        [8, [1]]
     ];
 
-    zRadius = get_base_rounding_radius_z(radius = baseRoundingRadius);
+    zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
 
     /*
     * START Functions

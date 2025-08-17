@@ -49,8 +49,8 @@ module mb_base_cutout(
     slanting,
     slantingLowerHeight
 ){
-    baseRoundingRadiusZ = get_base_rounding_radius_z(radius = baseRoundingRadius);
-    cutoutRadius = get_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
+    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
+    cutoutRadius = mb_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
 
     baseClampWallThickness = wallThickness + baseClampThickness;
 
