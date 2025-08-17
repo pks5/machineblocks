@@ -18,13 +18,17 @@ module mb_axis(
                 cube(size = [thickness, size, resultingHeight], center=true);
             }
             union(){
-                translate([0,0,0.5*resultingHeight-capHeight]) 
-                    resize([size,size,2*capHeight])
-                        sphere(d=size,  $fn = roundingResolution);
+                if(capHeight > 0){
+                    translate([0,0,0.5*resultingHeight-capHeight]) 
+                        resize([size,size,2*capHeight])
+                            sphere(d=size,  $fn = roundingResolution);
+                }
                 cylinder(h = resultingHeight - 2 * capHeight, d = size, center=true, $fn = roundingResolution);
-                translate([0,0,-0.5*resultingHeight+capHeight]) 
-                    resize([size,size,2*capHeight])
-                        sphere(d=size, $fn = roundingResolution);
+                if(capHeight > 0){
+                    translate([0,0,-0.5*resultingHeight+capHeight]) 
+                        resize([size,size,2*capHeight])
+                            sphere(d=size, $fn = roundingResolution);
+                }
             }
         }
     }

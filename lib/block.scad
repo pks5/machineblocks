@@ -299,10 +299,37 @@ module block(
     offsetY = 0.5 * (grid[1] - 1);
 
     roundingAreas = [
+        [92, [10,7,5,4,3,2,2,1,1,1]],
+        [89, [9,6,5,4,3,2,1,1,1]],
+        [88, [9,6,5,3,3,2,1,1,1]],
+        [83, [9,6,4,3,2,2,1,1,1]],
+        [82, [8,6,4,3,2,2,1,1]],
+        [76, [8,5,4,3,2,1,1,1]],
+        [75, [8,5,3,2,2,1,1,1]],
+        [71, [7,5,3,2,2,1,1]],
+        [67, [7,4,3,2,1,1,1]],
+        [63, [6,4,3,2,1,1]],
+        [60, [6,4,2,2,1,1]],
+        [57, [6,3,2,1,1,1]],
+        [48, [5,3,2,1,1]],
         [35, [4,2,1,1]],
         [29, [3,1,1]],
         [19, [2,1]],
         [8, [1]]
+    ];
+
+    roundingAreasCentered = [
+        [90, [7,5,4,3,2,1,1]],
+        [86, [7,5,3,2,2,1,1]],
+        [76, [6,4,3,2,1,1]],
+        [75, [5,4,2,2,1]],
+        [66, [5,3,2,1,1]],
+        [62, [4,3,2,1]],
+        [56, [4,2,1,1]],
+        [49, [3,2,1]],
+        [45, [3,1,1]],
+        [34, [2,1]],
+        [22, [1]]
     ];
 
     roundingCutAreas = [
@@ -365,16 +392,16 @@ module block(
     /*
     * Round Bricks
     */ 
-    function inRoundingTriangle(t, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - 1 - i : i) && (x ? (a >= grid[0] - t[i] && a < grid[0]) : (a >= 0 && a < t[i]))) || inRoundingTriangle(t, a, b, x, y, i+1));
-    function inRoundingCorner(areas, r, a, b, x, y, i) = (i < len(areas)) && ((r > areas[i][0] && inRoundingTriangle(areas[i][1], a, b,x, y, 0)) || inRoundingCorner(areas, r, a, b, x, y, i + 1));
-    function inRoundingArea(a, b) = inRoundingCorner(roundingAreas, zRadius[0], a, b, false, false, 0) 
-        || inRoundingCorner(roundingAreas, zRadius[1], a, b, false, true, 0) 
-        || inRoundingCorner(roundingAreas, zRadius[2], a, b, true, true, 0) 
-        || inRoundingCorner(roundingAreas, zRadius[3], a, b, true, false, 0);
-    function inRoundingCutArea(a, b) = inRoundingCorner(roundingCutAreas, zRadius[0], a, b, false, false, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[1], a, b, false, true, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[2], a, b, true, true, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[3], a, b, true, false, 0);
+    function inRoundingTriangle(t, c, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - (c ? 2 : 1) - i : i) && (x ? (a >= grid[0] - (c ? 1 : 0) - t[i] && a < grid[0] - (c ? 1 : 0)) : (a >= 0 && a < t[i]))) || inRoundingTriangle(t, c, a, b, x, y, i+1));
+    function inRoundingCorner(areas, r, c, a, b, x, y, i) = (i < len(areas)) && ((r > areas[i][0] && inRoundingTriangle(areas[i][1], c, a, b,x, y, 0)) || inRoundingCorner(areas, r, c, a, b, x, y, i + 1));
+    function inRoundingArea(a, b) = inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[0], knobCentered, a, b, false, false, 0) 
+        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[1], knobCentered, a, b, false, true, 0) 
+        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[2], knobCentered, a, b, true, true, 0) 
+        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[3], knobCentered, a, b, true, false, 0);
+    function inRoundingCutArea(a, b) = inRoundingCorner(roundingCutAreas, zRadius[0], false, a, b, false, false, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[1], false, a, b, false, true, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[2], false, a, b, true, true, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[3], false, a, b, true, false, 0);
 
     /*
     * Pit
@@ -506,8 +533,8 @@ module block(
                                     slantingLowerHeight = slantingLowerHeight
                                 );
 
-                                for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
-                                    for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
+                                for (a = [ startX : 1 : endX ]){
+                                    for (b = [ startY : 1 : endY ]){
                                         if(inRoundingCutArea(a, b)){
                                             translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobHeight - 0.5 * cutOffset])
                                                 cylinder(h=knobHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
@@ -1040,7 +1067,7 @@ module block(
                                     
                                     }
                                     else if(holeXType == "axis"){
-                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                     }
                                 };
                             };
@@ -1066,7 +1093,7 @@ module block(
                                             cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                     }
                                     else if(holeYType == "axis"){
-                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                     }
                                 };
                             };
@@ -1086,7 +1113,7 @@ module block(
                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                 }
                                 else if(holeZType == "axis"){
-                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                 }
                             };
                         }
