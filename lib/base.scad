@@ -146,6 +146,7 @@ module mb_base_cutout(
                     } 
                     */
 
+                    /*
                     if(stabilizerGrid){
                                         
                         //Helpers X
@@ -161,7 +162,7 @@ module mb_base_cutout(
                                 cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                             };
                         }
-                    }
+                    }*/
 
                     if(topPlateHelperRing){
                         translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperRingHeight) + 0.5 * cutOffset]){
