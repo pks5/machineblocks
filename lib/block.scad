@@ -549,8 +549,7 @@ module block(
                                                 translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                                     difference(){
                                                         union(){
-                                                            //translate([0,0,0.5*cutOffset])
-                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                            cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                             
                                                             //Clamp
                                                             translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
@@ -574,11 +573,10 @@ module block(
                                     //Middle Pin X
                                     if(gridSizeX > 1 && gridSizeY == 1){
                                         for (b = [ startY : 1 : endY ]){
-                                            color([0.953, 0.612, 0.071]) //f39c12
                                             for (a = [ startX : 1 : endX - 1 ]){
                                                 if(drawPin(a, b, true)){
                                                     translate([posX(a + 0.5), posY(b), baseCutoutZ]){
-                                                        cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                        cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                         translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
                                                             cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                     };
@@ -590,11 +588,10 @@ module block(
                                     //Middle Pin Y
                                     if(gridSizeX == 1 && gridSizeY > 1){
                                         for (a = [ startX : 1 : endX]){
-                                            color([0.953, 0.612, 0.071]) //f39c12
                                             for (b = [ startY : 1 : endY - 1 ]){
                                                 if(drawPin(a, b, false)){
                                                     translate([posX(a), posY(b + 0.5), baseCutoutZ]){
-                                                        cylinder(h=baseCutoutDepth, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                        cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                         translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
                                                             cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                     };
@@ -606,7 +603,6 @@ module block(
                                 
                                 //X-Holes Outer
                                 if(holesX != false){
-                                    color([0.953, 0.612, 0.071]) //f39c12
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
                                         for (a = [ startX : 1 : endX - 1 ]){
                                             if(drawHoleX(a, r)){
@@ -622,7 +618,6 @@ module block(
                                 
                                 //Y-Holes Outer
                                 if(holesY != false){
-                                    color([0.953, 0.612, 0.071]) //f39c12
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleY(b, r)){
@@ -640,7 +635,6 @@ module block(
                                     /*
                                     * Z-Holes Outer
                                     */
-                                    color([0.953, 0.612, 0.071]) //f39c12
                                     for (a = [ startX : 1 : endX - 1 ]){
                                         for (b = [ startY : 1 : endY - 1 ]){
                                             if(drawHoleZ(a, b)){
