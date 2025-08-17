@@ -1,6 +1,6 @@
 use <shapes.scad>;
 use <connectors.scad>;
-
+use <utils.scad>;
 
 module mb_slant_prism(side, l, w, h, inv){
     invRot = inv ? 180 : 0;
@@ -14,6 +14,10 @@ module mb_slant_prism(side, l, w, h, inv){
                     );
 }
 
+
+/*
+* Base Cutout
+*/
 module mb_base_cutout(
     grid,
     gridSizeXY,
@@ -45,6 +49,9 @@ module mb_base_cutout(
     slanting,
     slantingLowerHeight
 ){
+    baseRoundingRadiusZ = get_base_rounding_radius_z(radius = baseRoundingRadius);
+    cutoutRadius = get_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
+
     baseClampWallThickness = wallThickness + baseClampThickness;
 
     //Variables for cutouts        
@@ -82,7 +89,7 @@ module mb_base_cutout(
                     mb_rounded_block(
                         size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
                         center = true, 
-                        radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                        radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                         resolution=roundingResolution
                     );    
 
@@ -93,7 +100,7 @@ module mb_base_cutout(
                     mb_rounded_block(
                         size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
                         center = true, 
-                        radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                        radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                         resolution=roundingResolution
                     );
 
@@ -105,7 +112,7 @@ module mb_base_cutout(
                         mb_rounded_block(
                             size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
                             center = true, 
-                            radius=roundingRadius == 0 ? 0 : [0,0,roundingRadius], 
+                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                             resolution=roundingResolution
                         );
                 }
@@ -117,18 +124,16 @@ module mb_base_cutout(
             if(topPlateHelpers){
                 translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                     difference(){
-                        mb_rounded_block(
+                        cube(
                             size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], topPlateHelperHeight + cutOffset], 
-                            center=true, 
-                            resolution = roundingResolution,
-                            radius = baseRoundingRadius
+                            center=true
                         );
 
                         mb_rounded_block(
                             size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
                             center=true, 
                             resolution = roundingResolution,
-                            radius = roundingRadius == 0 ? 0 : [0,0,roundingRadius]
+                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius]
                         );
                     }
                 }
@@ -169,6 +174,9 @@ module mb_base_cutout(
 
 }
 
+/*
+* Base Block
+*/
 module mb_base(
     grid,
     gridSizeXY,
@@ -303,11 +311,9 @@ module mb_base(
             
         }
 
-    /*
+        /*
         * Connectors
         */
-        
-
         for (con = [ 0 : 1 : len(connectors)-1 ]){
             if(connectors[con][1] == 0){
                 mb_connectors(side = connectors[con][0],
