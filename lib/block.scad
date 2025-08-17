@@ -336,7 +336,9 @@ module block(
         [5, [1]],
         [14, [2,1]],
         [22, [3,1,1]],
-        [30, [4,1,1,1]]
+        [30, [4,1,1,1]],
+        [36, [5,1,1,1,1]],
+        [46, [6,1,1,1,1,1]]
     ];
 
     zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
