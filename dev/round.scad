@@ -88,11 +88,6 @@ block(
         baseRoundingRadius=[0,0,[40,0,0,0]],
         //baseCutoutMaxDepth=2.2,
         baseCutoutRoundingRadius=[37,0,0,0],
-        topPlateHelpers=true,
-        topPlateHelperOffset=0,
-        topPlateHelperHeight=0.2,
-        topPlateHelperRing=true,
-        stabilizerGrid=true,
         
         knobs = knobs,
         knobCentered = knobCentered,

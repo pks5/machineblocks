@@ -34,20 +34,8 @@ module mb_base_cutout(
     topPlateZ,
     topPlateHeight,
     topPlateHelpers,
-    topPlateHelperOffset,
     topPlateHelperHeight,
     topPlateHelperThickness,
-
-    topPlateHelperRing,
-    topPlateHelperRingHeight,
-    topPlateHelperRingThickness,
-
-    stabilizerGrid,
-    stabilizerGridOffset,
-    stabilizerGridHeight,
-    stabilizerGridThickness,
-    stabilizerExpansion,
-    stabilizerExpansionOffset,
 
     //Pit
     pit,
@@ -83,10 +71,7 @@ module mb_base_cutout(
     function slantingSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slanting[side] + baseSideAdjustment[side])) + cutTolerance;
     function slanting(s) = s > 0 ? 0 : s;
 
-    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
-
     translate([offsetX, offsetY, 0]){ 
         difference(){
             union(){
@@ -130,60 +115,23 @@ module mb_base_cutout(
             * Plate Helpers
             */
             if(topPlateHelpers){
-                
-                    /*
-                    translate([-0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
-                        cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
-                    }
-                    translate([0.5*(objectSizeX - 2*wallThickness - topPlateHelperThickness), 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
-                        cube([topPlateHelperThickness, objectSizeY - 2*wallThickness, topPlateHelperHeight + cutOffset], center = true);
-                    }    
-                    translate([0, -0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight + topPlateHelperOffset) + 0.5 * cutOffset]){
-                        cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
-                    }
-                    translate([0, 0.5*(objectSizeY - 2*wallThickness - topPlateHelperThickness), topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight + topPlateHelperOffset) + 0.5 * cutOffset]){
-                        cube([objectSizeX - 2*wallThickness, topPlateHelperThickness, topPlateHelperHeight + topPlateHelperOffset + cutOffset], center = true);
-                    } 
-                    */
+                translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                    difference(){
+                        mb_rounded_block(
+                            size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], topPlateHelperHeight + cutOffset], 
+                            center=true, 
+                            resolution = roundingResolution,
+                            radius = baseRoundingRadius
+                        );
 
-                    /*
-                    if(stabilizerGrid){
-                                        
-                        //Helpers X
-                        for (a = [ 0 : 1 : grid[0] - 2 ]){
-                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (topPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
-                                cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
-                            }
-                        }
-                        
-                        //Helpers Y
-                        for (b = [ 0 : 1 : grid[1] - 2 ]){
-                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (topPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
-                                cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
-                            };
-                        }
-                    }*/
-
-                    if(topPlateHelperRing){
-                        translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperRingHeight) + 0.5 * cutOffset]){
-                            difference(){
-                                mb_rounded_block(
-                                    size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], topPlateHelperRingHeight + cutOffset], 
-                                    center=true, 
-                                    resolution = roundingResolution,
-                                    radius = baseRoundingRadius
-                                );
-
-                                mb_rounded_block(
-                                    size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperRingThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperRingThickness, cutMultiplier * topPlateHelperRingHeight + cutOffset], 
-                                    center=true, 
-                                    resolution = roundingResolution,
-                                    radius = roundingRadius
-                                );
-                            }
-                        }
+                        mb_rounded_block(
+                            size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
+                            center=true, 
+                            resolution = roundingResolution,
+                            radius = roundingRadius == 0 ? 0 : [0,0,roundingRadius]
+                        );
                     }
-                
+                }
             }
 
             /*
