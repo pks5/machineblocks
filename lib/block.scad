@@ -298,8 +298,8 @@ module block(
     offsetY = 0.5 * (grid[1] - 1);
 
     roundingAreas = [
-        [39, [4,2,1,1]],
-        [29, [3,2,1]],
+        [35, [4,2,1,1]],
+        [29, [3,1,1]],
         [19, [2,1]],
         [8, [1]]
     ];
@@ -357,9 +357,9 @@ module block(
     /*
     * Round Bricks
     */ 
-    function inRoundingTriangle(t, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - 1 - i : i) && a >= 0 && a < t[i]) || inRoundingTriangle(t, a, b, x, y, i+1));
+    function inRoundingTriangle(t, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - 1 - i : i) && (x ? (a >= grid[0] - t[i] && a < grid[0]) : (a >= 0 && a < t[i]))) || inRoundingTriangle(t, a, b, x, y, i+1));
     function inRoundingCorner(r, a, b, x, y, i) = (i < len(roundingAreas)) && ((r > roundingAreas[i][0] && inRoundingTriangle(roundingAreas[i][1], a, b,x, y, 0)) || inRoundingCorner(r, a, b, x, y, i + 1));
-    function inRoundingArea(a, b) = inRoundingCorner(zRadius[0], a, b, false, false, 0) || inRoundingCorner(zRadius[1], a, b, false, true, 0);
+    function inRoundingArea(a, b) = inRoundingCorner(zRadius[0], a, b, false, false, 0) || inRoundingCorner(zRadius[1], a, b, false, true, 0) || inRoundingCorner(zRadius[2], a, b, true, true, 0) || inRoundingCorner(zRadius[3], a, b, true, false, 0);
 
     /*
     * Pit
