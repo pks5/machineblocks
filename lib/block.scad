@@ -200,11 +200,6 @@ module block(
         alignBottom = true, //Whether the brick should be always aligned on floor
         alignIgnoreAdjustment = true, //Whether baseSideAdjustment should be ignored when aligning the brick
         
-        //Adhesion Helpers
-        adhesionHelpers = false,
-        adhesionHelperHeight = 0.2, //mm
-        adhesionHelperThickness = 0.4, //mm
-        
         //Preview
         previewQuality = 0.5 //Between 0.0 and 1.0
         ){
@@ -462,6 +457,9 @@ module block(
 
                                 if(stabilizerGrid){
                                     difference(){
+                                        /*
+                                        * Stabilizer Grid
+                                        */
                                         union(){
                                             //Helpers X
                                             for (a = [ 0 : 1 : grid[0] - 2 ]){
@@ -476,7 +474,7 @@ module block(
                                                     cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                                                 };
                                             }
-                                        }
+                                        } // End union stabilizer grid
 
                                         /*
                                         * Pillar cutouts from stabilizer grid
@@ -538,8 +536,26 @@ module block(
                                                 }
                                             }
                                         } // End Pillars Cutouts from stabilizer grid
+                                    } // End difference stabilizer Grid
+
+                                    /*
+                                    * Screw Hole Helpers
+                                    */
+                                    for (a = [ startX : 1 : endX ]){
+                                        for (b = [ startY : 1 : endY ]){
+                                            if(drawScrewHoleZ(a, b, 0)){
+                                                translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
+                                            } 
+                                        }
                                     }
-                                }
+                                } // End stabilizer grid
 
                                 if(pillars != false){
                                     //Tubes with holes
@@ -703,79 +719,9 @@ module block(
 
                             
                             
-                        } // End difference
+                        } // End difference base
                         
                         
-                            union(){
-                                /*
-                                * Adhesion Helpers
-                                */
-                                if(adhesionHelpers){
-                                    color([0.753, 0.224, 0.169]) //c0392b
-                                    translate([0, 0, 0.5 * (adhesionHelperHeight - resultingBaseHeight)]){
-                                        difference(){
-                                            union(){
-                                                //Helpers X
-                                                for (a = [ startX : 1 : endX - 1 ]){
-                                                    translate([posX(a + 0.5), 0, 0]){ 
-                                                        cube([adhesionHelperThickness, objectSizeY - 2*wallThickness, adhesionHelperHeight], center = true);
-                                                    }
-                                                }
-                                                
-                                                //Helpers Y
-                                                for (b = [ startY : 1 : endY - 1 ]){
-                                                translate([0, posY(b + 0.5), 0]){
-                                                        cube([objectSizeX - 2*wallThickness, adhesionHelperThickness, adhesionHelperHeight], center = true);
-                                                    };
-                                                }
-                                            }
-                                            
-                                            if(pillars != false){
-                                                /*
-                                                * Cut TubeZ Area
-                                                */
-                                                for (a = [ startX : 1 : endX - 1 ]){
-                                                    for (b = [ startY : 1 : endY - 1 ]){
-                                                        if(drawPillar(a, b)){
-                                                            translate([posX(a + 0.5), posY(b + 0.5), 0]){
-                                                                cylinder(h=cutMultiplier * (adhesionHelperHeight), r=0.5 * tubeZSize - cutTolerance, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                            };
-                                                        }
-                                                    }   
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                    
-                                
-                        
-                                if(stabilizerGrid){
-                                    /*
-                                    * Screw Hole Helpers
-                                    */
-                                    for (a = [ startX : 1 : endX ]){
-                                        for (b = [ startY : 1 : endY ]){
-                                            if(drawScrewHoleZ(a, b, 0)){
-                                                translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
-                                                translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
-                                                translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
-                                                translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
-                                            } 
-                                        }
-                                    }
-                                }
-
-                                
-                                
-                                
-                            } //End Union of tubes, helpers, etc
-
-                            
                         
                     } //End union
                 }
