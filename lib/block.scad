@@ -88,7 +88,7 @@ module block(
 
         //Holes
         holesX = false,
-        holesXType = "circle",
+        holeXType = "technic",
         holeXSize = 5.1, //mm
         holeXInsetThickness = 0.6, //mm
         holeXInsetDepth = 0.9, //mm
@@ -97,7 +97,7 @@ module block(
         holeXMinTopMargin = 0.8, //mm
 
         holesY = false,
-        holesYType = "circle",
+        holeYType = "technic",
         holeYSize = 5.1, //mm
         holeYInsetThickness = 0.55, //mm
         holeYInsetDepth = 0.9, //mm
@@ -106,7 +106,7 @@ module block(
         holeYMinTopMargin = 0.8, //mm
 
         holesZ = false,
-        holesZType = "circle",
+        holeZType = "technic",
         holeZSize = 5.1, //mm
         holeRoundingResolution = 64,
         
@@ -115,6 +115,7 @@ module block(
         knobType = "classic",
         knobCentered = false,
         knobSize = 5.0, //mm
+        knobCutSize = 5.0,
         knobHeight = 1.8, //mm
         knobClampHeight = 0.8, //mm
         knobClampThickness = 0.0, //mm
@@ -304,6 +305,13 @@ module block(
         [8, [1]]
     ];
 
+    roundingCutAreas = [
+        [5, [1]],
+        [14, [2,1]],
+        [22, [3,1,1]],
+        [30, [4,1,1,1]]
+    ];
+
     zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
 
     /*
@@ -358,8 +366,15 @@ module block(
     * Round Bricks
     */ 
     function inRoundingTriangle(t, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - 1 - i : i) && (x ? (a >= grid[0] - t[i] && a < grid[0]) : (a >= 0 && a < t[i]))) || inRoundingTriangle(t, a, b, x, y, i+1));
-    function inRoundingCorner(r, a, b, x, y, i) = (i < len(roundingAreas)) && ((r > roundingAreas[i][0] && inRoundingTriangle(roundingAreas[i][1], a, b,x, y, 0)) || inRoundingCorner(r, a, b, x, y, i + 1));
-    function inRoundingArea(a, b) = inRoundingCorner(zRadius[0], a, b, false, false, 0) || inRoundingCorner(zRadius[1], a, b, false, true, 0) || inRoundingCorner(zRadius[2], a, b, true, true, 0) || inRoundingCorner(zRadius[3], a, b, true, false, 0);
+    function inRoundingCorner(areas, r, a, b, x, y, i) = (i < len(areas)) && ((r > areas[i][0] && inRoundingTriangle(areas[i][1], a, b,x, y, 0)) || inRoundingCorner(areas, r, a, b, x, y, i + 1));
+    function inRoundingArea(a, b) = inRoundingCorner(roundingAreas, zRadius[0], a, b, false, false, 0) 
+        || inRoundingCorner(roundingAreas, zRadius[1], a, b, false, true, 0) 
+        || inRoundingCorner(roundingAreas, zRadius[2], a, b, true, true, 0) 
+        || inRoundingCorner(roundingAreas, zRadius[3], a, b, true, false, 0);
+    function inRoundingCutArea(a, b) = inRoundingCorner(roundingCutAreas, zRadius[0], a, b, false, false, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[1], a, b, false, true, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[2], a, b, true, true, 0) 
+        || inRoundingCorner(roundingCutAreas, zRadius[3], a, b, true, false, 0);
 
     /*
     * Pit
@@ -491,7 +506,14 @@ module block(
                                     slantingLowerHeight = slantingLowerHeight
                                 );
 
-                                
+                                for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
+                                    for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
+                                        if(inRoundingCutArea(a, b)){
+                                            translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobHeight - 0.5 * cutOffset])
+                                                cylinder(h=knobHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                        }
+                                    }
+                                }
                             } // End Union Base Cutout
 
                             if(stabilizerGrid){
@@ -694,7 +716,7 @@ module block(
                                     for (b = [ startY : 1 : endY - 1 ]){
                                         if(drawHoleZ(a, b)){
                                             translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                cylinder(h=baseCutoutDepth, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                 
                                                 //Clamp
                                                 translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
@@ -840,11 +862,8 @@ module block(
                     /*
                     * Normal knobs
                     */
-                    knobEndX = endX - (knobCentered ? 1 : 0);
-                    knobEndY = endY - (knobCentered ? 1 : 0);
-                    
-                    for (a = [ startX : 1 : knobEndX ]){
-                        for (b = [ startY : 1 : knobEndY ]){
+                    for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
+                        for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
                             
                             if(drawKnob(a, b)){
                                 pitKnobOffset = pitKnobCentered ? 0.5 : 0;
@@ -889,7 +908,7 @@ module block(
                             }
                         }
                     }
-                }
+                } // End if knobs
 
                 /*
                 * Tongue
@@ -1011,12 +1030,18 @@ module block(
                         if(drawHoleX(a, r)){
                             translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                 rotate([90, 0, 0]){ 
-                                    cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    if(holeXType == "technic"){
+                                        cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                     
-                                    translate([0, 0, 0.5 * objectSizeY])
-                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                    translate([0, 0, -0.5 * objectSizeY])
-                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        translate([0, 0, 0.5 * objectSizeY])
+                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        translate([0, 0, -0.5 * objectSizeY])
+                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    
+                                    }
+                                    else if(holeXType == "axis"){
+                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    }
                                 };
                             };
                         }
@@ -1032,12 +1057,17 @@ module block(
                         if(drawHoleY(b, r)){
                             translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                 rotate([0, 90, 0]){ 
-                                    cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    if(holeYType == "technic"){
+                                        cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                     
-                                    translate([0, 0, 0.5 * objectSizeX])
-                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                    translate([0, 0, -0.5 * objectSizeX])
-                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        translate([0, 0, 0.5 * objectSizeX])
+                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        translate([0, 0, -0.5 * objectSizeX])
+                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    }
+                                    else if(holeYType == "axis"){
+                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    }
                                 };
                             };
                         }
@@ -1052,10 +1082,10 @@ module block(
                     for (b = [ startY : 1 : endY - 1 ]){
                         if(drawHoleZ(a, b)){
                             translate([posX(a + 0.5), posY(b+0.5), 0]){
-                                if(holesZType == "circle"){
+                                if(holeZType == "technic"){
                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                 }
-                                else if(holesZType == "axis"){
+                                else if(holeZType == "axis"){
                                     mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * holeRoundingResolution);
                                 }
                             };
