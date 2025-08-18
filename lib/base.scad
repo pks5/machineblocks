@@ -47,7 +47,8 @@ module mb_base_cutout(
     
     //Slanting
     slanting,
-    slantingLowerHeight
+    slantingLowerHeight,
+    bevelHorizontal
 ){
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     cutoutRadius = mb_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
@@ -72,6 +73,8 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
+    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, -wallThickness, grid, gridSizeXY, [0,0,0,0]);
+
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
 
@@ -81,40 +84,48 @@ module mb_base_cutout(
     
     translate([offsetX, offsetY, 0]){ 
         difference(){
-            union(){
-                /*
-                * Bottom Hole
-                */
-                translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                    mb_rounded_block(
-                        size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
-                        center = true, 
-                        radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
-                        resolution=roundingResolution
-                    );    
-
-                /*
-                * Clamp Skirt
-                */
-                translate([0, 0, baseClampOffset + 0.5*(baseClampHeight - baseHeight)])
-                    mb_rounded_block(
-                        size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
-                        center = true, 
-                        radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
-                        resolution=roundingResolution
-                    );
-
-                /*
-                * Clamp Offset
-                */
-                if(baseClampOffset > 0){
-                    translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
+            intersection(){
+                
+                translate([0,0,-baseHeight]){
+                    linear_extrude(height = 2*baseHeight)
+                        polygon(points = bevelAbs);
+                }
+                
+                union(){
+                    /*
+                    * Bottom Hole
+                    */
+                    translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
                         mb_rounded_block(
-                            size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                            size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
+                            center = true, 
+                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                            resolution=roundingResolution
+                        );    
+
+                    /*
+                    * Clamp Skirt
+                    */
+                    translate([0, 0, baseClampOffset + 0.5*(baseClampHeight - baseHeight)])
+                        mb_rounded_block(
+                            size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
                             center = true, 
                             radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                             resolution=roundingResolution
                         );
+
+                    /*
+                    * Clamp Offset
+                    */
+                    if(baseClampOffset > 0){
+                        translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
+                            mb_rounded_block(
+                                size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                                center = true, 
+                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                resolution=roundingResolution
+                            );
+                    }
                 }
             }
 
@@ -192,6 +203,7 @@ module mb_base(
     pitWallGaps,
     slanting,
     slantingLowerHeight,
+    bevelHorizontal,
     connectors = [],
     connectorHeight,
     connectorDepth,
@@ -220,45 +232,57 @@ module mb_base(
     function slantingSize(side) = (abs(slanting[side]) >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * abs(slanting[side]) + baseSideAdjustment[side])) + cutTolerance;
 
     union(){
+        
+
         difference(){
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
-                difference(){
-                    mb_rounded_block(
-                        size = size, 
-                        center=true, 
-                        resolution = roundingResolution,
-                        radius = roundingRadius
-                    );
-                    
-                    /*
-                    * Slanting
-                    */
-                    if(slanting != false){
-                        if(slanting[0] != 0){
-                            slanting0 = slantingSize(0);
-                            translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
+                
+
+                    difference(){
+                        intersection(){
+                            translate([0,0,-0.5*height]){
+                                linear_extrude(height = height)
+                                    polygon(points = bevelHorizontal);
+                            }
+
+                            mb_rounded_block(
+                                size = size, 
+                                center=true, 
+                                resolution = roundingResolution,
+                                radius = roundingRadius
+                            );
                         }
 
-                        if(slanting[1] != 0){
-                            slanting1 = slantingSize(1);
-                            translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
-                        }
+                        /*
+                        * Slanting
+                        */
+                        if(slanting != false){
+                            if(slanting[0] != 0){
+                                slanting0 = slantingSize(0);
+                                translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
+                                    mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
+                            }
 
-                        if(slanting[2] != 0){
-                            slanting2 = slantingSize(2);
-                            translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
-                        }
+                            if(slanting[1] != 0){
+                                slanting1 = slantingSize(1);
+                                translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
+                                    mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
+                            }
 
-                        if(slanting[3] != 0){
-                            slanting3 = slantingSize(3);
-                            translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
+                            if(slanting[2] != 0){
+                                slanting2 = slantingSize(2);
+                                translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
+                                    mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
+                            }
+
+                            if(slanting[3] != 0){
+                                slanting3 = slantingSize(3);
+                                translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
+                                    mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
+                            }
                         }
                     }
-                }
+                
             }
 
             /*

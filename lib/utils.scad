@@ -27,3 +27,21 @@ function mb_calc_rounding_radius(radius, baseRadius) = radius < 0 ? max(0, baseR
 * Whether a given string is empty
 */
 function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
+
+/*
+* Determine position of grid cell relative to object origin
+*/ 
+function mb_grid_pos_x(a, grid, gridSizeXY) = (a - 0.5 * (grid[0] - 1)) * gridSizeXY;
+function mb_grid_pos_y(b, grid, gridSizeXY) = (b - 0.5 * (grid[1] - 1)) * gridSizeXY;
+
+function mb_resolve_bevel_horizontal(bevelHorizontal, grow, grid, gridSizeXY, sideAdjustment) = [
+    [mb_grid_pos_x(bevelHorizontal[0][0] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[0], mb_grid_pos_y(bevelHorizontal[0][1] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[2]],
+    [mb_grid_pos_x(bevelHorizontal[1][0] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[0], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[1][1] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[3]],
+    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[2][0] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[1], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[2][1] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[3]],
+    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[3][0] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[1], mb_grid_pos_y(bevelHorizontal[3][1] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[2]]
+];
+
+/*
+* Resolve base side adjustment
+*/
+function mb_resolve_base_side_adjustment(baseSideAdjustment) = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);

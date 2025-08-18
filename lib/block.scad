@@ -17,6 +17,7 @@ use <svg3d.scad>;
 use <pcb.scad>;
 use <axis.scad>;
 use <utils.scad>;
+use <bevel.scad>;
 
 module block(
         //Grid
@@ -53,9 +54,11 @@ module block(
         topPlateHelperHeight = 0.2, //mm
         topPlateHelperThickness = 0.4, //mm
 
-        //Slanting
+        //Bevel
+        //TODO rename slanting to bevelVertical
         slanting = false,
         slantingLowerHeight = 2, //mm
+        bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Stabilizers
         stabilizerGrid = true,
@@ -212,7 +215,7 @@ module block(
     cutTolerance = 0.01;
        
     //Side Adjustment
-    sAdjustment = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);
+    sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
 
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
@@ -261,6 +264,8 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
+    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, sAdjustment);
+
     echo(
         preview= $preview,
         previewQuality = previewQuality,
@@ -278,7 +283,8 @@ module block(
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
         xyScrewHolesZ = xyScrewHolesZ,
-        pitFloorZ = pitFloorZ
+        pitFloorZ = pitFloorZ,
+        bevelHorizontal = bevelAbs
     );
     
     //Decorator Rotations
@@ -423,7 +429,11 @@ module block(
     /*
     * Knobs
     */ 
-    function drawKnob(a, b) = !inSlantedArea(a, b, false, 2) && drawGridItem(knobs, a, b, 0, false) && !inRoundingArea(a, b); 
+    function drawKnob(a, b) = drawGridItem(knobs, a, b, 0, false) 
+            && !inSlantedArea(a, b, false, 2)
+            && !inRoundingArea(a, b)
+            && mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
+            ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
     function knobType(a, b) = pit && inPit(a, b) ? pitKnobType : knobType;
@@ -492,6 +502,7 @@ module block(
                                 pitWallGaps = pitWallGaps,
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight,
+                                bevelHorizontal = bevelAbs,
                                 connectors = connectors,
                                 connectorHeight = connectorHeight,
                                 connectorDepth = connectorDepth,
@@ -533,7 +544,8 @@ module block(
                                         pitDepth = resultingPitDepth,
                                         
                                         slanting = slanting,
-                                        slantingLowerHeight = slantingLowerHeight
+                                        slantingLowerHeight = slantingLowerHeight,
+                                        bevelHorizontal = bevelHorizontal
                                     );
 
                                     for (a = [ startX : 1 : endX ]){
@@ -833,6 +845,7 @@ module block(
                             pitWallGaps = pitWallGaps,
                             slanting = slanting,
                             slantingLowerHeight = slantingLowerHeight,
+                            bevelHorizontal = bevelAbs,
                             connectors = connectors,
                             connectorHeight = connectorHeight,
                             connectorDepth = connectorDepth,

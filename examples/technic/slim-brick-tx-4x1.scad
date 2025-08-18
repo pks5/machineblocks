@@ -93,7 +93,7 @@ block(
     pillars = pillars,
     
     holesX = holesX,
-    holeXType = "axis",
+    holeXType = "technic",
     holesY = holesY,
     holesZ = holesZ,
     
