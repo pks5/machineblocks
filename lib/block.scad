@@ -19,6 +19,7 @@ use <axis.scad>;
 use <utils.scad>;
 use <bevel.scad>;
 use <rounded.scad>;
+use <quad.scad>;
 
 module block(
         //Grid
@@ -267,6 +268,9 @@ module block(
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
     bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sAdjustment);
+
+    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
+    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
     //echo(bhr = bhr);
     //bevelHorResolved = mb_inset_quad_lrfh(bhr, sAdjustment);
 
@@ -498,7 +502,7 @@ module block(
 
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
-                                            if(mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)
+                                            if(!mb_circle_in_rounded_rect(bevelInner, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
                                                 || mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)){
                                                 translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5 * cutOffset])
                                                     cylinder(h=knobCutHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
