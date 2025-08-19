@@ -419,8 +419,8 @@ module block(
     /*
     * Knobs
     */ 
-    function drawKnob(a, b) = drawGridItem(knobs, a, b, 0, false) 
-            && !inSlantedArea(a, b, false, 2)
+    function drawKnob(a, b) = 
+            !inSlantedArea(a, b, false, 2)
             && mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             && mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             ;
@@ -1156,11 +1156,11 @@ module block(
                 */
                 for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
                     for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
-                        
-                        if(drawKnob(a, b)){
+                        knobOffset = knobCentered ? 0.5 : 0;
+                        if(drawGridItem(knobs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
+                            
                             pitKnobOffset = pitKnobCentered ? 0.5 : 0;
                             inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
-                            knobOffset = knobCentered ? 0.5 : 0;
                             onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
                             if(onPitBorder || inPit){
                                 posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
