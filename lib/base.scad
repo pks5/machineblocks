@@ -76,6 +76,7 @@ module mb_base_cutout(
 
     bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
     bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
+    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelAbs, [wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
@@ -142,12 +143,20 @@ module mb_base_cutout(
                             center=true
                         );
 
-                        mb_rounded_block(
-                            size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
-                            center=true, 
-                            resolution = roundingResolution,
-                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius]
-                        );
+                        intersection(){
+                
+                            translate([0,0,-baseHeight]){
+                                linear_extrude(height = 2*baseHeight)
+                                    polygon(points = bevelTopPlateHelper);
+                            }
+                
+                            mb_rounded_block(
+                                size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
+                                center=true, 
+                                resolution = roundingResolution,
+                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius]
+                            );
+                        }
                     }
                 }
             }
