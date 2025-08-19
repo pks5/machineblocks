@@ -85,7 +85,7 @@ block(
         grid = [brickSizeX, brickSizeY],
         baseLayers = baseLayers,
         baseCutoutType = "classic",
-        baseRoundingRadius=[0,0,[0,0,0,48]],
+        baseRoundingRadius=[0,0,[0,0,0,47]],
         
         knobs = knobs,
         knobCentered = knobCentered,

@@ -308,49 +308,6 @@ module block(
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
 
-    roundingAreas = [
-        [92, [10,7,5,4,3,2,2,1,1,1]],
-        [89, [9,6,5,4,3,2,1,1,1]],
-        [88, [9,6,5,3,3,2,1,1,1]],
-        [83, [9,6,4,3,2,2,1,1,1]],
-        [82, [8,6,4,3,2,2,1,1]],
-        [76, [8,5,4,3,2,1,1,1]],
-        [75, [8,5,3,2,2,1,1,1]],
-        [71, [7,5,3,2,2,1,1]],
-        [67, [7,4,3,2,1,1,1]],
-        [63, [6,4,3,2,1,1]],
-        [60, [6,4,2,2,1,1]],
-        [57, [6,3,2,1,1,1]],
-        [48, [5,3,2,1,1]],
-        [35, [4,2,1,1]],
-        [29, [3,1,1]],
-        [19, [2,1]],
-        [8, [1]]
-    ];
-
-    roundingAreasCentered = [
-        [90, [7,5,4,3,2,1,1]],
-        [86, [7,5,3,2,2,1,1]],
-        [76, [6,4,3,2,1,1]],
-        [75, [5,4,2,2,1]],
-        [66, [5,3,2,1,1]],
-        [62, [4,3,2,1]],
-        [56, [4,2,1,1]],
-        [49, [3,2,1]],
-        [45, [3,1,1]],
-        [34, [2,1]],
-        [22, [1]]
-    ];
-
-    roundingCutAreas = [
-        [5, [1]],
-        [14, [2,1]],
-        [22, [3,1,1]],
-        [30, [4,1,1,1]],
-        [36, [5,1,1,1,1]],
-        [46, [6,1,1,1,1,1]]
-    ];
-
     zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
 
     /*
@@ -507,7 +464,6 @@ module block(
                             */
                             difference(){
                                 union(){
-                                    
                                     mb_base_cutout(
                                         grid = grid,
                                         gridSizeXY = gridSizeXY,
@@ -539,6 +495,7 @@ module block(
                                         bevelHorizontal = bevelHorizontal
                                     );
 
+
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
                                             if(mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)
@@ -548,7 +505,7 @@ module block(
                                             }
                                         }
                                     }
-                                } // End Union Base Cutout
+                                }
 
                                 if(stabilizerGrid){
                                     difference(){
@@ -761,6 +718,8 @@ module block(
                                     }
                                 }
                             } // End Difference Base Cutout
+
+                            
                             
                             /*
                             * Subtract Wall gaps
