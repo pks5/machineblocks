@@ -399,21 +399,6 @@ module block(
 
     
     /*
-    * Round Bricks
-    */ 
-    function inRoundingTriangle(t, c, a, b, x, y, i) = (i < len(t)) && ((b == (y ? grid[1] - (c ? 2 : 1) - i : i) && (x ? (a >= grid[0] - (c ? 1 : 0) - t[i] && a < grid[0] - (c ? 1 : 0)) : (a >= 0 && a < t[i]))) || inRoundingTriangle(t, c, a, b, x, y, i+1));
-    function inRoundingCorner(areas, r, c, a, b, x, y, i) = (i < len(areas)) && ((r > areas[i][0] && inRoundingTriangle(areas[i][1], c, a, b,x, y, 0)) || inRoundingCorner(areas, r, c, a, b, x, y, i + 1));
-    /*
-    function inRoundingArea(a, b) = inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[0], knobCentered, a, b, false, false, 0) 
-        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[1], knobCentered, a, b, false, true, 0) 
-        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[2], knobCentered, a, b, true, true, 0) 
-        || inRoundingCorner(knobCentered ? roundingAreasCentered : roundingAreas, zRadius[3], knobCentered, a, b, true, false, 0);*/
-    function inRoundingCutArea(a, b) = inRoundingCorner(roundingCutAreas, zRadius[0], false, a, b, false, false, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[1], false, a, b, false, true, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[2], false, a, b, true, true, 0) 
-        || inRoundingCorner(roundingCutAreas, zRadius[3], false, a, b, true, false, 0);
-
-    /*
     * Pit
     */
     function onPitBorder(a, b) = ((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
@@ -433,7 +418,6 @@ module block(
     */ 
     function drawKnob(a, b) = drawGridItem(knobs, a, b, 0, false) 
             && !inSlantedArea(a, b, false, 2)
-            //&& !inRoundingArea(a, b)
             && mb_circle_in_rounded_rect(bevelAbs, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             && mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             ;
