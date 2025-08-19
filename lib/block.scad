@@ -121,6 +121,7 @@ module block(
         knobSize = 5.0, //mm
         knobCutSize = 5.0,
         knobHeight = 1.8, //mm
+        knobCutHeight = 2.0,
         knobClampHeight = 0.8, //mm
         knobClampThickness = 0.0, //mm
         knobHoleSize = 3.5, //mm
@@ -265,7 +266,9 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
-    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, sAdjustment);
+    bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, sAdjustment);
+    //echo(bhr = bhr);
+    //bevelHorResolved = mb_inset_quad_lrfh(bhr, sAdjustment);
 
     echo(
         preview= $preview,
@@ -285,7 +288,7 @@ module block(
         topPlateZ = topPlateZ, 
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
-        bevelHorizontal = bevelAbs
+        bevelHorResolved = bevelHorResolved
     );
     
     //Decorator Rotations
@@ -418,8 +421,8 @@ module block(
     */ 
     function drawKnob(a, b) = drawGridItem(knobs, a, b, 0, false) 
             && !inSlantedArea(a, b, false, 2)
-            && mb_circle_in_rounded_rect(bevelAbs, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
-            && mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
+            && mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
+            && mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
@@ -489,7 +492,8 @@ module block(
                                 pitWallGaps = pitWallGaps,
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight,
-                                bevelHorizontal = bevelAbs,
+                                bevelHorizontal = bevelHorizontal,
+                                bevelHorResolved = bevelHorResolved,
                                 connectors = connectors,
                                 connectorHeight = connectorHeight,
                                 connectorDepth = connectorDepth,
@@ -537,10 +541,10 @@ module block(
 
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
-                                            if(mb_circle_in_rounded_rect(bevelAbs, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)
-                                                || mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)){
-                                                translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobHeight - 0.5 * cutOffset])
-                                                    cylinder(h=knobHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                            if(mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)
+                                                || mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)){
+                                                translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5 * cutOffset])
+                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                             }
                                         }
                                     }
@@ -833,7 +837,8 @@ module block(
                             pitWallGaps = pitWallGaps,
                             slanting = slanting,
                             slantingLowerHeight = slantingLowerHeight,
-                            bevelHorizontal = bevelAbs,
+                            bevelHorizontal = bevelHorizontal,
+                            bevelHorResolved = bevelHorResolved,
                             connectors = connectors,
                             connectorHeight = connectorHeight,
                             connectorDepth = connectorDepth,

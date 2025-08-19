@@ -1,6 +1,7 @@
 use <shapes.scad>;
 use <connectors.scad>;
 use <utils.scad>;
+use <quad.scad>;
 
 module mb_slant_prism(side, l, w, h, inv){
     invRot = inv ? 180 : 0;
@@ -73,7 +74,8 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
-    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, -wallThickness, grid, gridSizeXY, [0,0,0,0]);
+    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, [0,0,0,0]);
+    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
@@ -88,7 +90,7 @@ module mb_base_cutout(
                 
                 translate([0,0,-baseHeight]){
                     linear_extrude(height = 2*baseHeight)
-                        polygon(points = bevelAbs);
+                        polygon(points = bevelInner);
                 }
                 
                 union(){
@@ -204,6 +206,7 @@ module mb_base(
     slanting,
     slantingLowerHeight,
     bevelHorizontal,
+    bevelHorResolved,
     connectors = [],
     connectorHeight,
     connectorDepth,
@@ -242,7 +245,7 @@ module mb_base(
                         intersection(){
                             translate([0,0,-0.5*height]){
                                 linear_extrude(height = height)
-                                    polygon(points = bevelHorizontal);
+                                    polygon(points = bevelHorResolved);
                             }
 
                             mb_rounded_block(
@@ -291,22 +294,34 @@ module mb_base(
             if(pit){
                 pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * gridSizeXY;
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
-                echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
+                pitBevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, [0,0,0,0]);
+                pitBevelInner = mb_inset_quad_lrfh(pitBevelAbs, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
+                echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness, pitBevelAbs = pitBevelAbs);
 
-                translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
-                    mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
-            
-                for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                    gap = pitWallGaps[gapIndex];
-                    if(gap[0] < 2){
-                        translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
-                            cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
-                    }  
-                    else{
-                        translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
-                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
-                    } 
-                }
+                
+                    
+                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+                            intersection(){
+                                translate([0,0,-height]){
+                                    linear_extrude(height = 2 * height)
+                                        polygon(points = pitBevelInner);
+                                }
+                                mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
+                            }
+
+                        for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                            gap = pitWallGaps[gapIndex];
+                            if(gap[0] < 2){
+                                translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
+                                    cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
+                            }  
+                            else{
+                                translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
+                                    cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
+                            } 
+                        }
+                    
+                
             }
 
             for (con = [ 0 : 1 : len(connectors)-1 ]){
