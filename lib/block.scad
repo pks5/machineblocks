@@ -432,7 +432,7 @@ module block(
     function drawKnob(a, b) = drawGridItem(knobs, a, b, 0, false) 
             && !inSlantedArea(a, b, false, 2)
             && !inRoundingArea(a, b)
-            && mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
+            && mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
@@ -550,7 +550,7 @@ module block(
 
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
-                                            if(inRoundingCutArea(a, b)){
+                                            if(inRoundingCutArea(a, b) || mb_circle_in_convex_quad(bevelAbs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)){
                                                 translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobHeight - 0.5 * cutOffset])
                                                     cylinder(h=knobHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                             }

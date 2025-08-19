@@ -1,31 +1,30 @@
 // =======================================
 // Kreis-in-konvexem-Viereck (OpenSCAD)
-// mit mb_-Prefix
+// Modi:
+//   on_border=false -> true, wenn Kreis vollständig im Viereck (Berührung erlaubt)
+//   on_border=true  -> true, wenn Kreis Rand berührt/überschneidet,
+//                     aber NICHT vollständig im Viereck liegt
 // =======================================
 
-// Hauptfunktion
-// points ... 4 Eckpunkte [[x,y], ...] in Reihenfolge (CW oder CCW), konvex!
-// M      ... Mittelpunkt [x,y]
-// r      ... Radius
-// strict ... wenn true: strikt innen (ohne Berührung) -> d > r
-// eps    ... Toleranz
-function mb_circle_in_convex_quad(points, M, r, strict=false, eps=1e-9) =
-    mb_point_in_convex_polygon(M, points, eps) &&
-    (strict
-      ? mb_all_true([for (i = [0:len(points)-1])
-          mb_dist_point_segment(M, points[i], points[(i+1)%len(points)]) >  r + eps])
-      : mb_all_true([for (i = [0:len(points)-1])
-          mb_dist_point_segment(M, points[i], points[(i+1)%len(points)]) >= r - eps]));
+function mb_circle_in_convex_quad(points, M, r, on_border=false, eps=1e-9) =
+    let(
+        n = len(points),
+        inside_poly = mb_point_in_convex_polygon(M, points, eps),
+        dmins = [for (i=[0:n-1]) mb_dist_point_segment(M, points[i], points[(i+1)%n])],
+        dmin  = min(dmins),
+        fully_inside = inside_poly && (dmin >= r - eps),
+        touches_or_overlaps = (r >= dmin - eps)
+    )
+    on_border
+      ? (touches_or_overlaps && (!fully_inside))
+      : fully_inside;
 
 // ---------------------------------------
 // Punkt-in-konvexem-Polygon
-// Kriterium: Alle Kreuzprodukte haben gleiches Vorzeichen
-// (Rand zählt als innen)
 function mb_point_in_convex_polygon(P, points, eps=1e-9) =
     let(n = len(points))
     let(signs = [for (i=[0:n-1])
         mb_cross2d(points[(i+1)%n] - points[i], P - points[i])])
-    // alle >= -eps ODER alle <= +eps
     (min(signs) >= -eps) || (max(signs) <= eps);
 
 // ---------------------------------------
@@ -44,15 +43,22 @@ function mb_cross2d(a, b) = a[0]*b[1] - a[1]*b[0];
 function mb_dot(a, b)     = a[0]*b[0] + a[1]*b[1];
 function mb_norm(a)       = sqrt(a[0]*a[0] + a[1]*a[1]);
 function mb_clamp(x, lo, hi) = x < lo ? lo : (x > hi ? hi : x);
-function mb_all_true(lst) = min([for (v=lst) v ? 1 : 0]) == 1;
 
 // ---------------------------------------
-// Beispiel (zum Testen)
+// Beispiele (zum Testen)
 /*
 quad = [[0,0],[10,0],[9,7],[1,8]]; // konvex
-M1 = [5,4]; r1 = 2;
-M2 = [5,4]; r2 = 3;
+M = [5,4];
 
-echo("M1 in quad? ", mb_circle_in_convex_quad(quad, M1, r1));        // true/false
-echo("M2 (strict) in quad? ", mb_circle_in_convex_quad(quad, M2, r2, true)); // erwartbar false
+// A) Vollständig drin
+echo("voll drin r=2: ",
+     mb_circle_in_convex_quad(quad, M, 2)); // true
+
+// B) Randmodus: Kreis größer, überlappt
+echo("on_border r=3: ",
+     mb_circle_in_convex_quad(quad, M, 3, true)); // true
+
+// C) Ganz draußen, kein Kontakt
+echo("on_border r=0.2: ",
+     mb_circle_in_convex_quad(quad, M, 0.2, true)); // false
 */
