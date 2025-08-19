@@ -266,7 +266,7 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
-    bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, sAdjustment);
+    bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sAdjustment);
     //echo(bhr = bhr);
     //bevelHorResolved = mb_inset_quad_lrfh(bhr, sAdjustment);
 

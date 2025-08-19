@@ -74,7 +74,7 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
-    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, [0,0,0,0]);
+    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
     bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
@@ -294,7 +294,7 @@ module mb_base(
             if(pit){
                 pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * gridSizeXY;
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
-                pitBevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, 0, grid, gridSizeXY, [0,0,0,0]);
+                pitBevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
                 pitBevelInner = mb_inset_quad_lrfh(pitBevelAbs, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
                 echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness, pitBevelAbs = pitBevelAbs);
 

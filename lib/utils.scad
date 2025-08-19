@@ -34,11 +34,11 @@ function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
 function mb_grid_pos_x(a, grid, gridSizeXY) = (a - 0.5 * (grid[0] - 1)) * gridSizeXY;
 function mb_grid_pos_y(b, grid, gridSizeXY) = (b - 0.5 * (grid[1] - 1)) * gridSizeXY;
 
-function mb_resolve_bevel_horizontal(bevelHorizontal, grow, grid, gridSizeXY, sideAdjustment) = [
-    [mb_grid_pos_x(bevelHorizontal[0][0] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[0], mb_grid_pos_y(bevelHorizontal[0][1] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[2]],
-    [mb_grid_pos_x(bevelHorizontal[1][0] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[0], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[1][1] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[3]],
-    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[2][0] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[1], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[2][1] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[3]],
-    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[3][0] + 0.5, grid, gridSizeXY) + grow + sideAdjustment[1], mb_grid_pos_y(bevelHorizontal[3][1] - 0.5, grid, gridSizeXY) - grow - sideAdjustment[2]]
+function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sideAdjustment) = [
+    [mb_grid_pos_x(bevelHorizontal[0][0] - 0.5, grid, gridSizeXY) - sideAdjustment[0], mb_grid_pos_y(bevelHorizontal[0][1] - 0.5, grid, gridSizeXY) - sideAdjustment[2]],
+    [mb_grid_pos_x(bevelHorizontal[1][0] - 0.5, grid, gridSizeXY) - sideAdjustment[0], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[1][1] + 0.5, grid, gridSizeXY) + sideAdjustment[3]],
+    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[2][0] + 0.5, grid, gridSizeXY) + sideAdjustment[1], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[2][1] + 0.5, grid, gridSizeXY) + sideAdjustment[3]],
+    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[3][0] + 0.5, grid, gridSizeXY) + sideAdjustment[1], mb_grid_pos_y(bevelHorizontal[3][1] - 0.5, grid, gridSizeXY) - sideAdjustment[2]]
 ];
 
 /*
