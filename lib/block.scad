@@ -723,8 +723,17 @@ module block(
                                         for (b = [ startY : 1 : endY ]){
                                             if(!mb_circle_in_rounded_rect(cornersInner, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
                                                 || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)){
-                                                translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5 * cutOffset])
-                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight]){
+                                                    if(baseClampOffset > 0){
+                                                        translate([0,0, -0.5 * (cutOffset + knobCutHeight - baseClampOffset)])
+                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    }
+                                                    translate([0,0,-0.5*cutOffset])
+                                                        cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    
+                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset + cutOffset - baseClampHeight)])
+                                                        cylinder(h=knobCutHeight - baseClampOffset + cutOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                }
                                             }
                                         }
                                     }
@@ -796,7 +805,7 @@ module block(
                                     
                                     
                                     mb_rounded_block(
-                                        size = [objectSizeX - 2*wallThickness - 2*baseClampWallThickness, objectSizeY - 2*wallThickness - 2*baseClampWallThickness, resultingBaseHeight], 
+                                        size = [objectSizeX - 2*baseClampWallThickness - 2*cutTolerance, objectSizeY - 2*baseClampWallThickness - 2*cutTolerance, resultingBaseHeight], 
                                         center = true, 
                                         radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                                         resolution = baseRoundingResolution
