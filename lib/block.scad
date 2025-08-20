@@ -275,10 +275,7 @@ module block(
 
     bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
     bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
-    bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [wallThickness+knobCutTolerance,wallThickness+knobCutTolerance,wallThickness+knobCutTolerance,wallThickness+knobCutTolerance]);
-    //echo(bhr = bhr);
-    //bevelHorResolved = mb_inset_quad_lrfh(bhr, sAdjustment);
-
+    
     echo(
         preview= $preview,
         previewQuality = previewQuality,
@@ -789,6 +786,8 @@ module block(
                                     //TODO move elsewhere
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
+                                    bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness]);
+    
 
                                     //TODO use a difference height
                                     translate([0,0,-0.5 * resultingBaseHeight]){
@@ -798,7 +797,7 @@ module block(
                                     
                                     
                                     mb_rounded_block(
-                                        size = [objectSizeX - 2*wallThickness - 2*knobCutTolerance, objectSizeY - 2*wallThickness - 2*knobCutTolerance, resultingBaseHeight], 
+                                        size = [objectSizeX - 2*wallThickness - 2*baseClampWallThickness, objectSizeY - 2*wallThickness - 2*baseClampWallThickness, resultingBaseHeight], 
                                         center = true, 
                                         radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                                         resolution = baseRoundingResolution
