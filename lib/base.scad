@@ -75,8 +75,8 @@ module mb_base_cutout(
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
     bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
-    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
-    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelAbs, [wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness,wallThickness+topPlateHelperThickness]);
+    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelAbs, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;

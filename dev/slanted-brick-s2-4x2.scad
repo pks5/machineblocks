@@ -45,7 +45,7 @@ holesY = false;
 holesZ = false;
 
 // Whether brick should have a pit
-pit = true;
+pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length

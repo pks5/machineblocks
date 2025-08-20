@@ -269,6 +269,9 @@ module block(
 
     bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sAdjustment);
 
+    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY, [0,0,0,0]);
+    cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
+
     bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
     bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
     //echo(bhr = bhr);
@@ -382,7 +385,7 @@ module block(
     */ 
     function drawKnob(a, b) = 
             !inSlantedArea(a, b, false, 2)
-            && mb_circle_in_rounded_rect(bevelHorResolved, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
+            && mb_circle_in_rounded_rect(corners, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
             && mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
             ;
 
@@ -502,8 +505,8 @@ module block(
 
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
-                                            if(!mb_circle_in_rounded_rect(bevelInner, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)
-                                                || mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, true)){
+                                            if(!mb_circle_in_rounded_rect(cornersInner, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
+                                                || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, false)){
                                                 translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5 * cutOffset])
                                                     cylinder(h=knobCutHeight + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                             }
