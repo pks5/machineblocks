@@ -731,8 +731,8 @@ module block(
                                                     translate([0,0,-0.5*cutOffset])
                                                         cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                                     
-                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset + cutOffset - baseClampHeight)])
-                                                        cylinder(h=knobCutHeight - baseClampOffset + cutOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight)+ cutOffset ])
+                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                                 }
                                             }
                                         }
@@ -794,8 +794,8 @@ module block(
                                     //TODO move elsewhere
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
-                                    bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness,wallThickness+baseClampWallThickness]);
-    
+                                    bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
+    echo(bi=bevelAbs);
 
                                     //TODO use a difference height
                                     translate([0,0,-0.5 * resultingBaseHeight]){
@@ -805,7 +805,7 @@ module block(
                                     
                                     
                                     mb_rounded_block(
-                                        size = [objectSizeX - 2*baseClampWallThickness - 2*cutTolerance, objectSizeY - 2*baseClampWallThickness - 2*cutTolerance, resultingBaseHeight], 
+                                        size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, resultingBaseHeight], 
                                         center = true, 
                                         radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                                         resolution = baseRoundingResolution
