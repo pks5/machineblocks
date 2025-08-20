@@ -123,7 +123,6 @@ module block(
         knobCutSize = 5.0,
         knobHeight = 1.8, //mm
         knobCutHeight = 2.0,
-        knobCutTolerance = 0.2,
         knobClampHeight = 0.8, //mm
         knobClampThickness = 0.0, //mm
         knobHoleSize = 3.5, //mm
