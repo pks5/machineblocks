@@ -76,6 +76,8 @@ module mb_base_cutout(
 
     bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
     bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    bevelClamp = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness, baseClampWallThickness, baseClampWallThickness, baseClampWallThickness]);
+    
     bevelTopPlateHelper = mb_inset_quad_lrfh(bevelAbs, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
@@ -87,24 +89,49 @@ module mb_base_cutout(
     
     translate([offsetX, offsetY, 0]){ 
         difference(){
-            intersection(){
+            
                 
-                translate([0,0,-baseHeight]){
-                    linear_extrude(height = 2*baseHeight)
-                        polygon(points = bevelInner);
+            union(){
+                intersection(){
+                
+                    translate([0,0,-baseHeight]){
+                        linear_extrude(height = 2*baseHeight)
+                            polygon(points = bevelInner);
+                    }
+                    
+                    union(){
+                        /*
+                        * Bottom Hole
+                        */
+                        translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
+                            mb_rounded_block(
+                                size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
+                                center = true, 
+                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                resolution=roundingResolution
+                            );
+
+                        /*
+                        * Clamp Offset
+                        */
+                        if(baseClampOffset > 0){
+                            translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
+                                mb_rounded_block(
+                                    size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                                    center = true, 
+                                    radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                    resolution=roundingResolution
+                                );
+                        }
+                    }    
                 }
+
+                intersection(){
                 
-                union(){
-                    /*
-                    * Bottom Hole
-                    */
-                    translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                        mb_rounded_block(
-                            size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
-                            center = true, 
-                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
-                            resolution=roundingResolution
-                        );    
+                    translate([0,0,-baseHeight]){
+                        linear_extrude(height = 2*baseHeight)
+                            polygon(points = bevelClamp);
+                    }
 
                     /*
                     * Clamp Skirt
@@ -117,20 +144,9 @@ module mb_base_cutout(
                             resolution=roundingResolution
                         );
 
-                    /*
-                    * Clamp Offset
-                    */
-                    if(baseClampOffset > 0){
-                        translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
-                            mb_rounded_block(
-                                size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
-                                center = true, 
-                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
-                                resolution=roundingResolution
-                            );
-                    }
                 }
             }
+            
 
             /*
             * Plate Helpers
