@@ -795,7 +795,7 @@ module block(
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
-    echo(bi=bevelAbs);
+    echo(bi=bevelInnerTol);
 
                                     //TODO use a difference height
                                     translate([0,0,-0.5 * resultingBaseHeight]){

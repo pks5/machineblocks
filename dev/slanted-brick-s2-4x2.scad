@@ -17,9 +17,9 @@ use <../lib/block.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]  
+brickSizeX = 3; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 3; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 6; // [1:24]
 
@@ -101,7 +101,7 @@ block(
     pitWallThickness = pitWallThickness,
     
     slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-    bevelHorizontal = [[2,0],[0,0],[0,0],[0,0]],
+    bevelHorizontal = [[2,0],[0,0],[-2,0],[0,0]],
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
