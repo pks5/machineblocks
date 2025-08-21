@@ -20,6 +20,7 @@ use <utils.scad>;
 use <bevel.scad>;
 use <rounded.scad>;
 use <quad.scad>;
+use <polygon.scad>;
 
 module block(
         //Grid
@@ -267,8 +268,9 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
-    bevelHorResolved = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sAdjustment);
-
+    bevelHor = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
+    bevelHorResolved = mb_inset_quad_lrfh(bevelHor, [-1*sAdjustment[0], -1*sAdjustment[1], -1*sAdjustment[2], -1*sAdjustment[3]]);
+    
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY, [0,0,0,0]);
     cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
 
@@ -795,14 +797,16 @@ module block(
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
-    echo(bi=bevelInnerTol);
+                                    echo(bevelInnerTol = bevelInnerTol);
 
                                     //TODO use a difference height
+                                    /*
                                     translate([0,0,-0.5 * resultingBaseHeight]){
                                         linear_extrude(height = resultingBaseHeight)
                                             polygon(points = bevelInnerTol);
-                                    }
+                                    }*/
                                     
+                                    make_bevel(bevelInnerTol, resultingBaseHeight);
                                     
                                     mb_rounded_block(
                                         size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, resultingBaseHeight], 

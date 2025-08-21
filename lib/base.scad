@@ -2,6 +2,7 @@ use <shapes.scad>;
 use <connectors.scad>;
 use <utils.scad>;
 use <quad.scad>;
+use <polygon.scad>;
 
 module mb_slant_prism(side, l, w, h, inv){
     invRot = inv ? 180 : 0;
@@ -94,10 +95,12 @@ module mb_base_cutout(
             union(){
                 intersection(){
                 
+                    /*
                     translate([0,0,-baseHeight]){
                         linear_extrude(height = 2*baseHeight)
                             polygon(points = bevelInner);
-                    }
+                    }*/
+                    make_bevel(bevelInner, 2*baseHeight);
                     
                     union(){
                         /*
@@ -127,11 +130,12 @@ module mb_base_cutout(
                 }
 
                 intersection(){
-                
+                    /*
                     translate([0,0,-baseHeight]){
                         linear_extrude(height = 2*baseHeight)
                             polygon(points = bevelClamp);
-                    }
+                    }*/
+                    make_bevel(bevelClamp, 2*baseHeight);
 
                     /*
                     * Clamp Skirt
@@ -160,11 +164,13 @@ module mb_base_cutout(
                         );
 
                         intersection(){
-                
+                            /*
                             translate([0,0,-baseHeight]){
                                 linear_extrude(height = 2*baseHeight)
                                     polygon(points = bevelTopPlateHelper);
-                            }
+                            }*/
+
+                            make_bevel(bevelTopPlateHelper, 2*baseHeight);
                 
                             mb_rounded_block(
                                 size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
@@ -268,10 +274,13 @@ module mb_base(
 
                     difference(){
                         intersection(){
+                            /*
                             translate([0,0,-0.5*height]){
                                 linear_extrude(height = height)
                                     polygon(points = bevelHorResolved);
-                            }
+                            }*/
+                            echo(bevelHorResolved = bevelHorResolved);
+                            make_bevel(bevelHorResolved, height);
 
                             mb_rounded_block(
                                 size = size, 
@@ -327,10 +336,14 @@ module mb_base(
                     
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                             intersection(){
+                                /*
                                 translate([0,0,-height]){
                                     linear_extrude(height = 2 * height)
                                         polygon(points = pitBevelInner);
                                 }
+                                */
+                                echo(pitBevelInner = pitBevelInner);
+                                make_bevel(pitBevelInner, 2 * height);
                                 mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
                             }
 

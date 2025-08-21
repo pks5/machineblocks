@@ -34,12 +34,22 @@ function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
 function mb_grid_pos_x(a, grid, gridSizeXY) = (a - 0.5 * (grid[0] - 1)) * gridSizeXY;
 function mb_grid_pos_y(b, grid, gridSizeXY) = (b - 0.5 * (grid[1] - 1)) * gridSizeXY;
 
-function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sideAdjustment) = [
-    [mb_grid_pos_x(bevelHorizontal[0][0] - 0.5, grid, gridSizeXY) - sideAdjustment[0], mb_grid_pos_y(bevelHorizontal[0][1] - 0.5, grid, gridSizeXY) - sideAdjustment[2]],
-    [mb_grid_pos_x(bevelHorizontal[1][0] - 0.5, grid, gridSizeXY) - sideAdjustment[0], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[1][1] + 0.5, grid, gridSizeXY) + sideAdjustment[3]],
-    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[2][0] + 0.5, grid, gridSizeXY) + sideAdjustment[1], mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[2][1] + 0.5, grid, gridSizeXY) + sideAdjustment[3]],
-    [mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[3][0] + 0.5, grid, gridSizeXY) + sideAdjustment[1], mb_grid_pos_y(bevelHorizontal[3][1] - 0.5, grid, gridSizeXY) - sideAdjustment[2]]
-];
+function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, sideAdjustment) = 
+    let(x1 = mb_grid_pos_x(bevelHorizontal[0][0] - 0.5, grid, gridSizeXY),
+        y1 = mb_grid_pos_y(bevelHorizontal[0][1] - 0.5, grid, gridSizeXY),
+        x2 = mb_grid_pos_x(bevelHorizontal[1][0] - 0.5, grid, gridSizeXY),
+        y2 = mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[1][1] + 0.5, grid, gridSizeXY),
+        x3 = mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[2][0] + 0.5, grid, gridSizeXY),
+        y3 = mb_grid_pos_y(grid[1] - 1 + bevelHorizontal[2][1] + 0.5, grid, gridSizeXY),
+        x4 = mb_grid_pos_x(grid[0] - 1 + bevelHorizontal[3][0] + 0.5, grid, gridSizeXY),
+        y4 = mb_grid_pos_y(bevelHorizontal[3][1] - 0.5, grid, gridSizeXY)
+        )
+    [
+        [x1 - sideAdjustment[0], y1 - sideAdjustment[2]],
+        [x2 - sideAdjustment[0], y2 + sideAdjustment[3]],
+        [x3 + sideAdjustment[1], y3 + sideAdjustment[3]],
+        [x4 + sideAdjustment[1], y4 - sideAdjustment[2]]
+    ];
 
 /*
 * Resolve base side adjustment
