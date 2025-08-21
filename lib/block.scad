@@ -268,14 +268,14 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
-    bevelHor = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
-    bevelHorResolved = mb_inset_quad_lrfh(bevelHor, [-1*sAdjustment[0], -1*sAdjustment[1], -1*sAdjustment[2], -1*sAdjustment[3]]);
+    bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
+    bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
+    bevelInner = mb_inset_quad_lrfh(bevelOuter, [wallThickness, wallThickness, wallThickness, wallThickness]);
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY, [0,0,0,0]);
+    cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
 
-    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
-    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness,wallThickness,wallThickness,wallThickness]);
     
     echo(
         preview= $preview,
@@ -295,7 +295,7 @@ module block(
         topPlateZ = topPlateZ, 
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
-        bevelHorResolved = bevelHorResolved
+        bevelOuterAdjusted = bevelOuterAdjusted
     );
     
     //Decorator Rotations
@@ -385,8 +385,8 @@ module block(
     */ 
     function drawKnob(a, b) = 
             !inSlantedArea(a, b, false, 2)
-            && mb_circle_in_rounded_rect(corners, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
-            && mb_circle_in_convex_quad(bevelHorResolved, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
+            && mb_circle_in_rounded_rect(cornersAdjusted, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
+            && mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize)
             ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
@@ -457,7 +457,7 @@ module block(
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight,
                                 bevelHorizontal = bevelHorizontal,
-                                bevelHorResolved = bevelHorResolved,
+                                bevelOuterAdjusted = bevelOuterAdjusted,
                                 connectors = connectors,
                                 connectorHeight = connectorHeight,
                                 connectorDepth = connectorDepth,
@@ -499,7 +499,9 @@ module block(
                                     
                                     slanting = slanting,
                                     slantingLowerHeight = slantingLowerHeight,
-                                    bevelHorizontal = bevelHorizontal
+                                    bevelHorizontal = bevelHorizontal,
+                                    bevelOuter = bevelOuter,
+                                    bevelInner = bevelInner
                                 );
 
                                 if(stabilizerGrid){
@@ -796,17 +798,16 @@ module block(
                                     //TODO move elsewhere
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
-                                    bevelInnerTol = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
-                                    echo(bevelInnerTol = bevelInnerTol);
-
+                                    bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
+                                    
                                     //TODO use a difference height
                                     /*
                                     translate([0,0,-0.5 * resultingBaseHeight]){
                                         linear_extrude(height = resultingBaseHeight)
-                                            polygon(points = bevelInnerTol);
+                                            polygon(points = bevelKnobCut);
                                     }*/
                                     
-                                    make_bevel(bevelInnerTol, resultingBaseHeight);
+                                    make_bevel(bevelKnobCut, resultingBaseHeight);
                                     
                                     mb_rounded_block(
                                         size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, resultingBaseHeight], 
@@ -839,7 +840,7 @@ module block(
                             slanting = slanting,
                             slantingLowerHeight = slantingLowerHeight,
                             bevelHorizontal = bevelHorizontal,
-                            bevelHorResolved = bevelHorResolved,
+                            bevelOuterAdjusted = bevelOuterAdjusted,
                             connectors = connectors,
                             connectorHeight = connectorHeight,
                             connectorDepth = connectorDepth,

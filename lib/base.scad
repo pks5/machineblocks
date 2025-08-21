@@ -50,7 +50,9 @@ module mb_base_cutout(
     //Slanting
     slanting,
     slantingLowerHeight,
-    bevelHorizontal
+    bevelHorizontal,
+    bevelOuter,
+    bevelInner
 ){
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     cutoutRadius = mb_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
@@ -75,11 +77,9 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
-    bevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
-    bevelInner = mb_inset_quad_lrfh(bevelAbs, [wallThickness, wallThickness, wallThickness, wallThickness]);
-    bevelClamp = mb_inset_quad_lrfh(bevelAbs, [baseClampWallThickness, baseClampWallThickness, baseClampWallThickness, baseClampWallThickness]);
+    bevelClamp = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness, baseClampWallThickness, baseClampWallThickness, baseClampWallThickness]);
     
-    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelAbs, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
+    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
 
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
@@ -237,7 +237,7 @@ module mb_base(
     slanting,
     slantingLowerHeight,
     bevelHorizontal,
-    bevelHorResolved,
+    bevelOuterAdjusted,
     connectors = [],
     connectorHeight,
     connectorDepth,
@@ -277,10 +277,9 @@ module mb_base(
                             /*
                             translate([0,0,-0.5*height]){
                                 linear_extrude(height = height)
-                                    polygon(points = bevelHorResolved);
+                                    polygon(points = bevelOuterAdjusted);
                             }*/
-                            echo(bevelHorResolved = bevelHorResolved);
-                            make_bevel(bevelHorResolved, height);
+                            make_bevel(bevelOuterAdjusted, height);
 
                             mb_rounded_block(
                                 size = size, 
