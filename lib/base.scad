@@ -237,6 +237,7 @@ module mb_base(
     slanting,
     slantingLowerHeight,
     bevelHorizontal,
+    bevelOuter,
     bevelOuterAdjusted,
     connectors = [],
     connectorHeight,
@@ -327,9 +328,8 @@ module mb_base(
             if(pit){
                 pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * gridSizeXY;
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
-                pitBevelAbs = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
-                pitBevelInner = mb_inset_quad_lrfh(pitBevelAbs, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
-                echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness, pitBevelAbs = pitBevelAbs);
+                pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
+                //echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
                 
                     

@@ -270,11 +270,13 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
-    bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY, [0,0,0,0]);
+    bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
+                
     
-    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY, [0,0,0,0]);
+    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
 
@@ -459,6 +461,7 @@ module block(
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight,
                                 bevelHorizontal = bevelHorizontal,
+                                bevelOuter = bevelOuter,
                                 bevelOuterAdjusted = bevelOuterAdjusted,
                                 connectors = connectors,
                                 connectorHeight = connectorHeight,
@@ -842,6 +845,7 @@ module block(
                             slanting = slanting,
                             slantingLowerHeight = slantingLowerHeight,
                             bevelHorizontal = bevelHorizontal,
+                            bevelOuter = bevelOuter,
                             bevelOuterAdjusted = bevelOuterAdjusted,
                             connectors = connectors,
                             connectorHeight = connectorHeight,
