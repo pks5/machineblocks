@@ -49,7 +49,7 @@ pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = true;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
+pitWallThickness = 1;
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 0;
@@ -101,7 +101,7 @@ block(
     pitWallThickness = pitWallThickness,
     
     slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-    bevelHorizontal = [[3,0],[0,0],[0,0],[0,0]],
+    bevelHorizontal = [[2,0],[0,0],[0,0],[0,0]],
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,

@@ -273,6 +273,8 @@ module block(
     bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY, pWallThickness[1]*gridSizeXY, pWallThickness[2]*gridSizeXY, pWallThickness[3]*gridSizeXY]);
+    
     pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
                 
     
@@ -372,8 +374,13 @@ module block(
     /*
     * Pit
     */
-    function onPitBorder(a, b) = ((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
-    function inPit(a, b) = (floor(a) >= ceil(pWallThickness[0])) && (ceil(a) < grid[0] - ceil(pWallThickness[1])) && (floor(b) >= ceil(pWallThickness[2])) && (ceil(b) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a, b, false, 0);                                
+    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize) &&
+                                !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, touch=true);
+    
+    //((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
+    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelKnobs, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize);
+    
+    //(floor(a) >= ceil(pWallThickness[0])) && (ceil(a) < grid[0] - ceil(pWallThickness[1])) && (floor(b) >= ceil(pWallThickness[2])) && (ceil(b) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a, b, false, 0);                                
     
     function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
