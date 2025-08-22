@@ -95,6 +95,7 @@ module block(
         //Holes
         holesX = false,
         holeXType = "technic",
+        holeXCentered = true,
         holeXSize = 5.1, //mm
         holeXInsetThickness = 0.6, //mm
         holeXInsetDepth = 0.9, //mm
@@ -104,6 +105,7 @@ module block(
 
         holesY = false,
         holeYType = "technic",
+        holeYCentered = true,
         holeYSize = 5.1, //mm
         holeYInsetThickness = 0.55, //mm
         holeYInsetDepth = 0.9, //mm
@@ -669,9 +671,9 @@ module block(
                                 //X-Holes Outer
                                 if(holesX != false){
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                        for (a = [ startX : 1 : endX - 1 ]){
+                                        for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                             if(drawHoleX(a, r)){
-                                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                                translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                                     rotate([90, 0, 0]){ 
                                                         cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                     }
@@ -684,9 +686,9 @@ module block(
                                 //Y-Holes Outer
                                 if(holesY != false){
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                        for (b = [ startY : 1 : endY - 1 ]){
+                                        for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                             if(drawHoleY(b, r)){
-                                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                                translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                                     rotate([0, 90, 0]){ 
                                                         cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                     };
@@ -860,9 +862,9 @@ module block(
                 //Cut X-Holes
                 if(holesX != false){
                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                        for (a = [ startX : 1 : endX - 1 ]){
+                        for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                             if(drawHoleX(a, r)){
-                                translate([posX(a + 0.5), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                     rotate([90, 0, 0]){ 
                                         if(holeXType == "technic"){
                                             cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -886,9 +888,9 @@ module block(
                 //Cut Y-Holes
                 if(holesY != false){
                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                        for (b = [ startY : 1 : endY - 1 ]){
+                        for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                             if(drawHoleY(b, r)){
-                                translate([0, posY(b + 0.5), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                     rotate([0, 90, 0]){ 
                                         if(holeYType == "technic"){
                                             cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);

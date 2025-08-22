@@ -93,6 +93,7 @@ block(
     pillars = pillars,
     
     holesX = holesX,
+    holeXCentered = false,
     holesY = holesY,
     holesZ = holesZ,
     
