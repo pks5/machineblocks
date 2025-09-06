@@ -18,9 +18,9 @@ use <../lib/axis.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 4; // [1:32]  
+brickSizeX = 2; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 4; // [1:32]  
+brickSizeY = 2; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 3; // [1:24]
 
@@ -43,7 +43,7 @@ holesX = false;
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holesZ = true;
 
 // Whether brick should have a pit
 pit = true;
@@ -85,7 +85,7 @@ block(
         grid = [brickSizeX, brickSizeY],
         baseLayers = baseLayers,
         baseCutoutType = "classic",
-        baseRoundingRadius=[0,0,16],
+        baseRoundingRadius=[0,0,8],
         
         knobs = knobs,
         knobCentered = knobCentered,

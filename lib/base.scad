@@ -227,6 +227,9 @@ module mb_base(
     objectSize, 
     height, 
     baseSideAdjustment, 
+    baseReliefCut,
+    baseReliefCutHeight,
+    baseReliefCutThickness,
     roundingRadius, 
     roundingResolution,
     pit,
@@ -261,6 +264,8 @@ module mb_base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
+    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, [baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness]);
+
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
@@ -268,7 +273,6 @@ module mb_base(
 
     union(){
         
-
         difference(){
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
                 
@@ -288,6 +292,28 @@ module mb_base(
                                 resolution = roundingResolution,
                                 radius = roundingRadius
                             );
+                        }
+
+                        if(baseReliefCut){
+                            translate([0,0,-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
+                                difference(){
+                                    cube(
+                                        size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], baseReliefCutHeight + cutOffset], 
+                                        center=true
+                                    );
+
+                                    intersection(){
+                                        make_bevel(bevelReliefCut, cutMultiplier * (baseReliefCutHeight + cutOffset));
+                            
+                                        mb_rounded_block(
+                                            size = [objectSize[0] - 2*baseReliefCutThickness, objectSize[1] - 2*baseReliefCutThickness, cutMultiplier * (baseReliefCutHeight + cutOffset)], 
+                                            center=true, 
+                                            resolution = roundingResolution,
+                                            radius = roundingRadius
+                                        );
+                                    }
+                                }
+                            }
                         }
 
                         /*

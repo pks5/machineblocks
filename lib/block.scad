@@ -41,6 +41,9 @@ module block(
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = -3, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
+        baseReliefCut = false,
+        baseReliefCutHeight = 0.4,
+        baseReliefCutThickness = 0.4,
         
         //Base Adjustment
         baseSideAdjustment = -0.1, //mm
@@ -458,6 +461,9 @@ module block(
                                 objectSize = [objectSizeX, objectSizeY],
                                 height = resultingBaseHeight,
                                 baseSideAdjustment = sAdjustment,
+                                baseReliefCut = baseReliefCut,
+                                baseReliefCutHeight = baseReliefCutHeight,
+                                baseReliefCutThickness = baseReliefCutThickness,
                                 roundingRadius = baseRoundingRadius, 
                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                 pit = pit,
@@ -842,6 +848,9 @@ module block(
                             objectSize = [objectSizeX, objectSizeY],
                             height = resultingBaseHeight,
                             baseSideAdjustment = sAdjustment,
+                            baseReliefCut = baseReliefCut,
+                            baseReliefCutHeight = baseReliefCutHeight,
+                            baseReliefCutThickness = baseReliefCutThickness,
                             roundingRadius = baseRoundingRadius, 
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                             pit = pit,
