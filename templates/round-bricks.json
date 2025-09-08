@@ -1,0 +1,29 @@
+{
+    "examples" : [
+        {
+            "template": "./brick-template.scad",
+            "targetDirectory" : "../examples/round",
+            "url": "https://machineblocks.com/examples/round-bricks",
+            "bricks" : [
+                {
+                    "name": "Round Brick 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 4
+                    }
+                },
+                {
+                    "name": "Round Brick 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 8
+                    }
+                }
+            ]
+        }
+    ]
+}

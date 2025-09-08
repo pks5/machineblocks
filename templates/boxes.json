@@ -178,7 +178,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -192,7 +192,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -206,7 +206,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -220,7 +220,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -234,7 +234,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -248,7 +248,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -262,7 +262,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -276,7 +276,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -290,7 +290,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -304,7 +304,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -318,7 +318,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -332,7 +332,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -346,7 +346,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -360,7 +360,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -374,7 +374,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -388,7 +388,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -402,7 +402,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -416,7 +416,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -430,7 +430,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -444,7 +444,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -458,7 +458,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -472,7 +472,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -486,7 +486,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 
@@ -500,7 +500,7 @@
                         "baseKnobs": false,
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
-                        "lidPermanent": true
+                        "lidPermanent": false
                     }
                 },
 

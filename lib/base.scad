@@ -71,7 +71,15 @@ module mb_base_cutout(
     offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
     offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
 
-    echo(slanting=slanting, offsetX = offsetX, offsetY = offsetY, baseHeight=baseHeight, topPlateHeight = topPlateHeight, baseClampOffset=baseClampOffset);
+    echo(
+        slanting=slanting, 
+        offsetX = offsetX, 
+        offsetY = offsetY, 
+        baseHeight=baseHeight, 
+        topPlateHeight = topPlateHeight, 
+        baseClampOffset=baseClampOffset,
+        baseRoundingRadiusZ = baseRoundingRadiusZ,
+        cutoutRadius = cutoutRadius);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -264,6 +272,9 @@ module mb_base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
+    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
+    reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ);
+
     bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, [baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness]);
 
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
@@ -309,7 +320,7 @@ module mb_base(
                                             size = [objectSize[0] - 2*baseReliefCutThickness, objectSize[1] - 2*baseReliefCutThickness, cutMultiplier * (baseReliefCutHeight + cutOffset)], 
                                             center=true, 
                                             resolution = roundingResolution,
-                                            radius = roundingRadius
+                                            radius = reliefRadius
                                         );
                                     }
                                 }

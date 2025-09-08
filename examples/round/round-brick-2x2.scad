@@ -1,8 +1,8 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/round-bricks
 *
-* Slim Plate 2x1
+* Round Brick 2x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -12,8 +12,8 @@
 */
 
 // Include the library
-use <../lib/block.scad>;
-use <../lib/axis.scad>;
+use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Size] */
 
@@ -28,6 +28,8 @@ baseLayers = 3; // [1:24]
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
+// Rounding Radius Z
+baseRoundingRadiusZ = 8;
 // Whether to draw knobs.
 knobs = true;
 // Whether knobs should be centered.
@@ -43,10 +45,10 @@ holesX = false;
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Whether brick should have Technic holes along Z-axis.
-holesZ = true;
+holesZ = false;
 
 // Whether brick should have a pit
-pit = true;
+pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
@@ -66,46 +68,41 @@ slantingY1 = 0;
 // Quality of the preview in relation to the final rendering.
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 128; // [16:8:128]
+roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = 0;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
+// Generate the block
 block(
-        grid = [brickSizeX, brickSizeY],
-        baseLayers = baseLayers,
-        baseCutoutType = "classic",
-        baseRoundingRadius=[0,0,8],
-        baseReliefCut = true,
-        
-        knobs = knobs,
-        knobCentered = knobCentered,
-        knobType = knobType,
+    grid = [brickSizeX, brickSizeY],
+    baseLayers = baseLayers,
+    baseCutoutType = baseCutoutType,
+    baseRoundingRadius=[0, 0, baseRoundingRadiusZ],
+    
+    knobs = knobs,
+    knobCentered = knobCentered,
+    knobType = knobType,
+    
+    pillars = pillars,
+    
+    holesX = holesX,
+    holesY = holesY,
+    holesZ = holesZ,
+    
+    pit = pit,
+    pitKnobs = pitKnobs,
+    pitWallThickness = pitWallThickness,
+    
+    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
 
-        holesZ = holesZ,
-        holeZType = "axis",
-        
-        pillars = pillars,
-        
-        previewQuality = previewQuality,
-        baseRoundingResolution = roundingResolution,
-        holeRoundingResolution = roundingResolution,
-        knobRoundingResolution = roundingResolution,
-        pillarRoundingResolution = roundingResolution,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
 
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize
-    );
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
+);

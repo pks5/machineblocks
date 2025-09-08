@@ -39,7 +39,7 @@ module block(
         baseClampThickness = 0.1, //mm
         baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
-        baseCutoutRoundingRadius = -3, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
+        baseCutoutRoundingRadius = -1.5, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         baseReliefCut = false,
         baseReliefCutHeight = 0.4,

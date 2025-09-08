@@ -11,6 +11,7 @@
 *
 */
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [View] */
 // How to view the brick in the editor
@@ -23,7 +24,7 @@ boxSizeX = 4; // [1:32]
 // Box size in Y-direction specified as multiple of an 1x1 brick.
 boxSizeY = 2; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 4; // [1:24]
+boxLayers = 5; // [1:24]
 
 /* [Appearance] */
 
@@ -44,7 +45,7 @@ basePitKnobCentered = false;
 // Pit wall thickness
 basePitWallThickness = 0.333;
 // Pit wall gaps
-basePitWallGaps = [[2, 0, 2], [1, 0.666, 0]];
+basePitWallGaps = [[0, 0, 0], [1, 0, 0]];
 // Whether the base should have a tongue
 baseTongue = true;
 
@@ -70,19 +71,6 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-//Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 block(
     grid=[boxSizeX, boxSizeY],
     baseLayers = boxLayers - (lid ? lidLayers : 0),
@@ -102,14 +90,15 @@ block(
     tongue = baseTongue,
     tongueHeight = lidPermanent ? 2.0 : 1.8,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
-    tongueOuterAdjustment = lidPermanent ? 0.0 : 0.0,
+    tongueOuterAdjustment = lidPermanent ? 0.0 : -0.1,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 if(lid){
@@ -117,7 +106,7 @@ if(lid){
         block(
             grid=[boxSizeX, boxSizeY],
             baseLayers = lidLayers,
-            baseCutoutType = "groove",
+            baseCutoutType = baseTongue ? "groove" : "classic",
 
             knobs = lidKnobs,
             knobType = lidKnobType,
@@ -130,6 +119,7 @@ if(lid){
             baseSideAdjustment = baseSideAdjustment,
             knobSize = knobSize,
             wallThickness = wallThickness,
-            tubeZSize = tubeZSize
+            tubeZSize = tubeZSize,
+            pinSize = pinSize
         );
 }
