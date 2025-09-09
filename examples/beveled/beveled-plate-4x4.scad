@@ -1,8 +1,8 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/beveled-bricks
 *
-* Tile 16x6
+* Beveled Plate 4x4
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -18,36 +18,42 @@ include <../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 16; // [1:32]  
+brickSizeX = 4; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 6; // [1:32]  
+brickSizeY = 4; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
-/* [Appearance] */
+/* [Base] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0;
+// Whether to draw pillars.
+pillars = true;
+
+/* [Knobs] */
+
 // Whether to draw knobs.
-knobs = false;
+knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
+/* [Bevel] */
+
 // Bevel X and Y for the corner 0,0
-bevel0 = [0, 0];
+bevel0 = [2, 0];
 // Bevel X and Y for the corner 0,1
 bevel1 = [0, 0];
 // Bevel X and Y for the corner 1,1
-bevel2 = [0, 0];
+bevel2 = [-2, 0];
 // Bevel X and Y for the corner 1,0
 bevel3 = [0, 0];
 
-// Whether to draw pillars.
-pillars = true;
+/* [Holes] */
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
@@ -56,12 +62,16 @@ holesY = false;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
 
+/* [Pit] */
+
 // Whether brick should have a pit
 pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 0.333;
+
+/* [Slanting] */
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 0;

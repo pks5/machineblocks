@@ -24,12 +24,17 @@ brickSizeY = 2; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 3; // [1:24]
 
-/* [Appearance] */
+/* [Base] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0;
+// Whether to draw pillars.
+pillars = true;
+
+/* [Knobs] */
+
 // Whether to draw knobs.
 knobs = true;
 // Whether knobs should be centered.
@@ -37,8 +42,18 @@ knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-// Whether to draw pillars.
-pillars = true;
+/* [Bevel] */
+
+// Bevel X and Y for the corner 0,0
+bevel0 = [0, 0];
+// Bevel X and Y for the corner 0,1
+bevel1 = [0, 0];
+// Bevel X and Y for the corner 1,1
+bevel2 = [0, 0];
+// Bevel X and Y for the corner 1,0
+bevel3 = [0, 0];
+
+/* [Holes] */
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
@@ -47,12 +62,16 @@ holesY = false;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
 
+/* [Pit] */
+
 // Whether brick should have a pit
 pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 0.333;
+
+/* [Slanting] */
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 0;
@@ -76,7 +95,8 @@ block(
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
     baseRoundingRadius=[0, 0, baseRoundingRadiusZ],
-    
+    bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
+
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,

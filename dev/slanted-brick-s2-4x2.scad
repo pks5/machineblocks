@@ -101,7 +101,7 @@ block(
     pitWallThickness = pitWallThickness,
     
     slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-    bevelHorizontal = [[2,0],[0,0],[0,0],[0,0]],
+    bevelHorizontal = [[2,0],[-1,0],[0,0],[0,0]],
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
