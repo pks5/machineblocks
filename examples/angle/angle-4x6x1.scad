@@ -32,10 +32,13 @@ brick1BaseLayers = 1; // [1:24]
 // Second brick's base height in mm
 brick2BaseHeight = 1.8;
 
-/* [Appearance] */
+/* [Base] */
 
 // Type of cut-out on the underside.
 brick1BaseCutoutType = "classic"; // [none, classic]
+
+/* [Knobs] */
+
 // Whether first brick should have knobs.
 brick1Knobs = true;
 // Type of first brick's knobs

@@ -26,28 +26,33 @@ boxSizeY = 12; // [1:32]
 // Total box height specified as number of layers. Each layer has the height of one plate.
 boxLayers = 12; // [1:24]
 
-/* [Appearance] */
+/* [Base] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
+// Whether the base should have a tongue
+baseTongue = false;
 // Whether the base should have knobs
 baseKnobs = true;
 // Type of the base knobs
 baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
+
+/* [Pit] */
+
+// Pit wall thickness
+basePitWallThickness = 1;
+// Pit wall gaps
+basePitWallGaps = [];
 // Whether the pit should contain knobs
 basePitKnobs = false;
 // Type of the base pit knobs
 basePitKnobType = "classic"; // [classic, technic]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = false;
-// Pit wall thickness
-basePitWallThickness = 1;
-// Pit wall gaps
-basePitWallGaps = [];
-// Whether the base should have a tongue
-baseTongue = false;
+
+/* [Lid] */
 
 // Whether the box should have a lid
 lid = true;
