@@ -13,6 +13,7 @@
 
 //Include the library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Size] */
 
@@ -42,19 +43,6 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0; // .1
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1; // .1
-// Diameter of the knobs (mm)
-knobSize = 5.0; // .1
-// Thickness of the walls (mm)
-wallThickness = 1.5; // .1
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4; // .1
-
 // Generate the block
 union(){
     block(
@@ -62,13 +50,15 @@ union(){
         gridOffset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
         wallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
         baseLayers = baseLayers,
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
         knobs = knobs,
         knobType = knobType,
+        
+        baseHeightAdjustment = baseHeightAdjustment,
+        baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 
     block(
@@ -76,12 +66,14 @@ union(){
         gridOffset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
         wallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
         baseLayers = baseLayers,
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
         knobs = knobs,
         knobType = knobType,
+        
+        baseHeightAdjustment = baseHeightAdjustment,
+        baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );    
 }

@@ -13,6 +13,7 @@
 
 //Include the library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Size] */
 
@@ -53,19 +54,6 @@ textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book It
 // Spacing of the letters
 textSpacing = 1; // [0.1:0.1:4]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
@@ -87,5 +75,6 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );

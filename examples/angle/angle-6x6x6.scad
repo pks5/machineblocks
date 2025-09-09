@@ -13,6 +13,7 @@
 
 // Include the library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [View] */
 // How to view the brick in the editor
@@ -51,19 +52,6 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 /* [Hidden] */
 
 // Grid Size XY
@@ -86,12 +74,17 @@ union()
         holeRoundingResolution = roundingResolution,
         knobRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
+
+        gridSizeXY = gridSizeXY,
+        gridSizeZ = gridSizeZ,
         
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize);
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
+  );
 }
 
 translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY + (viewMode == "cover" ? (brick1BaseLayers + 2) * gridSizeZ : 0)] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
@@ -111,11 +104,16 @@ translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick
           holeRoundingResolution = roundingResolution,
           knobRoundingResolution = roundingResolution,
           pillarRoundingResolution = roundingResolution,
+
+          gridSizeXY = gridSizeXY,
+          gridSizeZ = gridSizeZ,
           
           baseHeightAdjustment = baseHeightAdjustment,
           baseSideAdjustment =
             [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
           knobSize = knobSize,
           wallThickness = wallThickness,
-          tubeZSize = tubeZSize);
+          tubeZSize = tubeZSize,
+          pinSize = pinSize
+    );
   }

@@ -13,6 +13,7 @@
 
 //Include the MachineBlocks library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Size] */
 
@@ -32,19 +33,6 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0; // .1
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1; // .1
-// Diameter of the knobs (mm)
-knobSize = 5.0; // .1
-// Thickness of the walls (mm)
-wallThickness = 1.5; // .1
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4; // .1
-
 // Generate the block
 union(){
     block(
@@ -54,11 +42,13 @@ union(){
         baseLayers = baseLayers,
         wallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
         gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
+        
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );  
 
     block(
@@ -68,11 +58,13 @@ union(){
         baseLayers = baseLayers,
         wallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
         gridOffset=[0,0.5*(brickSizeY-borderSize),0],
+        
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 
     block(
@@ -82,11 +74,13 @@ union(){
         baseLayers = baseLayers,
         wallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
         gridOffset=[0.5*(brickSizeX-borderSize),0,0],
+        
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );    
 
     block(
@@ -96,10 +90,12 @@ union(){
         baseLayers = baseLayers,
         wallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
         gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
+        
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 }

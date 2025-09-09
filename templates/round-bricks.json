@@ -22,6 +22,151 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 8
                     }
+                },
+                {
+                    "name": "Round Brick 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 16
+                    }
+                },
+                {
+                    "name": "Round Brick 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 24
+                    }
+                },
+                {
+                    "name": "Round Plate 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8
+                    }
+                },
+                {
+                    "name": "Round Plate 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 16
+                    }
+                },
+                {
+                    "name": "Round Plate 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 24
+                    }
+                },
+                {
+                    "name": "Round Plate 8x8",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 32
+                    }
+                },
+
+                {
+                    "name": "Rounded Brick 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 4
+                    }
+                },
+                {
+                    "name": "Rounded Brick 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 8
+                    }
+                },
+                {
+                    "name": "Rounded Brick 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 12
+                    }
+                },
+                {
+                    "name": "Rounded Plate 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4
+                    }
+                },
+                {
+                    "name": "Rounded Plate 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8
+                    }
+                },
+                {
+                    "name": "Rounded Plate 6x2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8
+                    }
+                },
+                {
+                    "name": "Rounded Plate 6x4",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8
+                    }
+                },
+                {
+                    "name": "Rounded Plate 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 12
+                    }
+                },
+                {
+                    "name": "Rounded Plate 8x6",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 16
+                    }
+                },
+                {
+                    "name": "Rounded Plate 8x8",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 16
+                    }
                 }
             ]
         }
