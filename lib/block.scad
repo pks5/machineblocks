@@ -151,7 +151,7 @@ module block(
         
         //Pit
         pit=false,
-        pitRoundingRadius = 0.0, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
+        pitRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
         pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,

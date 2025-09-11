@@ -366,11 +366,13 @@ module mb_base(
                 pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * gridSizeXY;
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
+                pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
+                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);
                 //echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
 
                 
                     
-                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+                        translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
                             intersection(){
                                 /*
                                 translate([0,0,-height]){
@@ -378,9 +380,10 @@ module mb_base(
                                         polygon(points = pitBevelInner);
                                 }
                                 */
-                                echo(pitBevelInner = pitBevelInner);
+                                //echo(pitBevelInner = pitBevelInner);
                                 make_bevel(pitBevelInner, 2 * height);
-                                mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRoundingRadius], resolution=roundingResolution, center = true);
+                                translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0])
+                                    mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRadius], resolution=roundingResolution, center = true);
                             }
 
                         for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){

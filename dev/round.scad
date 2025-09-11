@@ -50,7 +50,9 @@ pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
+pitWallThickness = [0.333,0.333,0.333,-0.0001];
+
+tongue = false;
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 0;
@@ -92,7 +94,10 @@ block(
         knobCentered = knobCentered,
         knobType = knobType,
         
-        tongue = true,
+        pit=pit,
+        pitWallThickness = pitWallThickness,
+        
+        tongue = tongue,
 
         holesZ = holesZ,
         
