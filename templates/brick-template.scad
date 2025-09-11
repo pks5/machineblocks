@@ -57,10 +57,16 @@ bevel3 = [0, 0];
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
+// Type of X Holes.
+holeXType = "technic";
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
+// Type of Y Holes.
+holeYType = "technic";
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
+// Type of Z Holes.
+holeZType = "technic";
 
 /* [Pit] */
 
@@ -104,8 +110,11 @@ block(
     pillars = pillars,
     
     holesX = holesX,
+    holeXType = holeXType,
     holesY = holesY,
+    holeYType = holeYType,
     holesZ = holesZ,
+    holeZType = holeZType,
     
     pit = pit,
     pitKnobs = pitKnobs,

@@ -139,10 +139,11 @@ module block(
         //Tongue
         tongue = false,
         tongueHeight = 2.0, //mm
-        tongueKnobSize = 5.0, //mm
-        tongueRoundingRadius = 0.0, //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueInnerRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueThickness = 1.1, //mm
         tongueOuterAdjustment = 0, //mm
+        tongueOffset = 1.5, //mm (0.5 * (gridSizeXY - referenceKnobSize))
         tongueClampHeight = 0.8, //mm
         tongueClampOffset = 0.4, //mm
         tongueClampThickness = 0.1, //mm
@@ -285,28 +286,9 @@ module block(
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
 
-    
-    echo(
-        preview= $preview,
-        previewQuality = previewQuality,
-        grid=grid,
-        baseHeight = resultingBaseHeight, 
-        heightWithKnobs = resultingBaseHeight + knobHeight,
-        size = [objectSizeX, objectSizeY],
-        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-        topPlateHeight = resultingTopPlateHeight, 
-        baseCutoutDepth = baseCutoutDepth,
-        pitDepth = resultingPitDepth, 
-        knobHeight = knobHeight,
-        wallThickness = wallThickness,
-        baseClampWallThickness = baseClampWallThickness,
-        baseCutoutZ = baseCutoutZ, 
-        topPlateZ = topPlateZ, 
-        xyScrewHolesZ = xyScrewHolesZ,
-        pitFloorZ = pitFloorZ,
-        bevelOuterAdjusted = bevelOuterAdjusted
-    );
-    
+    knobRectX = objectSizeX - 2*tongueOffset;
+    knobRectY = objectSizeY - 2*tongueOffset;
+
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
@@ -325,6 +307,8 @@ module block(
     offsetY = 0.5 * (grid[1] - 1);
 
     zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
+    tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : tongueRoundingRadius, zRadius);
+    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : tongueInnerRoundingRadius, tongueRadius);
 
     /*
     * START Functions
@@ -441,9 +425,33 @@ module block(
     * END Functions
     */
 
-    knobRectX = posX(endX) - posX(startX) + tongueKnobSize;
-    knobRectY = posY(endY) - posY(startY) + tongueKnobSize;
+    echo(
+        preview= $preview,
+        previewQuality = previewQuality,
+        grid=grid,
+        baseHeight = resultingBaseHeight, 
+        heightWithKnobs = resultingBaseHeight + knobHeight,
+        size = [objectSizeX, objectSizeY],
+        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+        topPlateHeight = resultingTopPlateHeight, 
+        baseCutoutDepth = baseCutoutDepth,
+        pitDepth = resultingPitDepth, 
+        knobHeight = knobHeight,
+        wallThickness = wallThickness,
+        baseClampWallThickness = baseClampWallThickness,
+        baseCutoutZ = baseCutoutZ, 
+        topPlateZ = topPlateZ, 
+        xyScrewHolesZ = xyScrewHolesZ,
+        pitFloorZ = pitFloorZ,
+        bevelOuterAdjusted = bevelOuterAdjusted,
+        knobRectX = knobRectX,
+        knobRectY = knobRectY,
+        tongueRadius = tongueRadius
+    );
 
+    /*
+    * START BLOCK
+    */
     translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
         union(){
 
@@ -1238,13 +1246,13 @@ module block(
                                 mb_rounded_block(
                                     size=[knobRectX + 2 * tongueOuterAdjustment, knobRectY + 2 * tongueOuterAdjustment, tongueHeight], 
                                     center = true, 
-                                    radius=[0,0,tongueRoundingRadius], 
+                                    radius=[0,0,tongueRadius], 
                                     resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                 );
                                 mb_rounded_block(
                                     size = [knobRectX - 2*tongueThickness, knobRectY - 2*tongueThickness, tongueHeight * cutMultiplier], 
                                     center=true,
-                                    radius=[0,0,pitRoundingRadius], 
+                                    radius=[0,0,tongueRadiusInner], 
                                     resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                 );
 
@@ -1275,13 +1283,13 @@ module block(
                                         mb_rounded_block(
                                             size=[knobRectX + 2 * tongueOuterAdjustment + 2*tongueClampThickness, knobRectY + 2 * tongueOuterAdjustment + 2*tongueClampThickness, tongueClampHeight], 
                                             center = true, 
-                                            radius=[0,0,tongueRoundingRadius], 
+                                            radius=[0,0,tongueRadius], 
                                             resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                         );
                                         mb_rounded_block(
                                             size = [knobRectX - 2*tongueThickness - 2*tongueClampThickness, knobRectY - 2*tongueThickness - 2*tongueClampThickness, tongueClampHeight*cutMultiplier], 
                                             center=true, 
-                                            radius=[0,0,pitRoundingRadius], 
+                                            radius=[0,0,tongueRadiusInner], 
                                             resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                                         );
                                     

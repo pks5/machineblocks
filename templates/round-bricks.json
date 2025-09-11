@@ -24,6 +24,17 @@
                     }
                 },
                 {
+                    "name": "Round Brick 2x2 with Z Hole",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 8,
+                        "holesZ": true,
+                        "holeZType": "axis"
+                    }
+                },
+                {
                     "name": "Round Brick 4x4",
                     "parameters": {
                         "brickSizeX": 4,

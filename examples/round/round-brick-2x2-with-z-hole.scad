@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Rounded Plate 8x6
+* Round Brick 2x2 with Z Hole
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -18,18 +18,18 @@ include <../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 8; // [1:32]  
+brickSizeX = 2; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 6; // [1:32]  
+brickSizeY = 2; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 1; // [1:24]
+baseLayers = 3; // [1:24]
 
 /* [Base] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Rounding Radius Z
-baseRoundingRadiusZ = 16;
+baseRoundingRadiusZ = 8;
 // Whether to draw pillars.
 pillars = true;
 
@@ -64,9 +64,9 @@ holesY = false;
 // Type of Y Holes.
 holeYType = "technic";
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holesZ = true;
 // Type of Z Holes.
-holeZType = "technic";
+holeZType = "axis";
 
 /* [Pit] */
 
