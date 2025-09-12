@@ -42,7 +42,7 @@ basePitKnobType = "classic"; // [classic, technic]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = false;
 // Pit wall thickness
-basePitWallThickness = 0.333;
+basePitWallThickness = 0.33;
 
 // Whether the base should have a tongue
 baseTongue = true;
@@ -60,7 +60,7 @@ lidKnobCentered = false;
 // Whether lid should have pillars
 lidPillars = true;
 // Whether lid should be permanent (non removable)
-lidPermanent = false;
+lidPermanent = true;
 
 /* [Quality] */
 

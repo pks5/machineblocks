@@ -8,7 +8,7 @@ function mb_base_rounding_radius_z(radius) = radius[2] == undef ?
 /*
 * Creates a four dimensional vector with the inner rounding radius
 */
-function mb_base_cutout_radius(cutoutRadius, baseRadiusZ) = cutoutRadius == 0 ? 0 : (cutoutRadius[0] == undef ? 
+function mb_base_cutout_radius(cutoutRadius, baseRadiusZ) = cutoutRadius == 0 ? [0,0,0,0] : (cutoutRadius[0] == undef ? 
     [
         mb_calc_rounding_radius(cutoutRadius, baseRadiusZ[0]), 
         mb_calc_rounding_radius(cutoutRadius, baseRadiusZ[1]),

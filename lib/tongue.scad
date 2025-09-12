@@ -84,14 +84,14 @@ module mb_tongue(
                             translate([(-0.5 + gap[0]) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
                                 cube([
                                     tongueThicknessAdjusted * cutMultiplier,
-                                    pitSizeY  - (gap[1] + gap[2]) * gridSizeXY, 
+                                    pitSizeY - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeY - pitSizeY, 
                                     tongueHeight * cutMultiplier
                                     ], center = true);
                         }  
                         else{
                             translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                 cube([
-                                    pitSizeX  - (gap[1] + gap[2]) * gridSizeXY, 
+                                    pitSizeX  - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeX - pitSizeX, 
                                     tongueThicknessAdjusted * cutMultiplier, 
                                     tongueHeight * cutMultiplier
                                     ], center = true);     
@@ -136,14 +136,14 @@ module mb_tongue(
                                         cube(
                                             [
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
-                                            pitSizeY  - (gap[1] + gap[2]) * gridSizeXY - 2 * tongueClampThickness, 
+                                            pitSizeY  - (gap[1] + gap[2]) * gridSizeXY - 2 * tongueClampThickness + tongueInnerSizeY - pitSizeY, 
                                             tongueClampHeight * cutMultiplier
                                             ], center = true);
                                 }  
                                 else{
                                     translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                         cube([
-                                            pitSizeX  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness, 
+                                            pitSizeX  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness + tongueInnerSizeX - pitSizeX, 
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
                                             tongueClampHeight * cutMultiplier
                                             ], center = true);     

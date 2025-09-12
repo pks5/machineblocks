@@ -1053,6 +1053,9 @@ module block(
 
                         tongueSizeX = objectSizeX - 2 * tongueOffset + tongueThicknessAdjustment;
                         tongueSizeY = objectSizeY - 2 * tongueOffset + tongueThicknessAdjustment;
+                        tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
+                        tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
+                        tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
 
                         /*
                         * Groove Wall Gaps X
@@ -1062,12 +1065,20 @@ module block(
                             for (side = [ 0 : 1 : 1 ]){
                                 gapLength = drawWallGapX(a, side, 0);
                                 if(gapLength > 0){
-                                    translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
+                                    translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset]){
                                         cube([
                                             gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
                                             objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
                                             tongueGrooveDepth + cutOffset
                                         ], center=true); 
+                                        
+                                        translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                            cube([
+                                                gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
+                                                objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                                tongueClampHeight
+                                            ], center=true); 
+                                    }
                                 }
                             }
                         }
@@ -1080,12 +1091,20 @@ module block(
                             for (side = [ 0 : 1 : 1 ]){
                                 gapLength = drawWallGapY(b, side, 0);
                                 if(gapLength > 0){
-                                    translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
+                                    translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset]){
                                         cube([
                                             objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
                                             gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
                                             tongueGrooveDepth + cutOffset
                                         ], center=true);   
+
+                                        translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                            cube([
+                                                objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
+                                                gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
+                                                tongueClampHeight
+                                            ], center=true);   
+                                    }
                                 }
                             }
                         }
