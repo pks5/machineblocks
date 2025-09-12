@@ -1026,7 +1026,7 @@ module block(
                 * Cut Groove
                 */
                 if(baseCutoutType == "groove"){
-                    translate([0, 0, sideZ(0)]){ 
+                    translate([0, 0, sideZ(0) - 0.5*cutOffset + 0.5*tongueGrooveDepth]){ 
                         mb_tongue(
                             gridSizeXY = gridSizeXY,
                             objectSize = [objectSizeX, objectSizeY],
@@ -1035,11 +1035,11 @@ module block(
                             bevelOuter = bevelOuter,
                             tongueOffset = tongueOffset,
                             tongueThickness = tongueThickness,
-                            tongueThicknessAdjustment = tongueThicknessAdjustment,
-                            tongueHeight = tongueHeight,
+                            tongueThicknessAdjustment = 0,
+                            tongueHeight = tongueGrooveDepth + cutOffset,
                             tongueClampThickness = tongueClampThickness,
                             tongueClampHeight = tongueClampHeight,
-                            tongueClampOffset = tongueClampOffset,
+                            tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
                             tongueRoundingRadius = tongueRoundingRadius,
                             tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                             pit = pit,

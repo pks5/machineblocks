@@ -82,11 +82,19 @@ module mb_tongue(
                         gap = pitWallGaps[gapIndex];
                         if(gap[0] < 2){
                             translate([(-0.5 + gap[0]) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
-                                cube([tongueThicknessAdjusted * cutMultiplier, pitSizeY  - (gap[1] + gap[2]) * gridSizeXY, tongueHeight * cutMultiplier], center = true);
+                                cube([
+                                    tongueThicknessAdjusted * cutMultiplier,
+                                    pitSizeY  - (gap[1] + gap[2]) * gridSizeXY, 
+                                    tongueHeight * cutMultiplier
+                                    ], center = true);
                         }  
                         else{
                             translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
-                                cube([pitSizeX  - (gap[1] + gap[2]) * gridSizeXY , tongueThicknessAdjusted * cutMultiplier, tongueHeight * cutMultiplier], center = true);     
+                                cube([
+                                    pitSizeX  - (gap[1] + gap[2]) * gridSizeXY, 
+                                    tongueThicknessAdjusted * cutMultiplier, 
+                                    tongueHeight * cutMultiplier
+                                    ], center = true);     
                         } 
                     }  
                 }
