@@ -134,8 +134,8 @@ module mb_base_cutout(
                 /*
                 * Clamp Skirt
                 */
-                intersection(){
-                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+                translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+                    intersection(){
                         make_bevel(bevelClamp, baseClampHeight * cutMultiplier);
                         mb_rounded_block(
                             size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
