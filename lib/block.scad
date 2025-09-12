@@ -144,7 +144,6 @@ module block(
         tongueInnerRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueThickness = 1.1, //mm
         tongueThicknessAdjustment = 0,
-        tongueOuterAdjustment = 0, //mm
         tongueOffset = 1.5, //mm (0.5 * (gridSizeXY - referenceKnobSize))
         tongueClampHeight = 0.8, //mm
         tongueClampOffset = 0.4, //mm
@@ -1028,7 +1027,27 @@ module block(
                 */
                 if(baseCutoutType == "groove"){
                     translate([0, 0, sideZ(0)]){ 
-                        
+                        mb_tongue(
+                            gridSizeXY = gridSizeXY,
+                            objectSize = [objectSizeX, objectSizeY],
+                            baseRoundingRadius = baseRoundingRadius,
+                            baseRoundingResolution = baseRoundingResolution,
+                            bevelOuter = bevelOuter,
+                            tongueOffset = tongueOffset,
+                            tongueThickness = tongueThickness,
+                            tongueThicknessAdjustment = tongueThicknessAdjustment,
+                            tongueHeight = tongueHeight,
+                            tongueClampThickness = tongueClampThickness,
+                            tongueClampHeight = tongueClampHeight,
+                            tongueClampOffset = tongueClampOffset,
+                            tongueRoundingRadius = tongueRoundingRadius,
+                            tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                            pit = pit,
+                            pitWallGaps = pitWallGaps,
+                            pitSizeX = pitSizeX,
+                            pitSizeY = pitSizeY,
+                            previewQuality = previewQuality
+                        );
                     }   
                 }
             } // End main difference
@@ -1149,7 +1168,6 @@ module block(
                         tongueClampThickness = tongueClampThickness,
                         tongueClampHeight = tongueClampHeight,
                         tongueClampOffset = tongueClampOffset,
-                        tongueOuterAdjustment = tongueOuterAdjustment,
                         tongueRoundingRadius = tongueRoundingRadius,
                         tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                         pit = pit,
