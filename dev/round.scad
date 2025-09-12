@@ -50,7 +50,7 @@ pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = [0.333,0.333,0.333,-0.0001];
+pitWallThickness = [0.333,0.333,0.333,0.333];
 
 tongue = false;
 

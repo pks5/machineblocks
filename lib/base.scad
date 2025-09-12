@@ -287,77 +287,71 @@ module mb_base(
         difference(){
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
                 
+                difference(){ // Subtract relief cut and slanting from base
+                    intersection(){
+                        make_bevel(bevelOuterAdjusted, height);
 
-                    difference(){
-                        intersection(){
-                            /*
-                            translate([0,0,-0.5*height]){
-                                linear_extrude(height = height)
-                                    polygon(points = bevelOuterAdjusted);
-                            }*/
-                            make_bevel(bevelOuterAdjusted, height);
+                        mb_rounded_block(
+                            size = size, 
+                            center=true, 
+                            resolution = roundingResolution,
+                            radius = roundingRadius
+                        );
+                    }
 
-                            mb_rounded_block(
-                                size = size, 
-                                center=true, 
-                                resolution = roundingResolution,
-                                radius = roundingRadius
-                            );
-                        }
+                    if(baseReliefCut){
+                        translate([0,0,-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
+                            difference(){
+                                cube(
+                                    size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], baseReliefCutHeight + cutOffset], 
+                                    center=true
+                                );
 
-                        if(baseReliefCut){
-                            translate([0,0,-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
-                                difference(){
-                                    cube(
-                                        size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], baseReliefCutHeight + cutOffset], 
-                                        center=true
+                                intersection(){
+                                    make_bevel(bevelReliefCut, cutMultiplier * (baseReliefCutHeight + cutOffset));
+                        
+                                    mb_rounded_block(
+                                        size = [objectSize[0] - 2*baseReliefCutThickness, objectSize[1] - 2*baseReliefCutThickness, cutMultiplier * (baseReliefCutHeight + cutOffset)], 
+                                        center=true, 
+                                        resolution = roundingResolution,
+                                        radius = reliefRadius
                                     );
-
-                                    intersection(){
-                                        make_bevel(bevelReliefCut, cutMultiplier * (baseReliefCutHeight + cutOffset));
-                            
-                                        mb_rounded_block(
-                                            size = [objectSize[0] - 2*baseReliefCutThickness, objectSize[1] - 2*baseReliefCutThickness, cutMultiplier * (baseReliefCutHeight + cutOffset)], 
-                                            center=true, 
-                                            resolution = roundingResolution,
-                                            radius = reliefRadius
-                                        );
-                                    }
                                 }
                             }
                         }
+                    }
 
-                        /*
-                        * Slanting
-                        */
-                        if(slanting != false){
-                            if(slanting[0] != 0){
-                                slanting0 = slantingSize(0);
-                                translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
-                                    mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
-                            }
+                    /*
+                    * Slanting
+                    */
+                    if(slanting != false){
+                        if(slanting[0] != 0){
+                            slanting0 = slantingSize(0);
+                            translate([-0.5 * (objectSizeXAdjusted - slanting0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
+                                mb_slant_prism(0, slanting0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
+                        }
 
-                            if(slanting[1] != 0){
-                                slanting1 = slantingSize(1);
-                                translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
-                                    mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
-                            }
+                        if(slanting[1] != 0){
+                            slanting1 = slantingSize(1);
+                            translate([0.5 * (objectSizeXAdjusted - slanting1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
+                                mb_slant_prism(1, slanting1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
+                        }
 
-                            if(slanting[2] != 0){
-                                slanting2 = slantingSize(2);
-                                translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
-                                    mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
-                            }
+                        if(slanting[2] != 0){
+                            slanting2 = slantingSize(2);
+                            translate([0, -0.5 * (objectSizeYAdjusted - slanting2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
+                                mb_slant_prism(2, slanting2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
+                        }
 
-                            if(slanting[3] != 0){
-                                slanting3 = slantingSize(3);
-                                translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
-                                    mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
-                            }
+                        if(slanting[3] != 0){
+                            slanting3 = slantingSize(3);
+                            translate([0, 0.5 * (objectSizeYAdjusted - slanting3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
+                                mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
                         }
                     }
+                } // End difference
                 
-            }
+            } // End translate
 
             /*
             * Pit
@@ -368,39 +362,31 @@ module mb_base(
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);
-                //echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY, pitDepth = pitDepth, pitWallThickness = pitWallThickness);
-
-                
                     
-                        translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
-                            intersection(){
-                                /*
-                                translate([0,0,-height]){
-                                    linear_extrude(height = 2 * height)
-                                        polygon(points = pitBevelInner);
-                                }
-                                */
-                                //echo(pitBevelInner = pitBevelInner);
-                                make_bevel(pitBevelInner, 2 * height);
-                                translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0])
-                                    mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRadius], resolution=roundingResolution, center = true);
-                            }
+                translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+                    intersection(){
+                        make_bevel(pitBevelInner, pitDepth + cutOffset);
+                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0])
+                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRadius], resolution=roundingResolution, center = true);
+                    }
 
-                        for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                            gap = pitWallGaps[gapIndex];
-                            if(gap[0] < 2){
-                                translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
-                                    cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
-                            }  
-                            else{
-                                translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
-                                    cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
-                            } 
-                        }
-                    
-                
-            }
+                //Pit Wall Gaps
+                for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                    gap = pitWallGaps[gapIndex];
+                    if(gap[0] < 2){
+                        translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
+                            cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
+                    }  
+                    else{
+                        translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
+                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
+                    } 
+                }
+            } // End Pit
 
+            /*
+            * Connectors
+            */
             for (con = [ 0 : 1 : len(connectors)-1 ]){
                 if(connectors[con][1] == 1){
                     mb_connectors(side = connectors[con][0],
@@ -425,7 +411,7 @@ module mb_base(
             }
 
             
-        }
+        } // End difference
 
         /*
         * Connectors
@@ -442,5 +428,5 @@ module mb_base(
                         gs = gridSizeXY);
             }
         }
-    }
-}
+    } // End union
+} // End mb_base
