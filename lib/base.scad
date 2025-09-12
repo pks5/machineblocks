@@ -87,8 +87,7 @@ module mb_base_cutout(
 
     bevelClamp = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness, baseClampWallThickness, baseClampWallThickness, baseClampWallThickness]);
     
-    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
-
+    
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
     function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
 
@@ -103,11 +102,6 @@ module mb_base_cutout(
             union(){
                 intersection(){
                 
-                    /*
-                    translate([0,0,-baseHeight]){
-                        linear_extrude(height = 2*baseHeight)
-                            polygon(points = bevelInner);
-                    }*/
                     make_bevel(bevelInner, 2*baseHeight);
                     
                     union(){
@@ -137,60 +131,22 @@ module mb_base_cutout(
                     }    
                 }
 
+                /*
+                * Clamp Skirt
+                */
                 intersection(){
-                    /*
-                    translate([0,0,-baseHeight]){
-                        linear_extrude(height = 2*baseHeight)
-                            polygon(points = bevelClamp);
-                    }*/
-                    make_bevel(bevelClamp, 2*baseHeight);
-
-                    /*
-                    * Clamp Skirt
-                    */
-                    translate([0, 0, baseClampOffset + 0.5*(baseClampHeight - baseHeight)])
+                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+                        make_bevel(bevelClamp, baseClampHeight * cutMultiplier);
                         mb_rounded_block(
                             size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
                             center = true, 
                             radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
                             resolution=roundingResolution
                         );
-
-                }
-            }
-            
-
-            /*
-            * Plate Helpers
-            */
-            if(topPlateHelpers){
-                translate([0, 0, topPlateZ - 0.5 * (topPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
-                    difference(){
-                        cube(
-                            size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], topPlateHelperHeight + cutOffset], 
-                            center=true
-                        );
-
-                        intersection(){
-                            /*
-                            translate([0,0,-baseHeight]){
-                                linear_extrude(height = 2*baseHeight)
-                                    polygon(points = bevelTopPlateHelper);
-                            }*/
-
-                            make_bevel(bevelTopPlateHelper, 2*baseHeight);
-                
-                            mb_rounded_block(
-                                size = [objectSize[0] - 2*wallThickness - 2*topPlateHelperThickness, objectSize[1] - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * topPlateHelperHeight + cutOffset], 
-                                center=true, 
-                                resolution = roundingResolution,
-                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius]
-                            );
-                        }
                     }
                 }
             }
-
+            
             /*
             * Slanting
             */

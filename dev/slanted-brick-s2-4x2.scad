@@ -17,9 +17,9 @@ use <../lib/block.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 3; // [1:32]  
+brickSizeX = 4; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 3; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 3; // [1:24]
 
@@ -28,7 +28,7 @@ baseLayers = 3; // [1:24]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether to draw knobs.
-knobs = false;
+knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
@@ -37,7 +37,7 @@ knobType = "classic"; // [classic, technic]
 // Whether to draw pillars.
 pillars = true;
 
-tongue = true;
+tongue = false;
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
@@ -47,9 +47,9 @@ holesY = false;
 holesZ = false;
 
 // Whether brick should have a pit
-pit = false;
+pit = true;
 // Whether knobs should be drawn inside pit
-pitKnobs = false;
+pitKnobs = true;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 1;
 
@@ -122,11 +122,11 @@ block(
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
-    gridOffset = [3,0,0],
+    gridOffset = [4,0,0],
     baseLayers = 1,
     baseCutoutType = "groove",
     
-    knobs = knobs,
+    knobs = true,
     knobCentered = knobCentered,
     knobType = knobType,
     
@@ -135,10 +135,6 @@ block(
     holesX = holesX,
     holesY = holesY,
     holesZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
     
     bevelHorizontal = [[2,0],[-1,0],[0,0],[0,0]],
     

@@ -522,6 +522,68 @@ module block(
                                     bevelInner = bevelInner
                                 );
 
+                                /*
+                                * Plate Helpers
+                                */
+                                if(topPlateHelpers){
+                                    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
+                                    topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, zRadius);
+
+                                    translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                                        difference(){
+                                            cube(
+                                                size = [objectSizeX, objectSizeY, topPlateHelperHeight + cutOffset], 
+                                                center=true
+                                            );
+
+                                            intersection(){
+                                                make_bevel(bevelTopPlateHelper, cutMultiplier * (topPlateHelperHeight + cutOffset));
+                                    
+                                                mb_rounded_block(
+                                                    size = [objectSizeX - 2*wallThickness - 2*topPlateHelperThickness, objectSizeY - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * (topPlateHelperHeight + cutOffset)], 
+                                                    center=true, 
+                                                    resolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                                    radius = topPlateHelperRoundingRadius
+                                                );
+                                            }
+
+                                            for (a = [ startX : 1 : endX ]){
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    gapLength = drawWallGapX(a, side, 0);
+                                                    if(gapLength > 0){
+                                                        translate([posX(a + 0.5*(gapLength-1)), sideY(side), 0]){
+                                                            cube([
+                                                                gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                            ], center=true); 
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            /*
+                                            * Groove Wall Gaps Y
+                                            */
+                                            //color([0.608, 0.349, 0.714]) //9b59b6
+                                            for (b = [ startY : 1 : endY ]){
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    gapLength = drawWallGapY(b, side, 0);
+                                                    if(gapLength > 0){
+                                                        translate([sideX(side), posY(b + 0.5*(gapLength-1)), 0]){
+                                                            cube([
+                                                                2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                            ], center=true);   
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
                                 if(stabilizerGrid){
                                     difference(){
                                         /*
@@ -817,13 +879,6 @@ module block(
                                     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
                                     cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
-                                    
-                                    //TODO use a difference height
-                                    /*
-                                    translate([0,0,-0.5 * resultingBaseHeight]){
-                                        linear_extrude(height = resultingBaseHeight)
-                                            polygon(points = bevelKnobCut);
-                                    }*/
                                     
                                     make_bevel(bevelKnobCut, resultingBaseHeight);
                                     

@@ -18,7 +18,7 @@ use <../lib/axis.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 4; // [1:32]  
+brickSizeX = 3; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
 brickSizeY = 3; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
@@ -29,7 +29,7 @@ baseLayers = 3; // [1:24]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether to draw knobs.
-knobs = false;
+knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
@@ -50,7 +50,7 @@ pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = [0.333,0.333,0.333,0.333];
+pitWallThickness = 1;
 
 tongue = false;
 
@@ -96,6 +96,7 @@ block(
         
         pit=pit,
         pitWallThickness = pitWallThickness,
+        pitKnobs = pitKnobs,
         
         tongue = tongue,
 
