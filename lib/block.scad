@@ -143,6 +143,7 @@ module block(
         tongueRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueInnerRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueThickness = 1.1, //mm
+        tongueThicknessAdjustment = 0,
         tongueOuterAdjustment = 0, //mm
         tongueOffset = 1.5, //mm (0.5 * (gridSizeXY - referenceKnobSize))
         tongueClampHeight = 0.8, //mm
@@ -286,9 +287,6 @@ module block(
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
-
-    knobRectX = objectSizeX - 2*tongueOffset;
-    knobRectY = objectSizeY - 2*tongueOffset;
 
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -441,9 +439,7 @@ module block(
         topPlateZ = topPlateZ, 
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
-        bevelOuterAdjusted = bevelOuterAdjusted,
-        knobRectX = knobRectX,
-        knobRectY = knobRectY
+        bevelOuterAdjusted = bevelOuterAdjusted
     );
 
     /*
@@ -1032,104 +1028,7 @@ module block(
                 */
                 if(baseCutoutType == "groove"){
                     translate([0, 0, sideZ(0)]){ 
-                        difference(){
-                            union(){
-                                translate([0, 0, 0.5 * tongueGrooveDepth - 0.5 * cutOffset]){
-                                    difference(){
-                                        mb_rounded_block(
-                                            size=[knobRectX + 2 * tongueOuterAdjustment, knobRectY + 2 * tongueOuterAdjustment, tongueGrooveDepth + cutOffset], 
-                                            center = true,
-                                            radius = [0,0,tongueRoundingRadius], 
-                                            resolution=($preview ? previewQuality : 1) * baseRoundingResolution
-                                        );
-                                        mb_rounded_block(
-                                            size = [knobRectX - 2*tongueThickness, knobRectY - 2*tongueThickness, (tongueGrooveDepth + cutOffset)*cutMultiplier], 
-                                            center=true,
-                                            radius = [0,0,pitRoundingRadius], 
-                                            resolution=($preview ? previewQuality : 1) * baseRoundingResolution
-                                        );
-                                        /*
-                                        * Cut knobGrooveGaps
-                                        */
-                                        for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                                            gap = pitWallGaps[gapIndex];
-                                            if(gap[0] < 2){
-                                                translate([(-0.5 + gap[0]) * (knobRectX + 2*tongueOuterAdjustment - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
-                                                    cube([(tongueThickness + tongueOuterAdjustment)*cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);
-                                            }  
-                                            else{
-                                                translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment - tongueThickness), 0])
-                                                    cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , (tongueThickness + tongueOuterAdjustment)*cutMultiplier, (tongueGrooveDepth + cutOffset)*cutMultiplier], center = true);     
-                                            } 
-                                        }   
-                                    }
-                                }
-                                
-                                //Top Part with clamp
-                                if(tongueClampThickness > 0){
-                                    translate([0, 0, tongueHeight - tongueClampOffset - 0.5 * tongueClampHeight]){    
-                                        difference(){       
-                                            mb_rounded_block(
-                                                size=[knobRectX + 2 * tongueOuterAdjustment + 2 * tongueClampThickness, knobRectY + 2 * tongueOuterAdjustment + 2 * tongueClampThickness, tongueClampHeight], 
-                                                center = true,
-                                                radius = [0,0,tongueRoundingRadius], 
-                                                resolution=($preview ? previewQuality : 1) * baseRoundingResolution
-                                            );
-                                            mb_rounded_block(
-                                                size = [knobRectX - 2*tongueThickness - 2*tongueClampThickness, knobRectY - 2*tongueThickness - 2*tongueClampThickness, tongueClampHeight*cutMultiplier], 
-                                                center=true,
-                                                radius = [0,0,pitRoundingRadius], 
-                                                resolution=($preview ? previewQuality : 1) * baseRoundingResolution
-                                            );
-                                            /*
-                                            * Cut knobGrooveGaps
-                                            */
-                                            for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                                                gap = pitWallGaps[gapIndex];
-                                                if(gap[0] < 2){
-                                                    translate([(-0.5 + gap[0]) * (knobRectX + 2 * tongueOuterAdjustment + 2 * tongueClampThickness - tongueThickness), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
-                                                        cube([(tongueThickness + tongueOuterAdjustment + 2 * tongueClampThickness)*cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY - 2 * tongueClampThickness, tongueClampHeight*cutMultiplier], center = true);
-                                                }  
-                                                else{
-                                                    translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (knobRectY + 2*tongueOuterAdjustment + 2*tongueClampThickness - tongueThickness), 0])
-                                                        cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness , (tongueThickness + tongueOuterAdjustment + 2*tongueClampThickness)*cutMultiplier, tongueClampHeight*cutMultiplier], center = true);     
-                                                } 
-                                            }   
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        translate([0, 0, 0.5 * tongueGrooveDepth]){
-                            /*
-                            * Wall Gaps X
-                            */
-                            //color([0.608, 0.349, 0.714]) //9b59b6
-                            for (a = [ startX : 1 : endX ]){
-                                for (side = [ 0 : 1 : 1 ]){
-                                    gapLength = drawWallGapX(a, side, 0);
-                                    if(gapLength > 0){
-                                        translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
-                                            cube([gapLength*gridSizeXY - (objectSizeX - (knobRectX + 2 * tongueOuterAdjustment)) + cutTolerance, (objectSizeY - (knobRectY + 2 * tongueOuterAdjustment) + sAdjustment[2 + side] + cutTolerance), tongueGrooveDepth + cutOffset], center=true); 
-                                    }
-                                }
-                            }
-                            
-                            /*
-                            * Wall Gaps Y
-                            */
-                            //color([0.608, 0.349, 0.714]) //9b59b6
-                            for (b = [ startY : 1 : endY ]){
-                                for (side = [ 0 : 1 : 1 ]){
-                                    gapLength = drawWallGapY(b, side, 0);
-                                    if(gapLength > 0){
-                                        translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
-                                                cube([(objectSizeX - (knobRectX + 2 * tongueOuterAdjustment) + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - (objectSizeY - (knobRectY + 2 * tongueOuterAdjustment)) + cutTolerance, tongueGrooveDepth + cutOffset], center=true);   
-                                    }
-                                }
-                            }
-                        }
+                        
                     }   
                 }
             } // End main difference
@@ -1245,6 +1144,7 @@ module block(
                         bevelOuter = bevelOuter,
                         tongueOffset = tongueOffset,
                         tongueThickness = tongueThickness,
+                        tongueThicknessAdjustment = tongueThicknessAdjustment,
                         tongueHeight = tongueHeight,
                         tongueClampThickness = tongueClampThickness,
                         tongueClampHeight = tongueClampHeight,
