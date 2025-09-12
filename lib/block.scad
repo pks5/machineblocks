@@ -1026,28 +1026,71 @@ module block(
                 * Cut Groove
                 */
                 if(baseCutoutType == "groove"){
-                    translate([0, 0, sideZ(0) - 0.5*cutOffset + 0.5*tongueGrooveDepth]){ 
-                        mb_tongue(
-                            gridSizeXY = gridSizeXY,
-                            objectSize = [objectSizeX, objectSizeY],
-                            baseRoundingRadius = baseRoundingRadius,
-                            baseRoundingResolution = baseRoundingResolution,
-                            bevelOuter = bevelOuter,
-                            tongueOffset = tongueOffset,
-                            tongueThickness = tongueThickness,
-                            tongueThicknessAdjustment = 0,
-                            tongueHeight = tongueGrooveDepth + cutOffset,
-                            tongueClampThickness = tongueClampThickness,
-                            tongueClampHeight = tongueClampHeight,
-                            tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
-                            tongueRoundingRadius = tongueRoundingRadius,
-                            tongueInnerRoundingRadius = tongueInnerRoundingRadius,
-                            pit = pit,
-                            pitWallGaps = pitWallGaps,
-                            pitSizeX = pitSizeX,
-                            pitSizeY = pitSizeY,
-                            previewQuality = previewQuality
-                        );
+                    translate([0, 0, sideZ(0) + 0.5*tongueGrooveDepth]){ 
+                        translate([0, 0, -0.5 * cutOffset]){
+                            mb_tongue(
+                                gridSizeXY = gridSizeXY,
+                                objectSize = [objectSizeX, objectSizeY],
+                                baseRoundingRadius = baseRoundingRadius,
+                                baseRoundingResolution = baseRoundingResolution,
+                                bevelOuter = bevelOuter,
+                                tongueOffset = tongueOffset,
+                                tongueThickness = tongueThickness,
+                                tongueThicknessAdjustment = 0,
+                                tongueHeight = tongueGrooveDepth + cutOffset,
+                                tongueClampThickness = tongueClampThickness,
+                                tongueClampHeight = tongueClampHeight,
+                                tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
+                                tongueRoundingRadius = tongueRoundingRadius,
+                                tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                                pit = pit,
+                                pitWallGaps = pitWallGaps,
+                                pitSizeX = pitSizeX,
+                                pitSizeY = pitSizeY,
+                                previewQuality = previewQuality
+                            );
+                        }
+
+                        tongueSizeX = objectSizeX - 2 * tongueOffset + tongueThicknessAdjustment;
+                        tongueSizeY = objectSizeY - 2 * tongueOffset + tongueThicknessAdjustment;
+
+                        /*
+                        * Groove Wall Gaps X
+                        */
+                        //color([0.608, 0.349, 0.714]) //9b59b6
+                        for (a = [ startX : 1 : endX ]){
+                            for (side = [ 0 : 1 : 1 ]){
+                                gapLength = drawWallGapX(a, side, 0);
+                                if(gapLength > 0){
+                                    translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset])
+                                        cube([
+                                            gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
+                                            objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                            tongueGrooveDepth + cutOffset
+                                        ], center=true); 
+                                }
+                            }
+                        }
+                        
+                        /*
+                        * Groove Wall Gaps Y
+                        */
+                        //color([0.608, 0.349, 0.714]) //9b59b6
+                        for (b = [ startY : 1 : endY ]){
+                            for (side = [ 0 : 1 : 1 ]){
+                                gapLength = drawWallGapY(b, side, 0);
+                                if(gapLength > 0){
+                                    translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset])
+                                        cube([
+                                            objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
+                                            gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
+                                            tongueGrooveDepth + cutOffset
+                                        ], center=true);   
+                                }
+                            }
+                        }
+                        
+                        
                     }   
                 }
             } // End main difference
