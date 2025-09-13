@@ -50,6 +50,8 @@ module mb_base_cutout(
     //Slanting
     slanting,
     slantingLowerHeight,
+
+    beveled,
     bevelHorizontal,
     bevelOuter,
     bevelInner
@@ -106,7 +108,7 @@ module mb_base_cutout(
                         translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
                             
                             mb_beveled_rounded_block(
-                                bevel = bevelInner,
+                                bevel = beveled ? bevelInner : false,
                                 sizeX = objectSize[0] - 2*wallThickness,
                                 sizeY = objectSize[1] - 2*wallThickness,
                                 height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
@@ -130,7 +132,7 @@ module mb_base_cutout(
                         if(baseClampOffset > 0){
                             translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
                                 mb_beveled_rounded_block(
-                                    bevel = bevelInner,
+                                    bevel = beveled ? bevelInner : false,
                                     sizeX = objectSize[0] - 2 * wallThickness,
                                     sizeY = objectSize[1] - 2 * wallThickness,
                                     height = baseClampOffset + cutOffset,
@@ -157,7 +159,7 @@ module mb_base_cutout(
                 */
                 translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
                     mb_beveled_rounded_block(
-                        bevel = bevelClamp,
+                        bevel = beveled ? bevelClamp : false,
                         sizeX = objectSize[0] - 2 * baseClampWallThickness,
                         sizeY = objectSize[1] - 2 * baseClampWallThickness,
                         height = baseClampHeight * cutMultiplier,
@@ -234,6 +236,7 @@ module mb_base(
     pitWallGaps,
     slanting,
     slantingLowerHeight,
+    beveled,
     bevelHorizontal,
     bevelOuter,
     bevelOuterAdjusted,
@@ -276,7 +279,7 @@ module mb_base(
                 
                 difference(){ // Subtract relief cut and slanting from base
                     mb_beveled_rounded_block(
-                        bevel = bevelOuterAdjusted,
+                        bevel = beveled ? bevelOuterAdjusted : false,
                         sizeX = objectSizeXAdjusted,
                         sizeY = objectSizeYAdjusted,
                         height = height,
@@ -305,7 +308,7 @@ module mb_base(
                                 );
 
                                 mb_beveled_rounded_block(
-                                    bevel = bevelReliefCut,
+                                    bevel = beveled ? bevelReliefCut : false,
                                     sizeX = objectSize[0] - 2*baseReliefCutThickness,
                                     sizeY = objectSize[1] - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
@@ -377,7 +380,7 @@ module mb_base(
                             mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=roundingResolution, center = true);
                     }
                 }
-                
+
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                     gap = pitWallGaps[gapIndex];

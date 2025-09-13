@@ -482,6 +482,7 @@ module block(
                                 pitWallGaps = pitWallGaps,
                                 slanting = slanting,
                                 slantingLowerHeight = slantingLowerHeight,
+                                beveled = beveled,
                                 bevelHorizontal = bevelHorizontal,
                                 bevelOuter = bevelOuter,
                                 bevelOuterAdjusted = bevelOuterAdjusted,
@@ -526,6 +527,8 @@ module block(
                                         
                                         slanting = slanting,
                                         slantingLowerHeight = slantingLowerHeight,
+
+                                        beveled = beveled,
                                         bevelHorizontal = bevelHorizontal,
                                         bevelOuter = bevelOuter,
                                         bevelInner = bevelInner
@@ -940,6 +943,7 @@ module block(
                             pitWallGaps = pitWallGaps,
                             slanting = slanting,
                             slantingLowerHeight = slantingLowerHeight,
+                            beveled = beveled,
                             bevelHorizontal = bevelHorizontal,
                             bevelOuter = bevelOuter,
                             bevelOuterAdjusted = bevelOuterAdjusted,
@@ -1113,6 +1117,7 @@ module block(
                                 objectSize = [objectSizeX, objectSizeY],
                                 baseRoundingRadius = baseRoundingRadius,
                                 baseRoundingResolution = baseRoundingResolution,
+                                beveled = beveled,
                                 bevelOuter = bevelOuter,
                                 tongueOffset = tongueOffset,
                                 tongueThickness = tongueThickness,
@@ -1302,6 +1307,7 @@ module block(
                         objectSize = [objectSizeX, objectSizeY],
                         baseRoundingRadius = baseRoundingRadius,
                         baseRoundingResolution = baseRoundingResolution,
+                        beveled = beveled,
                         bevelOuter = bevelOuter,
                         tongueOffset = tongueOffset,
                         tongueThickness = tongueThickness,

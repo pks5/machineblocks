@@ -8,6 +8,7 @@ module mb_tongue(
     objectSize,
     baseRoundingRadius,
     baseRoundingResolution,
+    beveled,
     bevelOuter,
     tongueOffset,
     tongueThickness,
@@ -55,7 +56,7 @@ module mb_tongue(
         union(){
             difference(){
                 mb_beveled_rounded_block(
-                    bevel = bevelTongueOuter,
+                    bevel = beveled ? bevelTongueOuter : false,
                     sizeX = tongueSizeX,
                     sizeY = tongueSizeY,
                     height = tongueHeight,
@@ -63,7 +64,7 @@ module mb_tongue(
                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                 );
                 mb_beveled_rounded_block(
-                    bevel = bevelTongueInner,
+                    bevel = beveled ? bevelTongueInner : false,
                     sizeX = tongueInnerSizeX,
                     sizeY = tongueInnerSizeY,
                     height = tongueHeight * cutMultiplier,
@@ -123,7 +124,7 @@ module mb_tongue(
                 translate([0, 0, 0.5 * (tongueHeight - tongueClampHeight) - tongueClampOffset]){    
                     difference(){ 
                         mb_beveled_rounded_block(
-                            bevel = bevelTongueClampOuter,
+                            bevel = beveled ? bevelTongueClampOuter : false,
                             sizeX = tongueSizeX + 2 * tongueClampThickness,
                             sizeY = tongueSizeY + 2 * tongueClampThickness,
                             height = tongueClampHeight,
@@ -131,7 +132,7 @@ module mb_tongue(
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                         );
                         mb_beveled_rounded_block(
-                            bevel = bevelTongueClampInner,
+                            bevel = beveled ? bevelTongueClampInner : false,
                             sizeX = tongueInnerSizeX - 2 * tongueClampThickness,
                             sizeY = tongueInnerSizeY - 2 * tongueClampThickness,
                             height = tongueClampHeight * cutMultiplier,
