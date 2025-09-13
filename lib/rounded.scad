@@ -59,10 +59,10 @@ function mb_circle_inside_basic(rect_pts, rr_geom, c, r_eff) =
 
 // --- Hauptfunktion ---
 // true → Kreis liegt vollständig im abgerundeten Rechteck
-// tol_inside: Kulanz nach innen (macht Test „großzügiger“)
-function mb_circle_in_rounded_rect(rect_pts, corner_r_FLHLHRFR, c, r, tol_inside=0.3) =
+// overhang: Kulanz nach innen (macht Test „großzügiger“)
+function mb_circle_in_rounded_rect(rect_pts, corner_r_FLHLHRFR, c, r, overhang=0) =
     let(
         rr = mb_rr_from_FL_HL_HR_FR(rect_pts, corner_r_FLHLHRFR),
-        r_eff = max(0, r - tol_inside)
+        r_eff = max(0, r - overhang)
     )
     mb_circle_inside_basic(rect_pts, rr, c, r_eff);

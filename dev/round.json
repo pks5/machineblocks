@@ -1,4 +1,5 @@
 {
+    "fileFormatVersion": "1",
     "parameterSets": {
         "test2": {
             "baseCutoutType": "classic",
@@ -27,10 +28,5 @@
             "tubeZSize": "6.4",
             "wallThickness": "1.5"
         }
-    },
-    "fileFormatVersion": "1",
-    "parameterSets": "",
-    "parameterSets": "",
-    "parameterSets": "",
-    "parameterSets": ""
+    }
 }

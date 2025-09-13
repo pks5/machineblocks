@@ -4,7 +4,7 @@
 // - touch=true : true, wenn (innen) ODER (Randkontakt/Overlap, inkl. aufgeblasen um overhang)
 // =======================================
 
-function mb_circle_in_convex_quad(points, M, r, overhang=0.3, eps=1e-6, touch=false) =
+function mb_circle_in_convex_quad(points, M, r, overhang=0, eps=1e-6, touch=false) =
     let(
         okM = mb_ok_point(M),
         okr = (r != undef) && (r >= 0),
