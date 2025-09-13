@@ -13,6 +13,7 @@
 
 // Include the library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Size] */
 
@@ -23,10 +24,17 @@ brickSizeY = 3; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 3; // [1:24]
 
-/* [Appearance] */
+/* [Base] */
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
+// Rounding Radius Z
+baseRoundingRadiusZ = 0;
+// Whether to draw pillars.
+pillars = true;
+
+/* [Knobs] */
+
 // Whether to draw knobs.
 knobs = true;
 // Whether knobs should be centered.
@@ -34,15 +42,33 @@ knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-// Whether to draw pillars.
-pillars = true;
+/* [Bevel] */
+
+// Bevel X and Y for the corner 0,0
+bevel0 = [0, 0];
+// Bevel X and Y for the corner 0,1
+bevel1 = [0, 0];
+// Bevel X and Y for the corner 1,1
+bevel2 = [0, 0];
+// Bevel X and Y for the corner 1,0
+bevel3 = [0, 0];
+
+/* [Holes] */
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
+// Type of X Holes.
+holeXType = "technic";
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
+// Type of Y Holes.
+holeYType = "technic";
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
+// Type of Z Holes.
+holeZType = "technic";
+
+/* [Pit] */
 
 // Whether brick should have a pit
 pit = false;
@@ -50,6 +76,8 @@ pit = false;
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
 pitWallThickness = 0.333;
+
+/* [Slanting] */
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 2;
@@ -67,25 +95,14 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
-    
+    baseRoundingRadius=[0, 0, baseRoundingRadiusZ],
+    bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
+
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
@@ -93,8 +110,11 @@ block(
     pillars = pillars,
     
     holesX = holesX,
+    holeXType = holeXType,
     holesY = holesY,
+    holeYType = holeYType,
     holesZ = holesZ,
+    holeZType = holeZType,
     
     pit = pit,
     pitKnobs = pitKnobs,
@@ -112,5 +132,6 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
