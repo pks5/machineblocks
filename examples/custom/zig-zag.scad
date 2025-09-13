@@ -13,6 +13,7 @@
 
 //Include the library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -20,19 +21,6 @@ use <../../lib/block.scad>;
 baseLayers = 3;
 //Draw Knobs
 knobs = true;
-
-/* [Calibration] */
-
-//Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
 
 block(
     baseLayers=baseLayers, 
@@ -43,7 +31,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -56,7 +45,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -69,7 +59,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -82,7 +73,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -95,7 +87,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -108,7 +101,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -121,5 +115,6 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
