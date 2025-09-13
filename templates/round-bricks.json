@@ -68,6 +68,17 @@
                     }
                 },
                 {
+                    "name": "Round Plate 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "knobType": "technic",
+                        "baseRoundingRadiusZ": 4,
+                        "baseReliefCut": true
+                    }
+                },
+                {
                     "name": "Round Plate 2x2",
                     "parameters": {
                         "brickSizeX": 2,
@@ -101,6 +112,52 @@
                         "brickSizeY": 8,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 32
+                    }
+                },
+
+                {
+                    "name": "Round Tile 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4,
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
+                    "name": "Qrt Round Tile 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [8,0,0,0],
+                        "baseCutoutRoundingRadius":0,
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
+                    "name": "Round Tile 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4,
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
+                    "name": "Round Tile 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8,
+                        "knobs": false,
+                        "baseReliefCut": true
                     }
                 },
 

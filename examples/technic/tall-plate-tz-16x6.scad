@@ -28,10 +28,19 @@ baseLayers = 3; // [1:24]
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
+// Rounding Radius X
+baseRoundingRadiusX = 0;
+// Rounding Radius Y
+baseRoundingRadiusY = 0;
 // Rounding Radius Z
 baseRoundingRadiusZ = 0;
+
+
 // Whether to draw pillars.
 pillars = true;
+baseReliefCut = false;
+baseReliefCutHeight = 0.4;
+baseReliefCutThickness = 0.4;
 
 /* [Knobs] */
 
@@ -59,10 +68,18 @@ bevel3 = [0, 0];
 holesX = false;
 // Type of X Holes.
 holeXType = "technic";
+// Whether X Holes should be centered
+holeXCentered = true;
+// Hole X Grid Offset Z
+holeXGridOffsetZ = 1.75;
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Type of Y Holes.
 holeYType = "technic";
+// Whether Y Holes should be centered
+holeYCentered = true;
+// Hole Y Grid Offset Z
+holeYGridOffsetZ = 1.75;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = true;
 // Type of Z Holes.
@@ -100,7 +117,11 @@ block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
-    baseRoundingRadius=[0, 0, baseRoundingRadiusZ],
+    baseRoundingRadius=[baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ],
+    baseReliefCut = baseReliefCut,
+    baseReliefCutHeight = baseReliefCutHeight,
+    baseReliefCutThickness = baseReliefCutThickness,
+
     bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
 
     knobs = knobs,
@@ -111,8 +132,12 @@ block(
     
     holesX = holesX,
     holeXType = holeXType,
+    holeXCentered = holeXCentered,
+    holeXGridOffsetZ = holeXGridOffsetZ,
     holesY = holesY,
     holeYType = holeYType,
+    holeYCentered = holeYCentered,
+    holeYGridOffsetZ = holeYGridOffsetZ,
     holesZ = holesZ,
     holeZType = holeZType,
     

@@ -87,7 +87,7 @@ wallThickness = 1.5;
 tubeZSize = 6.4;
 
 // Generate the block
-*block(
+block(
     grid = [brickSizeX, brickSizeY],
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,

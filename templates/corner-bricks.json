@@ -270,6 +270,32 @@
                 },
 
                 {
+                    "name": "Corner Tile 2x2 B1",
+                    "parameters": {
+                        "brick1SizeX": 2,
+                        "brick1SizeY": 1,
+                        "brick1OffsetY": 0,
+                        "brick2SizeX": 1,
+                        "brick2SizeY": 2,
+                        "brick2OffsetX": 0,
+                        "knobs": false
+                    }
+                },
+
+                {
+                    "name": "Corner Tile 3x3 B1",
+                    "parameters": {
+                        "brick1SizeX": 3,
+                        "brick1SizeY": 1,
+                        "brick1OffsetY": 0,
+                        "brick2SizeX": 1,
+                        "brick2SizeY": 3,
+                        "brick2OffsetX": 0,
+                        "knobs": false
+                    }
+                },
+
+                {
                     "name": "Corner Brick 2x2 B1",
                     "parameters": {
                         "brick1SizeX": 2,

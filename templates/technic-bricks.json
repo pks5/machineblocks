@@ -6,6 +6,90 @@
             "url": "https://machineblocks.com/examples/technic-bricks",
             "bricks" : [
                 {
+                    "name": "Beam 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
+                    "name": "Beam 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
+                    "name": "Beam 4x1",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
+                    "name": "Beam 6x1",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
+                    "name": "Beam 8x1",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
+                    "name": "Beam 12x1",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 1,
+                        "baseLayers": 2.5,
+                        "holesX" : true,
+                        "holeXCentered" : false,
+                        "holeXGridOffsetZ": 1.25,
+                        "knobs": false,
+                        "baseRoundingRadiusY":4,
+                        "baseCutoutType": "none"
+                    }
+                },
+                {
                     "name": "Slim Brick TX 2x1",
                     "parameters": {
                         "brickSizeX": 2,
