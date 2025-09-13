@@ -129,7 +129,7 @@ module block(
         knobSize = 5.0, //mm
         knobCutSize = 5.0,
         knobHeight = 1.8, //mm
-        knobCutHeight = 2.0,
+        knobCutHeight = 2.2,
         knobClampHeight = 0.8, //mm
         knobClampThickness = 0.0, //mm
         knobHoleSize = 3.5, //mm
@@ -819,7 +819,7 @@ module block(
                                                     translate([0,0,-0.5*cutOffset])
                                                         cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                                     
-                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight)+ cutOffset ])
+                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight)+ 0.5*cutOffset ])
                                                         cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
                                                 }
                                             }
