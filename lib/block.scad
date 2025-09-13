@@ -1101,7 +1101,7 @@ module block(
                                 tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
                                 tongueRoundingRadius = tongueRoundingRadius,
                                 tongueInnerRoundingRadius = tongueInnerRoundingRadius,
-                                pit = pit,
+                                pit = true,
                                 pitWallGaps = pitWallGaps,
                                 pitSizeX = pitSizeX,
                                 pitSizeY = pitSizeY,
