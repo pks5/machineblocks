@@ -12,6 +12,7 @@
 */
 
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -33,19 +34,6 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-//Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 block(
     grid = [gridX, gridY],
     baseLayers = baseLayers - 1,
@@ -53,7 +41,7 @@ block(
     tongue = true,
     tongueHeight = 1.8,
     tongueClampThickness = 0,
-    tongueRoundingRadius = 1,
+    
     pit = true,
     baseCutoutType = "none",
     baseRoundingRadius = [0,0,4],
@@ -62,7 +50,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );
 
 block(
@@ -70,9 +59,8 @@ block(
     gridOffset = [gridX + 1, 0, 0],
     baseCutoutType = "groove",
     tongueClampThickness = 0,
-    tongueRoundingRadius = 1,
-    tongueOuterAdjustment = 0.1,
-    tongueThickness = 1.2,
+    
+    //tongueThickness = 1.2,
     knobs = false,
     textSide = 5,
     textSize = 10,
@@ -85,5 +73,6 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
 );

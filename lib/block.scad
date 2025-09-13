@@ -40,7 +40,7 @@ module block(
         baseClampThickness = 0.1, //mm
         baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
-        baseCutoutRoundingRadius = -1.5, //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
+        baseCutoutRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         baseReliefCut = false,
         baseReliefCutHeight = 0.4,
@@ -263,7 +263,7 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
+    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        

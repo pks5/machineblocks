@@ -11,6 +11,7 @@
 *
 */
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -30,19 +31,6 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-//Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
-
 union(){
     block(
         baseLayers = floorLayers, 
@@ -53,7 +41,8 @@ union(){
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 
 
@@ -71,7 +60,8 @@ union(){
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     ); 
 
 
@@ -85,7 +75,8 @@ union(){
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 
 
@@ -99,7 +90,8 @@ union(){
         baseSideAdjustment = [-0.1, -0.1, 0.1, 0.1],
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     );
 
 
@@ -113,6 +105,7 @@ union(){
         baseSideAdjustment = [-0.1, -0.1, 0.1, 0.1],
         knobSize = knobSize,
         wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        tubeZSize = tubeZSize,
+        pinSize = pinSize
     ); 
 }
