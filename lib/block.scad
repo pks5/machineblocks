@@ -278,11 +278,13 @@ module block(
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
 
+    beveled = bevelHorizontal != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+knobMaxOverhang, pWallThickness[1]*gridSizeXY+knobMaxOverhang, pWallThickness[2]*gridSizeXY+knobMaxOverhang, pWallThickness[3]*gridSizeXY+knobMaxOverhang]);
     
+
     pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
     pMinThickness = [-min(pWallThickness[2], pWallThickness[0])*gridSizeXY, -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, -min(pWallThickness[1], pWallThickness[2])*gridSizeXY];
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);            
@@ -443,6 +445,8 @@ module block(
         topPlateZ = topPlateZ, 
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
+        beveled = beveled,
+        bevelHorizontal = bevelHorizontal,
         bevelOuterAdjusted = bevelOuterAdjusted
     );
 
@@ -592,6 +596,16 @@ module block(
                                                 center=true
                                             );
 
+                                            mb_beveled_rounded_block(
+                                                bevel = beveled ? bevelTopPlateHelper : false,
+                                                sizeX = objectSizeX - 2*wallThickness - 2*topPlateHelperThickness,
+                                                sizeY = objectSizeY - 2*wallThickness - 2*topPlateHelperThickness,
+                                                height = cutMultiplier * (topPlateHelperHeight + cutOffset),
+                                                roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
+                                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                            );
+
+                                            /*
                                             intersection(){
                                                 make_bevel(bevelTopPlateHelper, cutMultiplier * (topPlateHelperHeight + cutOffset));
                                     
@@ -599,9 +613,9 @@ module block(
                                                     size = [objectSizeX - 2*wallThickness - 2*topPlateHelperThickness, objectSizeY - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * (topPlateHelperHeight + cutOffset)], 
                                                     center=true, 
                                                     resolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                                    radius = topPlateHelperRoundingRadius
+                                                    radius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]
                                                 );
-                                            }
+                                            }*/
 
                                             for (a = [ startX : 1 : endX ]){
                                                 for (side = [ 0 : 1 : 1 ]){
@@ -880,20 +894,25 @@ module block(
                                         
                                     } // End union
 
-                                    
+                                    mb_beveled_rounded_block(
+                                        bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness * cutMultiplier) : false,
+                                        sizeX = objectSizeX - 2 * baseClampWallThickness * cutMultiplier,
+                                        sizeY = objectSizeY - 2 * baseClampWallThickness * cutMultiplier,
+                                        height = cutMultiplier * (knobCutHeight + cutOffset),
+                                        roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                        roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                    );
+
+                                    /*
                                     intersection(){
-                                        //TODO move elsewhere
-                                        bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness * cutMultiplier);
-                                        
                                         make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
-                                        
                                         mb_rounded_block(
                                             size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, cutMultiplier * (knobCutHeight + cutOffset)], 
                                             center = true, 
                                             radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                             resolution = baseRoundingResolution
                                         );
-                                    }
+                                    }*/
                                 } //End difference final cutout elements
                             }
                         } // End difference base

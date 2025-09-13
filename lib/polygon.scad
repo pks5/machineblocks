@@ -30,7 +30,3 @@ module make_bevel(bevelInnerTol, resultingBaseHeight, tol=1e-6) {
     else
         echo("Nicht genug eindeutige Punkte für ein Polygon: ", pts);
 }
-
-// Beispiel:
-// points_demo = [[0,0],[10,0],[10,0],[10,10],[0,10],[0,0],[0,0]];
-// make_bevel(points_demo, 5);

@@ -97,41 +97,75 @@ module mb_base_cutout(
             
                 
             union(){
-                intersection(){
                 
-                    make_bevel(bevelInner, 2*baseHeight);
                     
                     union(){
                         /*
                         * Bottom Hole
                         */
-                        translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ])
-                            mb_rounded_block(
-                                size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
-                                center = true, 
-                                radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
-                                resolution=roundingResolution
+                        translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
+                            
+                            mb_beveled_rounded_block(
+                                bevel = bevelInner,
+                                sizeX = objectSize[0] - 2*wallThickness,
+                                sizeY = objectSize[1] - 2*wallThickness,
+                                height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
+                                roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                roundingResolution = roundingResolution
                             );
-
-                        /*
-                        * Clamp Offset
-                        */
-                        if(baseClampOffset > 0){
-                            translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)])
+                            /*
+                            intersection(){
+                                make_bevel(bevelInner, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset);
                                 mb_rounded_block(
-                                    size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                                    size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
                                     center = true, 
                                     radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                     resolution=roundingResolution
                                 );
+                            }*/
+                        }
+                        /*
+                        * Clamp Offset
+                        */
+                        if(baseClampOffset > 0){
+                            translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
+                                mb_beveled_rounded_block(
+                                    bevel = bevelInner,
+                                    sizeX = objectSize[0] - 2 * wallThickness,
+                                    sizeY = objectSize[1] - 2 * wallThickness,
+                                    height = baseClampOffset + cutOffset,
+                                    roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                    roundingResolution = roundingResolution
+                                );
+                                /*
+                                intersection(){
+                                    make_bevel(bevelInner, baseClampOffset + cutOffset);
+                                    mb_rounded_block(
+                                        size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
+                                        center = true, 
+                                        radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
+                                        resolution=roundingResolution
+                                    );
+                                }*/
+                            }
                         }
                     }    
-                }
+                
 
                 /*
                 * Clamp Skirt
                 */
                 translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+                    mb_beveled_rounded_block(
+                        bevel = bevelClamp,
+                        sizeX = objectSize[0] - 2 * baseClampWallThickness,
+                        sizeY = objectSize[1] - 2 * baseClampWallThickness,
+                        height = baseClampHeight * cutMultiplier,
+                        roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                        roundingResolution = roundingResolution
+                    );
+
+                    /*
                     intersection(){
                         make_bevel(bevelClamp, baseClampHeight * cutMultiplier);
                         mb_rounded_block(
@@ -140,7 +174,7 @@ module mb_base_cutout(
                             radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                             resolution=roundingResolution
                         );
-                    }
+                    }*/
                 }
             }
             
@@ -241,6 +275,16 @@ module mb_base(
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
                 
                 difference(){ // Subtract relief cut and slanting from base
+                    mb_beveled_rounded_block(
+                        bevel = bevelOuterAdjusted,
+                        sizeX = objectSizeXAdjusted,
+                        sizeY = objectSizeYAdjusted,
+                        height = height,
+                        roundingRadius = roundingRadius,
+                        roundingResolution = roundingResolution
+                    );
+
+                    /*
                     intersection(){
                         make_bevel(bevelOuterAdjusted, height);
 
@@ -250,7 +294,7 @@ module mb_base(
                             resolution = roundingResolution,
                             radius = roundingRadius
                         );
-                    }
+                    }*/
 
                     if(baseReliefCut){
                         translate([0,0,-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
@@ -260,6 +304,16 @@ module mb_base(
                                     center=true
                                 );
 
+                                mb_beveled_rounded_block(
+                                    bevel = bevelReliefCut,
+                                    sizeX = objectSize[0] - 2*baseReliefCutThickness,
+                                    sizeY = objectSize[1] - 2*baseReliefCutThickness,
+                                    height = cutMultiplier * (baseReliefCutHeight + cutOffset),
+                                    roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
+                                    roundingResolution = roundingResolution
+                                );
+
+                                /*
                                 intersection(){
                                     make_bevel(bevelReliefCut, cutMultiplier * (baseReliefCutHeight + cutOffset));
                         
@@ -267,9 +321,9 @@ module mb_base(
                                         size = [objectSize[0] - 2*baseReliefCutThickness, objectSize[1] - 2*baseReliefCutThickness, cutMultiplier * (baseReliefCutHeight + cutOffset)], 
                                         center=true, 
                                         resolution = roundingResolution,
-                                        radius = reliefRadius
+                                        radius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius]
                                     );
-                                }
+                                }*/
                             }
                         }
                     }
@@ -316,13 +370,14 @@ module mb_base(
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);
                     
-                translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset])
+                translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0])
-                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=[0,0,pitRadius], resolution=roundingResolution, center = true);
+                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=roundingResolution, center = true);
                     }
-
+                }
+                
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                     gap = pitWallGaps[gapIndex];

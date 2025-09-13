@@ -59,7 +59,7 @@ module mb_tongue(
                     sizeX = tongueSizeX,
                     sizeY = tongueSizeY,
                     height = tongueHeight,
-                    roundingRadius = [0, 0, tongueRadius],
+                    roundingRadius = tongueRadius == 0 ? 0 : [0, 0, tongueRadius],
                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                 );
                 mb_beveled_rounded_block(
@@ -67,7 +67,7 @@ module mb_tongue(
                     sizeX = tongueInnerSizeX,
                     sizeY = tongueInnerSizeY,
                     height = tongueHeight * cutMultiplier,
-                    roundingRadius = [0, 0, tongueRadiusInner],
+                    roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                 );
                 /*
@@ -127,7 +127,7 @@ module mb_tongue(
                             sizeX = tongueSizeX + 2 * tongueClampThickness,
                             sizeY = tongueSizeY + 2 * tongueClampThickness,
                             height = tongueClampHeight,
-                            roundingRadius = [0, 0, tongueRadius],
+                            roundingRadius = tongueRadius == 0 ? 0 : [0, 0, tongueRadius],
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                         );
                         mb_beveled_rounded_block(
@@ -135,7 +135,7 @@ module mb_tongue(
                             sizeX = tongueInnerSizeX - 2 * tongueClampThickness,
                             sizeY = tongueInnerSizeY - 2 * tongueClampThickness,
                             height = tongueClampHeight * cutMultiplier,
-                            roundingRadius = [0, 0, tongueRadiusInner],
+                            roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                         );
                         /*      
