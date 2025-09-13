@@ -1095,7 +1095,7 @@ module block(
                                 bevelOuter = bevelOuter,
                                 tongueOffset = tongueOffset,
                                 tongueThickness = tongueThickness,
-                                tongueThicknessAdjustment = 0,
+                                tongueThicknessAdjustment = tongueThicknessAdjustment,
                                 tongueHeight = tongueGrooveDepth + cutOffset,
                                 tongueClampThickness = tongueClampThickness,
                                 tongueClampHeight = tongueClampHeight,
