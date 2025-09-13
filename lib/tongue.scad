@@ -44,11 +44,11 @@ module mb_tongue(
     tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : tongueRoundingRadius, baseRoundingRadiusZ);
     tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : tongueInnerRoundingRadius, tongueRadius);
     
-    bevelTongueOuter = mb_inset_quad_lrfh(bevelOuter, [tongueOffsetAdjusted, tongueOffsetAdjusted, tongueOffsetAdjusted, tongueOffsetAdjusted]);
-    bevelTongueInner = mb_inset_quad_lrfh(bevelOuter, [tongueInnerOffsetAdjusted, tongueInnerOffsetAdjusted, tongueInnerOffsetAdjusted, tongueInnerOffsetAdjusted]);
+    bevelTongueOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted);
+    bevelTongueInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted);
     
-    bevelTongueClampOuter = mb_inset_quad_lrfh(bevelOuter, [tongueOffsetAdjusted - tongueClampThickness, tongueOffsetAdjusted - tongueClampThickness, tongueOffsetAdjusted - tongueClampThickness, tongueOffsetAdjusted - tongueClampThickness]);
-    bevelTongueClampInner = mb_inset_quad_lrfh(bevelOuter, [tongueInnerOffsetAdjusted + tongueClampThickness, tongueInnerOffsetAdjusted + tongueClampThickness, tongueInnerOffsetAdjusted + tongueClampThickness, tongueInnerOffsetAdjusted + tongueClampThickness]);
+    bevelTongueClampOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted - tongueClampThickness);
+    bevelTongueClampInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted + tongueClampThickness);
     
 
     difference(){

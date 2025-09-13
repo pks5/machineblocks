@@ -51,10 +51,11 @@ function mb_inset_ngon_edges(P, d_edge) =
 // punkte:  [VorneLinks, HintenLinks, HintenRechts, VorneRechts]
 // raender: [Links, Rechts, Vorne, Hinten]
 // =====================
-function mb_inset_quad_lrfh(punkte, raender) =
+function mb_inset_quad_lrfh(punkte, borders) =
     let(
         P0 = punkte[0], P1 = punkte[1], P2 = punkte[2], P3 = punkte[3],
 
+        raender = borders[0] == undef ? [borders, borders, borders, borders] : borders,
         // Mapping deiner Ränder -> Kanten P[i]→P[i+1]
         // 0: P0->P1 = links, 1: P1->P2 = hinten, 2: P2->P3 = rechts, 3: P3->P0 = vorne
         d_edge4 = [raender[0], raender[3], raender[1], raender[2]],
@@ -91,11 +92,4 @@ function mb_inset_quad_lrfh(punkte, raender) =
     )
     Q4;
 
-/* // -------- Mini-Demo --------
-punkte  = [[0,0],[0,80],[120,80],[120,0]];      // [VL, HL, HR, VR]
-raender = [3, 6, 10, 8];                         // [links, rechts, vorne, hinten]
-echo("normal =", mb_inset_quad_lrfh(punkte, raender));
 
-punkte2 = [[0,0],[0,80],[120,80],[120,80]];     // P2==P3  -> Dreieck
-echo("degeneriert =", mb_inset_quad_lrfh(punkte2, raender));
-*/

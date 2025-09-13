@@ -82,7 +82,7 @@ module mb_base_cutout(
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
 
-    bevelClamp = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness, baseClampWallThickness, baseClampWallThickness, baseClampWallThickness]);
+    bevelClamp = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness);
     
     
     function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
@@ -228,7 +228,7 @@ module mb_base(
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
     reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ);
 
-    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, [baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness, baseReliefCutThickness]);
+    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
 
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;

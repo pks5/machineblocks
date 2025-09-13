@@ -280,7 +280,7 @@ module block(
 
     bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
-    bevelInner = mb_inset_quad_lrfh(bevelOuter, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+knobMaxOverhang, pWallThickness[1]*gridSizeXY+knobMaxOverhang, pWallThickness[2]*gridSizeXY+knobMaxOverhang, pWallThickness[3]*gridSizeXY+knobMaxOverhang]);
     
     pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
@@ -289,7 +289,7 @@ module block(
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
-    cornersInner = mb_inset_quad_lrfh(corners, [wallThickness, wallThickness, wallThickness, wallThickness]);
+    cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
 
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -582,7 +582,7 @@ module block(
                                 * Plate Helpers
                                 */
                                 if(topPlateHelpers){
-                                    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
+                                    bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
                                     topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ);
 
                                     translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
@@ -883,7 +883,7 @@ module block(
                                     
                                     intersection(){
                                         //TODO move elsewhere
-                                        bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
+                                        bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness * cutMultiplier);
                                         
                                         make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
                                         
