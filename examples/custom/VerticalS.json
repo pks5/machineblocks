@@ -1,0 +1,17 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "brick1HolesZ": "true",
+            "brick1KnobType": "technic",
+            "brick1SizeX": "5",
+            "brick2HolesZ": "true",
+            "brick2KnobType": "classic",
+            "brick2SizeX": "6",
+            "gridSizeY": "2",
+            "middleLayers": "2",
+            "middleSizeX": "1",
+            "viewMode": "unassembled"
+        }
+    }
+}

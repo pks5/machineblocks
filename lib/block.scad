@@ -180,7 +180,7 @@ module block(
         svgScale = 1,
         svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
 
-        connectors = [],
+        connectors = false,
         connectorHeight = 0,
         connectorDepth = 1.4,
         connectorSize = 4.0,

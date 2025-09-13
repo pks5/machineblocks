@@ -1,0 +1,20 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "brick1BaseCutoutType": "classic",
+            "brick1BaseLayers": "1",
+            "brick1KnobType": "classic",
+            "brick1Knobs": "true",
+            "brick1SizeY": "2",
+            "brick2BaseHeight": "1.8",
+            "brick2KnobType": "technic",
+            "brick2Knobs": "true",
+            "brick2SizeY": "2",
+            "brickSizeX": "2",
+            "previewQuality": "0.5",
+            "roundingResolution": "64",
+            "viewMode": "assembled"
+        }
+    }
+}

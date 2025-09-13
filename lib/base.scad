@@ -398,26 +398,28 @@ module mb_base(
             /*
             * Connectors
             */
-            for (con = [ 0 : 1 : len(connectors)-1 ]){
-                if(connectors[con][1] == 1){
-                    mb_connectors(side = connectors[con][0],
+            if(connectors != false){
+                for (con = [ 0 : 1 : len(connectors)-1 ]){
+                    if(connectors[con][1] == 1){
+                        mb_connectors(side = connectors[con][0],
+                                grid = grid,
+                                height = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
+                                baseHeight = height,
+                                inverse=true,
+                                size = connectorSize,
+                                depth = connectorDepth,
+                                gs = gridSizeXY);
+                    }
+                    else if(connectors[con][1] > 1){
+                        mb_connector_grooves(side = connectors[con][0],
                             grid = grid,
-                            height = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
+                            depth = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
                             baseHeight = height,
-                            inverse=true,
+                            inverse=connectors[con][1]==3,
                             size = connectorSize,
-                            depth = connectorDepth,
+                            height = connectorDepth,
                             gs = gridSizeXY);
-                }
-                else if(connectors[con][1] > 1){
-                    mb_connector_grooves(side = connectors[con][0],
-                        grid = grid,
-                        depth = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
-                        baseHeight = height,
-                        inverse=connectors[con][1]==3,
-                        size = connectorSize,
-                        height = connectorDepth,
-                        gs = gridSizeXY);
+                    }
                 }
             }
 
@@ -427,16 +429,18 @@ module mb_base(
         /*
         * Connectors
         */
-        for (con = [ 0 : 1 : len(connectors)-1 ]){
-            if(connectors[con][1] == 0){
-                mb_connectors(side = connectors[con][0],
-                        grid = grid,
-                        height = (connectorHeight == 0 ? height : connectorHeight),
-                        baseHeight = height,
-                        inverse=connectors[con][1]==1,
-                        size = connectorSize - 2*connectorSideTolerance,
-                        depth = connectorDepth - connectorSideTolerance,
-                        gs = gridSizeXY);
+        if(connectors != false){
+            for (con = [ 0 : 1 : len(connectors)-1 ]){
+                if(connectors[con][1] == 0){
+                    mb_connectors(side = connectors[con][0],
+                            grid = grid,
+                            height = (connectorHeight == 0 ? height : connectorHeight),
+                            baseHeight = height,
+                            inverse=connectors[con][1]==1,
+                            size = connectorSize - 2*connectorSideTolerance,
+                            depth = connectorDepth - connectorSideTolerance,
+                            gs = gridSizeXY);
+                }
             }
         }
     } // End union

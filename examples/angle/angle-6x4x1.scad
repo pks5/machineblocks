@@ -15,9 +15,13 @@
 use <../../lib/block.scad>;
 include <../../config/presets.scad>;
 
-/* [View] */
-// How to view the brick in the editor
-viewMode = "print"; // [print, assembled, cover]
+/* [Render] */
+// Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
+assemblyMode = "merged"; // [unassembled, assembled, merged]
+// Quality of the preview in relation to the final rendering.
+previewQuality = 0.5; // [0.1:0.1:1]
+// Number of drawn fragments for roundings in the final rendering.
+roundingResolution = 64; // [16:8:128]
 
 /* [Size] */
 
@@ -48,13 +52,6 @@ brick2Knobs = true;
 // Type of second brick's knobs
 brick2KnobType = "technic"; // [classic, technic]
 
-/* [Quality] */
-
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
 /* [Hidden] */
 
 // Grid Size XY
@@ -68,7 +65,8 @@ union()
   block(grid = [ brickSizeX, brick1SizeY ],
         baseLayers = brick1BaseLayers,
         baseCutoutType = brick1BaseCutoutType,
-        connectors = [[ 2, 0 ] ],
+        connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
+        connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
         knobs = brick1Knobs,
         knobType = brick1KnobType,
 
@@ -82,7 +80,8 @@ union()
         gridSizeZ = gridSizeZ,
         
         baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = assemblyMode == "merged" ? 
+            [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ] : baseSideAdjustment,
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
@@ -90,8 +89,8 @@ union()
   );
 }
 
-translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY + (viewMode == "cover" ? (brick1BaseLayers + 2) * gridSizeZ : 0)] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
-  rotate(viewMode != "print" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
+translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
+  rotate(assemblyMode != "unassembled" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
   {
 
     block(grid = [ brickSizeX, brick2SizeY ],
@@ -99,8 +98,9 @@ translate(viewMode != "print" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick
           baseCutoutType = "none",
           knobs = brick2Knobs,
           knobType = brick2KnobType,
-          connectors = [ [ 2, 2 ] ],
+          connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
           connectorHeight = brick1BaseLayers * gridSizeZ,
+          
 
           previewQuality = previewQuality,
           baseRoundingResolution = roundingResolution,
