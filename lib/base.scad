@@ -27,12 +27,11 @@ module mb_base_cutout(
     baseHeight,
     baseSideAdjustment, 
     baseCutoutDepth,
-    baseRoundingRadius,
+    baseRoundingRadiusZ,
     baseClampHeight,
     baseClampThickness,
     baseClampOffset,
     
-    roundingRadius, 
     cutoutRoundingRadius,
     roundingResolution,
     wallThickness,
@@ -55,8 +54,6 @@ module mb_base_cutout(
     bevelOuter,
     bevelInner
 ){
-    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    
     baseClampWallThickness = wallThickness + baseClampThickness;
 
     //Variables for cutouts        

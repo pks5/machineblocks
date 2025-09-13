@@ -263,7 +263,7 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
+    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -500,14 +500,13 @@ module block(
                                     
                                     baseHeight = resultingBaseHeight,
                                     baseSideAdjustment = sAdjustment,
-                                    baseRoundingRadius = baseRoundingRadius,
+                                    baseRoundingRadiusZ = baseRoundingRadiusZ,
                                     baseCutoutDepth = baseCutoutDepth,
                                     baseClampHeight = baseClampHeight,
                                     baseClampThickness = baseClampThickness,
                                     baseClampOffset = baseClampOffset,
                                     
-                                    roundingRadius = baseCutoutRoundingRadius, 
-                                    cutoutRoundingRadius = cutoutRadius,
+                                    cutoutRoundingRadius = cutoutRoundingRadius,
                                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     
                                     wallThickness = wallThickness,
@@ -889,7 +888,7 @@ module block(
                                     mb_rounded_block(
                                         size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, resultingBaseHeight], 
                                         center = true, 
-                                        radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                        radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                         resolution = baseRoundingResolution
                                     );    
                                 }
