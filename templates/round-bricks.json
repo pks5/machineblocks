@@ -53,6 +53,15 @@
                     }
                 },
                 {
+                    "name": "Round Plate 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4
+                    }
+                },
+                {
                     "name": "Round Plate 2x2",
                     "parameters": {
                         "brickSizeX": 2,
