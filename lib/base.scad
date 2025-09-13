@@ -33,6 +33,7 @@ module mb_base_cutout(
     baseClampOffset,
     
     roundingRadius, 
+    cutoutRoundingRadius,
     roundingResolution,
     wallThickness,
     
@@ -55,8 +56,7 @@ module mb_base_cutout(
     bevelInner
 ){
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    cutoutRadius = mb_base_cutout_radius(roundingRadius, baseRoundingRadiusZ);
-
+    
     baseClampWallThickness = wallThickness + baseClampThickness;
 
     //Variables for cutouts        
@@ -79,7 +79,7 @@ module mb_base_cutout(
         topPlateHeight = topPlateHeight, 
         baseClampOffset=baseClampOffset,
         baseRoundingRadiusZ = baseRoundingRadiusZ,
-        cutoutRadius = cutoutRadius);
+        cutoutRoundingRadius = cutoutRoundingRadius);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -112,7 +112,7 @@ module mb_base_cutout(
                             mb_rounded_block(
                                 size = [objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness, baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset], 
                                 center = true, 
-                                radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                 resolution=roundingResolution
                             );
 
@@ -124,7 +124,7 @@ module mb_base_cutout(
                                 mb_rounded_block(
                                     size = [objectSize[0] - 2 * wallThickness, objectSize[1] - 2 * wallThickness, baseClampOffset + cutOffset], 
                                     center = true, 
-                                    radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                                    radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                     resolution=roundingResolution
                                 );
                         }
@@ -140,7 +140,7 @@ module mb_base_cutout(
                         mb_rounded_block(
                             size = [objectSize[0] - 2 * baseClampWallThickness, objectSize[1] - 2 * baseClampWallThickness, baseClampHeight * cutMultiplier], 
                             center = true, 
-                            radius = cutoutRadius == 0 ? 0 : [0, 0, cutoutRadius], 
+                            radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                             resolution=roundingResolution
                         );
                     }

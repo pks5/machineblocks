@@ -262,8 +262,9 @@ module block(
     baseCutoutDepth = baseCutoutType == "none" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
     
     baseClampWallThickness = wallThickness + baseClampThickness;
-    zRadius = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    
+    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
+    cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
+                                    
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
     topPlateZ = baseCutoutZ + 0.5 * (resultingBaseHeight - resultingPitDepth);
@@ -284,7 +285,7 @@ module block(
     
     pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
     pMinThickness = [-min(pWallThickness[2], pWallThickness[0])*gridSizeXY, -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, -min(pWallThickness[1], pWallThickness[2])*gridSizeXY];
-    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, zRadius);            
+    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);            
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
@@ -382,7 +383,7 @@ module block(
     */ 
     function drawKnob(a, b) = 
             !inSlantedArea(a, b, false, 2)
-            && mb_circle_in_rounded_rect(cornersAdjusted, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+            && mb_circle_in_rounded_rect(cornersAdjusted, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
             && mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
             ;
 
@@ -506,6 +507,7 @@ module block(
                                     baseClampOffset = baseClampOffset,
                                     
                                     roundingRadius = baseCutoutRoundingRadius, 
+                                    cutoutRoundingRadius = cutoutRadius,
                                     roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                     
                                     wallThickness = wallThickness,
@@ -531,7 +533,7 @@ module block(
                                 */
                                 if(topPlateHelpers){
                                     bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, [wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness, wallThickness + topPlateHelperThickness]);
-                                    topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, zRadius);
+                                    topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ);
 
                                     translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                         difference(){
@@ -809,7 +811,7 @@ module block(
                                 union(){
                                     for (a = [ startX : 1 : endX ]){
                                         for (b = [ startY : 1 : endY ]){
-                                            if(!mb_circle_in_rounded_rect(cornersInner, zRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+                                            if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
                                                 || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
                                                 translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight]){
                                                     if(baseClampOffset > 0){
@@ -880,8 +882,6 @@ module block(
                                 translate([0,0,baseCutoutZ])
                                 intersection(){
                                     //TODO move elsewhere
-                                    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-                                    cutoutRadius = mb_base_cutout_radius(baseCutoutRoundingRadius, baseRoundingRadiusZ);
                                     bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
                                     
                                     make_bevel(bevelKnobCut, resultingBaseHeight);
