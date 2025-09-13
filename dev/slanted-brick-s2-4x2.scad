@@ -28,7 +28,7 @@ baseLayers = 3; // [1:24]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether to draw knobs.
-knobs = true;
+knobs = false;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
@@ -37,7 +37,8 @@ knobType = "classic"; // [classic, technic]
 // Whether to draw pillars.
 pillars = true;
 
-tongue = false;
+tongue = true;
+tongueClampThickness = 0;
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
@@ -51,7 +52,7 @@ pit = true;
 // Whether knobs should be drawn inside pit
 pitKnobs = true;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = 1;
+pitWallThickness = 0.333;
 
 // Slanting size on X0 side specified as multiple of an 1x1 brick.
 slantingX0 = 0;
@@ -103,6 +104,7 @@ block(
     pitWallThickness = pitWallThickness,
     
     tongue = tongue,
+    tongueClampThickness = tongueClampThickness,
     
     bevelHorizontal = [[2,0],[-1,0],[0,0],[0,0]],
     
@@ -122,7 +124,7 @@ block(
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
-    gridOffset = [4,0,0],
+    gridOffset = [5,0,0],
     baseLayers = 1,
     baseCutoutType = "groove",
     

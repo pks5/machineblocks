@@ -54,6 +54,23 @@ module mb_tongue(
     difference(){
         union(){
             difference(){
+                mb_beveled_rounded_block(
+                    bevel = bevelTongueOuter,
+                    sizeX = tongueSizeX,
+                    sizeY = tongueSizeY,
+                    height = tongueHeight,
+                    roundingRadius = [0, 0, tongueRadius],
+                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                );
+                mb_beveled_rounded_block(
+                    bevel = bevelTongueInner,
+                    sizeX = tongueInnerSizeX,
+                    sizeY = tongueInnerSizeY,
+                    height = tongueHeight * cutMultiplier,
+                    roundingRadius = [0, 0, tongueRadiusInner],
+                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                );
+                /*
                 intersection(){
                     make_bevel(bevelTongueOuter, tongueHeight);
                     mb_rounded_block(
@@ -71,7 +88,7 @@ module mb_tongue(
                         radius=[0,0,tongueRadiusInner], 
                         resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                     );
-                }
+                }*/
 
                 /*
                 * Cut knobGrooveGaps
@@ -104,7 +121,24 @@ module mb_tongue(
             //Tongue Clamp
             if(tongueClampThickness > 0){
                 translate([0, 0, 0.5 * (tongueHeight - tongueClampHeight) - tongueClampOffset]){    
-                    difference(){       
+                    difference(){ 
+                        mb_beveled_rounded_block(
+                            bevel = bevelTongueClampOuter,
+                            sizeX = tongueSizeX + 2 * tongueClampThickness,
+                            sizeY = tongueSizeY + 2 * tongueClampThickness,
+                            height = tongueClampHeight,
+                            roundingRadius = [0, 0, tongueRadius],
+                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                        );
+                        mb_beveled_rounded_block(
+                            bevel = bevelTongueClampInner,
+                            sizeX = tongueInnerSizeX - 2 * tongueClampThickness,
+                            sizeY = tongueInnerSizeY - 2 * tongueClampThickness,
+                            height = tongueClampHeight * cutMultiplier,
+                            roundingRadius = [0, 0, tongueRadiusInner],
+                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                        );
+                        /*      
                         intersection(){
                             make_bevel(bevelTongueClampOuter, tongueClampHeight);
                             mb_rounded_block(
@@ -122,7 +156,7 @@ module mb_tongue(
                                 radius=[0,0,tongueRadiusInner], 
                                 resolution=($preview ? previewQuality : 1) * baseRoundingResolution
                             );
-                        }
+                        }*/
                     
                         /*
                         * Cut knobGrooveGaps
