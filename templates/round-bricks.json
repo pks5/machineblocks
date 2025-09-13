@@ -11,7 +11,10 @@
                         "brickSizeX": 1,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 4
+                        "baseRoundingRadiusZ": 4,
+                        "baseReliefCut": true,
+                        "baseReliefCutHeight": 2.2,
+                        "baseReliefCutThickness": 0.8
                     }
                 },
                 {
@@ -58,7 +61,10 @@
                         "brickSizeX": 1,
                         "brickSizeY": 1,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 4
+                        "baseRoundingRadiusZ": 4,
+                        "baseReliefCut": true,
+                        "baseReliefCutHeight": 2.2,
+                        "baseReliefCutThickness": 0.8
                     }
                 },
                 {

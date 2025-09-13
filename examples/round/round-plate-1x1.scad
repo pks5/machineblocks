@@ -32,6 +32,9 @@ baseCutoutType = "classic"; // [none, classic]
 baseRoundingRadiusZ = 4;
 // Whether to draw pillars.
 pillars = true;
+baseReliefCut = true;
+baseReliefCutHeight = 2.2;
+baseReliefCutThickness = 0.8;
 
 /* [Knobs] */
 
@@ -101,6 +104,10 @@ block(
     baseLayers = baseLayers,
     baseCutoutType = baseCutoutType,
     baseRoundingRadius=[0, 0, baseRoundingRadiusZ],
+    baseReliefCut = baseReliefCut,
+    baseReliefCutHeight = baseReliefCutHeight,
+    baseReliefCutThickness = baseReliefCutThickness,
+
     bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
 
     knobs = knobs,
