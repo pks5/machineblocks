@@ -853,47 +853,49 @@ module block(
                             
                             
                             /*
-                            * Final Subtraction from the resulting hollowed base
+                            * Knob subtraction from the resulting hollowed base
                             */
-                            difference(){
-                                union(){
-                                    for (a = [ startX : 1 : endX ]){
-                                        for (b = [ startY : 1 : endY ]){
-                                            if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-                                                || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
-                                                translate([posX(a), posY(b), -0.5 * resultingBaseHeight + 0.5 * knobCutHeight]){
-                                                    if(baseClampOffset > 0){
-                                                        translate([0,0, -0.5 * (cutOffset + knobCutHeight - baseClampOffset)])
-                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                    }
-                                                    translate([0,0,-0.5*cutOffset])
+                            translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
+                                difference(){
+                                    union(){
+                                        for (a = [ startX : 1 : endX ]){
+                                            for (b = [ startY : 1 : endY ]){
+                                                if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+                                                    || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
+                                                    translate([posX(a), posY(b), 0]){
+                                                        if(baseClampOffset > 0){
+                                                            translate([0,0, -0.5 * (knobCutHeight - baseClampOffset)])
+                                                                cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                        }
+                                                        
                                                         cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                    
-                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight)+ 0.5*cutOffset ])
-                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                        
+                                                        translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight) + cutOffset])
+                                                            cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+
+                                        
+                                    } // End union
 
                                     
-                                } // End union
-
-                                translate([0,0,baseCutoutZ])
                                     intersection(){
                                         //TODO move elsewhere
                                         bevelKnobCut = mb_inset_quad_lrfh(bevelOuter, [baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier, baseClampWallThickness*cutMultiplier]);
                                         
-                                        make_bevel(bevelKnobCut, resultingBaseHeight);
+                                        make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
                                         
                                         mb_rounded_block(
-                                            size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, resultingBaseHeight], 
+                                            size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, cutMultiplier * (knobCutHeight + cutOffset)], 
                                             center = true, 
                                             radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
                                             resolution = baseRoundingResolution
-                                        );    
+                                        );
                                     }
-                            } //End difference final cutout elements
+                                } //End difference final cutout elements
+                            }
                         } // End difference base
                     }
                     else{
