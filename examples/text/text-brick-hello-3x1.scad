@@ -26,6 +26,8 @@ baseLayers = 3; // [1:24]
 
 /* [Appearance] */
 
+// Color of the brick
+baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Whether to draw knobs
@@ -53,12 +55,16 @@ textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Fr
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
 // Spacing of the letters
 textSpacing = 1; // [0.1:0.1:4]
+// Color of the text
+textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
 
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
     baseCutoutType = baseCutoutType,
     baseLayers = baseLayers,
+    baseColor = baseColor,
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
@@ -70,6 +76,7 @@ block(
     textDepth=textDepth,
     textSpacing = textSpacing,
     textFont=str(textFont, (textStyle == "" ? "" : str(":style=", textStyle))),
+    textColor = textColor,
 
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,

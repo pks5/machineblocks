@@ -1044,7 +1044,7 @@ module block(
                 * Text Cutout
                 */
                 if(!mb_is_empty_string(text) && textDepth < 0){
-                    color(textColor){
+                    color(textColor == "inherit" ? baseColor : textColor){
                         translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                             rotate(decoratorRotations[textSide])
                                 mb_text3d(
@@ -1064,7 +1064,7 @@ module block(
                 * SVG Cutout
                 */
                 if(!mb_is_empty_string(svg) && svgDepth < 0){
-                    color(svgColor){
+                    color(svgColor == "inherit" ? baseColor : svgColor){
                         translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                             rotate(decoratorRotations[svgSide])
                                 mb_svg3d(
@@ -1227,7 +1227,7 @@ module block(
             * Text
             */
             if(!mb_is_empty_string(text) && textDepth > 0){
-                color(textColor)
+                color(textColor == "inherit" ? baseColor : textColor)
                     translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
                         rotate(decoratorRotations[textSide])
                             mb_text3d(
@@ -1246,7 +1246,7 @@ module block(
             * SVG
             */
             if(!mb_is_empty_string(svg) && svgDepth > 0){
-                color(svgColor)
+                color(svgColor == "inherit" ? baseColor : svgColor)
                     translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                         rotate(decoratorRotations[svgSide])
                             mb_svg3d(
