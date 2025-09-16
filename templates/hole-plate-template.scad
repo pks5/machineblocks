@@ -36,6 +36,10 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
+/* [Render] */
+
+/*{QUALITY_VARIABLES}*/
+
 // Generate the block
 union(){
     block(
@@ -47,12 +51,9 @@ union(){
         wallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
         gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );  
 
     block(
@@ -64,12 +65,9 @@ union(){
         wallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
         gridOffset=[0,0.5*(brickSizeY-borderSize),0],
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );
 
     block(
@@ -81,12 +79,9 @@ union(){
         wallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
         gridOffset=[0.5*(brickSizeX-borderSize),0,0],
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );    
 
     block(
@@ -98,11 +93,8 @@ union(){
         wallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
         gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );
 }

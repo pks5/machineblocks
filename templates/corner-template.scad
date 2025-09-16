@@ -46,6 +46,10 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
+/* [Render] */
+
+/*{QUALITY_VARIABLES}*/
+
 // Generate the block
 union(){
     block(
@@ -57,12 +61,9 @@ union(){
         knobs = knobs,
         knobType = knobType,
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );
 
     block(
@@ -74,11 +75,8 @@ union(){
         knobs = knobs,
         knobType = knobType,
         
-        baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        /*{QUALITY_PARAMETERS}*/
+
+        /*{PRESET_PARAMETERS}*/
     );    
 }

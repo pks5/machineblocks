@@ -15,14 +15,6 @@
 use <../../lib/block.scad>;
 include <../../config/presets.scad>;
 
-/* [Render] */
-// Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
-assemblyMode = "merged"; // [unassembled, assembled, merged]
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
 /* [Size] */
 
 // Both bricks' size in X-direction specified as multiple of an 1x1 brick.
@@ -55,6 +47,15 @@ brick2Knobs = true;
 // Type of second brick's knobs
 brick2KnobType = "technic"; // [classic, technic]
 
+/* [Render] */
+
+// Quality of the preview in relation to the final rendering.
+    previewQuality = 0.5; // [0.1:0.1:1]
+    // Number of drawn fragments for roundings in the final rendering.
+    roundingResolution = 64; // [16:8:128]
+// Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
+assemblyMode = "merged"; // [unassembled, assembled, merged]
+
 /* [Hidden] */
 
 // Grid Size XY
@@ -74,15 +75,15 @@ union()
         knobs = brick1Knobs,
         knobType = brick1KnobType,
 
-        previewQuality = previewQuality,
-        baseRoundingResolution = roundingResolution,
-        holeRoundingResolution = roundingResolution,
-        knobRoundingResolution = roundingResolution,
-        pillarRoundingResolution = roundingResolution,
-
         gridSizeXY = gridSizeXY,
         gridSizeZ = gridSizeZ,
-        
+
+        previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
+
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = assemblyMode == "merged" ? 
             [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ] : baseSideAdjustment,
@@ -107,14 +108,14 @@ translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0
           connectorHeight = brick1BaseLayers * gridSizeZ,
           
 
-          previewQuality = previewQuality,
-          baseRoundingResolution = roundingResolution,
-          holeRoundingResolution = roundingResolution,
-          knobRoundingResolution = roundingResolution,
-          pillarRoundingResolution = roundingResolution,
-
           gridSizeXY = gridSizeXY,
           gridSizeZ = gridSizeZ,
+          
+          previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
           
           baseHeightAdjustment = baseHeightAdjustment,
           baseSideAdjustment =

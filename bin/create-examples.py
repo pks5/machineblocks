@@ -3,6 +3,25 @@ import os
 import re
 import argparse
 
+quality_variables = """// Quality of the preview in relation to the final rendering.
+    previewQuality = 0.5; // [0.1:0.1:1]
+    // Number of drawn fragments for roundings in the final rendering.
+    roundingResolution = 64; // [16:8:128]"""
+
+quality_params = """previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,"""
+
+preset_params = """baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize,
+    pinSize = pinSize"""
+
+
 
 parser = argparse.ArgumentParser("create-examples")
 parser.add_argument("example_file", help="A JSON file with examples to create.", type=str)
@@ -34,6 +53,10 @@ for example in d['examples']:
         file_name = brick['name'].lower().replace(' ', '-') + '.scad'
         scad = brick_template.replace('{URL}', url)
         scad = scad.replace('{BRICK_NAME}', brick['name'])
+        scad = scad.replace('/*{QUALITY_VARIABLES}*/', quality_variables)
+        scad = scad.replace('/*{QUALITY_PARAMETERS}*/', quality_params)
+        scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
+
         for param in brick['parameters']:
             val = brick['parameters'][param]
             if(isinstance(val, str)):
@@ -54,6 +77,7 @@ for example in d['examples']:
                 scad = re.sub(param + r'\s*=\s*((\[[\[\]0-9\.\,\s]*\])|(\"[a-zA-Z0-9\.\-_\s]+\")|([0-9\.\-]+)|((true)|(false)))\s*;', param + ' = ' + json.dumps(val) + ';', scad)
             else:
                 print('Did not replace param ' + param + ': unknown type!')
+
         f = open(target_dir + "/" + file_name, "w", encoding="utf-8")
         f.write(scad)
         f.close()

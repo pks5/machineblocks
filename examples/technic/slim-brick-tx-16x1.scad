@@ -109,12 +109,15 @@ slantingY0 = 0;
 // Slanting size on Y1 side specified as multiple of an 1x1 brick.
 slantingY1 = 0;
 
-/* [Quality] */
+/* [Render] */
 
 // Quality of the preview in relation to the final rendering.
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
+
+/* [Hidden] */
+slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
 
 // Generate the block
 block(
@@ -151,7 +154,7 @@ block(
     pitKnobs = pitKnobs,
     pitWallThickness = pitWallThickness,
     
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
+    slanting = slanting, 
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,

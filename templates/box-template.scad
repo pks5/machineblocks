@@ -71,12 +71,9 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 
-/* [Quality] */
+/* [Render] */
 
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
+/*{QUALITY_VARIABLES}*/
 
 block(
     grid=[boxSizeX, boxSizeY],
@@ -89,7 +86,7 @@ block(
     knobCentered = baseKnobCentered,
     
     pit=true,
-    pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+    pitWallGaps = basePitWallGaps,
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
     pitKnobType = basePitKnobType,
@@ -101,12 +98,9 @@ block(
     tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
-    baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+    /*{QUALITY_PARAMETERS}*/
+
+    /*{PRESET_PARAMETERS}*/
 );
 
 if(lid){
@@ -122,13 +116,10 @@ if(lid){
             knobCentered = lidKnobCentered,
 
             pillars = lidPillars,
-            pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+            pitWallGaps = basePitWallGaps,
 
-            baseHeightAdjustment = baseHeightAdjustment,
-            baseSideAdjustment = baseSideAdjustment,
-            knobSize = knobSize,
-            wallThickness = wallThickness,
-            tubeZSize = tubeZSize,
-            pinSize = pinSize
+            /*{QUALITY_PARAMETERS}*/
+
+            /*{PRESET_PARAMETERS}*/
         );
 }
