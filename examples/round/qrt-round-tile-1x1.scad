@@ -35,7 +35,7 @@ baseRoundingRadiusY = 0;
 // Rounding Radius Z
 baseRoundingRadiusZ = [8, 0, 0, 0];
 // Cutout Rounding Radius
-baseCutoutRoundingRadius = 0;
+baseCutoutRoundingRadius = "auto";
 
 
 // Whether to draw pillars.

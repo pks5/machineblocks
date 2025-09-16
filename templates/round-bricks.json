@@ -133,7 +133,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": [8,0,0,0],
-                        "baseCutoutRoundingRadius":0,
+                        
                         "knobs": false,
                         "baseReliefCut": true
                     }

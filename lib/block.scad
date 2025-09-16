@@ -235,6 +235,7 @@ module block(
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
     objectSizeY = gridSizeXY * grid[1];
+    minObjectSide = min(objectSizeX, objectSizeY);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
@@ -266,7 +267,10 @@ module block(
     
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : baseCutoutRoundingRadius, baseRoundingRadiusZ);
+    
+    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : baseCutoutRoundingRadius, baseRoundingRadiusZ, minObjectSide);
+    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampWallThickness, baseRoundingRadiusZ, minObjectSide);
+    
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -290,7 +294,7 @@ module block(
 
     pitBevelKnobs = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + wallThickness, pWallThickness[1]*gridSizeXY + wallThickness, pWallThickness[2]*gridSizeXY + wallThickness, pWallThickness[3]*gridSizeXY + wallThickness]);
     pMinThickness = [-min(pWallThickness[2], pWallThickness[0])*gridSizeXY, -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, -min(pWallThickness[1], pWallThickness[2])*gridSizeXY];
-    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);            
+    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersAdjusted = mb_inset_quad_lrfh(corners, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
@@ -591,7 +595,7 @@ module block(
                                     */
                                     if(topPlateHelpers){
                                         bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
-                                        topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ);
+                                        topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
 
                                         translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                             difference(){
@@ -899,11 +903,11 @@ module block(
                                         } // End union
 
                                         mb_beveled_rounded_block(
-                                            bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness * cutMultiplier) : false,
-                                            sizeX = objectSizeX - 2 * baseClampWallThickness * cutMultiplier,
-                                            sizeY = objectSizeY - 2 * baseClampWallThickness * cutMultiplier,
+                                            bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                            sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
+                                            sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
                                             height = cutMultiplier * (knobCutHeight + cutOffset),
-                                            roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                            roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                         );
 

@@ -30,6 +30,8 @@ module mb_tongue(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
+    minObjectSide = min(objectSize[0], objectSize[1]);
+
     tongueOffsetAdjusted = tongueOffset - 0.5 * tongueThicknessAdjustment;
     tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
     tongueInnerOffsetAdjusted = tongueOffsetAdjusted + tongueThicknessAdjusted;
@@ -42,8 +44,8 @@ module mb_tongue(
 
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
 
-    tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : tongueRoundingRadius, baseRoundingRadiusZ);
-    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : tongueInnerRoundingRadius, tongueRadius);
+    tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : tongueRoundingRadius, baseRoundingRadiusZ, minObjectSide);
+    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : tongueInnerRoundingRadius, tongueRadius, minObjectSide);
     
     bevelTongueOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted);
     bevelTongueInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted);

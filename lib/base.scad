@@ -70,6 +70,9 @@ module mb_base_cutout(
     offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
     offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
 
+    minCutoutSide = min(objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness);
+    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
+
     echo(
         slanting=slanting, 
         offsetX = offsetX, 
@@ -163,7 +166,7 @@ module mb_base_cutout(
                         sizeX = objectSize[0] - 2 * baseClampWallThickness,
                         sizeY = objectSize[1] - 2 * baseClampWallThickness,
                         height = baseClampHeight * cutMultiplier,
-                        roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                        roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                         roundingResolution = roundingResolution
                     );
 
@@ -255,6 +258,7 @@ module mb_base(
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
     objectSizeY = gridSizeXY * grid[1];
+    minObjectSide = min(objectSizeX, objectSizeY);
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -263,7 +267,8 @@ module mb_base(
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
-    reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ);
+    
+    reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
 
     bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
 
@@ -371,7 +376,7 @@ module mb_base(
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
-                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ);
+                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);
                     
                 translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
                     intersection(){
