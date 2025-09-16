@@ -24,12 +24,15 @@ brickSizeY = 2; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
-/* [Appearance] */
+/* [Base] */
 
-// Color of the brick
-baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
+
+/*{BASE_VARIABLES}*/
+
+/* [Knobs] */
+
 // Whether to draw knobs
 knobs = false;
 // Whether knobs should be centered.
@@ -65,9 +68,11 @@ textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 // Generate the block
 block(
     grid = [brickSizeX, brickSizeY],
-    baseCutoutType = baseCutoutType,
     baseLayers = baseLayers,
-    baseColor = baseColor,
+    
+    baseCutoutType = baseCutoutType,
+    /*{BASE_PARAMETERS}*/
+
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
@@ -83,5 +88,7 @@ block(
 
     /*{QUALITY_PARAMETERS}*/
 
+    baseSideAdjustment = baseSideAdjustment,
+    
     /*{PRESET_PARAMETERS}*/
 );

@@ -15,13 +15,15 @@ quality_params = """previewQuality = previewQuality,
     pillarRoundingResolution = roundingResolution,"""
 
 preset_params = """baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
     pinSize = pinSize"""
 
+base_variables = """// Color of the brick
+    baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]"""
 
+base_params = """baseColor = baseColor,"""
 
 parser = argparse.ArgumentParser("create-examples")
 parser.add_argument("example_file", help="A JSON file with examples to create.", type=str)
@@ -56,6 +58,8 @@ for example in d['examples']:
         scad = scad.replace('/*{QUALITY_VARIABLES}*/', quality_variables)
         scad = scad.replace('/*{QUALITY_PARAMETERS}*/', quality_params)
         scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
+        scad = scad.replace('/*{BASE_VARIABLES}*/', base_variables)
+        scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
 
         for param in brick['parameters']:
             val = brick['parameters'][param]

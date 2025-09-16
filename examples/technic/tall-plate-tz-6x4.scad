@@ -36,8 +36,6 @@ baseRoundingRadiusY = 0;
 baseRoundingRadiusZ = 0;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
-// Color of the brick
-baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
 
 // Whether to draw pillars.
@@ -45,6 +43,9 @@ pillars = true;
 baseReliefCut = false;
 baseReliefCutHeight = 0.4;
 baseReliefCutThickness = 0.4;
+
+// Color of the brick
+    baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
 /* [Knobs] */
 
@@ -112,9 +113,9 @@ slantingY1 = 0;
 /* [Render] */
 
 // Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
+    previewQuality = 0.5; // [0.1:0.1:1]
+    // Number of drawn fragments for roundings in the final rendering.
+    roundingResolution = 64; // [16:8:128]
 
 /* [Hidden] */
 slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
@@ -162,8 +163,9 @@ block(
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
 
-    baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
+    
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
