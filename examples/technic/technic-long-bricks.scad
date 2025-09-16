@@ -13,6 +13,7 @@
 
 // Include the MachineBlocks library
 use <../../lib/block.scad>;
+include <../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -32,18 +33,6 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
 
 translate([ -80, 10, 0 ]) block(baseLayers = 3,
                                 holesX = true,
@@ -63,7 +52,8 @@ translate([ -80, 10, 0 ]) block(baseLayers = 3,
                                 baseSideAdjustment = baseSideAdjustment,
                                 knobSize = knobSize,
                                 wallThickness = wallThickness,
-                                tubeZSize = tubeZSize);
+                                tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, 0, 0 ]) block(baseLayers = 3,
                                holesX = true,
@@ -83,7 +73,8 @@ translate([ -80, 0, 0 ]) block(baseLayers = 3,
                                baseSideAdjustment = baseSideAdjustment,
                                knobSize = knobSize,
                                wallThickness = wallThickness,
-                               tubeZSize = tubeZSize);
+                               tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -10, 0 ]) block(baseLayers = 3,
                                  holesX = true,
@@ -103,7 +94,8 @@ translate([ -80, -10, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -20, 0 ]) block(baseLayers = 3,
                                  holesX = true,
@@ -123,7 +115,8 @@ translate([ -80, -20, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -30, 0 ]) block(baseLayers = 3,
                                  grid = [ 9, 1 ],
@@ -143,7 +136,8 @@ translate([ -80, -30, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -40, 0 ]) block(baseLayers = 3,
                                  grid = [ 8, 1 ],
@@ -163,7 +157,8 @@ translate([ -80, -40, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -50, 0 ]) block(baseLayers = 3,
                                  grid = [ 7, 1 ],
@@ -183,7 +178,8 @@ translate([ -80, -50, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -60, 0 ]) block(baseLayers = 3,
                                  grid = [ 6, 1 ],
@@ -203,7 +199,8 @@ translate([ -80, -60, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -70, 0 ]) block(baseLayers = 3,
                                  grid = [ 5, 1 ],
@@ -223,7 +220,8 @@ translate([ -80, -70, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -80, 0 ]) block(baseLayers = 3,
                                  grid = [ 4, 1 ],
@@ -243,7 +241,8 @@ translate([ -80, -80, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -90, 0 ]) block(baseLayers = 3,
                                  grid = [ 3, 1 ],
@@ -263,7 +262,8 @@ translate([ -80, -90, 0 ]) block(baseLayers = 3,
                                  baseSideAdjustment = baseSideAdjustment,
                                  knobSize = knobSize,
                                  wallThickness = wallThickness,
-                                 tubeZSize = tubeZSize);
+                                 tubeZSize = tubeZSize,
+    pinSize = pinSize);
 
 translate([ -80, -100, 0 ]) block(baseLayers = 3,
                                   grid = [ 2, 1 ],
@@ -283,4 +283,5 @@ translate([ -80, -100, 0 ]) block(baseLayers = 3,
                                   baseSideAdjustment = baseSideAdjustment,
                                   knobSize = knobSize,
                                   wallThickness = wallThickness,
-                                  tubeZSize = tubeZSize);
+                                  tubeZSize = tubeZSize,
+    pinSize = pinSize);
