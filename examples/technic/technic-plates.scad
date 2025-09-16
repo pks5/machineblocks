@@ -23,6 +23,9 @@ baseCutoutType = "classic"; // [none, classic]
 knobs = true;
 // Whether to draw pillars.
 pillars = true;
+// Color of the brick
+baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
 
 /* [Quality] */
 
@@ -36,6 +39,7 @@ translate([ 10, -20, 0 ]) block(grid = [ 4, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+                                baseColor = baseColor,
 
                                 previewQuality = previewQuality,
                                 baseRoundingResolution = roundingResolution,
@@ -55,6 +59,7 @@ translate([ 10, -40, 0 ]) block(grid = [ 6, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+                                baseColor = baseColor,
 
                                 previewQuality = previewQuality,
                                 baseRoundingResolution = roundingResolution,
@@ -74,6 +79,7 @@ translate([ 10, -60, 0 ]) block(grid = [ 8, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+                                baseColor = baseColor,
 
                                 previewQuality = previewQuality,
                                 baseRoundingResolution = roundingResolution,
@@ -93,6 +99,7 @@ translate([ 10, -80, 0 ]) block(grid = [ 10, 2 ],
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 pillars = pillars,
+                                baseColor = baseColor,
 
                                 previewQuality = previewQuality,
                                 baseRoundingResolution = roundingResolution,
@@ -112,6 +119,7 @@ translate([ 10, -100, 0 ]) block(grid = [ 12, 2 ],
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  pillars = pillars,
+                                baseColor = baseColor,
 
                                  previewQuality = previewQuality,
                                  baseRoundingResolution = roundingResolution,
@@ -131,6 +139,7 @@ translate([ 10, -120, 0 ]) block(grid = [ 16, 2 ],
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  pillars = pillars,
+                                baseColor = baseColor,
 
                                  previewQuality = previewQuality,
                                  baseRoundingResolution = roundingResolution,
@@ -150,6 +159,7 @@ translate([ 10, -140, 0 ]) block(grid = [ 20, 2 ],
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  pillars = pillars,
+                                baseColor = baseColor,
 
                                  previewQuality = previewQuality,
                                  baseRoundingResolution = roundingResolution,
