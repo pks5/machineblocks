@@ -39,6 +39,9 @@ baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 
+// Color of the brick
+    baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
 /* [Pit] */
 
 // Pit wall thickness
@@ -69,24 +72,26 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 
-/* [Quality] */
+/* [Render] */
 
 // Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
+    previewQuality = 0.5; // [0.1:0.1:1]
+    // Number of drawn fragments for roundings in the final rendering.
+    roundingResolution = 64; // [16:8:128]
 
 block(
     grid=[boxSizeX, boxSizeY],
     baseLayers = boxLayers - (lid ? lidLayers : 0),
+    
     baseCutoutType = baseCutoutType,
+    baseColor = baseColor,
 
     knobs = baseKnobs,
     knobType = baseKnobType,
     knobCentered = baseKnobCentered,
     
     pit=true,
-    pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+    pitWallGaps = basePitWallGaps,
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
     pitKnobType = basePitKnobType,
@@ -98,8 +103,15 @@ block(
     tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
-    baseHeightAdjustment = baseHeightAdjustment,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
+
     baseSideAdjustment = baseSideAdjustment,
+    
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
@@ -111,20 +123,26 @@ if(lid){
         block(
             grid=[boxSizeX, boxSizeY],
             baseLayers = lidLayers,
+
+            pillars = lidPillars,
+            pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
+            baseColor = baseColor,
 
             knobs = lidKnobs,
             knobType = lidKnobType,
             knobCentered = lidKnobCentered,
 
-            pillars = lidPillars,
-            pitWallGaps = basePitWallGaps, //boxType != "box" ? (boxType == "channel_corner" ? [ [ 0, 0, 0 ], [ 2, 0, 0 ] ] : [ [ 0, 0, 0 ], [ 1, 0, 0 ] ]) : [],
+            previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    knobRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution,
 
             baseHeightAdjustment = baseHeightAdjustment,
-            baseSideAdjustment = baseSideAdjustment,
-            knobSize = knobSize,
-            wallThickness = wallThickness,
-            tubeZSize = tubeZSize,
-            pinSize = pinSize
+    knobSize = knobSize,
+    wallThickness = wallThickness,
+    tubeZSize = tubeZSize,
+    pinSize = pinSize
         );
 }
