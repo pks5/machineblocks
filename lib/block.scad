@@ -905,6 +905,7 @@ module block(
                                             
                                         } // End union
 
+                                        union(){
                                         mb_beveled_rounded_block(
                                             bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
                                             sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
@@ -913,7 +914,43 @@ module block(
                                             roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                         );
+                                        map = [[0,1],[2,3],[0,3],[1,2]];
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            
+                                            if((baseRoundingRadiusZ[map[side][0]] == 0) 
+                                                && (baseRoundingRadiusZ[map[side][1]] == 0)
+                                                && (bevelHorizontal[map[side][0]] == [0,0])
+                                                && (bevelHorizontal[map[side][1]] == [0,0])){
+                                                translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
+                                                    cube([
+                                                        cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
+                                                        objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
+                                                        
+                                                        cutMultiplier * (knobCutHeight + cutOffset)
+                                                    ], center=true);
+                                                }
+                                            }
+                                        }
+                                        
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
+                                                && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
+                                                && (bevelHorizontal[map[2+side][0]] == [0,0])
+                                                && (bevelHorizontal[map[2+side][1]] == [0,0])){
+                                                translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
+                                                    cube([
+                                                        objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
+                                                        cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
+                                                        cutMultiplier * (knobCutHeight + cutOffset)
+                                                    ], center=true);
+                                                }
+                                            }
+                                        }
+
+                                        
+                                        
                                         echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
+                                        }
                                         /*
                                         intersection(){
                                             make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));

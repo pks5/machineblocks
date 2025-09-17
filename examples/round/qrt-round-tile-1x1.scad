@@ -33,7 +33,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = [8, 0, 0, 0];
+baseRoundingRadiusZ = [0, 0, 0, 8];
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
