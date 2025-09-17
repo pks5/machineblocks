@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Qrt Round Tile 1x1
+* Round Tile 1x1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -33,7 +33,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = [0, 0, 0, 8];
+baseRoundingRadiusZ = 4;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
@@ -163,7 +163,7 @@ block(
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
 
-    baseSideAdjustment = 0,
+    baseSideAdjustment = baseSideAdjustment,
     
     baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,

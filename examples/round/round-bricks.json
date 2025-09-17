@@ -1,8 +1,9 @@
 {
+    "type": "com.machineblocks.examples",
     "examples" : [
         {
-            "template": "./brick-template.scad",
-            "targetDirectory" : "../examples/round",
+            "template": "../../templates/brick-template.scad",
+            "targetDirectory" : "./scad",
             "url": "https://machineblocks.com/examples/round-bricks",
             "bricks" : [
                 {
