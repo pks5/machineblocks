@@ -33,6 +33,7 @@ module mb_base_cutout(
     baseClampOffset,
     
     cutoutRoundingRadius,
+    cutoutClampRoundingRadius,
     roundingResolution,
     wallThickness,
     
@@ -69,9 +70,6 @@ module mb_base_cutout(
 
     offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
     offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
-
-    minCutoutSide = min(objectSize[0] - 2*wallThickness, objectSize[1] - 2*wallThickness);
-    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
 
     echo(
         slanting=slanting, 
@@ -258,19 +256,21 @@ module mb_base(
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
     objectSizeY = gridSizeXY * grid[1];
-    minObjectSide = min(objectSizeX, objectSizeY);
+    
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
+    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
     
     reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
+    bevelReliefCut = mb_inset_quad_lrfh(bevelOuterAdjusted, baseReliefCutThickness);
 
-    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
+    echo(roundingRadius = roundingRadius, bevelOuterAdjusted = bevelOuterAdjusted, bevelReliefCut=bevelReliefCut, reliefRadius=reliefRadius, x=objectSizeXAdjusted - 2*baseReliefCutThickness);
 
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -314,8 +314,8 @@ module mb_base(
 
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
-                                    sizeX = objectSize[0] - 2*baseReliefCutThickness,
-                                    sizeY = objectSize[1] - 2*baseReliefCutThickness,
+                                    sizeX = objectSizeXAdjusted - 2*baseReliefCutThickness,
+                                    sizeY = objectSizeYAdjusted - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
                                     roundingResolution = roundingResolution
@@ -364,7 +364,7 @@ module mb_base(
                                 mb_slant_prism(3, slanting3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
                         }
                     }
-                } // End difference
+               } // End difference
                 
             } // End translate
 

@@ -163,7 +163,7 @@ block(
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = 0,
     
     baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,

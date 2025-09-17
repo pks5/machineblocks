@@ -269,8 +269,10 @@ module block(
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : baseCutoutRoundingRadius, baseRoundingRadiusZ, minObjectSide);
-    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampWallThickness, baseRoundingRadiusZ, minObjectSide);
+    //cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampWallThickness, baseRoundingRadiusZ, minObjectSide);
     
+    minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
+    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -519,6 +521,7 @@ module block(
                                             baseClampOffset = baseClampOffset,
                                             
                                             cutoutRoundingRadius = cutoutRoundingRadius,
+                                            cutoutClampRoundingRadius = cutoutClampRoundingRadius,
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                             
                                             wallThickness = wallThickness,
@@ -596,7 +599,7 @@ module block(
                                     if(topPlateHelpers){
                                         bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
                                         topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
-
+                                        
                                         translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                             difference(){
                                                 cube(
@@ -910,7 +913,7 @@ module block(
                                             roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                         );
-
+                                        echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
                                         /*
                                         intersection(){
                                             make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));

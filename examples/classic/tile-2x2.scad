@@ -40,7 +40,7 @@ baseCutoutRoundingRadius = "auto";
 
 // Whether to draw pillars.
 pillars = true;
-baseReliefCut = false;
+baseReliefCut = true;
 baseReliefCutHeight = 0.4;
 baseReliefCutThickness = 0.4;
 

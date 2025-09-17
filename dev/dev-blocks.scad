@@ -6,7 +6,13 @@ include <../lib/block.scad>;
 
 grid = [2, 1];
 
-block(baseLayers=3, grid=grid, knobType = "technic", holesX=true);
+//block(baseLayers=3, grid=grid, knobType = "technic", holesX=true);
 
-block(baseLayers=1, grid=grid, gridOffset=[0,1,1], baseSideAdjustment=[-0.1,-0.1,0.1,-0.1]);
+//block(baseLayers=1, grid=grid, gridOffset=[0,1,1], baseSideAdjustment=[-0.1,-0.1,0.1,-0.1]);
+
+
+
+block(baseLayers=1, grid=[1,1], knobs = false, baseRoundingRadius = [0,0,[0,7.6,0,0]], baseReliefCut=true);
+
+block(baseLayers=1, grid=[1,1], gridOffset=[1,0,0], knobs = false, baseRoundingRadius = [0,0,[0,0,7.6,0]], baseReliefCut=true);
         
