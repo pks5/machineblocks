@@ -11,9 +11,8 @@
 *
 */
 
-//Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+/*{IMPORTS}*/
 
 /* [Size] */
 

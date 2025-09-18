@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mbcli"
+version = "0.1.0"
+description = "MachineBlocks CLI: examples and thumbnails"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "Pillow>=10.0.0",
+]
+
+[project.scripts]
+mbcli = "mb.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

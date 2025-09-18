@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#Parameters
+
+PATH_TO_MAGICK="magick"
+
+IMAGE_WIDTH=2400
+IMAGE_HEIGHT=1800
+IMAGE_BORDER=60
+
+# END Parameters
+
 # TODO Support Linux
 if [[ "$OSTYPE" == "darwin"* ]]; then
    PATH_TO_OPENSCAD="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
@@ -7,11 +17,6 @@ else
    PATH_TO_OPENSCAD="C:/Program Files/OpenSCAD/openscad.exe"
 fi
 
-PATH_TO_MAGICK="magick"
-
-IMAGE_WIDTH=2400
-IMAGE_HEIGHT=1800
-IMAGE_BORDER=60
 IMAGE_WIDTH_FULL=$((IMAGE_WIDTH + 2 * IMAGE_BORDER))
 IMAGE_HEIGHT_FULL=$((IMAGE_HEIGHT + 2 * IMAGE_BORDER))
 IMAGE_WIDTH_HALF=$((IMAGE_WIDTH_FULL / 2))

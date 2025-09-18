@@ -1,23 +1,7 @@
 import json
 import os
 import re
-import argparse
-import sys
 from typing import List
-
-USAGE_TEMPLATE = """
-USAGE:
-  {prog} examples render <path>
-      Render .scad files from a JSON file or recursively from all JSON files in a directory.
-
-  {prog} thumbnails generate <path>
-      Generate thumbnails (dummy implementation).
-
-Examples:
-  {prog} examples render ./examples.json
-  {prog} examples render ./examples/
-  {prog} thumbnails generate ./assets
-"""
 
 quality_variables = """// Quality of the preview in relation to the final rendering.
     previewQuality = 0.5; // [0.1:0.1:1]
@@ -73,7 +57,6 @@ def process_examples_file(example_file_path: str):
             print(f"Cannot open template '{template_file_path}': {e}")
             continue
 
-        # Ensure target dir exists
         os.makedirs(target_dir, exist_ok=True)
 
         for brick in example['bricks']:
@@ -85,6 +68,7 @@ def process_examples_file(example_file_path: str):
             scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
             scad = scad.replace('/*{BASE_VARIABLES}*/', base_variables)
             scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
+            scad = scad.replace('/*{IMPORTS}*/', "use <" + d['config']['lib'] + "/block.scad>;\ninclude <" + d['config']['presets'] + ">;\n")
 
             for param in brick['parameters']:
                 val = brick['parameters'][param]
@@ -93,7 +77,6 @@ def process_examples_file(example_file_path: str):
                         print('Replaced string param ' + param + ' with value: ' + val)
                     except UnicodeEncodeError:
                         print('Replaced string param ' + param + ' with unicode value')
-
                     scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]+\"\s*;', param + ' = "' + val + '";', scad)
                 elif isinstance(val, bool):
                     print('Replaced bool param ' + param + ' with value: ' + str(val).lower())
@@ -115,18 +98,15 @@ def process_examples_file(example_file_path: str):
             except OSError as e:
                 print(f"Failed to write '{out_path}': {e}")
 
-
 def _collect_json_files_recursive(root_dir: str) -> List[str]:
     """Return a sorted list of absolute paths to all .json files under root_dir (recursive)."""
     collected: List[str] = []
     for current_root, dirs, files in os.walk(root_dir):
-        # Make traversal deterministic
         dirs.sort()
         files.sort()
         for name in files:
             if name.lower().endswith(".json"):
                 collected.append(os.path.abspath(os.path.join(current_root, name)))
-    # de-duplicate while preserving order
     seen = set()
     unique: List[str] = []
     for p in collected:
@@ -135,103 +115,138 @@ def _collect_json_files_recursive(root_dir: str) -> List[str]:
             unique.append(p)
     return unique
 
+def process_examples_clean(example_file_path: str):
+    """
+    Öffnet eine examples-JSON, prüft sie und listet alle .scad-Dateien in den
+    dort referenzierten targetDirectories auf. Für jede Datei wird der absolute
+    Pfad ausgegeben; darunter steht ein auskommentierter Löschbefehl.
+    """
+    if not os.path.exists(example_file_path):
+        print("Cannot open file: " + example_file_path)
+        return
 
-if __name__ == "__main__":
-    prog = os.path.basename(__file__)
-    USAGE = USAGE_TEMPLATE.format(prog=prog)
+    try:
+        with open(example_file_path, "r", encoding="utf-8") as f:
+            d = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Invalid JSON in {example_file_path}: {e}")
+        return
+    except OSError as e:
+        print(f"Cannot open file '{example_file_path}': {e}")
+        return
 
-    def _print_usage_and_exit(msg: str = None, code: int = 2):
-        if msg:
-            print(msg)
-        print(USAGE)
-        sys.exit(code)
+    if 'type' not in d or d['type'] != 'com.machineblocks.examples':
+        print(f"No valid examples file: {example_file_path}")
+        return
 
-    parser = argparse.ArgumentParser("create-examples", add_help=True)
-    # Do NOT require subparsers at parse time; we want to show a custom USAGE if missing/invalid
-    lvl1 = parser.add_subparsers(dest="command")
+    if 'examples' not in d or not isinstance(d['examples'], list):
+        print(f"No 'examples' list found in {example_file_path}")
+        return
 
-    # =====================
-    # Top-level: examples
-    # =====================
+    for example in d['examples']:
+        # targetDirectory relativ zur JSON-Datei -> zu absolutem Pfad auflösen
+        target_dir_rel = example.get('targetDirectory', '')
+        target_dir = os.path.abspath(os.path.join(example_file_path, '..', target_dir_rel))
+
+        if not os.path.isdir(target_dir):
+            print("Target directory does not exist (skip): " + target_dir)
+            continue
+
+        try:
+            entries = os.listdir(target_dir)
+        except OSError as e:
+            print(f"Cannot list target directory '{target_dir}': {e}")
+            continue
+
+        scad_files = []
+        for name in entries:
+            full = os.path.join(target_dir, name)
+            if os.path.isfile(full) and name.lower().endswith(".scad"):
+                scad_files.append(os.path.abspath(full))
+
+        if not scad_files:
+            print("No .scad files found in: " + target_dir)
+        else:
+            for scad_path in sorted(scad_files):
+                print(scad_path)
+                # Zum Löschen einer Datei, folgende Zeile auskommentieren:
+                # os.remove(scad_path)
+
+
+def _handle_examples(args, unknown, usage_printer):
+    if args.examples_cmd is None:
+        if unknown:
+            usage_printer(f"Error: unknown 'examples' subcommand '{unknown[0]}'.")
+        usage_printer("Error: no 'examples' subcommand provided.")
+        return
+
+    if args.examples_cmd == "render":
+        target_path = os.path.abspath(os.path.relpath(args.path, start=os.curdir))
+        if not os.path.exists(target_path):
+            print("Path does not exist: " + target_path)
+        elif os.path.isfile(target_path):
+            print("Processing examples file: " + target_path)
+            process_examples_file(target_path)
+        elif os.path.isdir(target_path):
+            json_files = _collect_json_files_recursive(target_path)
+            if not json_files:
+                print("No JSON files to process in directory: " + target_path)
+            else:
+                for path in json_files:
+                    print("Processing examples file: " + path)
+                    process_examples_file(path)
+        else:
+            print("Unsupported path type: " + target_path)
+
+    elif args.examples_cmd == "clean":
+        target_path = os.path.abspath(os.path.relpath(args.path, start=os.curdir))
+        if not os.path.exists(target_path):
+            print("Path does not exist: " + target_path)
+        elif os.path.isfile(target_path):
+            print("Cleaning targets for examples file: " + target_path)
+            process_examples_clean(target_path)
+        elif os.path.isdir(target_path):
+            json_files = _collect_json_files_recursive(target_path)
+            if not json_files:
+                print("No JSON files to process in directory: " + target_path)
+            else:
+                for path in json_files:
+                    print("Cleaning targets for examples file: " + path)
+                    process_examples_clean(path)
+        else:
+            print("Unsupported path type: " + target_path)
+
+    else:
+        usage_printer(f"Error: unknown 'examples' subcommand '{args.examples_cmd}'.")
+
+
+def register_examples(lvl1):
     p_examples = lvl1.add_parser(
         "examples",
-        help="Work with example JSONs (render .scad files, etc.).")
+        help="Work with example JSONs (render .scad files, etc.)."
+    )
     ex_sub = p_examples.add_subparsers(dest="examples_cmd")
 
-    # examples render <path>
     p_ex_render = ex_sub.add_parser(
         "render",
-        help="Render .scad files from a JSON file or recursively from all JSON files in a directory.")
+        help="Render .scad files from a JSON file or recursively from all JSON files in a directory."
+    )
     p_ex_render.add_argument(
         "path",
         help="Path to a JSON file or a directory that will be searched recursively for JSON files.",
         type=str,
     )
 
-    # =====================
-    # Top-level: thumbnails
-    # =====================
-    p_thumbs = lvl1.add_parser(
-        "thumbnails",
-        help="Manage thumbnails (placeholder).")
-    th_sub = p_thumbs.add_subparsers(dest="thumbs_cmd")
-
-    # thumbnails generate <path>
-    p_th_generate = th_sub.add_parser(
-        "generate",
-        help="Generate thumbnails (dummy implementation).")
-    p_th_generate.add_argument(
+    # Neuer Subcommand: examples clean
+    p_ex_clean = ex_sub.add_parser(
+        "clean",
+        help="List .scad files inside targetDirectories defined in an examples JSON (or all JSONs in a directory)."
+    )
+    p_ex_clean.add_argument(
         "path",
-        help="Path to a file or directory (not used yet).",
+        help="Path to a JSON file or a directory that will be searched recursively for JSON files.",
         type=str,
     )
 
-    # Parse while keeping unknowns so we can provide friendly errors
-    args, unknown = parser.parse_known_args()
+    p_examples.set_defaults(command_handler=_handle_examples)
 
-    # No top-level command provided
-    if args.command is None:
-        if unknown and not unknown[0].startswith("-"):
-            _print_usage_and_exit(f"Error: unknown command '{unknown[0]}'.")
-        _print_usage_and_exit("Error: no command provided.")
-
-    if args.command == "examples":
-        # No subcommand or invalid subcommand under 'examples'
-        if args.examples_cmd is None:
-            if unknown:
-                _print_usage_and_exit(f"Error: unknown 'examples' subcommand '{unknown[0]}'.")
-            _print_usage_and_exit("Error: no 'examples' subcommand provided.")
-
-        if args.examples_cmd == "render":
-            target_path = os.path.abspath(os.path.relpath(args.path, start=os.curdir))
-
-            if not os.path.exists(target_path):
-                print("Path does not exist: " + target_path)
-            elif os.path.isfile(target_path):
-                print("Processing examples file: " + target_path)
-                process_examples_file(target_path)
-            elif os.path.isdir(target_path):
-                json_files = _collect_json_files_recursive(target_path)
-                if not json_files:
-                    print("No JSON files to process in directory: " + target_path)
-                else:
-                    for path in json_files:
-                        print("Processing examples file: " + path)
-                        process_examples_file(path)
-            else:
-                print("Unsupported path type: " + target_path)
-        else:
-            _print_usage_and_exit(f"Error: unknown 'examples' subcommand '{args.examples_cmd}'.")
-
-    elif args.command == "thumbnails":
-        # No subcommand or invalid subcommand under 'thumbnails'
-        if args.thumbs_cmd is None:
-            if unknown:
-                _print_usage_and_exit(f"Error: unknown 'thumbnails' subcommand '{unknown[0]}'.")
-            _print_usage_and_exit("Error: no 'thumbnails' subcommand provided.")
-
-        if args.thumbs_cmd == "generate":
-            abs_path = os.path.abspath(os.path.relpath(args.path, start=os.curdir))
-            print(f"[thumbnails/generate] Not implemented yet. Would process: {abs_path}")
-        else:
-            _print_usage_and_exit(f"Error: unknown 'thumbnails' subcommand '{args.thumbs_cmd}'.")

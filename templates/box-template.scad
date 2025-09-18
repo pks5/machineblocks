@@ -10,8 +10,8 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+/*{IMPORTS}*/
 
 /* [View] */
 // How to view the brick in the editor
