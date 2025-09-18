@@ -13,7 +13,7 @@ def _get_openscad_path() -> str:
     Optional: Umgebungsvariable OPENSCAD_PATH überschreibt den Wert.
     """
     if sys.platform.startswith("darwin"):
-        default_path = "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+        default_path = "/Applications/OpenSCAD-Preview.app/Contents/MacOS/OpenSCAD"
     else:
         # TODO Support Linux (wie im Bash-Skript)
         default_path = "C:/Program Files/OpenSCAD/openscad.exe"
@@ -31,9 +31,7 @@ def _ensure_font(font_path: Optional[str], size: int) -> ImageFont.FreeTypeFont:
     if font_path:
         try_candidates.append(font_path)
     try_candidates += [
-        "/System/Library/Fonts/Supplemental/Arial.ttf",
-        "C:/Windows/Fonts/arial.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/Library/Fonts/RBNo3.1-Book.otf"
     ]
     for p in try_candidates:
         if p and os.path.exists(p):
@@ -114,12 +112,12 @@ def generate_thumbnails(
             png_path = os.path.join(base_out_dir, base_name + ".png")
             webp_path = os.path.join(base_out_dir, base_name + ".webp")
 
-            # OpenSCAD-Render (PNG) – PNG entsteht im Zielordner
+            # OpenSCAD-Render (PNG) – Parameter direkt via -D übergeben
             cmd = [
                 openscad,
+                "-D", "previewQuality=1",
+                "-D", "roundingResolution=128",
                 "--o", png_path,
-                "--p", "preview-parameters.json",
-                "--P", "BestQuality",
                 "--csglimit", "3000000",
                 "--imgsize", f"{image_width},{image_height}",
                 "--autocenter",
@@ -141,14 +139,14 @@ def generate_thumbnails(
 
                 x_left = 120
                 y_nw_1 = 120
-                y_nw_2 = 290
+                y_nw_2 = 280
                 draw.text((x_left, y_nw_1), label, font=font_big, fill=overlay_color)
                 draw.text((x_left, y_nw_2), "STL / 3MF Model", font=font_small, fill=overlay_color)
 
                 _, h1 = _text_size(font_big, "MachineBlocks")
                 _, h2 = _text_size(font_small, "generated with")
                 y_sw_1 = image_height_full - 120 - h1
-                y_sw_2 = image_height_full - 290 - h2
+                y_sw_2 = image_height_full - 260 - h2
                 draw.text((x_left, y_sw_1), "MachineBlocks", font=font_big, fill=overlay_color)
                 draw.text((x_left, y_sw_2), "generated with", font=font_small, fill=overlay_color)
 
