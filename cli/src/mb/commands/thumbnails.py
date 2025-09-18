@@ -26,19 +26,14 @@ def _safe_title_32(s: str) -> str:
     base = base.replace("-", " ")
     return base[:32].title()
 
-def _ensure_font(font_path: Optional[str], size: int) -> ImageFont.FreeTypeFont:
-    try_candidates = []
-    if font_path:
-        try_candidates.append(font_path)
-    try_candidates += [
-        "/Library/Fonts/RBNo3.1-Book.otf"
-    ]
-    for p in try_candidates:
-        if p and os.path.exists(p):
-            try:
-                return ImageFont.truetype(p, size=size)
-            except Exception:
-                pass
+def _ensure_font(font_path: str, font_file: str, size: int) -> ImageFont.FreeTypeFont:
+    font = font_path + font_file
+    
+    if font and os.path.exists(font):
+        try:
+            return ImageFont.truetype(font, size=size)
+        except Exception:
+            pass
     return ImageFont.load_default()
 
 def _hex_with_alpha(hex_color: str) -> tuple:
@@ -90,8 +85,9 @@ def generate_thumbnails(
     border_color = (0xE5, 0xE5, 0xCE, 255)  # '#e5e5ce'
     overlay_color = _hex_with_alpha("#000000d0")
 
-    font_big = _ensure_font(font_path, 140)
-    font_small = _ensure_font(font_path, 70)
+    font_big = _ensure_font(font_path, "RBNo3.1-Medium.otf", 140)
+    font_mb = _ensure_font(font_path, "RBNo3.1-Book.otf", 140)
+    font_small = _ensure_font(font_path, "RBNo3.1-Light.otf", 70)
 
     for current_root, _, files in os.walk(root_dir):
         files.sort()
@@ -116,7 +112,7 @@ def generate_thumbnails(
             cmd = [
                 openscad,
                 "-D", "previewQuality=1",
-                "-D", "roundingResolution=128",
+                "-D", "roundingResolution=256",
                 "--o", png_path,
                 "--csglimit", "3000000",
                 "--imgsize", f"{image_width},{image_height}",
@@ -141,14 +137,14 @@ def generate_thumbnails(
                 y_nw_1 = 120
                 y_nw_2 = 280
                 draw.text((x_left, y_nw_1), label, font=font_big, fill=overlay_color)
-                draw.text((x_left, y_nw_2), "STL / 3MF Model", font=font_small, fill=overlay_color)
+                draw.text((x_left, y_nw_2), "3D printable", font=font_small, fill=overlay_color)
 
-                _, h1 = _text_size(font_big, "MachineBlocks")
-                _, h2 = _text_size(font_small, "generated with")
+                _, h1 = _text_size(font_mb, "MachineBlocks")
+                _, h2 = _text_size(font_small, "created with")
                 y_sw_1 = image_height_full - 120 - h1
-                y_sw_2 = image_height_full - 260 - h2
-                draw.text((x_left, y_sw_1), "MachineBlocks", font=font_big, fill=overlay_color)
-                draw.text((x_left, y_sw_2), "generated with", font=font_small, fill=overlay_color)
+                y_sw_2 = image_height_full - 274 - h2
+                draw.text((x_left, y_sw_1), "MachineBlocks", font=font_mb, fill=overlay_color)
+                draw.text((x_left, y_sw_2), "created with", font=font_small, fill=overlay_color)
 
                 composed = Image.alpha_composite(canvas, overlay)
                 new_height = int(composed.height * (image_width_half / composed.width))
@@ -221,8 +217,8 @@ def register_thumbnails(lvl1):
         help="Border size in pixels (default: 60)."
     )
     p_th_generate.add_argument(
-        "--font-path", dest="font_path", type=str, default=None,
-        help="Optional TTF font path (fallbacks are tried if not provided)."
+        "--font-path", dest="font_path", type=str, default="/Library/Fonts/",
+        help="Path to fonts."
     )
 
     p_thumbs.set_defaults(command_handler=_handle_thumbnails)
