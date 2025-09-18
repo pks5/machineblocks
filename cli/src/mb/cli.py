@@ -48,7 +48,7 @@ def main():
         handler(args, unknown, _print_usage_and_exit)
     else:
         _print_usage_and_exit("Error: no handler for command.", 2)
-    print("hello")
+    print("hello2")
 
 if __name__ == "__main__":
     main()

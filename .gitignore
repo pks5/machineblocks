@@ -1,4 +1,5 @@
 .DS_Store
 
+cli/build
 __pycache__
 *.egg-info
