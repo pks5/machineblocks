@@ -160,6 +160,30 @@ def generate_thumbnails(
                 except Exception:
                     pass
 
+def clean_thumbnails(root_dir: str) -> None:
+    """
+    Sucht rekursiv nach .webp-Dateien ab root_dir und gibt pro Treffer
+    den absoluten Pfad aus. Zusätzlich wird ein auskommentierter
+    Löschbefehl (plattformabhängig) in derselben Zeile ausgegeben.
+    """
+    if not os.path.isdir(root_dir):
+        print(f"[thumbnails/clean] Directory does not exist: {root_dir}")
+        return
+
+    count = 0
+    for current_root, _, files in os.walk(root_dir):
+        files.sort()
+        for name in files:
+            if name.lower().endswith(".webp"):
+                abs_path = os.path.abspath(os.path.join(current_root, name))
+                # Plattformabhängiger Löschbefehl
+                del_cmd = f'del "{abs_path}"' if os.name == "nt" else f'rm -v "{abs_path}"'
+                print(f'{abs_path}    # {del_cmd}')
+                count += 1
+
+    print(f"[thumbnails/clean] Found {count} .webp file(s).")
+
+
 def _handle_thumbnails(args, unknown, usage_printer):
     if args.thumbs_cmd is None:
         if unknown:
@@ -181,6 +205,9 @@ def _handle_thumbnails(args, unknown, usage_printer):
             image_border=args.image_border,
             font_path=args.font_path,
         )
+    elif args.thumbs_cmd == "clean":
+        abs_path = os.path.abspath(os.path.relpath(args.path, start=os.curdir))
+        clean_thumbnails(abs_path)
     else:
         usage_printer(f"Error: unknown 'thumbnails' subcommand '{args.thumbs_cmd}'.")
 
@@ -219,6 +246,15 @@ def register_thumbnails(lvl1):
     p_th_generate.add_argument(
         "--font-path", dest="font_path", type=str, default="/Library/Fonts/",
         help="Path to fonts."
+    )
+    p_th_clean = th_sub.add_parser(
+        "clean",
+        help="List .webp thumbnails recursively and print a commented delete command for each."
+    )
+    p_th_clean.add_argument(
+        "path",
+        help="Path to a directory (processed recursively for .webp files).",
+        type=str,
     )
 
     p_thumbs.set_defaults(command_handler=_handle_thumbnails)

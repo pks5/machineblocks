@@ -6,6 +6,7 @@ use <shapes.scad>;
 module mb_tongue(
     gridSizeXY,
     objectSize,
+    objectSizeAdjusted,
     baseRoundingRadius,
     baseRoundingResolution,
     beveled,
@@ -30,7 +31,7 @@ module mb_tongue(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    minObjectSide = min(objectSize[0], objectSize[1]);
+    minObjectSide = min(objectSizeAdjusted[0], objectSizeAdjusted[1]);
 
     tongueOffsetAdjusted = tongueOffset - 0.5 * tongueThicknessAdjustment;
     tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
