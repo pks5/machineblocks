@@ -10,8 +10,10 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
+
 
 /* [View] */
 // How to view the brick in the editor
@@ -78,6 +80,7 @@ lidPermanent = true;
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
+    previewRender = true;
 
 block(
     grid=[boxSizeX, boxSizeY],
@@ -108,6 +111,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
     baseSideAdjustment = baseSideAdjustment,
     
@@ -138,6 +142,7 @@ if(lid){
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
             baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,

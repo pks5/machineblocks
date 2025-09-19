@@ -119,6 +119,7 @@ slantingY1 = 0;
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
+    previewRender = true;
 
 /* [Hidden] */
 slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
@@ -166,6 +167,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
     baseSideAdjustment = baseSideAdjustment,
     

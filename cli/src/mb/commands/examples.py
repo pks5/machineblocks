@@ -6,13 +6,15 @@ from typing import List
 quality_variables = """// Quality of the preview in relation to the final rendering.
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]"""
+    roundingResolution = 64; // [16:8:128]
+    previewRender = true;"""
 
 quality_params = """previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,"""
+    pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,"""
 
 preset_params = """baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,

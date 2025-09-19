@@ -11,9 +11,10 @@
 *
 */
 
-//Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
+
 
 /* [Size] */
 
@@ -54,6 +55,7 @@ knobType = "classic"; // [classic, technic]
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
+    previewRender = true;
 
 // Generate the block
 union(){
@@ -72,6 +74,7 @@ union(){
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
         baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
@@ -95,6 +98,7 @@ union(){
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
         baseSideAdjustment = baseSideAdjustment,
     

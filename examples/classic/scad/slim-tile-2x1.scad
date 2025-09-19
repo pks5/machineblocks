@@ -11,9 +11,10 @@
 *
 */
 
-// Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
+
 
 /* [Size] */
 
@@ -55,6 +56,8 @@ knobs = false;
 knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
+// Knob Padding
+knobPadding = 1.5;
 
 /* [Bevel] */
 
@@ -116,6 +119,7 @@ slantingY1 = 0;
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
+    previewRender = true;
 
 /* [Hidden] */
 slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
@@ -137,6 +141,7 @@ block(
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
+    knobPadding = knobPadding,
     
     pillars = pillars,
     
@@ -162,6 +167,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
     baseSideAdjustment = baseSideAdjustment,
     

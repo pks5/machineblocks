@@ -11,9 +11,10 @@
 *
 */
 
-//Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+// Imports
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
+
 
 /* [Size] */
 
@@ -68,6 +69,7 @@ textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
+    previewRender = true;
 
 // Generate the block
 block(
@@ -95,6 +97,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
     baseSideAdjustment = baseSideAdjustment,
     

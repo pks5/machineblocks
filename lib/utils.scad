@@ -56,3 +56,13 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 * Resolve base side adjustment
 */
 function mb_resolve_base_side_adjustment(baseSideAdjustment) = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);
+
+module pre_render(do_render, convexity){
+    if(do_render){
+        render(convexity)
+            children();
+    }
+    else{
+        children();
+    }
+}
