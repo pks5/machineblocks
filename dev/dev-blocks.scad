@@ -23,12 +23,12 @@ block(baseLayers=1, grid=[2,2], gridOffset=[2,2,0], knobs = false, baseRoundingR
         
         
 difference(){
-    block(grid=[4,4], knobs=false, align="start", alignChildren="start"){
-        block(grid=[2,2], gridOffset=[0,0,0], knobs=true, baseCutoutType="none", baseSideAdjustment=1.5, align=["center","center","start"]);
+    block(grid=[4,4], knobs=false, align="start", alignChildren="center"){
+        block(grid=[2,2], gridOffset=[0,0,0], knobs=true, baseCutoutType="none", baseSideAdjustment=1.5, align="center_start");
     
     };
 
-    block(grid=[2,2], gridOffset=[2,2,0], baseLayers=3, knobs=false, baseCutoutType="none", baseSideAdjustment=0.1, align=["start", "start", "center"]);
+    *block(grid=[2,2], gridOffset=[2,2,0], baseLayers=3, knobs=false, baseCutoutType="none", baseSideAdjustment=0.1, align=["start", "start", "center"]);
  }
  
  

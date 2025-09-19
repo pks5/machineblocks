@@ -255,9 +255,9 @@ module block(
     gridSizeY = slanting != false ? grid[1] + (slanting[2] < 0 ? slanting[2] : 0) + (slanting[3] < 0 ? slanting[3] : 0) : grid[1];
 
     alignment = is_string(align) ? [align, align, align] : align;
-    translateX = alignment[0] == "center" ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
-    translateY = alignment[1] == "center" ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    translateZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" ? 1 : -1) * 0.5*baseLayers * baseHeight);
+    translateX = (alignment[0] == "center" || alignment[0] == "center_start") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
+    translateY = (alignment[1] == "center" || alignment[1] == "center_start") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
+    translateZ = alignment[2] == "center" ? 0 : (((alignment[2] == "start" || alignment[2] == "center_start") ? 1 : -1) * 0.5*baseLayers * baseHeight);
     //(center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
     //(center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted))
     //Calculate Brick Offset
@@ -266,8 +266,8 @@ module block(
     gridOffsetZ = gridOffset[2] * gridSizeZ; 
 
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren] : alignChildren;
-    translateXChildren = alignmentChildren[0] == "center" ? 0.5*objectSizeX : ((alignmentChildren[0] == "start" ? 0 : 1) * objectSizeX);
-    translateYChildren = alignmentChildren[1] == "center" ? 0.5*objectSizeY : ((alignmentChildren[1] == "start" ? 0 : 1) * objectSizeY);
+    translateXChildren = alignmentChildren[0] == "center" ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
+    translateYChildren = alignmentChildren[1] == "center" ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
@@ -482,8 +482,8 @@ module block(
     * START BLOCK
     */
     
-    translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
-        translate([translateX,translateY,translateZ]){
+    translate([gridOffsetX + translateX, gridOffsetY+translateY, gridOffsetZ]){
+        translate([0,0,translateZ]){
             pre_render(previewRender, previewRenderConvexity){
                 if(base){
                     difference(){
@@ -1439,10 +1439,12 @@ module block(
 
                 
             } // End pre_render
+        
         } //End grid offset
 
         translate([translateXChildren, translateYChildren, 0]){
             children();
         }
+        
     } //End translate
 } // End module block    
