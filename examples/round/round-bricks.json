@@ -4,6 +4,7 @@
         "lib": "../../../lib",
         "presets": "../../../config/presets.scad"
     },
+    "name": "Round Bricks",
     "examples" : [
         {
             "template": "../../templates/brick-template.scad",
@@ -28,7 +29,8 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -39,7 +41,8 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 8,
                         "holesZ": true,
-                        "holeZType": "axis"
+                        "holeZType": "axis",
+                        "knobPadding":0
                     }
                 },
                 {
@@ -48,7 +51,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 16
+                        "baseRoundingRadiusZ": 16,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -57,7 +61,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 6,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 24
+                        "baseRoundingRadiusZ": 24,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -80,7 +85,8 @@
                         "baseLayers": 1,
                         "knobType": "technic",
                         "baseRoundingRadiusZ": 4,
-                        "baseReliefCut": true
+                        "baseReliefCut": true,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -89,7 +95,8 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -98,7 +105,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 16
+                        "baseRoundingRadiusZ": 16,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -107,7 +115,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 6,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 24
+                        "baseRoundingRadiusZ": 24,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -116,7 +125,8 @@
                         "brickSizeX": 8,
                         "brickSizeY": 8,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 32
+                        "baseRoundingRadiusZ": 32,
+                        "knobPadding":0
                     }
                 },
 
@@ -172,7 +182,8 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 4
+                        "baseRoundingRadiusZ": 4,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -181,7 +192,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -190,7 +202,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 6,
                         "baseLayers": 3,
-                        "baseRoundingRadiusZ": 12
+                        "baseRoundingRadiusZ": 12,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -199,7 +212,8 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 4
+                        "baseRoundingRadiusZ": 4,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -208,7 +222,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -217,7 +232,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -226,7 +242,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 8
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -235,7 +252,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 6,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 12
+                        "baseRoundingRadiusZ": 12,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -244,7 +262,8 @@
                         "brickSizeX": 8,
                         "brickSizeY": 6,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 16
+                        "baseRoundingRadiusZ": 16,
+                        "knobPadding":0
                     }
                 },
                 {
@@ -253,7 +272,8 @@
                         "brickSizeX": 8,
                         "brickSizeY": 8,
                         "baseLayers": 1,
-                        "baseRoundingRadiusZ": 16
+                        "baseRoundingRadiusZ": 16,
+                        "knobPadding":0
                     }
                 }
             ]

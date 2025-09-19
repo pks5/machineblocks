@@ -142,6 +142,8 @@ def process_examples_clean(example_file_path: str):
     if 'examples' not in d or not isinstance(d['examples'], list):
         print(f"No 'examples' list found in {example_file_path}")
         return
+    
+    print(f"Processing {d['name']} ...")
 
     for example in d['examples']:
         # targetDirectory relativ zur JSON-Datei -> zu absolutem Pfad auflösen
@@ -149,13 +151,13 @@ def process_examples_clean(example_file_path: str):
         target_dir = os.path.abspath(os.path.join(example_file_path, '..', target_dir_rel))
 
         if not os.path.isdir(target_dir):
-            print("Target directory does not exist (skip): " + target_dir)
+            print("[examples/clean] Target directory does not exist (skip): " + target_dir)
             continue
 
         try:
             entries = os.listdir(target_dir)
         except OSError as e:
-            print(f"Cannot list target directory '{target_dir}': {e}")
+            print(f"[examples/clean] Cannot list target directory '{target_dir}': {e}")
             continue
 
         scad_files = []
@@ -164,14 +166,18 @@ def process_examples_clean(example_file_path: str):
             if os.path.isfile(full) and name.lower().endswith(".scad"):
                 scad_files.append(os.path.abspath(full))
 
+        print(f"[examples/clean] Found {len(scad_files)} .scad files to delete in {target_dir} and subdirectories.")
+
         if not scad_files:
-            print("No .scad files found in: " + target_dir)
+            print("[examples/clean] No .scad files found in: " + target_dir)
         else:
             for scad_path in sorted(scad_files):
-                print(scad_path)
+                print(f"[examples/clean] Deleted {scad_path}")
                 # Zum Löschen einer Datei, folgende Zeile auskommentieren:
                 # os.remove(scad_path)
 
+        print(f"[examples/clean] Deleted {len(scad_files)} .scad files in {target_dir} and subdirectories.")
+        print(f"[thumbnails/clean] DONE - Have a nice day!")
 
 def _handle_examples(args, unknown, usage_printer):
     if args.examples_cmd is None:

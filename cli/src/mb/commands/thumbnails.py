@@ -170,18 +170,20 @@ def clean_thumbnails(root_dir: str) -> None:
         print(f"[thumbnails/clean] Directory does not exist: {root_dir}")
         return
 
+    print(f"[thumbnails/clean] Cleaning thumbnails in {root_dir} ...")
+
     count = 0
     for current_root, _, files in os.walk(root_dir):
         files.sort()
         for name in files:
             if name.lower().endswith(".webp"):
                 abs_path = os.path.abspath(os.path.join(current_root, name))
-                # Plattformabhängiger Löschbefehl
-                del_cmd = f'del "{abs_path}"' if os.name == "nt" else f'rm -v "{abs_path}"'
-                print(f'{abs_path}    # {del_cmd}')
+                os.remove(abs_path)
+                print(f'[thumbnails/clean] Deleted {abs_path}')
                 count += 1
 
-    print(f"[thumbnails/clean] Found {count} .webp file(s).")
+    print(f"[thumbnails/clean] Deleted {count} thumbnails in {root_dir} and subdirectories.")
+    print(f"[thumbnails/clean] DONE - Have a nice day!")
 
 
 def _handle_thumbnails(args, unknown, usage_printer):

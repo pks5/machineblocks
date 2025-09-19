@@ -1,8 +1,8 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/round-bricks
+* https://machineblocks.com/examples/beveled-bricks
 *
-* Rounded Plate 6x4
+* Wedge Plate Left 4x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ include <../../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 6; // [1:32]  
+brickSizeX = 4; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 4; // [1:32]  
+brickSizeY = 2; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
@@ -34,7 +34,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 8;
+baseRoundingRadiusZ = 0;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
@@ -57,7 +57,7 @@ knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 // Knob Padding
-knobPadding = 0;
+knobPadding = 1.5;
 
 /* [Bevel] */
 
@@ -66,7 +66,7 @@ bevel0 = [0, 0];
 // Bevel X and Y for the corner 0,1
 bevel1 = [0, 0];
 // Bevel X and Y for the corner 1,1
-bevel2 = [0, 0];
+bevel2 = [0, -1];
 // Bevel X and Y for the corner 1,0
 bevel3 = [0, 0];
 

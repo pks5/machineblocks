@@ -56,6 +56,8 @@ knobs = true;
 knobCentered = false;
 // Type of the knobs
 knobType = "technic"; // [classic, technic]
+// Knob Padding
+knobPadding = 0;
 
 /* [Bevel] */
 
@@ -138,6 +140,7 @@ block(
     knobs = knobs,
     knobCentered = knobCentered,
     knobType = knobType,
+    knobPadding = knobPadding,
     
     pillars = pillars,
     
