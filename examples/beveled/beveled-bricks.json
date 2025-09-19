@@ -140,6 +140,81 @@
                         "bevel2": [0,-1],
                         "knobPadding": 0
                     }
+                },
+                {
+                    "name": "Wedge Plate Right 8x3",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        
+                        "bevel1": [0,-2],
+                        "bevel2": [0,0.666],
+                        "knobPadding": 1
+                    }
+                },
+                {
+                    "name": "Wedge Plate Left 8x3",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "bevel1": [0,0.666],
+                        "bevel2": [0,-2],
+                        "knobPadding": 1
+                    }
+                },
+                {
+                    "name": "Wedge Plate Right 12x3",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "bevel1": [0,-2],
+                        "knobPadding": 0
+                    }
+                },
+                {
+                    "name": "Wedge Plate Left 12x3",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "bevel2": [0,-2],
+                        "knobPadding": 0
+                    }
+                },
+
+                {
+                    "name": "Wedge Plate Right 4x6",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "bevel2": [-3,0]
+                    }
+                },
+
+                {
+                    "name": "Wedge Plate Left 4x6",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "bevel1": [3,0]
+                    }
+                },
+                {
+                    "name": "Wedge Plate Double 4x6",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "bevel0": [0,1],
+                        "bevel1": [0,-1],
+                        "bevel2": [0,1],
+                        "bevel3": [0,-1]
+                    }
                 }
             ]
         }
