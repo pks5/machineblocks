@@ -223,7 +223,7 @@ module block(
         //Alignment
         align = "start",
         alignChildren = "start",
-        //center = false, //If true, block is truly centered. Otherwise grid aligned as defined in align. TODO implement true centering
+        //alignIgnoreAdjustment = true, //If true, brick is aligned as if there is no adjustment - TODO
         
         //Preview
         previewQuality = 0.5, //Between 0.0 and 1.0
@@ -254,20 +254,21 @@ module block(
     gridSizeX = slanting != false ? grid[0] + (slanting[0] < 0 ? slanting[0] : 0) + (slanting[1] < 0 ? slanting[1] : 0) : grid[0];
     gridSizeY = slanting != false ? grid[1] + (slanting[2] < 0 ? slanting[2] : 0) + (slanting[3] < 0 ? slanting[3] : 0) : grid[1];
 
+    //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
     translateX = (alignment[0] == "center" || alignment[0] == "center_start") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
     translateY = (alignment[1] == "center" || alignment[1] == "center_start") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
     translateZ = alignment[2] == "center" ? 0 : (((alignment[2] == "start" || alignment[2] == "center_start") ? 1 : -1) * 0.5*baseLayers * baseHeight);
-    //(center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeXAdjusted - objectSizeX)) : (alignIgnoreAdjustment ?  0.5*objectSizeX : 0.5*objectSizeXAdjusted));
-    //(center ? (alignIgnoreAdjustment ? 0 : 0.5*(objectSizeYAdjusted - objectSizeY)) : (alignIgnoreAdjustment ?  0.5*objectSizeY : 0.5*objectSizeYAdjusted))
-    //Calculate Brick Offset
-    gridOffsetX = gridOffset[0] * gridSizeXY;
-    gridOffsetY = gridOffset[1] * gridSizeXY;
-    gridOffsetZ = gridOffset[2] * gridSizeZ; 
+    
+    gridOffsetX = gridOffset[0] * gridSizeXY + translateX;
+    gridOffsetY = gridOffset[1] * gridSizeXY + translateY;
+    gridOffsetZ = gridOffset[2] * gridSizeZ + translateZ; 
 
-    alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren] : alignChildren;
-    translateXChildren = alignmentChildren[0] == "center" ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
-    translateYChildren = alignmentChildren[1] == "center" ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
+    //Children alignment
+    alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
+    translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "center_start") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
+    translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "center_start") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
+    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (((alignmentChildren[2] == "start" || alignmentChildren[2] == "center_start") ? -1 : 1) * 0.5*baseLayers * baseHeight);
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
@@ -482,8 +483,8 @@ module block(
     * START BLOCK
     */
     
-    translate([gridOffsetX + translateX, gridOffsetY+translateY, gridOffsetZ]){
-        translate([0,0,translateZ]){
+    translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
+        
             pre_render(previewRender, previewRenderConvexity){
                 if(base){
                     difference(){
@@ -1440,11 +1441,11 @@ module block(
                 
             } // End pre_render
         
-        } //End grid offset
+        
 
-        translate([translateXChildren, translateYChildren, 0]){
+        translate([translateXChildren, translateYChildren, translateZChildren]){
             children();
         }
         
-    } //End translate
+    } //End grid offset
 } // End module block    
