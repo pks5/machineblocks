@@ -220,12 +220,10 @@ module block(
         pcbScrewSocketHeight = 3, //mm
         pcbScrewSockets = [],
 
-        //Children
-        childrenOrigin = [0,0], //TODO implement!
-
         //Alignment
         align = "start",
-        center = false, //If true, block is truly centered. Otherwise grid aligned as defined in align. TODO implement true centering
+        alignChildren = "start",
+        //center = false, //If true, block is truly centered. Otherwise grid aligned as defined in align. TODO implement true centering
         
         //Preview
         previewQuality = 0.5, //Between 0.0 and 1.0
@@ -257,7 +255,6 @@ module block(
     gridSizeY = slanting != false ? grid[1] + (slanting[2] < 0 ? slanting[2] : 0) + (slanting[3] < 0 ? slanting[3] : 0) : grid[1];
 
     alignment = is_string(align) ? [align, align, align] : align;
-
     translateX = alignment[0] == "center" ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
     translateY = alignment[1] == "center" ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
     translateZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" ? 1 : -1) * 0.5*baseLayers * baseHeight);
@@ -267,6 +264,10 @@ module block(
     gridOffsetX = gridOffset[0] * gridSizeXY;
     gridOffsetY = gridOffset[1] * gridSizeXY;
     gridOffsetZ = gridOffset[2] * gridSizeZ; 
+
+    alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren] : alignChildren;
+    translateXChildren = alignmentChildren[0] == "center" ? 0.5*objectSizeX : ((alignmentChildren[0] == "start" ? 0 : 1) * objectSizeX);
+    translateYChildren = alignmentChildren[1] == "center" ? 0.5*objectSizeY : ((alignmentChildren[1] == "start" ? 0 : 1) * objectSizeY);
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
@@ -483,16 +484,513 @@ module block(
     
     translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
         translate([translateX,translateY,translateZ]){
-        pre_render(previewRender, previewRenderConvexity){
-            if(base){
-                difference(){
-                    color(baseColor){
-                        union(){
-                            if(baseCutoutType == "classic"){
-                                difference() {
+            pre_render(previewRender, previewRenderConvexity){
+                if(base){
+                    difference(){
+                        color(baseColor){
+                            union(){
+                                if(baseCutoutType == "classic"){
+                                    difference() {
+                                        /*
+                                        * Base Block
+                                        */
+                                        mb_base(
+                                            grid = grid,
+                                            gridSizeXY = gridSizeXY,
+                                            objectSize = [objectSizeX, objectSizeY],
+                                            height = resultingBaseHeight,
+                                            baseSideAdjustment = sAdjustment,
+                                            baseReliefCut = baseReliefCut,
+                                            baseReliefCutHeight = baseReliefCutHeight,
+                                            baseReliefCutThickness = baseReliefCutThickness,
+                                            roundingRadius = baseRoundingRadius, 
+                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                            pit = pit,
+                                            pitRoundingRadius = pitRoundingRadius,
+                                            pitDepth = resultingPitDepth,
+                                            pitWallThickness = pWallThickness,
+                                            pitWallGaps = pitWallGaps,
+                                            slanting = slanting,
+                                            slantingLowerHeight = slantingLowerHeight,
+                                            beveled = beveled,
+                                            bevelHorizontal = bevelHorizontal,
+                                            bevelOuter = bevelOuter,
+                                            bevelOuterAdjusted = bevelOuterAdjusted,
+                                            connectors = connectors,
+                                            connectorHeight = connectorHeight,
+                                            connectorDepth = connectorDepth,
+                                            connectorSize = connectorSize,
+                                            connectorDepthTolerance = connectorDepthTolerance,
+                                            connectorSideTolerance = connectorSideTolerance
+                                        );
+
+                                        /*
+                                        * Subtract base cutout
+                                        */
+                                        difference(){
+                                            union(){
+                                                mb_base_cutout(
+                                                    grid = grid,
+                                                    gridSizeXY = gridSizeXY,
+                                                    
+                                                    baseHeight = resultingBaseHeight,
+                                                    baseSideAdjustment = sAdjustment,
+                                                    baseRoundingRadiusZ = baseRoundingRadiusZ,
+                                                    baseCutoutDepth = baseCutoutDepth,
+                                                    baseClampHeight = baseClampHeight,
+                                                    baseClampThickness = baseClampThickness,
+                                                    baseClampOffset = baseClampOffset,
+                                                    
+                                                    cutoutRoundingRadius = cutoutRoundingRadius,
+                                                    cutoutClampRoundingRadius = cutoutClampRoundingRadius,
+                                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                                    
+                                                    wallThickness = wallThickness,
+                                                    
+                                                    topPlateZ = topPlateZ,
+                                                    topPlateHeight = resultingTopPlateHeight,
+                                                    topPlateHelpers = topPlateHelpers,
+                                                    topPlateHelperHeight = topPlateHelperHeight,
+                                                    topPlateHelperThickness = topPlateHelperThickness,
+                                                    
+                                                    pit = pit,
+                                                    pitDepth = resultingPitDepth,
+                                                    
+                                                    slanting = slanting,
+                                                    slantingLowerHeight = slantingLowerHeight,
+
+                                                    beveled = beveled,
+                                                    bevelHorizontal = bevelHorizontal,
+                                                    bevelOuter = bevelOuter,
+                                                    bevelInner = bevelInner
+                                                );
+                                                
+                                                /*
+                                                * Wall Gaps X
+                                                */
+                                                for (a = [ startX : 1 : endX ]){
+                                                    for (side = [ 0 : 1 : 1 ]){
+                                                        gapLength = drawWallGapX(a, side, 0);
+                                                        if(gapLength > 0){
+                                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
+                                                                difference(){
+                                                                    translate([0, 0, -0.5 * cutOffset])
+                                                                        cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
+                                                                    
+                                                                    translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
+                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                
+                                                                
+                                                                    translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
+                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                }  
+                                                            }
+                                                        }
+                                                        
+                                                    }
+                                                }
+                                                
+                                                /*
+                                                * Wall Gaps Y
+                                                */
+                                                for (b = [ startY : 1 : endY ]){
+                                                    for (side = [ 0 : 1 : 1 ]){
+                                                        gapLength = drawWallGapY(b, side, 0);
+                                                        if(gapLength > 0){
+                                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
+                                                                difference(){
+                                                                    translate([0, 0, -0.5 * cutOffset])
+                                                                        cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
+                                                                    
+                                                                    translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
+                                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                
+                                                                    translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
+                                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } // End union cutout
+
+                                            /*
+                                            * Plate Helpers
+                                            */
+                                            if(topPlateHelpers){
+                                                bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
+                                                topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
+                                                
+                                                translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                                                    difference(){
+                                                        cube(
+                                                            size = [objectSizeX, objectSizeY, topPlateHelperHeight + cutOffset], 
+                                                            center=true
+                                                        );
+
+                                                        mb_beveled_rounded_block(
+                                                            bevel = beveled ? bevelTopPlateHelper : false,
+                                                            sizeX = objectSizeX - 2*wallThickness - 2*topPlateHelperThickness,
+                                                            sizeY = objectSizeY - 2*wallThickness - 2*topPlateHelperThickness,
+                                                            height = cutMultiplier * (topPlateHelperHeight + cutOffset),
+                                                            roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
+                                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                        );
+
+                                                        /*
+                                                        intersection(){
+                                                            make_bevel(bevelTopPlateHelper, cutMultiplier * (topPlateHelperHeight + cutOffset));
+                                                
+                                                            mb_rounded_block(
+                                                                size = [objectSizeX - 2*wallThickness - 2*topPlateHelperThickness, objectSizeY - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * (topPlateHelperHeight + cutOffset)], 
+                                                                center=true, 
+                                                                resolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                                                radius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]
+                                                            );
+                                                        }*/
+
+                                                        for (a = [ startX : 1 : endX ]){
+                                                            for (side = [ 0 : 1 : 1 ]){
+                                                                gapLength = drawWallGapX(a, side, 0);
+                                                                if(gapLength > 0){
+                                                                    translate([posX(a + 0.5*(gapLength-1)), sideY(side), 0]){
+                                                                        cube([
+                                                                            gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                            2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                            cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                                        ], center=true); 
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                        for (b = [ startY : 1 : endY ]){
+                                                            for (side = [ 0 : 1 : 1 ]){
+                                                                gapLength = drawWallGapY(b, side, 0);
+                                                                if(gapLength > 0){
+                                                                    translate([sideX(side), posY(b + 0.5*(gapLength-1)), 0]){
+                                                                        cube([
+                                                                            2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                            gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                            cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                                        ], center=true);   
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } // End if topPlateHelpers
+
+                                            if(stabilizerGrid){
+                                                difference(){
+                                                    /*
+                                                    * Stabilizer Grid
+                                                    */
+                                                    union(){
+                                                        //Helpers X
+                                                        for (a = [ 0 : 1 : grid[0] - 2 ]){
+                                                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
+                                                                cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
+                                                            }
+                                                        }
+                                                        
+                                                        //Helpers Y
+                                                        for (b = [ 0 : 1 : grid[1] - 2 ]){
+                                                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
+                                                                cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
+                                                            };
+                                                        }
+
+                                                        /*
+                                                        * Screw Hole Helpers
+                                                        */
+                                                        for (a = [ startX : 1 : endX ]){
+                                                            for (b = [ startY : 1 : endY ]){
+                                                                if(drawScrewHoleZ(a, b, 0)){
+                                                                    translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                                        cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                                    translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
+                                                                        cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                                    translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                                        cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                                    translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
+                                                                        cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
+                                                                } 
+                                                            }
+                                                        }
+                                                    } // End union stabilizer grid
+
+                                                    /*
+                                                    * Pillar cutouts from stabilizer grid
+                                                    */
+                                                    if(pillars != false){
+                                                        /*
+                                                        * Cut TubeZ area
+                                                        */
+                                                        
+                                                        for (a = [ startX : 1 : endX - 1 ]){
+                                                            for (b = [ startY : 1 : endY - 1 ]){
+                                                                if(drawPillar(a, b)){
+                                                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
+                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                        };
+                                                                }
+                                                            }   
+                                                        }
+
+                                                        for (a = [ startX : 1 : endX ]){
+                                                            for (side = [ 0 : 1 : 1 ]){
+                                                                gapLength = drawWallGapX(a, side, 0);
+
+                                                                if(gapLength > 1){
+                                                                    for (p = [ 0 : 1 : gapLength - 2 ]){
+                                                                        if(side == 0 || side == 2){
+                                                                            translate([posX(a + p + 0.5), posY(-0.5), baseCutoutZ + cutTolerance]){
+                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                            };
+                                                                        }
+                                                                        if(side == 1 || side == 2){
+                                                                            translate([posX(a + p + 0.5), posY(endY + 0.5), baseCutoutZ + cutTolerance]){
+                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                            };
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+
+                                                        for (b = [ startY : 1 : endY ]){
+                                                            for (side = [ 0 : 1 : 1 ]){
+                                                                gapLength = drawWallGapY(b, side, 0);
+
+                                                                if(gapLength > 1){
+                                                                    for (p = [ 0 : 1 : gapLength - 2 ]){
+                                                                        if(side == 0 || side == 2){
+                                                                            translate([posX(-0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
+                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                            };
+                                                                        }
+                                                                        if(side == 1 || side == 2){
+                                                                            translate([posX(endX + 0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
+                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                            };
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } // End Pillars Cutouts from stabilizer grid
+                                                } // End difference stabilizer Grid
+
+                                                
+                                            } // End stabilizer grid
+
+                                            if(pillars != false){
+                                                //Tubes with holes
+                                                for (a = [ startX : 1 : endX - 1 ]){
+                                                    for (b = [ startY : 1 : endY - 1 ]){
+                                                        if(drawPillar(a, b)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                                difference(){
+                                                                    union(){
+                                                                        cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                        
+                                                                        //Clamp
+                                                                        translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
+                                                                            cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    }
+                                                                    intersection(){
+                                                                        cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                        cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
+                                                                    };
+                                                                }
+                                                            };
+                                                        }
+                                                    }
+                                                }
+                                            } // End if pillars
+
+                                            if(pillars != false){
+                                                /*
+                                                * Middle Pins
+                                                */
+                                                //Middle Pin X
+                                                if(gridSizeX > 1 && gridSizeY == 1){
+                                                    for (b = [ startY : 1 : endY ]){
+                                                        for (a = [ startX : 1 : endX - 1 ]){
+                                                            if(drawPin(a, b, true)){
+                                                                translate([posX(a + 0.5), posY(b), baseCutoutZ]){
+                                                                    cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                };
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                //Middle Pin Y
+                                                if(gridSizeX == 1 && gridSizeY > 1){
+                                                    for (a = [ startX : 1 : endX]){
+                                                        for (b = [ startY : 1 : endY - 1 ]){
+                                                            if(drawPin(a, b, false)){
+                                                                translate([posX(a), posY(b + 0.5), baseCutoutZ]){
+                                                                    cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                };
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } // End if pillars
+                                            
+                                            //X-Holes Outer
+                                            if(holesX != false){
+                                                for(r = [ 0 : 1 : holeXMaxRows-1]){
+                                                    for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
+                                                        if(drawHoleX(a, r)){
+                                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                                                rotate([90, 0, 0]){ 
+                                                                    cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                }
+                                                            };
+                                                        }
+                                                    }
+                                                }
+                                            } // End if holesX
+                                            
+                                            //Y-Holes Outer
+                                            if(holesY != false){
+                                                for(r = [ 0 : 1 : holeYMaxRows-1]){
+                                                    for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
+                                                        if(drawHoleY(b, r)){
+                                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                                                rotate([0, 90, 0]){ 
+                                                                    cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                };
+                                                            };
+                                                        }
+                                                    }
+                                                }
+                                            } // End if holesY
+                                            
+                                            if(holesZ != false){
+                                                /*
+                                                * Z-Holes Outer
+                                                */
+                                                for (a = [ startX : 1 : endX - 1 ]){
+                                                    for (b = [ startY : 1 : endY - 1 ]){
+                                                        if(drawHoleZ(a, b)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                
+                                                                //Clamp
+                                                                translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
+                                                                    cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                            };
+                                                        }
+                                                    }   
+                                                }
+                                            } // End if holesZ
+                                        } // End Difference Base Cutout
+
+                                        
+                                        
+                                        /*
+                                        * Knob subtraction from the resulting hollowed base
+                                        */
+                                        translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
+                                            difference(){
+                                                union(){
+                                                    for (a = [ startX : 1 : endX ]){
+                                                        for (b = [ startY : 1 : endY ]){
+                                                            if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+                                                                || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
+                                                                translate([posX(a), posY(b), 0]){
+                                                                    if(baseClampOffset > 0){
+                                                                        translate([0,0, -0.5 * (knobCutHeight - baseClampOffset)])
+                                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                    }
+                                                                    
+                                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                    
+                                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight) + cutOffset])
+                                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    
+                                                } // End union
+
+                                                union(){
+                                                mb_beveled_rounded_block(
+                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                                    sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
+                                                    sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
+                                                    height = cutMultiplier * (knobCutHeight + cutOffset),
+                                                    roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
+                                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                );
+                                                map = [[0,1],[2,3],[0,3],[1,2]];
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    
+                                                    if((baseRoundingRadiusZ[map[side][0]] == 0) 
+                                                        && (baseRoundingRadiusZ[map[side][1]] == 0)
+                                                        && (bevelHorizontal[map[side][0]] == [0,0])
+                                                        && (bevelHorizontal[map[side][1]] == [0,0])){
+                                                        translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
+                                                            cube([
+                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
+                                                                objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                
+                                                                cutMultiplier * (knobCutHeight + cutOffset)
+                                                            ], center=true);
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
+                                                        && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
+                                                        && (bevelHorizontal[map[2+side][0]] == [0,0])
+                                                        && (bevelHorizontal[map[2+side][1]] == [0,0])){
+                                                        translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
+                                                            cube([
+                                                                objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
+                                                                cutMultiplier * (knobCutHeight + cutOffset)
+                                                            ], center=true);
+                                                        }
+                                                    }
+                                                }
+
+                                                
+                                                
+                                                echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
+                                                }
+                                                /*
+                                                intersection(){
+                                                    make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
+                                                    mb_rounded_block(
+                                                        size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, cutMultiplier * (knobCutHeight + cutOffset)], 
+                                                        center = true, 
+                                                        radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
+                                                        resolution = baseRoundingResolution
+                                                    );
+                                                }*/
+                                            } //End difference final cutout elements
+                                        } // End translate
+                                    } // End difference base
+                                }
+                                else{
                                     /*
-                                    * Base Block
+                                    * Solid Base Block
                                     */
+                                    
                                     mb_base(
                                         grid = grid,
                                         gridSizeXY = gridSizeXY,
@@ -522,923 +1020,429 @@ module block(
                                         connectorDepthTolerance = connectorDepthTolerance,
                                         connectorSideTolerance = connectorSideTolerance
                                     );
+                                } //End baseCutoutType
+                            } //End base union
+                        } //End base color
+                        
+                        /*
+                        * Final Subtraction
+                        * Starting from here, everything applies to the final block
+                        *
+                        */
 
-                                    /*
-                                    * Subtract base cutout
-                                    */
-                                    difference(){
-                                        union(){
-                                            mb_base_cutout(
-                                                grid = grid,
-                                                gridSizeXY = gridSizeXY,
-                                                
-                                                baseHeight = resultingBaseHeight,
-                                                baseSideAdjustment = sAdjustment,
-                                                baseRoundingRadiusZ = baseRoundingRadiusZ,
-                                                baseCutoutDepth = baseCutoutDepth,
-                                                baseClampHeight = baseClampHeight,
-                                                baseClampThickness = baseClampThickness,
-                                                baseClampOffset = baseClampOffset,
-                                                
-                                                cutoutRoundingRadius = cutoutRoundingRadius,
-                                                cutoutClampRoundingRadius = cutoutClampRoundingRadius,
-                                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                                
-                                                wallThickness = wallThickness,
-                                                
-                                                topPlateZ = topPlateZ,
-                                                topPlateHeight = resultingTopPlateHeight,
-                                                topPlateHelpers = topPlateHelpers,
-                                                topPlateHelperHeight = topPlateHelperHeight,
-                                                topPlateHelperThickness = topPlateHelperThickness,
-                                                
-                                                pit = pit,
-                                                pitDepth = resultingPitDepth,
-                                                
-                                                slanting = slanting,
-                                                slantingLowerHeight = slantingLowerHeight,
-
-                                                beveled = beveled,
-                                                bevelHorizontal = bevelHorizontal,
-                                                bevelOuter = bevelOuter,
-                                                bevelInner = bevelInner
-                                            );
-                                            
-                                            /*
-                                            * Wall Gaps X
-                                            */
-                                            for (a = [ startX : 1 : endX ]){
-                                                for (side = [ 0 : 1 : 1 ]){
-                                                    gapLength = drawWallGapX(a, side, 0);
-                                                    if(gapLength > 0){
-                                                        translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
-                                                            difference(){
-                                                                translate([0, 0, -0.5 * cutOffset])
-                                                                    cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
-                                                                
-                                                                translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
-                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
-                                                            
-                                                            
-                                                                translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
-                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
-                                                            }  
-                                                        }
-                                                    }
+                        //Cut X-Holes
+                        if(holesX != false){
+                            color(baseColor){
+                                for(r = [ 0 : 1 : holeXMaxRows-1]){
+                                    for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
+                                        if(drawHoleX(a, r)){
+                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                                rotate([90, 0, 0]){ 
+                                                    if(holeXType == "technic"){
+                                                        cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
-                                                }
-                                            }
-                                            
-                                            /*
-                                            * Wall Gaps Y
-                                            */
-                                            for (b = [ startY : 1 : endY ]){
-                                                for (side = [ 0 : 1 : 1 ]){
-                                                    gapLength = drawWallGapY(b, side, 0);
-                                                    if(gapLength > 0){
-                                                        translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
-                                                            difference(){
-                                                                translate([0, 0, -0.5 * cutOffset])
-                                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
-                                                                
-                                                                translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
-                                                                    cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
-                                                            
-                                                                translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
-                                                                    cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } // End union cutout
-
-                                        /*
-                                        * Plate Helpers
-                                        */
-                                        if(topPlateHelpers){
-                                            bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
-                                            topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
-                                            
-                                            translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
-                                                difference(){
-                                                    cube(
-                                                        size = [objectSizeX, objectSizeY, topPlateHelperHeight + cutOffset], 
-                                                        center=true
-                                                    );
-
-                                                    mb_beveled_rounded_block(
-                                                        bevel = beveled ? bevelTopPlateHelper : false,
-                                                        sizeX = objectSizeX - 2*wallThickness - 2*topPlateHelperThickness,
-                                                        sizeY = objectSizeY - 2*wallThickness - 2*topPlateHelperThickness,
-                                                        height = cutMultiplier * (topPlateHelperHeight + cutOffset),
-                                                        roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
-                                                        roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
-                                                    );
-
-                                                    /*
-                                                    intersection(){
-                                                        make_bevel(bevelTopPlateHelper, cutMultiplier * (topPlateHelperHeight + cutOffset));
-                                            
-                                                        mb_rounded_block(
-                                                            size = [objectSizeX - 2*wallThickness - 2*topPlateHelperThickness, objectSizeY - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * (topPlateHelperHeight + cutOffset)], 
-                                                            center=true, 
-                                                            resolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                                            radius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]
-                                                        );
-                                                    }*/
-
-                                                    for (a = [ startX : 1 : endX ]){
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            gapLength = drawWallGapX(a, side, 0);
-                                                            if(gapLength > 0){
-                                                                translate([posX(a + 0.5*(gapLength-1)), sideY(side), 0]){
-                                                                    cube([
-                                                                        gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
-                                                                        2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
-                                                                        cutMultiplier * (topPlateHelperHeight + cutOffset)
-                                                                    ], center=true); 
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-                                                    for (b = [ startY : 1 : endY ]){
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            gapLength = drawWallGapY(b, side, 0);
-                                                            if(gapLength > 0){
-                                                                translate([sideX(side), posY(b + 0.5*(gapLength-1)), 0]){
-                                                                    cube([
-                                                                        2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
-                                                                        gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
-                                                                        cutMultiplier * (topPlateHelperHeight + cutOffset)
-                                                                    ], center=true);   
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } // End if topPlateHelpers
-
-                                        if(stabilizerGrid){
-                                            difference(){
-                                                /*
-                                                * Stabilizer Grid
-                                                */
-                                                union(){
-                                                    //Helpers X
-                                                    for (a = [ 0 : 1 : grid[0] - 2 ]){
-                                                        translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
-                                                            cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
-                                                        }
-                                                    }
+                                                        translate([0, 0, 0.5 * objectSizeY])
+                                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                        translate([0, 0, -0.5 * objectSizeY])
+                                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
-                                                    //Helpers Y
-                                                    for (b = [ 0 : 1 : grid[1] - 2 ]){
-                                                    translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
-                                                            cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
-                                                        };
                                                     }
-
-                                                    /*
-                                                    * Screw Hole Helpers
-                                                    */
-                                                    for (a = [ startX : 1 : endX ]){
-                                                        for (b = [ startY : 1 : endY ]){
-                                                            if(drawScrewHoleZ(a, b, 0)){
-                                                                translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
-                                                                translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                                    cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
-                                                                translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
-                                                                translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                                    cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
-                                                            } 
-                                                        }
+                                                    else if(holeXType == "axis"){
+                                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                     }
-                                                } // End union stabilizer grid
-
-                                                /*
-                                                * Pillar cutouts from stabilizer grid
-                                                */
-                                                if(pillars != false){
-                                                    /*
-                                                    * Cut TubeZ area
-                                                    */
-                                                    
-                                                    for (a = [ startX : 1 : endX - 1 ]){
-                                                        for (b = [ startY : 1 : endY - 1 ]){
-                                                            if(drawPillar(a, b)){
-                                                                    translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
-                                                                        cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                    };
-                                                            }
-                                                        }   
-                                                    }
-
-                                                    for (a = [ startX : 1 : endX ]){
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            gapLength = drawWallGapX(a, side, 0);
-
-                                                            if(gapLength > 1){
-                                                                for (p = [ 0 : 1 : gapLength - 2 ]){
-                                                                    if(side == 0 || side == 2){
-                                                                        translate([posX(a + p + 0.5), posY(-0.5), baseCutoutZ + cutTolerance]){
-                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                        };
-                                                                    }
-                                                                    if(side == 1 || side == 2){
-                                                                        translate([posX(a + p + 0.5), posY(endY + 0.5), baseCutoutZ + cutTolerance]){
-                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                        };
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-                                                    for (b = [ startY : 1 : endY ]){
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            gapLength = drawWallGapY(b, side, 0);
-
-                                                            if(gapLength > 1){
-                                                                for (p = [ 0 : 1 : gapLength - 2 ]){
-                                                                    if(side == 0 || side == 2){
-                                                                        translate([posX(-0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
-                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                        };
-                                                                    }
-                                                                    if(side == 1 || side == 2){
-                                                                        translate([posX(endX + 0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
-                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                        };
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                } // End Pillars Cutouts from stabilizer grid
-                                            } // End difference stabilizer Grid
-
-                                            
-                                        } // End stabilizer grid
-
-                                        if(pillars != false){
-                                            //Tubes with holes
-                                            for (a = [ startX : 1 : endX - 1 ]){
-                                                for (b = [ startY : 1 : endY - 1 ]){
-                                                    if(drawPillar(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                            difference(){
-                                                                union(){
-                                                                    cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                    
-                                                                    //Clamp
-                                                                    translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
-                                                                        cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                }
-                                                                intersection(){
-                                                                    cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                    cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
-                                                                };
-                                                            }
-                                                        };
-                                                    }
-                                                }
-                                            }
-                                        } // End if pillars
-
-                                        if(pillars != false){
-                                            /*
-                                            * Middle Pins
-                                            */
-                                            //Middle Pin X
-                                            if(gridSizeX > 1 && gridSizeY == 1){
-                                                for (b = [ startY : 1 : endY ]){
-                                                    for (a = [ startX : 1 : endX - 1 ]){
-                                                        if(drawPin(a, b, true)){
-                                                            translate([posX(a + 0.5), posY(b), baseCutoutZ]){
-                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
-                                                                    cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            };
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            
-                                            //Middle Pin Y
-                                            if(gridSizeX == 1 && gridSizeY > 1){
-                                                for (a = [ startX : 1 : endX]){
-                                                    for (b = [ startY : 1 : endY - 1 ]){
-                                                        if(drawPin(a, b, false)){
-                                                            translate([posX(a), posY(b + 0.5), baseCutoutZ]){
-                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
-                                                                    cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            };
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } // End if pillars
-                                        
-                                        //X-Holes Outer
-                                        if(holesX != false){
-                                            for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                                for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
-                                                    if(drawHoleX(a, r)){
-                                                        translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
-                                                            rotate([90, 0, 0]){ 
-                                                                cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            }
-                                                        };
-                                                    }
-                                                }
-                                            }
-                                        } // End if holesX
-                                        
-                                        //Y-Holes Outer
-                                        if(holesY != false){
-                                            for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                                for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
-                                                    if(drawHoleY(b, r)){
-                                                        translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
-                                                            rotate([0, 90, 0]){ 
-                                                                cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            };
-                                                        };
-                                                    }
-                                                }
-                                            }
-                                        } // End if holesY
-                                        
-                                        if(holesZ != false){
-                                            /*
-                                            * Z-Holes Outer
-                                            */
-                                            for (a = [ startX : 1 : endX - 1 ]){
-                                                for (b = [ startY : 1 : endY - 1 ]){
-                                                    if(drawHoleZ(a, b)){
-                                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                            cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                            
-                                                            //Clamp
-                                                            translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
-                                                                cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                        };
-                                                    }
-                                                }   
-                                            }
-                                        } // End if holesZ
-                                    } // End Difference Base Cutout
-
-                                    
-                                    
-                                    /*
-                                    * Knob subtraction from the resulting hollowed base
-                                    */
-                                    translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
-                                        difference(){
-                                            union(){
-                                                for (a = [ startX : 1 : endX ]){
-                                                    for (b = [ startY : 1 : endY ]){
-                                                        if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-                                                            || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
-                                                            translate([posX(a), posY(b), 0]){
-                                                                if(baseClampOffset > 0){
-                                                                    translate([0,0, -0.5 * (knobCutHeight - baseClampOffset)])
-                                                                        cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                                }
-                                                                
-                                                                cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                                
-                                                                translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight) + cutOffset])
-                                                                    cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                
-                                            } // End union
-
-                                            union(){
-                                            mb_beveled_rounded_block(
-                                                bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
-                                                sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
-                                                sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
-                                                height = cutMultiplier * (knobCutHeight + cutOffset),
-                                                roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
-                                            );
-                                            map = [[0,1],[2,3],[0,3],[1,2]];
-                                            for (side = [ 0 : 1 : 1 ]){
-                                                
-                                                if((baseRoundingRadiusZ[map[side][0]] == 0) 
-                                                    && (baseRoundingRadiusZ[map[side][1]] == 0)
-                                                    && (bevelHorizontal[map[side][0]] == [0,0])
-                                                    && (bevelHorizontal[map[side][1]] == [0,0])){
-                                                    translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
-                                                        cube([
-                                                            cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
-                                                            objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
-                                                            
-                                                            cutMultiplier * (knobCutHeight + cutOffset)
-                                                        ], center=true);
-                                                    }
-                                                }
-                                            }
-                                            
-                                            for (side = [ 0 : 1 : 1 ]){
-                                                if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
-                                                    && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
-                                                    && (bevelHorizontal[map[2+side][0]] == [0,0])
-                                                    && (bevelHorizontal[map[2+side][1]] == [0,0])){
-                                                    translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
-                                                        cube([
-                                                            objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
-                                                            cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
-                                                            cutMultiplier * (knobCutHeight + cutOffset)
-                                                        ], center=true);
-                                                    }
-                                                }
-                                            }
-
-                                            
-                                            
-                                            echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
-                                            }
-                                            /*
-                                            intersection(){
-                                                make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
-                                                mb_rounded_block(
-                                                    size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, cutMultiplier * (knobCutHeight + cutOffset)], 
-                                                    center = true, 
-                                                    radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
-                                                    resolution = baseRoundingResolution
-                                                );
-                                            }*/
-                                        } //End difference final cutout elements
-                                    } // End translate
-                                } // End difference base
-                            }
-                            else{
-                                /*
-                                * Solid Base Block
-                                */
-                                
-                                mb_base(
-                                    grid = grid,
-                                    gridSizeXY = gridSizeXY,
-                                    objectSize = [objectSizeX, objectSizeY],
-                                    height = resultingBaseHeight,
-                                    baseSideAdjustment = sAdjustment,
-                                    baseReliefCut = baseReliefCut,
-                                    baseReliefCutHeight = baseReliefCutHeight,
-                                    baseReliefCutThickness = baseReliefCutThickness,
-                                    roundingRadius = baseRoundingRadius, 
-                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                    pit = pit,
-                                    pitRoundingRadius = pitRoundingRadius,
-                                    pitDepth = resultingPitDepth,
-                                    pitWallThickness = pWallThickness,
-                                    pitWallGaps = pitWallGaps,
-                                    slanting = slanting,
-                                    slantingLowerHeight = slantingLowerHeight,
-                                    beveled = beveled,
-                                    bevelHorizontal = bevelHorizontal,
-                                    bevelOuter = bevelOuter,
-                                    bevelOuterAdjusted = bevelOuterAdjusted,
-                                    connectors = connectors,
-                                    connectorHeight = connectorHeight,
-                                    connectorDepth = connectorDepth,
-                                    connectorSize = connectorSize,
-                                    connectorDepthTolerance = connectorDepthTolerance,
-                                    connectorSideTolerance = connectorSideTolerance
-                                );
-                            } //End baseCutoutType
-                        } //End base union
-                    } //End base color
-                    
-                    /*
-                    * Final Subtraction
-                    * Starting from here, everything applies to the final block
-                    *
-                    */
-
-                    //Cut X-Holes
-                    if(holesX != false){
-                        color(baseColor){
-                            for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
-                                    if(drawHoleX(a, r)){
-                                        translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
-                                            rotate([90, 0, 0]){ 
-                                                if(holeXType == "technic"){
-                                                    cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                
-                                                    translate([0, 0, 0.5 * objectSizeY])
-                                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                    translate([0, 0, -0.5 * objectSizeY])
-                                                        cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                
-                                                }
-                                                else if(holeXType == "axis"){
-                                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
-                                                }
+                                                };
                                             };
-                                        };
-                                    }
-                                }
-                            }
-                        } // End color
-                    } // End if holesX
-                    
-                    //Cut Y-Holes
-                    if(holesY != false){
-                        color(baseColor){
-                            for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
-                                    if(drawHoleY(b, r)){
-                                        translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
-                                            rotate([0, 90, 0]){ 
-                                                if(holeYType == "technic"){
-                                                    cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                
-                                                    translate([0, 0, 0.5 * objectSizeX])
-                                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                    translate([0, 0, -0.5 * objectSizeX])
-                                                        cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                }
-                                                else if(holeYType == "axis"){
-                                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
-                                                }
-                                            };
-                                        };
-                                    }
-                                }
-                            }
-                        } // End color
-                    } // End if holesY
-                    
-                    if(holesZ != false){
-                        color(baseColor){
-                            //Cut Z-Holes
-                            for (a = [ startX : 1 : endX - 1 ]){
-                                for (b = [ startY : 1 : endY - 1 ]){
-                                    if(drawHoleZ(a, b)){
-                                        translate([posX(a + 0.5), posY(b+0.5), 0]){
-                                            if(holeZType == "technic"){
-                                                cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                            }
-                                            else if(holeZType == "axis"){
-                                                mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
-                                            }
-                                        };
-                                    }
-                                }
-                            }
-                        } // End color
-                    } // End if holesZ
-
-                    /*
-                    * Text Cutout
-                    */
-                    if(!mb_is_empty_string(text) && textDepth < 0){
-                        color(textColor == "inherit" ? baseColor : textColor){
-                            translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
-                                rotate(decoratorRotations[textSide])
-                                    mb_text3d(
-                                        text = text,
-                                        textDepth = 2 * abs(textDepth),
-                                        textSize = textSize,
-                                        textFont = textFont,
-                                        textSpacing = textSpacing,
-                                        textVerticalAlign = textVerticalAlign,
-                                        textHorizontalAlign = textHorizontalAlign,
-                                        center = true
-                                    );
-                        } // End color
-                    } // End if text
-
-                    /*
-                    * SVG Cutout
-                    */
-                    if(!mb_is_empty_string(svg) && svgDepth < 0){
-                        color(svgColor == "inherit" ? baseColor : svgColor){
-                            translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
-                                rotate(decoratorRotations[svgSide])
-                                    mb_svg3d(
-                                        file = svg,
-                                        orgWidth = svgDimensions[0],
-                                        orgHeight = svgDimensions[1],
-                                        depth = 2 * abs(svgDepth),
-                                        size = svgScale,
-                                        center = true
-                                    );
-                        } // End color
-                    } // End if svg
-
-                    /*
-                    * Screw Holes Z
-                    */
-                    if(stabilizerGrid || (baseCutoutType == "none") || (baseCutoutType == "groove")){
-                        color(baseColor){
-                            for (a = [ startX : 1 : endX ]){
-                                for (b = [ startY : 1 : endY ]){
-                                    if(drawScrewHoleZ(a, b, 0)){
-                                        translate([posX(a), posY(b), 0.5*knobHeight])
-                                            cylinder(h = (resultingBaseHeight + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                    } 
-                                }
-                            }
-                        } // End color
-                    } // End if stabilizerGrid
-
-                    /*
-                    * Screw Holes X
-                    */
-                    for (b = [ 0 : 1 : len(screwHolesX) - 1]){
-                        color(baseColor){
-                            for (s = [ 0 : 1 : 1]){
-                                if(screwHolesX[b][2] == undef || screwHolesX[b][2] == s){
-                                    translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * gridSizeZ])
-                                        rotate([90, 0, 0])
-                                            cylinder(h = screwHoleXDepth + cutOffset, r = 0.5*screwHoleXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                }
-                            }
-                        } // End color
-                    } // End for screwHolesX
-
-                    /*
-                    * Screw Holes Y
-                    */
-                    for (b = [ 0 : 1 : len(screwHolesY) - 1]){
-                        color(baseColor){
-                            for (s = [ 0 : 1 : 1]){
-                                if(screwHolesY[b][2] == undef || screwHolesY[b][2] == s){
-                                    translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * gridSizeZ])
-                                        rotate([0, 90, 0])
-                                            cylinder(h = screwHoleYDepth + cutOffset, r = 0.5*screwHoleYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                }
-                            }
-                        } // End color
-                    } // End for screwHolesY
-
-                    /*
-                    * Cut Groove
-                    */
-                    if(baseCutoutType == "groove"){
-                        color(baseColor){
-                            translate([0, 0, sideZ(0) + 0.5*tongueGrooveDepth]){ 
-                                translate([0, 0, -0.5 * cutOffset]){
-                                    mb_tongue(
-                                        gridSizeXY = gridSizeXY,
-                                        objectSize = [objectSizeX, objectSizeY],
-                                        objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-                                        baseRoundingRadius = baseRoundingRadius,
-                                        baseRoundingResolution = baseRoundingResolution,
-                                        beveled = beveled,
-                                        bevelOuter = bevelOuter,
-                                        tongueOffset = tongueOffset,
-                                        tongueThickness = tongueThickness,
-                                        tongueThicknessAdjustment = tongueThicknessAdjustment,
-                                        tongueHeight = tongueGrooveDepth + cutOffset,
-                                        tongueClampThickness = tongueClampThickness,
-                                        tongueClampHeight = tongueClampHeight,
-                                        tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
-                                        tongueRoundingRadius = tongueRoundingRadius,
-                                        tongueInnerRoundingRadius = tongueInnerRoundingRadius,
-                                        pit = true,
-                                        pitWallGaps = pitWallGaps,
-                                        pitSizeX = pitSizeX,
-                                        pitSizeY = pitSizeY,
-                                        previewQuality = previewQuality
-                                    );
-                                }
-
-                                tongueSizeX = objectSizeX - 2 * tongueOffset + tongueThicknessAdjustment;
-                                tongueSizeY = objectSizeY - 2 * tongueOffset + tongueThicknessAdjustment;
-                                tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
-                                tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
-                                tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
-
-                                /*
-                                * Groove Wall Gaps X
-                                */
-                                //color([0.608, 0.349, 0.714]) //9b59b6
-                                for (a = [ startX : 1 : endX ]){
-                                    for (side = [ 0 : 1 : 1 ]){
-                                        gapLength = drawWallGapX(a, side, 0);
-                                        if(gapLength > 0){
-                                            translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset]){
-                                                cube([
-                                                    gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
-                                                    objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
-                                                    tongueGrooveDepth + cutOffset
-                                                ], center=true); 
-                                                
-                                                translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
-                                                    cube([
-                                                        gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
-                                                        objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
-                                                        tongueClampHeight
-                                                    ], center=true); 
-                                            }
                                         }
                                     }
                                 }
-                                
-                                /*
-                                * Groove Wall Gaps Y
-                                */
-                                for (b = [ startY : 1 : endY ]){
-                                    for (side = [ 0 : 1 : 1 ]){
-                                        gapLength = drawWallGapY(b, side, 0);
-                                        if(gapLength > 0){
-                                            translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset]){
-                                                cube([
-                                                    objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
-                                                    gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
-                                                    tongueGrooveDepth + cutOffset
-                                                ], center=true);   
+                            } // End color
+                        } // End if holesX
+                        
+                        //Cut Y-Holes
+                        if(holesY != false){
+                            color(baseColor){
+                                for(r = [ 0 : 1 : holeYMaxRows-1]){
+                                    for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
+                                        if(drawHoleY(b, r)){
+                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                                rotate([0, 90, 0]){ 
+                                                    if(holeYType == "technic"){
+                                                        cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                    
+                                                        translate([0, 0, 0.5 * objectSizeX])
+                                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                        translate([0, 0, -0.5 * objectSizeX])
+                                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                    }
+                                                    else if(holeYType == "axis"){
+                                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
+                                                    }
+                                                };
+                                            };
+                                        }
+                                    }
+                                }
+                            } // End color
+                        } // End if holesY
+                        
+                        if(holesZ != false){
+                            color(baseColor){
+                                //Cut Z-Holes
+                                for (a = [ startX : 1 : endX - 1 ]){
+                                    for (b = [ startY : 1 : endY - 1 ]){
+                                        if(drawHoleZ(a, b)){
+                                            translate([posX(a + 0.5), posY(b+0.5), 0]){
+                                                if(holeZType == "technic"){
+                                                    cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                }
+                                                else if(holeZType == "axis"){
+                                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
+                                                }
+                                            };
+                                        }
+                                    }
+                                }
+                            } // End color
+                        } // End if holesZ
 
-                                                translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                        /*
+                        * Text Cutout
+                        */
+                        if(!mb_is_empty_string(text) && textDepth < 0){
+                            color(textColor == "inherit" ? baseColor : textColor){
+                                translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                                    rotate(decoratorRotations[textSide])
+                                        mb_text3d(
+                                            text = text,
+                                            textDepth = 2 * abs(textDepth),
+                                            textSize = textSize,
+                                            textFont = textFont,
+                                            textSpacing = textSpacing,
+                                            textVerticalAlign = textVerticalAlign,
+                                            textHorizontalAlign = textHorizontalAlign,
+                                            center = true
+                                        );
+                            } // End color
+                        } // End if text
+
+                        /*
+                        * SVG Cutout
+                        */
+                        if(!mb_is_empty_string(svg) && svgDepth < 0){
+                            color(svgColor == "inherit" ? baseColor : svgColor){
+                                translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
+                                    rotate(decoratorRotations[svgSide])
+                                        mb_svg3d(
+                                            file = svg,
+                                            orgWidth = svgDimensions[0],
+                                            orgHeight = svgDimensions[1],
+                                            depth = 2 * abs(svgDepth),
+                                            size = svgScale,
+                                            center = true
+                                        );
+                            } // End color
+                        } // End if svg
+
+                        /*
+                        * Screw Holes Z
+                        */
+                        if(stabilizerGrid || (baseCutoutType == "none") || (baseCutoutType == "groove")){
+                            color(baseColor){
+                                for (a = [ startX : 1 : endX ]){
+                                    for (b = [ startY : 1 : endY ]){
+                                        if(drawScrewHoleZ(a, b, 0)){
+                                            translate([posX(a), posY(b), 0.5*knobHeight])
+                                                cylinder(h = (resultingBaseHeight + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                        } 
+                                    }
+                                }
+                            } // End color
+                        } // End if stabilizerGrid
+
+                        /*
+                        * Screw Holes X
+                        */
+                        for (b = [ 0 : 1 : len(screwHolesX) - 1]){
+                            color(baseColor){
+                                for (s = [ 0 : 1 : 1]){
+                                    if(screwHolesX[b][2] == undef || screwHolesX[b][2] == s){
+                                        translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * gridSizeZ])
+                                            rotate([90, 0, 0])
+                                                cylinder(h = screwHoleXDepth + cutOffset, r = 0.5*screwHoleXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    }
+                                }
+                            } // End color
+                        } // End for screwHolesX
+
+                        /*
+                        * Screw Holes Y
+                        */
+                        for (b = [ 0 : 1 : len(screwHolesY) - 1]){
+                            color(baseColor){
+                                for (s = [ 0 : 1 : 1]){
+                                    if(screwHolesY[b][2] == undef || screwHolesY[b][2] == s){
+                                        translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * gridSizeZ])
+                                            rotate([0, 90, 0])
+                                                cylinder(h = screwHoleYDepth + cutOffset, r = 0.5*screwHoleYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                    }
+                                }
+                            } // End color
+                        } // End for screwHolesY
+
+                        /*
+                        * Cut Groove
+                        */
+                        if(baseCutoutType == "groove"){
+                            color(baseColor){
+                                translate([0, 0, sideZ(0) + 0.5*tongueGrooveDepth]){ 
+                                    translate([0, 0, -0.5 * cutOffset]){
+                                        mb_tongue(
+                                            gridSizeXY = gridSizeXY,
+                                            objectSize = [objectSizeX, objectSizeY],
+                                            objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+                                            baseRoundingRadius = baseRoundingRadius,
+                                            baseRoundingResolution = baseRoundingResolution,
+                                            beveled = beveled,
+                                            bevelOuter = bevelOuter,
+                                            tongueOffset = tongueOffset,
+                                            tongueThickness = tongueThickness,
+                                            tongueThicknessAdjustment = tongueThicknessAdjustment,
+                                            tongueHeight = tongueGrooveDepth + cutOffset,
+                                            tongueClampThickness = tongueClampThickness,
+                                            tongueClampHeight = tongueClampHeight,
+                                            tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
+                                            tongueRoundingRadius = tongueRoundingRadius,
+                                            tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                                            pit = true,
+                                            pitWallGaps = pitWallGaps,
+                                            pitSizeX = pitSizeX,
+                                            pitSizeY = pitSizeY,
+                                            previewQuality = previewQuality
+                                        );
+                                    }
+
+                                    tongueSizeX = objectSizeX - 2 * tongueOffset + tongueThicknessAdjustment;
+                                    tongueSizeY = objectSizeY - 2 * tongueOffset + tongueThicknessAdjustment;
+                                    tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
+                                    tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
+                                    tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
+
+                                    /*
+                                    * Groove Wall Gaps X
+                                    */
+                                    //color([0.608, 0.349, 0.714]) //9b59b6
+                                    for (a = [ startX : 1 : endX ]){
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            gapLength = drawWallGapX(a, side, 0);
+                                            if(gapLength > 0){
+                                                translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset]){
+                                                    cube([
+                                                        gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
+                                                        objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                                        tongueGrooveDepth + cutOffset
+                                                    ], center=true); 
+                                                    
+                                                    translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                                        cube([
+                                                            gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
+                                                            objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                                            tongueClampHeight
+                                                        ], center=true); 
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    /*
+                                    * Groove Wall Gaps Y
+                                    */
+                                    for (b = [ startY : 1 : endY ]){
+                                        for (side = [ 0 : 1 : 1 ]){
+                                            gapLength = drawWallGapY(b, side, 0);
+                                            if(gapLength > 0){
+                                                translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset]){
                                                     cube([
                                                         objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
-                                                        gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
-                                                        tongueClampHeight
+                                                        gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
+                                                        tongueGrooveDepth + cutOffset
                                                     ], center=true);   
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                
-                            }   
-                        } // End color
-                    } // End if baseCutoutType
-                } // End main difference
-            }
 
-            /*
-            * Final Addition AREA
-            * Starting from here, everything affects both solid and cutout blocks
-            */
-            
-            /*
-            * Classic Knobs
-            */
-            if(knobs != false){
-                color(baseColor){
-                    /*
-                    * Normal knobs
-                    */
-                    for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
-                        for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
-                            knobOffset = knobCentered ? 0.5 : 0;
-                            if(drawGridItem(knobs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
-                                
-                                pitKnobOffset = pitKnobCentered ? 0.5 : 0;
-                                inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
-                                onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
-                                if(onPitBorder || inPit){
-                                    posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
-                                    translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
-                                        difference(){
-                                            union(){
-                                                translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
-                                                    cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-
-                                                
-                                                translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
-                                                    cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                                
-                                                translate([0, 0, 0.5 * (knobHeight - knobRounding)])
-                                                    cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
-                                            }
-                                            
-                                            if(knobType(a + posOffset, b + posOffset) == "technic"){
-                                                intersection(){
-                                                    cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
-                                                    cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                                        cube([
+                                                            objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
+                                                            gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
+                                                            tongueClampHeight
+                                                        ], center=true);   
                                                 }
                                             }
                                         }
-                                        
-                                        //Knob Rounding
-                                        translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                            mb_torus(
-                                                circleRadius = knobRounding, 
-                                                torusRadius = 0.5 * knobSize + knobClampThickness, 
-                                                circleResolution = ($preview ? previewQuality : 1) * knobRoundingResolution,
-                                                torusResolution = ($preview ? previewQuality : 1) * knobRoundingResolution
-                                            );
+                                    }
+                                    
+                                    
+                                }   
+                            } // End color
+                        } // End if baseCutoutType
+                    } // End main difference
+                }
+
+                /*
+                * Final Addition AREA
+                * Starting from here, everything affects both solid and cutout blocks
+                */
+                
+                /*
+                * Classic Knobs
+                */
+                if(knobs != false){
+                    color(baseColor){
+                        /*
+                        * Normal knobs
+                        */
+                        for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
+                            for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
+                                knobOffset = knobCentered ? 0.5 : 0;
+                                if(drawGridItem(knobs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
+                                    
+                                    pitKnobOffset = pitKnobCentered ? 0.5 : 0;
+                                    inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
+                                    onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
+                                    if(onPitBorder || inPit){
+                                        posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
+                                        translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
+                                            difference(){
+                                                union(){
+                                                    translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
+                                                        cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+
+                                                    
+                                                    translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
+                                                        cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    
+                                                    translate([0, 0, 0.5 * (knobHeight - knobRounding)])
+                                                        cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                }
+                                                
+                                                if(knobType(a + posOffset, b + posOffset) == "technic"){
+                                                    intersection(){
+                                                        cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
+                                                        cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    }
+                                                }
+                                            }
+                                            
+                                            //Knob Rounding
+                                            translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
+                                                mb_torus(
+                                                    circleRadius = knobRounding, 
+                                                    torusRadius = 0.5 * knobSize + knobClampThickness, 
+                                                    circleResolution = ($preview ? previewQuality : 1) * knobRoundingResolution,
+                                                    torusResolution = ($preview ? previewQuality : 1) * knobRoundingResolution
+                                                );
+                                            };
                                         };
-                                    };
+                                    }
                                 }
                             }
                         }
-                    }
-                } // End base color
-            } // End if knobs
+                    } // End base color
+                } // End if knobs
 
-            /*
-            * Tongue
-            */
-            if(tongue){
-                color(baseColor){
-                    translate([0, 0, 0.5 * (resultingBaseHeight + tongueHeight)]){ 
-                        mb_tongue(
-                            gridSizeXY = gridSizeXY,
-                            objectSize = [objectSizeX, objectSizeY],
-                            objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-                            baseRoundingRadius = baseRoundingRadius,
-                            baseRoundingResolution = baseRoundingResolution,
-                            beveled = beveled,
-                            bevelOuter = bevelOuter,
-                            tongueOffset = tongueOffset,
-                            tongueThickness = tongueThickness,
-                            tongueThicknessAdjustment = tongueThicknessAdjustment,
-                            tongueHeight = tongueHeight,
-                            tongueClampThickness = tongueClampThickness,
-                            tongueClampHeight = tongueClampHeight,
-                            tongueClampOffset = tongueClampOffset,
-                            tongueRoundingRadius = tongueRoundingRadius,
-                            tongueInnerRoundingRadius = tongueInnerRoundingRadius,
-                            pit = pit,
-                            pitWallGaps = pitWallGaps,
-                            pitSizeX = pitSizeX,
-                            pitSizeY = pitSizeY,
-                            previewQuality = previewQuality
-                        );
-                    }
-                } // End color
-            } // End if tongue
-
-            //PCB
-            if(pcb){
-                color(baseColor){
-                    translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, pitFloorZ]){
-                        if(pcbMountingType == "clips"){
-                            mb_pcb_clips(
-                                pcbDimensions = pcbDimensions
+                /*
+                * Tongue
+                */
+                if(tongue){
+                    color(baseColor){
+                        translate([0, 0, 0.5 * (resultingBaseHeight + tongueHeight)]){ 
+                            mb_tongue(
+                                gridSizeXY = gridSizeXY,
+                                objectSize = [objectSizeX, objectSizeY],
+                                objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+                                baseRoundingRadius = baseRoundingRadius,
+                                baseRoundingResolution = baseRoundingResolution,
+                                beveled = beveled,
+                                bevelOuter = bevelOuter,
+                                tongueOffset = tongueOffset,
+                                tongueThickness = tongueThickness,
+                                tongueThicknessAdjustment = tongueThicknessAdjustment,
+                                tongueHeight = tongueHeight,
+                                tongueClampThickness = tongueClampThickness,
+                                tongueClampHeight = tongueClampHeight,
+                                tongueClampOffset = tongueClampOffset,
+                                tongueRoundingRadius = tongueRoundingRadius,
+                                tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                                pit = pit,
+                                pitWallGaps = pitWallGaps,
+                                pitSizeX = pitSizeX,
+                                pitSizeY = pitSizeY,
+                                previewQuality = previewQuality
                             );
                         }
-                        if(pcbMountingType == "screws"){
-                            mb_pcb_screw_sockets(
-                                screwSockets = pcbScrewSockets,
-                                screwSocketHeight = pcbScrewSocketHeight,
-                                screwSocketSize = pcbScrewSocketSize,
-                                screwSocketHoleSize = pcbScrewSocketHoleSize
-                            );
+                    } // End color
+                } // End if tongue
+
+                //PCB
+                if(pcb){
+                    color(baseColor){
+                        translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, pitFloorZ]){
+                            if(pcbMountingType == "clips"){
+                                mb_pcb_clips(
+                                    pcbDimensions = pcbDimensions
+                                );
+                            }
+                            if(pcbMountingType == "screws"){
+                                mb_pcb_screw_sockets(
+                                    screwSockets = pcbScrewSockets,
+                                    screwSocketHeight = pcbScrewSocketHeight,
+                                    screwSocketSize = pcbScrewSocketSize,
+                                    screwSocketHoleSize = pcbScrewSocketHoleSize
+                                );
+                            }
                         }
-                    }
-                } // End color
-            } // End if pcb
-            
-            /*
-            * Text
-            */
-            if(!mb_is_empty_string(text) && textDepth > 0){
-                color(textColor == "inherit" ? baseColor : textColor)
-                    translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
-                        rotate(decoratorRotations[textSide])
-                            mb_text3d(
-                                text = text,
-                                textDepth = textDepth,
-                                textSize = textSize,
-                                textFont = textFont,
-                                textSpacing = textSpacing,
-                                textVerticalAlign = textVerticalAlign,
-                                textHorizontalAlign = textHorizontalAlign,
-                                center = true
-                            );
-            } // End if text
+                    } // End color
+                } // End if pcb
+                
+                /*
+                * Text
+                */
+                if(!mb_is_empty_string(text) && textDepth > 0){
+                    color(textColor == "inherit" ? baseColor : textColor)
+                        translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                            rotate(decoratorRotations[textSide])
+                                mb_text3d(
+                                    text = text,
+                                    textDepth = textDepth,
+                                    textSize = textSize,
+                                    textFont = textFont,
+                                    textSpacing = textSpacing,
+                                    textVerticalAlign = textVerticalAlign,
+                                    textHorizontalAlign = textHorizontalAlign,
+                                    center = true
+                                );
+                } // End if text
 
-            /*
-            * SVG
-            */
-            if(!mb_is_empty_string(svg) && svgDepth > 0){
-                color(svgColor == "inherit" ? baseColor : svgColor)
-                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
-                        rotate(decoratorRotations[svgSide])
-                            mb_svg3d(
-                                file = svg,
-                                orgWidth = svgDimensions[0],
-                                orgHeight = svgDimensions[1],
-                                depth = svgDepth,
-                                size = svgScale,
-                                center = true
-                            );
-            } // End if svg
+                /*
+                * SVG
+                */
+                if(!mb_is_empty_string(svg) && svgDepth > 0){
+                    color(svgColor == "inherit" ? baseColor : svgColor)
+                        translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
+                            rotate(decoratorRotations[svgSide])
+                                mb_svg3d(
+                                    file = svg,
+                                    orgWidth = svgDimensions[0],
+                                    orgHeight = svgDimensions[1],
+                                    depth = svgDepth,
+                                    size = svgScale,
+                                    center = true
+                                );
+                } // End if svg
 
-            
-        } // End pre_render
-    } //End grid offset
-        children();
+                
+            } // End pre_render
+        } //End grid offset
+
+        translate([translateXChildren, translateYChildren, 0]){
+            children();
+        }
     } //End translate
 } // End module block    
