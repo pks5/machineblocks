@@ -164,7 +164,7 @@ module block(
         pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
-        pitKnobPadding=1.5,
+        pitKnobPadding=0.2,
         pitKnobType = "classic",
         pitKnobCentered = false,
         pitWallGaps = [],
@@ -310,9 +310,14 @@ module block(
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     
+    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
+    cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
+
     //Pit
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+knobMaxOverhang, pWallThickness[1]*gridSizeXY+knobMaxOverhang, pWallThickness[2]*gridSizeXY+knobMaxOverhang, pWallThickness[3]*gridSizeXY+knobMaxOverhang]);
-    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + pitKnobPadding, pWallThickness[1]*gridSizeXY + pitKnobPadding, pWallThickness[2]*gridSizeXY + pitKnobPadding, pWallThickness[3]*gridSizeXY + pitKnobPadding]);
+    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
+    cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
+    
     pMinThickness = [
         -min(pWallThickness[2], pWallThickness[0])*gridSizeXY, 
         -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, 
@@ -321,8 +326,7 @@ module block(
     ];
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
-    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
-    cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
+    
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(knobPadding, gridSizeXY);
@@ -336,6 +340,7 @@ module block(
     ];
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
     echo (knobPaddingRoundingRadius = knobPaddingRoundingRadius);
+    
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
@@ -408,11 +413,8 @@ module block(
     function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
                                 && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, touch=true, overhang=0);
     
-    //((ceil(a) < floor(pWallThickness[0])) || (floor(a) > grid[0] - floor(pWallThickness[1]) - 1) || (ceil(b) < floor(pWallThickness[2])) || (floor(b) > grid[1] - floor(pWallThickness[3]) - 1)) && !inPitWallGaps(a, b, true, 0);
     function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-                        && mb_circle_in_rounded_rect(pitBevelPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang);
-    
-    //(floor(a) >= ceil(pWallThickness[0])) && (ceil(a) < grid[0] - ceil(pWallThickness[1])) && (floor(b) >= ceil(pWallThickness[2])) && (ceil(b) < grid[1] - ceil(pWallThickness[3])) || inPitWallGaps(a, b, false, 0);                                
+                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang);
     
     function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     

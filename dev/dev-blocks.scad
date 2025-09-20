@@ -22,7 +22,7 @@ block(baseLayers=1, grid=[2,2], gridOffset=[2,2,0], knobs = false, baseRoundingR
   }      
         
         
-difference(){
+*difference(){
     block(grid=[4,4], knobs=false, align="start", alignChildren="center"){
         block(grid=[2,2], gridOffset=[0,0,0], knobs=true, baseCutoutType="none", baseSideAdjustment=1.5, align="center");
     
@@ -33,3 +33,16 @@ difference(){
  
  
  *block(grid=[4,2], baseLayers=3, knobs=true, align=["start","start","start"], previewRender=false);
+ 
+ 
+ block(
+    grid=[6,6], 
+    baseRoundingRadius=[0,0,8],
+    baseLayers=3, 
+    knobs=true, 
+    align=["start","start","start"], 
+    previewRender=false,
+    pit=true,
+    pitWallThickness=1,
+    pitKnobPadding=0.1
+ );
