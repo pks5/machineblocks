@@ -54,7 +54,6 @@ brick2KnobType = "technic"; // [classic, technic]
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
-    previewRender = true;
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
@@ -86,11 +85,11 @@ union()
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
 
         baseSideAdjustment = baseSideAdjustment,
         
-        baseHeightAdjustment = baseHeightAdjustment,
+        previewRender = previewRender,
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
@@ -121,12 +120,12 @@ translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
 
           baseSideAdjustment =
             [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
 
-          baseHeightAdjustment = baseHeightAdjustment,
+          previewRender = previewRender,
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,

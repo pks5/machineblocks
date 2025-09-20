@@ -37,8 +37,7 @@ baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
-// Whether to render in preview mode
-previewRender = true;
+
 
 translate([ 10, -10, 0 ]) block(grid = [ 8, 2 ],
                                 baseCutoutType = baseCutoutType,

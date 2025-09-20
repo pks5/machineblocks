@@ -38,6 +38,8 @@ block(
     baseCutoutMaxDepth = 2.6,
     knobs = false,
 
+    previewRender = previewRender,
+
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

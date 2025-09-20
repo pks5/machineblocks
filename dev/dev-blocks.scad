@@ -35,7 +35,7 @@ block(baseLayers=1, grid=[2,2], gridOffset=[2,2,0], knobs = false, baseRoundingR
  *block(grid=[4,2], baseLayers=3, knobs=true, align=["start","start","start"], previewRender=false);
  
  
- block(
+ *block(
     grid=[6,6], 
     baseRoundingRadius=[0,0,8],
     baseLayers=3, 

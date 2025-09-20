@@ -55,7 +55,6 @@ knobType = "classic"; // [classic, technic]
     previewQuality = 0.5; // [0.1:0.1:1]
     // Number of drawn fragments for roundings in the final rendering.
     roundingResolution = 64; // [16:8:128]
-    previewRender = true;
 
 // Generate the block
 union(){
@@ -75,9 +74,9 @@ union(){
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
 
-        baseHeightAdjustment = baseHeightAdjustment,
+        previewRender = previewRender,
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
@@ -100,11 +99,11 @@ union(){
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
 
         baseSideAdjustment = baseSideAdjustment,
     
-        baseHeightAdjustment = baseHeightAdjustment,
+        previewRender = previewRender,
+    baseHeightAdjustment = baseHeightAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,

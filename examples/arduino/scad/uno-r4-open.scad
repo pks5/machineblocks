@@ -49,6 +49,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
 
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,

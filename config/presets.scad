@@ -40,3 +40,7 @@ tubeZSize = 6.4;
 
 // Diameter of the Pins (mm)
 pinSize = 3.2;
+
+// Whether brick should be rendered in preview mode
+// Only feasable when using a latest nightly build of OpenSCAD
+previewRender = false; //true or false

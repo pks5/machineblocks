@@ -62,6 +62,7 @@ block(
     grid = [gridX, gridY],
     baseLayers = baseLayers,
     knobs = knobs,
+    previewRender = previewRender,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,

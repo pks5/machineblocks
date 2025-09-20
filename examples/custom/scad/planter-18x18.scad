@@ -37,6 +37,7 @@ union(){
         grid = [gridX, gridY], 
         knobs = false,
 
+        previewRender = previewRender,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -57,6 +58,7 @@ union(){
         textFont = "Font Awesome 6 Free Solid", 
         gridOffset = [0, -0.5 * (gridY - 1), floorLayers],
 
+        previewRender = previewRender,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -73,6 +75,7 @@ union(){
         baseCutoutType = "none", 
         gridOffset = [0, 0.5 * (gridY - 1), floorLayers],
 
+        previewRender = previewRender,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,
@@ -88,7 +91,8 @@ union(){
         grid = [1, gridY-2], 
         baseCutoutType = "none", 
         gridOffset = [-0.5 * (gridX - 1), 0, floorLayers], 
-        
+
+        previewRender = previewRender,     
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = [-0.1, -0.1, 0.1, 0.1],
         knobSize = knobSize,
@@ -105,6 +109,7 @@ union(){
         baseCutoutType = "none", 
         gridOffset = [0.5 * (gridX - 1), 0, floorLayers], 
 
+        previewRender = previewRender,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = [-0.1, -0.1, 0.1, 0.1],
         knobSize = knobSize,

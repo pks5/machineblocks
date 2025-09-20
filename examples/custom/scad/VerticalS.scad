@@ -52,7 +52,8 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    
+
+    previewRender = previewRender, 
     //baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
@@ -74,7 +75,8 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    
+    previewRender = previewRender,
+
     //baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment=baseSideAdjustment,
     knobSize = knobSize,
@@ -96,7 +98,8 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    
+    previewRender = previewRender,
+
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment=[baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
     knobSize = knobSize,
@@ -118,6 +121,7 @@ block(
     holeRoundingResolution = roundingResolution,
     knobRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    previewRender = previewRender,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,

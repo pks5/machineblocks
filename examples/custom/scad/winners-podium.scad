@@ -19,6 +19,7 @@ include <../../../config/presets.scad>;
 block(
     grid=[6,2],
     baseLayers=3,
+    previewRender = previewRender,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
@@ -30,6 +31,7 @@ block(
         grid=[2,2],
         baseLayers=3,
         gridOffset=[2,0,3],
+        previewRender = previewRender,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         knobSize = knobSize,

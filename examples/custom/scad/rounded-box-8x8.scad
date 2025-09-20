@@ -46,6 +46,7 @@ block(
     baseCutoutType = "none",
     baseRoundingRadius = [0,0,4],
 
+    previewRender = previewRender,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
@@ -69,6 +70,7 @@ block(
     textFont = textFont,
     baseRoundingRadius = [0,0,4],
 
+    previewRender = previewRender,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
