@@ -57,7 +57,7 @@ knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 // Knob Padding
-knobPadding = [1.5, 0, 0, 0];
+knobPadding = [0.2, 0, 0, 0];
 
 /* [Bevel] */
 

@@ -150,7 +150,7 @@
                         
                         "bevel1": [0,-2],
                         "bevel2": [0,0.666],
-                        "knobPadding": 1
+                        "knobPadding": 0.125
                     }
                 },
                 {
@@ -161,7 +161,7 @@
                         "baseLayers": 1,
                         "bevel1": [0,0.666],
                         "bevel2": [0,-2],
-                        "knobPadding": 1
+                        "knobPadding": 0.125
                     }
                 },
                 {
@@ -193,7 +193,7 @@
                         "baseLayers": 1,
                         "bevel1": [0,-3],
                         "bevel2": [0,1],
-                        "knobPadding": 1
+                        "knobPadding": 0.125
                     }
                 },
                 {
@@ -204,7 +204,7 @@
                         "baseLayers": 1,
                         "bevel1": [0,1],
                         "bevel2": [0,-3],
-                        "knobPadding": 1
+                        "knobPadding": 0.125
                     }
                 },
 

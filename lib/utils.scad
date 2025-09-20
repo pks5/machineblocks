@@ -7,6 +7,7 @@ function mb_base_rounding_radius_z(radius) = radius[2] == undef ?
 
 /*
 * Creates a four dimensional vector with the inner rounding radius
+* Deprecated use mb_calc_rel_radius instead!
 */
 function mb_base_cutout_radius(cutoutRadius, baseRadiusZ, minSide) = cutoutRadius == 0 ? [0,0,0,0] : (cutoutRadius[0] == undef ? 
     [
@@ -24,6 +25,9 @@ function mb_base_cutout_radius(cutoutRadius, baseRadiusZ, minSide) = cutoutRadiu
     
 function mb_calc_rounding_radius(radius, baseRadius, minSide) = radius < 0 ? max(0, baseRadius * ((minSide + 2*radius) / minSide)) : radius;
 
+/*
+* Calculate relative radius
+*/
 function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) = 
     let(newRadius = is_list(cutoutRadius) ? cutoutRadius : [cutoutRadius[0], cutoutRadius[1], cutoutRadius[2], cutoutRadius[3]])
     [
@@ -34,6 +38,8 @@ function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) =
     ];
 
 function mb_calc_rel_radius(radius, baseRadius, minSide) = max(0, baseRadius * ((minSide + 2*radius) / minSide));
+
+function mb_resolve_quadruple(quad, multiplier) = is_list(quad) ? [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]  : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
 
 /*
 * Whether a given string is empty

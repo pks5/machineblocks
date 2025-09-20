@@ -189,7 +189,7 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": [8, 8, 0, 0],
-                        "knobPadding":[1.5, 0, 0, 0],
+                        "knobPadding":[0.2, 0, 0, 0],
                         "holesZ": [[0,0,0,0]],
                         "holeZCenteredX":false
                     }

@@ -325,9 +325,9 @@ module block(
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
 
     //Knob Padding
-    knobPaddingResolved = is_list(knobPadding) ? knobPadding : [knobPadding, knobPadding, knobPadding, knobPadding];
-    bevelKnobPadding = mb_inset_quad_lrfh(bevelOuterAdjusted, knobPaddingResolved);
-    cornersKnobPadding = mb_inset_quad_lrfh(corners, [knobPaddingResolved[0] - sAdjustment[0], knobPaddingResolved[1] - sAdjustment[1], knobPaddingResolved[2] - sAdjustment[2], knobPaddingResolved[3] - sAdjustment[3]]);
+    knobPaddingResolved = mb_resolve_quadruple(knobPadding, gridSizeXY);
+    bevelKnobPadding = mb_inset_quad_lrfh(bevelOuter, knobPaddingResolved);
+    cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
     knobPaddingRadiusInv = [
         -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
         -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
