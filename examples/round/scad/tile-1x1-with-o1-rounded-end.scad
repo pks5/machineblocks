@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Rounded Brick 2x2
+* Tile 1x1 with O1 Rounded End
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,11 +19,11 @@ include <../../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]  
+brickSizeX = 1; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 1; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 3; // [1:24]
+baseLayers = 1; // [1:24]
 
 /* [Base] */
 
@@ -34,14 +34,14 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 4;
+baseRoundingRadiusZ = [4, 4, 0, 0];
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
 
 // Whether to draw pillars.
 pillars = true;
-baseReliefCut = false;
+baseReliefCut = true;
 baseReliefCutHeight = 0.4;
 baseReliefCutThickness = 0.4;
 
@@ -51,13 +51,13 @@ baseReliefCutThickness = 0.4;
 /* [Knobs] */
 
 // Whether to draw knobs.
-knobs = true;
+knobs = false;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 // Knob Padding
-knobPadding = 0;
+knobPadding = 1.5;
 
 /* [Bevel] */
 

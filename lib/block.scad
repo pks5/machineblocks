@@ -123,6 +123,8 @@ module block(
 
         holesZ = false,
         holeZType = "technic",
+        holeZCenteredX = true,
+        holeZCenteredY = true,
         holeZSize = 5.1, //mm
         holeRoundingResolution = 64,
         
@@ -223,7 +225,7 @@ module block(
         //Alignment
         align = "start",
         alignChildren = "start",
-        //alignIgnoreAdjustment = true, //If true, brick is aligned as if there is no adjustment - TODO
+        alignMode = "grid", //If set to object, brick is aligned like a normal scad object - TODO implement object mode
         
         //Preview
         previewQuality = 0.5, //Between 0.0 and 1.0
@@ -311,16 +313,28 @@ module block(
     //Pit
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+knobMaxOverhang, pWallThickness[1]*gridSizeXY+knobMaxOverhang, pWallThickness[2]*gridSizeXY+knobMaxOverhang, pWallThickness[3]*gridSizeXY+knobMaxOverhang]);
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY + pitKnobPadding, pWallThickness[1]*gridSizeXY + pitKnobPadding, pWallThickness[2]*gridSizeXY + pitKnobPadding, pWallThickness[3]*gridSizeXY + pitKnobPadding]);
-    pMinThickness = [-min(pWallThickness[2], pWallThickness[0])*gridSizeXY, -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, -min(pWallThickness[1], pWallThickness[2])*gridSizeXY];
+    pMinThickness = [
+        -min(pWallThickness[2], pWallThickness[0])*gridSizeXY, 
+        -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, 
+        -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, 
+        -min(pWallThickness[1], pWallThickness[2])*gridSizeXY
+    ];
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
 
     //Knob Padding
-    bevelKnobPadding = mb_inset_quad_lrfh(bevelOuterAdjusted, knobPadding);
-    cornersKnobPadding = mb_inset_quad_lrfh(corners, [knobPadding - sAdjustment[0], knobPadding - sAdjustment[1], knobPadding - sAdjustment[2], knobPadding - sAdjustment[3]]);
-    knobPaddingRoundingRadius = knobPadding > 0 ? mb_base_cutout_radius(-knobPadding, baseRoundingRadiusZ, minObjectSide) : baseRoundingRadiusZ;
+    knobPaddingResolved = is_list(knobPadding) ? knobPadding : [knobPadding, knobPadding, knobPadding, knobPadding];
+    bevelKnobPadding = mb_inset_quad_lrfh(bevelOuterAdjusted, knobPaddingResolved);
+    cornersKnobPadding = mb_inset_quad_lrfh(corners, [knobPaddingResolved[0] - sAdjustment[0], knobPaddingResolved[1] - sAdjustment[1], knobPaddingResolved[2] - sAdjustment[2], knobPaddingResolved[3] - sAdjustment[3]]);
+    knobPaddingRadiusInv = [
+        -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
+        -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
+        -min(knobPaddingResolved[3], knobPaddingResolved[1]),
+        -min(knobPaddingResolved[1], knobPaddingResolved[2])
+    ];
+    knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
     echo (knobPaddingRoundingRadius = knobPaddingRoundingRadius);
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -881,10 +895,10 @@ module block(
                                                 /*
                                                 * Z-Holes Outer
                                                 */
-                                                for (a = [ startX : 1 : endX - 1 ]){
-                                                    for (b = [ startY : 1 : endY - 1 ]){
+                                                for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
+                                                    for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
                                                         if(drawHoleZ(a, b)){
-                                                            translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
+                                                            translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b +(holeZCenteredY ? 0.5 : 0)), baseCutoutZ]){
                                                                 cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 
                                                                 //Clamp
@@ -1089,10 +1103,10 @@ module block(
                         if(holesZ != false){
                             color(baseColor){
                                 //Cut Z-Holes
-                                for (a = [ startX : 1 : endX - 1 ]){
-                                    for (b = [ startY : 1 : endY - 1 ]){
+                                for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
+                                    for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
                                         if(drawHoleZ(a, b)){
-                                            translate([posX(a + 0.5), posY(b+0.5), 0]){
+                                            translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
                                                 if(holeZType == "technic"){
                                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                 }

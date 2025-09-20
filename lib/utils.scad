@@ -22,7 +22,18 @@ function mb_base_cutout_radius(cutoutRadius, baseRadiusZ, minSide) = cutoutRadiu
         mb_calc_rounding_radius(cutoutRadius[3], baseRadiusZ[3], minSide)   
     ]);
     
-function mb_calc_rounding_radius(radius, baseRadius, minSide) = radius < 0 ? max(0, baseRadius * ((minSide+2*radius)/minSide)) : radius;
+function mb_calc_rounding_radius(radius, baseRadius, minSide) = radius < 0 ? max(0, baseRadius * ((minSide + 2*radius) / minSide)) : radius;
+
+function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) = 
+    let(newRadius = is_list(cutoutRadius) ? cutoutRadius : [cutoutRadius[0], cutoutRadius[1], cutoutRadius[2], cutoutRadius[3]])
+    [
+        newRadius[0] >= 0 && !alwaysRel ? newRadius[0] : mb_calc_rel_radius(newRadius[0], baseRadiusZ[0], minSide), 
+        newRadius[1] >= 0 && !alwaysRel ? newRadius[1] : mb_calc_rel_radius(newRadius[1], baseRadiusZ[1], minSide),
+        newRadius[2] >= 0 && !alwaysRel ? newRadius[2] : mb_calc_rel_radius(newRadius[2], baseRadiusZ[2], minSide),
+        newRadius[3] >= 0 && !alwaysRel ? newRadius[3] : mb_calc_rel_radius(newRadius[3], baseRadiusZ[3], minSide)   
+    ];
+
+function mb_calc_rel_radius(radius, baseRadius, minSide) = max(0, baseRadius * ((minSide + 2*radius) / minSide));
 
 /*
 * Whether a given string is empty

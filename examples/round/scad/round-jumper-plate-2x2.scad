@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Rounded Brick 2x2
+* Round Jumper Plate 2x2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -23,7 +23,7 @@ brickSizeX = 2; // [1:32]
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
 brickSizeY = 2; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 3; // [1:24]
+baseLayers = 1; // [1:24]
 
 /* [Base] */
 
@@ -34,7 +34,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 4;
+baseRoundingRadiusZ = 8;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
@@ -53,9 +53,9 @@ baseReliefCutThickness = 0.4;
 // Whether to draw knobs.
 knobs = true;
 // Whether knobs should be centered.
-knobCentered = false;
+knobCentered = true;
 // Type of the knobs
-knobType = "classic"; // [classic, technic]
+knobType = "technic"; // [classic, technic]
 // Knob Padding
 knobPadding = 0;
 

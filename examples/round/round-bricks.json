@@ -43,6 +43,8 @@
                         "brickSizeY": 2,
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 8,
+                        "holesZ": true,
+                        "holeZType": "axis",
                         "knobPadding":0
                     }
                 },
@@ -116,6 +118,18 @@
                     }
                 },
                 {
+                    "name": "Round Jumper Plate 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8,
+                        "knobPadding":0,
+                        "knobType": "technic",
+                        "knobCentered": true
+                    }
+                },
+                {
                     "name": "Round Plate 2x2 With Axle Hole",
                     "parameters": {
                         "brickSizeX": 2,
@@ -128,6 +142,36 @@
                     }
                 },
                 {
+                    "name": "Plate 3x3 With O4 Rounded Corner",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [16,0,0,0],
+                        "knobPadding":0
+                    }
+                },
+                {
+                    "name": "Qtr Circle Plate 4x4 With O8 Rounded Corner",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [32,0,0,0],
+                        "knobPadding":0
+                    }
+                },
+                {
+                    "name": "Plate 2x6 With 2-Rounded Corner O4",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [16,16,0,0],
+                        "knobPadding":0
+                    }
+                },
+                {
                     "name": "Round Plate 4x4 With Hole",
                     "parameters": {
                         "brickSizeX": 4,
@@ -136,6 +180,18 @@
                         "baseRoundingRadiusZ": 16,
                         "knobPadding":0,
                         "holesZ": [[1,1,1,1]]
+                    }
+                },
+                {
+                    "name": "Plate 3x2 Rounded End Plate O2 With Pin Hole",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [8, 8, 0, 0],
+                        "knobPadding":[1.5, 0, 0, 0],
+                        "holesZ": [[0,0,0,0]],
+                        "holeZCenteredX":false
                     }
                 },
                 {
@@ -172,6 +228,17 @@
                     }
                 },
                 {
+                    "name": "Tile 1x1 with O1 Rounded End",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [4,4,0,0],
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
                     "name": "Qrt Round Tile 1x1",
                     "parameters": {
                         "brickSizeX": 1,
@@ -203,6 +270,19 @@
                         "baseRoundingRadiusZ": 8,
                         "knobs": false,
                         "baseReliefCut": true
+                    }
+                },
+
+                {
+                    "name": "Round Tile 2x2 With Pin Hole",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8,
+                        "knobs": false,
+                        "baseReliefCut": true,
+                        "holesZ": true
                     }
                 },
 

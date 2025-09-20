@@ -92,6 +92,10 @@ holeYGridOffsetZ = 1.75;
 holesZ = [[0, 0, 0, 0]];
 // Type of Z Holes.
 holeZType = "axis";
+// Whether Z Holes should be centered on X direction
+holeZCenteredX = true;
+// Whether Z Holes should be centered on Y direction
+holeZCenteredY = true;
 
 /* [Pit] */
 
@@ -155,6 +159,8 @@ block(
     holeYGridOffsetZ = holeYGridOffsetZ,
     holesZ = holesZ,
     holeZType = holeZType,
+    holeZCenteredX = holeZCenteredX,
+    holeZCenteredY = holeZCenteredY,
     
     pit = pit,
     pitKnobs = pitKnobs,

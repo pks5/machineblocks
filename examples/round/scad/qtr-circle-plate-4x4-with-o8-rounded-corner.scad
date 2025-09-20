@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Rounded Brick 2x2
+* Qtr Circle Plate 4x4 With O8 Rounded Corner
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,11 +19,11 @@ include <../../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]  
+brickSizeX = 4; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 4; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 3; // [1:24]
+baseLayers = 1; // [1:24]
 
 /* [Base] */
 
@@ -34,7 +34,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 4;
+baseRoundingRadiusZ = [32, 0, 0, 0];
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 

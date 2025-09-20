@@ -89,9 +89,13 @@ holeYCentered = true;
 // Hole Y Grid Offset Z
 holeYGridOffsetZ = 1.75;
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holesZ = true;
 // Type of Z Holes.
-holeZType = "technic";
+holeZType = "axis";
+// Whether Z Holes should be centered on X direction
+holeZCenteredX = true;
+// Whether Z Holes should be centered on Y direction
+holeZCenteredY = true;
 
 /* [Pit] */
 
@@ -155,6 +159,8 @@ block(
     holeYGridOffsetZ = holeYGridOffsetZ,
     holesZ = holesZ,
     holeZType = holeZType,
+    holeZCenteredX = holeZCenteredX,
+    holeZCenteredY = holeZCenteredY,
     
     pit = pit,
     pitKnobs = pitKnobs,
