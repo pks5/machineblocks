@@ -137,7 +137,7 @@ def generate_thumbnails(
                 y_nw_1 = 120
                 y_nw_2 = 280
                 draw.text((x_left, y_nw_1), label, font=font_big, fill=overlay_color)
-                draw.text((x_left, y_nw_2), "3D printable", font=font_small, fill=overlay_color)
+                draw.text((x_left, y_nw_2), "3D-printable", font=font_small, fill=overlay_color)
 
                 _, h1 = _text_size(font_mb, "MachineBlocks")
                 _, h2 = _text_size(font_small, "created with")
