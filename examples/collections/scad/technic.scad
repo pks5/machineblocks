@@ -32,10 +32,13 @@ baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
+// Whether to render in preview mode
+previewRender = true;
 
 translate([ -26, -20, 0 ]) block(baseLayers = 3,
                                  grid = [ 6, 2 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -57,7 +60,8 @@ translate([ -26, -20, 0 ]) block(baseLayers = 3,
 
 translate([ -26, -40, 0 ]) block(baseLayers = 3,
                                  grid = [ 4, 2 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -79,7 +83,8 @@ translate([ -26, -40, 0 ]) block(baseLayers = 3,
 
 translate([ -26, -60, 0 ]) block(baseLayers = 3,
                                  grid = [ 2, 2 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -103,6 +108,8 @@ translate([ 32, 10, 0 ])
 {
 
   translate([ 0, -20, 0 ]) block(grid = [ 2, 2 ],
+                                align="ccs",
+                                previewRender=previewRender,
                                  holesZ = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -123,6 +130,8 @@ translate([ 32, 10, 0 ])
     pinSize = pinSize);
 
   translate([ 0, -40, 0 ]) block(grid = [ 4, 2 ],
+                                    align="ccs",
+                                    previewRender=previewRender,
                                  holesZ = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -143,6 +152,8 @@ translate([ 32, 10, 0 ])
     pinSize = pinSize);
 
   translate([ 0, -60, 0 ]) block(grid = [ 6, 2 ],
+  align="ccs",
+  previewRender=previewRender,
                                  holesZ = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -163,6 +174,8 @@ translate([ 32, 10, 0 ])
     pinSize = pinSize);
 
   translate([ 0, -80, 0 ]) block(grid = [ 8, 2 ],
+  align="ccs",
+  previewRender=previewRender,
                                  holesZ = true,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
@@ -187,7 +200,8 @@ translate([ 108, -110, 0 ]) rotate([ 0, 0, 180 ])
 {
   translate([ 0, -40, 0 ]) block(baseLayers = 3,
                                  grid = [ 2, 1 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  knobType = "technic",
                                  baseCutoutType = baseCutoutType,
@@ -210,7 +224,8 @@ translate([ 108, -110, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -60, 0 ]) block(baseLayers = 3,
                                  grid = [ 4, 1 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  knobType = "technic",
                                  baseCutoutType = baseCutoutType,
@@ -233,7 +248,8 @@ translate([ 108, -110, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -80, 0 ]) block(baseLayers = 3,
                                  grid = [ 6, 1 ],
-                                 center = false,
+                                 align="start",
+                                 previewRender=previewRender,
                                  holesX = true,
                                  knobType = "technic",
                                  baseCutoutType = baseCutoutType,
@@ -256,7 +272,8 @@ translate([ 108, -110, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -100, 0 ]) block(baseLayers = 3,
                                   grid = [ 8, 1 ],
-                                  center = false,
+                                  align="start",
+                                  previewRender=previewRender,
                                   holesX = true,
                                   knobType = "technic",
                                   baseCutoutType = baseCutoutType,
@@ -279,7 +296,8 @@ translate([ 108, -110, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -120, 0 ]) block(baseLayers = 3,
                                   grid = [ 16, 1 ],
-                                  center = false,
+                                  align="start",
+                                  previewRender=previewRender,
                                   holesX = true,
                                   knobType = "technic",
                                   baseCutoutType = baseCutoutType,

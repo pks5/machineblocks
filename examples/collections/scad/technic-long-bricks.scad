@@ -12,8 +12,8 @@
  */
 
 // Include the MachineBlocks library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -35,7 +35,8 @@ baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
-
+// Whether to render in preview mode
+previewRender = true;
 
 translate([ -80, 10, 0 ]) block(baseLayers = 3,
                                 holesX = true,
@@ -47,6 +48,7 @@ translate([ -80, 10, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                 previewQuality = previewQuality,
+                                previewRender=previewRender,
                                 baseRoundingResolution = roundingResolution,
                                 holeRoundingResolution = roundingResolution,
                                 knobRoundingResolution = roundingResolution,
@@ -69,6 +71,7 @@ translate([ -80, 0, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                previewQuality = previewQuality,
+                                previewRender=previewRender,
                                baseRoundingResolution = roundingResolution,
                                holeRoundingResolution = roundingResolution,
                                knobRoundingResolution = roundingResolution,
@@ -91,6 +94,7 @@ translate([ -80, -10, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -113,6 +117,7 @@ translate([ -80, -20, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -135,6 +140,7 @@ translate([ -80, -30, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -157,6 +163,7 @@ translate([ -80, -40, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -179,6 +186,7 @@ translate([ -80, -50, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -201,6 +209,7 @@ translate([ -80, -60, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -223,6 +232,7 @@ translate([ -80, -70, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -245,6 +255,7 @@ translate([ -80, -80, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -267,6 +278,7 @@ translate([ -80, -90, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -289,6 +301,7 @@ translate([ -80, -100, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                   previewQuality = previewQuality,
+                                previewRender=previewRender,
                                   baseRoundingResolution = roundingResolution,
                                   holeRoundingResolution = roundingResolution,
                                   knobRoundingResolution = roundingResolution,

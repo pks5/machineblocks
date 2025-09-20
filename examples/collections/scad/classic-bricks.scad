@@ -12,8 +12,8 @@
  */
 
 // Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -36,10 +36,11 @@ baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
+// Whether to render in preview mode
+previewRender = true;
 
 translate([ -20, -20, 0 ]) block(baseLayers = 3,
                                  grid = [ 2, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -48,6 +49,7 @@ translate([ -20, -20, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -62,7 +64,6 @@ translate([ -20, -20, 0 ]) block(baseLayers = 3,
 
 translate([ -20, -40, 0 ]) block(baseLayers = 3,
                                  grid = [ 3, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -71,6 +72,7 @@ translate([ -20, -40, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -85,7 +87,6 @@ translate([ -20, -40, 0 ]) block(baseLayers = 3,
 
 translate([ -20, -60, 0 ]) block(baseLayers = 3,
                                  grid = [ 4, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -94,6 +95,7 @@ translate([ -20, -60, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -108,7 +110,6 @@ translate([ -20, -60, 0 ]) block(baseLayers = 3,
 
 translate([ -20, -80, 0 ]) block(baseLayers = 3,
                                  grid = [ 6, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -117,6 +118,7 @@ translate([ -20, -80, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -131,7 +133,6 @@ translate([ -20, -80, 0 ]) block(baseLayers = 3,
 
 translate([ -44, -120, 0 ]) block(baseLayers = 3,
                                   grid = [ 2, 14 ],
-                                  center = false,
                                   baseCutoutType = baseCutoutType,
                                   knobs = knobs,
                                   knobCentered = knobCentered,
@@ -140,6 +141,7 @@ translate([ -44, -120, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                   previewQuality = previewQuality,
+                                  previewRender=previewRender,
                                   baseRoundingResolution = roundingResolution,
                                   holeRoundingResolution = roundingResolution,
                                   knobRoundingResolution = roundingResolution,
@@ -154,7 +156,6 @@ translate([ -44, -120, 0 ]) block(baseLayers = 3,
 
 translate([ -20, -120, 0 ]) block(baseLayers = 3,
                                   grid = [ 4, 4 ],
-                                  center = false,
                                   baseCutoutType = baseCutoutType,
                                   knobs = knobs,
                                   knobCentered = knobCentered,
@@ -163,6 +164,7 @@ translate([ -20, -120, 0 ]) block(baseLayers = 3,
                                 baseColor = baseColor,
 
                                   previewQuality = previewQuality,
+                                  previewRender=previewRender,
                                   baseRoundingResolution = roundingResolution,
                                   holeRoundingResolution = roundingResolution,
                                   knobRoundingResolution = roundingResolution,
@@ -178,7 +180,6 @@ translate([ -20, -120, 0 ]) block(baseLayers = 3,
 translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
 {
   translate([ 0, -20, 0 ]) block(grid = [ 2, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -187,6 +188,7 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -200,7 +202,6 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 pinSize = pinSize);
 
   translate([ 0, -40, 0 ]) block(grid = [ 3, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -209,6 +210,7 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -222,7 +224,6 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 pinSize = pinSize);
 
   translate([ 0, -60, 0 ]) block(grid = [ 4, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -231,6 +232,7 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -244,7 +246,6 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 pinSize = pinSize);
 
   translate([ 0, -80, 0 ]) block(grid = [ 6, 2 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -253,6 +254,7 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -267,7 +269,6 @@ translate([ 50, -84, 0 ]) rotate([ 0, 0, 180 ])
 }
 
 translate([ 20, -120, 0 ]) block(grid = [ 12, 4 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -276,6 +277,7 @@ translate([ 20, -120, 0 ]) block(grid = [ 12, 4 ],
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -292,7 +294,6 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
 {
   translate([ 0, -20, 0 ]) block(baseLayers = 3,
                                  grid = [ 1, 1 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -301,6 +302,7 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -315,7 +317,6 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -40, 0 ]) block(baseLayers = 3,
                                  grid = [ 2, 1 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -324,6 +325,7 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -338,7 +340,6 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -60, 0 ]) block(baseLayers = 3,
                                  grid = [ 4, 1 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -347,6 +348,7 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -361,7 +363,6 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
 
   translate([ 0, -80, 0 ]) block(baseLayers = 3,
                                  grid = [ 6, 1 ],
-                                 center = false,
                                  baseCutoutType = baseCutoutType,
                                  knobs = knobs,
                                  knobCentered = knobCentered,
@@ -370,6 +371,7 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
                                 baseColor = baseColor,
 
                                  previewQuality = previewQuality,
+                                 previewRender=previewRender,
                                  baseRoundingResolution = roundingResolution,
                                  holeRoundingResolution = roundingResolution,
                                  knobRoundingResolution = roundingResolution,
@@ -384,7 +386,6 @@ translate([ 116, -92, 0 ]) rotate([ 0, 0, 180 ])
 }
 
 translate([ 56, -20, 0 ]) block(grid = [ 1, 1 ],
-                                center = false,
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 knobCentered = knobCentered,
@@ -393,6 +394,7 @@ translate([ 56, -20, 0 ]) block(grid = [ 1, 1 ],
                                 baseColor = baseColor,
 
                                 previewQuality = previewQuality,
+                                previewRender=previewRender,
                                 baseRoundingResolution = roundingResolution,
                                 holeRoundingResolution = roundingResolution,
                                 knobRoundingResolution = roundingResolution,
@@ -406,7 +408,6 @@ translate([ 56, -20, 0 ]) block(grid = [ 1, 1 ],
                                 pinSize = pinSize);
 
 translate([ 56, -40, 0 ]) block(grid = [ 2, 1 ],
-                                center = false,
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 knobCentered = knobCentered,
@@ -415,6 +416,7 @@ translate([ 56, -40, 0 ]) block(grid = [ 2, 1 ],
                                 baseColor = baseColor,
 
                                 previewQuality = previewQuality,
+                                previewRender=previewRender,
                                 baseRoundingResolution = roundingResolution,
                                 holeRoundingResolution = roundingResolution,
                                 knobRoundingResolution = roundingResolution,
@@ -428,7 +430,6 @@ translate([ 56, -40, 0 ]) block(grid = [ 2, 1 ],
                                 pinSize = pinSize);
 
 translate([ 56, -60, 0 ]) block(grid = [ 4, 1 ],
-                                center = false,
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 knobCentered = knobCentered,
@@ -437,6 +438,7 @@ translate([ 56, -60, 0 ]) block(grid = [ 4, 1 ],
                                 baseColor = baseColor,
 
                                 previewQuality = previewQuality,
+                                previewRender=previewRender,
                                 baseRoundingResolution = roundingResolution,
                                 holeRoundingResolution = roundingResolution,
                                 knobRoundingResolution = roundingResolution,
@@ -450,7 +452,6 @@ translate([ 56, -60, 0 ]) block(grid = [ 4, 1 ],
                                 pinSize = pinSize);
 
 translate([ 56, -80, 0 ]) block(grid = [ 6, 1 ],
-                                center = false,
                                 baseCutoutType = baseCutoutType,
                                 knobs = knobs,
                                 knobCentered = knobCentered,
@@ -459,6 +460,7 @@ translate([ 56, -80, 0 ]) block(grid = [ 6, 1 ],
                                 baseColor = baseColor,
 
                                 previewQuality = previewQuality,
+                                previewRender=previewRender,
                                 baseRoundingResolution = roundingResolution,
                                 holeRoundingResolution = roundingResolution,
                                 knobRoundingResolution = roundingResolution,
