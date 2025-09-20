@@ -1,4 +1,4 @@
-include <../../lib/block.scad>;
+include <../../../lib/block.scad>;
 
 // The height of the Tree.
 treeHeight = 100; //[10:400]
@@ -66,7 +66,8 @@ block(
     baseSideAdjustment = baseSideAdjustment,
     knobSize = knobSize,
     wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    tubeZSize = tubeZSize,
+    align="ccs"
 );
 
 translate([0,0,10])

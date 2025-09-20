@@ -99,8 +99,7 @@ textOffset=[0,0]
                         wallThickness=blockMinWallThickness, 
                         baseClampThickness=baseClampThickness, 
                         baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
-                        center=true, 
-                        alignBottom=false
+                        align="center"
                     );
                     
                     difference(){
@@ -164,15 +163,14 @@ textOffset=[0,0]
                             knobHeight=knobHeight,
                             knobs=knobs, 
                             baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
-                            center=true,
+                            align="center",
                             textFont=textFont,
                             text=text,
                             textSize=textSize,
                             textSide=textSide,
                             textDepth=textDepth,
                             textSpacing=textSpacing,
-                            textOffset=textOffset, 
-                            alignBottom=false
+                            textOffset=textOffset
                         );
                     
                     cube([innerX, innerY, 2*innerZ], center=true);

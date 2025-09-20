@@ -70,8 +70,7 @@ module pi_case_lid(
                         knobSize=knobSize, 
                         knobs=knobs, 
                         baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
-                        center=true, 
-                        alignBottom=false
+                        align="center"
                     );
                     
                     //Cut border to fit as lid

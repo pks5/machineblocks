@@ -48,7 +48,7 @@ if(withTop){
     spaceY = (grassSizeY - 2*strawOffsetY - rowsCount*strawThickness) / (rowsCount - 1);
     
 color([0.945, 0.769, 0.059])
-    translate([0,40,0]){
+    translate([0,80,0]){
         
         translate([0,0,0.5*grassSizeY])
         rotate([90,0,0])

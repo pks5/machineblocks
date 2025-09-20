@@ -11,8 +11,8 @@
 *
 */
 
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Appearance] */
 

@@ -12,8 +12,8 @@
 */
 
 //Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Render] */
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
@@ -58,7 +58,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -79,7 +80,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -100,7 +102,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 
@@ -121,5 +124,6 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );

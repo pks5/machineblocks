@@ -5,7 +5,7 @@ use <../../lib/block.scad>;
 block(
     baseLayers = 1,
     grid = [16, 9],
-    gridOffset = [7, 0, 0],
+    
     svg="../sets/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,

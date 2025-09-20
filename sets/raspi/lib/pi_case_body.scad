@@ -74,8 +74,7 @@ module pi_case_body(){
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
                             knobs = false, 
-                            center=true, 
-                            alignBottom=false, 
+                            align="center", 
                             baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }
@@ -88,8 +87,7 @@ module pi_case_body(){
                             topPlateHeight=blockHeight - (floorHeight - topPlateHeight), 
                             grid=halfGrid, 
                             knobs = false, 
-                            center=true, 
-                            alignBottom=false, 
+                            align="center", 
                             baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY]
                         );
                     }

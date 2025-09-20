@@ -10,8 +10,8 @@
 * https://creativecommons.org/licenses/by-nc-sa/4.0/
 *
 */
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Appearance] */
 
@@ -42,7 +42,8 @@ union(){
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
-        pinSize = pinSize
+        pinSize = pinSize,
+        align = "ccs"
     );
 
 
@@ -61,7 +62,8 @@ union(){
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
-        pinSize = pinSize
+        pinSize = pinSize,
+        align = "ccs"
     ); 
 
 
@@ -76,7 +78,8 @@ union(){
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
-        pinSize = pinSize
+        pinSize = pinSize,
+        align = "ccs"
     );
 
 
@@ -91,7 +94,8 @@ union(){
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
-        pinSize = pinSize
+        pinSize = pinSize,
+        align = "ccs"
     );
 
 
@@ -106,6 +110,7 @@ union(){
         knobSize = knobSize,
         wallThickness = wallThickness,
         tubeZSize = tubeZSize,
-        pinSize = pinSize
+        pinSize = pinSize,
+        align = "ccs"
     ); 
 }

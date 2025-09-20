@@ -32,7 +32,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -46,7 +47,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -60,7 +62,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -74,7 +77,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -88,7 +92,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -102,7 +107,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 block(
@@ -116,5 +122,6 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );

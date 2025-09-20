@@ -12,8 +12,8 @@
 */
 
 // Include the library
-use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 /* [Size] */
 
@@ -102,7 +102,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 // Generate the block
@@ -139,7 +140,8 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
 
 // Generate the block
@@ -176,5 +178,6 @@ block(
     knobSize = knobSize,
     wallThickness = wallThickness,
     tubeZSize = tubeZSize,
-    pinSize = pinSize
+    pinSize = pinSize,
+    align="ccs"
 );
