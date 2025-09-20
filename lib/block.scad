@@ -256,9 +256,9 @@ module block(
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
-    translateX = (alignment[0] == "center" || alignment[0] == "center_start") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
-    translateY = (alignment[1] == "center" || alignment[1] == "center_start") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    translateZ = alignment[2] == "center" ? 0 : (((alignment[2] == "start" || alignment[2] == "center_start") ? 1 : -1) * 0.5*baseLayers * baseHeight);
+    translateX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
+    translateY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
+    translateZ = alignment[2] == "center" ? 0 : (((alignment[2] == "start" || alignment[2] == "ccs") ? 1 : -1) * 0.5*baseLayers * baseHeight);
     
     gridOffsetX = gridOffset[0] * gridSizeXY + translateX;
     gridOffsetY = gridOffset[1] * gridSizeXY + translateY;
@@ -266,9 +266,9 @@ module block(
 
     //Children alignment
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
-    translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "center_start") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
-    translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "center_start") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
-    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (((alignmentChildren[2] == "start" || alignmentChildren[2] == "center_start") ? -1 : 1) * 0.5*baseLayers * baseHeight);
+    translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
+    translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
+    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs") ? -1 : 1) * 0.5*baseLayers * baseHeight);
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;

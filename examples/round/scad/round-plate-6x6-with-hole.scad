@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Round Plate 6x6
+* Round Plate 6x6 With Hole
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -89,7 +89,7 @@ holeYCentered = true;
 // Hole Y Grid Offset Z
 holeYGridOffsetZ = 1.75;
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holesZ = [[2, 2, 2, 2]];
 // Type of Z Holes.
 holeZType = "technic";
 

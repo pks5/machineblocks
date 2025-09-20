@@ -61,7 +61,7 @@ union(){
 
         knobs = knobs,
         knobType = knobType,
-        align="center_start",
+        align="ccs",
         
         /*{QUALITY_PARAMETERS}*/
 
@@ -77,7 +77,7 @@ union(){
 
         knobs = knobs,
         knobType = knobType,
-        align="center_start",
+        align="ccs",
         
         /*{QUALITY_PARAMETERS}*/
 

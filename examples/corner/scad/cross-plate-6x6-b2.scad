@@ -68,7 +68,7 @@ union(){
 
         knobs = knobs,
         knobType = knobType,
-        align="center_start",
+        align="ccs",
         
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -93,7 +93,7 @@ union(){
 
         knobs = knobs,
         knobType = knobType,
-        align="center_start",
+        align="ccs",
         
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,

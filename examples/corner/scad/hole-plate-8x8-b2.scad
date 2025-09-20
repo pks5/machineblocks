@@ -58,7 +58,7 @@ union(){
 
         wallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
         gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
-        align="center_start",
+        align="ccs",
         
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -85,7 +85,7 @@ union(){
 
         wallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
         gridOffset=[0,0.5*(brickSizeY-borderSize),0],
-        align="center_start",
+        align="ccs",
 
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -112,7 +112,7 @@ union(){
 
         wallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
         gridOffset=[0.5*(brickSizeX-borderSize),0,0],
-        align="center_start",
+        align="ccs",
         
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
@@ -139,7 +139,7 @@ union(){
 
         wallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
         gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
-        align="center_start",
+        align="ccs",
         
         previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,

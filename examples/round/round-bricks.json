@@ -24,6 +24,19 @@
                     }
                 },
                 {
+                    "name": "Round Brick 1x1 With Hole",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 4,
+                        "baseReliefCut": true,
+                        "baseReliefCutHeight": 2.2,
+                        "baseReliefCutThickness": 0.8,
+                        "knobType": "technic"
+                    }
+                },
+                {
                     "name": "Round Brick 2x2",
                     "parameters": {
                         "brickSizeX": 2,
@@ -34,7 +47,7 @@
                     }
                 },
                 {
-                    "name": "Round Brick 2x2 with Z Hole",
+                    "name": "Round Brick 2x2 with Axle Hole",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
@@ -78,6 +91,19 @@
                     }
                 },
                 {
+                    "name": "Round Plate 1x1 With Hole",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4,
+                        "baseReliefCut": true,
+                        "baseReliefCutHeight": 2.2,
+                        "baseReliefCutThickness": 0.8,
+                        "knobType": "technic"
+                    }
+                },
+                {
                     "name": "Round Plate 2x1",
                     "parameters": {
                         "brickSizeX": 2,
@@ -90,33 +116,37 @@
                     }
                 },
                 {
-                    "name": "Round Plate 2x2",
+                    "name": "Round Plate 2x2 With Axle Hole",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 8,
-                        "knobPadding":0
+                        "knobPadding":0,
+                        "holesZ": [[0,0,0,0]],
+                        "holeZType": "axis"
                     }
                 },
                 {
-                    "name": "Round Plate 4x4",
+                    "name": "Round Plate 4x4 With Hole",
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 16,
-                        "knobPadding":0
+                        "knobPadding":0,
+                        "holesZ": [[1,1,1,1]]
                     }
                 },
                 {
-                    "name": "Round Plate 6x6",
+                    "name": "Round Plate 6x6 With Hole",
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 6,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 24,
-                        "knobPadding":0
+                        "knobPadding":0,
+                        "holesZ": [[2,2,2,2]]
                     }
                 },
                 {

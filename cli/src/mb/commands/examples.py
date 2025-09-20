@@ -174,9 +174,8 @@ def process_examples_clean(example_file_path: str):
             print("[examples/clean] No .scad files found in: " + target_dir)
         else:
             for scad_path in sorted(scad_files):
+                os.remove(scad_path)
                 print(f"[examples/clean] Deleted {scad_path}")
-                # Zum Löschen einer Datei, folgende Zeile auskommentieren:
-                # os.remove(scad_path)
 
         print(f"[examples/clean] Deleted {len(scad_files)} .scad files in {target_dir} and subdirectories.")
         print(f"[thumbnails/clean] DONE - Have a nice day!")
