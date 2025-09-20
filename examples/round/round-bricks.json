@@ -61,13 +61,25 @@
                     }
                 },
                 {
-                    "name": "Round Brick 4x4",
+                    "name": "Round Brick 2x2 with 2 Pin Holes",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "baseRoundingRadiusZ": 8,
+                        "holesX": true,
+                        "knobPadding":0
+                    }
+                },
+                {
+                    "name": "Round Brick 4x4 with Pin Hole",
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 16,
-                        "knobPadding":0
+                        "knobPadding":0,
+                        "holesZ":[[1,1,1,1]]
                     }
                 },
                 {
@@ -106,15 +118,27 @@
                     }
                 },
                 {
-                    "name": "Round Plate 2x1",
+                    "name": "Plate 1x2 with Rounded Ends O1",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 1,
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
                         "baseLayers": 1,
                         "knobType": "technic",
                         "baseRoundingRadiusZ": 4,
                         "baseReliefCut": true,
                         "knobPadding":0
+                    }
+                },
+                {
+                    "name": "Plate 1x3 with Rounded Ends O1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4,
+                        "knobs": true,
+                        "knobType": "technic",
+                        "baseReliefCut": true
                     }
                 },
                 {
@@ -215,6 +239,19 @@
                         "knobPadding":0
                     }
                 },
+                {
+                    "name": "Plate 8x8 with O8 Rounded End",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": [32,32,0,0],
+                        "knobs": true,
+                        "knobPadding": 0
+                    }
+                },
+
+                
 
                 {
                     "name": "Round Tile 1x1",
@@ -251,12 +288,34 @@
                     }
                 },
                 {
-                    "name": "Round Tile 2x1",
+                    "name": "Tile 1x2 with Rounded Ends O1",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 1,
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 4,
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
+                    "name": "Tile 1x3 with Rounded Ends O1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 4,
+                        "knobs": false,
+                        "baseReliefCut": true
+                    }
+                },
+                {
+                    "name": "Tile 2xx with Rounded Ends O2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 8,
                         "knobs": false,
                         "baseReliefCut": true
                     }
@@ -283,6 +342,17 @@
                         "knobs": false,
                         "baseReliefCut": true,
                         "holesZ": true
+                    }
+                },
+                {
+                    "name": "Round Tile 3x3",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "baseRoundingRadiusZ": 12,
+                        "knobs": false,
+                        "baseReliefCut": true
                     }
                 },
 

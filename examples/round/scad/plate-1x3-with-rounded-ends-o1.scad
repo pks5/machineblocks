@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Round Plate 4x4
+* Plate 1x3 with Rounded Ends O1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ include <../../../config/presets.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 4; // [1:32]  
+brickSizeX = 1; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 4; // [1:32]  
+brickSizeY = 3; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
@@ -34,14 +34,14 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 16;
+baseRoundingRadiusZ = 4;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
 
 // Whether to draw pillars.
 pillars = true;
-baseReliefCut = false;
+baseReliefCut = true;
 baseReliefCutHeight = 0.4;
 baseReliefCutThickness = 0.4;
 
@@ -55,9 +55,9 @@ knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
-knobType = "classic"; // [classic, technic]
+knobType = "technic"; // [classic, technic]
 // Knob Padding
-knobPadding = 0;
+knobPadding = 0.2;
 
 /* [Bevel] */
 
@@ -92,6 +92,10 @@ holeYGridOffsetZ = 1.75;
 holesZ = false;
 // Type of Z Holes.
 holeZType = "technic";
+// Whether Z Holes should be centered on X direction
+holeZCenteredX = true;
+// Whether Z Holes should be centered on Y direction
+holeZCenteredY = true;
 
 /* [Pit] */
 
@@ -155,6 +159,8 @@ block(
     holeYGridOffsetZ = holeYGridOffsetZ,
     holesZ = holesZ,
     holeZType = holeZType,
+    holeZCenteredX = holeZCenteredX,
+    holeZCenteredY = holeZCenteredY,
     
     pit = pit,
     pitKnobs = pitKnobs,

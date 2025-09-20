@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/round-bricks
 *
-* Round Tile 2x1
+* Tile 2xx with Rounded Ends O2
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -21,7 +21,7 @@ include <../../../config/presets.scad>;
 // Brick size in X-direction specified as multiple of an 1x1 brick.
 brickSizeX = 2; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 1; // [1:32]  
+brickSizeY = 4; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
@@ -34,7 +34,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = 4;
+baseRoundingRadiusZ = 8;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
