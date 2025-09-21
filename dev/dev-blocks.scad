@@ -1,6 +1,4 @@
-echo(version=version());
-
-include <../lib/block.scad>;
+use <../lib/block.scad>;
 
 /* [Hidden] */
 
@@ -22,13 +20,20 @@ block(baseLayers=1, grid=[2,2], gridOffset=[2,2,0], knobs = false, baseRoundingR
   }      
         
         
-*difference(){
-    block(grid=[4,4], knobs=false, align="start", alignChildren="center"){
-        block(grid=[2,2], gridOffset=[0,0,0], knobs=true, baseCutoutType="none", baseSideAdjustment=1.5, align="center");
+difference(){
+    block(grid=[4,4], knobs=true, align="start", alignChildren="start"){
+        block(
+          grid=[2,2], 
+          gridOffset=[0,0,0], 
+          knobs=false,
+          baseCutoutType="none",
+          baseSideAdjustment=[-0.1,1.5,-0.1,1.5], 
+          align="start",
+          baseClampThicknessOuter=0.1
+        );
     
     };
-
-    *block(grid=[2,2], gridOffset=[2,2,0], baseLayers=3, knobs=false, baseCutoutType="none", baseSideAdjustment=0.1, align=["start", "start", "center"]);
+    block(grid=[2,2], gridOffset=[0,0,0], baseLayers=6, knobs=false, baseCutoutType="none", baseSideAdjustment=0.1, align=["start", "start", "center"]);
  }
  
  

@@ -12,12 +12,16 @@
 */
 
 /*
-* Set your calibration preset values here. Save the file after changing.
+* Set your preset values here. Save the file after changing.
 *
 * ATTENTION: Changing values in this file affects ALL examples.
 */
 
 /* [Hidden] */
+
+/*
+* Calibration
+*/
 
 // Adjustment of the height (mm)
 // Amount will be added to/subtracted from the top side of the brick's base
@@ -41,6 +45,10 @@ tubeZSize = 6.4;
 // Diameter of the Pins (mm)
 pinSize = 3.2;
 
+/*
+* Preview
+*/
+
 // Whether brick should be rendered in preview mode
-// Only feasable when using a latest nightly build of OpenSCAD
+// Only works with a latest nightly build of OpenSCAD
 previewRender = false; //true or false

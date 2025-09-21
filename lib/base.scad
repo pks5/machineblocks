@@ -228,6 +228,9 @@ module mb_base(
     baseReliefCut,
     baseReliefCutHeight,
     baseReliefCutThickness,
+    baseClampHeight,
+    baseClampThicknessOuter,
+    baseClampOffset,
     roundingRadius, 
     roundingResolution,
     pit,
@@ -268,9 +271,10 @@ module mb_base(
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
     
     reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
-    bevelReliefCut = mb_inset_quad_lrfh(bevelOuterAdjusted, baseReliefCutThickness);
+    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
 
-    echo(roundingRadius = roundingRadius, bevelOuterAdjusted = bevelOuterAdjusted, bevelReliefCut=bevelReliefCut, reliefRadius=reliefRadius, x=objectSizeXAdjusted - 2*baseReliefCutThickness);
+    bevelBaseClampOuter = mb_inset_quad_lrfh(bevelOuterAdjusted, -baseClampThicknessOuter);
+    baseClampOuterRoundingRadius = mb_base_rel_radius(baseClampThicknessOuter, baseRoundingRadiusZ, minObjectSide, true);
 
     function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
@@ -283,15 +287,30 @@ module mb_base(
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
                 
                 difference(){ // Subtract relief cut and slanting from base
-                    mb_beveled_rounded_block(
-                        bevel = beveled ? bevelOuterAdjusted : false,
-                        sizeX = objectSizeXAdjusted,
-                        sizeY = objectSizeYAdjusted,
-                        height = height,
-                        roundingRadius = roundingRadius,
-                        roundingResolution = roundingResolution
-                    );
+                    union(){
+                        mb_beveled_rounded_block(
+                            bevel = beveled ? bevelOuterAdjusted : false,
+                            sizeX = objectSizeXAdjusted,
+                            sizeY = objectSizeYAdjusted,
+                            height = height,
+                            roundingRadius = roundingRadius,
+                            roundingResolution = roundingResolution
+                        );
 
+                        if(baseClampThicknessOuter > 0){
+                            //Outer clamp
+                            //Only used to produce cutouts
+                            translate([0,0,-0.5*(height-baseClampHeight) + baseClampOffset])
+                                mb_beveled_rounded_block(
+                                    bevel = beveled ? bevelBaseClampOuter : false,
+                                    sizeX = objectSizeXAdjusted + 2*baseClampThicknessOuter,
+                                    sizeY = objectSizeYAdjusted + 2*baseClampThicknessOuter,
+                                    height = baseClampHeight,
+                                    roundingRadius = baseClampOuterRoundingRadius,
+                                    roundingResolution = roundingResolution
+                                );
+                        }
+                    }
                     /*
                     intersection(){
                         make_bevel(bevelOuterAdjusted, height);
@@ -314,8 +333,8 @@ module mb_base(
 
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
-                                    sizeX = objectSizeXAdjusted - 2*baseReliefCutThickness,
-                                    sizeY = objectSizeYAdjusted - 2*baseReliefCutThickness,
+                                    sizeX = objectSizeX - 2*baseReliefCutThickness,
+                                    sizeY = objectSizeY - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
                                     roundingResolution = roundingResolution

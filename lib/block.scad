@@ -40,13 +40,14 @@ module block(
         baseCutoutMaxDepth = 9.0, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
+        baseClampThicknessOuter = 0, //mm
         baseClampOffset = 0.4, //mm
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         baseReliefCut = false,
-        baseReliefCutHeight = 0.4,
-        baseReliefCutThickness = 0.4,
+        baseReliefCutHeight = 0.6,
+        baseReliefCutThickness = 0.6,
         baseColor = "#EAC645",
         
         
@@ -520,6 +521,9 @@ module block(
                                             baseReliefCut = baseReliefCut,
                                             baseReliefCutHeight = baseReliefCutHeight,
                                             baseReliefCutThickness = baseReliefCutThickness,
+                                            baseClampHeight = baseClampHeight,
+                                            baseClampThicknessOuter = baseClampThicknessOuter,
+                                            baseClampOffset = baseClampOffset,
                                             roundingRadius = baseRoundingRadius, 
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                             pit = pit,
@@ -1017,6 +1021,9 @@ module block(
                                         baseReliefCut = baseReliefCut,
                                         baseReliefCutHeight = baseReliefCutHeight,
                                         baseReliefCutThickness = baseReliefCutThickness,
+                                        baseClampHeight = baseClampHeight,
+                                        baseClampThicknessOuter = baseClampThicknessOuter,
+                                        baseClampOffset = baseClampOffset,
                                         roundingRadius = baseRoundingRadius, 
                                         roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                         pit = pit,
