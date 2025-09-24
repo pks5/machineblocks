@@ -92,6 +92,7 @@ block(
     baseLayers = 1,
     knobType = brick2KnobType,
     baseCutoutType = multipart ? "groove" : "none",
+    tongueThicknessAdjustment = 0.1,
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
