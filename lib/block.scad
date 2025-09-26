@@ -46,8 +46,8 @@ module block(
         baseCutoutRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         baseReliefCut = false,
-        baseReliefCutHeight = 0.6,
-        baseReliefCutThickness = 0.6,
+        baseReliefCutHeight = 0.6, //mm
+        baseReliefCutThickness = 0.6, //mm
         baseColor = "#EAC645",
         
         
@@ -134,17 +134,17 @@ module block(
         knobType = "classic",
         knobCentered = false,
         knobSize = 5.0, //mm
-        knobCutSize = 5.0,
+        knobCutSize = 5.0, //mm
         knobHeight = 1.8, //mm
-        knobCutHeight = 2.2,
+        knobCutHeight = 2.2, //mm
         knobClampHeight = 0.8, //mm
         knobClampThickness = 0.0, //mm
         knobHoleSize = 3.5, //mm
         knobHoleClampThickness = 0.1, //mm
         knobRounding = 0.1, //mm
         knobRoundingResolution = 64,
-        knobMaxOverhang = 0.3,
-        knobPadding = 0,
+        knobMaxOverhang = 0.3, //mm
+        knobPadding = 0, //Multipliers of gridSizeXY
         
         //Tongue
         tongue = false,
@@ -165,7 +165,7 @@ module block(
         pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
-        pitKnobPadding=0.2,
+        pitKnobPadding=0.2, //Multipliers of gridSizeXY
         pitKnobType = "classic",
         pitKnobCentered = false,
         pitWallGaps = [],
