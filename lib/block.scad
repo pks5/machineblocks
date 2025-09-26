@@ -192,11 +192,11 @@ module block(
         svgColor = "#2c3e50",
 
         connectors = false,
-        connectorHeight = 0,
-        connectorDepth = 1.4,
-        connectorSize = 4.0,
-        connectorDepthTolerance = 0.2,
-        connectorSideTolerance = 0.1,
+        connectorHeight = 0, //mm
+        connectorDepth = 1.4, //mm
+        connectorSize = 4.0, //mm
+        connectorDepthTolerance = 0.2, //mm
+        connectorSideTolerance = 0.1, //mm
 
         //Screw Holes
         screwHolesZ = [],
