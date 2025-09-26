@@ -25,39 +25,43 @@ use <tongue.scad>;
 
 //TODO Rename: machineblock() or mb_block() or mb_brick()
 module block(
-        //Root Unit "mb"
+        //Root Unit "mbu"
         rootUnit = 1.6, //mm
         
         //Grid
         grid = [1, 1],
+        gridSize = [5, 2],
         gridOffset = [0, 0, 0], //Multipliers of gridSizeXY and gridSizeZ
         
         //Base
         base = true,
+        baseColor = "#EAC645",
         baseHeight = "auto", //mm
         baseLayers = 1,
+        
         baseCutoutType = "classic",
         baseCutoutMinDepth = 2.4, //mm
         baseCutoutMaxDepth = 8.8, //mm
+        
+        baseClampOffset = 0.4, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
         baseClampThicknessOuter = 0, //mm
-        baseClampOffset = 0.4, //mm
+        
         baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
+        
         baseReliefCut = false,
         baseReliefCutHeight = 0.6, //mm
         baseReliefCutThickness = 0.6, //mm
-        baseColor = "#EAC645",
-        
         
         //Base Adjustment
         baseSideAdjustment = -0.1, //mm
         baseHeightAdjustment = 0.0, //mm
-
+        baseWallThicknessAdjustment = -0.1, //mm
         //Walls
-        wallThickness = 1.5, //mm
+        //wallThickness = 1.5, //mm
         wallGapsX = [],
         wallGapsY = [],
         
@@ -88,15 +92,18 @@ module block(
         pillarGapMiddle = 10,
         
         //Pins (little tubes for blocks with 1 brick side length)
-        pinSize = 3.2, //mm
+        //pinSize = 3.2, //mm
+        //pinDiameter = 2, //mbu
+        pinDiameterAdjustment = 0.0, // mm
         pinClampThickness = 0.1, //mm
         pinClampOffset = 0.4, //mm
         pinClampHeight = 0.8, //mm
 
         //Tubes
-        tubeXSize = 6.4, //mm
-        tubeYSize = 6.4, //mm
-        tubeZSize = 6.4, //mm
+        tubeXDiameterAdjustment = -0.1, //mm
+        tubeYDiameterAdjustment = -0.1, //mm
+        tubeZDiameterAdjustment = -0.1, //mm
+
         tubeInnerClampThickness = 0.1, //mm
         tubeOuterClampThickness = 0.1, //mm
         tubeOuterClampOffset = 0.4, //mm
@@ -127,25 +134,35 @@ module block(
         holeZType = "technic",
         holeZCenteredX = true,
         holeZCenteredY = true,
-        holeZSize = 5.1, //mm
+        //holeZSize = 5.1, //mm
+        //holeZDiameter = 3, // mbu
+        holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64,
         
         //Knobs
         knobs = true,
         knobType = "classic",
         knobCentered = false,
-        knobSize = 5.0, //mm
-        knobCutSize = 5.0, //mm
-        knobHeight = 1.8, //mm
-        knobCutHeight = 2.2, //mm
-        knobClampHeight = 0.8, //mm
-        knobClampThickness = 0.0, //mm
-        knobHoleSize = 3.5, //mm
-        knobHoleClampThickness = 0.1, //mm
-        knobRounding = 0.1, //mm
-        knobRoundingResolution = 64,
         knobMaxOverhang = 0.3, //mm
         knobPadding = 0, //Multipliers of gridSizeXY
+       // knobSize = 5.0, //mm
+        //knobHeight = 1.8, //mm
+        
+        knobCutSize = 5.0, //mm
+        knobCutHeight = 2.2, //mm
+        
+        knobClampHeight = 0.8, //mm
+        knobClampThickness = 0.0, //mm
+        
+        knobHoleSize = 3.5, //mm
+        knobHoleClampThickness = 0.1, //mm
+        
+        knobRounding = 0.1, //mm
+        knobRoundingResolution = 64,
+        
+        studDiameter = 3, // mbu
+        studDiameterAdjustment = 0.2, // mm
+        studHeight = 1.125, // mbu
         
         //Tongue
         tongue = false,
@@ -240,8 +257,8 @@ module block(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    gridSizeXY = 5 * rootUnit;
-    gridSizeZ = 2 * rootUnit;
+    gridSizeXY = gridSize[0] * rootUnit;
+    gridSizeZ = gridSize[1] * rootUnit;
        
     //Side Adjustment
     sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
@@ -266,7 +283,7 @@ module block(
     alignment = is_string(align) ? [align, align, align] : align;
     translateX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
     translateY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    translateZ = alignment[2] == "center" ? 0 : (alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved;
+    translateZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved);
     
     gridOffsetX = gridOffset[0] * gridSizeXY + translateX;
     gridOffsetY = gridOffset[1] * gridSizeXY + translateY;
@@ -276,7 +293,7 @@ module block(
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
     translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
     translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
-    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved;
+    translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
@@ -290,6 +307,7 @@ module block(
     resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
     baseCutoutDepth = baseCutoutType == "none" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
     
+    wallThickness = 0.5 * (gridSize[0] - studDiameter) * rootUnit + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     
@@ -332,7 +350,8 @@ module block(
     ];
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
-    
+    knobSize = studDiameter * rootUnit + studDiameterAdjustment;
+    knobHeight = studHeight * rootUnit;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(knobPadding, gridSizeXY);
@@ -345,7 +364,13 @@ module block(
         -min(knobPaddingResolved[1], knobPaddingResolved[2])
     ];
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
-    echo (knobPaddingRoundingRadius = knobPaddingRoundingRadius);
+
+    tubeDiameter = sqrt(2*studDiameter^2);
+    tubeXSize = tubeDiameter * rootUnit + tubeXDiameterAdjustment;
+    tubeYSize = tubeDiameter * rootUnit + tubeYDiameterAdjustment;
+    tubeZSize = tubeDiameter * rootUnit + tubeZDiameterAdjustment;
+    holeZSize = studDiameter * rootUnit + holeZDiameterAdjustment;
+    pinSize = (gridSize[0] - studDiameter) * rootUnit + pinDiameterAdjustment;
     
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -489,11 +514,15 @@ module block(
         topPlateHeight = resultingTopPlateHeight, 
         baseCutoutDepth = baseCutoutDepth,
         pitDepth = resultingPitDepth, 
+        knobSize = knobSize,
         knobHeight = knobHeight,
         wallThickness = wallThickness,
         baseClampWallThickness = baseClampWallThickness,
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
+        tubeXSize = tubeXSize,
+        tubeYSize = tubeYSize,
+        tubeZSize = tubeZSize,
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
         beveled = beveled,
@@ -953,50 +982,50 @@ module block(
                                                 } // End union
 
                                                 union(){
-                                                mb_beveled_rounded_block(
-                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
-                                                    sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
-                                                    sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
-                                                    height = cutMultiplier * (knobCutHeight + cutOffset),
-                                                    roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
-                                                );
-                                                map = [[0,1],[2,3],[0,3],[1,2]];
-                                                for (side = [ 0 : 1 : 1 ]){
+                                                    mb_beveled_rounded_block(
+                                                        bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                                        sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
+                                                        sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
+                                                        height = cutMultiplier * (knobCutHeight + cutOffset),
+                                                        roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
+                                                        roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                    );
+                                                    map = [[0,1],[2,3],[0,3],[1,2]];
+                                                    for (side = [ 0 : 1 : 1 ]){
+                                                        
+                                                        if((baseRoundingRadiusZ[map[side][0]] == 0) 
+                                                            && (baseRoundingRadiusZ[map[side][1]] == 0)
+                                                            && (bevelHorizontal[map[side][0]] == [0,0])
+                                                            && (bevelHorizontal[map[side][1]] == [0,0])){
+                                                            translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
+                                                                cube([
+                                                                    cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
+                                                                    objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                    
+                                                                    cutMultiplier * (knobCutHeight + cutOffset)
+                                                                ], center=true);
+                                                            }
+                                                        }
+                                                    }
                                                     
-                                                    if((baseRoundingRadiusZ[map[side][0]] == 0) 
-                                                        && (baseRoundingRadiusZ[map[side][1]] == 0)
-                                                        && (bevelHorizontal[map[side][0]] == [0,0])
-                                                        && (bevelHorizontal[map[side][1]] == [0,0])){
-                                                        translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
-                                                            cube([
-                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
-                                                                objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                
-                                                                cutMultiplier * (knobCutHeight + cutOffset)
-                                                            ], center=true);
+                                                    for (side = [ 0 : 1 : 1 ]){
+                                                        if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
+                                                            && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
+                                                            && (bevelHorizontal[map[2+side][0]] == [0,0])
+                                                            && (bevelHorizontal[map[2+side][1]] == [0,0])){
+                                                            translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
+                                                                cube([
+                                                                    objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                    cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
+                                                                    cutMultiplier * (knobCutHeight + cutOffset)
+                                                                ], center=true);
+                                                            }
                                                         }
                                                     }
-                                                }
-                                                
-                                                for (side = [ 0 : 1 : 1 ]){
-                                                    if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
-                                                        && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
-                                                        && (bevelHorizontal[map[2+side][0]] == [0,0])
-                                                        && (bevelHorizontal[map[2+side][1]] == [0,0])){
-                                                        translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
-                                                            cube([
-                                                                objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
-                                                                cutMultiplier * (knobCutHeight + cutOffset)
-                                                            ], center=true);
-                                                        }
-                                                    }
-                                                }
 
-                                                
-                                                
-                                                echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
+                                                    
+                                                    
+                                                    //echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
                                                 }
                                                 /*
                                                 intersection(){
