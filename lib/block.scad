@@ -25,15 +25,16 @@ use <tongue.scad>;
 
 //TODO Rename: machineblock() or mb_block() or mb_brick()
 module block(
+        //Root Unit "mb"
+        rootUnit = 1.6, //mm
+        
         //Grid
         grid = [1, 1],
-        gridSizeXY = 8.0, //mm
-        gridSizeZ = 3.2, //mm
         gridOffset = [0, 0, 0], //Multipliers of gridSizeXY and gridSizeZ
         
         //Base
         base = true,
-        baseHeight = 3.2, //mm
+        baseHeight = "auto", //mm
         baseLayers = 1,
         baseCutoutType = "classic",
         baseCutoutMinDepth = 2.4, //mm
@@ -238,6 +239,9 @@ module block(
     cutOffset = 0.2;
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
+
+    gridSizeXY = 5 * rootUnit;
+    gridSizeZ = 2 * rootUnit;
        
     //Side Adjustment
     sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
@@ -252,7 +256,8 @@ module block(
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     //Base Height
-    resultingBaseHeight = baseLayers * baseHeight + baseHeightAdjustment;
+    baseHeightResolved = baseHeight == "auto" ? baseLayers * gridSizeZ : baseHeight;
+    resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
     gridSizeX = slanting != false ? grid[0] + (slanting[0] < 0 ? slanting[0] : 0) + (slanting[1] < 0 ? slanting[1] : 0) : grid[0];
     gridSizeY = slanting != false ? grid[1] + (slanting[2] < 0 ? slanting[2] : 0) + (slanting[3] < 0 ? slanting[3] : 0) : grid[1];
@@ -261,7 +266,7 @@ module block(
     alignment = is_string(align) ? [align, align, align] : align;
     translateX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
     translateY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    translateZ = alignment[2] == "center" ? 0 : (((alignment[2] == "start" || alignment[2] == "ccs") ? 1 : -1) * 0.5*baseLayers * baseHeight);
+    translateZ = alignment[2] == "center" ? 0 : (alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved;
     
     gridOffsetX = gridOffset[0] * gridSizeXY + translateX;
     gridOffsetY = gridOffset[1] * gridSizeXY + translateY;
@@ -271,7 +276,7 @@ module block(
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
     translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
     translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
-    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs") ? -1 : 1) * 0.5*baseLayers * baseHeight);
+    translateZChildren  = alignmentChildren[2] == "center" ? 0 : (alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved;
     
     //Base Cutout and Pit Depth
     resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
