@@ -37,7 +37,7 @@ module block(
         baseLayers = 1,
         baseCutoutType = "classic",
         baseCutoutMinDepth = 2.4, //mm
-        baseCutoutMaxDepth = 9.0, //mm
+        baseCutoutMaxDepth = 8.8, //mm
         baseClampHeight = 0.8, //mm
         baseClampThickness = 0.1, //mm
         baseClampThicknessOuter = 0, //mm
