@@ -53,6 +53,7 @@ module block(
         baseCutoutRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         
+        //Relief Cut
         baseReliefCut = false,
         baseReliefCutHeight = 0.6, // mm
         baseReliefCutThickness = 0.6, // mm
@@ -63,21 +64,13 @@ module block(
         
         //Walls
         baseWallThicknessAdjustment = -0.1, // mm
-        
         baseWallGapsX = [],
         baseWallGapsY = [],
         
-        //Top Plate
-        //topPlateHeight = 0.8, // mm
+        //Top Plate Helpers
         topPlateHelpers = true,
         topPlateHelperHeight = 0.2, // mm
         topPlateHelperThickness = 0.4, // mm
-
-        //Bevel
-        //TODO rename slanting to bevelVertical
-        slanting = false,
-        slantingLowerHeight = 2, // mm
-        bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Stabilizers
         stabilizerGrid = true,
@@ -110,6 +103,12 @@ module block(
         tubeOuterClampThickness = 0.1, // mm
         tubeOuterClampOffset = 0.4, // mm
         tubeOuterClampHeight = 0.8, // mm
+
+        //Bevel
+        //TODO rename slanting to bevelVertical
+        slanting = false,
+        slantingLowerHeight = 2, // mm
+        bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Holes
         holeX = false,
