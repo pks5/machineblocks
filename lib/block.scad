@@ -74,11 +74,11 @@ module block(
 
         //Stabilizers
         stabilizerGrid = true,
-        stabilizerGridOffset = 0.2, // mm
-        stabilizerGridHeight = 0.8, // mm
-        stabilizerGridThickness = 0.8, // mm
-        stabilizerExpansion = 2,
-        stabilizerExpansionOffset = 1.8, // mm
+        stabilizerGridOffset = 0.2, // mm, usually 1 printable layer height (0.2mm)
+        stabilizerGridHeight = 0.5, // mbu
+        stabilizerGridThickness = 0.5, // mbu
+        stabilizerExpansion = 2, // Integer, Create expansion after each [n] bricks
+        stabilizerExpansionOffset = 1, // mbu
         
         //Pillars: Tubes and Pins
         pillars = true,
@@ -192,13 +192,13 @@ module block(
         text = "",
         textSide = 0, // Side
         textDepth = -0.6, // mm
-        textFont = "Liberation Sans",
+        textFont = "Liberation Sans", // font family
         textSize = 4, // pt
         textSpacing = 1,
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
         textOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
-        textColor = "#2c3e50",
+        textColor = "#2c3e50", // hex color with leading #
 
         //SVG
         svg = "",
@@ -207,7 +207,7 @@ module block(
         svgDimensions = [100, 100],
         svgScale = 1,
         svgOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
-        svgColor = "#2c3e50",
+        svgColor = "#2c3e50", // hex color with leading #
 
         connectors = false,
         connectorHeight = 0, // mm
@@ -379,6 +379,10 @@ module block(
 
     holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2 * holeYInsetThickness * rootUnit);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ * gridSizeZ)); 
+
+    //Stabilizer
+    sGridThickness = stabilizerGridThickness * rootUnit;
+    sGridHeight = stabilizerGridHeight * rootUnit;
     
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -492,8 +496,8 @@ module block(
     /*
     * Stabilizer Grid
     */
-    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
+    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * rootUnit) - sGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * rootUnit) - sGridHeight, 0) : 0);
     
     /*
     * Screw Holes
@@ -747,6 +751,7 @@ module block(
                                             } // End if topPlateHelpers
 
                                             if(stabilizerGrid){
+                                                
                                                 difference(){
                                                     /*
                                                     * Stabilizer Grid
@@ -755,14 +760,14 @@ module block(
                                                         //Helpers X
                                                         for (a = [ 0 : 1 : grid[0] - 2 ]){
                                                             translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
-                                                                cube([stabilizerGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
+                                                                cube([sGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
                                                             }
                                                         }
                                                         
                                                         //Helpers Y
                                                         for (b = [ 0 : 1 : grid[1] - 2 ]){
                                                         translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
-                                                                cube([objectSizeX, stabilizerGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
+                                                                cube([objectSizeX, sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                                                             };
                                                         }
 
@@ -773,13 +778,13 @@ module block(
                                                             for (b = [ startY : 1 : endY ]){
                                                                 if(drawScrewHoleZ(a, b, 0)){
                                                                     translate([posX(a), posY(b)-0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                                        cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
+                                                                        cube([gridSizeXY - sGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);
                                                                     translate([posX(a), posY(b)+0.5*(screwHoleZSize + screwHoleZHelperThickness), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight + screwHoleZHelperOffset)])
-                                                                        cube([gridSizeXY - stabilizerGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
+                                                                        cube([gridSizeXY - sGridThickness, screwHoleZHelperThickness, screwHoleZHelperHeight + screwHoleZHelperOffset], center = true);    
                                                                     translate([posX(a)-0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                                        cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);
+                                                                        cube([screwHoleZHelperThickness, gridSizeXY - sGridThickness, screwHoleZHelperHeight], center = true);
                                                                     translate([posX(a)+0.5*(screwHoleZSize + screwHoleZHelperThickness), posY(b), topPlateZ - 0.5 * (resultingTopPlateHeight + screwHoleZHelperHeight)])
-                                                                        cube([screwHoleZHelperThickness, gridSizeXY - stabilizerGridThickness, screwHoleZHelperHeight], center = true);    
+                                                                        cube([screwHoleZHelperThickness, gridSizeXY - sGridThickness, screwHoleZHelperHeight], center = true);    
                                                                 } 
                                                             }
                                                         }
