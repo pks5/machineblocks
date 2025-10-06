@@ -26,64 +26,64 @@ use <tongue.scad>;
 //TODO Rename: machineblock() or mb_block() or mb_brick()
 module block(
         //Root Unit "mbu"
-        rootUnit = 1.6, //mm
+        rootUnit = 1.6, // mm
         
         //Grid
         grid = [1, 1],
         gridSize = [5, 2],
-        gridOffset = [0, 0, 0], //Multipliers of gridSizeXY and gridSizeZ
+        gridOffset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
         
         //Base
         base = true,
-        baseColor = "#EAC645",
-        baseHeight = "auto", //mm
-        baseLayers = 1,
+        baseColor = "#EAC645", // hex color with leading #
+        baseHeight = "auto", // mm or "auto"
+        baseLayers = 1, // Number of plates
         
         baseCutoutType = "classic",
-        baseCutoutMinDepth = 2.4, //mm
-        baseCutoutMaxDepth = 8.8, //mm
+        baseCutoutMinDepth = 2.4, // mm -- 1 plate minus topPlateHeight
+        baseCutoutMaxDepth = 8.8, // mm
         
-        baseClampOffset = 0.4, //mm
-        baseClampHeight = 0.8, //mm
-        baseClampThickness = 0.1, //mm
-        baseClampThicknessOuter = 0, //mm
+        baseClampOffset = 0.4, // mm
+        baseClampHeight = 0.8, // mm
+        baseClampThickness = 0.1, // mm
+        baseClampThicknessOuter = 0, // mm
         
-        baseRoundingRadius = 0.0, //e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
-        baseCutoutRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
+        baseRoundingRadius = 0.0, // e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
+        baseCutoutRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
         baseRoundingResolution = 64,
         
         baseReliefCut = false,
-        baseReliefCutHeight = 0.6, //mm
-        baseReliefCutThickness = 0.6, //mm
+        baseReliefCutHeight = 0.6, // mm
+        baseReliefCutThickness = 0.6, // mm
         
         //Base Adjustment
-        baseSideAdjustment = -0.1, //mm
-        baseHeightAdjustment = 0.0, //mm
+        baseSideAdjustment = -0.1, // mm
+        baseHeightAdjustment = 0.0, // mm
         
         //Walls
-        baseWallThicknessAdjustment = -0.1, //mm
+        baseWallThicknessAdjustment = -0.1, // mm
         baseWallGapsX = [],
         baseWallGapsY = [],
         
         //Top Plate
-        topPlateHeight = 0.8, //mm
+        topPlateHeight = 0.8, // mm
         topPlateHelpers = true,
-        topPlateHelperHeight = 0.2, //mm
-        topPlateHelperThickness = 0.4, //mm
+        topPlateHelperHeight = 0.2, // mm
+        topPlateHelperThickness = 0.4, // mm
 
         //Bevel
         //TODO rename slanting to bevelVertical
         slanting = false,
-        slantingLowerHeight = 2, //mm
+        slantingLowerHeight = 2, // mm
         bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Stabilizers
         stabilizerGrid = true,
-        stabilizerGridOffset = 0.2, //mm
-        stabilizerGridHeight = 0.8, //mm
-        stabilizerGridThickness = 0.8, //mm
+        stabilizerGridOffset = 0.2, // mm
+        stabilizerGridHeight = 0.8, // mm
+        stabilizerGridThickness = 0.8, // mm
         stabilizerExpansion = 2,
-        stabilizerExpansionOffset = 1.8, //mm
+        stabilizerExpansionOffset = 1.8, // mm
         
         //Pillars: Tubes and Pins
         pillars = true,
@@ -94,50 +94,46 @@ module block(
         //Pins (little tubes for blocks with 1 brick side length)
         pinDiameterAdjustment = 0.0, // mm
         
-        pinClampThickness = 0.1, //mm
-        pinClampOffset = 0.4, //mm
-        pinClampHeight = 0.8, //mm
+        pinClampThickness = 0.1, // mm
+        pinClampOffset = 0.4, // mm
+        pinClampHeight = 0.8, // mm
 
         //Tubes
-        tubeXDiameterAdjustment = -0.1, //mm
-        tubeYDiameterAdjustment = -0.1, //mm
-        tubeZDiameterAdjustment = -0.1, //mm
+        tubeXDiameterAdjustment = -0.1, // mm
+        tubeYDiameterAdjustment = -0.1, // mm
+        tubeZDiameterAdjustment = -0.1, // mm
 
-        tubeInnerClampThickness = 0.1, //mm
+        tubeInnerClampThickness = 0.1, // mm
         
-        tubeOuterClampThickness = 0.1, //mm
-        tubeOuterClampOffset = 0.4, //mm
-        tubeOuterClampHeight = 0.8, //mm
+        tubeOuterClampThickness = 0.1, // mm
+        tubeOuterClampOffset = 0.4, // mm
+        tubeOuterClampHeight = 0.8, // mm
 
         //Holes
         holeX = false,
         holeXType = "technic",
         holeXCentered = true,
-        //holeXSize = 5.1, //mm
         holeXDiameterAdjustment = 0.3, // mm
-        holeXInsetThickness = 0.375, //mbu
-        holeXInsetDepth = 0.25, //mbu
-        holeXGridOffsetZ = 1.75, //Multiplier of gridSizeZ
-        holeXGridSizeZ = 3, //Multiplier of gridSizeZ
-        holeXMinTopMargin = 0.8, //mm
+        holeXInsetThickness = 0.375, // mbu
+        holeXInsetDepth = 0.25, // mbu
+        holeXGridOffsetZ = 1.75, // Multiplier of gridSizeZ
+        holeXGridSizeZ = 3, // Multiplier of gridSizeZ
+        holeXMinTopMargin = 0.8, // mm
 
         holeY = false,
         holeYType = "technic",
         holeYCentered = true,
-        //holeYSize = 5.1, //mm
         holeYDiameterAdjustment = 0.3, // mm
-        holeYInsetThickness = 0.375, //mbu
-        holeYInsetDepth = 0.25, //mbu
-        holeYGridOffsetZ = 1.75, //Multiplier of gridSizeZ
-        holeYGridSizeZ = 3, //Multiplier of gridSizeZ
-        holeYMinTopMargin = 0.8, //mm
+        holeYInsetThickness = 0.375, // mbu
+        holeYInsetDepth = 0.25, // mbu
+        holeYGridOffsetZ = 1.75, // Multiplier of gridSizeZ
+        holeYGridSizeZ = 3, // Multiplier of gridSizeZ
+        holeYMinTopMargin = 0.8, // mm
 
         holeZ = false,
         holeZType = "technic",
         holeZCenteredX = true,
         holeZCenteredY = true,
-        //holeZSize = 5.1, //mm
-        //holeZDiameter = 3, // mbu
         holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64,
         
@@ -145,21 +141,21 @@ module block(
         knobs = true,
         knobType = "classic",
         knobCentered = false,
-        knobMaxOverhang = 0.3, //mm
-        knobPadding = 0, //Multipliers of gridSizeXY
+        knobMaxOverhang = 0.3, // mm
+        knobPadding = 0, // Multipliers of gridSizeXY
        // knobSize = 5.0, //mm
         //knobHeight = 1.8, //mm
         
-        knobCutSize = 5.0, //mm
-        knobCutHeight = 2.2, //mm
+        knobCutSize = 5.0, // mm
+        knobCutHeight = 2.2, // mm
         
-        knobClampHeight = 0.8, //mm
-        knobClampThickness = 0.0, //mm
+        knobClampHeight = 0.8, // mm
+        knobClampThickness = 0.0, // mm
         
-        knobHoleSize = 3.5, //mm
-        knobHoleClampThickness = 0.1, //mm
+        knobHoleSize = 3.5, // mm
+        knobHoleClampThickness = 0.1, // mm
         
-        knobRounding = 0.1, //mm
+        knobRounding = 0.1, // mm
         knobRoundingResolution = 64,
         
         studDiameter = 3, // mbu
@@ -168,90 +164,91 @@ module block(
         
         //Tongue
         tongue = false,
-        tongueHeight = 2.0, //mm
-        tongueRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
-        tongueInnerRoundingRadius = "auto", //mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
-        tongueThickness = 1.1, //mm
-        tongueThicknessAdjustment = 0,
-        tongueOffset = 1.5, //mm (0.5 * (gridSizeXY - referenceKnobSize))
-        tongueClampHeight = 0.8, //mm
-        tongueClampOffset = 0.4, //mm
-        tongueClampThickness = 0.1, //mm
-        tongueGrooveDepth = 2.4, //mm
+        tongueHeight = 2.0, // mm
+        tongueGrooveDepth = 2.4, // mm
+        tongueRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueInnerRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueThickness = 1.1, // mm
+        tongueThicknessAdjustment = 0, // mm
+        tongueOffset = 1.5, // mm (0.5 * (gridSizeXY - referenceKnobSize))
+        tongueClampHeight = 0.8, // mm
+        tongueClampOffset = 0.4, // mm
+        tongueClampThickness = 0.1, // mm
+        
         
         //Pit
         pit=false,
-        pitRoundingRadius = "auto", //e.g 2.7 or [2.7, 2.7, 2.7, 2.7]  
-        pitDepth = 0.0, //mm
-        pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
-        pitKnobs=true,
-        pitKnobPadding = 0.2, //Multipliers of gridSizeXY
+        pitRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] or "auto" 
+        pitDepth = "auto", // mm or "auto"
+        pitWallThickness = 0.333, // Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
+        pitKnobs = true,
+        pitKnobPadding = 0.2, // Multipliers of gridSizeXY
         pitKnobType = "classic",
         pitKnobCentered = false,
         pitWallGaps = [],
         
         //Text
         text = "",
-        textSide = 0, //Side
-        textDepth = -0.6, //mm
+        textSide = 0, // Side
+        textDepth = -0.6, // mm
         textFont = "Liberation Sans",
-        textSize = 4,
+        textSize = 4, // pt
         textSpacing = 1,
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
-        textOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
+        textOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
         textColor = "#2c3e50",
 
         //SVG
         svg = "",
-        svgSide = 5, //Side
-        svgDepth = 0.4, //mm
+        svgSide = 5, // Side
+        svgDepth = 0.4, // mm
         svgDimensions = [100, 100],
         svgScale = 1,
-        svgOffset = [0, 0], //Multipliers of gridSizeXY and gridSizeZ depending on side
+        svgOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
         svgColor = "#2c3e50",
 
         connectors = false,
-        connectorHeight = 0, //mm
-        connectorDepth = 1.4, //mm
-        connectorSize = 4.0, //mm
-        connectorDepthTolerance = 0.2, //mm
-        connectorSideTolerance = 0.1, //mm
+        connectorHeight = 0, // mm
+        connectorDepth = 1.4, // mm
+        connectorSize = 4.0, // mm
+        connectorDepthTolerance = 0.2, // mm
+        connectorSideTolerance = 0.1, // mm
 
         //Screw Holes
         screwHolesZ = [],
-        screwHoleZSize = 2.3, //mm
-        screwHoleZHelperThickness = 0.8, //mm
-        screwHoleZHelperOffset = 0.2, //mm
-        screwHoleZHelperHeight = 0.2, //mm
+        screwHoleZSize = 2.3, // mm
+        screwHoleZHelperThickness = 0.8, // mm
+        screwHoleZHelperOffset = 0.2, // mm
+        screwHoleZHelperHeight = 0.2, // mm
 
         screwHolesX = [],
-        screwHoleXSize = 2.1, //mm
-        screwHoleXDepth = 4, //mm
+        screwHoleXSize = 2.1, // mm
+        screwHoleXDepth = 4, // mm
 
         screwHolesY = [],
-        screwHoleYSize = 2.1, //mm
-        screwHoleYDepth = 4, //mm
+        screwHoleYSize = 2.1, // mm
+        screwHoleYDepth = 4, // mm
 
         //PCB
         pcb=false,
         pcbMountingType = "clips",
-        pcbDimensions = [20, 30, 3], //mm
-        pcbOffset = [0, 0], //Multipliers of gridSizeXY
-        pcbScrewSocketSize = 5, //mm
-        pcbScrewSocketHoleSize = 2.2, //mm
-        pcbScrewSocketHeight = 3, //mm
+        pcbDimensions = [20, 30, 3], // mm
+        pcbOffset = [0, 0], // Multipliers of gridSizeXY
+        pcbScrewSocketSize = 5, // mm
+        pcbScrewSocketHoleSize = 2.2, // mm
+        pcbScrewSocketHeight = 3, // mm
         pcbScrewSockets = [],
 
         //Alignment
         align = "start",
         alignChildren = "start",
-        alignMode = "grid", //If set to object, brick is aligned like a normal scad object - TODO implement object mode
+        alignMode = "grid", // If set to object, brick is aligned like a normal scad object - TODO implement object mode
         
         //Preview
-        previewQuality = 0.5, //Between 0.0 and 1.0
-        previewRender = false, //Whether the brick should always be rendered in preview mode
-        previewRenderConvexity = 15 //Convexity for preview rendering
+        previewQuality = 0.5, // Between 0.0 and 1.0
+        previewRender = false, // Whether the brick should always be rendered in preview mode
+        previewRenderConvexity = 15 // Convexity for preview rendering
         ){
             
     //Variables for cutouts        
@@ -298,7 +295,7 @@ module block(
     translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
     
     //Base Cutout and Pit Depth
-    resultingPitDepth = pit ? (pitDepth > 0 ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
+    resultingPitDepth = pit ? (pitDepth != "auto" ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
                 : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
