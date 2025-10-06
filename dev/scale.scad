@@ -8,7 +8,7 @@ block(
 
 translate([0, 24, 0])
 block(
-    rootUnit = 3.2,
+    scale = 2,
     baseLayers=3, 
     grid=[4,2],
     holeZ = true
@@ -16,7 +16,7 @@ block(
 
 translate([0, 72, 0])
 block(
-    rootUnit = 4.8,
+    scale = 3,
     baseLayers=3, 
     grid=[4,2],
     holeZ=true
@@ -38,7 +38,7 @@ block(
 
 translate([70, 24, 0])
 block(
-    rootUnit = 3.2,
+    scale = 2,
     baseLayers=3, 
     grid=[3,1],
     holeX=true
@@ -46,7 +46,7 @@ block(
 
 translate([120, 24, 0])
 block(
-    rootUnit = 3.2,
+    scale = 2,
     baseLayers=3, 
     grid=[1,2],
     holeY=true
@@ -54,7 +54,7 @@ block(
 
 translate([100, 72, 0])
 block(
-    rootUnit = 4.8,
+    scale = 3,
     baseLayers=3, 
     grid=[2,1],
     holeX=true
@@ -62,7 +62,7 @@ block(
 
 translate([150, 72, 0])
 block(
-    rootUnit = 4.8,
+    scale = 3,
     baseLayers=3, 
     grid=[1,2],
     holeY=true

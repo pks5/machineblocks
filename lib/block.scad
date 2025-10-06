@@ -25,14 +25,14 @@ use <tongue.scad>;
 
 //TODO Rename: machineblock() or mb_block() or mb_brick()
 module block(
-        //Root Unit "mbu"
-        rootUnit = 1.6, // mm
-        
         //Grid
         grid = [1, 1],
         gridSize = [5, 2],
         gridOffset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
         
+        //Scale
+        scale = 1.0, // Float
+
         //Base
         base = true,
         baseColor = "#EAC645", // hex color with leading #
@@ -258,9 +258,11 @@ module block(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
+    rootUnit = scale * 1.6;
+
     gridSizeXY = gridSize[0] * rootUnit;
     gridSizeZ = gridSize[1] * rootUnit;
-       
+
     //Side Adjustment
     sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
 
