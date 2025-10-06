@@ -23,13 +23,15 @@ use <quad.scad>;
 use <polygon.scad>;
 use <tongue.scad>;
 
-//TODO Rename: machineblock() or mb_block() or mb_brick()
-module block(
+module machineblock(
         //Grid
         grid = [1, 1],
         gridSize = [5, 2],
         gridOffset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
         
+        //Size
+        layers = 1, // Number of plates
+
         //Scale
         scale = 1.0, // Float
 
@@ -37,7 +39,6 @@ module block(
         base = true,
         baseColor = "#EAC645", // hex color with leading #
         baseHeight = "auto", // mm or "auto"
-        baseLayers = 1, // Number of plates
         
         baseTopPlateHeight = 1, // mbu
         baseTopPlateHeightAdjustment = -0.6, // mm
@@ -276,7 +277,7 @@ module block(
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     //Base Height
-    baseHeightResolved = baseHeight == "auto" ? baseLayers * gridSizeZ : baseHeight;
+    baseHeightResolved = baseHeight == "auto" ? layers * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
     gridSizeX = slanting != false ? grid[0] + (slanting[0] < 0 ? slanting[0] : 0) + (slanting[1] < 0 ? slanting[1] : 0) : grid[0];
