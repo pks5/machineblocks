@@ -39,10 +39,11 @@ module block(
         baseHeight = "auto", // mm or "auto"
         baseLayers = 1, // Number of plates
         
-        baseTopPlateHeight = 0.5, // mbu
+        baseTopPlateHeight = 1, // mbu
+        baseTopPlateHeightAdjustment = -0.6, // mm
 
         baseCutoutType = "classic",
-        baseCutoutMaxDepth = 5.5, // mbu
+        baseCutoutMaxDepth = 5, // mbu
         
         baseClampOffset = 0.4, // mm
         baseClampHeight = 0.8, // mm
@@ -69,8 +70,8 @@ module block(
         
         //Top Plate Helpers
         topPlateHelpers = true,
-        topPlateHelperHeight = 0.2, // mm
-        topPlateHelperThickness = 0.4, // mm
+        topPlateHelperHeight = 0.2, // mm, usually 1 printable layer height (0.2mm)
+        topPlateHelperThickness = 0.4, // mm, usually 1 printable wall thickness (0.4mm)
 
         //Stabilizers
         stabilizerGrid = true,
@@ -296,7 +297,7 @@ module block(
     translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
     
     //Base Cutout and Pit Depth
-    topPlateHeight = baseTopPlateHeight * rootUnit;
+    topPlateHeight = baseTopPlateHeight * rootUnit + baseTopPlateHeightAdjustment;
     baseCutoutMinDepth = gridSize[1] * rootUnit - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * rootUnit;  
     
