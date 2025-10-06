@@ -32,7 +32,8 @@ translate([80, 0, 0])
 machineblock(
     layers=3, 
     grid=[1,2],
-    holeY=true
+    holeY=true,
+    knobType="technic"
 );
 
 translate([70, 24, 0])
@@ -40,7 +41,8 @@ machineblock(
     scale = 2,
     layers=3, 
     grid=[3,1],
-    holeX=true
+    holeX=true,
+    knobType="technic"
 );
 
 translate([120, 24, 0])
@@ -48,7 +50,8 @@ machineblock(
     scale = 2,
     layers=3, 
     grid=[1,2],
-    holeY=true
+    holeY=true,
+    knobType="technic"
 );
 
 translate([100, 72, 0])
@@ -56,7 +59,8 @@ machineblock(
     scale = 3,
     layers=3, 
     grid=[2,1],
-    holeX=true
+    holeX=true,
+    knobType="technic"
 );
 
 translate([150, 72, 0])
@@ -64,5 +68,6 @@ machineblock(
     scale = 3,
     layers=3, 
     grid=[1,2],
-    holeY=true
+    holeY=true,
+    knobType="technic"
 );

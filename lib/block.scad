@@ -1123,7 +1123,7 @@ module machineblock(
                                                             cylinder(h=2*holeXInsetDepth * rootUnit, r=0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                     }
-                                                    else if(holeXType == "axis"){
+                                                    else if(holeXType == "axle"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                     }
                                                 };
@@ -1150,7 +1150,7 @@ module machineblock(
                                                         translate([0, 0, -0.5 * objectSizeX])
                                                             cylinder(h=2*holeYInsetDepth * rootUnit, r=0.5 * (holeYSize + 2 * holeYInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     }
-                                                    else if(holeYType == "axis"){
+                                                    else if(holeYType == "axle"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                     }
                                                 };
@@ -1171,7 +1171,7 @@ module machineblock(
                                                 if(holeZType == "technic"){
                                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                 }
-                                                else if(holeZType == "axis"){
+                                                else if(holeZType == "axle"){
                                                     mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                 }
                                             };
