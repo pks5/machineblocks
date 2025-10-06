@@ -59,11 +59,11 @@ module block(
         //Base Adjustment
         baseSideAdjustment = -0.1, //mm
         baseHeightAdjustment = 0.0, //mm
-        baseWallThicknessAdjustment = -0.1, //mm
+        
         //Walls
-        //wallThickness = 1.5, //mm
-        wallGapsX = [],
-        wallGapsY = [],
+        baseWallThicknessAdjustment = -0.1, //mm
+        baseWallGapsX = [],
+        baseWallGapsY = [],
         
         //Top Plate
         topPlateHeight = 0.8, //mm
@@ -92,9 +92,8 @@ module block(
         pillarGapMiddle = 10,
         
         //Pins (little tubes for blocks with 1 brick side length)
-        //pinSize = 3.2, //mm
-        //pinDiameter = 2, //mbu
         pinDiameterAdjustment = 0.0, // mm
+        
         pinClampThickness = 0.1, //mm
         pinClampOffset = 0.4, //mm
         pinClampHeight = 0.8, //mm
@@ -105,32 +104,35 @@ module block(
         tubeZDiameterAdjustment = -0.1, //mm
 
         tubeInnerClampThickness = 0.1, //mm
+        
         tubeOuterClampThickness = 0.1, //mm
         tubeOuterClampOffset = 0.4, //mm
         tubeOuterClampHeight = 0.8, //mm
 
         //Holes
-        holesX = false,
+        holeX = false,
         holeXType = "technic",
         holeXCentered = true,
-        holeXSize = 5.1, //mm
-        holeXInsetThickness = 0.6, //mm
-        holeXInsetDepth = 0.9, //mm
+        //holeXSize = 5.1, //mm
+        holeXDiameterAdjustment = 0.3, // mm
+        holeXInsetThickness = 0.375, //mbu
+        holeXInsetDepth = 0.25, //mbu
         holeXGridOffsetZ = 1.75, //Multiplier of gridSizeZ
         holeXGridSizeZ = 3, //Multiplier of gridSizeZ
         holeXMinTopMargin = 0.8, //mm
 
-        holesY = false,
+        holeY = false,
         holeYType = "technic",
         holeYCentered = true,
-        holeYSize = 5.1, //mm
-        holeYInsetThickness = 0.55, //mm
-        holeYInsetDepth = 0.9, //mm
+        //holeYSize = 5.1, //mm
+        holeYDiameterAdjustment = 0.3, // mm
+        holeYInsetThickness = 0.375, //mbu
+        holeYInsetDepth = 0.25, //mbu
         holeYGridOffsetZ = 1.75, //Multiplier of gridSizeZ
         holeYGridSizeZ = 3, //Multiplier of gridSizeZ
         holeYMinTopMargin = 0.8, //mm
 
-        holesZ = false,
+        holeZ = false,
         holeZType = "technic",
         holeZCenteredX = true,
         holeZCenteredY = true,
@@ -183,7 +185,7 @@ module block(
         pitDepth = 0.0, //mm
         pitWallThickness = 0.333, //Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs=true,
-        pitKnobPadding=0.2, //Multipliers of gridSizeXY
+        pitKnobPadding = 0.2, //Multipliers of gridSizeXY
         pitKnobType = "classic",
         pitKnobCentered = false,
         pitWallGaps = [],
@@ -322,12 +324,7 @@ module block(
     xyScrewHolesZ = -0.5 * resultingBaseHeight + 0.5 * gridSizeZ;
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
-    //Holes XY
-    holeXBottomMargin = holeXGridOffsetZ*gridSizeZ - 0.5*(holeXSize + 2*holeXInsetThickness);
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin) / (holeXGridSizeZ*gridSizeZ)); 
-
-    holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2*holeYInsetThickness);
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ*gridSizeZ)); 
+    
 
     beveled = bevelHorizontal != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
@@ -369,8 +366,17 @@ module block(
     tubeXSize = tubeDiameter * rootUnit + tubeXDiameterAdjustment;
     tubeYSize = tubeDiameter * rootUnit + tubeYDiameterAdjustment;
     tubeZSize = tubeDiameter * rootUnit + tubeZDiameterAdjustment;
+    holeXSize = studDiameter * rootUnit + holeXDiameterAdjustment;
+    holeYSize = studDiameter * rootUnit + holeYDiameterAdjustment;
     holeZSize = studDiameter * rootUnit + holeZDiameterAdjustment;
     pinSize = (gridSize[0] - studDiameter) * rootUnit + pinDiameterAdjustment;
+
+    //Holes XY
+    holeXBottomMargin = holeXGridOffsetZ*gridSizeZ - 0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit);
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin) / (holeXGridSizeZ * gridSizeZ)); 
+
+    holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2 * holeYInsetThickness * rootUnit);
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ * gridSizeZ)); 
     
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -471,21 +477,21 @@ module block(
     /*
     * XYZ Holes
     */
-    function drawHoleX(a, b) = drawGridItem(holesX, a, b, 0, false); 
-    function drawHoleY(a, b) = drawGridItem(holesY, a, b, 0, false); 
-    function drawHoleZ(a, b) = drawGridItem(holesZ, a, b, 0, false); 
+    function drawHoleX(a, b) = drawGridItem(holeX, a, b, 0, false); 
+    function drawHoleY(a, b) = drawGridItem(holeY, a, b, 0, false); 
+    function drawHoleZ(a, b) = drawGridItem(holeZ, a, b, 0, false); 
     
     /*
     * Wall Gaps
     */
-    function drawWallGapX(a, side, i) = (i < len(wallGapsX)) ? ((wallGapsX[i][0] == a && (side == wallGapsX[i][1] || wallGapsX[i][1] == 2)) ? (wallGapsX[i][2] == undef ? 1 : wallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
-    function drawWallGapY(a, side, i) = (i < len(wallGapsY)) ? ((wallGapsY[i][0] == a && (side == wallGapsY[i][1] || wallGapsY[i][1] == 2)) ? (wallGapsY[i][2] == undef ? 1 : wallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
+    function drawWallGapX(a, side, i) = (i < len(baseWallGapsX)) ? ((baseWallGapsX[i][0] == a && (side == baseWallGapsX[i][1] || baseWallGapsX[i][1] == 2)) ? (baseWallGapsX[i][2] == undef ? 1 : baseWallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
+    function drawWallGapY(a, side, i) = (i < len(baseWallGapsY)) ? ((baseWallGapsY[i][0] == a && (side == baseWallGapsY[i][1] || baseWallGapsY[i][1] == 2)) ? (baseWallGapsY[i][2] == undef ? 1 : baseWallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
     
     /*
     * Stabilizer Grid
     */
-    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holesX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holesY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
+    function stabilizersXHeight(a) = stabilizerGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersYHeight(b) = stabilizerGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - stabilizerExpansionOffset - stabilizerGridHeight, 0) : 0);
     
     /*
     * Screw Holes
@@ -902,7 +908,7 @@ module block(
                                             } // End if pillars
                                             
                                             //X-Holes Outer
-                                            if(holesX != false){
+                                            if(holeX != false){
                                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                                         if(drawHoleX(a, r)){
@@ -914,10 +920,10 @@ module block(
                                                         }
                                                     }
                                                 }
-                                            } // End if holesX
+                                            } // End if holeX
                                             
                                             //Y-Holes Outer
-                                            if(holesY != false){
+                                            if(holeY != false){
                                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                                         if(drawHoleY(b, r)){
@@ -929,9 +935,9 @@ module block(
                                                         }
                                                     }
                                                 }
-                                            } // End if holesY
+                                            } // End if holeY
                                             
-                                            if(holesZ != false){
+                                            if(holeZ != false){
                                                 /*
                                                 * Z-Holes Outer
                                                 */
@@ -948,7 +954,7 @@ module block(
                                                         }
                                                     }   
                                                 }
-                                            } // End if holesZ
+                                            } // End if holeZ
                                         } // End Difference Base Cutout
 
                                         
@@ -1089,7 +1095,7 @@ module block(
                         */
 
                         //Cut X-Holes
-                        if(holesX != false){
+                        if(holeX != false){
                             color(baseColor){
                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
@@ -1100,9 +1106,9 @@ module block(
                                                         cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeY])
-                                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeXInsetDepth * rootUnit, r=0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         translate([0, 0, -0.5 * objectSizeY])
-                                                            cylinder(h=2*holeXInsetDepth, r=0.5 * (holeXSize + 2*holeXInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeXInsetDepth * rootUnit, r=0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                     }
                                                     else if(holeXType == "axis"){
@@ -1114,10 +1120,10 @@ module block(
                                     }
                                 }
                             } // End color
-                        } // End if holesX
+                        } // End if holeX
                         
                         //Cut Y-Holes
-                        if(holesY != false){
+                        if(holeY != false){
                             color(baseColor){
                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
@@ -1128,9 +1134,9 @@ module block(
                                                         cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeX])
-                                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeYInsetDepth * rootUnit, r=0.5 * (holeYSize + 2 * holeYInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         translate([0, 0, -0.5 * objectSizeX])
-                                                            cylinder(h=2*holeYInsetDepth, r=0.5 * (holeYSize + 2*holeYInsetThickness), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeYInsetDepth * rootUnit, r=0.5 * (holeYSize + 2 * holeYInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     }
                                                     else if(holeYType == "axis"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
@@ -1141,9 +1147,9 @@ module block(
                                     }
                                 }
                             } // End color
-                        } // End if holesY
+                        } // End if holeY
                         
-                        if(holesZ != false){
+                        if(holeZ != false){
                             color(baseColor){
                                 //Cut Z-Holes
                                 for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
@@ -1161,7 +1167,7 @@ module block(
                                     }
                                 }
                             } // End color
-                        } // End if holesZ
+                        } // End if holeZ
 
                         /*
                         * Text Cutout
