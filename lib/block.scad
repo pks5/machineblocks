@@ -39,9 +39,10 @@ module block(
         baseHeight = "auto", // mm or "auto"
         baseLayers = 1, // Number of plates
         
+        baseTopPlateHeight = 0.5, // mbu
+
         baseCutoutType = "classic",
-        baseCutoutMinDepth = 2.4, // mm -- 1 plate minus topPlateHeight
-        baseCutoutMaxDepth = 8.8, // mm
+        baseCutoutMaxDepth = 5.5, // mbu
         
         baseClampOffset = 0.4, // mm
         baseClampHeight = 0.8, // mm
@@ -62,11 +63,12 @@ module block(
         
         //Walls
         baseWallThicknessAdjustment = -0.1, // mm
+        
         baseWallGapsX = [],
         baseWallGapsY = [],
         
         //Top Plate
-        topPlateHeight = 0.8, // mm
+        //topPlateHeight = 0.8, // mm
         topPlateHelpers = true,
         topPlateHelperHeight = 0.2, // mm
         topPlateHelperThickness = 0.4, // mm
@@ -295,6 +297,10 @@ module block(
     translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
     
     //Base Cutout and Pit Depth
+    topPlateHeight = baseTopPlateHeight * rootUnit;
+    baseCutoutMinDepth = gridSize[1] * rootUnit - topPlateHeight; // mm -- 1 plate minus topPlateHeight
+    maxBaseCutoutDepth = baseCutoutMaxDepth * rootUnit;  
+    
     resultingPitDepth = pit ? (pitDepth != "auto" ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
                 ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
@@ -302,9 +308,9 @@ module block(
     pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * gridSizeXY;
     pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * gridSizeXY;
 
-    calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;        
-    resultingTopPlateHeight = topPlateHeight + ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? (calculatedBaseCutoutDepth - baseCutoutMaxDepth) : 0);
-    baseCutoutDepth = baseCutoutType == "none" ? 0 : ((baseCutoutMaxDepth > 0 && (calculatedBaseCutoutDepth > baseCutoutMaxDepth)) ? baseCutoutMaxDepth : calculatedBaseCutoutDepth);
+    calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;  
+    resultingTopPlateHeight = topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
+    baseCutoutDepth = baseCutoutType == "none" ? 0 : ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
     
     wallThickness = 0.5 * (gridSize[0] - studDiameter) * rootUnit + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
@@ -514,7 +520,8 @@ module block(
         heightWithKnobs = resultingBaseHeight + knobHeight,
         size = [objectSizeX, objectSizeY],
         sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-        topPlateHeight = resultingTopPlateHeight, 
+        topPlateHeight = topPlateHeight,
+        resultingTopPlateHeight = resultingTopPlateHeight, 
         baseCutoutDepth = baseCutoutDepth,
         pitDepth = resultingPitDepth, 
         knobSize = knobSize,
