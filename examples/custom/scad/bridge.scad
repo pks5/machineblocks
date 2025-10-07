@@ -24,13 +24,6 @@ brickSizeY = 1; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
-/* [Quality] */
-
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
 // Generate the block
 machineblock(
     size = [3, brickSizeY, baseLayers],
@@ -39,13 +32,6 @@ machineblock(
     
     studs = false,
     
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-    
-
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -60,7 +46,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );
 
 // Generate the block
@@ -71,13 +62,6 @@ machineblock(
     
     studs = false,
     
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-    
-
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -92,7 +76,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );
 
 // Generate the block
@@ -102,13 +91,6 @@ machineblock(
     align="ccs",
     baseCutoutType = "none",
     
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-    
-
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -123,5 +105,10 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );

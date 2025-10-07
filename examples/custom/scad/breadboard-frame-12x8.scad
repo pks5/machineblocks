@@ -22,13 +22,6 @@ gridY = 8;
 //Number of layers
 baseLayers = 4;
 
-/* [Quality] */
-
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
 machineblock(
     size = [gridX, gridY, baseLayers],
     pit = true,
@@ -50,5 +43,10 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );

@@ -24,13 +24,6 @@ baseLayers = 24;
 //Floor layers
 floorLayers = 3;
 
-/* [Quality] */
-
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
 union(){
     machineblock(
         size = [gridX, gridY, floorLayers], 
@@ -51,7 +44,12 @@ union(){
         pinDiameterAdjustment = pinDiameterAdjustment,
         studDiameterAdjustment = studDiameterAdjustment,
         studCutoutAdjustment = studCutoutAdjustment,
-        previewRender = previewRender
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     );
 
 
@@ -75,7 +73,12 @@ union(){
         pinDiameterAdjustment = pinDiameterAdjustment,
         studDiameterAdjustment = studDiameterAdjustment,
         studCutoutAdjustment = studCutoutAdjustment,
-        previewRender = previewRender
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     ); 
 
 
@@ -99,7 +102,12 @@ union(){
         pinDiameterAdjustment = pinDiameterAdjustment,
         studDiameterAdjustment = studDiameterAdjustment,
         studCutoutAdjustment = studCutoutAdjustment,
-        previewRender = previewRender
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     );
 
 
@@ -123,7 +131,12 @@ union(){
         pinDiameterAdjustment = pinDiameterAdjustment,
         studDiameterAdjustment = studDiameterAdjustment,
         studCutoutAdjustment = studCutoutAdjustment,
-        previewRender = previewRender
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     );
 
 
@@ -147,6 +160,11 @@ union(){
         pinDiameterAdjustment = pinDiameterAdjustment,
         studDiameterAdjustment = studDiameterAdjustment,
         studCutoutAdjustment = studCutoutAdjustment,
-        previewRender = previewRender
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     ); 
 }

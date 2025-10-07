@@ -68,3 +68,9 @@ studCutoutAdjustment = [0, 0.2]; // mm [diameter, height]
 // Whether brick should be rendered in preview mode
 // Only works with a latest nightly build of OpenSCAD
 previewRender = true; //true or false
+
+// Quality of the preview in relation to the final rendering.
+previewQuality = 0.5; // float, from 0.1 to 1.0
+
+// Number of drawn fragments for roundings in the final rendering.
+roundingResolution = 64; // integer, from 32 to 512

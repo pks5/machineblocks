@@ -1,6 +1,6 @@
 echo(version=version());
 
-include <../../../lib/block.scad>;
+use <../../../lib/block.scad>;
 
 machineblock(
     size=[4,2,3],

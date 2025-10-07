@@ -68,7 +68,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );
 
 translate([0,0,10])

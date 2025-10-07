@@ -20,7 +20,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 ){
 
   machineblock(
@@ -42,7 +47,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );
 }
 

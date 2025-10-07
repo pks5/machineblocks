@@ -18,10 +18,6 @@ include <../../../config/presets.scad>;
 /* [Render] */
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
 
 /* [Size] */
 
@@ -46,12 +42,6 @@ machineblock(
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
     holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
     studType = brick1KnobType,
-
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
     align="ccs",
 
     scale = scale,
@@ -68,7 +58,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
     
 );
 
@@ -78,14 +73,8 @@ machineblock(
     
     studs = false,
     tongue = multipart,
-
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
     align="ccs",
-    
+
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -100,7 +89,12 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
     
 );
 
@@ -110,14 +104,8 @@ machineblock(
     studType = brick2KnobType,
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
-
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
     align="ccs",
-    
+
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
@@ -132,23 +120,22 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
 );
 
 
 machineblock(
     size=[brick2SizeX-middleSizeX,gridSizeY,1],
     offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    holeZ=brick2HolesZ,  //[brick2HolesZ,[0,0,middleSizeX-1,gridSizeY-2,true]],
+    holeZ=brick2HolesZ,
     studType = brick2KnobType,
     align="ccs",
 
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-    
     scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -163,6 +150,11 @@ machineblock(
     pinDiameterAdjustment = pinDiameterAdjustment,
     studDiameterAdjustment = studDiameterAdjustment,
     studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender
+    previewRender = previewRender,
+    previewQuality = previewQuality,
+    baseRoundingResolution = roundingResolution,
+    holeRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
+    pillarRoundingResolution = roundingResolution
     
 );
