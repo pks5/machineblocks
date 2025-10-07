@@ -62,7 +62,7 @@ textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 
 // Generate the block
 machineblock(
-    grid = [brickSizeX, brickSizeY, baseLayers],
+    size = [brickSizeX, brickSizeY, baseLayers],
     
     baseCutoutType = baseCutoutType,
     /*{BASE_PARAMETERS}*/

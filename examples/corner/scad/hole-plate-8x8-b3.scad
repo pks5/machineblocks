@@ -37,27 +37,20 @@ borderSize = 3; // [1:8]
 // Whether to draw knobs.
 knobs = true;
 // Type of the knobs
-knobType = "classic"; // [classic, technic]
-
-/* [Render] */
-
-/*{QUALITY_VARIABLES}*/
+knobType = "solid"; // [solid, ring]
 
 // Generate the block
 union(){
-    block(
-        grid=[borderSize, brickSizeY], 
-        knobs=knobs,
-        knobType=knobType,
-        baseLayers = baseLayers,
+    machineblock(
+        size=[borderSize, brickSizeY,baseLayers], 
+        studs=knobs,
+        studType=knobType,
         baseColor = baseColor,
 
-        wallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
-        gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
+        baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
+        offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        /*{QUALITY_PARAMETERS}*/
-
         baseSideAdjustment = baseSideAdjustment,
         
         scale=scale,
@@ -81,18 +74,15 @@ union(){
     pillarRoundingResolution=roundingResolution
     );  
 
-    block(
-        grid=[brickSizeX,borderSize],
-        knobs=knobs,
-        knobType=knobType,
-        baseLayers = baseLayers,
+    machineblock(
+        size=[brickSizeX,borderSize,baseLayers],
+        studs=knobs,
+        studType=knobType,
         baseColor = baseColor,
 
-        wallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
-        gridOffset=[0,0.5*(brickSizeY-borderSize),0],
+        baseWllGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
+        offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
-
-        /*{QUALITY_PARAMETERS}*/
 
         baseSideAdjustment = baseSideAdjustment,
     
@@ -117,19 +107,16 @@ union(){
     pillarRoundingResolution=roundingResolution
     );
 
-    block(
-        grid=[borderSize, brickSizeY], 
-        knobs=knobs,
-        knobType=knobType,
-        baseLayers = baseLayers,
+    machineblock(
+        size=[borderSize, brickSizeY,baseLayers], 
+        studs=knobs,
+        studType=knobType,
         baseColor = baseColor,
 
-        wallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
-        gridOffset=[0.5*(brickSizeX-borderSize),0,0],
+        baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
+        offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        /*{QUALITY_PARAMETERS}*/
-
         baseSideAdjustment = baseSideAdjustment,
     
         scale=scale,
@@ -153,19 +140,16 @@ union(){
     pillarRoundingResolution=roundingResolution
     );    
 
-    block(
-        grid=[brickSizeX,borderSize], 
-        knobs=knobs,
-        knobType=knobType,
-        baseLayers = baseLayers,
+    machineblock(
+        size=[brickSizeX,borderSize,baseLayers], 
+        studs=knobs,
+        studType=knobType,
         baseColor = baseColor,
 
-        wallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
-        gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
+        baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
+        offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
         
-        /*{QUALITY_PARAMETERS}*/
-
         baseSideAdjustment = baseSideAdjustment,
     
         scale=scale,
