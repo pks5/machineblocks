@@ -46,8 +46,8 @@ module machineblock(
         baseCutoutType = "classic",
         baseCutoutMaxDepth = 5, // mbu
         
-        baseClampOffset = 0.4, // mm
-        baseClampHeight = 0.8, // mm
+        baseClampOffset = 0.25, // mbu
+        baseClampHeight = 0.5, // mbu
         baseClampThickness = 0.1, // mm
         baseClampOuter = false,
         
@@ -112,9 +112,9 @@ module machineblock(
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
         holeXInsetDepth = 0.25, // mbu
-        holeXGridOffsetZ = 1.75, // Multiplier of gridSizeZ
-        holeXGridSizeZ = 3, // Multiplier of gridSizeZ
-        holeXMinTopMargin = 0.8, // mm
+        holeXGridOffsetZ = 3.5, // mbu
+        holeXGridSizeZ = 6, // mbu
+        holeXMinTopMargin = 0.5, // mbu
 
         holeY = false,
         holeYType = "pin",
@@ -122,9 +122,9 @@ module machineblock(
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
         holeYInsetDepth = 0.25, // mbu
-        holeYGridOffsetZ = 1.75, // Multiplier of gridSizeZ
-        holeYGridSizeZ = 3, // Multiplier of gridSizeZ
-        holeYMinTopMargin = 0.8, // mm
+        holeYGridOffsetZ = 3.5, // mbu
+        holeYGridSizeZ = 6, // mbu
+        holeYMinTopMargin = 0.5, // mbu
 
         holeZ = false,
         holeZType = "pin",
@@ -153,7 +153,7 @@ module machineblock(
         studDiameter = 3, // mbu
         studDiameterAdjustment = 0.2, // mm
         studHeight = 1, // mbu
-        studCutoutAdjustment = [0, 0.2],
+        studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
         
         //Tongue
         tongue = false,
@@ -315,6 +315,8 @@ module machineblock(
     cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
 
     baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
+    bClampOffset = baseClampOffset * rootUnit;
+    bClampHeight = baseClampHeight * rootUnit;
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -374,11 +376,11 @@ module machineblock(
     pinSize = (gridSize[0] - studDiameter) * rootUnit + pinDiameterAdjustment;
 
     //Holes XY
-    holeXBottomMargin = holeXGridOffsetZ*gridSizeZ - 0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit);
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin) / (holeXGridSizeZ * gridSizeZ)); 
+    holeXBottomMargin = holeXGridOffsetZ*rootUnit - 0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit);
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * rootUnit) / (holeXGridSizeZ * rootUnit)); 
 
-    holeYBottomMargin = holeYGridOffsetZ*gridSizeZ - 0.5*(holeYSize + 2 * holeYInsetThickness * rootUnit);
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin) / (holeYGridSizeZ * gridSizeZ)); 
+    holeYBottomMargin = holeYGridOffsetZ*rootUnit - 0.5*(holeYSize + 2 * holeYInsetThickness * rootUnit);
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin * rootUnit) / (holeYGridSizeZ * rootUnit)); 
 
     //Stabilizer
     sGridThickness = stabilizerGridThickness * rootUnit;
@@ -568,9 +570,9 @@ module machineblock(
                                             baseReliefCut = baseReliefCut,
                                             baseReliefCutHeight = baseReliefCutHeight,
                                             baseReliefCutThickness = baseReliefCutThickness,
-                                            baseClampHeight = baseClampHeight,
+                                            baseClampHeight = bClampHeight,
                                             baseClampThicknessOuter = baseClampThicknessOuter,
-                                            baseClampOffset = baseClampOffset,
+                                            baseClampOffset = bClampOffset,
                                             roundingRadius = baseRoundingRadius, 
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                             pit = pit,
@@ -605,9 +607,9 @@ module machineblock(
                                                     baseSideAdjustment = sAdjustment,
                                                     baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                     baseCutoutDepth = baseCutoutDepth,
-                                                    baseClampHeight = baseClampHeight,
+                                                    baseClampHeight = bClampHeight,
                                                     baseClampThickness = baseClampThickness,
-                                                    baseClampOffset = baseClampOffset,
+                                                    baseClampOffset = bClampOffset,
                                                     
                                                     cutoutRoundingRadius = cutoutRoundingRadius,
                                                     cutoutClampRoundingRadius = cutoutClampRoundingRadius,
@@ -645,12 +647,12 @@ module machineblock(
                                                                     translate([0, 0, -0.5 * cutOffset])
                                                                         cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
                                                                     
-                                                                    translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
-                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                    translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
+                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                 
                                                                 
-                                                                    translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight) ]) 
-                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                    translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
+                                                                        cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                 }  
                                                             }
                                                         }
@@ -670,11 +672,11 @@ module machineblock(
                                                                     translate([0, 0, -0.5 * cutOffset])
                                                                         cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
                                                                     
-                                                                    translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
-                                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                    translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
+                                                                        cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                 
-                                                                    translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (baseClampOffset > 0 ? baseClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - baseClampHeight)]) 
-                                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, baseClampHeight + (baseClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                    translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
+                                                                        cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                 }
                                                             }
                                                         }
@@ -866,8 +868,8 @@ module machineblock(
                                                                         cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                         
                                                                         //Clamp
-                                                                        translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                                            cylinder(h=baseClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                        translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
+                                                                            cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                     }
                                                                     intersection(){
                                                                         cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -891,8 +893,8 @@ module machineblock(
                                                             if(drawPin(a, b, true)){
                                                                 translate([posX(a + 0.5), posY(b), baseCutoutZ]){
                                                                     cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=bClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
                                                             }
                                                         }
@@ -906,8 +908,8 @@ module machineblock(
                                                             if(drawPin(a, b, false)){
                                                                 translate([posX(a), posY(b + 0.5), baseCutoutZ]){
                                                                     cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=bClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
                                                             }
                                                         }
@@ -920,7 +922,7 @@ module machineblock(
                                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                                         if(drawHoleX(a, r)){
-                                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*rootUnit + r * holeXGridSizeZ*rootUnit]){
                                                                 rotate([90, 0, 0]){ 
                                                                     cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 }
@@ -935,7 +937,7 @@ module machineblock(
                                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                                         if(drawHoleY(b, r)){
-                                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*rootUnit + r * holeYGridSizeZ*rootUnit]){
                                                                 rotate([0, 90, 0]){ 
                                                                     cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
@@ -956,8 +958,8 @@ module machineblock(
                                                                 cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 
                                                                 //Clamp
-                                                                translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
-                                                                    cylinder(h=baseClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
+                                                                    cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                             };
                                                         }
                                                     }   
@@ -978,15 +980,15 @@ module machineblock(
                                                             if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
                                                                 || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)){
                                                                 translate([posX(a), posY(b), 0]){
-                                                                    if(baseClampOffset > 0){
-                                                                        translate([0,0, -0.5 * (knobCutHeight - baseClampOffset)])
-                                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                    if(bClampOffset > 0){
+                                                                        translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
+                                                                            cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     }
                                                                     
                                                                     cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     
-                                                                    translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight) + cutOffset])
-                                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                    translate([0,0, 0.5*(knobCutHeight - bClampOffset - bClampHeight) + cutOffset])
+                                                                        cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                 }
                                                             }
                                                         }
@@ -1069,9 +1071,9 @@ module machineblock(
                                         baseReliefCut = baseReliefCut,
                                         baseReliefCutHeight = baseReliefCutHeight,
                                         baseReliefCutThickness = baseReliefCutThickness,
-                                        baseClampHeight = baseClampHeight,
+                                        baseClampHeight = bClampHeight,
                                         baseClampThicknessOuter = baseClampThicknessOuter,
-                                        baseClampOffset = baseClampOffset,
+                                        baseClampOffset = bClampOffset,
                                         roundingRadius = baseRoundingRadius, 
                                         roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                         pit = pit,
@@ -1108,7 +1110,7 @@ module machineblock(
                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                         if(drawHoleX(a, r)){
-                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
+                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*rootUnit + r * holeXGridSizeZ*rootUnit]){
                                                 rotate([90, 0, 0]){ 
                                                     if(holeXType == "pin"){
                                                         cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1136,7 +1138,7 @@ module machineblock(
                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                         if(drawHoleY(b, r)){
-                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
+                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*rootUnit + r * holeYGridSizeZ*rootUnit]){
                                                 rotate([0, 90, 0]){ 
                                                     if(holeYType == "pin"){
                                                         cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
