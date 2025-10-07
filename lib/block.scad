@@ -25,12 +25,13 @@ use <tongue.scad>;
 
 module machineblock(
         //Grid
-        grid = [1, 1],
-        gridSize = [5, 2],
-        gridOffset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
+        
+        gridSize = [5, 2], // mbu [xy, z]
+        
         
         //Size
-        layers = 1, // Number of plates
+        size = [1, 1, 1],
+        offset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
 
         //Scale
         scale = 1.0, // Float
@@ -254,6 +255,8 @@ module machineblock(
     gridSizeXY = gridSize[0] * rootUnit;
     gridSizeZ = gridSize[1] * rootUnit;
 
+    grid = [size[0], size[1]];
+
     //Side Adjustment
     sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
 
@@ -267,7 +270,7 @@ module machineblock(
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     //Base Height
-    baseHeightResolved = baseHeight == "auto" ? layers * gridSizeZ : baseHeight;
+    baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
     gridSizeX = slanting != false ? grid[0] + (slanting[0] < 0 ? slanting[0] : 0) + (slanting[1] < 0 ? slanting[1] : 0) : grid[0];
@@ -279,9 +282,9 @@ module machineblock(
     translateY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
     translateZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved);
     
-    gridOffsetX = gridOffset[0] * gridSizeXY + translateX;
-    gridOffsetY = gridOffset[1] * gridSizeXY + translateY;
-    gridOffsetZ = gridOffset[2] * gridSizeZ + translateZ; 
+    gridOffsetX = offset[0] * gridSizeXY + translateX;
+    gridOffsetY = offset[1] * gridSizeXY + translateY;
+    gridOffsetZ = offset[2] * gridSizeZ + translateZ; 
 
     //Children alignment
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;

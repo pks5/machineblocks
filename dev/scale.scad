@@ -1,37 +1,33 @@
 use <../lib/block.scad>;
 
 machineblock(
-    layers=3, 
-    grid=[4,2],
+    size=[4, 2, 3],
     holeZ=true
 );
 
 translate([0, 24, 0])
 machineblock(
     scale = 2,
-    grid=[4,2],
+    size=[4, 2, 1],
     holeZ = true
 );
 
 translate([0, 72, 0])
 machineblock(
     scale = 3,
-    layers=2, 
-    grid=[4,2],
+    size=[4, 2, 2],
     holeZ=true
 );
 
 translate([40, 0, 0])
 machineblock(
-    layers=3, 
-    grid=[4,1],
+    size=[4, 1, 3],
     holeX=true
 );
 
 translate([80, 0, 0])
 machineblock(
-    layers=3, 
-    grid=[1,2],
+    size=[1, 2, 3],
     holeY=true,
     studType="ring"
 );
@@ -39,8 +35,7 @@ machineblock(
 translate([70, 24, 0])
 machineblock(
     scale = 2,
-    layers=3, 
-    grid=[3,1],
+    size=[3, 1, 3],
     holeX=true,
     studType="ring"
 );
@@ -48,8 +43,7 @@ machineblock(
 translate([120, 24, 0])
 machineblock(
     scale = 2,
-    layers=3, 
-    grid=[1,2],
+    size=[1, 2, 3],
     holeY=true,
     studType="ring"
 );
@@ -57,8 +51,7 @@ machineblock(
 translate([100, 72, 0])
 machineblock(
     scale = 3,
-    layers=3, 
-    grid=[2,1],
+    size=[2, 1, 3],
     holeX=true,
     studType="ring"
 );
@@ -66,8 +59,7 @@ machineblock(
 translate([150, 72, 0])
 machineblock(
     scale = 3,
-    layers=3, 
-    grid=[1,2],
+    size=[1, 2, 3],
     holeY=true,
     studType="ring"
 );
