@@ -52,7 +52,7 @@ knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
-knobType = "classic"; // [classic, technic]
+knobType = "solid"; // [solid, ring]
 // Knob Padding
 knobPadding = 0.2;
 
@@ -72,23 +72,23 @@ bevel3 = [0, 0];
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
 // Type of X Holes.
-holeXType = "technic";
+holeXType = "pin";
 // Whether X Holes should be centered
 holeXCentered = true;
 // Hole X Grid Offset Z
-holeXGridOffsetZ = 1.75;
+holeXGridOffsetZ = 3.5;
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Type of Y Holes.
-holeYType = "technic";
+holeYType = "pin";
 // Whether Y Holes should be centered
 holeYCentered = true;
 // Hole Y Grid Offset Z
-holeYGridOffsetZ = 1.75;
+holeYGridOffsetZ = 3.5;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
 // Type of Z Holes.
-holeZType = "technic";
+holeZType = "pin";
 // Whether Z Holes should be centered on X direction
 holeZCenteredX = true;
 // Whether Z Holes should be centered on Y direction
@@ -114,17 +114,12 @@ slantingY0 = 0;
 // Slanting size on Y1 side specified as multiple of an 1x1 brick.
 slantingY1 = 0;
 
-/* [Render] */
-
-/*{QUALITY_VARIABLES}*/
-
 /* [Hidden] */
 slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
 
 // Generate the block
-block(
-    grid = [brickSizeX, brickSizeY],
-    baseLayers = baseLayers,
+machineblock(
+    size = [brickSizeX, brickSizeY,baseLayers],
     baseCutoutType = baseCutoutType,
     baseRoundingRadius=[baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ],
     baseCutoutRoundingRadius = baseCutoutRoundingRadius,
@@ -135,22 +130,22 @@ block(
 
     bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
 
-    knobs = knobs,
-    knobCentered = knobCentered,
-    knobType = knobType,
-    knobPadding = knobPadding,
+    studs = knobs,
+    studCentered = knobCentered,
+    studType = knobType,
+    studPadding = knobPadding,
     
     pillars = pillars,
     
-    holesX = holesX,
+    holeX = holesX,
     holeXType = holeXType,
     holeXCentered = holeXCentered,
     holeXGridOffsetZ = holeXGridOffsetZ,
-    holesY = holesY,
+    holeY = holesY,
     holeYType = holeYType,
     holeYCentered = holeYCentered,
     holeYGridOffsetZ = holeYGridOffsetZ,
-    holesZ = holesZ,
+    holeZ = holesZ,
     holeZType = holeZType,
     holeZCenteredX = holeZCenteredX,
     holeZCenteredY = holeZCenteredY,
@@ -160,8 +155,6 @@ block(
     pitWallThickness = pitWallThickness,
     
     slanting = slanting, 
-
-    /*{QUALITY_PARAMETERS}*/
 
     baseSideAdjustment = baseSideAdjustment,
     

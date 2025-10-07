@@ -46,41 +46,34 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-/* [Render] */
-
-/*{QUALITY_VARIABLES}*/
-
 // Generate the block
 union(){
-    block(
-        grid = [brick1SizeX, brick1SizeY],
-        gridOffset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
-        wallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
-        baseLayers = baseLayers,
+    machineblock(
+        size = [brick1SizeX, brick1SizeY,baseLayers],
+        offset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
+        baseWallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
+        
         /*{BASE_PARAMETERS}*/
 
-        knobs = knobs,
-        knobType = knobType,
+        studs = knobs,
+        studType = knobType,
         align="ccs",
-        
-        /*{QUALITY_PARAMETERS}*/
 
+        baseSideAdjustment = baseSideAdjustment,
+        
         /*{PRESET_PARAMETERS}*/
     );
 
-    block(
-        grid = [brick2SizeX, brick2SizeY],
-        gridOffset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
-        wallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
-        baseLayers = baseLayers,
+    machineblock(
+        size = [brick2SizeX, brick2SizeY,baseLayers],
+        offset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
+        baseWallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
         /*{BASE_PARAMETERS}*/
 
-        knobs = knobs,
-        knobType = knobType,
+        studs = knobs,
+        studType = knobType,
         align="ccs",
         
-        /*{QUALITY_PARAMETERS}*/
-
         baseSideAdjustment = baseSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/

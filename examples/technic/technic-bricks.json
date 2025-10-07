@@ -19,7 +19,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"
@@ -33,7 +33,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"
@@ -47,7 +47,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"
@@ -61,7 +61,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"
@@ -75,7 +75,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"
@@ -89,7 +89,7 @@
                         "baseLayers": 2.5,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 1.25,
+                        "holeXGridOffsetZ": 2.5,
                         "knobs": false,
                         "baseRoundingRadiusY":4,
                         "baseCutoutType": "none"

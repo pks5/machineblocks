@@ -41,10 +41,7 @@ knobType = "classic"; // [classic, technic]
 
 /* [Render] */
 
-// Quality of the preview in relation to the final rendering.
-    previewQuality = 0.5; // [0.1:0.1:1]
-    // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]
+/*{QUALITY_VARIABLES}*/
 
 // Generate the block
 union(){
@@ -59,20 +56,29 @@ union(){
         gridOffset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+        /*{QUALITY_PARAMETERS}*/
 
         baseSideAdjustment = baseSideAdjustment,
         
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );  
 
     block(
@@ -86,20 +92,29 @@ union(){
         gridOffset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
 
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+        /*{QUALITY_PARAMETERS}*/
 
         baseSideAdjustment = baseSideAdjustment,
     
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );
 
     block(
@@ -113,20 +128,29 @@ union(){
         gridOffset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+        /*{QUALITY_PARAMETERS}*/
 
         baseSideAdjustment = baseSideAdjustment,
     
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );    
 
     block(
@@ -140,19 +164,28 @@ union(){
         gridOffset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
         
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+        /*{QUALITY_PARAMETERS}*/
 
         baseSideAdjustment = baseSideAdjustment,
     
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );
 }

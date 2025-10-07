@@ -49,64 +49,72 @@ knobs = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-/* [Render] */
-
-// Quality of the preview in relation to the final rendering.
-    previewQuality = 0.5; // [0.1:0.1:1]
-    // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]
-
 // Generate the block
 union(){
-    block(
-        grid = [brick1SizeX, brick1SizeY],
-        gridOffset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
-        wallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
-        baseLayers = baseLayers,
+    machineblock(
+        size = [brick1SizeX, brick1SizeY,baseLayers],
+        offset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
+        baseWallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
+        
         baseColor = baseColor,
 
-        knobs = knobs,
-        knobType = knobType,
+        studs = knobs,
+        studType = knobType,
         align="ccs",
-        
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
-    );
-
-    block(
-        grid = [brick2SizeX, brick2SizeY],
-        gridOffset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
-        wallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
-        baseLayers = baseLayers,
-        baseColor = baseColor,
-
-        knobs = knobs,
-        knobType = knobType,
-        align="ccs",
-        
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
 
         baseSideAdjustment = baseSideAdjustment,
+        
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
+    );
+
+    machineblock(
+        size = [brick2SizeX, brick2SizeY,baseLayers],
+        offset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
+        baseWallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
+        baseColor = baseColor,
+
+        studs = knobs,
+        studType = knobType,
+        align="ccs",
+        
+        baseSideAdjustment = baseSideAdjustment,
     
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );    
 }
