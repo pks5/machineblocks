@@ -76,23 +76,16 @@ roundingResolution = 128; // [16:8:128]
 baseHeightAdjustment = 0.0;
 // Adjustment of each side (mm)
 baseSideAdjustment = 0;
-// Diameter of the knobs (mm)
-knobSize = 5.0;
-// Thickness of the walls (mm)
-wallThickness = 1.5;
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
 
-block(
-        grid = [brickSizeX, brickSizeY],
-        baseLayers = baseLayers,
+machineblock(
+        size = [brickSizeX, brickSizeY, baseLayers],
         baseCutoutType = "classic",
         baseRoundingRadius=[0,0,8],
-        baseReliefCut = true,
+        baseReliefCut = false,
         
-        knobs = knobs,
-        knobCentered = knobCentered,
-        knobType = knobType,
+        studs = knobs,
+        studCentered = knobCentered,
+        studType = knobType,
         
         pit=pit,
         pitWallThickness = pitWallThickness,
@@ -100,19 +93,16 @@ block(
         
         tongue = tongue,
 
-        holesZ = holesZ,
+        holeZ = holesZ,
         
         pillars = pillars,
         
         previewQuality = previewQuality,
         baseRoundingResolution = roundingResolution,
         holeRoundingResolution = roundingResolution,
-        knobRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
         pillarRoundingResolution = roundingResolution,
 
         baseHeightAdjustment = baseHeightAdjustment,
-        baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize
+        baseSideAdjustment = baseSideAdjustment
     );
