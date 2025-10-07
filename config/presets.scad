@@ -64,4 +64,4 @@ studCutoutAdjustment = [0, 0.2]; // mm [diameter, height]
 
 // Whether brick should be rendered in preview mode
 // Only works with a latest nightly build of OpenSCAD
-previewRender = false; //true or false
+previewRender = true; //true or false
