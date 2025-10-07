@@ -114,7 +114,7 @@ module machineblock(
 
         //Holes
         holeX = false,
-        holeXType = "technic",
+        holeXType = "pin",
         holeXCentered = true,
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
@@ -124,7 +124,7 @@ module machineblock(
         holeXMinTopMargin = 0.8, // mm
 
         holeY = false,
-        holeYType = "technic",
+        holeYType = "pin",
         holeYCentered = true,
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
@@ -134,7 +134,7 @@ module machineblock(
         holeYMinTopMargin = 0.8, // mm
 
         holeZ = false,
-        holeZType = "technic",
+        holeZType = "pin",
         holeZCenteredX = true,
         holeZCenteredY = true,
         holeZDiameterAdjustment = 0.3, // mm
@@ -142,15 +142,12 @@ module machineblock(
         
         //Knobs
         knobs = true,
-        knobType = "classic",
-        knobCentered = false,
-        knobMaxOverhang = 0.3, // mm
-        knobPadding = 0, // Multipliers of gridSizeXY
+        studType = "solid",
+        studCentered = false,
+        studMaxOverhang = 0.3, // mm
+        studPadding = 0, // Multipliers of gridSizeXY
        // knobSize = 5.0, //mm
         //knobHeight = 1.8, //mm
-        
-        knobCutSize = 5.0, // mm
-        knobCutHeight = 2.2, // mm
         
         knobClampHeight = 0.8, // mm
         knobClampThickness = 0.0, // mm
@@ -158,12 +155,13 @@ module machineblock(
         knobHoleSize = 3.5, // mm
         knobHoleClampThickness = 0.1, // mm
         
-        knobRounding = 0.1, // mm
-        knobRoundingResolution = 64,
+        studRounding = 0.1, // mm
+        studRoundingResolution = 64,
         
         studDiameter = 3, // mbu
         studDiameterAdjustment = 0.2, // mm
-        studHeight = 1.125, // mbu
+        studHeight = 1, // mbu
+        studCutoutAdjustment = [0, 0.2],
         
         //Tongue
         tongue = false,
@@ -341,7 +339,7 @@ module machineblock(
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
 
     //Pit
-    pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+knobMaxOverhang, pWallThickness[1]*gridSizeXY+knobMaxOverhang, pWallThickness[2]*gridSizeXY+knobMaxOverhang, pWallThickness[3]*gridSizeXY+knobMaxOverhang]);
+    pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+studMaxOverhang, pWallThickness[1]*gridSizeXY+studMaxOverhang, pWallThickness[2]*gridSizeXY+studMaxOverhang, pWallThickness[3]*gridSizeXY+studMaxOverhang]);
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
     cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
     
@@ -356,8 +354,11 @@ module machineblock(
     knobSize = studDiameter * rootUnit + studDiameterAdjustment;
     knobHeight = studHeight * rootUnit;
 
+    knobCutSize = knobSize + studCutoutAdjustment[0];
+    knobCutHeight = knobHeight + studCutoutAdjustment[1];
+
     //Knob Padding
-    knobPaddingResolved = mb_resolve_quadruple(knobPadding, gridSizeXY);
+    knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
     bevelKnobPadding = mb_inset_quad_lrfh(bevelOuter, knobPaddingResolved);
     cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
     knobPaddingRadiusInv = [
@@ -457,11 +458,11 @@ module machineblock(
     /*
     * Pit
     */
-    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
                                 && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, touch=true, overhang=0);
     
-    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang);
+    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
+                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang);
     
     function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
@@ -477,12 +478,12 @@ module machineblock(
     */ 
     function drawKnob(a, b) = 
             !inSlantedArea(a, b, false, 2)
-            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
+            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
+            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
             ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
-    function knobType(a, b) = pit && inPit(a, b) ? pitKnobType : knobType;
+    function studType(a, b) = pit && inPit(a, b) ? pitKnobType : studType;
 
     /*
     * XYZ Holes
@@ -979,18 +980,18 @@ module machineblock(
                                                 union(){
                                                     for (a = [ startX : 1 : endX ]){
                                                         for (b = [ startY : 1 : endY ]){
-                                                            if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)
-                                                                || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = knobMaxOverhang)){
+                                                            if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
+                                                                || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)){
                                                                 translate([posX(a), posY(b), 0]){
                                                                     if(baseClampOffset > 0){
                                                                         translate([0,0, -0.5 * (knobCutHeight - baseClampOffset)])
-                                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                            cylinder(h=baseClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     }
                                                                     
-                                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     
                                                                     translate([0,0, 0.5*(knobCutHeight - baseClampOffset - baseClampHeight) + cutOffset])
-                                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                                        cylinder(h=knobCutHeight - baseClampOffset - baseClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                 }
                                                             }
                                                         }
@@ -1114,7 +1115,7 @@ module machineblock(
                                         if(drawHoleX(a, r)){
                                             translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*gridSizeZ + r * holeXGridSizeZ*gridSizeZ]){
                                                 rotate([90, 0, 0]){ 
-                                                    if(holeXType == "technic"){
+                                                    if(holeXType == "pin"){
                                                         cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeY])
@@ -1142,7 +1143,7 @@ module machineblock(
                                         if(drawHoleY(b, r)){
                                             translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*gridSizeZ + r * holeYGridSizeZ*gridSizeZ]){
                                                 rotate([0, 90, 0]){ 
-                                                    if(holeYType == "technic"){
+                                                    if(holeYType == "pin"){
                                                         cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeX])
@@ -1168,7 +1169,7 @@ module machineblock(
                                     for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
                                         if(drawHoleZ(a, b)){
                                             translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
-                                                if(holeZType == "technic"){
+                                                if(holeZType == "pin"){
                                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                 }
                                                 else if(holeZType == "axle"){
@@ -1374,45 +1375,45 @@ module machineblock(
                         /*
                         * Normal knobs
                         */
-                        for (a = [ startX : 1 : (endX - (knobCentered ? 1 : 0)) ]){
-                            for (b = [ startY : 1 : (endY - (knobCentered ? 1 : 0)) ]){
-                                knobOffset = knobCentered ? 0.5 : 0;
+                        for (a = [ startX : 1 : (endX - (studCentered ? 1 : 0)) ]){
+                            for (b = [ startY : 1 : (endY - (studCentered ? 1 : 0)) ]){
+                                knobOffset = studCentered ? 0.5 : 0;
                                 if(drawGridItem(knobs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
                                     
                                     pitKnobOffset = pitKnobCentered ? 0.5 : 0;
                                     inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
                                     onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
                                     if(onPitBorder || inPit){
-                                        posOffset = (inPit ? pitKnobCentered : knobCentered) ? 0.5 : 0;
+                                        posOffset = (inPit ? pitKnobCentered : studCentered) ? 0.5 : 0;
                                         translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                             difference(){
                                                 union(){
-                                                    translate([0, 0, -0.5 * (knobRounding + knobClampHeight)])
-                                                        cylinder(h=knobHeight - knobRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    translate([0, 0, -0.5 * (studRounding + knobClampHeight)])
+                                                        cylinder(h=knobHeight - studRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - knobRounding ])
-                                                        cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - studRounding ])
+                                                        cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - knobRounding)])
-                                                        cylinder(h=knobRounding, r=0.5 * knobSize + knobClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - studRounding)])
+                                                        cylinder(h=studRounding, r=0.5 * knobSize + knobClampThickness - studRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                 }
                                                 
-                                                if(knobType(a + posOffset, b + posOffset) == "technic"){
+                                                if(studType(a + posOffset, b + posOffset) == "ring"){
                                                     intersection(){
                                                         cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
-                                                        cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * knobRoundingResolution);
+                                                        cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     }
                                                 }
                                             }
                                             
                                             //Knob Rounding
-                                            translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
+                                            translate([0, 0, 0.5 * knobHeight - studRounding]){ 
                                                 mb_torus(
-                                                    circleRadius = knobRounding, 
+                                                    circleRadius = studRounding, 
                                                     torusRadius = 0.5 * knobSize + knobClampThickness, 
-                                                    circleResolution = ($preview ? previewQuality : 1) * knobRoundingResolution,
-                                                    torusResolution = ($preview ? previewQuality : 1) * knobRoundingResolution
+                                                    circleResolution = ($preview ? previewQuality : 1) * studRoundingResolution,
+                                                    torusResolution = ($preview ? previewQuality : 1) * studRoundingResolution
                                                 );
                                             };
                                         };
