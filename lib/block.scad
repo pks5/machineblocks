@@ -150,7 +150,7 @@ module machineblock(
         studDiameter = 3, // mbu
         studDiameterAdjustment = 0.2, // mm
         studHeight = 1, // mbu
-        studCutoutAdjustment = [0, 0.4], // mm [diameter, height]
+        studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
         
         //Tongue
         tongue = false,
@@ -983,10 +983,11 @@ module machineblock(
                                                                         translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
                                                                             cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     }
+                                                                    //color("red")
+                                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                     
-                                                                    cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
-                                                                    
-                                                                    translate([0,0, 0.5*(knobCutHeight - bClampOffset - bClampHeight) + cutOffset])
+                                                                    //color("green")
+                                                                    translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
                                                                         cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                 }
                                                             }
