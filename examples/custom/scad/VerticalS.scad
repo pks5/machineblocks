@@ -41,94 +41,124 @@ middleLayers = 2;
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
 
-block(
-    grid=[brick1SizeX,gridSizeY],
-    gridOffset=[-0.5*(brick1SizeX-middleSizeX),0,0],
-    holesZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
-    knobType = brick1KnobType,
+machineblock(
+    size=[brick1SizeX,gridSizeY,1],
+    offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
+    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
+    studType = brick1KnobType,
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
+    align="ccs",
 
-    previewRender = previewRender, 
-    //baseHeightAdjustment = baseHeightAdjustment,
+    baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
+    
 );
 
-block(
-    grid=[middleSizeX,gridSizeY],
-    gridOffset=[0,0,1],
-    baseLayers = middleLayers,
-    knobs = false,
+machineblock(
+    size=[middleSizeX,gridSizeY,middleLayers],
+    offset=[0,0,1],
+    
+    studs = false,
     tongue = multipart,
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
-
-    //baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment=baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    align="ccs",
+    
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
+    
 );
 
-block(
-    grid=[middleSizeX,gridSizeY],
-    gridOffset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    baseLayers = 1,
-    knobType = brick2KnobType,
+machineblock(
+    size=[middleSizeX,gridSizeY,1],
+    offset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
+    studType = brick2KnobType,
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
-
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment=[baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
 
-block(
-    grid=[brick2SizeX-middleSizeX,gridSizeY],
-    gridOffset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    holesZ=brick2HolesZ,  //[brick2HolesZ,[0,0,middleSizeX-1,gridSizeY-2,true]],
-    knobType = brick2KnobType,
+machineblock(
+    size=[brick2SizeX-middleSizeX,gridSizeY,1],
+    offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
+    holeZ=brick2HolesZ,  //[brick2HolesZ,[0,0,middleSizeX-1,gridSizeY-2,true]],
+    studType = brick2KnobType,
+    align="ccs",
 
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
+    
 );

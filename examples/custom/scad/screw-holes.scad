@@ -2,20 +2,15 @@ echo(version=version());
 
 include <../../../lib/block.scad>;
 
-block(
-    grid=[4,2],
-    baseLayers=3,
+machineblock(
+    size=[4,2,3],
     screwHolesX=[[0,0], [0,1], [0,2]]
 );
   
-translate([0,50,0])
-block(
-    grid=[6,6],
-    baseLayers=1,
+
+machineblock(
+    size=[6,6,1],
+    offset=[0,3,0],
     screwHolesZ=[[0,0], [0,1], [0,2]],
     pillars = true
 );
-
-
-//translate([0, 50,0])
-//    mb_rounded_block(size=[32,16,9.6], resolution=30, center=true, radius=[0,0,[4,0,0,0]]);
