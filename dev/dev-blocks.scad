@@ -2,7 +2,7 @@ use <../lib/block.scad>;
 
 
 
-*translate([0,0,0]){
+translate([0,0,0]){
 machineblock(size=[1,1,1], studs = false, baseRoundingRadius = [0,0,[0,7.6,0,0]], baseReliefCut=true);
 
 machineblock(size=[1,1,1], offset=[1,0,0], studs = false, baseRoundingRadius = [0,0,[0,0,7.8,0]], baseReliefCut=true);
@@ -29,14 +29,13 @@ difference(){
     machineblock(size=[2,2,6], offset=[0,0,0], studs=false, baseCutoutType="none", baseSideAdjustment=0.1, align=["start", "start", "center"]);
  }
  
+
  
- *machineblock(size=[4,2,3], studs=true, align=["start","start","start"], previewRender=false);
  
- 
- *machineblock(
+ machineblock(
     size=[6,6,3], 
     baseRoundingRadius=[0,0,8],
-    stud=true, 
+    studs=true, 
     align=["start","start","start"], 
     previewRender=false,
     pit=true,

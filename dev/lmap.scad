@@ -13,6 +13,7 @@
 
 // Include the library
 use <../lib/block.scad>;
+include <../config/presets.scad>;
 
 /* [Size] */
 
@@ -27,107 +28,52 @@ baseLayers = 6; // [1:24]
 
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
-// Whether to draw knobs.
-knobs = true;
-// Whether knobs should be centered.
-knobCentered = false;
-// Type of the knobs
-knobType = "classic"; // [classic, technic]
-
-// Whether to draw pillars.
-pillars = true;
-
-pcb = true;
 pcbDimensions = [15, 17, 3];
 pcbOffset = [0,0];
-
-tongue=true;
-
-// Whether brick should have Technic holes along X-axis.
-holesX = false;
-// Whether brick should have Technic holes along Y-axis.
-holesY = false;
-// Whether brick should have Technic holes along Z-axis.
-holesZ = [[2,0,2,0]];
-
-// Whether brick should have a pit
-pit = true;
-// Whether knobs should be drawn inside pit
-pitKnobs = false;
-// Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
-
-// Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = 0;
-// Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = 0;
-// Slanting size on Y0 side specified as multiple of an 1x1 brick.
-slantingY0 = 0;
-// Slanting size on Y1 side specified as multiple of an 1x1 brick.
-slantingY1 = 0;
-
-/* [Quality] */
-
-// Quality of the preview in relation to the final rendering.
-previewQuality = 0.5; // [0.1:0.1:1]
-// Number of drawn fragments for roundings in the final rendering.
-roundingResolution = 64; // [16:8:128]
-
-/* [Calibration] */
-
-// Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-// Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-
 
 // Generate the block
 machineblock(
     size = [brickSizeX, brickSizeY, baseLayers],
     baseCutoutType = baseCutoutType,
     
-    studs = knobs,
-    studCentered = knobCentered,
-    studType = knobType,
+    studs = false,
+    tongue = true,
     
-    tongue = tongue,
-    
-    pillars = pillars,
-    
-    holeX = holesX,
-    holeY = holesY,
-    holeZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    pcb = pcb,
+    pit = true,
+
+    pcb = true,
     pcbDimensions = pcbDimensions,
     pcbOffset = pcbOffset,
     
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
+    holeZ = [[2,0,2,0]],
+    
+    scale = scale,
+    baseHeightAdjustment = baseHeightAdjustment,
+    baseSideAdjustment = baseSideAdjustment,
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender,
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
     studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-
-    baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = baseSideAdjustment
+    pillarRoundingResolution = roundingResolution
 );
 
 machineblock(
     size = [brickSizeX, brickSizeY, 1],
     offset = [brickSizeX + 1, 0, 0],
     baseCutoutType = "groove",
-    
     studs = false,
-    studCentered = knobCentered,
-    studType = knobType,
-    
-    pillars = pillars,
     
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
