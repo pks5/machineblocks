@@ -21,6 +21,7 @@ machineblock(
     studs=false,
     alignChildren=["center", "end", "start"],
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -48,6 +49,7 @@ machineblock(
         textDepth=0.4,
         textSize=8,
     
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -76,7 +78,8 @@ machineblock(
         textSide=5,
         textDepth=0.4,
         textSize=5,
-    
+        
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -105,7 +108,8 @@ machineblock(
         textSide=5,
         textDepth=0.4,
         textSize=6,
-    
+        
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -135,6 +139,7 @@ machineblock(
         textDepth=0.4,
         textSize=8,
     
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,

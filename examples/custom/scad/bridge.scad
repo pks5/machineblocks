@@ -24,43 +24,6 @@ brickSizeY = 1; // [1:32]
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
-/* [Appearance] */
-
-// Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic]
-// Whether to draw knobs.
-knobs = true;
-// Whether knobs should be centered.
-knobCentered = false;
-// Type of the knobs
-knobType = "classic"; // [classic, technic]
-
-// Whether to draw pillars.
-pillars = true;
-
-// Whether brick should have Technic holes along X-axis.
-holesX = false;
-// Whether brick should have Technic holes along Y-axis.
-holesY = false;
-// Whether brick should have Technic holes along Z-axis.
-holesZ = false;
-
-// Whether brick should have a pit
-pit = false;
-// Whether knobs should be drawn inside pit
-pitKnobs = false;
-// Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
-
-// Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = 0;
-// Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = 0;
-// Slanting size on Y0 side specified as multiple of an 1x1 brick.
-slantingY0 = 0;
-// Slanting size on Y1 side specified as multiple of an 1x1 brick.
-slantingY1 = 0;
-
 /* [Quality] */
 
 // Quality of the preview in relation to the final rendering.
@@ -69,118 +32,96 @@ previewQuality = 0.5; // [0.1:0.1:1]
 roundingResolution = 64; // [16:8:128]
 
 // Generate the block
-block(
-    grid = [3, brickSizeY],
-    gridOffset = [-3.5,0,0],
-    baseLayers = baseLayers,
-    baseCutoutType = baseCutoutType,
+machineblock(
+    size = [3, brickSizeY, baseLayers],
+    offset = [-3.5,0,0],
+    align="ccs",
     
-    knobs = false,
-    knobCentered = knobCentered,
-    knobType = knobType,
+    studs = false,
     
-    pillars = pillars,
-    
-    holesX = holesX,
-    holesY = holesY,
-    holesZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
+    
 
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
 // Generate the block
-block(
-    grid = [brickSizeX, brickSizeY],
-    gridOffset = [2,0,0],
-    baseLayers = baseLayers,
-    baseCutoutType = baseCutoutType,
+machineblock(
+    size = [brickSizeX, brickSizeY, baseLayers],
+    offset = [2,0,0],
+    align="ccs",
     
-    knobs = false,
-    knobCentered = knobCentered,
-    knobType = knobType,
+    studs = false,
     
-    pillars = pillars,
-    
-    holesX = holesX,
-    holesY = holesY,
-    holesZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
+    
 
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
 // Generate the block
-block(
-    grid = [8, brickSizeY],
-    gridOffset = [-1,0,1],
-    baseLayers = 2,
+machineblock(
+    size = [8, brickSizeY, 2],
+    offset = [-1,0,1],
+    align="ccs",
     baseCutoutType = "none",
     
-    knobs = knobs,
-    knobCentered = knobCentered,
-    knobType = knobType,
-    
-    pillars = pillars,
-    
-    holesX = holesX,
-    holesY = holesY,
-    holesZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
-    previewRender = previewRender,
+    
 
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );

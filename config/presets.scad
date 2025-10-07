@@ -23,6 +23,9 @@
 * Calibration
 */
 
+// Scale of the bricks
+scale = 1.0; // Float
+
 // Adjustment of the height
 // Amount will be added to/subtracted from the top side of the brick's base
 baseHeightAdjustment = 0.0; // mm

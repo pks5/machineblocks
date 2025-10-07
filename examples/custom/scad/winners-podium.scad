@@ -19,6 +19,7 @@ include <../../../config/presets.scad>;
 machineblock(
     size=[6,2,3],
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -38,6 +39,7 @@ machineblock(
         size=[2,2,3],
         offset=[2,0,3],
         
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,

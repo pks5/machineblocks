@@ -6,6 +6,7 @@ machineblock(
     baseRoundingRadius=[0,0,[0,0,16,16]],
     baseWallGapsX=[[0,1,4]],
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -27,6 +28,7 @@ machineblock(
     baseRoundingRadius=[0,0,[0,16,16,0]],
     baseWallGapsY=[[0,1,4]],
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,

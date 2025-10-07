@@ -37,6 +37,7 @@ union(){
         studs = false,
         align="ccs",
 
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -60,6 +61,7 @@ union(){
         offset = [0, -0.5 * (gridY - 1), floorLayers],
         align="ccs",
 
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -83,6 +85,7 @@ union(){
         offset = [0, 0.5 * (gridY - 1), floorLayers],
         align="ccs",
 
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -106,6 +109,7 @@ union(){
         offset = [-0.5 * (gridX - 1), 0, floorLayers],
         align="ccs", 
 
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = [baseSideAdjustment, baseSideAdjustment, -baseSideAdjustment, -baseSideAdjustment],
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -129,6 +133,7 @@ union(){
         offset = [0.5 * (gridX - 1), 0, floorLayers],
         align="ccs", 
 
+        scale = scale,
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = [baseSideAdjustment, baseSideAdjustment, -baseSideAdjustment, -baseSideAdjustment],
         baseWallThicknessAdjustment = baseWallThicknessAdjustment,

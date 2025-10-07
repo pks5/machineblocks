@@ -1,4 +1,5 @@
-include <../../../lib/block.scad>;
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
 // The height of the Tree.
 treeHeight = 100; //[10:400]
@@ -21,16 +22,6 @@ baseLayers = 1;
 //Draw Knobs
 knobs = [true, [1,1,4,4,true]];
 
-//Adjustment of the height (mm)
-baseHeightAdjustment = 0.0;
-//Adjustment of each side (mm)
-baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
 
 
 /* [Hidden] */
@@ -58,17 +49,26 @@ for(segment = [0:1:treeSegments - 1]) {
 
 //Generate the block
 color("brown")
-block(
-    grid = [gridX, gridY],
-    baseLayers = baseLayers,
-    knobs = knobs,
-    previewRender = previewRender,
+machineblock(
+    size = [gridX, gridY,baseLayers],
+    align="ccs",
+    studs = knobs,
+
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
 translate([0,0,10])

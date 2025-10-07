@@ -54,6 +54,7 @@ machineblock(
     pillarRoundingResolution = roundingResolution,
     align="ccs",
 
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -85,6 +86,7 @@ machineblock(
     pillarRoundingResolution = roundingResolution,
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -116,6 +118,7 @@ machineblock(
     pillarRoundingResolution = roundingResolution,
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -146,6 +149,7 @@ machineblock(
     studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,

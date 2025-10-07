@@ -34,10 +34,9 @@ previewQuality = 0.5; // [0.1:0.1:1]
 // Number of drawn fragments for roundings in the final rendering.
 roundingResolution = 64; // [16:8:128]
 
-block(
-    grid = [gridX, gridY],
-    baseLayers = baseLayers - 1,
-    knobs = false,
+machineblock(
+    size = [gridX, gridY, baseLayers - 1],
+    studs = false,
     tongue = true,
     tongueHeight = 1.8,
     tongueClampThickness = 0,
@@ -45,24 +44,32 @@ block(
     pit = true,
     baseCutoutType = "none",
     baseRoundingRadius = [0,0,4],
-
-    previewRender = previewRender,
+    
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    grid = [gridX, gridY],
-    gridOffset = [gridX + 1, 0, 0],
+machineblock(
+    size = [gridX, gridY,1],
+    offset = [gridX + 1, 0, 0],
     baseCutoutType = "groove",
     tongueClampThickness = 0,
     
     //tongueThickness = 1.2,
-    knobs = false,
+    studs = false,
     textSide = 5,
     textSize = 10,
     textDepth = 0.8,
@@ -70,11 +77,19 @@ block(
     textFont = textFont,
     baseRoundingRadius = [0,0,4],
 
-    previewRender = previewRender,
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );

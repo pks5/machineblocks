@@ -36,6 +36,7 @@ machineblock(
     pitDepth = 8.8,
     studs = false,
 
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,

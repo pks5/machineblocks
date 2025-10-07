@@ -28,6 +28,7 @@ machineblock(
     baseWallGapsX=[[0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -51,6 +52,7 @@ machineblock(
     baseWallGapsY=[[1,1], [0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -74,6 +76,7 @@ machineblock(
     baseWallGapsX=[[1,1], [0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -97,6 +100,7 @@ machineblock(
     baseWallGapsY=[[1,1], [0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -120,6 +124,7 @@ machineblock(
     baseWallGapsX=[[1,1], [0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -143,6 +148,7 @@ machineblock(
     baseWallGapsY=[[1,1], [0,0]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
@@ -166,6 +172,7 @@ machineblock(
     baseWallGapsX=[[1,1]],
     align="ccs",
     
+    scale = scale,
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
     baseWallThicknessAdjustment = baseWallThicknessAdjustment,
