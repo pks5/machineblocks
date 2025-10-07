@@ -150,7 +150,7 @@ module machineblock(
         studDiameter = 3, // mbu
         studDiameterAdjustment = 0.2, // mm
         studHeight = 1, // mbu
-        studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
+        studCutoutAdjustment = [0, 0.4], // mm [diameter, height]
         
         //Tongue
         tongue = false,
