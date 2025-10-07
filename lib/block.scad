@@ -141,19 +141,18 @@ module machineblock(
         holeRoundingResolution = 64,
         
         //Knobs
-        knobs = true,
+        studs = true,
         studType = "solid",
         studCentered = false,
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // Multipliers of gridSizeXY
-       // knobSize = 5.0, //mm
-        //knobHeight = 1.8, //mm
         
-        knobClampHeight = 0.8, // mm
-        knobClampThickness = 0.0, // mm
+        studClampHeight = 0.8, // mm
+        studClampThickness = 0.0, // mm
         
-        knobHoleSize = 3.5, // mm
-        knobHoleClampThickness = 0.1, // mm
+        studHoleSize = 2, // mbu
+        studHoleSizeAdjustment = 0.3, // mm
+        studHoleClampThickness = 0.1, // mm
         
         studRounding = 0.1, // mm
         studRoundingResolution = 64,
@@ -356,6 +355,7 @@ module machineblock(
 
     knobCutSize = knobSize + studCutoutAdjustment[0];
     knobCutHeight = knobHeight + studCutoutAdjustment[1];
+    knobHoleSize = studHoleSize * rootUnit + studHoleSizeAdjustment;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
@@ -1370,15 +1370,15 @@ module machineblock(
                 /*
                 * Classic Knobs
                 */
-                if(knobs != false){
+                if(studs != false){
                     color(baseColor){
                         /*
-                        * Normal knobs
+                        * Normal studs
                         */
                         for (a = [ startX : 1 : (endX - (studCentered ? 1 : 0)) ]){
                             for (b = [ startY : 1 : (endY - (studCentered ? 1 : 0)) ]){
                                 knobOffset = studCentered ? 0.5 : 0;
-                                if(drawGridItem(knobs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
+                                if(drawGridItem(studs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
                                     
                                     pitKnobOffset = pitKnobCentered ? 0.5 : 0;
                                     inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
@@ -1388,20 +1388,20 @@ module machineblock(
                                         translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                             difference(){
                                                 union(){
-                                                    translate([0, 0, -0.5 * (studRounding + knobClampHeight)])
-                                                        cylinder(h=knobHeight - studRounding - knobClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, -0.5 * (studRounding + studClampHeight)])
+                                                        cylinder(h=knobHeight - studRounding - studClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - knobClampHeight) - studRounding ])
-                                                        cylinder(h=knobClampHeight, r=0.5 * knobSize + knobClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight) - studRounding ])
+                                                        cylinder(h=studClampHeight, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     
                                                     translate([0, 0, 0.5 * (knobHeight - studRounding)])
-                                                        cylinder(h=studRounding, r=0.5 * knobSize + knobClampThickness - studRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                        cylinder(h=studRounding, r=0.5 * knobSize + studClampThickness - studRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                 }
                                                 
                                                 if(studType(a + posOffset, b + posOffset) == "ring"){
                                                     intersection(){
-                                                        cube([knobHoleSize - 2*knobHoleClampThickness, knobHoleSize - 2*knobHoleClampThickness, knobHeight*cutMultiplier], center=true);
+                                                        cube([knobHoleSize - 2*studHoleClampThickness, knobHoleSize - 2*studHoleClampThickness, knobHeight*cutMultiplier], center=true);
                                                         cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     }
                                                 }
@@ -1411,7 +1411,7 @@ module machineblock(
                                             translate([0, 0, 0.5 * knobHeight - studRounding]){ 
                                                 mb_torus(
                                                     circleRadius = studRounding, 
-                                                    torusRadius = 0.5 * knobSize + knobClampThickness, 
+                                                    torusRadius = 0.5 * knobSize + studClampThickness, 
                                                     circleResolution = ($preview ? previewQuality : 1) * studRoundingResolution,
                                                     torusResolution = ($preview ? previewQuality : 1) * studRoundingResolution
                                                 );
@@ -1422,7 +1422,7 @@ module machineblock(
                             }
                         }
                     } // End base color
-                } // End if knobs
+                } // End if studs
 
                 /*
                 * Tongue
