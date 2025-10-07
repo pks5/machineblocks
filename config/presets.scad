@@ -23,27 +23,40 @@
 * Calibration
 */
 
-// Adjustment of the height (mm)
+// Adjustment of the height
 // Amount will be added to/subtracted from the top side of the brick's base
-baseHeightAdjustment = 0.0;
+baseHeightAdjustment = 0.0; // mm
 
-// Adjustment of each side (mm)
+// Adjustment of each side
 // Amount will be added to/subtracted from each side of the brick's base
-baseSideAdjustment = -0.1;
+baseSideAdjustment = -0.1; // mm
 
-// Effective diameter of all studs (mm)
-// Original LEGO brick stud diameter is 4.8mm
-knobSize = 5.0;
+// Adjustment of base walls
+baseWallThicknessAdjustment = -0.1; // mm
 
-// Effective thickness of the walls (mm)
-// Original LEGO brick wall thickness is 1.6mm
-wallThickness = 1.5;
+// Thickness of clamps
+baseClampThickness = 0.1; // mm
 
-// Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
+// Adjustment of tube diameter
+// Amount will be added to/subtracted from tube diameter
+tubeXDiameterAdjustment = -0.1; // mm
+tubeYDiameterAdjustment = -0.1; // mm
+tubeZDiameterAdjustment = -0.1; // mm
 
-// Diameter of the Pins (mm)
-pinSize = 3.2;
+// Adjustment of hole diameter
+// Amount will be added to/subtracted from hole diameter
+holeXDiameterAdjustment = 0.3; // mm
+holeYDiameterAdjustment = 0.3; // mm
+holeZDiameterAdjustment = 0.3; // mm
+
+// Adjustment of pin diameter
+// Amount will be added to/subtracted from pin diameter
+pinDiameterAdjustment = 0.0; // mm
+
+// Adjustment of stud diameter and cutout
+// Amount will be added to/subtracted from stud diameter
+studDiameterAdjustment = 0.2; // mm
+studCutoutAdjustment = [0, 0.2]; // mm [diameter, height]
 
 /*
 * Preview

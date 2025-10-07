@@ -16,28 +16,42 @@ use <../../../lib/block.scad>;
 include <../../../config/presets.scad>;
 
 
-block(
-    grid=[6,2],
-    baseLayers=3,
-    previewRender = previewRender,
+machineblock(
+    size=[6,2,3],
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 ){
-    block(
-        grid=[2,2],
-        baseLayers=3,
-        gridOffset=[2,0,3],
-        previewRender = previewRender,
+    machineblock(
+        size=[2,2,3],
+        offset=[2,0,3],
+        
         baseHeightAdjustment = baseHeightAdjustment,
         baseSideAdjustment = baseSideAdjustment,
-        knobSize = knobSize,
-        wallThickness = wallThickness,
-        tubeZSize = tubeZSize,
-        pinSize = pinSize
+        baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+        baseClampThickness = baseClampThickness,
+        tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+        tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+        tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+        holeXDiameterAdjustment = holeXDiameterAdjustment,
+        holeYDiameterAdjustment = holeYDiameterAdjustment,
+        holeZDiameterAdjustment = holeZDiameterAdjustment,
+        pinDiameterAdjustment = pinDiameterAdjustment,
+        studDiameterAdjustment = studDiameterAdjustment,
+        studCutoutAdjustment = studCutoutAdjustment,
+        previewRender = previewRender
     );    
 }
     

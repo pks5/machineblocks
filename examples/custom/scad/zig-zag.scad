@@ -22,113 +22,162 @@ baseLayers = 3;
 //Draw Knobs
 knobs = true;
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[2,1], 
-    wallGapsX=[[0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[2,1, baseLayers], 
+    baseWallGapsX=[[0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[1, 2], 
-    gridOffset=[-0.5, -0.5, 0], 
-    wallGapsY=[[1,1], [0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[1, 2, baseLayers], 
+    offset=[-0.5, -0.5, 0], 
+    baseWallGapsY=[[1,1], [0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[2,1], 
-    gridOffset=[-1, -1, 0],
-    wallGapsX=[[1,1], [0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[2,1, baseLayers], 
+    offset=[-1, -1, 0],
+    baseWallGapsX=[[1,1], [0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[1, 2], 
-    gridOffset=[-1.5, -1.5, 0], 
-    wallGapsY=[[1,1], [0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[1, 2, baseLayers], 
+    offset=[-1.5, -1.5, 0], 
+    baseWallGapsY=[[1,1], [0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[2,1], 
-    gridOffset=[-2, -2, 0], 
-    wallGapsX=[[1,1], [0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[2,1, baseLayers], 
+    offset=[-2, -2, 0], 
+    baseWallGapsX=[[1,1], [0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[1, 2], 
-    gridOffset=[-2.5, -2.5, 0], 
-    wallGapsY=[[1,1], [0,0]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[1, 2, baseLayers], 
+    offset=[-2.5, -2.5, 0], 
+    baseWallGapsY=[[1,1], [0,0]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
 
-block(
-    baseLayers=baseLayers, 
-    knobs=knobs,
-    grid=[2,1], 
-    gridOffset=[-3, -3, 0], 
-    wallGapsX=[[1,1]],
-    previewRender = previewRender,
+machineblock(
+    studs=knobs,
+    size=[2,1, baseLayers], 
+    offset=[-3, -3, 0], 
+    baseWallGapsX=[[1,1]],
+    align="ccs",
+    
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize,
-    align="ccs"
+    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+    baseClampThickness = baseClampThickness,
+    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+    holeXDiameterAdjustment = holeXDiameterAdjustment,
+    holeYDiameterAdjustment = holeYDiameterAdjustment,
+    holeZDiameterAdjustment = holeZDiameterAdjustment,
+    pinDiameterAdjustment = pinDiameterAdjustment,
+    studDiameterAdjustment = studDiameterAdjustment,
+    studCutoutAdjustment = studCutoutAdjustment,
+    previewRender = previewRender
 );
