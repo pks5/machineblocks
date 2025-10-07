@@ -49,7 +49,8 @@ module machineblock(
         baseClampOffset = 0.4, // mm
         baseClampHeight = 0.8, // mm
         baseClampThickness = 0.1, // mm
-        baseClampThicknessOuter = 0, // mm
+        baseClampOuter = false,
+        
         
         baseRoundingRadius = 0.0, // e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
         baseCutoutRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
@@ -91,10 +92,6 @@ module machineblock(
         //Pins (little tubes for blocks with 1 brick side length)
         pinDiameterAdjustment = 0.0, // mm
         
-        pinClampThickness = 0.1, // mm
-        pinClampOffset = 0.4, // mm
-        pinClampHeight = 0.8, // mm
-
         //Tubes
         tubeXDiameterAdjustment = -0.1, // mm
         tubeYDiameterAdjustment = -0.1, // mm
@@ -102,10 +99,6 @@ module machineblock(
 
         tubeInnerClampThickness = 0.1, // mm
         
-        tubeOuterClampThickness = 0.1, // mm
-        tubeOuterClampOffset = 0.4, // mm
-        tubeOuterClampHeight = 0.8, // mm
-
         //Bevel
         //TODO rename slanting to bevelVertical
         slanting = false,
@@ -147,7 +140,7 @@ module machineblock(
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // Multipliers of gridSizeXY
         
-        studClampHeight = 0.8, // mm
+        studClampHeight = 0.5, // mbu
         studClampThickness = 0.0, // mm
         
         studHoleSize = 2, // mbu
@@ -183,7 +176,7 @@ module machineblock(
         pitWallThickness = 0.333, // Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
         pitKnobs = true,
         pitKnobPadding = 0.2, // Multipliers of gridSizeXY
-        pitKnobType = "classic",
+        pitKnobType = "solid",
         pitKnobCentered = false,
         pitWallGaps = [],
         
@@ -320,6 +313,8 @@ module machineblock(
     
     minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
     cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
+
+    baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -871,8 +866,8 @@ module machineblock(
                                                                         cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                         
                                                                         //Clamp
-                                                                        translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
-                                                                            cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                        translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                            cylinder(h=baseClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                     }
                                                                     intersection(){
                                                                         cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -896,8 +891,8 @@ module machineblock(
                                                             if(drawPin(a, b, true)){
                                                                 translate([posX(a + 0.5), posY(b), baseCutoutZ]){
                                                                     cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
-                                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
                                                             }
                                                         }
@@ -911,8 +906,8 @@ module machineblock(
                                                             if(drawPin(a, b, false)){
                                                                 translate([posX(a), posY(b + 0.5), baseCutoutZ]){
                                                                     cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
-                                                                    translate([0, 0, pinClampOffset + 0.5 * (pinClampHeight - baseCutoutDepth)])
-                                                                        cylinder(h=pinClampHeight, r=0.5 * pinSize + pinClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                    translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                        cylinder(h=baseClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
                                                             }
                                                         }
@@ -961,8 +956,8 @@ module machineblock(
                                                                 cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 
                                                                 //Clamp
-                                                                translate([0, 0, tubeOuterClampOffset + 0.5 * (tubeOuterClampHeight - baseCutoutDepth)])
-                                                                    cylinder(h=tubeOuterClampHeight, r=0.5 * tubeZSize + tubeOuterClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
+                                                                translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseCutoutDepth)])
+                                                                    cylinder(h=baseClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                             };
                                                         }
                                                     }   
@@ -1388,12 +1383,12 @@ module machineblock(
                                         translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                             difference(){
                                                 union(){
-                                                    translate([0, 0, -0.5 * (studRounding + studClampHeight)])
-                                                        cylinder(h=knobHeight - studRounding - studClampHeight, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, -0.5 * (studRounding + studClampHeight * rootUnit)])
+                                                        cylinder(h=knobHeight - studRounding - studClampHeight * rootUnit, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight) - studRounding ])
-                                                        cylinder(h=studClampHeight, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight * rootUnit) - studRounding ])
+                                                        cylinder(h=studClampHeight * rootUnit, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     
                                                     translate([0, 0, 0.5 * (knobHeight - studRounding)])
                                                         cylinder(h=studRounding, r=0.5 * knobSize + studClampThickness - studRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
