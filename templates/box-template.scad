@@ -71,20 +71,15 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 
-/* [Render] */
-
-/*{QUALITY_VARIABLES}*/
-
-block(
-    grid=[boxSizeX, boxSizeY],
-    baseLayers = boxLayers - (lid ? lidLayers : 0),
+machineblock(
+    size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
     /*{BASE_PARAMETERS}*/
 
-    knobs = baseKnobs,
-    knobType = baseKnobType,
-    knobCentered = baseKnobCentered,
+    studs = baseKnobs,
+    studType = baseKnobType,
+    studCentered = baseKnobCentered,
     
     pit=true,
     pitWallGaps = basePitWallGaps,
@@ -99,8 +94,6 @@ block(
     tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
-    /*{QUALITY_PARAMETERS}*/
-
     baseSideAdjustment = baseSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
@@ -108,20 +101,19 @@ block(
 
 if(lid){
     translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
-        block(
-            grid=[boxSizeX, boxSizeY],
-            baseLayers = lidLayers,
-
+        machineblock(
+            size=[boxSizeX, boxSizeY, lidLayers],
+            
             pillars = lidPillars,
             pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
             /*{BASE_PARAMETERS}*/
 
-            knobs = lidKnobs,
-            knobType = lidKnobType,
-            knobCentered = lidKnobCentered,
+            studs = lidKnobs,
+            studType = lidKnobType,
+            studCentered = lidKnobCentered,
 
-            /*{QUALITY_PARAMETERS}*/
+            baseSideAdjustment = baseSideAdjustment,
 
             /*{PRESET_PARAMETERS}*/
         );

@@ -42,18 +42,14 @@ brick1BaseCutoutType = "classic"; // [none, classic]
 // Whether first brick should have knobs.
 brick1Knobs = true;
 // Type of first brick's knobs
-brick1KnobType = "classic"; // [classic, technic]
+brick1KnobType = "solid"; // [solid, ring]
 // Whether second brick should have knobs.
 brick2Knobs = true;
 // Type of second brick's knobs
-brick2KnobType = "technic"; // [classic, technic]
+brick2KnobType = "ring"; // [solid, ring]
 
 /* [Render] */
 
-// Quality of the preview in relation to the final rendering.
-    previewQuality = 0.5; // [0.1:0.1:1]
-    // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
@@ -67,33 +63,36 @@ gridSizeZ = 3.2;
 // Generate the block
 union()
 {
-  block(grid = [ brickSizeX, brick1SizeY ],
-        baseLayers = brick1BaseLayers,
+  machineblock(size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
         baseCutoutType = brick1BaseCutoutType,
         baseColor = baseColor,
 
         connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
         connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
-        knobs = brick1Knobs,
-        knobType = brick1KnobType,
-
-        gridSizeXY = gridSizeXY,
-        gridSizeZ = gridSizeZ,
-
-        previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+        studs = brick1Knobs,
+        studType = brick1KnobType,
 
         baseSideAdjustment = baseSideAdjustment,
         
-        previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+        scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
   );
 }
 
@@ -101,34 +100,38 @@ translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0
   rotate(assemblyMode != "unassembled" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
   {
 
-    block(grid = [ brickSizeX, brick2SizeY ],
+    machineblock(size = [ brickSizeX, brick2SizeY, 1 ],
           baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseColor = baseColor,
 
-          knobs = brick2Knobs,
-          knobType = brick2KnobType,
+          studs = brick2Knobs,
+          studType = brick2KnobType,
           connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
           connectorHeight = brick1BaseLayers * gridSizeZ,
           
 
-          gridSizeXY = gridSizeXY,
-          gridSizeZ = gridSizeZ,
-          
-          previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-
           baseSideAdjustment =
             [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
 
-          previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+          scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
     );
   }

@@ -39,15 +39,14 @@ brick1BaseCutoutType = "classic"; // [none, classic]
 // Whether first brick should have knobs.
 brick1Knobs = true;
 // Type of first brick's knobs
-brick1KnobType = "classic"; // [classic, technic]
+brick1KnobType = "solid"; // [solid, ring]
 // Whether second brick should have knobs.
 brick2Knobs = true;
 // Type of second brick's knobs
-brick2KnobType = "technic"; // [classic, technic]
+brick2KnobType = "ring"; // [solid, ring]
 
 /* [Render] */
 
-/*{QUALITY_VARIABLES}*/
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
@@ -61,20 +60,14 @@ gridSizeZ = 3.2;
 // Generate the block
 union()
 {
-  block(grid = [ brickSizeX, brick1SizeY ],
-        baseLayers = brick1BaseLayers,
+  machineblock(size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
         baseCutoutType = brick1BaseCutoutType,
         /*{BASE_PARAMETERS}*/
 
         connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
         connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
-        knobs = brick1Knobs,
-        knobType = brick1KnobType,
-
-        gridSizeXY = gridSizeXY,
-        gridSizeZ = gridSizeZ,
-
-        /*{QUALITY_PARAMETERS}*/
+        studs = brick1Knobs,
+        studType = brick1KnobType,
 
         baseSideAdjustment = baseSideAdjustment,
         
@@ -86,21 +79,16 @@ translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0
   rotate(assemblyMode != "unassembled" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
   {
 
-    block(grid = [ brickSizeX, brick2SizeY ],
+    machineblock(size = [ brickSizeX, brick2SizeY, 1 ],
           baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           /*{BASE_PARAMETERS}*/
 
-          knobs = brick2Knobs,
-          knobType = brick2KnobType,
+          studs = brick2Knobs,
+          studType = brick2KnobType,
           connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
           connectorHeight = brick1BaseLayers * gridSizeZ,
           
-
-          gridSizeXY = gridSizeXY,
-          gridSizeZ = gridSizeZ,
-          
-          /*{QUALITY_PARAMETERS}*/
 
           baseSideAdjustment =
             [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],

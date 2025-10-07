@@ -74,23 +74,15 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 
-/* [Render] */
-
-// Quality of the preview in relation to the final rendering.
-    previewQuality = 0.5; // [0.1:0.1:1]
-    // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]
-
-block(
-    grid=[boxSizeX, boxSizeY],
-    baseLayers = boxLayers - (lid ? lidLayers : 0),
+machineblock(
+    size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
     baseColor = baseColor,
 
-    knobs = baseKnobs,
-    knobType = baseKnobType,
-    knobCentered = baseKnobCentered,
+    studs = baseKnobs,
+    studType = baseKnobType,
+    studCentered = baseKnobCentered,
     
     pit=true,
     pitWallGaps = basePitWallGaps,
@@ -105,48 +97,63 @@ block(
     tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
-
     baseSideAdjustment = baseSideAdjustment,
     
-    previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+    scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
 );
 
 if(lid){
     translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
-        block(
-            grid=[boxSizeX, boxSizeY],
-            baseLayers = lidLayers,
-
+        machineblock(
+            size=[boxSizeX, boxSizeY, lidLayers],
+            
             pillars = lidPillars,
             pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
             baseColor = baseColor,
 
-            knobs = lidKnobs,
-            knobType = lidKnobType,
-            knobCentered = lidKnobCentered,
+            studs = lidKnobs,
+            studType = lidKnobType,
+            studCentered = lidKnobCentered,
 
-            previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,
+            baseSideAdjustment = baseSideAdjustment,
 
-            previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize
+            scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution
         );
 }

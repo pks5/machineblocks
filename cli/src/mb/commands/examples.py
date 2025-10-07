@@ -3,23 +3,25 @@ import os
 import re
 from typing import List
 
-quality_variables = """// Quality of the preview in relation to the final rendering.
-    previewQuality = 0.5; // [0.1:0.1:1]
-    // Number of drawn fragments for roundings in the final rendering.
-    roundingResolution = 64; // [16:8:128]"""
-
-quality_params = """previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution,"""
-
-preset_params = """previewRender = previewRender,
-    baseHeightAdjustment = baseHeightAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize,
-    pinSize = pinSize"""
+preset_params = """scale=scale,
+    baseHeightAdjustment=baseHeightAdjustment,
+    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
+    baseClampThickness=baseClampThickness,
+    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=holeXDiameterAdjustment,
+    holeYDiameterAdjustment=holeYDiameterAdjustment,
+    holeZDiameterAdjustment=holeZDiameterAdjustment,
+    pinDiameterAdjustment=pinDiameterAdjustment,
+    studDiameterAdjustment=studDiameterAdjustment,
+    studCutoutAdjustment=studCutoutAdjustment,
+    previewRender=previewRender,
+    previewQuality=previewQuality,
+    baseRoundingResolution=roundingResolution,
+    holeRoundingResolution=roundingResolution,
+    studRoundingResolution=roundingResolution,
+    pillarRoundingResolution=roundingResolution"""
 
 base_variables = """// Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]"""
@@ -64,8 +66,6 @@ def process_examples_file(example_file_path: str):
             file_name = brick['name'].lower().replace(' ', '-') + '.scad'
             scad = brick_template.replace('{URL}', url)
             scad = scad.replace('{BRICK_NAME}', brick['name'])
-            scad = scad.replace('/*{QUALITY_VARIABLES}*/', quality_variables)
-            scad = scad.replace('/*{QUALITY_PARAMETERS}*/', quality_params)
             scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
             scad = scad.replace('/*{BASE_VARIABLES}*/', base_variables)
             scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
