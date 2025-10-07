@@ -82,15 +82,15 @@ wallThickness = 1.5;
 //Diameter of the Z-Tubes (mm)
 tubeZSize = 6.4;
 
-block(
-    grid=[boxSizeX, boxSizeY],
-    gridOffset=[0, -0.5*boxSizeX + 1,0],
-    baseLayers = boxLayers - (lid ? lidLayers : 0),
+machineblock(
+    align="ccs",
+    size=[boxSizeX, boxSizeY, boxLayers - (lid ? lidLayers : 0)],
+    offset=[0, -0.5*boxSizeX + 1,0],
     baseCutoutType = baseCutoutType,
 
-    knobs = baseKnobs,
-    knobType = baseKnobType,
-    knobCentered = baseKnobCentered,
+    studs = baseKnobs,
+    studType = baseKnobType,
+    studCentered = baseKnobCentered,
     
     pit=true,
     pitWallGaps = [[0, 0, 0], [1, 0, 0], [3,0,boxSizeX-2]],
@@ -107,21 +107,18 @@ block(
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    wallGapsX = [[0, 1, boxSizeY]],
-    tubeZSize = tubeZSize
+    baseWallGapsX = [[0, 1, boxSizeY]]
 );
 
-block(
-    grid=[boxSizeY, boxSizeX],
-    gridOffset=[-0.5*boxSizeX + 1, 0,0],
-    baseLayers = boxLayers - (lid ? lidLayers : 0),
+machineblock(
+    align="ccs",
+    size=[boxSizeY, boxSizeX, boxLayers - (lid ? lidLayers : 0)],
+    offset=[-0.5*boxSizeX + 1, 0,0],
     baseCutoutType = baseCutoutType,
 
-    knobs = baseKnobs,
-    knobType = baseKnobType,
-    knobCentered = baseKnobCentered,
+    studs = baseKnobs,
+    studType = baseKnobType,
+    studCentered = baseKnobCentered,
     
     pit=true,
     pitWallGaps = [[2, 0, 0], [3, 0, 0], [1,0,boxSizeX-2]],
@@ -138,54 +135,46 @@ block(
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    wallGapsY = [[0, 1, boxSizeY]],
-    tubeZSize = tubeZSize
+    baseWallGapsY = [[0, 1, boxSizeY]]
 );
 
 if(lid){
     translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [0, -(boxSizeX + 0.5) * 8.0, 0]){
-        block(
-            grid=[boxSizeX, boxSizeY],
-            gridOffset=[0, -0.5*boxSizeX + 1,0],
-            baseLayers = lidLayers,
+        machineblock(
+            align="ccs",
+            size=[boxSizeX, boxSizeY, lidLayers],
+            offset=[0, -0.5*boxSizeX + 1,0],
             baseCutoutType = "groove",
 
-            knobs = lidKnobs,
-            knobType = lidKnobType,
-            knobCentered = lidKnobCentered,
+            studs = lidKnobs,
+            studType = lidKnobType,
+            studCentered = lidKnobCentered,
 
             pillars = lidPillars,
             pitWallGaps = [[1, 0, 0], [3,0,boxSizeX-2]],
     
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
-            knobSize = knobSize,
-            wallThickness = wallThickness,
-            wallGapsX = [[0, 1, boxSizeY]],
-            tubeZSize = tubeZSize
+            baseWallGapsX = [[0, 1, boxSizeY]]
         );
         
-        block(
-            grid=[boxSizeY, boxSizeX],
-            gridOffset=[-0.5*boxSizeX + 1, 0,0],
-            baseLayers = lidLayers,
+        machineblock(
+            align="ccs",
+            size=[boxSizeY, boxSizeX, lidLayers],
+            offset=[-0.5*boxSizeX + 1, 0,0],
             baseCutoutType = "groove",
 
-            knobs = lidKnobs,
-            knobType = lidKnobType,
-            knobCentered = lidKnobCentered,
+            studs = lidKnobs,
+            studType = lidKnobType,
+            studCentered = lidKnobCentered,
 
             pillars = lidPillars,
             pitWallGaps = [[3, 0, 0], [1,0,boxSizeX-2]],
     
             baseHeightAdjustment = baseHeightAdjustment,
             baseSideAdjustment = baseSideAdjustment,
-            knobSize = knobSize,
-            wallThickness = wallThickness,
-            wallGapsY = [[0, 1, boxSizeY]],
-            tubeZSize = tubeZSize
+            baseWallGapsY = [[0, 1, boxSizeY]]
+            
         );
     }
 }

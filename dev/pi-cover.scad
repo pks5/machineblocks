@@ -81,20 +81,20 @@ wallThickness = 1.5;
 tubeZSize = 6.4;
 
 // Generate the block
-block(
-    grid = [brickSizeX, brickSizeY],
-    baseLayers = baseLayers,
+machineblock(
+    size = [brickSizeX, brickSizeY, baseLayers],
+    align = "ccs",
     baseCutoutType = baseCutoutType,
     
-    knobs = knobs,
-    knobCentered = knobCentered,
-    knobType = knobType,
+    studs = knobs,
+    studCentered = knobCentered,
+    studType = knobType,
     
     pillars = pillars,
     
-    holesX = holesX,
-    holesY = holesY,
-    holesZ = holesZ,
+    holeX = holesX,
+    holeY = holesY,
+    holeZ = holesZ,
     
     pit = pit,
     pitKnobs = pitKnobs,
@@ -105,32 +105,29 @@ block(
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
 
     baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = baseSideAdjustment,
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    baseSideAdjustment = baseSideAdjustment
 );
 
 // Generate the block
-block(
-    grid = [5, 5],
-    gridOffset=[-4,-7.5,0],
-    baseLayers = baseLayers,
+machineblock(
+    size = [5, 5, baseLayers],
+    offset=[-4,-7.5,0],
+    align = "ccs",
     baseCutoutType = baseCutoutType,
     
-    knobs = knobs,
-    knobCentered = knobCentered,
-    knobType = knobType,
+    studs = knobs,
+    studCentered = knobCentered,
+    studType = knobType,
     
     pillars = pillars,
     
-    holesX = holesX,
-    holesY = holesY,
-    holesZ = holesZ,
+    holeX = holesX,
+    holeY = holesY,
+    holeZ = holesZ,
     
     pit = pit,
     pitKnobs = pitKnobs,
@@ -141,12 +138,9 @@ block(
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
-    knobRoundingResolution = roundingResolution,
+    studRoundingResolution = roundingResolution,
     pillarRoundingResolution = roundingResolution,
 
     baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = [baseSideAdjustment,baseSideAdjustment,baseSideAdjustment,baseSideAdjustment+0.2],
-    knobSize = knobSize,
-    wallThickness = wallThickness,
-    tubeZSize = tubeZSize
+    baseSideAdjustment = [baseSideAdjustment,baseSideAdjustment,baseSideAdjustment,baseSideAdjustment+0.2]
 );
