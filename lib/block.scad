@@ -25,16 +25,12 @@ use <tongue.scad>;
 
 module machineblock(
         //Grid
-        
         gridSize = [5, 2], // mbu [xy, z]
-        
-        
+        scale = 1.0, // Float
+
         //Size
         size = [1, 1, 1],
         offset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
-
-        //Scale
-        scale = 1.0, // Float
 
         //Base
         base = true,
