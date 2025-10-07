@@ -803,7 +803,7 @@ module machineblock(
                                                             for (b = [ startY : 1 : endY - 1 ]){
                                                                 if(drawPillar(a, b)){
                                                                         translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
-                                                                            cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                            cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                         };
                                                                 }
                                                             }   
@@ -817,12 +817,12 @@ module machineblock(
                                                                     for (p = [ 0 : 1 : gapLength - 2 ]){
                                                                         if(side == 0 || side == 2){
                                                                             translate([posX(a + p + 0.5), posY(-0.5), baseCutoutZ + cutTolerance]){
-                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                                cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                             };
                                                                         }
                                                                         if(side == 1 || side == 2){
                                                                             translate([posX(a + p + 0.5), posY(endY + 0.5), baseCutoutZ + cutTolerance]){
-                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                                cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                             };
                                                                         }
                                                                     }
@@ -838,12 +838,12 @@ module machineblock(
                                                                     for (p = [ 0 : 1 : gapLength - 2 ]){
                                                                         if(side == 0 || side == 2){
                                                                             translate([posX(-0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
-                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                                cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                             };
                                                                         }
                                                                         if(side == 1 || side == 2){
                                                                             translate([posX(endX + 0.5), posY(b + p + 0.5), baseCutoutZ + cutTolerance]){
-                                                                                cylinder(h=baseCutoutDepth, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                                cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                             };
                                                                         }
                                                                     }

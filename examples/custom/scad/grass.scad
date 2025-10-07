@@ -1,8 +1,7 @@
-echo(version=version());
+use <../../../lib/block.scad>;
+include <../../../config/presets.scad>;
 
-include <../../lib/block.scad>;
-
-grid = [6,6];
+grid = [6,6,1];
 pitWallThickness = 0.8 / 8;
 gridSizeZ = 3.2;
 gridSizeXY = 8;
@@ -25,17 +24,36 @@ withTop = true;
 withBottom = true;
 
 if(withBottom){
-    block(
-        grid = grid,
+    machineblock(
+        size = grid,
         baseHeight = brickHeight,
-        topPlateHeight = 0.4,
-        stabilizerGridHeight = 1,
+        baseTopPlateHeightAdjustment = -1, // mm
+        stabilizerExpansion = 1, // Integer, Create expansion after each [n] bricks
+        stabilizerExpansionOffset = 0,
         pitDepth = pitDepth,
-        gridSizeZ = gridSizeZ,
-        gridSizeXY = gridSizeXY,
         pitWallThickness = pitWallThickness,
         pit = true,
-        knobs = false
+        studs = false,
+        scale = scale,
+        baseHeightAdjustment = baseHeightAdjustment,
+        baseSideAdjustment = baseSideAdjustment,
+        baseWallThicknessAdjustment = baseWallThicknessAdjustment,
+        baseClampThickness = baseClampThickness,
+        tubeXDiameterAdjustment = tubeXDiameterAdjustment,
+        tubeYDiameterAdjustment = tubeYDiameterAdjustment,
+        tubeZDiameterAdjustment = tubeZDiameterAdjustment,
+        holeXDiameterAdjustment = holeXDiameterAdjustment,
+        holeYDiameterAdjustment = holeYDiameterAdjustment,
+        holeZDiameterAdjustment = holeZDiameterAdjustment,
+        pinDiameterAdjustment = pinDiameterAdjustment,
+        studDiameterAdjustment = studDiameterAdjustment,
+        studCutoutAdjustment = studCutoutAdjustment,
+        previewRender = previewRender,
+        previewQuality = previewQuality,
+        baseRoundingResolution = roundingResolution,
+        holeRoundingResolution = roundingResolution,
+        studRoundingResolution = roundingResolution,
+        pillarRoundingResolution = roundingResolution
     );
 }
 
