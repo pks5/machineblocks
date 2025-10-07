@@ -75,12 +75,6 @@ roundingResolution = 64; // [16:8:128]
 baseHeightAdjustment = 0.0;
 //Adjustment of each side (mm)
 baseSideAdjustment = -0.1;
-//Diameter of the knobs (mm)
-knobSize = 5.0;
-//Thickness of the walls (mm)
-wallThickness = 1.5;
-//Diameter of the Z-Tubes (mm)
-tubeZSize = 6.4;
 
 machineblock(
     align="ccs",
@@ -104,6 +98,7 @@ machineblock(
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     tongueThicknessAdjustment = lidPermanent ? 0.0 : 0.0,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
+    tongueInnerRoundingRadius = 0,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
@@ -132,6 +127,7 @@ machineblock(
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     tongueThicknessAdjustment = lidPermanent ? 0.0 : 0.0,
     tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
+    tongueInnerRoundingRadius = 0,
     
     baseHeightAdjustment = baseHeightAdjustment,
     baseSideAdjustment = baseSideAdjustment,
