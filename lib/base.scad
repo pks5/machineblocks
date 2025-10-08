@@ -64,12 +64,12 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    objectSizeX = gridSizeXY * (grid[0] + (slanting != false ? slanting(slanting[0]) + slanting(slanting[1]) : 0)); //todo support slanting undef
-    objectSizeY = gridSizeXY * (grid[1] + (slanting != false ? slanting(slanting[2]) + slanting(slanting[3]) : 0));
+    objectSizeX = gridSizeXY * (grid[0] + (slanting != false ? min(slanting[0], 0) + min(slanting[1], 0) : 0)); //todo support slanting undef
+    objectSizeY = gridSizeXY * (grid[1] + (slanting != false ? min(slanting[2], 0) + min(slanting[3], 0) : 0));
     objectSize=[objectSizeX, objectSizeY];
 
-    offsetX =  0.5*(slanting != false ? -slanting(slanting[0]) + slanting(slanting[1]) : 0) * gridSizeXY;
-    offsetY =  0.5*(slanting != false ? -slanting(slanting[2]) + slanting(slanting[3]) : 0) * gridSizeXY;
+    offsetX =  0.5*(slanting != false ? -min(slanting[0], 0) + min(slanting[1], 0) : 0) * gridSizeXY;
+    offsetY =  0.5*(slanting != false ? -min(slanting[2], 0) + min(slanting[3], 0) : 0) * gridSizeXY;
 
     echo(
         slanting=slanting, 
@@ -88,11 +88,11 @@ module mb_base_cutout(
     bevelClamp = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness);
     
     
-    function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
-    function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
+    //function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
+    //function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
 
     function slopeSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slanting[side] + baseSideAdjustment[side])) + cutTolerance;
-    function slanting(s) = s > 0 ? 0 : s;
+    //function slanting(s) = s > 0 ? 0 : s;
 
     
     translate([offsetX, offsetY, 0]){ 
