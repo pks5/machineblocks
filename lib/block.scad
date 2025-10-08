@@ -101,8 +101,7 @@ module machineblock(
 
         tubeInnerClampThickness = 0.1, // mm
         
-        //Bevel
-        //TODO rename slanting to bevelVertical
+        //Slope & Bevel
         slanting = false,
         slopeBaseHeightLower = 1.333, // mbu
         slopeBaseHeightUpper = 1, // mbu
@@ -278,8 +277,8 @@ module machineblock(
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
-    gridSizeX = slanting != false ? grid[0] + (slanting[0] < 0 ? slanting[0] : 0) + (slanting[1] < 0 ? slanting[1] : 0) : grid[0];
-    gridSizeY = slanting != false ? grid[1] + (slanting[2] < 0 ? slanting[2] : 0) + (slanting[3] < 0 ? slanting[3] : 0) : grid[1];
+    gridSizeX = grid_size_x(grid, slanting);
+    gridSizeY = grid_size_y(grid, slanting);
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
@@ -448,12 +447,13 @@ module machineblock(
     */
     function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
     function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
-
+    
     /*
-    * Slanting
+    * Slope
     */
-    function slanting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
-    function inSlantedArea(a, b, inv, qx, qy) = (slanting != false) && !inGridArea(a, b, [slanting(slanting[0], inv), slanting(slanting[2], inv), grid[0] - slanting(slanting[1], inv) - (inv ? qx : 1), grid[1] - slanting(slanting[3], inv) - (inv ? qy : 1)]);
+    function smx(s, inv=false) = max(inv ? -s : s, 0);
+    //function slan2ting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
+    function onSlope(a, b, inv, qx, qy) = (slanting != false) && !inGridArea(a, b, [smx(slanting[0], inv), smx(slanting[2], inv), grid[0] - smx(slanting[1], inv) - (inv ? qx : 1), grid[1] - smx(slanting[3], inv) - (inv ? qy : 1)]);
 
     
     /*
@@ -471,11 +471,11 @@ module machineblock(
     function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
     function drawPillar(a, b) = !drawHoleZ(a, b) 
-                                && !inSlantedArea(a, b, true, 2, 2) 
+                                && !onSlope(a, b, true, 2, 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
     function drawPin(a, b, isX) = !drawHoleZ(a, b) 
-                                && !inSlantedArea(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
+                                && !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
     
@@ -501,7 +501,7 @@ module machineblock(
     * Knobs
     */ 
     function drawKnob(a, b) = 
-            !inSlantedArea(a, b, false, 2)
+            !onSlope(a, b, false, 2)
             && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
             && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
             ;

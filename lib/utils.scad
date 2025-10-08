@@ -47,6 +47,14 @@ function mb_resolve_quadruple(quad, multiplier) = is_list(quad) ? [quad[0]*multi
 function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
 
 /*
+* get the grid size
+*/
+
+function grid_size_x(grid, slope) = slope != false ? grid[0] + (slope[0] < 0 ? slope[0] : 0) + (slope[1] < 0 ? slope[1] : 0) : grid[0];
+function grid_size_y(grid, slope) = slope != false ? grid[1] + (slope[2] < 0 ? slope[2] : 0) + (slope[3] < 0 ? slope[3] : 0) : grid[1];
+
+
+/*
 * Determine position of grid cell relative to object origin
 */ 
 function mb_grid_pos_x(a, grid, gridSizeXY) = (a - 0.5 * (grid[0] - 1)) * gridSizeXY;

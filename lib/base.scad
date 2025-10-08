@@ -16,7 +16,6 @@ module mb_slant_prism(side, l, w, h, inv){
                     );
 }
 
-
 /*
 * Base Cutout
 */
@@ -64,7 +63,7 @@ module mb_base_cutout(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    objectSizeX = gridSizeXY * (grid[0] + (slanting != false ? min(slanting[0], 0) + min(slanting[1], 0) : 0)); //todo support slanting undef
+    objectSizeX = gridSizeXY * (grid[0] + (slanting != false ? min(slanting[0], 0) + min(slanting[1], 0) : 0));
     objectSizeY = gridSizeXY * (grid[1] + (slanting != false ? min(slanting[2], 0) + min(slanting[3], 0) : 0));
     objectSize=[objectSizeX, objectSizeY];
 
@@ -92,7 +91,7 @@ module mb_base_cutout(
     //function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
 
     function slopeSize(side) = (slanting[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slanting[side] + baseSideAdjustment[side])) + cutTolerance;
-    //function slanting(s) = s > 0 ? 0 : s;
+    //function slan2ting(s) = s > 0 ? 0 : s;
 
     
     translate([offsetX, offsetY, 0]){ 
@@ -153,7 +152,15 @@ module mb_base_cutout(
             * Slanting
             */
             if(slanting != false){
-                
+                for(side = [0 : 1 : 3]){
+                    if(slanting[side] > 0){
+                        slopeSide0 = slopeSize(side);
+                        tx = ((side % 2 == 0) ? -0.5 : 0.5) * (objectSize[side < 2 ? 0 : 1] - 2*wallThickness - slopeSide0 + cutTolerance);
+                        translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, 0.5*(slopeBaseHeightLower + cutTolerance)])
+                            mb_slant_prism(side, slopeSide0, objectSize[side < 2 ? 1 : 0] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
+                    }
+                }
+                /*
                 if(slanting[0] > 0){
                     slopeSide0 = slopeSize(0);
                     translate([-0.5 * (objectSize[0] - 2*wallThickness - slopeSide0 + cutTolerance), 0, 0.5*(slopeBaseHeightLower + cutTolerance)])
@@ -176,7 +183,7 @@ module mb_base_cutout(
                     slopeSide3 = slopeSize(3);
                     translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slopeSide3 + cutTolerance), 0.5*(slopeBaseHeightLower + cutTolerance)])
                         mb_slant_prism(3, slopeSide3, objectSize[0] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
-                }
+                }*/
                 
             }
         }
@@ -257,7 +264,7 @@ module mb_base(
         difference(){
             translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
                 
-                difference(){ // Subtract relief cut and slanting from base
+                difference(){ // Subtract relief cut and slope from base
                     union(){
                         mb_beveled_rounded_block(
                             bevel = beveled ? bevelOuterAdjusted : false,
@@ -307,6 +314,17 @@ module mb_base(
                     * Slanting
                     */
                     if(slanting != false){
+                        for(side = [0 : 1 : 3]){
+                            if(slanting[side] != 0){
+                                slopeSide0 = slopeSize(side);
+                                slopeBaseHeight0 = slopeBaseHeight(side);
+                                tx = ((side % 2 == 0) ? -0.5 : 0.5) * ((side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) - slopeSide0 + cutTolerance);
+                                translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slanting[0])*0.5*(slopeBaseHeight0 + cutTolerance)])
+                                    mb_slant_prism(side, slopeSide0, (side < 2 ? objectSizeYAdjusted : objectSizeXAdjusted) * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slanting[side] < 0);
+                            }
+                        }
+
+                        /*
                         if(slanting[0] != 0){
                             slopeSide0 = slopeSize(0);
                             slopeBaseHeight0 = slopeBaseHeight(0);
@@ -333,7 +351,7 @@ module mb_base(
                             slopeBaseHeight3 = slopeBaseHeight(3);
                             translate([0, 0.5 * (objectSizeYAdjusted - slopeSide3 + cutTolerance), sign(slanting[3])*0.5*(slopeBaseHeight3 + cutTolerance)])
                                 mb_slant_prism(3, slopeSide3, objectSizeXAdjusted * cutMultiplier, height - slopeBaseHeight3 + cutTolerance, slanting[3] < 0);
-                        }
+                        }*/
                     }
                } // End difference
                 
