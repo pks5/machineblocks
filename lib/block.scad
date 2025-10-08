@@ -30,7 +30,7 @@ module machineblock(
 
         //Size
         size = [1, 1, 1],
-        offset = [0, 0, 0], // Multipliers of gridSizeXY and gridSizeZ
+        offset = [0, 0, 0], // grid
 
         //Base
         base = true,
@@ -135,7 +135,7 @@ module machineblock(
         studType = "solid",
         studCentered = false,
         studMaxOverhang = 0.3, // mm
-        studPadding = 0, // Multipliers of gridSizeXY
+        studPadding = 0, // grid
         
         studClampHeight = 0.5, // mbu
         studClampThickness = 0.0, // mm
@@ -154,15 +154,15 @@ module machineblock(
         
         //Tongue
         tongue = false,
-        tongueHeight = 2.0, // mm
-        tongueGrooveDepth = 2.4, // mm
+        tongueHeight = 1.25, // mbu
+        tongueGrooveDepth = 1.5, // mbu
         tongueRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
         tongueInnerRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
-        tongueThickness = 1.1, // mm
+        tongueThickness = 0.6875, // mbu
         tongueThicknessAdjustment = 0, // mm
-        tongueOffset = 1.5, // mm (0.5 * (gridSizeXY - referenceKnobSize))
-        tongueClampHeight = 0.8, // mm
-        tongueClampOffset = 0.4, // mm
+        tongueOffset = 0.2, // grid
+        tongueClampHeight = 0.5, // mbu
+        tongueClampOffset = 0.25, // mbu
         tongueClampThickness = 0.1, // mm
         
         
@@ -170,9 +170,9 @@ module machineblock(
         pit=false,
         pitRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] or "auto" 
         pitDepth = "auto", // mm or "auto"
-        pitWallThickness = 0.333, // Format: 0.333 or [0.333, 0.333, 0.333, 0.333], Multipliers of gridSizeXY
+        pitWallThickness = 0.333, // grid, Format: 0.333 or [0.333, 0.333, 0.333, 0.333]
         pitKnobs = true,
-        pitKnobPadding = 0.2, // Multipliers of gridSizeXY
+        pitKnobPadding = 0.2, // grid
         pitKnobType = "solid",
         pitKnobCentered = false,
         pitWallGaps = [],
@@ -186,7 +186,7 @@ module machineblock(
         textSpacing = 1,
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
-        textOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
+        textOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
         textColor = "#2c3e50", // hex color with leading #
 
         //SVG
@@ -195,7 +195,7 @@ module machineblock(
         svgDepth = 0.4, // mm
         svgDimensions = [100, 100],
         svgScale = 1,
-        svgOffset = [0, 0], // Multipliers of gridSizeXY and gridSizeZ depending on side
+        svgOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
         connectors = false,
@@ -224,7 +224,7 @@ module machineblock(
         pcb=false,
         pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3], // mm
-        pcbOffset = [0, 0], // Multipliers of gridSizeXY
+        pcbOffset = [0, 0], // grid
         pcbScrewSocketSize = 5, // mm
         pcbScrewSocketHoleSize = 2.2, // mm
         pcbScrewSocketHeight = 3, // mm
@@ -385,6 +385,14 @@ module machineblock(
     sGridThickness = stabilizerGridThickness * rootUnit;
     sGridHeight = stabilizerGridHeight * rootUnit;
     
+    //Tongue
+    tonHeightCalc = tongueHeight * rootUnit;
+    tonThicknessCalc = tongueThickness * rootUnit;
+    tonOffsetCalc = tongueOffset * gridSizeXY;
+    tonClampHeightCalc = tongueClampHeight * rootUnit;
+    tonClampOffsetCalc = tongueClampOffset * rootUnit;
+    tonGrooveDepthCalc = tongueGrooveDepth * rootUnit;
+
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
     
@@ -1268,7 +1276,7 @@ module machineblock(
                         */
                         if(baseCutoutType == "groove"){
                             color(baseColor){
-                                translate([0, 0, sideZ(0) + 0.5*tongueGrooveDepth]){ 
+                                translate([0, 0, sideZ(0) + 0.5*tonGrooveDepthCalc]){ 
                                     translate([0, 0, -0.5 * cutOffset]){
                                         mb_tongue(
                                             gridSizeXY = gridSizeXY,
@@ -1278,13 +1286,13 @@ module machineblock(
                                             baseRoundingResolution = baseRoundingResolution,
                                             beveled = beveled,
                                             bevelOuter = bevelOuter,
-                                            tongueOffset = tongueOffset,
-                                            tongueThickness = tongueThickness,
+                                            tongueOffset = tonOffsetCalc,
+                                            tongueThickness = tonThicknessCalc,
                                             tongueThicknessAdjustment = tongueThicknessAdjustment,
-                                            tongueHeight = tongueGrooveDepth + cutOffset,
+                                            tongueHeight = tonGrooveDepthCalc + cutOffset,
                                             tongueClampThickness = tongueClampThickness,
-                                            tongueClampHeight = tongueClampHeight,
-                                            tongueClampOffset = tongueClampOffset + tongueGrooveDepth - tongueHeight,
+                                            tongueClampHeight = tonClampHeightCalc,
+                                            tongueClampOffset = tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc,
                                             tongueRoundingRadius = tongueRoundingRadius,
                                             tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                                             pit = true,
@@ -1295,9 +1303,9 @@ module machineblock(
                                         );
                                     }
 
-                                    tongueSizeX = objectSizeX - 2 * tongueOffset + tongueThicknessAdjustment;
-                                    tongueSizeY = objectSizeY - 2 * tongueOffset + tongueThicknessAdjustment;
-                                    tongueThicknessAdjusted = tongueThickness + tongueThicknessAdjustment;
+                                    tongueSizeX = objectSizeX - 2 * tonOffsetCalc + tongueThicknessAdjustment;
+                                    tongueSizeY = objectSizeY - 2 * tonOffsetCalc + tongueThicknessAdjustment;
+                                    tongueThicknessAdjusted = tonThicknessCalc + tongueThicknessAdjustment;
                                     tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
                                     tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
 
@@ -1313,14 +1321,14 @@ module machineblock(
                                                     cube([
                                                         gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
                                                         objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
-                                                        tongueGrooveDepth + cutOffset
+                                                        tonGrooveDepthCalc + cutOffset
                                                     ], center=true); 
                                                     
-                                                    translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                                    translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
                                                         cube([
                                                             gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
                                                             objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
-                                                            tongueClampHeight
+                                                            tonClampHeightCalc
                                                         ], center=true); 
                                                 }
                                             }
@@ -1338,14 +1346,14 @@ module machineblock(
                                                     cube([
                                                         objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
                                                         gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
-                                                        tongueGrooveDepth + cutOffset
+                                                        tonGrooveDepthCalc + cutOffset
                                                     ], center=true);   
 
-                                                    translate([0,0,+0.5*(tongueGrooveDepth+cutOffset)-0.5*tongueClampHeight - (tongueClampOffset + tongueGrooveDepth - tongueHeight)])
+                                                    translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
                                                         cube([
                                                             objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
                                                             gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
-                                                            tongueClampHeight
+                                                            tonClampHeightCalc
                                                         ], center=true);   
                                                 }
                                             }
@@ -1426,7 +1434,7 @@ module machineblock(
                 */
                 if(tongue){
                     color(baseColor){
-                        translate([0, 0, 0.5 * (resultingBaseHeight + tongueHeight)]){ 
+                        translate([0, 0, 0.5 * (resultingBaseHeight + tonHeightCalc)]){ 
                             mb_tongue(
                                 gridSizeXY = gridSizeXY,
                                 objectSize = [objectSizeX, objectSizeY],
@@ -1435,13 +1443,13 @@ module machineblock(
                                 baseRoundingResolution = baseRoundingResolution,
                                 beveled = beveled,
                                 bevelOuter = bevelOuter,
-                                tongueOffset = tongueOffset,
-                                tongueThickness = tongueThickness,
+                                tongueOffset = tonOffsetCalc,
+                                tongueThickness = tonThicknessCalc,
                                 tongueThicknessAdjustment = tongueThicknessAdjustment,
-                                tongueHeight = tongueHeight,
+                                tongueHeight = tonHeightCalc,
                                 tongueClampThickness = tongueClampThickness,
-                                tongueClampHeight = tongueClampHeight,
-                                tongueClampOffset = tongueClampOffset,
+                                tongueClampHeight = tonClampHeightCalc,
+                                tongueClampOffset = tonClampOffsetCalc,
                                 tongueRoundingRadius = tongueRoundingRadius,
                                 tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                                 pit = pit,
