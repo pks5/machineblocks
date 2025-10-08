@@ -168,7 +168,7 @@ module machineblock(
         tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
         tongueThickness = 0.666, // mbu
         tongueThicknessAdjustment = 0, // mm
-        tongueOffset = 0.2, // grid
+        tongueOffset = 1, // mbu
         tongueClampHeight = 0.5, // mbu
         tongueClampOffset = 0.25, // mbu
         tongueClampThickness = 0.1, // mm
@@ -407,7 +407,7 @@ module machineblock(
     //Tongue
     tonHeightCalc = tongueHeight * rootUnit;
     tonThicknessCalc = tongueThickness * rootUnit;
-    tonOffsetCalc = tongueOffset * gridSizeXY;
+    tonOffsetCalc = tongueOffset * rootUnit;
     tonClampHeightCalc = tongueClampHeight * rootUnit;
     tonClampOffsetCalc = tongueClampOffset * rootUnit;
     tonGrooveDepthCalc = tongueGrooveDepth * rootUnit;
