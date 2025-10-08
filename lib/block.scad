@@ -40,7 +40,7 @@ module machineblock(
         baseTopPlateHeight = 1, // mbu
         baseTopPlateHeightAdjustment = -0.6, // mm
 
-        baseCutoutType = "classic",
+        baseCutoutType = "classic", // "classic", "groove", "none"
         baseCutoutMaxDepth = 5, // mbu
         
         baseClampOffset = 0.25, // mbu
@@ -49,8 +49,8 @@ module machineblock(
         baseClampOuter = false,
         
         
-        baseRoundingRadius = 0.0, // e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]]
-        baseCutoutRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] 
+        baseRoundingRadius = 0.0, // mm (e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]])
+        baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
         baseRoundingResolution = 64,
         
         //Relief Cut
@@ -69,23 +69,23 @@ module machineblock(
         baseWallGapsY = [],
         
         //Top Plate Helpers
-        topPlateHelpers = true,
-        topPlateHelperHeight = 0.2, // mm, usually 1 printable layer height (0.2mm)
-        topPlateHelperThickness = 0.4, // mm, usually 1 printable wall thickness (0.4mm)
+        topPlateHelpers = true, // true or false
+        topPlateHelperHeight = 0.2, // mm (min printable layer height, usually 0.2mm)
+        topPlateHelperThickness = 0.4, // mm (min printable wall thickness, usually 0.4mm)
 
         //Stabilizers
-        stabilizerGrid = true,
-        stabilizerGridOffset = 0.2, // mm, usually 1 printable layer height (0.2mm)
+        stabilizerGrid = true, // true or false
+        stabilizerGridOffset = 0.2, // mm (min printable layer height, usually 0.2mm)
         stabilizerGridHeight = 0.5, // mbu
         stabilizerGridThickness = 0.5, // mbu
-        stabilizerExpansion = 2, // Integer, Create expansion after each [n] bricks
+        stabilizerExpansion = 2, // integer number (create expansion after each [n] bricks)
         stabilizerExpansionOffset = 1, // mbu
         
         //Pillars: Tubes and Pins
         pillars = true,
-        pillarRoundingResolution = 64,
-        pillarGapCornerLength = 2,
-        pillarGapMiddle = 10,
+        pillarRoundingResolution = 64, // integer number
+        pillarGapCornerLength = 2, // integer number
+        pillarGapMiddle = 10, // integer number
         
         //Pins (little tubes for blocks with 1 brick side length)
         pinDiameter = "auto", // mbu or "auto"
@@ -194,7 +194,7 @@ module machineblock(
         textSpacing = 1, // integer number
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
-        textOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
+        textOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
         textColor = "#2c3e50", // hex color with leading #
 
         //SVG
@@ -203,7 +203,7 @@ module machineblock(
         svgDepth = 0.4, // mm
         svgDimensions = [100, 100],
         svgScale = 1, // float number
-        svgOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
+        svgOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
         connectors = false,
