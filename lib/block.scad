@@ -313,6 +313,7 @@ module machineblock(
     baseCutoutDepth = baseCutoutType == "none" ? 0 : ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
     
     //Default diameter of pins and stud holes
+    //Default thickness of a base wall multiplied by 2
     pDiameter = gridSize[0] - studDiameter;
 
     wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * rootUnit + baseWallThicknessAdjustment;
@@ -377,16 +378,16 @@ module machineblock(
     ];
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
-    //Tubes & Pins
+    // Tubes XYZ
     tubeDiameter = sqrt(2*studDiameter^2);
     tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * rootUnit + tubeXDiameterAdjustment;
     tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * rootUnit + tubeYDiameterAdjustment;
     tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * rootUnit + tubeZDiameterAdjustment;
     
-    
+    // Pin
     pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * rootUnit + pinDiameterAdjustment;
     
-    //Holes XY
+    //Holes XYZ
     holeXSize = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * rootUnit + holeXDiameterAdjustment;
     holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * rootUnit + holeYDiameterAdjustment;
     holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * rootUnit + holeZDiameterAdjustment;
