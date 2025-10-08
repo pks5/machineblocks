@@ -63,6 +63,7 @@ module machineblock(
         baseHeightAdjustment = 0.0, // mm
         
         //Walls
+        baseWallThickness = "auto", // mbu or "auto"
         baseWallThicknessAdjustment = -0.1, // mm
         baseWallGapsX = [],
         baseWallGapsY = [],
@@ -87,11 +88,15 @@ module machineblock(
         pillarGapMiddle = 10,
         
         //Pins (little tubes for blocks with 1 brick side length)
+        pinDiameter = "auto", // mbu or "auto"
         pinDiameterAdjustment = 0.0, // mm
         
         //Tubes
+        tubeXDiameter = "auto", // mbu or "auto"
         tubeXDiameterAdjustment = -0.1, // mm
+        tubeYDiameter = "auto", // mbu or "auto"
         tubeYDiameterAdjustment = -0.1, // mm
+        tubeZDiameter = "auto", // mbu or "auto"
         tubeZDiameterAdjustment = -0.1, // mm
 
         tubeInnerClampThickness = 0.1, // mm
@@ -104,8 +109,9 @@ module machineblock(
 
         //Holes
         holeX = false,
-        holeXType = "pin",
-        holeXCentered = true,
+        holeXType = "pin", // "pin" or "axle"
+        holeXCentered = true, // true or false
+        holeXDiameter = "auto", // mbu or "auto"
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
         holeXInsetDepth = 0.25, // mbu
@@ -114,8 +120,9 @@ module machineblock(
         holeXMinTopMargin = 0.5, // mbu
 
         holeY = false,
-        holeYType = "pin",
-        holeYCentered = true,
+        holeYType = "pin", // "pin" or "axle"
+        holeYCentered = true, // true or false
+        holeYDiameter = "auto", // mbu or "auto"
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
         holeYInsetDepth = 0.25, // mbu
@@ -124,28 +131,29 @@ module machineblock(
         holeYMinTopMargin = 0.5, // mbu
 
         holeZ = false,
-        holeZType = "pin",
-        holeZCenteredX = true,
-        holeZCenteredY = true,
+        holeZType = "pin", // "pin" or "axle"
+        holeZCenteredX = true, // true or false
+        holeZCenteredY = true, // true or false
+        holeZDiameter = "auto", // mbu or "auto"
         holeZDiameterAdjustment = 0.3, // mm
-        holeRoundingResolution = 64,
+        holeRoundingResolution = 64, // integer number
         
         //Knobs
         studs = true,
-        studType = "solid",
-        studCentered = false,
+        studType = "solid", // "solid" or "ring"
+        studCentered = false, // true or false
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
         
         studClampHeight = 0.5, // mbu
         studClampThickness = 0.0, // mm
         
-        studHoleSize = 2, // mbu
-        studHoleSizeAdjustment = 0.3, // mm
+        studHoleDiameter = "auto", // mbu or "auto"
+        studHoleDiameterAdjustment = 0.3, // mm
         studHoleClampThickness = 0.1, // mm
         
         studRounding = 0.1, // mm
-        studRoundingResolution = 64,
+        studRoundingResolution = 64, // integer number
         
         studDiameter = 3, // mbu
         studDiameterAdjustment = 0.2, // mm
@@ -156,8 +164,8 @@ module machineblock(
         tongue = false,
         tongueHeight = 1.25, // mbu
         tongueGrooveDepth = 1.5, // mbu
-        tongueRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
-        tongueInnerRoundingRadius = "auto", // mm, e.g 3.4 or [3.4, 3.4, 3.4, 3.4] 
+        tongueRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
+        tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
         tongueThickness = 0.6875, // mbu
         tongueThicknessAdjustment = 0, // mm
         tongueOffset = 0.2, // grid
@@ -168,13 +176,13 @@ module machineblock(
         
         //Pit
         pit=false,
-        pitRoundingRadius = "auto", // e.g 2.7 or [2.7, 2.7, 2.7, 2.7] or "auto" 
+        pitRoundingRadius = "auto", // mm or "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
         pitDepth = "auto", // mm or "auto"
-        pitWallThickness = 0.333, // grid, Format: 0.333 or [0.333, 0.333, 0.333, 0.333]
+        pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
         pitKnobs = true,
         pitKnobPadding = 0.2, // grid
         pitKnobType = "solid",
-        pitKnobCentered = false,
+        pitKnobCentered = false, // true or false
         pitWallGaps = [],
         
         //Text
@@ -183,7 +191,7 @@ module machineblock(
         textDepth = -0.6, // mm
         textFont = "Liberation Sans", // font family
         textSize = 4, // pt
-        textSpacing = 1,
+        textSpacing = 1, // integer number
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
         textOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
@@ -194,7 +202,7 @@ module machineblock(
         svgSide = 5, // Side
         svgDepth = 0.4, // mm
         svgDimensions = [100, 100],
-        svgScale = 1,
+        svgScale = 1, // float number
         svgOffset = [0, 0], // grid (Multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
@@ -221,7 +229,7 @@ module machineblock(
         screwHoleYDepth = 4, // mm
 
         //PCB
-        pcb=false,
+        pcb = false,
         pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3], // mm
         pcbOffset = [0, 0], // grid
@@ -304,7 +312,10 @@ module machineblock(
     resultingTopPlateHeight = topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
     baseCutoutDepth = baseCutoutType == "none" ? 0 : ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
     
-    wallThickness = 0.5 * (gridSize[0] - studDiameter) * rootUnit + baseWallThicknessAdjustment;
+    //Default diameter of pins and stud holes
+    pDiameter = gridSize[0] - studDiameter;
+
+    wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * rootUnit + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     
@@ -333,7 +344,7 @@ module machineblock(
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
 
-    //Pit
+    // Pit
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+studMaxOverhang, pWallThickness[1]*gridSizeXY+studMaxOverhang, pWallThickness[2]*gridSizeXY+studMaxOverhang, pWallThickness[3]*gridSizeXY+studMaxOverhang]);
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
     cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
@@ -346,12 +357,13 @@ module machineblock(
     ];
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
+    // Studs
     knobSize = studDiameter * rootUnit + studDiameterAdjustment;
     knobHeight = studHeight * rootUnit;
 
     knobCutSize = knobSize + studCutoutAdjustment[0];
     knobCutHeight = knobHeight + studCutoutAdjustment[1];
-    knobHoleSize = studHoleSize * rootUnit + studHoleSizeAdjustment;
+    knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * rootUnit + studHoleDiameterAdjustment;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
@@ -365,16 +377,20 @@ module machineblock(
     ];
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
+    //Tubes & Pins
     tubeDiameter = sqrt(2*studDiameter^2);
-    tubeXSize = tubeDiameter * rootUnit + tubeXDiameterAdjustment;
-    tubeYSize = tubeDiameter * rootUnit + tubeYDiameterAdjustment;
-    tubeZSize = tubeDiameter * rootUnit + tubeZDiameterAdjustment;
-    holeXSize = studDiameter * rootUnit + holeXDiameterAdjustment;
-    holeYSize = studDiameter * rootUnit + holeYDiameterAdjustment;
-    holeZSize = studDiameter * rootUnit + holeZDiameterAdjustment;
-    pinSize = (gridSize[0] - studDiameter) * rootUnit + pinDiameterAdjustment;
-
+    tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * rootUnit + tubeXDiameterAdjustment;
+    tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * rootUnit + tubeYDiameterAdjustment;
+    tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * rootUnit + tubeZDiameterAdjustment;
+    
+    
+    pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * rootUnit + pinDiameterAdjustment;
+    
     //Holes XY
+    holeXSize = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * rootUnit + holeXDiameterAdjustment;
+    holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * rootUnit + holeYDiameterAdjustment;
+    holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * rootUnit + holeZDiameterAdjustment;
+    
     holeXBottomMargin = holeXGridOffsetZ*rootUnit - 0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit);
     holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * rootUnit) / (holeXGridSizeZ * rootUnit)); 
 
