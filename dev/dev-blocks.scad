@@ -38,7 +38,7 @@ machineblock(size=[2,2,1], offset=[2,2,0], studs = false, baseRoundingRadius = [
     baseRoundingRadius=[0,0,8],
     studs=false,
    tongue=true, 
-   tongueClampThickness=0,
+   
     align=["start","start","start"], 
     previewRender=false,
     pit=true,
