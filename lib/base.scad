@@ -208,6 +208,7 @@ module mb_base(
     pitWallGaps,
     slanting,
     slantingLowerHeight,
+    slopeBaseHeightUpper,
     beveled,
     bevelHorizontal,
     bevelOuter,
@@ -249,6 +250,7 @@ module mb_base(
     function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
     function slopeSize(side) = (abs(slanting[side]) >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * abs(slanting[side]) + baseSideAdjustment[side])) + cutTolerance;
+    function slopeBaseHeight(side) = slanting[side] < 0 ? slopeBaseHeightUpper : slantingLowerHeight;
 
     union(){
         
@@ -307,26 +309,30 @@ module mb_base(
                     if(slanting != false){
                         if(slanting[0] != 0){
                             slopeSide0 = slopeSize(0);
-                            translate([-0.5 * (objectSizeXAdjusted - slopeSide0 + cutTolerance), 0, sign(slanting[0])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(0, slopeSide0, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[0] < 0);
+                            slopeBaseHeight0 = slopeBaseHeight(0);
+                            translate([-0.5 * (objectSizeXAdjusted - slopeSide0 + cutTolerance), 0, sign(slanting[0])*0.5*(slopeBaseHeight0 + cutTolerance)])
+                                mb_slant_prism(0, slopeSide0, objectSizeYAdjusted * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slanting[0] < 0);
                         }
 
                         if(slanting[1] != 0){
                             slopeSide1 = slopeSize(1);
-                            translate([0.5 * (objectSizeXAdjusted - slopeSide1 + cutTolerance), 0, sign(slanting[1])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(1, slopeSide1, objectSizeYAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[1] < 0);
+                            slopeBaseHeight1 = slopeBaseHeight(1);
+                            translate([0.5 * (objectSizeXAdjusted - slopeSide1 + cutTolerance), 0, sign(slanting[1])*0.5*(slopeBaseHeight1 + cutTolerance)])
+                                mb_slant_prism(1, slopeSide1, objectSizeYAdjusted * cutMultiplier, height - slopeBaseHeight1 + cutTolerance, slanting[1] < 0);
                         }
 
                         if(slanting[2] != 0){
                             slopeSide2 = slopeSize(2);
-                            translate([0, -0.5 * (objectSizeYAdjusted - slopeSide2 + cutTolerance), sign(slanting[2])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(2, slopeSide2, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[2] < 0);
+                            slopeBaseHeight2 = slopeBaseHeight(2);
+                            translate([0, -0.5 * (objectSizeYAdjusted - slopeSide2 + cutTolerance), sign(slanting[2])*0.5*(slopeBaseHeight2 + cutTolerance)])
+                                mb_slant_prism(2, slopeSide2, objectSizeXAdjusted * cutMultiplier, height - slopeBaseHeight2 + cutTolerance, slanting[2] < 0);
                         }
 
                         if(slanting[3] != 0){
                             slopeSide3 = slopeSize(3);
-                            translate([0, 0.5 * (objectSizeYAdjusted - slopeSide3 + cutTolerance), sign(slanting[3])*0.5*(slantingLowerHeight + cutTolerance)])
-                                mb_slant_prism(3, slopeSide3, objectSizeXAdjusted * cutMultiplier, height - slantingLowerHeight + cutTolerance, slanting[3] < 0);
+                            slopeBaseHeight3 = slopeBaseHeight(3);
+                            translate([0, 0.5 * (objectSizeYAdjusted - slopeSide3 + cutTolerance), sign(slanting[3])*0.5*(slopeBaseHeight3 + cutTolerance)])
+                                mb_slant_prism(3, slopeSide3, objectSizeXAdjusted * cutMultiplier, height - slopeBaseHeight3 + cutTolerance, slanting[3] < 0);
                         }
                     }
                } // End difference

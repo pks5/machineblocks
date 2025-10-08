@@ -104,7 +104,8 @@ module machineblock(
         //Bevel
         //TODO rename slanting to bevelVertical
         slanting = false,
-        slantingLowerHeight = 2, // mm
+        slopeBaseHeightLower = 1.333, // mbu
+        slopeBaseHeightUpper = 1, // mbu
         bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Holes
@@ -607,7 +608,8 @@ module machineblock(
                                             pitWallThickness = pWallThickness,
                                             pitWallGaps = pitWallGaps,
                                             slanting = slanting,
-                                            slantingLowerHeight = slantingLowerHeight,
+                                            slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                            slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
                                             beveled = beveled,
                                             bevelHorizontal = bevelHorizontal,
                                             bevelOuter = bevelOuter,
@@ -653,8 +655,8 @@ module machineblock(
                                                     pitDepth = resultingPitDepth,
                                                     
                                                     slanting = slanting,
-                                                    slantingLowerHeight = slantingLowerHeight,
-
+                                                    slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                                    
                                                     beveled = beveled,
                                                     bevelHorizontal = bevelHorizontal,
                                                     bevelOuter = bevelOuter,
@@ -1109,7 +1111,9 @@ module machineblock(
                                         pitWallThickness = pWallThickness,
                                         pitWallGaps = pitWallGaps,
                                         slanting = slanting,
-                                        slantingLowerHeight = slantingLowerHeight,
+                                        slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                        slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
+
                                         beveled = beveled,
                                         bevelHorizontal = bevelHorizontal,
                                         bevelOuter = bevelOuter,
