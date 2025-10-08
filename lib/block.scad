@@ -166,7 +166,7 @@ module machineblock(
         tongueGrooveDepth = 1.5, // mbu
         tongueRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
         tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
-        tongueThickness = 0.6875, // mbu
+        tongueThickness = 0.666, // mbu
         tongueThicknessAdjustment = 0, // mm
         tongueOffset = 0.2, // grid
         tongueClampHeight = 0.5, // mbu
