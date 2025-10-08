@@ -152,7 +152,7 @@ module machineblock(
         studHoleDiameterAdjustment = 0.3, // mm
         studHoleClampThickness = 0.1, // mm
         
-        studRounding = 0.1, // mm
+        studRounding = 0.0625, // mbu
         studRoundingResolution = 64, // integer number
         
         studDiameter = 3, // mbu
@@ -336,7 +336,7 @@ module machineblock(
     pitFloorZ = 0.5 * resultingBaseHeight - resultingPitDepth;
 
     
-
+    //Bevel
     beveled = bevelHorizontal != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
@@ -365,6 +365,8 @@ module machineblock(
     knobCutSize = knobSize + studCutoutAdjustment[0];
     knobCutHeight = knobHeight + studCutoutAdjustment[1];
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * rootUnit + studHoleDiameterAdjustment;
+
+    knobRounding = studRounding * rootUnit;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
@@ -1410,15 +1412,15 @@ module machineblock(
                                         translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                             difference(){
                                                 union(){
-                                                    translate([0, 0, -0.5 * (studRounding + studClampHeight * rootUnit)])
-                                                        cylinder(h=knobHeight - studRounding - studClampHeight * rootUnit, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, -0.5 * (knobRounding + studClampHeight * rootUnit)])
+                                                        cylinder(h=knobHeight - knobRounding - studClampHeight * rootUnit, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight * rootUnit) - studRounding ])
+                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight * rootUnit) - knobRounding ])
                                                         cylinder(h=studClampHeight * rootUnit, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - studRounding)])
-                                                        cylinder(h=studRounding, r=0.5 * knobSize + studClampThickness - studRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - knobRounding)])
+                                                        cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                 }
                                                 
                                                 if(studType(a + posOffset, b + posOffset) == "ring"){
@@ -1430,9 +1432,9 @@ module machineblock(
                                             }
                                             
                                             //Knob Rounding
-                                            translate([0, 0, 0.5 * knobHeight - studRounding]){ 
+                                            translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
                                                 mb_torus(
-                                                    circleRadius = studRounding, 
+                                                    circleRadius = knobRounding, 
                                                     torusRadius = 0.5 * knobSize + studClampThickness, 
                                                     circleResolution = ($preview ? previewQuality : 1) * studRoundingResolution,
                                                     torusResolution = ($preview ? previewQuality : 1) * studRoundingResolution
