@@ -608,7 +608,7 @@ module machineblock(
                                             pitWallThickness = pWallThickness,
                                             pitWallGaps = pitWallGaps,
                                             slanting = slanting,
-                                            slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                            slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                             slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
                                             beveled = beveled,
                                             bevelHorizontal = bevelHorizontal,
@@ -655,7 +655,7 @@ module machineblock(
                                                     pitDepth = resultingPitDepth,
                                                     
                                                     slanting = slanting,
-                                                    slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                                    slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                                     
                                                     beveled = beveled,
                                                     bevelHorizontal = bevelHorizontal,
@@ -1111,7 +1111,7 @@ module machineblock(
                                         pitWallThickness = pWallThickness,
                                         pitWallGaps = pitWallGaps,
                                         slanting = slanting,
-                                        slantingLowerHeight = slopeBaseHeightLower * rootUnit,
+                                        slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                         slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
 
                                         beveled = beveled,
