@@ -158,9 +158,9 @@ module machineblock(
         studRounding = 0.0625, // mbu
         studRoundingResolution = 64, // integer number
         
-        studDiameter = 3, // mbu
+        studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
-        studHeight = 1, // mbu
+        studHeight = 1, // mbu (constant, should not be changed normally)
         studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
         
         //Tongue
