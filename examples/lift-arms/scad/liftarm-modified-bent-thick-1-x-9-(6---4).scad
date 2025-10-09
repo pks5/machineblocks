@@ -77,7 +77,7 @@ machineblock(
 
     machineblock(
         rotation = [rotation,0,0],
-        rotationOffset = [0, -0.5, -1.2],
+        rotationOffset = [0, -0.5, -1.25],
         offset = [0, leg1Size-1, 0],
         baseRoundingRadius = [4,0,0],
         baseCutoutRoundingRadius = 0,
