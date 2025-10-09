@@ -40,14 +40,14 @@ rotation = 45;
 
 /* [Hidden] */
 
-holeY = middleAxle ? [true, [0,0,0,0,"axle"], [leg2Size-1,0,leg2Size-1,0,"axle"]] : [true, [leg2Size-1,0,leg2Size-1,0,"axle"]];
+holeY = middleAxle ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"axle"]] : [true, [0,0,0,0,"axle"]];
 
 machineblock(
     baseRoundingRadius = [4,0,0],
     baseCutoutRoundingRadius = 0,
     baseCutoutType = "none",
     baseColor = baseColor,
-    holeY = [true, [0,0,0,0,"axle"]],
+    holeY = holeY,
     holeYCentered = false,
     holeYGridOffsetZ = 2.5,
     size=[thin ? 0.5 : 1, leg1Size, 2.5], 
@@ -83,7 +83,7 @@ machineblock(
         baseCutoutRoundingRadius = 0,
         baseCutoutType = "none",
         baseColor = baseColor,
-        holeY = holeY,
+        holeY = [true, [leg2Size-1,0,leg2Size-1,0,"axle"]],
         holeYCentered = false,
         holeYGridOffsetZ = 2.5,
         size=[thin ? 0.5 : 1, leg2Size, 2.5], 
