@@ -54,15 +54,6 @@ pitWallThickness = 1;
 
 tongue = false;
 
-// Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = 0;
-// Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = 0;
-// Slanting size on Y0 side specified as multiple of an 1x1 brick.
-slantingY0 = 0;
-// Slanting size on Y1 side specified as multiple of an 1x1 brick.
-slantingY1 = 0;
-
 /* [Quality] */
 
 // Quality of the preview in relation to the final rendering.

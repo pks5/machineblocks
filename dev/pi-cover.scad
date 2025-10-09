@@ -34,32 +34,6 @@ knobCentered = false;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
-// Whether to draw pillars.
-pillars = true;
-
-// Whether brick should have Technic holes along X-axis.
-holesX = false;
-// Whether brick should have Technic holes along Y-axis.
-holesY = false;
-// Whether brick should have Technic holes along Z-axis.
-holesZ = false;
-
-// Whether brick should have a pit
-pit = false;
-// Whether knobs should be drawn inside pit
-pitKnobs = false;
-// Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
-
-// Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = 0;
-// Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = 0;
-// Slanting size on Y0 side specified as multiple of an 1x1 brick.
-slantingY0 = 0;
-// Slanting size on Y1 side specified as multiple of an 1x1 brick.
-slantingY1 = 0;
-
 /* [Quality] */
 
 // Quality of the preview in relation to the final rendering.
@@ -90,18 +64,6 @@ machineblock(
     studCentered = knobCentered,
     studType = knobType,
     
-    pillars = pillars,
-    
-    holeX = holesX,
-    holeY = holesY,
-    holeZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
@@ -123,18 +85,6 @@ machineblock(
     studCentered = knobCentered,
     studType = knobType,
     
-    pillars = pillars,
-    
-    holeX = holesX,
-    holeY = holesY,
-    holeZ = holesZ,
-    
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
-    
-    slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false, 
-
     previewQuality = previewQuality,
     baseRoundingResolution = roundingResolution,
     holeRoundingResolution = roundingResolution,
