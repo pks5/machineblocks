@@ -32,7 +32,7 @@ machineblock(size=[2,2,1], offset=[2,2,0], studs = false, baseRoundingRadius = [
 
  
  
- machineblock(
+ *machineblock(
     scale=3,
     size=[6,6,3], 
     baseRoundingRadius=[0,0,8],
@@ -46,3 +46,5 @@ machineblock(size=[2,2,1], offset=[2,2,0], studs = false, baseRoundingRadius = [
     pitWallThickness=0.33,
     pitKnobPadding=0.1
  );
+ 
+ machineblock(size=[1,4,3], holeY = [true, [0,0,0,0],[1,0,1,0,"axle"]]);

@@ -489,6 +489,8 @@ module machineblock(
     function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
     function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
     
+    function getGridItem(items, defaultValue, a, b, i, prev) = (is_bool(items) ? (items == false ? false : defaultValue) : ((i >= len(items)) ? prev : getGridItem(items, defaultValue, a, b, i+1, is_bool(items[i]) ? (items[i] == false ? false : defaultValue) : (inGridArea(a, b, items[i]) ? (items[i][4] == undef ? defaultValue : items[i][4]) : prev))));
+    
     /*
     * Slope
     */
@@ -511,11 +513,11 @@ module machineblock(
     
     function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
-    function drawPillar(a, b) = !drawHoleZ(a, b) 
+    function drawPillar(a, b) = (drawHoleZ(a, b) == false)
                                 && !onSlope(a, b, true, 2, 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
-    function drawPin(a, b, isX) = !drawHoleZ(a, b) 
+    function drawPin(a, b, isX) = (drawHoleZ(a, b) == false)
                                 && !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
 
@@ -553,9 +555,9 @@ module machineblock(
     /*
     * XYZ Holes
     */
-    function drawHoleX(a, b) = drawGridItem(holeX, a, b, 0, false); 
-    function drawHoleY(a, b) = drawGridItem(holeY, a, b, 0, false); 
-    function drawHoleZ(a, b) = drawGridItem(holeZ, a, b, 0, false); 
+    function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false); //drawGridItem(holeX, a, b, 0, false); 
+    function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false); //drawGridItem(holeY, a, b, 0, false); 
+    function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false); //drawGridItem(holeZ, a, b, 0, false); 
     
     /*
     * Wall Gaps
@@ -978,7 +980,7 @@ module machineblock(
                                             if(holeX != false){
                                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
-                                                        if(drawHoleX(a, r)){
+                                                        if(drawHoleX(a, r) != false){
                                                             translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
                                                                 rotate([90, 0, 0]){ 
                                                                     cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
@@ -993,7 +995,7 @@ module machineblock(
                                             if(holeY != false){
                                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
-                                                        if(drawHoleY(b, r)){
+                                                        if(drawHoleY(b, r) != false){
                                                             translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
                                                                 rotate([0, 90, 0]){ 
                                                                     cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
@@ -1010,7 +1012,7 @@ module machineblock(
                                                 */
                                                 for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
                                                     for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
-                                                        if(drawHoleZ(a, b)){
+                                                        if(drawHoleZ(a, b) != false){
                                                             translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b +(holeZCenteredY ? 0.5 : 0)), baseCutoutZ]){
                                                                 cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 
@@ -1154,10 +1156,11 @@ module machineblock(
                             color(baseColor){
                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
-                                        if(drawHoleX(a, r)){
+                                        xHole = drawHoleX(a, r);
+                                        if(xHole != false){
                                             translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
                                                 rotate([90, 0, 0]){ 
-                                                    if(holeXType == "pin"){
+                                                    if(xHole == "pin"){
                                                         cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeY])
@@ -1166,7 +1169,7 @@ module machineblock(
                                                             cylinder(h=2*holeXInsetDepth * mbuToMm, r=0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                     }
-                                                    else if(holeXType == "axle"){
+                                                    else if(xHole == "axle"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                     }
                                                 };
@@ -1182,10 +1185,11 @@ module machineblock(
                             color(baseColor){
                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
-                                        if(drawHoleY(b, r)){
+                                        yHole = drawHoleY(b, r);
+                                        if(yHole != false){
                                             translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
                                                 rotate([0, 90, 0]){ 
-                                                    if(holeYType == "pin"){
+                                                    if(yHole == "pin"){
                                                         cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeX])
@@ -1193,7 +1197,7 @@ module machineblock(
                                                         translate([0, 0, -0.5 * objectSizeX])
                                                             cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     }
-                                                    else if(holeYType == "axle"){
+                                                    else if(yHole == "axle"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                     }
                                                 };
@@ -1209,12 +1213,13 @@ module machineblock(
                                 //Cut Z-Holes
                                 for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
                                     for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
-                                        if(drawHoleZ(a, b)){
+                                        zHole = drawHoleZ(a, b);
+                                        if(zHole != false){
                                             translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
-                                                if(holeZType == "pin"){
+                                                if(zHole == "pin"){
                                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                 }
-                                                else if(holeZType == "axle"){
+                                                else if(zHole == "axle"){
                                                     mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
                                                 }
                                             };

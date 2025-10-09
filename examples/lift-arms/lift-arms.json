@@ -1,0 +1,37 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../../lib",
+        "presets": "../../../config/presets.scad"
+    },
+    "name": "Lift Arms",
+    "examples" : [
+        {
+            "template": "../../templates/lift-arm.template.scad",
+            "targetDirectory" : "./scad",
+            "url": "https://machineblocks.com/examples/lift-arms",
+            "bricks" : [
+                {
+                    "name": "Liftarm Modified Bent Thick 1 x 9 (6 - 4)",
+                    "parameters": {
+                        "leg1Size": 6,
+                        "leg2Size": 4,
+                        "thin": false,
+                        "rotation": 45
+                    }
+                },
+
+                {
+                    "name": "Liftarm Modified Bent Thin L-Shape 3 x 3",
+                    "parameters": {
+                        "leg1Size": 3,
+                        "leg2Size": 3,
+                        "thin": true,
+                        "middleAxle": true,
+                        "rotation": 90
+                    }
+                }
+            ]
+        }
+    ]
+}
