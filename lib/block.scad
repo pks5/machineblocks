@@ -186,7 +186,7 @@ module machineblock(
         pitKnobPadding = 0.2, // grid
         pitKnobType = "solid", // "solid" or "ring"
         pitKnobCentered = false, // true or false
-        pitWallGaps = [],
+        pitWallGaps = [], // vector
         
         //Text
         text = "", // string
