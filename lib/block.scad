@@ -204,9 +204,9 @@ module machineblock(
         svg = "", // string
         svgSide = 5, // side
         svgDepth = 0.4, // mm
-        svgDimensions = [100, 100],
+        svgDimensions = [100, 100], // vector2 x integer
         svgScale = 1.0, // float number
-        svgOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
+        svgOffset = [0, 0], // vector2 x grid (multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
         connectors = false, // true or false
@@ -234,8 +234,8 @@ module machineblock(
         //PCB
         pcb = false, // true or false
         pcbMountingType = "clips",
-        pcbDimensions = [20, 30, 3], // mm
-        pcbOffset = [0, 0], // grid
+        pcbDimensions = [20, 30, 3], // vector3 x mm
+        pcbOffset = [0, 0], // vector2 x grid
         pcbScrewSocketSize = 5, // mm
         pcbScrewSocketHoleSize = 2.2, // mm
         pcbScrewSocketHeight = 3, // mm
