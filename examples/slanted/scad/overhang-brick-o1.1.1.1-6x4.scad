@@ -118,7 +118,7 @@ slantingY0 = -1;
 slantingY1 = -1;
 
 /* [Hidden] */
-slanting = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
+slope = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
 
 // Generate the block
 machineblock(
@@ -157,7 +157,7 @@ machineblock(
     pitKnobs = pitKnobs,
     pitWallThickness = pitWallThickness,
     
-    slanting = slanting, 
+    slope = slope, 
 
     baseSideAdjustment = baseSideAdjustment,
     

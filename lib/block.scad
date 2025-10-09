@@ -101,10 +101,12 @@ module machineblock(
 
         tubeInnerClampThickness = 0.1, // mm
         
-        //Slope & Bevel
-        slanting = false,
+        // Slope
+        slope = false, // false or vector4
         slopeBaseHeightLower = 1.333, // mbu
         slopeBaseHeightUpper = 1, // mbu
+
+        // Bevel
         bevel = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Holes
@@ -277,8 +279,8 @@ module machineblock(
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
-    gridSizeX = grid_size_x(grid, slanting);
-    gridSizeY = grid_size_y(grid, slanting);
+    gridSizeX = grid_size_x(grid, slope);
+    gridSizeY = grid_size_y(grid, slope);
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
@@ -453,7 +455,7 @@ module machineblock(
     */
     function smx(s, inv=false) = max(inv ? -s : s, 0);
     //function slan2ting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
-    function onSlope(a, b, inv, qx, qy) = (slanting != false) && !inGridArea(a, b, [smx(slanting[0], inv), smx(slanting[2], inv), grid[0] - smx(slanting[1], inv) - (inv ? qx : 1), grid[1] - smx(slanting[3], inv) - (inv ? qy : 1)]);
+    function onSlope(a, b, inv, qx, qy) = (slope != false) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), grid[0] - smx(slope[1], inv) - (inv ? qx : 1), grid[1] - smx(slope[3], inv) - (inv ? qy : 1)]);
 
     
     /*
@@ -607,7 +609,7 @@ module machineblock(
                                             pitDepth = resultingPitDepth,
                                             pitWallThickness = pWallThickness,
                                             pitWallGaps = pitWallGaps,
-                                            slanting = slanting,
+                                            slope = slope,
                                             slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                             slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
                                             beveled = beveled,
@@ -653,7 +655,7 @@ module machineblock(
                                                     pit = pit,
                                                     pitDepth = resultingPitDepth,
                                                     
-                                                    slanting = slanting,
+                                                    slope = slope,
                                                     slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                                     
                                                     beveled = beveled,
@@ -1082,7 +1084,7 @@ module machineblock(
                                         pitDepth = resultingPitDepth,
                                         pitWallThickness = pWallThickness,
                                         pitWallGaps = pitWallGaps,
-                                        slanting = slanting,
+                                        slope = slope,
                                         slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                         slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
 
