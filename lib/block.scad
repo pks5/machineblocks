@@ -564,6 +564,7 @@ module machineblock(
         baseClampWallThickness = baseClampWallThickness,
         baseCutoutZ = baseCutoutZ, 
         topPlateZ = topPlateZ, 
+        tubeDiameter = tubeDiameter,
         tubeXSize = tubeXSize,
         tubeYSize = tubeYSize,
         tubeZSize = tubeZSize,
