@@ -131,7 +131,7 @@ machineblock(
     baseReliefCutThickness = baseReliefCutThickness,
     baseColor = baseColor,
 
-    bevelHorizontal = [bevel0, bevel1, bevel2, bevel3],
+    bevel = [bevel0, bevel1, bevel2, bevel3],
 
     studs = knobs,
     studCentered = knobCentered,

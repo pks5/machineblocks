@@ -105,7 +105,7 @@ module machineblock(
         slanting = false,
         slopeBaseHeightLower = 1.333, // mbu
         slopeBaseHeightUpper = 1, // mbu
-        bevelHorizontal = [[0, 0], [0, 0], [0, 0], [0, 0]],
+        bevel = [[0, 0], [0, 0], [0, 0], [0, 0]],
 
         //Holes
         holeX = false,
@@ -337,8 +337,8 @@ module machineblock(
 
     
     //Bevel
-    beveled = bevelHorizontal != [[0, 0], [0, 0], [0, 0], [0, 0]];
-    bevelOuter = mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY);
+    beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
+    bevelOuter = mb_resolve_bevel_horizontal(bevel, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     
@@ -568,7 +568,7 @@ module machineblock(
         xyScrewHolesZ = xyScrewHolesZ,
         pitFloorZ = pitFloorZ,
         beveled = beveled,
-        bevelHorizontal = bevelHorizontal,
+        bevel = bevel,
         bevelOuterAdjusted = bevelOuterAdjusted
     );
 
@@ -611,7 +611,6 @@ module machineblock(
                                             slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                             slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
                                             beveled = beveled,
-                                            bevelHorizontal = bevelHorizontal,
                                             bevelOuter = bevelOuter,
                                             bevelOuterAdjusted = bevelOuterAdjusted,
                                             connectors = connectors,
@@ -658,7 +657,6 @@ module machineblock(
                                                     slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
                                                     
                                                     beveled = beveled,
-                                                    bevelHorizontal = bevelHorizontal,
                                                     bevelOuter = bevelOuter,
                                                     bevelInner = bevelInner
                                                 );
@@ -734,18 +732,6 @@ module machineblock(
                                                             roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
                                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                                         );
-
-                                                        /*
-                                                        intersection(){
-                                                            make_bevel(bevelTopPlateHelper, cutMultiplier * (topPlateHelperHeight + cutOffset));
-                                                
-                                                            mb_rounded_block(
-                                                                size = [objectSizeX - 2*wallThickness - 2*topPlateHelperThickness, objectSizeY - 2*wallThickness - 2*topPlateHelperThickness, cutMultiplier * (topPlateHelperHeight + cutOffset)], 
-                                                                center=true, 
-                                                                resolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                                                radius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]
-                                                            );
-                                                        }*/
 
                                                         for (a = [ startX : 1 : endX ]){
                                                             for (side = [ 0 : 1 : 1 ]){
@@ -1040,8 +1026,8 @@ module machineblock(
                                                         
                                                         if((baseRoundingRadiusZ[map[side][0]] == 0) 
                                                             && (baseRoundingRadiusZ[map[side][1]] == 0)
-                                                            && (bevelHorizontal[map[side][0]] == [0,0])
-                                                            && (bevelHorizontal[map[side][1]] == [0,0])){
+                                                            && (bevel[map[side][0]] == [0,0])
+                                                            && (bevel[map[side][1]] == [0,0])){
                                                             translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
                                                                 cube([
                                                                     cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
@@ -1056,8 +1042,8 @@ module machineblock(
                                                     for (side = [ 0 : 1 : 1 ]){
                                                         if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
                                                             && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
-                                                            && (bevelHorizontal[map[2+side][0]] == [0,0])
-                                                            && (bevelHorizontal[map[2+side][1]] == [0,0])){
+                                                            && (bevel[map[2+side][0]] == [0,0])
+                                                            && (bevel[map[2+side][1]] == [0,0])){
                                                             translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
                                                                 cube([
                                                                     objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
@@ -1067,21 +1053,7 @@ module machineblock(
                                                             }
                                                         }
                                                     }
-
-                                                    
-                                                    
-                                                    //echo(bevelOuter = bevelOuter, bevelHorizontal=bevelHorizontal, cutoutClampRoundingRadius=cutoutClampRoundingRadius);
                                                 }
-                                                /*
-                                                intersection(){
-                                                    make_bevel(bevelKnobCut, cutMultiplier * (knobCutHeight + cutOffset));
-                                                    mb_rounded_block(
-                                                        size = [objectSizeX - 2*baseClampWallThickness*cutMultiplier, objectSizeY - 2*baseClampWallThickness*cutMultiplier, cutMultiplier * (knobCutHeight + cutOffset)], 
-                                                        center = true, 
-                                                        radius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius], 
-                                                        resolution = baseRoundingResolution
-                                                    );
-                                                }*/
                                             } //End difference final cutout elements
                                         } // End translate
                                     } // End difference base
@@ -1115,7 +1087,6 @@ module machineblock(
                                         slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
 
                                         beveled = beveled,
-                                        bevelHorizontal = bevelHorizontal,
                                         bevelOuter = bevelOuter,
                                         bevelOuterAdjusted = bevelOuterAdjusted,
                                         connectors = connectors,

@@ -52,7 +52,7 @@ module mb_base_cutout(
     slopeBaseHeightLower,
 
     beveled,
-    bevelHorizontal,
+    
     bevelOuter,
     bevelInner
 ){
@@ -217,7 +217,7 @@ module mb_base(
     slopeBaseHeightLower,
     slopeBaseHeightUpper,
     beveled,
-    bevelHorizontal,
+    
     bevelOuter,
     bevelOuterAdjusted,
     connectors = [],
