@@ -296,17 +296,17 @@ module mb_base(
                     }
 
                     if(baseReliefCut){
-                        translate([0,0,-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
+                        translate([-0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), -0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]),-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
                             difference(){
                                 cube(
-                                    size = [cutMultiplier * objectSize[0], cutMultiplier * objectSize[1], baseReliefCutHeight + cutOffset], 
+                                    size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, baseReliefCutHeight + cutOffset], 
                                     center=true
                                 );
 
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
-                                    sizeX = objectSizeX - 2*baseReliefCutThickness,
-                                    sizeY = objectSizeY - 2*baseReliefCutThickness,
+                                    sizeX = objectSize[0] - 2*baseReliefCutThickness,
+                                    sizeY = objectSize[1] - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
                                     roundingResolution = roundingResolution

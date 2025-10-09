@@ -81,8 +81,8 @@ module machineblock(
         
         //Relief Cut
         baseReliefCut = false, // bool
-        baseReliefCutHeight = 0.6, // mm
-        baseReliefCutThickness = 0.6, // mm
+        baseReliefCutHeight = 0.375, // mbu
+        baseReliefCutThickness = 0.375, // mbu
         
         //Base Adjustment
         baseSideAdjustment = -0.1, // mm
@@ -625,8 +625,8 @@ module machineblock(
                                             height = resultingBaseHeight,
                                             baseSideAdjustment = sAdjustment,
                                             baseReliefCut = baseReliefCut,
-                                            baseReliefCutHeight = baseReliefCutHeight,
-                                            baseReliefCutThickness = baseReliefCutThickness,
+                                            baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
+                                            baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
                                             baseClampHeight = bClampHeight,
                                             baseClampThicknessOuter = baseClampThicknessOuter,
                                             baseClampOffset = bClampOffset,
@@ -1100,8 +1100,8 @@ module machineblock(
                                         height = resultingBaseHeight,
                                         baseSideAdjustment = sAdjustment,
                                         baseReliefCut = baseReliefCut,
-                                        baseReliefCutHeight = baseReliefCutHeight,
-                                        baseReliefCutThickness = baseReliefCutThickness,
+                                        baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
+                                        baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
                                         baseClampHeight = bClampHeight,
                                         baseClampThicknessOuter = baseClampThicknessOuter,
                                         baseClampOffset = bClampOffset,
