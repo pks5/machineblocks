@@ -54,6 +54,10 @@ module machineblock(
         //Scale
         scale = 1.0, // float - Defines the scale of the block. Only affects parameters given in mbu and grid.
 
+        //Rotation
+        rotation = [0, 0, 0], // vector3 x int
+        rotationOffset = [0, 0, 0], // grid ([x, y, z])
+
         //Size
         size = [1, 1, 1], // vector3 x float ([x, y, z])
         offset = [0, 0, 0], // grid ([x, y, z])
@@ -270,7 +274,7 @@ module machineblock(
         //Alignment
         align = "start", // string | vector3 x string
         alignChildren = "start", // string | vector3 x string
-        alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
+        //alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
         
         //Preview
         previewQuality = 0.5, // float (between 0.0 and 1.0)
@@ -311,19 +315,27 @@ module machineblock(
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
-    translateX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
-    translateY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    translateZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved);
+    alignX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
+    alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
+    alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved);
     
-    gridOffsetX = offset[0] * gridSizeXY + translateX;
-    gridOffsetY = offset[1] * gridSizeXY + translateY;
-    gridOffsetZ = offset[2] * gridSizeZ + translateZ; 
+    
+
+    //Rotation Offset
+    rotationOffsetX = rotationOffset[0] * gridSizeXY;
+    rotationOffsetY = rotationOffset[1] * gridSizeXY;
+    rotationOffsetZ = rotationOffset[2] * gridSizeZ;
+
+    //Grid offset
+    gridOffsetX = offset[0] * gridSizeXY - rotationOffsetX;
+    gridOffsetY = offset[1] * gridSizeXY - rotationOffsetY;
+    gridOffsetZ = offset[2] * gridSizeZ - rotationOffsetZ; 
 
     //Children alignment
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
-    translateXChildren = (alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX);
-    translateYChildren = (alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY);
-    translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
+    translateXChildren = alignX + ((alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX));
+    translateYChildren = alignY + ((alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY));
+    translateZChildren = alignZ + (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved));
     
     //Base Cutout and Pit Depth
     topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
@@ -607,7 +619,8 @@ module machineblock(
     */
     
     translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
-        
+        rotate(rotation){
+            translate([rotationOffsetX + alignX, rotationOffsetY + alignY, rotationOffsetZ + alignZ]){
             pre_render(previewRender, previewRenderConvexity){
                 if(base){
                     difference(){
@@ -1545,7 +1558,8 @@ module machineblock(
 
                 
             } // End pre_render
-        
+            } // End rotation Offset
+        } // End rotation
         
 
         translate([translateXChildren, translateYChildren, translateZChildren]){

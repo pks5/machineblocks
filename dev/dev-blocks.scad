@@ -33,7 +33,7 @@ machineblock(size=[2,2,1], offset=[2,2,0], studs = false, baseRoundingRadius = [
  
  
  machineblock(
-    scale=2,
+    scale=3,
     size=[6,6,3], 
     baseRoundingRadius=[0,0,8],
     studs=false,
