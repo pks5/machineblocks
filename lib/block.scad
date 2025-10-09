@@ -23,35 +23,61 @@ use <quad.scad>;
 use <polygon.scad>;
 use <tongue.scad>;
 
+/**
+ * @module machineblock
+ * @brief Generates 3D-printable models of LEGO® compatible building blocks.
+ *
+ * Erzeugt einen blockförmigen Körper auf einem Raster (gridSize) in „mbu“-Einheiten inklusive zahlreicher
+ * Optionen für Wände, Stabilisierung, Kanten, Löcher, Noppen (studs), Zunge/Nut (tongue), Vertiefung (pit),
+ * Gravur/Relief (Text/SVG), Schraubhilfen und Leiterplattenhalterungen.
+ *
+ * @requires OpenSCAD 2021.01 or newer
+ *
+ * @note Einheiten: „mbu“ und „grid“ beziehen sich auf das interne Raster; mm sind reale Maße. Standardmässig entspricht 1mbu dem Vielfachen von 1.6mm; "grid" ist eine dreidimensionale Einheit (x, y, z) und entspricht 5mbu in x und y Richtung sowie 2mbu in z Richtung.
+ * @note Einige Parameter akzeptieren verschiedene Datentypen oder "auto" zur Ableitung sinnvoller Standardwerte.
+ * @note 
+ *
+ * @example Minimal
+ * machineblock();
+ *
+ * @example 2x4 Brick
+ * machineblock(size=[2, 4, 3]);
+ *
+ * @example 2x2 Plate
+ * machineblock(size=[2, 2, 1]);
+ */
 module machineblock(
-        //Grid
-        gridSize = [5, 2], // vector2 x mbu [xy, z]
-        scale = 1.0, // float number
+        //Grid units
+        unitMbu = 1.6, // mm - The MachineBlocks base unit.
+        unitGrid = [5, 2], // vector2 x mbu [xy, z] - The MachineBlocks grid relative to the base unit.
+        
+        //Scale
+        scale = 1.0, // float - Defines the scale of the block. Only affects parameters given in mbu and grid.
 
         //Size
-        size = [1, 1, 1], // vector3 x float
-        offset = [0, 0, 0], // grid
+        size = [1, 1, 1], // vector3 x float [x, y, z]
+        offset = [0, 0, 0], // grid [x, y, z]
 
         //Base
-        base = true, // true or false
+        base = true, // bool
         baseColor = "#EAC645", // hex color with leading #
         baseHeight = "auto", // mm or "auto"
         
-        baseTopPlateHeight = 1, // mbu (minimum height, affected by baseCutoutMaxDepth and pitDepth)
+        baseTopPlateHeight = 1, // mbu - The minimum height, affected by baseCutoutMaxDepth and pitDepth.
         baseTopPlateHeightAdjustment = -0.6, // mm
 
-        baseCutoutType = "classic", // "classic", "groove", "none"
+        baseCutoutType = "classic", // "classic", "groove" or "none"
         baseCutoutMaxDepth = 5, // mbu
         
         baseClampOffset = 0.25, // mbu
         baseClampHeight = 0.5, // mbu
         baseClampThickness = 0.1, // mm
-        baseClampOuter = false, // true or false
+        baseClampOuter = false, // bool
         
         
-        baseRoundingRadius = 0.0, // mm (e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]])
+        baseRoundingRadius = 0.0, // mm or vector3 x mm or vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
         baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
-        baseRoundingResolution = 64, // integer number
+        baseRoundingResolution = 64, // int
         
         //Relief Cut
         baseReliefCut = false,
@@ -69,23 +95,23 @@ module machineblock(
         baseWallGapsY = [], // vector
         
         //Top Plate Helpers
-        topPlateHelpers = true, // true or false
+        topPlateHelpers = true, // bool
         topPlateHelperHeight = 0.2, // mm (min printable layer height, usually 0.2mm)
         topPlateHelperThickness = 0.4, // mm (min printable wall thickness, usually 0.4mm)
 
         //Stabilizers
-        stabilizerGrid = true, // true or false
+        stabilizerGrid = true, // bool
         stabilizerGridOffset = 0.2, // mm (min printable layer height, usually 0.2mm)
         stabilizerGridHeight = 0.5, // mbu
         stabilizerGridThickness = 0.5, // mbu
-        stabilizerExpansion = 2, // integer number (create expansion after each [n] bricks)
+        stabilizerExpansion = 2, // int (create expansion after each [n] bricks)
         stabilizerExpansionOffset = 1, // mbu
         
         //Pillars: Tubes and Pins
-        pillars = true, // true, false or vector
-        pillarRoundingResolution = 64, // integer number
-        pillarGapCornerLength = 2, // integer number
-        pillarGapMiddle = 10, // integer number
+        pillars = true, // bool or vector
+        pillarRoundingResolution = 64, // int
+        pillarGapCornerLength = 2, // int
+        pillarGapMiddle = 10, // int
         
         //Pins (little tubes for blocks with 1 brick side length)
         pinDiameter = "auto", // mbu or "auto"
@@ -111,9 +137,9 @@ module machineblock(
         bevel = [[0, 0], [0, 0], [0, 0], [0, 0]], // vector4 x vector2
 
         //Holes
-        holeX = false, // true, false or vector
+        holeX = false, // bool or vector
         holeXType = "pin", // "pin" or "axle"
-        holeXCentered = true, // true or false
+        holeXCentered = true, // bool
         holeXDiameter = "auto", // mbu or "auto"
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
@@ -122,9 +148,9 @@ module machineblock(
         holeXGridSizeZ = 6, // mbu
         holeXMinTopMargin = 0.5, // mbu
 
-        holeY = false, // true, false or vector
+        holeY = false, // bool or vector
         holeYType = "pin", // "pin" or "axle"
-        holeYCentered = true, // true or false
+        holeYCentered = true, // bool
         holeYDiameter = "auto", // mbu or "auto"
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
@@ -133,18 +159,18 @@ module machineblock(
         holeYGridSizeZ = 6, // mbu
         holeYMinTopMargin = 0.5, // mbu
 
-        holeZ = false, // true, false or vector
+        holeZ = false, // bool or vector
         holeZType = "pin", // "pin" or "axle"
-        holeZCenteredX = true, // true or false
-        holeZCenteredY = true, // true or false
+        holeZCenteredX = true, // bool
+        holeZCenteredY = true, // bool
         holeZDiameter = "auto", // mbu or "auto"
         holeZDiameterAdjustment = 0.3, // mm
-        holeRoundingResolution = 64, // integer number
+        holeRoundingResolution = 64, // int
         
         //Knobs
-        studs = true, // true, false or vector
+        studs = true, // bool or vector
         studType = "solid", // "solid" or "ring"
-        studCentered = false, // true or false
+        studCentered = false, // bool
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
         
@@ -156,7 +182,7 @@ module machineblock(
         studHoleClampThickness = 0.1, // mm
         
         studRounding = 0.0625, // mbu
-        studRoundingResolution = 64, // integer number
+        studRoundingResolution = 64, // int
         
         studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
@@ -164,11 +190,11 @@ module machineblock(
         studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
         
         //Tongue
-        tongue = false, // true or false
+        tongue = false, // bool
         tongueHeight = 1.25, // mbu
         tongueGrooveDepth = 1.5, // mbu
-        tongueRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
-        tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
+        tongueRoundingRadius = "auto", // mm or "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+        tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 1.0 or [1, 2, 3, 4]) 
         tongueThickness = 0.666, // mbu
         tongueThicknessAdjustment = 0, // mm
         tongueOffset = 1, // mbu
@@ -178,14 +204,14 @@ module machineblock(
         
         
         //Pit
-        pit=false, // true or false
+        pit=false, // bool
         pitRoundingRadius = "auto", // mm or "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
         pitDepth = "auto", // mm or "auto"
         pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
-        pitKnobs = true, // true or false
+        pitKnobs = true, // bool
         pitKnobPadding = 0.2, // grid
         pitKnobType = "solid", // "solid" or "ring"
-        pitKnobCentered = false, // true or false
+        pitKnobCentered = false, // bool
         pitWallGaps = [], // vector
         
         //Text
@@ -194,7 +220,7 @@ module machineblock(
         textDepth = -0.6, // mm
         textFont = "Liberation Sans", // font family
         textSize = 4, // pt
-        textSpacing = 1, // integer number
+        textSpacing = 1, // int
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
         textOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
@@ -204,12 +230,12 @@ module machineblock(
         svg = "", // string
         svgSide = 5, // side
         svgDepth = 0.4, // mm
-        svgDimensions = [100, 100], // vector2 x integer
-        svgScale = 1.0, // float number
+        svgDimensions = [100, 100], // vector2 x int
+        svgScale = 1.0, // float
         svgOffset = [0, 0], // vector2 x grid (multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
-        connectors = false, // true or false
+        connectors = false, // bool
         connectorHeight = 0, // mm
         connectorDepth = 1.4, // mm
         connectorSize = 4.0, // mm
@@ -232,7 +258,7 @@ module machineblock(
         screwHoleYDepth = 4, // mm
 
         //PCB
-        pcb = false, // true or false
+        pcb = false, // bool
         pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3], // vector3 x mm
         pcbOffset = [0, 0], // vector2 x grid
@@ -247,9 +273,9 @@ module machineblock(
         alignMode = "grid", // "grid" or "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
         
         //Preview
-        previewQuality = 0.5, // float number (between 0.0 and 1.0)
-        previewRender = false, // true or false (Whether the brick should always be rendered in preview mode)
-        previewRenderConvexity = 15 // integer number (Convexity for preview rendering)
+        previewQuality = 0.5, // float (between 0.0 and 1.0)
+        previewRender = false, // bool (Whether the brick should always be rendered in preview mode)
+        previewRenderConvexity = 15 // int (Convexity for preview rendering)
         ){
             
     //Variables for cutouts        
@@ -257,10 +283,10 @@ module machineblock(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    rootUnit = scale * 1.6;
+    rootUnit = scale * unitMbu;
 
-    gridSizeXY = gridSize[0] * rootUnit;
-    gridSizeZ = gridSize[1] * rootUnit;
+    gridSizeXY = unitGrid[0] * rootUnit;
+    gridSizeZ = unitGrid[1] * rootUnit;
 
     grid = [size[0], size[1]];
 
@@ -301,7 +327,7 @@ module machineblock(
     
     //Base Cutout and Pit Depth
     topPlateHeight = baseTopPlateHeight * rootUnit + baseTopPlateHeightAdjustment;
-    baseCutoutMinDepth = gridSize[1] * rootUnit - topPlateHeight; // mm -- 1 plate minus topPlateHeight
+    baseCutoutMinDepth = unitGrid[1] * rootUnit - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * rootUnit;  
     
     resultingPitDepth = pit ? (pitDepth != "auto" ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
@@ -317,7 +343,7 @@ module machineblock(
     
     //Default diameter of pins and stud holes
     //Default thickness of a base wall multiplied by 2
-    pDiameter = gridSize[0] - studDiameter;
+    pDiameter = unitGrid[0] - studDiameter;
 
     wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * rootUnit + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
