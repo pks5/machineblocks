@@ -25,19 +25,19 @@ use <tongue.scad>;
 
 module machineblock(
         //Grid
-        gridSize = [5, 2], // mbu [xy, z]
-        scale = 1.0, // Float
+        gridSize = [5, 2], // vector2 x mbu [xy, z]
+        scale = 1.0, // float number
 
         //Size
-        size = [1, 1, 1],
+        size = [1, 1, 1], // vector3 x float
         offset = [0, 0, 0], // grid
 
         //Base
-        base = true,
+        base = true, // true or false
         baseColor = "#EAC645", // hex color with leading #
         baseHeight = "auto", // mm or "auto"
         
-        baseTopPlateHeight = 1, // mbu
+        baseTopPlateHeight = 1, // mbu (minimum height, affected by baseCutoutMaxDepth and pitDepth)
         baseTopPlateHeightAdjustment = -0.6, // mm
 
         baseCutoutType = "classic", // "classic", "groove", "none"
@@ -46,12 +46,12 @@ module machineblock(
         baseClampOffset = 0.25, // mbu
         baseClampHeight = 0.5, // mbu
         baseClampThickness = 0.1, // mm
-        baseClampOuter = false,
+        baseClampOuter = false, // true or false
         
         
         baseRoundingRadius = 0.0, // mm (e.g. 4 or [4, 4, 4] or [4, [4, 4, 4, 4], [4,4,4,4]])
         baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
-        baseRoundingResolution = 64,
+        baseRoundingResolution = 64, // integer number
         
         //Relief Cut
         baseReliefCut = false,
@@ -65,8 +65,8 @@ module machineblock(
         //Walls
         baseWallThickness = "auto", // mbu or "auto"
         baseWallThicknessAdjustment = -0.1, // mm
-        baseWallGapsX = [],
-        baseWallGapsY = [],
+        baseWallGapsX = [], // vector
+        baseWallGapsY = [], // vector
         
         //Top Plate Helpers
         topPlateHelpers = true, // true or false
@@ -82,7 +82,7 @@ module machineblock(
         stabilizerExpansionOffset = 1, // mbu
         
         //Pillars: Tubes and Pins
-        pillars = true,
+        pillars = true, // true, false or vector
         pillarRoundingResolution = 64, // integer number
         pillarGapCornerLength = 2, // integer number
         pillarGapMiddle = 10, // integer number
@@ -108,10 +108,10 @@ module machineblock(
         slopeBaseHeightUpper = 1, // mbu
 
         // Bevel
-        bevel = [[0, 0], [0, 0], [0, 0], [0, 0]],
+        bevel = [[0, 0], [0, 0], [0, 0], [0, 0]], // vector4 x vector2
 
         //Holes
-        holeX = false,
+        holeX = false, // true, false or vector
         holeXType = "pin", // "pin" or "axle"
         holeXCentered = true, // true or false
         holeXDiameter = "auto", // mbu or "auto"
@@ -122,7 +122,7 @@ module machineblock(
         holeXGridSizeZ = 6, // mbu
         holeXMinTopMargin = 0.5, // mbu
 
-        holeY = false,
+        holeY = false, // true, false or vector
         holeYType = "pin", // "pin" or "axle"
         holeYCentered = true, // true or false
         holeYDiameter = "auto", // mbu or "auto"
@@ -133,7 +133,7 @@ module machineblock(
         holeYGridSizeZ = 6, // mbu
         holeYMinTopMargin = 0.5, // mbu
 
-        holeZ = false,
+        holeZ = false, // true, false or vector
         holeZType = "pin", // "pin" or "axle"
         holeZCenteredX = true, // true or false
         holeZCenteredY = true, // true or false
@@ -142,7 +142,7 @@ module machineblock(
         holeRoundingResolution = 64, // integer number
         
         //Knobs
-        studs = true,
+        studs = true, // true, false or vector
         studType = "solid", // "solid" or "ring"
         studCentered = false, // true or false
         studMaxOverhang = 0.3, // mm
@@ -164,7 +164,7 @@ module machineblock(
         studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
         
         //Tongue
-        tongue = false,
+        tongue = false, // true or false
         tongueHeight = 1.25, // mbu
         tongueGrooveDepth = 1.5, // mbu
         tongueRoundingRadius = "auto", // mm or "auto" (e.g 3.4 or [3.4, 3.4, 3.4, 3.4]) 
@@ -178,19 +178,19 @@ module machineblock(
         
         
         //Pit
-        pit=false,
+        pit=false, // true or false
         pitRoundingRadius = "auto", // mm or "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
         pitDepth = "auto", // mm or "auto"
         pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
-        pitKnobs = true,
+        pitKnobs = true, // true or false
         pitKnobPadding = 0.2, // grid
-        pitKnobType = "solid",
+        pitKnobType = "solid", // "solid" or "ring"
         pitKnobCentered = false, // true or false
         pitWallGaps = [],
         
         //Text
-        text = "",
-        textSide = 0, // Side
+        text = "", // string
+        textSide = 0, // side
         textDepth = -0.6, // mm
         textFont = "Liberation Sans", // font family
         textSize = 4, // pt
@@ -201,15 +201,15 @@ module machineblock(
         textColor = "#2c3e50", // hex color with leading #
 
         //SVG
-        svg = "",
-        svgSide = 5, // Side
+        svg = "", // string
+        svgSide = 5, // side
         svgDepth = 0.4, // mm
         svgDimensions = [100, 100],
-        svgScale = 1, // float number
+        svgScale = 1.0, // float number
         svgOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
         svgColor = "#2c3e50", // hex color with leading #
 
-        connectors = false,
+        connectors = false, // true or false
         connectorHeight = 0, // mm
         connectorDepth = 1.4, // mm
         connectorSize = 4.0, // mm
@@ -217,39 +217,39 @@ module machineblock(
         connectorSideTolerance = 0.1, // mm
 
         //Screw Holes
-        screwHolesZ = [],
+        screwHolesZ = [], // vector
         screwHoleZSize = 2.3, // mm
         screwHoleZHelperThickness = 0.8, // mm
         screwHoleZHelperOffset = 0.2, // mm
         screwHoleZHelperHeight = 0.2, // mm
 
-        screwHolesX = [],
+        screwHolesX = [], // vector
         screwHoleXSize = 2.1, // mm
         screwHoleXDepth = 4, // mm
 
-        screwHolesY = [],
+        screwHolesY = [], // vector
         screwHoleYSize = 2.1, // mm
         screwHoleYDepth = 4, // mm
 
         //PCB
-        pcb = false,
+        pcb = false, // true or false
         pcbMountingType = "clips",
         pcbDimensions = [20, 30, 3], // mm
         pcbOffset = [0, 0], // grid
         pcbScrewSocketSize = 5, // mm
         pcbScrewSocketHoleSize = 2.2, // mm
         pcbScrewSocketHeight = 3, // mm
-        pcbScrewSockets = [],
+        pcbScrewSockets = [], // vector
 
         //Alignment
-        align = "start",
-        alignChildren = "start",
-        alignMode = "grid", // If set to object, brick is aligned like a normal scad object - TODO implement object mode
+        align = "start", // string or vector3 x string
+        alignChildren = "start", // string or vector3 x string
+        alignMode = "grid", // "grid" or "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
         
         //Preview
-        previewQuality = 0.5, // Between 0.0 and 1.0
-        previewRender = false, // Whether the brick should always be rendered in preview mode
-        previewRenderConvexity = 15 // Convexity for preview rendering
+        previewQuality = 0.5, // float number (between 0.0 and 1.0)
+        previewRender = false, // true or false (Whether the brick should always be rendered in preview mode)
+        previewRenderConvexity = 15 // integer number (Convexity for preview rendering)
         ){
             
     //Variables for cutouts        
