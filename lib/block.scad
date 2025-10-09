@@ -49,24 +49,24 @@ use <tongue.scad>;
 module machineblock(
         //Grid units
         unitMbu = 1.6, // mm - The MachineBlocks base unit.
-        unitGrid = [5, 2], // vector2 x mbu [xy, z] - The MachineBlocks grid relative to the base unit.
+        unitGrid = [5, 2], // vector2 x mbu ([xy, z]) - The MachineBlocks grid relative to the base unit.
         
         //Scale
         scale = 1.0, // float - Defines the scale of the block. Only affects parameters given in mbu and grid.
 
         //Size
-        size = [1, 1, 1], // vector3 x float [x, y, z]
-        offset = [0, 0, 0], // grid [x, y, z]
+        size = [1, 1, 1], // vector3 x float ([x, y, z])
+        offset = [0, 0, 0], // grid ([x, y, z])
 
         //Base
         base = true, // bool
-        baseColor = "#EAC645", // hex color with leading #
-        baseHeight = "auto", // mm or "auto"
+        baseColor = "#EAC645", // color - Color of the block.
+        baseHeight = "auto", // mm | "auto"
         
-        baseTopPlateHeight = 1, // mbu - The minimum height, affected by baseCutoutMaxDepth and pitDepth.
+        baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and pitDepth.
         baseTopPlateHeightAdjustment = -0.6, // mm
 
-        baseCutoutType = "classic", // "classic", "groove" or "none"
+        baseCutoutType = "classic", // "classic" | "groove" | "none"
         baseCutoutMaxDepth = 5, // mbu
         
         baseClampOffset = 0.25, // mbu
@@ -75,12 +75,12 @@ module machineblock(
         baseClampOuter = false, // bool
         
         
-        baseRoundingRadius = 0.0, // mm or vector3 x mm or vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
+        baseRoundingRadius = 0.0, // mm | vector3 x mm | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
         baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
         baseRoundingResolution = 64, // int
         
         //Relief Cut
-        baseReliefCut = false,
+        baseReliefCut = false, // bool
         baseReliefCutHeight = 0.6, // mm
         baseReliefCutThickness = 0.6, // mm
         
@@ -89,7 +89,7 @@ module machineblock(
         baseHeightAdjustment = 0.0, // mm
         
         //Walls
-        baseWallThickness = "auto", // mbu or "auto"
+        baseWallThickness = "auto", // mbu | "auto"
         baseWallThicknessAdjustment = -0.1, // mm
         baseWallGapsX = [], // vector
         baseWallGapsY = [], // vector
@@ -108,28 +108,28 @@ module machineblock(
         stabilizerExpansionOffset = 1, // mbu
         
         //Pillars: Tubes and Pins
-        pillars = true, // bool or vector
+        pillars = true, // bool | vector
         pillarRoundingResolution = 64, // int
         pillarGapCornerLength = 2, // int
         pillarGapMiddle = 10, // int
         
         //Pins (little tubes for blocks with 1 brick side length)
-        pinDiameter = "auto", // mbu or "auto"
+        pinDiameter = "auto", // mbu | "auto"
         pinDiameterAdjustment = 0.0, // mm
         
         //Tubes
         tubeWallThickness = 0.53125, // mbu (constant, should not be changed normally)
-        tubeXDiameter = "auto", // mbu or "auto"
+        tubeXDiameter = "auto", // mbu | "auto"
         tubeXDiameterAdjustment = -0.1, // mm
-        tubeYDiameter = "auto", // mbu or "auto"
+        tubeYDiameter = "auto", // mbu | "auto"
         tubeYDiameterAdjustment = -0.1, // mm
-        tubeZDiameter = "auto", // mbu or "auto"
+        tubeZDiameter = "auto", // mbu | "auto"
         tubeZDiameterAdjustment = -0.1, // mm
 
         tubeInnerClampThickness = 0.1, // mm
         
         // Slope
-        slope = false, // false or vector4
+        slope = false, // false | vector4
         slopeBaseHeightLower = 1.333, // mbu
         slopeBaseHeightUpper = 1, // mbu
 
@@ -137,10 +137,10 @@ module machineblock(
         bevel = [[0, 0], [0, 0], [0, 0], [0, 0]], // vector4 x vector2
 
         //Holes
-        holeX = false, // bool or vector
-        holeXType = "pin", // "pin" or "axle"
+        holeX = false, // bool | vector
+        holeXType = "pin", // "pin" | "axle"
         holeXCentered = true, // bool
-        holeXDiameter = "auto", // mbu or "auto"
+        holeXDiameter = "auto", // mbu | "auto"
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
         holeXInsetDepth = 0.25, // mbu
@@ -149,9 +149,9 @@ module machineblock(
         holeXMinTopMargin = 0.5, // mbu
 
         holeY = false, // bool or vector
-        holeYType = "pin", // "pin" or "axle"
+        holeYType = "pin", // "pin" | "axle"
         holeYCentered = true, // bool
-        holeYDiameter = "auto", // mbu or "auto"
+        holeYDiameter = "auto", // mbu | "auto"
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
         holeYInsetDepth = 0.25, // mbu
@@ -160,16 +160,16 @@ module machineblock(
         holeYMinTopMargin = 0.5, // mbu
 
         holeZ = false, // bool or vector
-        holeZType = "pin", // "pin" or "axle"
+        holeZType = "pin", // "pin" | "axle"
         holeZCenteredX = true, // bool
         holeZCenteredY = true, // bool
-        holeZDiameter = "auto", // mbu or "auto"
+        holeZDiameter = "auto", // mbu | "auto"
         holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64, // int
         
         //Knobs
         studs = true, // bool or vector
-        studType = "solid", // "solid" or "ring"
+        studType = "solid", // "solid" | "ring"
         studCentered = false, // bool
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
@@ -177,7 +177,7 @@ module machineblock(
         studClampHeight = 0.5, // mbu
         studClampThickness = 0.0, // mm
         
-        studHoleDiameter = "auto", // mbu or "auto"
+        studHoleDiameter = "auto", // mbu | "auto"
         studHoleDiameterAdjustment = 0.3, // mm
         studHoleClampThickness = 0.1, // mm
         
@@ -193,8 +193,8 @@ module machineblock(
         tongue = false, // bool
         tongueHeight = 1.25, // mbu
         tongueGrooveDepth = 1.5, // mbu
-        tongueRoundingRadius = "auto", // mm or "auto" (e.g 1.0 or [1, 2, 3, 4]) 
-        tongueInnerRoundingRadius = "auto", // mm or "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+        tongueRoundingRadius = "auto", // mm | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+        tongueInnerRoundingRadius = "auto", // mm | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
         tongueThickness = 0.666, // mbu
         tongueThicknessAdjustment = 0, // mm
         tongueOffset = 1, // mbu
@@ -205,12 +205,12 @@ module machineblock(
         
         //Pit
         pit=false, // bool
-        pitRoundingRadius = "auto", // mm or "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
-        pitDepth = "auto", // mm or "auto"
+        pitRoundingRadius = "auto", // mm | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
+        pitDepth = "auto", // mm | "auto"
         pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
         pitKnobs = true, // bool
         pitKnobPadding = 0.2, // grid
-        pitKnobType = "solid", // "solid" or "ring"
+        pitKnobType = "solid", // "solid" | "ring"
         pitKnobCentered = false, // bool
         pitWallGaps = [], // vector
         
@@ -218,13 +218,13 @@ module machineblock(
         text = "", // string
         textSide = 0, // side
         textDepth = -0.6, // mm
-        textFont = "Liberation Sans", // font family
+        textFont = "Liberation Sans", // font
         textSize = 4, // pt
         textSpacing = 1, // int
         textVerticalAlign = "center",
         textHorizontalAlign = "center",
         textOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
-        textColor = "#2c3e50", // hex color with leading #
+        textColor = "#2c3e50", // color - Color of text.
 
         //SVG
         svg = "", // string
@@ -233,7 +233,7 @@ module machineblock(
         svgDimensions = [100, 100], // vector2 x int
         svgScale = 1.0, // float
         svgOffset = [0, 0], // vector2 x grid (multipliers of gridSizeXY and gridSizeZ depending on side)
-        svgColor = "#2c3e50", // hex color with leading #
+        svgColor = "#2c3e50", // color - Color of svg
 
         connectors = false, // bool
         connectorHeight = 0, // mm
@@ -268,9 +268,9 @@ module machineblock(
         pcbScrewSockets = [], // vector
 
         //Alignment
-        align = "start", // string or vector3 x string
-        alignChildren = "start", // string or vector3 x string
-        alignMode = "grid", // "grid" or "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
+        align = "start", // string | vector3 x string
+        alignChildren = "start", // string | vector3 x string
+        alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
         
         //Preview
         previewQuality = 0.5, // float (between 0.0 and 1.0)
@@ -283,10 +283,10 @@ module machineblock(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    rootUnit = scale * unitMbu;
+    mbuToMm = scale * unitMbu;
 
-    gridSizeXY = unitGrid[0] * rootUnit;
-    gridSizeZ = unitGrid[1] * rootUnit;
+    gridSizeXY = unitGrid[0] * mbuToMm;
+    gridSizeZ = unitGrid[1] * mbuToMm;
 
     grid = [size[0], size[1]];
 
@@ -326,9 +326,9 @@ module machineblock(
     translateZChildren  = alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*resultingBaseHeight : -0.5*baseHeightAdjustment + 0.5*baseHeightResolved);
     
     //Base Cutout and Pit Depth
-    topPlateHeight = baseTopPlateHeight * rootUnit + baseTopPlateHeightAdjustment;
-    baseCutoutMinDepth = unitGrid[1] * rootUnit - topPlateHeight; // mm -- 1 plate minus topPlateHeight
-    maxBaseCutoutDepth = baseCutoutMaxDepth * rootUnit;  
+    topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
+    baseCutoutMinDepth = unitGrid[1] * mbuToMm - topPlateHeight; // mm -- 1 plate minus topPlateHeight
+    maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
     
     resultingPitDepth = pit ? (pitDepth != "auto" ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
     pWallThickness = pitWallThickness[0] == undef 
@@ -345,7 +345,7 @@ module machineblock(
     //Default thickness of a base wall multiplied by 2
     pDiameter = unitGrid[0] - studDiameter;
 
-    wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * rootUnit + baseWallThicknessAdjustment;
+    wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
     baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
     
@@ -355,8 +355,8 @@ module machineblock(
     cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
 
     baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
-    bClampOffset = baseClampOffset * rootUnit;
-    bClampHeight = baseClampHeight * rootUnit;
+    bClampOffset = baseClampOffset * mbuToMm;
+    bClampHeight = baseClampHeight * mbuToMm;
                                     
     //Calculate Z Positions
     baseCutoutZ = -0.5 * (resultingBaseHeight - baseCutoutDepth);        
@@ -388,14 +388,14 @@ module machineblock(
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
     
     // Studs
-    knobSize = studDiameter * rootUnit + studDiameterAdjustment;
-    knobHeight = studHeight * rootUnit;
+    knobSize = studDiameter * mbuToMm + studDiameterAdjustment;
+    knobHeight = studHeight * mbuToMm;
 
     knobCutSize = knobSize + studCutoutAdjustment[0];
     knobCutHeight = knobHeight + studCutoutAdjustment[1];
-    knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * rootUnit + studHoleDiameterAdjustment;
+    knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
-    knobRounding = studRounding * rootUnit;
+    knobRounding = studRounding * mbuToMm;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
@@ -411,35 +411,35 @@ module machineblock(
 
     // Tubes XYZ
     tubeDiameter = studDiameter + 2 * tubeWallThickness;
-    tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * rootUnit + tubeXDiameterAdjustment;
-    tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * rootUnit + tubeYDiameterAdjustment;
-    tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * rootUnit + tubeZDiameterAdjustment;
+    tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * mbuToMm + tubeXDiameterAdjustment;
+    tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * mbuToMm + tubeYDiameterAdjustment;
+    tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * mbuToMm + tubeZDiameterAdjustment;
     
     // Pin
-    pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * rootUnit + pinDiameterAdjustment;
+    pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * mbuToMm + pinDiameterAdjustment;
     
     //Holes XYZ
-    holeXSize = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * rootUnit + holeXDiameterAdjustment;
-    holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * rootUnit + holeYDiameterAdjustment;
-    holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * rootUnit + holeZDiameterAdjustment;
+    holeXSize = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * mbuToMm + holeXDiameterAdjustment;
+    holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * mbuToMm + holeYDiameterAdjustment;
+    holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm + holeZDiameterAdjustment;
     
-    holeXBottomMargin = holeXGridOffsetZ*rootUnit - 0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit);
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * rootUnit) / (holeXGridSizeZ * rootUnit)); 
+    holeXBottomMargin = holeXGridOffsetZ*mbuToMm - 0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm);
+    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * mbuToMm) / (holeXGridSizeZ * mbuToMm)); 
 
-    holeYBottomMargin = holeYGridOffsetZ*rootUnit - 0.5*(holeYSize + 2 * holeYInsetThickness * rootUnit);
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin * rootUnit) / (holeYGridSizeZ * rootUnit)); 
+    holeYBottomMargin = holeYGridOffsetZ*mbuToMm - 0.5*(holeYSize + 2 * holeYInsetThickness * mbuToMm);
+    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin * mbuToMm) / (holeYGridSizeZ * mbuToMm)); 
 
     //Stabilizer
-    sGridThickness = stabilizerGridThickness * rootUnit;
-    sGridHeight = stabilizerGridHeight * rootUnit;
+    sGridThickness = stabilizerGridThickness * mbuToMm;
+    sGridHeight = stabilizerGridHeight * mbuToMm;
     
     //Tongue
-    tonHeightCalc = tongueHeight * rootUnit;
-    tonThicknessCalc = tongueThickness * rootUnit;
-    tonOffsetCalc = tongueOffset * rootUnit;
-    tonClampHeightCalc = tongueClampHeight * rootUnit;
-    tonClampOffsetCalc = tongueClampOffset * rootUnit;
-    tonGrooveDepthCalc = tongueGrooveDepth * rootUnit;
+    tonHeightCalc = tongueHeight * mbuToMm;
+    tonThicknessCalc = tongueThickness * mbuToMm;
+    tonOffsetCalc = tongueOffset * mbuToMm;
+    tonClampHeightCalc = tongueClampHeight * mbuToMm;
+    tonClampOffsetCalc = tongueClampOffset * mbuToMm;
+    tonGrooveDepthCalc = tongueGrooveDepth * mbuToMm;
 
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -554,8 +554,8 @@ module machineblock(
     /*
     * Stabilizer Grid
     */
-    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * rootUnit) - sGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * rootUnit) - sGridHeight, 0) : 0);
+    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight, 0) : 0);
     
     /*
     * Screw Holes
@@ -638,8 +638,8 @@ module machineblock(
                                             pitWallThickness = pWallThickness,
                                             pitWallGaps = pitWallGaps,
                                             slope = slope,
-                                            slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
-                                            slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
+                                            slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
+                                            slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
                                             beveled = beveled,
                                             bevelOuter = bevelOuter,
                                             bevelOuterAdjusted = bevelOuterAdjusted,
@@ -684,7 +684,7 @@ module machineblock(
                                                     pitDepth = resultingPitDepth,
                                                     
                                                     slope = slope,
-                                                    slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
+                                                    slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
                                                     
                                                     beveled = beveled,
                                                     bevelOuter = bevelOuter,
@@ -966,7 +966,7 @@ module machineblock(
                                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                                         if(drawHoleX(a, r)){
-                                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*rootUnit + r * holeXGridSizeZ*rootUnit]){
+                                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
                                                                 rotate([90, 0, 0]){ 
                                                                     cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 }
@@ -981,7 +981,7 @@ module machineblock(
                                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                                         if(drawHoleY(b, r)){
-                                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*rootUnit + r * holeYGridSizeZ*rootUnit]){
+                                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
                                                                 rotate([0, 90, 0]){ 
                                                                     cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                 };
@@ -1113,8 +1113,8 @@ module machineblock(
                                         pitWallThickness = pWallThickness,
                                         pitWallGaps = pitWallGaps,
                                         slope = slope,
-                                        slopeBaseHeightLower = slopeBaseHeightLower * rootUnit,
-                                        slopeBaseHeightUpper = slopeBaseHeightUpper * rootUnit,
+                                        slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
+                                        slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
 
                                         beveled = beveled,
                                         bevelOuter = bevelOuter,
@@ -1142,15 +1142,15 @@ module machineblock(
                                 for(r = [ 0 : 1 : holeXMaxRows-1]){
                                     for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
                                         if(drawHoleX(a, r)){
-                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*rootUnit + r * holeXGridSizeZ*rootUnit]){
+                                            translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
                                                 rotate([90, 0, 0]){ 
                                                     if(holeXType == "pin"){
                                                         cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeY])
-                                                            cylinder(h=2*holeXInsetDepth * rootUnit, r=0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeXInsetDepth * mbuToMm, r=0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         translate([0, 0, -0.5 * objectSizeY])
-                                                            cylinder(h=2*holeXInsetDepth * rootUnit, r=0.5 * (holeXSize + 2 * holeXInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeXInsetDepth * mbuToMm, r=0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                     }
                                                     else if(holeXType == "axle"){
@@ -1170,15 +1170,15 @@ module machineblock(
                                 for(r = [ 0 : 1 : holeYMaxRows-1]){
                                     for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
                                         if(drawHoleY(b, r)){
-                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*rootUnit + r * holeYGridSizeZ*rootUnit]){
+                                            translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
                                                 rotate([0, 90, 0]){ 
                                                     if(holeYType == "pin"){
                                                         cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     
                                                         translate([0, 0, 0.5 * objectSizeX])
-                                                            cylinder(h=2*holeYInsetDepth * rootUnit, r=0.5 * (holeYSize + 2 * holeYInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         translate([0, 0, -0.5 * objectSizeX])
-                                                            cylinder(h=2*holeYInsetDepth * rootUnit, r=0.5 * (holeYSize + 2 * holeYInsetThickness * rootUnit), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     }
                                                     else if(holeYType == "axle"){
                                                         mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
@@ -1417,12 +1417,12 @@ module machineblock(
                                         translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
                                             difference(){
                                                 union(){
-                                                    translate([0, 0, -0.5 * (knobRounding + studClampHeight * rootUnit)])
-                                                        cylinder(h=knobHeight - knobRounding - studClampHeight * rootUnit, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, -0.5 * (knobRounding + studClampHeight * mbuToMm)])
+                                                        cylinder(h=knobHeight - knobRounding - studClampHeight * mbuToMm, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                     
-                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight * rootUnit) - knobRounding ])
-                                                        cylinder(h=studClampHeight * rootUnit, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                    translate([0, 0, 0.5 * (knobHeight - studClampHeight * mbuToMm) - knobRounding ])
+                                                        cylinder(h=studClampHeight * mbuToMm, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                     
                                                     translate([0, 0, 0.5 * (knobHeight - knobRounding)])
                                                         cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
