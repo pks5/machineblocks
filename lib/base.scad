@@ -149,7 +149,7 @@ module mb_base_cutout(
             }
             
             /*
-            * Slanting
+            * Slope
             */
             if(slope != false){
                 for(side = [0 : 1 : 3]){
@@ -316,7 +316,7 @@ module mb_base(
                     }
 
                     /*
-                    * Slanting
+                    * Slope
                     */
                     if(slope != false){
                         for(side = [0 : 1 : 3]){

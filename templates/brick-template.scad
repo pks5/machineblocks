@@ -105,17 +105,17 @@ pitWallThickness = 0.333;
 
 /* [Slope] */
 
-// Slanting size on X0 side specified as multiple of an 1x1 brick.
-slantingX0 = 0;
-// Slanting size on X1 side specified as multiple of an 1x1 brick.
-slantingX1 = 0;
-// Slanting size on Y0 side specified as multiple of an 1x1 brick.
-slantingY0 = 0;
-// Slanting size on Y1 side specified as multiple of an 1x1 brick.
-slantingY1 = 0;
+// Slope side 0
+slope0 = 0;
+// Slope side 1
+slope1 = 0;
+// Slope side 2
+slope2 = 0;
+// Slope side 3
+slope3 = 0;
 
 /* [Hidden] */
-slope = ((slantingX0 != 0) || (slantingX1 != 0) || (slantingY0 != 0) || (slantingY1 != 0)) ? [slantingX0, slantingX1, slantingY0, slantingY1] : false;
+slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;
 
 // Generate the block
 machineblock(

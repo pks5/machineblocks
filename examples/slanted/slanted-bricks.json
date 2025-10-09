@@ -16,8 +16,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
-                        "slantingX0": 1,
-                        "slantingX1": -1
+                        "slope0": 1,
+                        "slope1": -1
                     }
                 },
                 {
@@ -25,8 +25,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": -1
+                        "slope0": 1,
+                        "slope1": -1
                     }
                 },
                 {
@@ -35,8 +35,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 2,
                         "baseLayers": 6,
-                        "slantingX0": 2,
-                        "slantingX1": -2
+                        "slope0": 2,
+                        "slope1": -2
                     }
                 },
 
@@ -46,7 +46,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 2,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 {
@@ -54,7 +54,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
 
@@ -63,7 +63,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 
@@ -72,7 +72,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 
@@ -85,8 +85,8 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 {
@@ -94,8 +94,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
 
@@ -104,8 +104,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -114,8 +114,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -126,10 +126,10 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -140,7 +140,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 3,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 {
@@ -148,7 +148,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
 
@@ -157,7 +157,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 
@@ -166,7 +166,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 
@@ -175,8 +175,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingY0": 2
+                        "slope0": 1,
+                        "slope2": 2
                     }
                 },
                 
@@ -187,8 +187,8 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 {
@@ -196,8 +196,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
 
@@ -206,8 +206,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -216,8 +216,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -230,7 +230,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 2,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 {
@@ -238,7 +238,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
 
@@ -247,7 +247,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -256,7 +256,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -269,7 +269,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 3,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 {
@@ -277,7 +277,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
 
@@ -286,7 +286,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 
@@ -295,7 +295,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 
@@ -304,7 +304,7 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 3,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 
@@ -315,7 +315,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 3,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 {
@@ -323,7 +323,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
 
@@ -332,7 +332,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -341,7 +341,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -352,7 +352,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 {
@@ -360,7 +360,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
 
@@ -369,7 +369,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 1
+                        "slope0": 1
                     }
                 },
                 
@@ -378,8 +378,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingY0": 2
+                        "slope0": 1,
+                        "slope2": 2
                     }
                 },
                 
@@ -388,8 +388,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingY0": 3
+                        "slope0": 1,
+                        "slope2": 3
                     }
                 },
                 
@@ -401,8 +401,8 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 {
@@ -410,8 +410,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
 
@@ -420,8 +420,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -430,8 +430,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1
+                        "slope0": 1,
+                        "slope1": 1
                     }
                 },
                 
@@ -442,10 +442,10 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
 
@@ -454,10 +454,10 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -466,10 +466,10 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -478,10 +478,10 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -493,9 +493,9 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1
                     }
                 },
                 {
@@ -503,9 +503,9 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1
                     }
                 },
 
@@ -514,9 +514,9 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1
                     }
                 },
                 
@@ -525,9 +525,9 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1
                     }
                 },
                 
@@ -536,9 +536,9 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1
                     }
                 },
                 
@@ -550,10 +550,10 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
 
@@ -562,10 +562,10 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -574,10 +574,10 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -586,10 +586,10 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 1,
-                        "slantingX1": 1,
-                        "slantingY0": 1,
-                        "slantingY1": 1
+                        "slope0": 1,
+                        "slope1": 1,
+                        "slope2": 1,
+                        "slope3": 1
                     }
                 },
                 
@@ -600,7 +600,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 {
@@ -608,7 +608,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
 
@@ -617,7 +617,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -626,7 +626,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 2
+                        "slope0": 2
                     }
                 },
                 
@@ -638,8 +638,8 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2
+                        "slope0": 2,
+                        "slope1": 2
                     }
                 },
                 {
@@ -647,8 +647,8 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2
+                        "slope0": 2,
+                        "slope1": 2
                     }
                 },
 
@@ -657,8 +657,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": 2,
-                        "slantingX1": 2
+                        "slope0": 2,
+                        "slope1": 2
                     }
                 },
                 
@@ -667,8 +667,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2
+                        "slope0": 2,
+                        "slope1": 2
                     }
                 },
                 
@@ -677,8 +677,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2
+                        "slope0": 2,
+                        "slope1": 2
                     }
                 },
 
@@ -687,10 +687,10 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2,
-                        "slantingY0": 2,
-                        "slantingY1": 2
+                        "slope0": 2,
+                        "slope1": 2,
+                        "slope2": 2,
+                        "slope3": 2
                     }
                 },
                 
@@ -699,10 +699,10 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 2,
-                        "slantingX1": 2,
-                        "slantingY0": 2,
-                        "slantingY1": 2
+                        "slope0": 2,
+                        "slope1": 2,
+                        "slope2": 2,
+                        "slope3": 2
                     }
                 },
                 
@@ -713,7 +713,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 4,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 {
@@ -721,7 +721,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
 
@@ -730,8 +730,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": 3,
-                        "slantingY0": 2
+                        "slope0": 3,
+                        "slope2": 2
                     }
                 },
                 
@@ -740,7 +740,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": 3
+                        "slope0": 3
                     }
                 },
                 
@@ -749,8 +749,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": 3,
-                        "slantingY0": 2
+                        "slope0": 3,
+                        "slope2": 2
                     }
                 },
 
@@ -761,7 +761,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
                 
@@ -770,7 +770,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
 
@@ -779,7 +779,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
                 
@@ -788,7 +788,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
                 
@@ -797,7 +797,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
                 
@@ -809,8 +809,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 1,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
               
@@ -820,8 +820,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -830,8 +830,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -840,8 +840,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 2,
-                        "slantingX0": -2,
-                        "slantingX1": -2
+                        "slope0": -2,
+                        "slope1": -2
                     }
                 },
 
@@ -850,8 +850,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 1,
-                        "slantingX0": -2,
-                        "slantingX1": -2
+                        "slope0": -2,
+                        "slope1": -2
                     }
                 },
                 
@@ -861,7 +861,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
 
@@ -874,8 +874,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 3,
-                        "slantingX0": -1,
-                        "slantingY0": -2
+                        "slope0": -1,
+                        "slope2": -2
                     }
                 },
                 
@@ -889,8 +889,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -899,8 +899,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -909,8 +909,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 3,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -922,7 +922,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
 
@@ -931,7 +931,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 1,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -940,7 +940,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -950,7 +950,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
 
@@ -961,7 +961,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "slantingX0": -3
+                        "slope0": -3
                     }
                 },
 
@@ -970,7 +970,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": -3
+                        "slope0": -3
                     }
                 },
                 
@@ -979,7 +979,7 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 3,
-                        "slantingX0": -3
+                        "slope0": -3
                     }
                 },
                 
@@ -992,7 +992,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -1001,7 +1001,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 3,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -1013,7 +1013,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slantingX0": -1
+                        "slope0": -1
                     }
                 },
 
@@ -1024,8 +1024,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingY0": -2
+                        "slope0": -1,
+                        "slope2": -2
                     }
                 },
                 
@@ -1034,8 +1034,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingY0": -3
+                        "slope0": -1,
+                        "slope2": -3
                     }
                 },
                 
@@ -1049,8 +1049,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
                 
@@ -1059,8 +1059,8 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1
+                        "slope0": -1,
+                        "slope1": -1
                     }
                 },
 
@@ -1071,10 +1071,10 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1083,10 +1083,10 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1095,10 +1095,10 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1113,9 +1113,9 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1
                     }
                 },
                 
@@ -1124,9 +1124,9 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1
                     }
                 },
                 
@@ -1135,9 +1135,9 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1
                     }
                 },
                 
@@ -1151,10 +1151,10 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1163,10 +1163,10 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1175,10 +1175,10 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -1,
-                        "slantingX1": -1,
-                        "slantingY0": -1,
-                        "slantingY1": -1
+                        "slope0": -1,
+                        "slope1": -1,
+                        "slope2": -1,
+                        "slope3": -1
                     }
                 },
                 
@@ -1191,7 +1191,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -1200,7 +1200,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -2
+                        "slope0": -2
                     }
                 },
                 
@@ -1212,8 +1212,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -2,
-                        "slantingX1": -2
+                        "slope0": -2,
+                        "slope1": -2
                     }
                 },
 
@@ -1225,8 +1225,8 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slantingX0": -3,
-                        "slantingY0": -2
+                        "slope0": -3,
+                        "slope2": -2
                     }
                 },
                 
@@ -1235,7 +1235,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slantingX0": -3
+                        "slope0": -3
                     }
                 },
                 
@@ -1244,8 +1244,8 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 4,
-                        "slantingX0": -3,
-                        "slantingY0": -2
+                        "slope0": -3,
+                        "slope2": -2
                     }
                 }
             ]
