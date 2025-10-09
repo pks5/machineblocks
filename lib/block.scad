@@ -92,6 +92,7 @@ module machineblock(
         pinDiameterAdjustment = 0.0, // mm
         
         //Tubes
+        tubeWallThickness = 0.53125, // mbu (constant, should not be changed normally)
         tubeXDiameter = "auto", // mbu or "auto"
         tubeXDiameterAdjustment = -0.1, // mm
         tubeYDiameter = "auto", // mbu or "auto"
@@ -383,7 +384,7 @@ module machineblock(
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
     // Tubes XYZ
-    tubeDiameter = sqrt(2*studDiameter^2);
+    tubeDiameter = studDiameter + 2 * tubeWallThickness;
     tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * rootUnit + tubeXDiameterAdjustment;
     tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * rootUnit + tubeYDiameterAdjustment;
     tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * rootUnit + tubeZDiameterAdjustment;
