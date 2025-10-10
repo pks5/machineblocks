@@ -170,6 +170,9 @@ module machineblock(
         holeZDiameter = "auto", // mbu | "auto"
         holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64, // int
+
+        //Axle Holes
+        holeAxleThickness = 1, //mbu
         
         //Knobs
         studs = true, // bool or vector
@@ -1170,7 +1173,15 @@ module machineblock(
                                                     
                                                     }
                                                     else if(xHole == "axle"){
-                                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
+                                                        mb_axis(
+                                                            height = resultingBaseHeight * cutMultiplier, 
+                                                            capHeight=0, 
+                                                            size = holeZSize, 
+                                                            thickness = holeAxleThickness * mbuToMm,
+                                                            center=true, 
+                                                            alignBottom=false, 
+                                                            roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution
+                                                        );
                                                     }
                                                 };
                                             };
@@ -1198,7 +1209,15 @@ module machineblock(
                                                             cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                     }
                                                     else if(yHole == "axle"){
-                                                        mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
+                                                        mb_axis(
+                                                            height = resultingBaseHeight * cutMultiplier, 
+                                                            capHeight=0, 
+                                                            size = holeZSize, 
+                                                            thickness = holeAxleThickness * mbuToMm,
+                                                            center=true, 
+                                                            alignBottom=false, 
+                                                            roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution
+                                                        );
                                                     }
                                                 };
                                             };
@@ -1220,7 +1239,15 @@ module machineblock(
                                                     cylinder(h=resultingBaseHeight*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                 }
                                                 else if(zHole == "axle"){
-                                                    mb_axis(height = resultingBaseHeight * cutMultiplier, capHeight=0, size = holeZSize, center=true, alignBottom=false, roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution);
+                                                    mb_axis(
+                                                        height = resultingBaseHeight * cutMultiplier, 
+                                                        capHeight=0, 
+                                                        size = holeZSize, 
+                                                        thickness = holeAxleThickness * mbuToMm,
+                                                        center=true, 
+                                                        alignBottom=false, 
+                                                        roundingResolution=($preview ? previewQuality : 1) * 0.5 * holeRoundingResolution
+                                                    );
                                                 }
                                             };
                                         }
