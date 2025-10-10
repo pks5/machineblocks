@@ -13,9 +13,9 @@
 include <../../lib/block.scad>;
 
 //Generate the brick
-block(
-    grid=[3,2], 
-    knobs=false,
+machineblock(
+    size=[3,2,1], 
+    studs=false,
     textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
@@ -26,9 +26,9 @@ block(
 ); 
 
 translate([0, -20, 0])
-block(
-    grid=[7,2], 
-    knobs=false,
+machineblock(
+    size=[7,2,1], 
+    studs=false,
     textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],
@@ -39,9 +39,9 @@ block(
 ); 
 
 translate([0, -40, 0])
-block(
-    grid=[5,2], 
-    knobs=false,
+machineblock(
+    size=[5,2,1], 
+    studs=false,
     textSize=6.0, 
     textSide=5,
     baseSideAdjustment=[0,0,0,0],

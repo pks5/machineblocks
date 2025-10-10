@@ -2,9 +2,8 @@
 use <../../lib/block.scad>;
 
 //Generate 6x6 Plate with text between knobs
-block(
-    baseLayers = 1,
-    grid = [16, 9],
+machineblock(
+    size = [16, 9, 1],
     
     svg="../sets/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
@@ -18,10 +17,7 @@ block(
     textDepth=0.4,
     textSize=7,
     textOffset=[0, -3],
-    knobs = [true, [2,1,13,1, true], [11,4,14,7, true]],
+    studs = [true, [2,1,13,1, true], [11,4,14,7, true]],
     baseRoundingRadius=[0,0,4],
-    baseCutoutRoundingRadius=2.6,
-    knobSize = 5.0, //Reduce this value if the knobs do not fit into a LEGO brick or only with great difficulty
-    baseSideAdjustment = -0.1,
-    baseHeightAdjustment = 0.0 //Reduce this value if the base of the brick is too high
+    baseCutoutRoundingRadius=2.6
 );
