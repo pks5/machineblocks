@@ -61,8 +61,8 @@ gridSizeXY = 8.0;
 gridSizeZ = 3.2;
 
 // Generate the block
-union()
-{
+
+
   machineblock(size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
         baseCutoutType = brick1BaseCutoutType,
         baseColor = baseColor,
@@ -72,7 +72,8 @@ union()
         studs = brick1Knobs,
         studType = brick1KnobType,
 
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment =
+            [ baseSideAdjustment, baseSideAdjustment, assemblyMode == "merged" ? 0 : baseSideAdjustment, baseSideAdjustment ],
         
         scale=scale,
     baseHeightAdjustment=baseHeightAdjustment,
@@ -93,14 +94,13 @@ union()
     holeRoundingResolution=roundingResolution,
     studRoundingResolution=roundingResolution,
     pillarRoundingResolution=roundingResolution
-  );
-}
+  ){
 
-translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0.5 * brick2SizeY * gridSizeXY] : [(brickSizeX + 0.5) * gridSizeXY, 0, 0]) 
-  rotate(assemblyMode != "unassembled" ? [ 90, 0, 0 ] : [ 0, 0, 0 ])
-  {
-
-    machineblock(size = [ brickSizeX, brick2SizeY, 1 ],
+    machineblock(
+          rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
+          offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
+    
+          size = [ brickSizeX, brick2SizeY, 1 ],
           baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseColor = baseColor,
@@ -135,3 +135,9 @@ translate(assemblyMode != "unassembled" ? [0, -0.5 * brick1SizeY * gridSizeXY, 0
     pillarRoundingResolution=roundingResolution
     );
   }
+
+
+
+
+    
+ 

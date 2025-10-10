@@ -91,11 +91,11 @@ textOffset=[0,0]
         translate(translateBottom){
             union(){
                 difference(){
-                    block(
+                    machineblock(
                         baseHeight=floorHeight, 
                         topPlateHeight=topPlateHeight, 
-                        grid=grid, 
-                        knobs=false,  
+                        size=[grid[0], grid[1], 1], 
+                        studs=false,  
                         wallThickness=blockMinWallThickness, 
                         baseClampThickness=baseClampThickness, 
                         baseSideAdjustment=[adjustSizeX, adjustSizeX, adjustSizeY, adjustSizeY], 
