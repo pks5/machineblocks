@@ -1,9 +1,19 @@
+function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
+        [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] 
+        : [radius[0] * gridSize, radius[1] * gridSize, radius[2] * gridSize, radius[3] * gridSize]); 
+
 /*
-* Extracts the z-radis from the base radius as four dimensional vector
+* Extracts the (x, y, z) radius from the base radius as four dimensional vector
 */
-function mb_base_rounding_radius_z(radius) = radius[2] == undef ? 
-        [radius, radius, radius, radius] : 
-        (radius[2][0] == undef ? [radius[2], radius[2], radius[2], radius[2]] : radius[2]);
+function mb_base_rounding_radius_xyz(radius, i, gridSize) = is_num(radius) ? 
+        [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] : 
+        mb_rounding_radius(radius[i], gridSize);
+
+function mb_base_rounding_radius(radius, gridSizeXY, gridSizeZ) = [
+    mb_base_rounding_radius_xyz(radius, 0, gridSizeZ),
+    mb_base_rounding_radius_xyz(radius, 1, gridSizeZ),
+    mb_base_rounding_radius_xyz(radius, 2, gridSizeXY)
+];
 
 /*
 * Creates a four dimensional vector with the inner rounding radius

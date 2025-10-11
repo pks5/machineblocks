@@ -362,9 +362,9 @@ module machineblock(
 
     wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
-    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
+    baseRoundingRadiusZ = mb_base_rounding_radius_xyz(baseRoundingRadius, 2, gridSizeXY);
     
-    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : baseCutoutRoundingRadius, baseRoundingRadiusZ, minObjectSide);
+    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
     minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
     cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
@@ -400,7 +400,7 @@ module machineblock(
         -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, 
         -min(pWallThickness[1], pWallThickness[2])*gridSizeXY
     ];
-    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);            
+    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
     // Studs
     knobSize = studDiameter * mbuToMm + studDiameterAdjustment;
@@ -639,6 +639,7 @@ module machineblock(
                                         mb_base(
                                             grid = grid,
                                             gridSizeXY = gridSizeXY,
+                                            gridSizeZ = gridSizeZ,
                                             objectSize = [objectSizeX, objectSizeY],
                                             height = resultingBaseHeight,
                                             baseSideAdjustment = sAdjustment,
@@ -1114,6 +1115,7 @@ module machineblock(
                                     mb_base(
                                         grid = grid,
                                         gridSizeXY = gridSizeXY,
+                                        gridSizeZ = gridSizeZ,
                                         objectSize = [objectSizeX, objectSizeY],
                                         height = resultingBaseHeight,
                                         baseSideAdjustment = sAdjustment,
@@ -1351,7 +1353,7 @@ module machineblock(
                                             gridSizeXY = gridSizeXY,
                                             objectSize = [objectSizeX, objectSizeY],
                                             objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-                                            baseRoundingRadius = baseRoundingRadius,
+                                            baseRoundingRadiusZ = baseRoundingRadiusZ,
                                             baseRoundingResolution = baseRoundingResolution,
                                             beveled = beveled,
                                             bevelOuter = bevelOuter,
@@ -1508,7 +1510,7 @@ module machineblock(
                                 gridSizeXY = gridSizeXY,
                                 objectSize = [objectSizeX, objectSizeY],
                                 objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-                                baseRoundingRadius = baseRoundingRadius,
+                                baseRoundingRadiusZ = baseRoundingRadiusZ,
                                 baseRoundingResolution = baseRoundingResolution,
                                 beveled = beveled,
                                 bevelOuter = bevelOuter,

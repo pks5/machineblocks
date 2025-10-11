@@ -46,7 +46,7 @@ leg2Rotation = 45;
 holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"axle"]] : [true, [0,0,0,0,"axle"]];
 
 machineblock(
-    baseRoundingRadius = [4,0,0],
+    baseRoundingRadius = [1.25,0,0],
     baseCutoutRoundingRadius = 0,
     baseCutoutType = "none",
     baseColor = baseColor,
@@ -82,7 +82,7 @@ machineblock(
             rotation = [leg2Rotation,0,0],
             rotationOffset = [0, -0.5, -1.25],
             offset = [0, leg1Size-1, 0],
-            baseRoundingRadius = [4,0,0],
+            baseRoundingRadius = [1.25,0,0],
             baseCutoutRoundingRadius = 0,
             baseCutoutType = "none",
             baseColor = baseColor,

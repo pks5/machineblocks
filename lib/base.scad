@@ -197,6 +197,7 @@ module mb_base_cutout(
 module mb_base(
     grid,
     gridSizeXY,
+    gridSizeZ,
     objectSize, 
     height, 
     
@@ -249,7 +250,8 @@ module mb_base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
-    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = roundingRadius);
+    baseRoundingRadiusResolved = mb_base_rounding_radius(roundingRadius, gridSizeXY, gridSizeZ);
+    baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
     
     reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
     bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
@@ -276,7 +278,7 @@ module mb_base(
                             sizeX = objectSizeXAdjusted,
                             sizeY = objectSizeYAdjusted,
                             height = height,
-                            roundingRadius = roundingRadius,
+                            roundingRadius = baseRoundingRadiusResolved,
                             roundingResolution = roundingResolution
                         );
 
@@ -370,7 +372,7 @@ module mb_base(
                 pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
-                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : pitRoundingRadius, baseRoundingRadiusZ, minObjectSide);
+                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
                     
                 translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
                     intersection(){

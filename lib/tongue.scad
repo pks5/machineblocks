@@ -7,7 +7,7 @@ module mb_tongue(
     gridSizeXY,
     objectSize,
     objectSizeAdjusted,
-    baseRoundingRadius,
+    baseRoundingRadiusZ,
     baseRoundingResolution,
     beveled,
     bevelOuter,
@@ -43,10 +43,8 @@ module mb_tongue(
     tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
     tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
 
-    baseRoundingRadiusZ = mb_base_rounding_radius_z(radius = baseRoundingRadius);
-
-    tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : tongueRoundingRadius, baseRoundingRadiusZ, minObjectSide);
-    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : tongueInnerRoundingRadius, tongueRadius, minObjectSide);
+    tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : mb_rounding_radius(tongueRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
+    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : mb_rounding_radius(tongueInnerRoundingRadius, gridSizeXY), tongueRadius, minObjectSide);
     
     bevelTongueOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted);
     bevelTongueInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted);

@@ -85,7 +85,7 @@ machineblock(
     tongueHeight = lidPermanent ? 2.0 : 1.8,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     tongueThicknessAdjustment = lidPermanent ? 0.0 : 0.0,
-    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
+    tongueRoundingRadius = lidPermanent ? 0.0 : 0.05,
     tongueInnerRoundingRadius = 0,
 
     scale = scale,
@@ -132,7 +132,7 @@ machineblock(
     tongueHeight = lidPermanent ? 2.0 : 1.8,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     tongueThicknessAdjustment = lidPermanent ? 0.0 : 0.0,
-    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
+    tongueRoundingRadius = lidPermanent ? 0.0 : 0.05,
     tongueInnerRoundingRadius = 0,
 
     scale = scale,
