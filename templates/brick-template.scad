@@ -114,6 +114,13 @@ slope2 = 0;
 // Slope side 3
 slope3 = 0;
 
+/* [Grille] */
+// Grille in X direction
+grilleX = false;
+// Grille in Y direction
+grilleY = false;
+
+
 /* [Hidden] */
 slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;
 
@@ -155,6 +162,9 @@ machineblock(
     pitWallThickness = pitWallThickness,
     
     slope = slope, 
+
+    grilleX = grilleX,
+    grilleY = grilleY,
 
     baseSideAdjustment = baseSideAdjustment,
     
