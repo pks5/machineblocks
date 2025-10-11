@@ -79,7 +79,7 @@ module machineblock(
         baseClampOuter = false, // bool
         
         
-        baseRoundingRadius = 0.0, // mm | vector3 x mm | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
+        baseRoundingRadius = 0.0, // grid | vector3 x grid | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
         baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
         baseRoundingResolution = 64, // int
         
@@ -200,8 +200,8 @@ module machineblock(
         tongue = false, // bool
         tongueHeight = 1.25, // mbu
         tongueGrooveDepth = 1.5, // mbu
-        tongueRoundingRadius = "auto", // mm | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
-        tongueInnerRoundingRadius = "auto", // mm | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+        tongueRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+        tongueInnerRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
         tongueThickness = 0.666, // mbu
         tongueThicknessAdjustment = 0, // mm
         tongueOffset = 1, // mbu
@@ -209,10 +209,15 @@ module machineblock(
         tongueClampOffset = 0.25, // mbu
         tongueClampThickness = 0.1, // mm
         
+        //Grille
+        grilleX = false, // bool
+        grilleY = false, // bool
+        grilleDepth = 1, // mbu
+        grilleCount = 5, // int
         
         //Pit
         pit=false, // bool
-        pitRoundingRadius = "auto", // mm | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
+        pitRoundingRadius = "auto", // grid | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
         pitDepth = "auto", // mm | "auto"
         pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
         pitKnobs = true, // bool
@@ -1295,6 +1300,31 @@ module machineblock(
                                         );
                             } // End color
                         } // End if svg
+
+                        /*
+                        * Grille
+                        */
+                        if(grilleX){
+                            grilleHeight = grilleDepth * mbuToMm + cutOffset;
+                            grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
+                            for (g = [ 0 : 1 : size[1] * grilleCount - 1 ]){
+                                if(g % 2 == 1){
+                                    translate([0, sideY(0) + (0.5 + g) * grilleWidth, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                        cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidth, grilleHeight], center=true);
+                                }
+                            }
+                        }
+
+                        if(grilleY){
+                            grilleHeight = grilleDepth * mbuToMm + cutOffset;
+                            grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
+                            for (g = [ 0 : 1 : size[0] * grilleCount - 1 ]){
+                                if(g % 2 == 1){
+                                    translate([sideX(0) + (0.5 + g) * grilleWidth, 0, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                        cube(size=[grilleWidth, objectSizeYAdjusted*cutMultiplier, grilleHeight], center=true);
+                                }
+                            }
+                        }
 
                         /*
                         * Screw Holes Z

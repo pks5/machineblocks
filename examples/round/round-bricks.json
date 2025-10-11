@@ -125,7 +125,6 @@
                         "baseLayers": 1,
                         "knobType": "technic",
                         "baseRoundingRadiusZ": 0.5,
-                        "baseReliefCut": true,
                         "knobPadding":0
                     }
                 },
@@ -137,8 +136,7 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
                         "knobs": true,
-                        "knobType": "technic",
-                        "baseReliefCut": true
+                        "knobType": "technic"
                     }
                 },
                 {
@@ -260,8 +258,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -271,8 +268,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": [0.5,0.5,0,0],
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -283,8 +279,7 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": [1,0,0,0],
                         
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -294,8 +289,7 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -305,8 +299,7 @@
                         "brickSizeY": 3,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -316,8 +309,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 1,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
                 {
@@ -327,8 +319,7 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 1,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
 
@@ -340,7 +331,6 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 1,
                         "knobs": false,
-                        "baseReliefCut": true,
                         "holesZ": true
                     }
                 },
@@ -351,8 +341,7 @@
                         "brickSizeY": 3,
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 1.5,
-                        "knobs": false,
-                        "baseReliefCut": true
+                        "knobs": false
                     }
                 },
 
