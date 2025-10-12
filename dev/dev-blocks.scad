@@ -47,4 +47,4 @@ machineblock(size=[2,2,1], offset=[2,2,0], studs = false, baseRoundingRadius = [
     pitKnobPadding=0.1
  );
  
- machineblock(size=[3,3,1], studs = false, grilleY=true, grilleCount=5);
+ machineblock(size=[3,3, 3], studs = false, grilleY=true, grilleCount=5);
