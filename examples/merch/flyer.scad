@@ -5,7 +5,7 @@ use <../../lib/block.scad>;
 machineblock(
     size = [16, 9, 1],
     
-    svg="../sets/merch/images/mb.svg",
+    svg="../examples/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,
     svgSide=5,
@@ -18,6 +18,6 @@ machineblock(
     textSize=7,
     textOffset=[0, -3],
     studs = [true, [2,1,13,1, true], [11,4,14,7, true]],
-    baseRoundingRadius=[0,0,4],
+    baseRoundingRadius=[0,0,0.5],
     baseCutoutRoundingRadius=2.6
 );

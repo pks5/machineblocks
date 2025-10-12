@@ -4,7 +4,7 @@ use <../../lib/block.scad>;
 //Generate 6x6 Plate with text between knobs
 machineblock(
     size = [6, 6,1],
-    svg="../sets/merch/images/mb.svg",
+    svg="../examples/merch/images/mb.svg",
     svgDimensions = [158.940, 158.940],
     svgScale=0.2,
     svgSide=5,
