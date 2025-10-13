@@ -278,6 +278,20 @@
                         "baseLayers": 3,
                         "bevel1": [0,-1]
                     }
+                },
+
+                {
+                    "name": "Wing 9x4",
+                    "parameters": {
+                        "brickSizeX": 9,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "bevel0": [0,0.5],
+                        "bevel1": [0,-0.5],
+                        "bevel2": [0,0.25],
+                        "bevel3": [0,-0.25],
+                        "knobPadding" : 0.1
+                    }
                 }
             ]
         }
