@@ -78,7 +78,7 @@ def process_examples_file(example_file_path: str):
                         print('Replaced string param ' + param + ' with value: ' + val)
                     except UnicodeEncodeError:
                         print('Replaced string param ' + param + ' with unicode value')
-                    scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]+\"\s*;', param + ' = "' + val + '";', scad)
+                    scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]*\"\s*;', param + ' = "' + val + '";', scad)
                 elif isinstance(val, bool):
                     print('Replaced bool param ' + param + ' with value: ' + str(val).lower())
                     scad = re.sub(param + r'\s*=\s*((true)|(false))\s*;', param + ' = ' + str(val).lower() + ';', scad)

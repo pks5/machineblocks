@@ -38,6 +38,8 @@ baseKnobs = true;
 baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
+// The box rounding radius
+baseRoundingRadiusZ = 0;
 
 /*{BASE_VARIABLES}*/
 
@@ -70,11 +72,16 @@ lidKnobCentered = false;
 lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
+// Text on lid
+lidText = "";
+//Text Font
+textFont = "RBNo3.1";
 
 machineblock(
     size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
+    baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
     /*{BASE_PARAMETERS}*/
 
     studs = baseKnobs,
@@ -89,10 +96,7 @@ machineblock(
     pitKnobCentered = basePitKnobCentered,
 
     tongue = baseTongue,
-    tongueHeight = lidPermanent ? 2.0 : 1.8,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
-    tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
-    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
     baseSideAdjustment = baseSideAdjustment,
     
@@ -107,11 +111,20 @@ if(lid){
             pillars = lidPillars,
             pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
+            baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
             /*{BASE_PARAMETERS}*/
+
+            tongueThicknessAdjustment = 0.1,
 
             studs = lidKnobs,
             studType = lidKnobType,
             studCentered = lidKnobCentered,
+
+            textSide = 5,
+            textSize = 10,
+            textDepth = 0.8,
+            text = lidText,
+            textFont = textFont,
 
             baseSideAdjustment = baseSideAdjustment,
 

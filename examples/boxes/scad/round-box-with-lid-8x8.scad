@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/boxes-enclosures
 *
-* Channel Box C2 8x8
+* Round Box with Lid 8x8
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -26,14 +26,14 @@ boxSizeX = 8; // [1:32]
 // Box size in Y-direction specified as multiple of an 1x1 brick.
 boxSizeY = 8; // [1:32] 
 // Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 3; // [1:24]
+boxLayers = 12; // [1:24]
 
 /* [Base] */
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic]
+baseCutoutType = "none"; // [none, classic]
 // Whether the base should have a tongue
-baseTongue = false;
+baseTongue = true;
 // Whether the base should have knobs
 baseKnobs = true;
 // Type of the base knobs
@@ -41,7 +41,7 @@ baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // The box rounding radius
-baseRoundingRadiusZ = 0;
+baseRoundingRadiusZ = 4;
 
 // Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
@@ -49,9 +49,9 @@ baseRoundingRadiusZ = 0;
 /* [Pit] */
 
 // Pit wall thickness
-basePitWallThickness = 1;
+basePitWallThickness = 0.333;
 // Pit wall gaps
-basePitWallGaps = [[0, 0.333, 4.333], [0, 4.333, 0.333]];
+basePitWallGaps = [];
 // Whether the pit should contain knobs
 basePitKnobs = false;
 // Type of the base pit knobs
@@ -62,11 +62,11 @@ basePitKnobCentered = false;
 /* [Lid] */
 
 // Whether the box should have a lid
-lid = false;
+lid = true;
 // Lid height specified as number of layers. Each layer has the height of one plate.
 lidLayers = 1; // [1:24]
 // Whether the lid should have knobs
-lidKnobs = true;
+lidKnobs = false;
 // Type of the lid knobs
 lidKnobType = "classic"; // [classic, technic]
 // Whether lid knobs should be centered.
@@ -76,7 +76,7 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 // Text on lid
-lidText = "";
+lidText = "Jewlery";
 //Text Font
 textFont = "RBNo3.1";
 

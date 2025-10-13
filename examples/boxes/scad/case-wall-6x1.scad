@@ -40,6 +40,8 @@ baseKnobs = false;
 baseKnobType = "classic"; // [classic, technic]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
+// The box rounding radius
+baseRoundingRadiusZ = 0;
 
 // Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
@@ -73,11 +75,16 @@ lidKnobCentered = false;
 lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = true;
+// Text on lid
+lidText = "";
+//Text Font
+textFont = "RBNo3.1";
 
 machineblock(
     size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
+    baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
     baseColor = baseColor,
 
     studs = baseKnobs,
@@ -92,10 +99,7 @@ machineblock(
     pitKnobCentered = basePitKnobCentered,
 
     tongue = baseTongue,
-    tongueHeight = lidPermanent ? 2.0 : 1.8,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
-    tongueThicknessAdjustment = lidPermanent ? 0.0 : -0.1,
-    tongueRoundingRadius = lidPermanent ? 0.0 : 0.4,
     
     baseSideAdjustment = baseSideAdjustment,
     
@@ -128,11 +132,20 @@ if(lid){
             pillars = lidPillars,
             pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
+            baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
             baseColor = baseColor,
+
+            tongueThicknessAdjustment = 0.1,
 
             studs = lidKnobs,
             studType = lidKnobType,
             studCentered = lidKnobCentered,
+
+            textSide = 5,
+            textSize = 10,
+            textDepth = 0.8,
+            text = lidText,
+            textFont = textFont,
 
             baseSideAdjustment = baseSideAdjustment,
 

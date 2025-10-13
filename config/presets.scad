@@ -23,8 +23,14 @@
 * Calibration
 */
 
+// Unit Size MBU
+unitMbu = 1.6; // mm
+
+// Unit Grid, relative to mbu
+unitGrid = [5, 2]; // mbu
+
 // Scale of the bricks
-scale = 3.0; // Float
+scale = 1.0; // Float
 
 // Adjustment of the height
 // Amount will be added to/subtracted from the top side of the brick's base

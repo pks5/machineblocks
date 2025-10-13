@@ -31,6 +31,7 @@ pillars = true;
 baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
 translate([-20, -20, 0]) machineblock(
+    align = "ccs",
     size=[2, 2, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -61,6 +62,7 @@ translate([-20, -20, 0]) machineblock(
   );
 
 translate([-20, -40, 0]) machineblock(
+    align = "ccs",
     size=[3, 2, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -91,6 +93,7 @@ translate([-20, -40, 0]) machineblock(
   );
 
 translate([-20, -60, 0]) machineblock(
+    align = "ccs",
     size=[4, 2, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -121,6 +124,7 @@ translate([-20, -60, 0]) machineblock(
   );
 
 translate([-20, -80, 0]) machineblock(
+    align = "ccs",
     size=[6, 2, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -151,6 +155,7 @@ translate([-20, -80, 0]) machineblock(
   );
 
 translate([-44, -120, 0]) machineblock(
+    align = "ccs",
     size=[2, 14, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -181,6 +186,7 @@ translate([-44, -120, 0]) machineblock(
   );
 
 translate([-20, -120, 0]) machineblock(
+    align = "ccs",
     size=[4, 4, 3],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -212,6 +218,7 @@ translate([-20, -120, 0]) machineblock(
 
 translate([50, -84, 0]) rotate([0, 0, 180]) {
     translate([0, -20, 0]) machineblock(
+        align = "ccs",
         size=[2, 2, 1],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -242,6 +249,7 @@ translate([50, -84, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -40, 0]) machineblock(
+        align = "ccs",
         size=[3, 2, 1],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -272,6 +280,7 @@ translate([50, -84, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -60, 0]) machineblock(
+        align = "ccs",
         size=[4, 2, 1],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -302,6 +311,7 @@ translate([50, -84, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -80, 0]) machineblock(
+        align = "ccs",
         size=[6, 2, 1],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -333,6 +343,7 @@ translate([50, -84, 0]) rotate([0, 0, 180]) {
   }
 
 translate([20, -120, 0]) machineblock(
+    align = "ccs",
     size=[12, 4, 1],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -364,6 +375,7 @@ translate([20, -120, 0]) machineblock(
 
 translate([116, -92, 0]) rotate([0, 0, 180]) {
     translate([0, -20, 0]) machineblock(
+        align = "ccs",
         size=[1, 1, 3],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -394,6 +406,7 @@ translate([116, -92, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -40, 0]) machineblock(
+        align = "ccs",
         size=[2, 1, 3],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -424,6 +437,7 @@ translate([116, -92, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -60, 0]) machineblock(
+        align = "ccs",
         size=[4, 1, 3],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -454,6 +468,7 @@ translate([116, -92, 0]) rotate([0, 0, 180]) {
       );
 
     translate([0, -80, 0]) machineblock(
+        align = "ccs",
         size=[6, 1, 3],
         baseCutoutType=baseCutoutType,
         studs=knobs,
@@ -485,6 +500,7 @@ translate([116, -92, 0]) rotate([0, 0, 180]) {
   }
 
 translate([56, -20, 0]) machineblock(
+    align = "ccs",
     size=[1, 1, 1],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -515,6 +531,7 @@ translate([56, -20, 0]) machineblock(
   );
 
 translate([56, -40, 0]) machineblock(
+    align = "ccs",
     size=[2, 1, 1],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -545,6 +562,7 @@ translate([56, -40, 0]) machineblock(
   );
 
 translate([56, -60, 0]) machineblock(
+    align = "ccs",
     size=[4, 1, 1],
     baseCutoutType=baseCutoutType,
     studs=knobs,
@@ -575,6 +593,7 @@ translate([56, -60, 0]) machineblock(
   );
 
 translate([56, -80, 0]) machineblock(
+    align = "ccs",
     size=[6, 1, 1],
     baseCutoutType=baseCutoutType,
     studs=knobs,

@@ -86,6 +86,20 @@
                     }
                 },
                 {
+                    "name": "Round Box with Lid 8x8",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 12,
+                        "baseTongue": true,
+                        "baseCutoutType": "none",
+                        "basePitWallThickness": 0.333,
+                        "baseRoundingRadiusZ": 4,
+                        "lidKnobs" : false,
+                        "lidText": "Jewlery"
+                    }
+                },
+                {
                     "name": "Box with Lid 8x6",
                     "parameters": {
                         "boxSizeX": 8,
