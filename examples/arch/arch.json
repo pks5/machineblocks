@@ -1,0 +1,23 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
+    },
+    "name": "Arch Bricks",
+    "examples" : [
+        {
+            "template": "../../templates/arch.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/arch",
+            "bricks" : [
+                {
+                    "name": "Arch",
+                    "parameters": {
+                        
+                    }
+                }
+            ]
+        }
+    ]
+}
