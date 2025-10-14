@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Text Bricks",
     "examples": [
         {
-            "template": "../../templates/text-template.scad",
-            "targetDirectory": "./scad",
+            "template": "../../templates/text.template.scad",
+            "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/text",
             "bricks": [
                 {

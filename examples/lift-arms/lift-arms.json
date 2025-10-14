@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Lift Arms",
     "examples" : [
         {
             "template": "../../templates/lift-arm.template.scad",
-            "targetDirectory" : "./scad",
+            "targetDirectory" : ".",
             "url": "https://machineblocks.com/examples/lift-arms",
             "bricks" : [
                 {
