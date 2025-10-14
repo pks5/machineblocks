@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Angle Bricks",
     "examples": [
         {
-            "template": "../../templates/angle-template.scad",
-            "targetDirectory": "./scad",
+            "template": "../../templates/angle.template.scad",
+            "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/angle",
             "bricks": [
                 {
