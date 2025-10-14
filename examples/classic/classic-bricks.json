@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Classic Bricks",
     "examples" : [
         {
-            "template": "../../templates/brick-template.scad",
-            "targetDirectory" : "./scad",
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
             "url": "https://machineblocks.com/examples/classic-bricks",
             "bricks" : [
                 {

@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Boxes",
     "examples": [
         {
-            "template": "../../templates/box-template.scad",
-            "targetDirectory": "./scad",
+            "template": "../../templates/box.template.scad",
+            "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/boxes-enclosures",
             "bricks": [
                 {

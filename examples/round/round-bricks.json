@@ -7,7 +7,7 @@
     "name": "Round Bricks",
     "examples" : [
         {
-            "template": "../../templates/brick-template.scad",
+            "template": "../../templates/brick.template.scad",
             "targetDirectory" : ".",
             "url": "https://machineblocks.com/examples/round-bricks",
             "bricks" : [
