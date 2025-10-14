@@ -1,14 +1,14 @@
 {
     "type": "com.machineblocks.examples",
     "config":{
-        "lib": "../../../lib",
-        "presets": "../../../config/presets.scad"
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
     },
     "name": "Corner Bricks",
     "examples": [
         {
-            "template": "../../templates/hole-plate-template.scad",
-            "targetDirectory": "./scad",
+            "template": "../../templates/hole-plate.template.scad",
+            "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/corner",
             "bricks": [
                 {
@@ -115,8 +115,8 @@
         },
 
         {
-            "template": "../../templates/corner-template.scad",
-            "targetDirectory": "./scad",
+            "template": "../../templates/corner.template.scad",
+            "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/corner",
             "bricks": [
                 {
