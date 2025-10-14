@@ -1,0 +1,23 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
+    },
+    "name": "Brackets",
+    "examples" : [
+        {
+            "template": "../../templates/bracket.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/bracket",
+            "bricks" : [
+                {
+                    "name": "Bracket",
+                    "parameters": {
+                        
+                    }
+                }
+            ]
+        }
+    ]
+}
