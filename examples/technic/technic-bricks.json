@@ -101,7 +101,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 
@@ -111,7 +111,7 @@
                         "brickSizeX": 3,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -120,7 +120,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -129,7 +129,7 @@
                         "brickSizeX": 6,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -138,7 +138,7 @@
                         "brickSizeX": 8,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -147,7 +147,7 @@
                         "brickSizeX": 12,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -156,7 +156,7 @@
                         "brickSizeX": 16,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -165,7 +165,7 @@
                         "brickSizeX": 24,
                         "brickSizeY": 1,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
 
@@ -232,7 +232,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -241,7 +241,7 @@
                         "brickSizeX": 3,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -250,7 +250,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -259,7 +259,7 @@
                         "brickSizeX": 6,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -268,7 +268,7 @@
                         "brickSizeX": 8,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -277,7 +277,7 @@
                         "brickSizeX": 12,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -286,7 +286,7 @@
                         "brickSizeX": 16,
                         "brickSizeY": 2,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
 
@@ -664,7 +664,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -674,7 +674,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -684,7 +684,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -694,7 +694,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -704,7 +704,7 @@
                         "brickSizeY": 4,
                         "baseLayers": 3,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
 
@@ -889,7 +889,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 12,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 
@@ -900,7 +900,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 12,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -910,7 +910,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 15,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -920,7 +920,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 15,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -930,7 +930,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 15,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -940,7 +940,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 18,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 },
                 {
@@ -950,7 +950,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 18,
                         "holesX" : true,
-                        "knobType": "technic"
+                        "knobType": "ring"
                     }
                 }
             ]
