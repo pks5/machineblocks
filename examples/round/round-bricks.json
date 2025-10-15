@@ -33,7 +33,7 @@
                         "baseReliefCut": true,
                         "baseReliefCutHeight": 2.2,
                         "baseReliefCutThickness": 0.8,
-                        "knobType": "technic"
+                        "knobType": "hollow"
                     }
                 },
                 {
@@ -114,7 +114,7 @@
                         "baseReliefCut": true,
                         "baseReliefCutHeight": 2.2,
                         "baseReliefCutThickness": 0.8,
-                        "knobType": "technic"
+                        "knobType": "hollow"
                     }
                 },
                 {
@@ -123,7 +123,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobType": "technic",
+                        "knobType": "hollow",
                         "baseRoundingRadiusZ": 0.5,
                         "knobPadding":0
                     }
@@ -136,7 +136,7 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
                         "knobs": true,
-                        "knobType": "technic"
+                        "knobType": "hollow"
                     }
                 },
                 {
@@ -147,7 +147,7 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 1,
                         "knobPadding":0,
-                        "knobType": "technic",
+                        "knobType": "hollow",
                         "knobCentered": true
                     }
                 },

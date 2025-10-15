@@ -38,6 +38,8 @@ leg2Rotation=0;
 
 /*{BASE_VARIABLES}*/
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 /* [Hidden] */
 
 holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"axle"]] : [true, [0,0,0,0,"axle"]];

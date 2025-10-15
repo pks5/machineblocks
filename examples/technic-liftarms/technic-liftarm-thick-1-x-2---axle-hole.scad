@@ -41,6 +41,29 @@ leg2Rotation=0;
 // Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
+/* [Override Config] */
+    overrideConfig=false;
+    overrideUnitMbu = 1.6;
+    overrideUnitGrid = [5, 2];
+    overrideScale = 1.0;
+    overrideBaseHeightAdjustment = 0.0;
+    overrideBaseSideAdjustment = -0.1;
+    overrideBaseWallThicknessAdjustment = -0.1;
+    overrideBaseClampThickness = 0.1;
+    overrideTubeXDiameterAdjustment = -0.1;
+    overrideTubeYDiameterAdjustment = -0.1;
+    overrideTubeZDiameterAdjustment = -0.1;
+    overrideHoleXDiameterAdjustment = 0.3;
+    overrideHoleYDiameterAdjustment = 0.3;
+    overrideHoleZDiameterAdjustment = 0.3;
+    overridePinDiameterAdjustment = 0.0;
+    overrideStudDiameterAdjustment = 0.2;
+    overrideStudCutoutAdjustment = [0, 0.2];
+    overridePreviewRender = true;
+    overridePreviewQuality = 0.5;
+    overrideRoundingResolution = 64;
+
+
 /* [Hidden] */
 
 holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"axle"]] : [true, [0,0,0,0,"axle"]];
