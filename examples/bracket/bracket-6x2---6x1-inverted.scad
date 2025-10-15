@@ -2,7 +2,7 @@
  * MachineBlocks
  * https://machineblocks.com/examples/angle
  *
- * Bracket 2x1 - 2x2 Inverted
+ * Bracket 6x2 - 6x1 Inverted
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -19,11 +19,11 @@ include <../../config/presets.scad>;
 /* [Size] */
 
 // Both bricks' size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]
+brickSizeX = 6; // [1:32]
 // First brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick1SizeY = 1; // [1:32]
+brick1SizeY = 2; // [1:32]
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick2SizeY = 2; // [1:32]
+brick2SizeY = 1; // [1:32]
 // First brick's height specified as number of layers. Each layer has the height of one plate.
 brick1BaseLayers = 1; // [1:24]
 

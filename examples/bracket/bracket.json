@@ -50,6 +50,22 @@
                         "brick1SizeY": 1,
                         "brick2SizeY": 2
                     }
+                },
+                {
+                    "name": "Bracket 6x1 - 6x2 Inverted",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 2
+                    }
+                },
+                {
+                    "name": "Bracket 6x2 - 6x1 Inverted",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brick1SizeY": 2,
+                        "brick2SizeY": 1
+                    }
                 }
             ]
         },
