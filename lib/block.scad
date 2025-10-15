@@ -176,7 +176,7 @@ module machineblock(
         
         //Knobs
         studs = true, // bool or vector
-        studType = "solid", // "solid" | "ring"
+        studType = "solid", // "solid" | "hollow"
         studCentered = false, // bool
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
@@ -222,7 +222,7 @@ module machineblock(
         pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
         pitKnobs = true, // bool
         pitKnobPadding = 0.2, // grid
-        pitKnobType = "solid", // "solid" | "ring"
+        pitKnobType = "solid", // "solid" | "hollow"
         pitKnobCentered = false, // bool
         pitWallGaps = [], // vector
         
@@ -1505,7 +1505,7 @@ module machineblock(
                                                         cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                 }
                                                 
-                                                if(studType(a + posOffset, b + posOffset) == "ring"){
+                                                if(studType(a + posOffset, b + posOffset) == "hollow"){
                                                     intersection(){
                                                         cube([knobHoleSize - 2*studHoleClampThickness, knobHoleSize - 2*studHoleClampThickness, knobHeight*cutMultiplier], center=true);
                                                         cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);

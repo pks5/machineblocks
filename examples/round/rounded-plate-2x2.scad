@@ -55,7 +55,7 @@ knobs = true;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
-knobType = "solid"; // [solid, ring]
+knobType = "solid"; // [solid, hollow]
 // Knob Padding
 knobPadding = 0;
 

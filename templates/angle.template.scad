@@ -39,11 +39,11 @@ brick1BaseCutoutType = "classic"; // [none, classic]
 // Whether first brick should have knobs.
 brick1Knobs = true;
 // Type of first brick's knobs
-brick1KnobType = "solid"; // [solid, ring]
+brick1KnobType = "solid"; // [solid, hollow]
 // Whether second brick should have knobs.
 brick2Knobs = true;
 // Type of second brick's knobs
-brick2KnobType = "ring"; // [solid, ring]
+brick2KnobType = "hollow"; // [solid, hollow]
 
 /* [Render] */
 

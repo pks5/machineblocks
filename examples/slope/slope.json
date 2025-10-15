@@ -285,7 +285,7 @@
                         "brickSizeY": 1,
                         "baseLayers": 9,
                         "slope0": 1,
-                        "knobType": "ring"
+                        "knobType": "hollow"
                     }
                 },
 
@@ -306,7 +306,7 @@
                         "brickSizeY": 2,
                         "baseLayers": 9,
                         "slope0": 1,
-                        "knobType": "ring"
+                        "knobType": "hollow"
                     }
                 },
 
@@ -318,7 +318,7 @@
                         "baseLayers": 9,
                         "slope0": 1,
                         "slope2": 1,
-                        "knobType": "ring"
+                        "knobType": "hollow"
                     }
                 },
 

@@ -40,7 +40,7 @@ knobs = false;
 // Whether knobs should be centered.
 knobCentered = false;
 // Type of the knobs
-knobType = "solid"; // [solid, ring]
+knobType = "solid"; // [solid, hollow]
 // Whether to draw pillars.
 pillars = true;
 

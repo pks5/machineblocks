@@ -34,7 +34,7 @@ borderSize = 1; // [1:8]
 // Whether to draw knobs.
 knobs = true;
 // Type of the knobs
-knobType = "solid"; // [solid, ring]
+knobType = "solid"; // [solid, hollow]
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
