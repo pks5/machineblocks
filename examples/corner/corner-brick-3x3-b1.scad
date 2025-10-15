@@ -49,6 +49,29 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
+/* [Override Config] */
+    overrideConfig=false;
+    overrideUnitMbu = 1.6;
+    overrideUnitGrid = [5, 2];
+    overrideScale = 1.0;
+    overrideBaseHeightAdjustment = 0.0;
+    overrideBaseSideAdjustment = -0.1;
+    overrideBaseWallThicknessAdjustment = -0.1;
+    overrideBaseClampThickness = 0.1;
+    overrideTubeXDiameterAdjustment = -0.1;
+    overrideTubeYDiameterAdjustment = -0.1;
+    overrideTubeZDiameterAdjustment = -0.1;
+    overrideHoleXDiameterAdjustment = 0.3;
+    overrideHoleYDiameterAdjustment = 0.3;
+    overrideHoleZDiameterAdjustment = 0.3;
+    overridePinDiameterAdjustment = 0.0;
+    overrideStudDiameterAdjustment = 0.2;
+    overrideStudCutoutAdjustment = [0, 0.2];
+    overridePreviewRender = true;
+    overridePreviewQuality = 0.5;
+    overrideRoundingResolution = 64;
+
+
 // Generate the block
 union(){
     machineblock(
@@ -64,25 +87,27 @@ union(){
 
         baseSideAdjustment = baseSideAdjustment,
         
-        scale=scale,
-    baseHeightAdjustment=baseHeightAdjustment,
-    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
-    baseClampThickness=baseClampThickness,
-    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
-    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
-    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
-    holeXDiameterAdjustment=holeXDiameterAdjustment,
-    holeYDiameterAdjustment=holeYDiameterAdjustment,
-    holeZDiameterAdjustment=holeZDiameterAdjustment,
-    pinDiameterAdjustment=pinDiameterAdjustment,
-    studDiameterAdjustment=studDiameterAdjustment,
-    studCutoutAdjustment=studCutoutAdjustment,
-    previewRender=previewRender,
-    previewQuality=previewQuality,
-    baseRoundingResolution=roundingResolution,
-    holeRoundingResolution=roundingResolution,
-    studRoundingResolution=roundingResolution,
-    pillarRoundingResolution=roundingResolution
+        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
+    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+    scale=overrideConfig ? overrideScale : scale,
+    baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
+    baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
+    baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
+    tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
+    holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
+    holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
+    pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
+    studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
+    studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
+    previewRender=overrideConfig ? overridePreviewRender : previewRender,
+    previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
+    baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
     );
 
     machineblock(
@@ -97,24 +122,26 @@ union(){
         
         baseSideAdjustment = baseSideAdjustment,
     
-        scale=scale,
-    baseHeightAdjustment=baseHeightAdjustment,
-    baseWallThicknessAdjustment=baseWallThicknessAdjustment,
-    baseClampThickness=baseClampThickness,
-    tubeXDiameterAdjustment=tubeXDiameterAdjustment,
-    tubeYDiameterAdjustment=tubeYDiameterAdjustment,
-    tubeZDiameterAdjustment=tubeZDiameterAdjustment,
-    holeXDiameterAdjustment=holeXDiameterAdjustment,
-    holeYDiameterAdjustment=holeYDiameterAdjustment,
-    holeZDiameterAdjustment=holeZDiameterAdjustment,
-    pinDiameterAdjustment=pinDiameterAdjustment,
-    studDiameterAdjustment=studDiameterAdjustment,
-    studCutoutAdjustment=studCutoutAdjustment,
-    previewRender=previewRender,
-    previewQuality=previewQuality,
-    baseRoundingResolution=roundingResolution,
-    holeRoundingResolution=roundingResolution,
-    studRoundingResolution=roundingResolution,
-    pillarRoundingResolution=roundingResolution
+        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
+    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+    scale=overrideConfig ? overrideScale : scale,
+    baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
+    baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
+    baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
+    tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
+    holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
+    holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
+    pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
+    studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
+    studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
+    previewRender=overrideConfig ? overridePreviewRender : previewRender,
+    previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
+    baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
     );    
 }

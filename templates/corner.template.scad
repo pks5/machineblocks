@@ -46,6 +46,8 @@ knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 // Generate the block
 union(){
     machineblock(

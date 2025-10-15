@@ -36,6 +36,8 @@ knobs = true;
 // Type of the knobs
 knobType = "solid"; // [solid, ring]
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 // Generate the block
 union(){
     machineblock(

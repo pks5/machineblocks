@@ -120,6 +120,8 @@ grilleX = false;
 // Grille in Y direction
 grilleY = false;
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 
 /* [Hidden] */
 slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;

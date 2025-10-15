@@ -50,6 +50,8 @@ brick2KnobType = "ring"; // [solid, ring]
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 /* [Hidden] */
 
 // Grid Size XY

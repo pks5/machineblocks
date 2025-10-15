@@ -77,6 +77,8 @@ lidText = "";
 //Text Font
 textFont = "RBNo3.1";
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 machineblock(
     size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     

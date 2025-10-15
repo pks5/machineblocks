@@ -37,6 +37,8 @@ spanShape = "round"; // [square, round]
 
 /*{BASE_VARIABLES}*/
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 /* [Hidden] */
 brickTotalSizeY = (brickSizeY * unitGrid[0] * unitMbu + 2 * baseSideAdjustment);
 

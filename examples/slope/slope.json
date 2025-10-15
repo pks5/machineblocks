@@ -12,1240 +12,289 @@
             "url": "https://machineblocks.com/examples/slanted",
             "bricks": [
                 {
-                    "name": "Shifted Brick S1.1 2x1",
+                    "name": "Slope 18 4x1",
                     "parameters": {
-                        "brickSizeX": 2,
+                        "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "slope0": 1,
-                        "slope1": -1
+                        "slope0": 3
                     }
                 },
+
                 {
-                    "name": "Shifted Brick S1.1 2x2",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": -1
-                    }
-                },
-                {
-                    "name": "Shifted Brick S2.2 4x2",
+                    "name": "Slope 18 4x2",
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
+                        "slope0": 3
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "slope0": 2
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2,
+                        "slope0": 2
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x3",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 3,
+                        "slope0": 2
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x4",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 4,
+                        "slope0": 2
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x3",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 3,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x4",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x6",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 6,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x8",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 8,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 25 8x1x3",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope0": 7
+                    }
+                },
+
+                {
+                    "name": "Slope 65 2x1x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
                         "baseLayers": 6,
-                        "slope0": 2,
-                        "slope1": -2
-                    }
-                },
-
-
-                {
-                    "name": "Slanted Brick S1 1x2",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
-                        "slope0": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1 2x2",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
                         "slope0": 1
                     }
                 },
 
                 {
-                    "name": "Slanted Brick S1 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": 1
-                    }
-                },
-                
-                
-                
-                
-
-                {
-                    "name": "Slanted Brick S1.1 1x2",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1.1 2x2",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-               
-                
-                {
-                    "name": "Slanted Brick S1.1.1.1 2x2",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S1 1x3",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 3,
-                        "slope0": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1 2x3",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 3,
-                        "slope0": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.0.2 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slope0": 1,
-                        "slope2": 2
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S1.1 1x3",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 3,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1.1 2x3",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 3,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-               
-                
-                
-
-                {
-                    "name": "Slanted Brick S2 1x2",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
-                        "slope0": 2
-                    }
-                },
-                {
-                    "name": "Slanted Brick S2 2x2",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
-                        "slope0": 2
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S2 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": 2
-                    }
-                },
-                
-               
-                
-               
-
-                {
-                    "name": "Slanted Brick S3 1x3",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 3,
-                        "slope0": 3
-                    }
-                },
-                {
-                    "name": "Slanted Brick S3 2x3",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 3,
-                        "slope0": 3
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S3 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": 3
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S3 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": 3
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S3 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slope0": 3
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S2 1x3",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 3,
-                        "slope0": 2
-                    }
-                },
-                {
-                    "name": "Slanted Brick S2 2x3",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 3,
-                        "slope0": 2
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S2 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": 2
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S1 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.0.2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope2": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.0.3 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope2": 3
-                    }
-                },
-                
-                
-
-
-                {
-                    "name": "Slanted Brick S1.1 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1.1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S1.1.1.1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                
-
-
-                {
-                    "name": "Slanted Brick S1.1.1 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1
-                    }
-                },
-                {
-                    "name": "Slanted Brick S1.1.1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1
-                    }
-                },
-                
-               
-
-
-                {
-                    "name": "Slanted Brick S1.1.1.1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S1.1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S1.1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 1,
-                        "slope1": 1,
-                        "slope2": 1,
-                        "slope3": 1
-                    }
-                },
-                
-                
-
-                {
-                    "name": "Slanted Brick S2 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 2
-                    }
-                },
-                {
-                    "name": "Slanted Brick S2 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 2
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S2 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 2
-                    }
-                },
-                
-                
-               
-
-                {
-                    "name": "Slanted Brick S2.2 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2
-                    }
-                },
-                {
-                    "name": "Slanted Brick S2.2 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S2.2 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": 2,
-                        "slope1": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2.2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2.2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S2.2.2.2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2,
-                        "slope2": 2,
-                        "slope3": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S2.2.2.2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 2,
-                        "slope1": 2,
-                        "slope2": 2,
-                        "slope3": 2
-                    }
-                },
-                
-               
-
-                {
-                    "name": "Slanted Brick S3 1x4",
-                    "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
-                        "slope0": 3
-                    }
-                },
-                {
-                    "name": "Slanted Brick S3 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": 3
-                    }
-                },
-
-                {
-                    "name": "Slanted Brick S3.0.2 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": 3,
-                        "slope2": 2
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S3 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": 3
-                    }
-                },
-                
-                {
-                    "name": "Slanted Brick S3.0.2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": 3,
-                        "slope2": 2
-                    }
-                },
-
-
-
-                {
-                    "name": "Overhang Brick O1 2x1",
+                    "name": "Slope 18 2x1x⅔",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
-                        "slope0": -1
+                        "baseLayers": 2,
+                        "slope0": 2
                     }
                 },
-                
+
                 {
-                    "name": "Overhang Brick O1 2x2",
+                    "name": "Slope 30 1x1x⅔",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 2,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 30 1x2x⅔",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "baseLayers": 2,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 33 2x2 Double",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "baseLayers": 2,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 33 2x4 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 2,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x2 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x3 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 3,
+                        "baseLayers": 3,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x4 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 6x4 Double",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 45 1x1x⅔ Double",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 2,
+                        "slope0": 0.5,
+                        "slope1": 0.5
+                    }
+                },
+
+                {
+                    "name": "Slope 45 6x8 Double",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 8,
+                        "baseLayers": 3,
+                        "slope0": 1,
+                        "slope1": 1
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 33 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope0": -2
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
                         "slope0": -1
                     }
                 },
 
                 {
-                    "name": "Overhang Brick O1 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1 4x1",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1,
-                        "slope0": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": -1
-                    }
-                },
-                
-                
-                
-
-                {
-                    "name": "Overhang Brick O1.1 3x1",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-              
-
-                {
-                    "name": "Overhang Brick O1.1 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O2.2 6x2",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "slope0": -2,
-                        "slope1": -2
-                    }
-                },
-
-                {
-                    "name": "Overhang Brick O2.2 6x1",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 1,
-                        "slope0": -2,
-                        "slope1": -2
-                    }
-                },
-                
-                
-                {
-                    "name": "Overhang Brick O1 2x3",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 3,
-                        "slope0": -1
-                    }
-                },
-
-               
-                
-                
-                
-                {
-                    "name": "Overhang Brick O1.0.2 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slope0": -1,
-                        "slope2": -2
-                    }
-                },
-                
-                
-
-               
-                
-
-                {
-                    "name": "Overhang Brick O1.1 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                
-
-                
-                {
-                    "name": "Overhang Brick O2 3x2",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
-                        "slope0": -2
-                    }
-                },
-
-                {
-                    "name": "Overhang Brick O2 3x1",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "slope0": -2
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O2 4x2",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "slope0": -2
-                    }
-                },
-                
-               
-                {
-                    "name": "Overhang Brick O2 4x1",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1,
-                        "slope0": -2
-                    }
-                },
-
-                
-                
-                {
-                    "name": "Overhang Brick O3 4x1",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1,
-                        "slope0": -3
-                    }
-                },
-
-                {
-                    "name": "Overhang Brick O3 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": -3
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O3 6x3",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 3,
-                        "slope0": -3
-                    }
-                },
-                
-                
-
-                
-
-                {
-                    "name": "Overhang Brick O2 3x3",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 3,
-                        "slope0": -2
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O2 4x3",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 3,
-                        "slope0": -2
-                    }
-                },
-                
-               
-
-                
-                {
-                    "name": "Overhang Brick O1 2x4",
-                    "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
-                        "slope0": -1
-                    }
-                },
-
-                
-                
-                {
-                    "name": "Overhang Brick O1.0.2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope2": -2
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.0.3 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope2": -3
-                    }
-                },
-                
-                
-
-
-                
-               
-                {
-                    "name": "Overhang Brick O1.1 3x4",
+                    "name": "Slope 45 3x4 Double 33",
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1
-                    }
-                },
-
-                
-
-                {
-                    "name": "Overhang Brick O1.1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                
-
-
-                
-                
-
-                {
-                    "name": "Overhang Brick O1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1
-                    }
-                },
-                
-               
-
-
-                
-
-                {
-                    "name": "Overhang Brick O1.1.1.1 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1.1 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O1.1.1.1 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -1,
-                        "slope1": -1,
-                        "slope2": -1,
-                        "slope3": -1
-                    }
-                },
-                
-                
-
-                
-
-                {
-                    "name": "Overhang Brick O2 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": -2
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O2 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -2
-                    }
-                },
-                
-                
-                
-                
-                {
-                    "name": "Overhang Brick O2.2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -2,
-                        "slope1": -2
-                    }
-                },
-
-                
-
-               
-                {
-                    "name": "Overhang Brick O3.0.2 3x4",
-                    "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 4,
-                        "slope0": -3,
-                        "slope2": -2
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O3 4x4",
-                    "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "slope0": -3
-                    }
-                },
-                
-                {
-                    "name": "Overhang Brick O3.0.2 6x4",
-                    "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "slope0": -3,
-                        "slope2": -2
+                        "baseLayers": 3,
+                        "slope2": 1,
+                        "slope3": 1,
+                        "slope0": 2
                     }
                 }
             ]

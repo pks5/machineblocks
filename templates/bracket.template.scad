@@ -36,6 +36,8 @@ middleLayers = 2;
 
 /*{BASE_VARIABLES}*/
 
+/*{OVERRIDE_CONFIG_VARIABLES}*/
+
 /* [Hidden] */
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
