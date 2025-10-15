@@ -44,7 +44,7 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 1,
                         "holesZ": true,
-                        "holeZType": "axis",
+                        "holeZType": "axle",
                         "knobPadding":0
                     }
                 },
@@ -56,7 +56,7 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 1,
                         "holesZ": true,
-                        "holeZType": "axis",
+                        "holeZType": "axle",
                         "knobPadding":0
                     }
                 },
@@ -160,7 +160,7 @@
                         "baseRoundingRadiusZ": 1,
                         "knobPadding":0,
                         "holesZ": [[0,0,0,0]],
-                        "holeZType": "axis"
+                        "holeZType": "axle"
                     }
                 },
                 {

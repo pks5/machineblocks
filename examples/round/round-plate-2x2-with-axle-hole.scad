@@ -91,7 +91,7 @@ holeYGridOffsetZ = 3.5;
 // Whether brick should have Technic holes along Z-axis.
 holesZ = [[0, 0, 0, 0]];
 // Type of Z Holes.
-holeZType = "axis";
+holeZType = "axle";
 // Whether Z Holes should be centered on X direction
 holeZCenteredX = true;
 // Whether Z Holes should be centered on Y direction
