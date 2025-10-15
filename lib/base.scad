@@ -404,7 +404,7 @@ module mb_base(
                     if(connectors[con][1] == 1){
                         mb_connectors(side = connectors[con][0],
                                 grid = grid,
-                                height = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
+                                height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                                 baseHeight = height,
                                 inverse=true,
                                 size = connectorSize,
@@ -414,7 +414,7 @@ module mb_base(
                     else if(connectors[con][1] > 1){
                         mb_connector_grooves(side = connectors[con][0],
                             grid = grid,
-                            depth = (connectorHeight == 0 ? height : connectorHeight) + connectorDepthTolerance,
+                            depth = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                             baseHeight = height,
                             inverse=connectors[con][1]==3,
                             size = connectorSize,
@@ -435,7 +435,7 @@ module mb_base(
                 if(connectors[con][1] == 0){
                     mb_connectors(side = connectors[con][0],
                             grid = grid,
-                            height = (connectorHeight == 0 ? height : connectorHeight),
+                            height = (connectorHeight == "auto" ? height : connectorHeight),
                             baseHeight = height,
                             inverse=connectors[con][1]==1,
                             size = connectorSize - 2*connectorSideTolerance,

@@ -2,7 +2,7 @@
  * MachineBlocks
  * https://machineblocks.com/examples/angle
  *
- * Angle 1x1x1
+ * Bracket 2x1 - 2x2 Inverted
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -19,15 +19,16 @@ include <../../config/presets.scad>;
 /* [Size] */
 
 // Both bricks' size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 1; // [1:32]
+brickSizeX = 2; // [1:32]
 // First brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick1SizeY = 1; // [1:32]
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick2SizeY = 1; // [1:32]
+brick2SizeY = 2; // [1:32]
 // First brick's height specified as number of layers. Each layer has the height of one plate.
 brick1BaseLayers = 1; // [1:24]
+
 // Second brick's base height in mm
-brick2BaseHeight = 1.8;
+//brick2BaseHeight = 1.8;
 
 /* [Base] */
 
@@ -51,7 +52,7 @@ brick2KnobType = "hollow"; // [solid, hollow]
 /* [Render] */
 
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
-assemblyMode = "merged"; // [unassembled, assembled, merged]
+assemblyMode = "assembled"; // [unassembled, assembled, merged]
 
 /* [Override Config] */
     overrideConfig=false;
@@ -77,11 +78,6 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 
 /* [Hidden] */
-
-// Grid Size XY
-gridSizeXY = 8.0;
-// Grid Size Z
-gridSizeZ = 3.2;
 
 bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
 
@@ -127,8 +123,8 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
           rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
           offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
     
-          size = [ brickSizeX, brick2SizeY, 1 ],
-          baseHeight = brick2BaseHeight,
+          size = [ brickSizeX, brick2SizeY, 0.5 ],
+          //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
           baseColor = baseColor,
@@ -136,7 +132,7 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
           studs = brick2Knobs,
           studType = brick2KnobType,
           connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-          connectorHeight = brick1BaseLayers * gridSizeZ,
+          connectorHeight = brick1BaseLayers * unitGrid[1],
           
 
           baseSideAdjustment =

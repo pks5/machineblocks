@@ -248,9 +248,9 @@ module machineblock(
         svgColor = "#2c3e50", // color - Color of svg
 
         connectors = false, // bool
-        connectorHeight = 0, // mm
-        connectorDepth = 1.4, // mm
-        connectorSize = 4.0, // mm
+        connectorHeight = "auto", // mbu
+        connectorDepth = 0.75, // mbu
+        connectorWidth = 2.5, // mbu
         connectorDepthTolerance = 0.2, // mm
         connectorSideTolerance = 0.1, // mm
 
@@ -668,9 +668,9 @@ module machineblock(
                                             bevelOuter = bevelOuter,
                                             bevelOuterAdjusted = bevelOuterAdjusted,
                                             connectors = connectors,
-                                            connectorHeight = connectorHeight,
-                                            connectorDepth = connectorDepth,
-                                            connectorSize = connectorSize,
+                                            connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
+                                            connectorDepth = connectorDepth * mbuToMm,
+                                            connectorSize = connectorWidth * mbuToMm,
                                             connectorDepthTolerance = connectorDepthTolerance,
                                             connectorSideTolerance = connectorSideTolerance
                                         );
@@ -1145,9 +1145,9 @@ module machineblock(
                                         bevelOuter = bevelOuter,
                                         bevelOuterAdjusted = bevelOuterAdjusted,
                                         connectors = connectors,
-                                        connectorHeight = connectorHeight,
-                                        connectorDepth = connectorDepth,
-                                        connectorSize = connectorSize,
+                                        connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
+                                        connectorDepth = connectorDepth * mbuToMm,
+                                        connectorSize = connectorWidth * mbuToMm,
                                         connectorDepthTolerance = connectorDepthTolerance,
                                         connectorSideTolerance = connectorSideTolerance
                                     );

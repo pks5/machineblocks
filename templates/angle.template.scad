@@ -24,8 +24,9 @@ brick1SizeY = 2; // [1:32]
 brick2SizeY = 2; // [1:32]
 // First brick's height specified as number of layers. Each layer has the height of one plate.
 brick1BaseLayers = 1; // [1:24]
+
 // Second brick's base height in mm
-brick2BaseHeight = 1.8;
+//brick2BaseHeight = 1.8;
 
 /* [Base] */
 
@@ -54,11 +55,6 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Hidden] */
 
-// Grid Size XY
-gridSizeXY = 8.0;
-// Grid Size Z
-gridSizeZ = 3.2;
-
 /*{HIDDEN_PARAMETERS}*/
 
 // Generate the block
@@ -83,8 +79,8 @@ gridSizeZ = 3.2;
           rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
           offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
     
-          size = [ brickSizeX, brick2SizeY, 1 ],
-          baseHeight = brick2BaseHeight,
+          size = [ brickSizeX, brick2SizeY, 0.5 ],
+          //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
           /*{BASE_PARAMETERS}*/
@@ -92,7 +88,7 @@ gridSizeZ = 3.2;
           studs = brick2Knobs,
           studType = brick2KnobType,
           connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-          connectorHeight = brick1BaseLayers * gridSizeZ,
+          connectorHeight = brick1BaseLayers * unitGrid[1],
           
 
           baseSideAdjustment =
