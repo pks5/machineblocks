@@ -40,10 +40,13 @@ spanShape = "round"; // [square, round]
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
-brickTotalSizeY = (brickSizeY * unitGrid[0] * unitMbu + 2 * baseSideAdjustment);
 
 tunnelWidth = (brickSizeX - column1SizeX - column2SizeX) * unitGrid[0] * unitMbu;
 tunnelHeight = (brickHeight - deckHeight) * unitGrid[1] * unitMbu;
+
+/*{HIDDEN_PARAMETERS}*/
+
+brickTotalSizeY = (brickSizeY * unitGrid[0] * unitMbu + 2 * bSideAdjustment);
 
 // First Pillar
 machineblock(
@@ -52,7 +55,7 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
     
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
 ){
@@ -68,13 +71,13 @@ machineblock(
 
                 /*{BASE_PARAMETERS}*/
                 
-                baseSideAdjustment = [-baseSideAdjustment, -baseSideAdjustment,baseSideAdjustment, baseSideAdjustment],
+                baseSideAdjustment = [-bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
                 
                 /*{PRESET_PARAMETERS}*/
             );
             
             if(spanShape == "round"){
-                translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY)- baseSideAdjustment, 0])
+                translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, 0])
                 rotate([90,0,0])
                     scale([1, 2* tunnelHeight / tunnelWidth, 1])
                         cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true);
@@ -90,7 +93,7 @@ machineblock(
 
         /*{BASE_PARAMETERS}*/
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
         
         /*{PRESET_PARAMETERS}*/
     );
@@ -103,7 +106,7 @@ machineblock(
 
         /*{BASE_PARAMETERS}*/
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
         
         /*{PRESET_PARAMETERS}*/
     );

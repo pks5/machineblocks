@@ -83,6 +83,8 @@ gridSizeXY = 8.0;
 // Grid Size Z
 gridSizeZ = 3.2;
 
+bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
 // Generate the block
 
 
@@ -96,7 +98,7 @@ gridSizeZ = 3.2;
         studType = brick1KnobType,
 
         baseSideAdjustment =
-            [ baseSideAdjustment, baseSideAdjustment, assemblyMode == "merged" ? 0 : baseSideAdjustment, baseSideAdjustment ],
+            [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
         
         unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -128,6 +130,7 @@ gridSizeZ = 3.2;
           size = [ brickSizeX, brick2SizeY, 1 ],
           baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
+          baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
           baseColor = baseColor,
 
           studs = brick2Knobs,
@@ -137,7 +140,7 @@ gridSizeZ = 3.2;
           
 
           baseSideAdjustment =
-            [ baseSideAdjustment, baseSideAdjustment, 0, baseSideAdjustment ],
+            [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
 
           unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,

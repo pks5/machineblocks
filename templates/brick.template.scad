@@ -126,6 +126,8 @@ grilleY = false;
 /* [Hidden] */
 slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;
 
+/*{HIDDEN_PARAMETERS}*/
+
 // Generate the block
 machineblock(
     size = [brickSizeX, brickSizeY,baseLayers],
@@ -168,7 +170,7 @@ machineblock(
     grilleX = grilleX,
     grilleY = grilleY,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
 );

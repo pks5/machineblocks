@@ -1,0 +1,44 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/presets.scad"
+    },
+    "name": "Technic Plates",
+    "examples" : [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/technic-plates",
+            "bricks" : [
+                {
+                    "name": "Technic Plate 2x4 with 3 Holes",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "holesZ" : true
+                    }
+                },
+                {
+                    "name": "Technic Plate 2x6 with 5 Holes",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 6,
+                        "baseLayers": 1,
+                        "holesZ" : true
+                    }
+                },
+                {
+                    "name": "Technic Plate 2x8 with 7 Holes",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 8,
+                        "baseLayers": 1,
+                        "holesZ" : true
+                    }
+                }
+            ]
+        }
+    ]
+}

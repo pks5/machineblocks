@@ -53,6 +53,8 @@ base_variables = """// Color of the brick
 
 base_params = """baseColor = baseColor,"""
 
+hidden_params = """bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;"""
+
 def process_examples_file(example_file_path: str):
     if not os.path.exists(example_file_path):
         print("Cannot open file: " + example_file_path)
@@ -93,6 +95,7 @@ def process_examples_file(example_file_path: str):
             scad = scad.replace('{BRICK_NAME}', brick['name'])
             scad = scad.replace('/*{OVERRIDE_CONFIG_VARIABLES}*/', override_config_variables)
             scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
+            scad = scad.replace('/*{HIDDEN_PARAMETERS}*/', hidden_params)
             scad = scad.replace('/*{BASE_VARIABLES}*/', base_variables)
             scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
             scad = scad.replace('/*{IMPORTS}*/', "use <" + d['config']['lib'] + "/block.scad>;\ninclude <" + d['config']['presets'] + ">;\n")

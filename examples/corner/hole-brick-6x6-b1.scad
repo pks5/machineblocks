@@ -62,6 +62,10 @@ knobType = "solid"; // [solid, hollow]
     overrideRoundingResolution = 64;
 
 
+/* [Hidden] */
+
+bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
 // Generate the block
 union(){
     machineblock(
@@ -74,7 +78,7 @@ union(){
         offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
         
         unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -109,7 +113,7 @@ union(){
         offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
 
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -144,7 +148,7 @@ union(){
         offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -179,7 +183,7 @@ union(){
         offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,

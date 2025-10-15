@@ -66,6 +66,8 @@ middleLayers = 2;
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
 
+bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
@@ -75,7 +77,7 @@ machineblock(
 
     baseColor = baseColor,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -110,7 +112,7 @@ machineblock(
 
     baseColor = baseColor,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -146,7 +148,7 @@ machineblock(
 
     baseColor = baseColor,
 
-    baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
+    baseSideAdjustment = [bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -181,7 +183,7 @@ machineblock(
 
     baseColor = baseColor,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,

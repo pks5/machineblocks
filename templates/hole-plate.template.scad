@@ -38,6 +38,10 @@ knobType = "solid"; // [solid, hollow]
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
+/* [Hidden] */
+
+/*{HIDDEN_PARAMETERS}*/
+
 // Generate the block
 union(){
     machineblock(
@@ -50,7 +54,7 @@ union(){
         offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
         
         /*{PRESET_PARAMETERS}*/
     );  
@@ -65,7 +69,7 @@ union(){
         offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
 
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/
     );
@@ -80,7 +84,7 @@ union(){
         offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/
     );    
@@ -95,7 +99,7 @@ union(){
         offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/
     );

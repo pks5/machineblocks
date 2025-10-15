@@ -48,6 +48,10 @@ knobType = "classic"; // [classic, technic]
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
+/* [Hidden] */
+
+/*{HIDDEN_PARAMETERS}*/
+
 // Generate the block
 union(){
     machineblock(
@@ -61,7 +65,7 @@ union(){
         studType = knobType,
         align="ccs",
 
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
         
         /*{PRESET_PARAMETERS}*/
     );
@@ -76,7 +80,7 @@ union(){
         studType = knobType,
         align="ccs",
         
-        baseSideAdjustment = baseSideAdjustment,
+        baseSideAdjustment = bSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/
     );    

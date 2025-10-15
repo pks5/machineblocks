@@ -42,6 +42,8 @@ middleLayers = 2;
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
 
+/*{HIDDEN_PARAMETERS}*/
+
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
@@ -51,7 +53,7 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
     
@@ -66,7 +68,7 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
     
@@ -82,7 +84,7 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
 
-    baseSideAdjustment = [baseSideAdjustment,-baseSideAdjustment,baseSideAdjustment,baseSideAdjustment],
+    baseSideAdjustment = [bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
     
     /*{PRESET_PARAMETERS}*/
 );
@@ -97,7 +99,7 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
     

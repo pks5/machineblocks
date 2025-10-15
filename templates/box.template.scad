@@ -79,6 +79,10 @@ textFont = "RBNo3.1";
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
+/* [Hidden] */
+
+/*{HIDDEN_PARAMETERS}*/
+
 machineblock(
     size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
@@ -100,7 +104,7 @@ machineblock(
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
 );
@@ -128,7 +132,7 @@ if(lid){
             text = lidText,
             textFont = textFont,
 
-            baseSideAdjustment = baseSideAdjustment,
+            baseSideAdjustment = bSideAdjustment,
 
             /*{PRESET_PARAMETERS}*/
         );

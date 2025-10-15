@@ -103,6 +103,10 @@ textFont = "RBNo3.1";
     overrideRoundingResolution = 64;
 
 
+/* [Hidden] */
+
+bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
 machineblock(
     size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
     
@@ -124,7 +128,7 @@ machineblock(
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
@@ -172,7 +176,7 @@ if(lid){
             text = lidText,
             textFont = textFont,
 
-            baseSideAdjustment = baseSideAdjustment,
+            baseSideAdjustment = bSideAdjustment,
 
             unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,

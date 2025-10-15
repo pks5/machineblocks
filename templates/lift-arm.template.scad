@@ -42,6 +42,8 @@ leg2Rotation=0;
 
 holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"axle"]] : [true, [0,0,0,0,"axle"]];
 
+/*{HIDDEN_PARAMETERS}*/
+
 machineblock(
     baseRoundingRadius = [1.25,0,0],
     baseCutoutRoundingRadius = 0,
@@ -53,26 +55,9 @@ machineblock(
     size=[thin ? 0.5 : 1, leg1Size, 2.5], 
     studs = false,
 
-    scale = scale,
-    baseHeightAdjustment = baseHeightAdjustment,
-    baseSideAdjustment = baseSideAdjustment,
-    baseWallThicknessAdjustment = baseWallThicknessAdjustment,
-    baseClampThickness = baseClampThickness,
-    tubeXDiameterAdjustment = tubeXDiameterAdjustment,
-    tubeYDiameterAdjustment = tubeYDiameterAdjustment,
-    tubeZDiameterAdjustment = tubeZDiameterAdjustment,
-    holeXDiameterAdjustment = holeXDiameterAdjustment,
-    holeYDiameterAdjustment = holeYDiameterAdjustment,
-    holeZDiameterAdjustment = holeZDiameterAdjustment,
-    pinDiameterAdjustment = pinDiameterAdjustment,
-    studDiameterAdjustment = studDiameterAdjustment,
-    studCutoutAdjustment = studCutoutAdjustment,
-    previewRender = previewRender,
-    previewQuality = previewQuality,
-    baseRoundingResolution = roundingResolution,
-    holeRoundingResolution = roundingResolution,
-    studRoundingResolution = roundingResolution,
-    pillarRoundingResolution = roundingResolution
+    baseSideAdjustment = bSideAdjustment,
+    
+    /*{PRESET_PARAMETERS}*/
 ){
     if(leg2Size > 0){
         machineblock(
@@ -89,26 +74,9 @@ machineblock(
             size=[thin ? 0.5 : 1, leg2Size, 2.5], 
             studs = false,
 
-            scale = scale,
-            baseHeightAdjustment = baseHeightAdjustment,
-            baseSideAdjustment = baseSideAdjustment,
-            baseWallThicknessAdjustment = baseWallThicknessAdjustment,
-            baseClampThickness = baseClampThickness,
-            tubeXDiameterAdjustment = tubeXDiameterAdjustment,
-            tubeYDiameterAdjustment = tubeYDiameterAdjustment,
-            tubeZDiameterAdjustment = tubeZDiameterAdjustment,
-            holeXDiameterAdjustment = holeXDiameterAdjustment,
-            holeYDiameterAdjustment = holeYDiameterAdjustment,
-            holeZDiameterAdjustment = holeZDiameterAdjustment,
-            pinDiameterAdjustment = pinDiameterAdjustment,
-            studDiameterAdjustment = studDiameterAdjustment,
-            studCutoutAdjustment = studCutoutAdjustment,
-            previewRender = previewRender,
-            previewQuality = previewQuality,
-            baseRoundingResolution = roundingResolution,
-            holeRoundingResolution = roundingResolution,
-            studRoundingResolution = roundingResolution,
-            pillarRoundingResolution = roundingResolution
+            baseSideAdjustment = bSideAdjustment,
+            
+            /*{PRESET_PARAMETERS}*/
         );
     }
 }

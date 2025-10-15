@@ -150,6 +150,8 @@ grilleY = false;
 /* [Hidden] */
 slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;
 
+bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
 // Generate the block
 machineblock(
     size = [brickSizeX, brickSizeY,baseLayers],
@@ -192,7 +194,7 @@ machineblock(
     grilleX = grilleX,
     grilleY = grilleY,
 
-    baseSideAdjustment = baseSideAdjustment,
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
