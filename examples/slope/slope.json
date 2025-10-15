@@ -267,6 +267,62 @@
                 },
 
                 {
+                    "name": "Slope 45 3x4 Double 33",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope2": 1,
+                        "slope3": 1,
+                        "slope0": 2
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x1x3 Open Stud",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope0": 1,
+                        "knobType": "ring"
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Solid Studs",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope0": 1
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Hollow Studs",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope0": 1,
+                        "knobType": "ring"
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Double Convex",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope0": 1,
+                        "slope2": 1,
+                        "knobType": "ring"
+                    }
+                },
+
+                {
                     "name": "Slope Inverted 33 3x1",
                     "parameters": {
                         "brickSizeX": 3,
@@ -287,14 +343,55 @@
                 },
 
                 {
-                    "name": "Slope 45 3x4 Double 33",
+                    "name": "Slope Inverted 45 3x1 Double",
                     "parameters": {
                         "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope0": -1,
+                        "slope1": -1
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 4x1 Double",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope0": -1,
+                        "slope1": -1
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 4x4 Double",
+                    "parameters": {
+                        "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "slope2": 1,
-                        "slope3": 1,
-                        "slope0": 2
+                        "slope0": -1,
+                        "slope1": -1
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 60 4x1x3",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope0": -2
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 75 2x1x3",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope0": -1
                     }
                 }
             ]
