@@ -208,8 +208,8 @@ module mb_base(
     baseClampHeight,
     baseClampThicknessOuter,
     baseClampOffset,
-    
-    roundingRadius, 
+    baseRoundingRadius,
+
     roundingResolution,
     
     pit,
@@ -250,8 +250,7 @@ module mb_base(
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
 
-    baseRoundingRadiusResolved = mb_base_rounding_radius(roundingRadius, gridSizeXY, gridSizeZ);
-    baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
+    baseRoundingRadiusZ = baseRoundingRadius[2];
     
     reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
     bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
@@ -278,7 +277,7 @@ module mb_base(
                             sizeX = objectSizeXAdjusted,
                             sizeY = objectSizeYAdjusted,
                             height = height,
-                            roundingRadius = baseRoundingRadiusResolved,
+                            roundingRadius = baseRoundingRadius,
                             roundingResolution = roundingResolution
                         );
 

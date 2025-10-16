@@ -318,6 +318,8 @@ module machineblock(
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
+    adjustedSizeRelation = [objectSizeXAdjusted / objectSizeX, objectSizeYAdjusted / objectSizeY, resultingBaseHeight / baseHeightResolved];
+
     gridSizeX = grid_size_x(grid, slope);
     gridSizeY = grid_size_y(grid, slope);
 
@@ -367,7 +369,10 @@ module machineblock(
 
     wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
-    baseRoundingRadiusZ = mb_base_rounding_radius_xyz(baseRoundingRadius, 2, gridSizeXY);
+
+    baseRoundingRadiusResolved = mb_base_rounding_radius(baseRoundingRadius, gridSizeXY * min(adjustedSizeRelation[0], adjustedSizeRelation[1]), gridSizeZ * adjustedSizeRelation[2]);
+    baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
+    
     
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
@@ -621,7 +626,9 @@ module machineblock(
         pitFloorZ = pitFloorZ,
         beveled = beveled,
         bevel = bevel,
-        bevelOuterAdjusted = bevelOuterAdjusted
+        bevelOuterAdjusted = bevelOuterAdjusted,
+        baseRoundingRadiusZ = baseRoundingRadiusZ,
+        adjustedSizeRelation = adjustedSizeRelation
     );
 
     /*
@@ -654,8 +661,10 @@ module machineblock(
                                             baseClampHeight = bClampHeight,
                                             baseClampThicknessOuter = baseClampThicknessOuter,
                                             baseClampOffset = bClampOffset,
-                                            roundingRadius = baseRoundingRadius, 
+                                            baseRoundingRadius = baseRoundingRadiusResolved,
+
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                            
                                             pit = pit,
                                             pitRoundingRadius = pitRoundingRadius,
                                             pitDepth = resultingPitDepth,
@@ -1130,13 +1139,16 @@ module machineblock(
                                         baseClampHeight = bClampHeight,
                                         baseClampThicknessOuter = baseClampThicknessOuter,
                                         baseClampOffset = bClampOffset,
-                                        roundingRadius = baseRoundingRadius, 
+                                        baseRoundingRadius = baseRoundingRadiusResolved,
+
                                         roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
+                                        
                                         pit = pit,
                                         pitRoundingRadius = pitRoundingRadius,
                                         pitDepth = resultingPitDepth,
                                         pitWallThickness = pWallThickness,
                                         pitWallGaps = pitWallGaps,
+                                        
                                         slope = slope,
                                         slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
                                         slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
