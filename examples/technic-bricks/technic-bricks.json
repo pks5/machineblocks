@@ -2,7 +2,7 @@
     "type": "com.machineblocks.examples",
     "config":{
         "lib": "../../lib",
-        "presets": "../../config/presets.scad"
+        "presets": "../../config/config.scad"
     },
     "name": "Technic Bricks",
     "examples" : [

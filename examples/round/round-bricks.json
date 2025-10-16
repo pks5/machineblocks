@@ -2,7 +2,7 @@
     "type": "com.machineblocks.examples",
     "config":{
         "lib": "../../lib",
-        "presets": "../../config/presets.scad"
+        "presets": "../../config/config.scad"
     },
     "name": "Round Bricks",
     "examples" : [
@@ -19,8 +19,8 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 0.5,
                         "baseReliefCut": true,
-                        "baseReliefCutHeight": 2.2,
-                        "baseReliefCutThickness": 0.8
+                        "baseReliefCutHeight": 1.25,
+                        "baseReliefCutThickness": 0.5
                     }
                 },
                 {
@@ -31,8 +31,8 @@
                         "baseLayers": 3,
                         "baseRoundingRadiusZ": 0.5,
                         "baseReliefCut": true,
-                        "baseReliefCutHeight": 2.2,
-                        "baseReliefCutThickness": 0.8,
+                        "baseReliefCutHeight": 1.25,
+                        "baseReliefCutThickness": 0.5,
                         "knobType": "hollow"
                     }
                 },
@@ -100,8 +100,8 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
                         "baseReliefCut": true,
-                        "baseReliefCutHeight": 2.2,
-                        "baseReliefCutThickness": 0.8
+                        "baseReliefCutHeight": 1.25,
+                        "baseReliefCutThickness": 0.5
                     }
                 },
                 {
@@ -112,8 +112,8 @@
                         "baseLayers": 1,
                         "baseRoundingRadiusZ": 0.5,
                         "baseReliefCut": true,
-                        "baseReliefCutHeight": 2.2,
-                        "baseReliefCutThickness": 0.8,
+                        "baseReliefCutHeight": 1.25,
+                        "baseReliefCutThickness": 0.5,
                         "knobType": "hollow"
                     }
                 },

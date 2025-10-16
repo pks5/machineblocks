@@ -1,0 +1,297 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Bricks",
+    "examples" : [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/bricks",
+            "bricks" : [
+                {
+                    "name": "Brick 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1
+                    }
+                },
+                
+                {
+                    "name": "Brick 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 4x1",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 6x1",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 8x1",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 12x1",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 1
+                    }
+                },
+                {
+                    "name": "Brick 16x1",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 1
+                    }
+                },
+
+                
+                
+                {
+                    "name": "Brick 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 4x2",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 6x2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 8x2",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 12x2",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 2
+                    }
+                },
+                {
+                    "name": "Brick 16x2",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 2
+                    }
+                },
+
+
+
+                
+
+
+                {
+                    "name": "Brick 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 6x4",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 8x4",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 4,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 12x4",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 4,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 16x4",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 4,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 8x6",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 6,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 12x6",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 6,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 16x6",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 6,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 8x8",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 12x8",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 8,
+                        "baseLayers": 3
+                    }
+                },
+                {
+                    "name": "Brick 16x8",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 8,
+                        "baseLayers": 3
+                    }
+                },
+
+                
+
+
+                {
+                    "name": "Brick 1x1x4",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 12
+                    }
+                },
+                {
+                    "name": "Brick 2x1x4",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 12
+                    }
+                },
+                
+                {
+                    "name": "Brick 3x1x4",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 12
+                    }
+                },
+                {
+                    "name": "Brick 4x1x5",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 15
+                    }
+                },
+                {
+                    "name": "Brick 6x1x5",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 1,
+                        "baseLayers": 15
+                    }
+                },
+                {
+                    "name": "Brick 8x1x5",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1,
+                        "baseLayers": 15
+                    }
+                },
+                {
+                    "name": "Brick 12x1x6",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 1,
+                        "baseLayers": 18
+                    }
+                },
+                {
+                    "name": "Brick 16x1x6",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 1,
+                        "baseLayers": 18
+                    }
+                }
+            ]
+        }
+    ]
+}

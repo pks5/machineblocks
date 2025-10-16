@@ -13,7 +13,7 @@
 
 // Imports
 use <../../lib/block.scad>;
-include <../../config/presets.scad>;
+include <../../config/config.scad>;
 
 
 /* [Size] */
@@ -144,7 +144,7 @@ machineblock(
                 translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, 0])
                 rotate([90,0,0])
                     scale([1, 2* tunnelHeight / tunnelWidth, 1])
-                        cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true);
+                        cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true, $fn=roundingResolution);
             }
         }
     }
