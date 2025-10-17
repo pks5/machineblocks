@@ -29,11 +29,11 @@ column1SizeX = 1;
 deckHeight = 1;
 
 //Whether the arc has a second column
-secondColumn = true;
+secondColumn = false;
 // Size of second pillar in X-direction specified as multiple of an 1x1 brick.
 column2SizeX = 1;
 
-inverted = true;
+inverted = false;
 
 /* [Base] */
 
