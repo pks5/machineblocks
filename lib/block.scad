@@ -377,7 +377,7 @@ module machineblock(
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
     minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
-    cutoutClampRoundingRadius = mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide);
+    cutoutClampRoundingRadius = baseClampThickness > 0 ? mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide) : cutoutRoundingRadius;
 
     baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
     bClampOffset = baseClampOffset * mbuToMm;
@@ -1643,4 +1643,7 @@ module machineblock(
         }
         
     } //End grid offset
+
+    echo("Rendering of Block finished.");
+    echo("Join our Discord! Visit machineblocks.com");
 } // End module block    
