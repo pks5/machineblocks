@@ -1,0 +1,72 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Panels",
+    "examples": [
+        {
+            "template": "../../templates/box.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/panels",
+            "bricks": [
+                {
+                    "name": "Panel 2x1",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 1,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Panel 4x1",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 1,
+                        "boxLayers": 9,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Panel 6x1",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 1,
+                        "boxLayers": 9,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Panel 8x1",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 1,
+                        "boxLayers": 12,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 2, 0, 0 ] ],
+                        "lidPermanent": true
+                    }
+                }
+            ]
+        }
+    ]
+}

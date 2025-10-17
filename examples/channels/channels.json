@@ -1,0 +1,400 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Channels",
+    "examples": [
+        {
+            "template": "../../templates/box.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/channels",
+            "bricks": [
+                {
+                    "name": "Channel 1x1",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 2x1",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 2x2",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 3x1",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 3x2",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 3x3",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 4x1",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 4x2",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 4x3",
+                    "parameters": {
+                        "boxSizeX": 4,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 6x1",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 6x2",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 6x3",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 8x1",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 8x2",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 8x3",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 12x1",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 12x2",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel 12x3",
+                    "parameters": {
+                        "boxSizeX": 12,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 1, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 1x1",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 2x1",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 2x2",
+                    "parameters": {
+                        "boxSizeX": 2,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 3x1",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 1,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 3x2",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 2,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Corner 3x3",
+                    "parameters": {
+                        "boxSizeX": 3,
+                        "boxSizeY": 3,
+                        "boxLayers": 5,
+                        "basePitWallThickness": 0.333,
+                        "baseKnobs": false,
+                        "baseTongue": true,
+                        "basePitWallGaps": [ [ 0, 0, 0 ], [ 2, 0, 0 ] ],
+                        "lidPermanent": false
+                    }
+                },
+
+                {
+                    "name": "Channel Box C1 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 1.333, 1.333 ] ],
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Channel Box C2 6x6",
+                    "parameters": {
+                        "boxSizeX": 6,
+                        "boxSizeY": 6,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 1.333, 1.333 ], [ 2, 1.333, 1.333 ] ],
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Channel Box C2 8x8",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 0.333, 4.333 ], [ 0, 4.333, 0.333 ] ],
+                        "lid" : false
+                    }
+                },
+
+                {
+                    "name": "Channel Box C4 12x12",
+                    "parameters": {
+                        "boxSizeX": 8,
+                        "boxSizeY": 8,
+                        "boxLayers": 3,
+                        "basePitWallThickness": 1,
+                        "basePitWallGaps": [ [ 0, 0.333, 4.333 ], [ 0, 4.333, 0.333 ], [ 1, 0.333, 4.333 ], [ 1, 4.333, 0.333 ] ],
+                        "lid" : false
+                    }
+                }
+            ]
+        }
+    ]
+}
