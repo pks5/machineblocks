@@ -19,21 +19,23 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 8;
+brickSizeX = 4;
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 1; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 brickHeight = 3; // [1:24]
 
 // Size of first pillar in X-direction specified as multiple of an 1x1 brick.
-column1SizeX = 2;
-// Size of second pillar in X-direction specified as multiple of an 1x1 brick.
-column2SizeX = 2;
+column1SizeX = 1;
 // Height of the deck as multiple of a plate
 deckHeight = 1;
 
-// Shape of the span between columns
-spanShape = "round"; // [square, round]
+//Whether the arc has a second column
+secondColumn = true;
+// Size of second pillar in X-direction specified as multiple of an 1x1 brick.
+column2SizeX = 1;
+
+inverted = false;
 
 /* [Base] */
 
@@ -65,23 +67,24 @@ spanShape = "round"; // [square, round]
 
 /* [Hidden] */
 
-tunnelWidth = (brickSizeX - column1SizeX - column2SizeX) * unitGrid[0] * unitMbu;
-tunnelHeight = (brickHeight - deckHeight) * unitGrid[1] * unitMbu;
-
 bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+
+tunnelWidth = (secondColumn ? 1 : 2)*(brickSizeX - column1SizeX - (secondColumn ? column2SizeX : 0)) * unitGrid[0] * unitMbu;
+tunnelHeight = (brickHeight - deckHeight) * unitGrid[1] * unitMbu;
 
 brickTotalSizeY = (brickSizeY * unitGrid[0] * unitMbu + 2 * bSideAdjustment);
 
-// First Pillar
-machineblock(
-    size = [column1SizeX, brickSizeY, brickHeight - deckHeight],
-    studs = false,
+difference(){
+    // First Column
+    machineblock(
+        size = [inverted ? brickSizeX : column1SizeX, brickSizeY, brickHeight],
 
-    baseColor = baseColor,
-    
-    baseSideAdjustment = bSideAdjustment,
-    
-    unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
+        baseColor = baseColor,
+
+        baseSideAdjustment = bSideAdjustment,
+        baseCutoutMaxDepth = inverted ? 2 : 5,
+
+        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
@@ -102,22 +105,18 @@ machineblock(
     holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
     studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
     pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
-){
+    ){
+        if(!inverted){
+            if(secondColumn){
+                machineblock(
+                    size = [column2SizeX, brickSizeY, brickHeight],
+                    offset = [brickSizeX - column2SizeX, 0, 0],
 
-    if(spanShape != "square"){
-        difference(){
-            // Tunnel
-            machineblock(
-                size = [brickSizeX - column1SizeX - column2SizeX, brickSizeY, brickHeight - deckHeight],
-                offset = [column1SizeX,0,0],
-                baseCutoutType = "none",
-                studs = false,
+                    baseColor = baseColor,
 
-                baseColor = baseColor,
-                
-                baseSideAdjustment = [-bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
-                
-                unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
+                    baseSideAdjustment = bSideAdjustment,
+
+                    unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
     unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
@@ -138,80 +137,60 @@ machineblock(
     holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
     studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
     pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
-            );
-            
-            if(spanShape == "round"){
-                translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, 0])
-                rotate([90,0,0])
-                    scale([1, 2* tunnelHeight / tunnelWidth, 1])
-                        cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true, $fn=roundingResolution);
+                );
             }
+
+    
+            difference(){
+                // Tunnel
+                machineblock(
+                    size = [brickSizeX - column1SizeX - (secondColumn ? column2SizeX : 0), brickSizeY, brickHeight],
+                    offset = [column1SizeX,0,0],
+                    baseCutoutType = "none",
+                    
+                    baseColor = baseColor,
+                    
+                    baseSideAdjustment = [-bSideAdjustment, secondColumn ? -bSideAdjustment : bSideAdjustment, bSideAdjustment, bSideAdjustment],
+
+                    unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
+    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+    scale=overrideConfig ? overrideScale : scale,
+    baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
+    baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
+    baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
+    tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
+    tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
+    tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
+    holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
+    holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
+    holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
+    pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
+    studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
+    studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
+    previewRender=overrideConfig ? overridePreviewRender : previewRender,
+    previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
+    baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
+    pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
+                );
+                
+                
+                translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, 0])
+                    rotate([90,0,0])
+                        scale([1, 2* tunnelHeight / tunnelWidth, 1])
+                            cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true, $fn=roundingResolution);
+                
+            }
+        
         }
+        
     }
 
-    // Second Pillar
-    machineblock(
-        size = [column2SizeX, brickSizeY, brickHeight - deckHeight],
-        offset = [brickSizeX - column2SizeX,0,0],
-        studs = false,
-
-        baseColor = baseColor,
-        
-        baseSideAdjustment = bSideAdjustment,
-        
-        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
-    scale=overrideConfig ? overrideScale : scale,
-    baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
-    baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
-    baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
-    tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
-    tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
-    tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
-    holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
-    holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
-    holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
-    pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
-    studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
-    studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
-    previewRender=overrideConfig ? overridePreviewRender : previewRender,
-    previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
-    baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
-    );
-
-    // Bridge
-    machineblock(
-        size = [brickSizeX, brickSizeY, deckHeight],
-        offset = [0,0,brickHeight - deckHeight],
-        baseCutoutType = "none",
-
-        baseColor = baseColor,
-        
-        baseSideAdjustment = bSideAdjustment,
-        
-        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
-    scale=overrideConfig ? overrideScale : scale,
-    baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
-    baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
-    baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
-    tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
-    tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
-    tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
-    holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
-    holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
-    holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
-    pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
-    studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
-    studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
-    previewRender=overrideConfig ? overridePreviewRender : previewRender,
-    previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
-    baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-    pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
-    );
+    if(inverted){
+        translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, brickHeight * unitGrid[1] * unitMbu])
+                    rotate([90,0,0])
+                        scale([1, 2* tunnelHeight / tunnelWidth, 1])
+                            cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true, $fn=roundingResolution);
+    }
 }
