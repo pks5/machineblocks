@@ -12,11 +12,11 @@
             "url": "https://machineblocks.com/examples/panels",
             "bricks": [
                 {
-                    "name": "Panel 2x1",
+                    "name": "Panel 2x1x2 with Side Supports",
                     "parameters": {
                         "boxSizeX": 2,
                         "boxSizeY": 1,
-                        "boxLayers": 3,
+                        "boxLayers": 6,
                         "basePitWallThickness": 0.333,
                         "baseKnobs": false,
                         "baseTongue": true,
@@ -64,6 +64,66 @@
                         "baseTongue": true,
                         "basePitWallGaps": [ [ 2, 0, 0 ] ],
                         "lidPermanent": true
+                    }
+                },
+
+                {
+                    "name": "Panel 1x1x1 Corner",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 1,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [0.2, 0, 0, 0.2],
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Panel 1x2x1",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 2,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [0.2, 0, 0, 0],
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Panel 1x3x1",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 3,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [0.2, 0, 0, 0],
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Panel 1x4x1",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 4,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [0.2, 0, 0, 0],
+                        "baseKnobs": false,
+                        "lid": false
+                    }
+                },
+
+                {
+                    "name": "Panel 1x2x1 Corner with 2 Sides",
+                    "parameters": {
+                        "boxSizeX": 1,
+                        "boxSizeY": 2,
+                        "boxLayers": 3,
+                        "basePitWallThickness": [0.2, 0, 0.2, 0.2],
+                        "baseKnobs": false,
+                        "lid": false
                     }
                 }
             ]
