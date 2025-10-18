@@ -1,6 +1,6 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/bricks
 *
 * Brick 8x1x5
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>

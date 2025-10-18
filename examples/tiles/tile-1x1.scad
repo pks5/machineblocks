@@ -1,6 +1,6 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/tiles
 *
 * Tile 1x1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
