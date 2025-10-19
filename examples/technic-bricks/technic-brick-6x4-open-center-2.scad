@@ -44,6 +44,8 @@ knobType = "solid"; // [solid, hollow]
 pinHoles = true;
 pinHolesCentered = true;
 
+cornerRadius = 0.5;
+
 /* [Override Config] */
     overrideConfig=false;
     overrideUnitMbu = 1.6;
@@ -113,6 +115,7 @@ union(){
         size=[brickSizeX-2,borderSize,baseLayers],
         studs=knobs,
         studType=knobType,
+        baseRoundingRadius=[0,0,[cornerRadius,0,0,cornerRadius]],
         baseColor = baseColor,
 
         holeXCentered = pinHolesCentered,
@@ -185,6 +188,7 @@ union(){
         size=[brickSizeX-2,borderSize,baseLayers], 
         studs=knobs,
         studType=knobType,
+        baseRoundingRadius=[0,0,[0, cornerRadius,cornerRadius,0]],
         baseColor = baseColor,
 
         holeXCentered = pinHolesCentered,
