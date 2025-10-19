@@ -61,11 +61,11 @@ knobType = "solid"; // [solid, hollow]
 // Knob Padding Side 0
 knobPadding0 = 0.2;
 // Knob Padding Side 1
-knobPadding1 = 0.2;
+knobPadding1 = 0;
 // Knob Padding Side 2
-knobPadding2 = 0.2;
+knobPadding2 = 0;
 // Knob Padding Side 3
-knobPadding3 = 0.2;
+knobPadding3 = 0;
 
 /* [Bevel] */
 

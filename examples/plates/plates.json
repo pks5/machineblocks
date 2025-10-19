@@ -146,6 +146,15 @@
                     }
                 },
                 {
+                    "name": "Plate 4x4 with Studs on One Edge",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobPadding0": 3
+                    }
+                },
+                {
                     "name": "Plate 6x4",
                     "parameters": {
                         "brickSizeX": 6,

@@ -1,8 +1,8 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/round-bricks
+* https://machineblocks.com/examples/classic-bricks
 *
-* Plate 2x6 With 2-Rounded Corner O4
+* Plate 4x4 with Studs on One Edge
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]  
+brickSizeX = 4; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 6; // [1:32]  
+brickSizeY = 4; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
@@ -34,7 +34,7 @@ baseRoundingRadiusX = 0;
 // Rounding Radius Y
 baseRoundingRadiusY = 0;
 // Rounding Radius Z
-baseRoundingRadiusZ = [2, 2, 0, 0];
+baseRoundingRadiusZ = 0;
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
@@ -59,13 +59,13 @@ knobCenteredY = false;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
 // Knob Padding Side 0
-knobPadding0 = 0;
+knobPadding0 = 3;
 // Knob Padding Side 1
-knobPadding1 = 0;
+knobPadding1 = 0.2;
 // Knob Padding Side 2
-knobPadding2 = 0;
+knobPadding2 = 0.2;
 // Knob Padding Side 3
-knobPadding3 = 0;
+knobPadding3 = 0.2;
 
 /* [Bevel] */
 
