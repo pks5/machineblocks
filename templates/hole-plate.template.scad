@@ -36,6 +36,11 @@ knobs = true;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
 
+/* [Pin Holes] */
+
+pinHoles = false;
+pinHolesCentered = true;
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -50,6 +55,8 @@ union(){
         studType=knobType,
         /*{BASE_PARAMETERS}*/
 
+        holeYCentered = pinHolesCentered,
+        holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
         offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
@@ -65,6 +72,8 @@ union(){
         studType=knobType,
         /*{BASE_PARAMETERS}*/
 
+        holeXCentered = pinHolesCentered,
+        holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
         offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
@@ -80,6 +89,8 @@ union(){
         studType=knobType,
         /*{BASE_PARAMETERS}*/
 
+        holeYCentered = pinHolesCentered,
+        holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
         offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
@@ -95,6 +106,8 @@ union(){
         studType=knobType,
         /*{BASE_PARAMETERS}*/
 
+        holeXCentered = pinHolesCentered,
+        holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
         offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",

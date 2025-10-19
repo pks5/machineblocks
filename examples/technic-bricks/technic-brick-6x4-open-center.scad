@@ -1,8 +1,8 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/corner
+* https://machineblocks.com/examples/technic-bricks
 *
-* Hole Plate 6x6 B1
+* Technic Brick 6x4 Open Center
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -21,9 +21,9 @@ include <../../config/config.scad>;
 // Brick size in X-direction specified as multiple of an 1x1 brick.
 brickSizeX = 6; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 6; // [1:32]  
+brickSizeY = 4; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 1; // [1:24]
+baseLayers = 3; // [1:24]
 // Border Size as multiple of an 1x1 brick.
 borderSize = 1; // [1:8]
 
@@ -41,7 +41,7 @@ knobType = "solid"; // [solid, hollow]
 
 /* [Pin Holes] */
 
-pinHoles = false;
+pinHoles = true;
 pinHolesCentered = true;
 
 /* [Override Config] */

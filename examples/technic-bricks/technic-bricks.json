@@ -183,6 +183,23 @@
 
                 
             ]
+        },
+        {
+            "template": "../../templates/hole-plate.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/technic-bricks",
+            "bricks": [
+                {
+                    "name": "Technic Brick 6x4 Open Center",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "borderSize": 1,
+                        "baseLayers": 3,
+                        "pinHoles": true
+                    }
+                }
+            ]
         }
     ]
 }
