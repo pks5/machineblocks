@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/slanted
 *
-* Slope 30 1x1x⅔
+* Slope 30 1x1x2_3
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:

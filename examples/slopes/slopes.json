@@ -149,7 +149,7 @@
                 },
 
                 {
-                    "name": "Slope 18 2x1x⅔",
+                    "name": "Slope 18 2x1x2_3",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
@@ -159,7 +159,7 @@
                 },
 
                 {
-                    "name": "Slope 30 1x1x⅔",
+                    "name": "Slope 30 1x1x2_3",
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
@@ -169,7 +169,7 @@
                 },
 
                 {
-                    "name": "Slope 30 1x2x⅔",
+                    "name": "Slope 30 1x2x2_3",
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 2,
@@ -245,7 +245,7 @@
                 },
 
                 {
-                    "name": "Slope 45 1x1x⅔ Double",
+                    "name": "Slope 45 1x1x2_3 Double",
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,

@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/slanted
 *
-* Slope 45 1x1x⅔ Double
+* Slope 18 2x1x2_3
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,7 +19,7 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 1; // [1:32]  
+brickSizeX = 2; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
 brickSizeY = 1; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
@@ -109,9 +109,9 @@ pitWallThickness = 0.333;
 /* [Slope] */
 
 // Slope side 0
-slope0 = 0.5;
+slope0 = 2;
 // Slope side 1
-slope1 = 0.5;
+slope1 = 0;
 // Slope side 2
 slope2 = 0;
 // Slope side 3
