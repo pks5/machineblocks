@@ -128,7 +128,10 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "bevel1": [0,-1],
-                        "knobPadding": 0
+                        "knobPadding0": 0,
+                        "knobPadding1": 0,
+                        "knobPadding2": 0,
+                        "knobPadding3": 0
                     }
                 },
                 {
@@ -138,7 +141,10 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "bevel2": [0,-1],
-                        "knobPadding": 0
+                        "knobPadding0": 0,
+                        "knobPadding1": 0,
+                        "knobPadding2": 0,
+                        "knobPadding3": 0
                     }
                 },
                 {
@@ -150,7 +156,10 @@
                         
                         "bevel1": [0,-2],
                         "bevel2": [0,0.666],
-                        "knobPadding": 0.125
+                        "knobPadding0": 0.125,
+                        "knobPadding1": 0.125,
+                        "knobPadding2": 0.125,
+                        "knobPadding3": 0.125
                     }
                 },
                 {
@@ -161,7 +170,10 @@
                         "baseLayers": 1,
                         "bevel1": [0,0.666],
                         "bevel2": [0,-2],
-                        "knobPadding": 0.125
+                        "knobPadding0": 0.125,
+                        "knobPadding1": 0.125,
+                        "knobPadding2": 0.125,
+                        "knobPadding3": 0.125
                     }
                 },
                 {
@@ -171,7 +183,10 @@
                         "brickSizeY": 3,
                         "baseLayers": 1,
                         "bevel1": [0,-2],
-                        "knobPadding": 0
+                        "knobPadding0": 0,
+                        "knobPadding1": 0,
+                        "knobPadding2": 0,
+                        "knobPadding3": 0
                     }
                 },
                 {
@@ -181,7 +196,10 @@
                         "brickSizeY": 3,
                         "baseLayers": 1,
                         "bevel2": [0,-2],
-                        "knobPadding": 0
+                        "knobPadding0": 0,
+                        "knobPadding1": 0,
+                        "knobPadding2": 0,
+                        "knobPadding3": 0
                     }
                 },
 
@@ -193,7 +211,10 @@
                         "baseLayers": 1,
                         "bevel1": [0,-3],
                         "bevel2": [0,1],
-                        "knobPadding": 0.125
+                        "knobPadding0": 0.125,
+                        "knobPadding1": 0.125,
+                        "knobPadding2": 0.125,
+                        "knobPadding3": 0.125
                     }
                 },
                 {
@@ -204,7 +225,10 @@
                         "baseLayers": 1,
                         "bevel1": [0,1],
                         "bevel2": [0,-3],
-                        "knobPadding": 0.125
+                        "knobPadding0": 0.125,
+                        "knobPadding1": 0.125,
+                        "knobPadding2": 0.125,
+                        "knobPadding3": 0.125
                     }
                 },
 
@@ -290,7 +314,10 @@
                         "bevel1": [0,-0.5],
                         "bevel2": [0,0.25],
                         "bevel3": [0,-0.25],
-                        "knobPadding" : 0.1
+                        "knobPadding0": 0.1,
+                        "knobPadding1": 0.1,
+                        "knobPadding2": 0.1,
+                        "knobPadding3": 0.1
                     }
                 }
             ]

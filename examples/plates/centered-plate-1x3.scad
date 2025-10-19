@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/examples/classic-bricks
 *
-* Centered Plate 2x2
+* Centered Plate 1x3
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -19,9 +19,9 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 2; // [1:32]  
+brickSizeX = 1; // [1:32]  
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
+brickSizeY = 3; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
 baseLayers = 1; // [1:24]
 
@@ -53,7 +53,7 @@ baseReliefCutThickness = 0.4;
 // Whether to draw knobs.
 knobs = true;
 // Whether knobs should be centered in X direction.
-knobCenteredX = true;
+knobCenteredX = false;
 // Whether knobs should be centered in Y direction.
 knobCenteredY = true;
 // Type of the knobs

@@ -236,14 +236,34 @@
 
 
                 
-
+                {
+                    "name": "Centered Plate 1x2",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredY": true,
+                        "knobType": "hollow"
+                    }
+                },
+                {
+                    "name": "Centered Plate 1x3",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "knobCenteredY": true,
+                        "knobType": "hollow"
+                    }
+                },
                 {
                     "name": "Centered Plate 2x2",
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -253,7 +273,8 @@
                         "brickSizeX": 3,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -263,7 +284,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -273,7 +295,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -283,7 +306,8 @@
                         "brickSizeX": 8,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -293,7 +317,8 @@
                         "brickSizeX": 12,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -303,7 +328,8 @@
                         "brickSizeX": 16,
                         "brickSizeY": 2,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -313,7 +339,8 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -323,7 +350,8 @@
                         "brickSizeX": 6,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -333,7 +361,8 @@
                         "brickSizeX": 8,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -343,7 +372,8 @@
                         "brickSizeX": 12,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 },
@@ -353,7 +383,8 @@
                         "brickSizeX": 16,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobCentered": true,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
                         "knobType": "hollow"
                     }
                 }

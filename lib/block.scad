@@ -177,7 +177,8 @@ module machineblock(
         //Knobs
         studs = true, // bool or vector
         studType = "solid", // "solid" | "hollow"
-        studCentered = false, // bool
+        studCenteredX = false, // bool
+        studCenteredY = false, // bool
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
         
@@ -223,7 +224,8 @@ module machineblock(
         pitKnobs = true, // bool
         pitKnobPadding = 0.2, // grid
         pitKnobType = "solid", // "solid" | "hollow"
-        pitKnobCentered = false, // bool
+        pitKnobCenteredX = false, // bool
+        pitKnobCenteredY = false, // bool
         pitWallGaps = [], // vector
         
         //Text
@@ -1493,17 +1495,20 @@ module machineblock(
                         /*
                         * Normal studs
                         */
-                        for (a = [ startX : 1 : (endX - (studCentered ? 1 : 0)) ]){
-                            for (b = [ startY : 1 : (endY - (studCentered ? 1 : 0)) ]){
-                                knobOffset = studCentered ? 0.5 : 0;
-                                if(drawGridItem(studs, a, b, 0, false) && drawKnob(a + knobOffset, b + knobOffset)){
+                        for (a = [ startX : 1 : (endX - (studCenteredX ? 1 : 0)) ]){
+                            for (b = [ startY : 1 : (endY - (studCenteredY ? 1 : 0)) ]){
+                                knobOffsetX = studCenteredX ? 0.5 : 0;
+                                knobOffsetY = studCenteredY ? 0.5 : 0;
+                                if(drawGridItem(studs, a, b, 0, false) && drawKnob(a + knobOffsetX, b + knobOffsetY)){
                                     
-                                    pitKnobOffset = pitKnobCentered ? 0.5 : 0;
-                                    inPit = pit && pitKnobs && inPit(a + pitKnobOffset, b + pitKnobOffset);
+                                    pitKnobOffsetX = pitKnobCenteredX ? 0.5 : 0;
+                                    pitKnobOffsetY = pitKnobCenteredY ? 0.5 : 0;
+                                    inPit = pit && pitKnobs && inPit(a + pitKnobOffsetX, b + pitKnobOffsetY);
                                     onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
                                     if(onPitBorder || inPit){
-                                        posOffset = (inPit ? pitKnobCentered : studCentered) ? 0.5 : 0;
-                                        translate([posX(a + posOffset), posY(b + posOffset), knobZ(a + posOffset, b + posOffset)]){ 
+                                        posOffsetX = (inPit ? pitKnobCenteredX : studCenteredX) ? 0.5 : 0;
+                                        posOffsetY = (inPit ? pitKnobCenteredY : studCenteredY) ? 0.5 : 0;
+                                        translate([posX(a + posOffsetX), posY(b + posOffsetY), knobZ(a + posOffsetX, b + posOffsetY)]){ 
                                             difference(){
                                                 union(){
                                                     translate([0, 0, -0.5 * (knobRounding + studClampHeight * mbuToMm)])
@@ -1517,7 +1522,7 @@ module machineblock(
                                                         cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                 }
                                                 
-                                                if(studType(a + posOffset, b + posOffset) == "hollow"){
+                                                if(studType(a + posOffsetX, b + posOffsetY) == "hollow"){
                                                     intersection(){
                                                         cube([knobHoleSize - 2*studHoleClampThickness, knobHoleSize - 2*studHoleClampThickness, knobHeight*cutMultiplier], center=true);
                                                         cylinder(h=knobHeight * cutMultiplier, r=0.5 * knobHoleSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);

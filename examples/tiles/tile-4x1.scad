@@ -52,12 +52,20 @@ baseReliefCutThickness = 0.4;
 
 // Whether to draw knobs.
 knobs = false;
-// Whether knobs should be centered.
-knobCentered = false;
+// Whether knobs should be centered in X direction.
+knobCenteredX = false;
+// Whether knobs should be centered in Y direction.
+knobCenteredY = false;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
-// Knob Padding
-knobPadding = 0.2;
+// Knob Padding Side 0
+knobPadding0 = 0.2;
+// Knob Padding Side 1
+knobPadding1 = 0.2;
+// Knob Padding Side 2
+knobPadding2 = 0.2;
+// Knob Padding Side 3
+knobPadding3 = 0.2;
 
 /* [Bevel] */
 
@@ -166,9 +174,10 @@ machineblock(
     bevel = [bevel0, bevel1, bevel2, bevel3],
 
     studs = knobs,
-    studCentered = knobCentered,
+    studCenteredX = knobCenteredX,
+    studCenteredY = knobCenteredY,
     studType = knobType,
-    studPadding = knobPadding,
+    studPadding = [knobPadding0, knobPadding1, knobPadding2, knobPadding3],
     
     pillars = pillars,
     
