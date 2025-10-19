@@ -1,0 +1,23 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Calibration",
+    "examples" : [
+        {
+            "template": "../../templates/calibration-bricks.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/docs/calibration",
+            "bricks" : [
+                {
+                    "name": "Calibration Bricks",
+                    "parameters": {
+                        
+                    }
+                }
+            ]
+        }
+    ]
+}
