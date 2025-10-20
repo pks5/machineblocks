@@ -40,6 +40,7 @@ baseCutoutRoundingRadius = "auto";
 
 surfacePattern = true;
 surfacePatternScale = 0.3;
+surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
 
 // Whether to draw pillars.
 pillars = true;
@@ -124,8 +125,6 @@ grilleY = false;
 
 /* [Override Config] */
     overrideConfig=false;
-    overrideUnitMbu = 1.6;
-    overrideUnitGrid = [5, 2];
     overrideScale = 1.0;
     overrideBaseHeightAdjustment = 0.0;
     overrideBaseSideAdjustment = -0.1;
@@ -197,11 +196,12 @@ machineblock(
 
     surfacePattern = surfacePattern,
     surfacePatternScale = surfacePatternScale,
+    surfacePatternSvg = surfacePatternSvg,
 
     baseSideAdjustment = bSideAdjustment,
     
-    unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+    unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,

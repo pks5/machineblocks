@@ -16,7 +16,9 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brick1SizeY": 1,
-                        "brick2SizeY": 1
+                        "brick2SizeY": 1,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -24,7 +26,9 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "brick2SizeY": 2,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -32,7 +36,9 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brick1SizeY": 2,
-                        "brick2SizeY": 2
+                        "brick2SizeY": 2,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -40,7 +46,9 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brick1SizeY": 1,
-                        "brick2SizeY": 1
+                        "brick2SizeY": 1,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -48,7 +56,9 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "brick2SizeY": 2,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -56,7 +66,9 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "brick2SizeY": 2,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -64,7 +76,9 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brick1SizeY": 2,
-                        "brick2SizeY": 1
+                        "brick2SizeY": 1,
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 }
             ]

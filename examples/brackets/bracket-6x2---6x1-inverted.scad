@@ -35,6 +35,10 @@ brick1BaseLayers = 1; // [1:24]
 // Type of cut-out on the underside.
 brick1BaseCutoutType = "classic"; // [none, classic]
 
+surfacePattern = true;
+surfacePatternScale = 0.3;
+surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
+
 // Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
@@ -58,8 +62,6 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Override Config] */
     overrideConfig=false;
-    overrideUnitMbu = 1.6;
-    overrideUnitGrid = [5, 2];
     overrideScale = 1.0;
     overrideBaseHeightAdjustment = 0.0;
     overrideBaseSideAdjustment = -0.1;
@@ -99,8 +101,8 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
         baseSideAdjustment =
             [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
         
-        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+        unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
@@ -130,6 +132,11 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
           //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
+
+          surfacePattern = surfacePattern,
+          surfacePatternScale = surfacePatternScale,
+          surfacePatternSvg = surfacePatternSvg,
+
           baseColor = baseColor,
 
           studs = brick2Knobs,
@@ -142,8 +149,8 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
           baseSideAdjustment =
             [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
 
-          unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+          unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,

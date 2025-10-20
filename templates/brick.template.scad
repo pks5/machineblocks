@@ -38,6 +38,7 @@ baseCutoutRoundingRadius = "auto";
 
 surfacePattern = false;
 surfacePatternScale = 0.2;
+surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
 
 // Whether to draw pillars.
 pillars = true;
@@ -173,6 +174,7 @@ machineblock(
 
     surfacePattern = surfacePattern,
     surfacePatternScale = surfacePatternScale,
+    surfacePatternSvg = surfacePatternSvg,
 
     baseSideAdjustment = bSideAdjustment,
     

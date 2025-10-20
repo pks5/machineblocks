@@ -67,8 +67,6 @@ textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 
 /* [Override Config] */
     overrideConfig=false;
-    overrideUnitMbu = 1.6;
-    overrideUnitGrid = [5, 2];
     overrideScale = 1.0;
     overrideBaseHeightAdjustment = 0.0;
     overrideBaseSideAdjustment = -0.1;
@@ -116,8 +114,8 @@ machineblock(
 
     baseSideAdjustment = bSideAdjustment,
     
-    unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+    unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,

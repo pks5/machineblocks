@@ -250,7 +250,7 @@ module machineblock(
         //Surface Pattern
         surfacePattern = false,
         surfacePatternSvg = "../pattern/circuit-board.svg",
-        surfacePatternDimensions = [135.541, 135.547],
+        surfacePatternDimensions = [160, 160],
         surfacePatternOffset = [0,0],
         surfacePatternScale=0.25,
         surfacePatternDepth=-0.2,
@@ -1306,7 +1306,7 @@ module machineblock(
                                             mb_text3d(
                                                 text = text,
                                                 textDepth = 2 * abs(textDepth),
-                                                textSize = textSize,
+                                                textSize = scale * textSize,
                                                 textFont = textFont,
                                                 textSpacing = textSpacing,
                                                 textVerticalAlign = textVerticalAlign,
@@ -1328,7 +1328,7 @@ module machineblock(
                                                 orgWidth = svgDimensions[0],
                                                 orgHeight = svgDimensions[1],
                                                 depth = 2 * abs(svgDepth),
-                                                size = svgScale,
+                                                size = scale * svgScale,
                                                 center = true
                                             );
                                 } // End color
@@ -1348,7 +1348,7 @@ module machineblock(
                                                     orgWidth = surfacePatternDimensions[0],
                                                     orgHeight = surfacePatternDimensions[1],
                                                     depth = 2 * abs(surfacePatternDepth),
-                                                    size = surfacePatternScale,
+                                                    size = scale * surfacePatternScale,
                                                     center = true
                                                 );
                                                 mb_beveled_rounded_block(
@@ -1600,7 +1600,7 @@ module machineblock(
                                                                             orgWidth = studIconDimensions[0],
                                                                             orgHeight = studIconDimensions[1],
                                                                             depth = 2 * abs(studIconDepth),
-                                                                            size = studIconScale,
+                                                                            size = scale * studIconScale,
                                                                             center = true
                                                                         );
                                                                         
@@ -1617,7 +1617,7 @@ module machineblock(
                                                                         orgWidth = studIconDimensions[0],
                                                                         orgHeight = studIconDimensions[1],
                                                                         depth = 2 * abs(studIconDepth),
-                                                                        size = studIconScale,
+                                                                        size = scale * studIconScale,
                                                                         center = true
                                                                     );
                                                                     
@@ -1696,7 +1696,7 @@ module machineblock(
                                     mb_text3d(
                                         text = text,
                                         textDepth = textDepth,
-                                        textSize = textSize,
+                                        textSize = scale * textSize,
                                         textFont = textFont,
                                         textSpacing = textSpacing,
                                         textVerticalAlign = textVerticalAlign,
@@ -1717,7 +1717,7 @@ module machineblock(
                                         orgWidth = svgDimensions[0],
                                         orgHeight = svgDimensions[1],
                                         depth = svgDepth,
-                                        size = svgScale,
+                                        size = scale * svgScale,
                                         center = true
                                     );
                     } // End if svg

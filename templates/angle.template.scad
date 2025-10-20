@@ -33,6 +33,10 @@ brick1BaseLayers = 1; // [1:24]
 // Type of cut-out on the underside.
 brick1BaseCutoutType = "classic"; // [none, classic]
 
+surfacePattern = false;
+surfacePatternScale = 0.2;
+surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
+
 /*{BASE_VARIABLES}*/
 
 /* [Knobs] */
@@ -86,6 +90,11 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
           //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
           baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
+
+          surfacePattern = surfacePattern,
+          surfacePatternScale = surfacePatternScale,
+          surfacePatternSvg = surfacePatternSvg,
+
           /*{BASE_PARAMETERS}*/
 
           studs = brick2Knobs,

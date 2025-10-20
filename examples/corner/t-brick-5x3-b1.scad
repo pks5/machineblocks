@@ -53,8 +53,6 @@ studIcon = true;
 
 /* [Override Config] */
     overrideConfig=false;
-    overrideUnitMbu = 1.6;
-    overrideUnitGrid = [5, 2];
     overrideScale = 1.0;
     overrideBaseHeightAdjustment = 0.0;
     overrideBaseSideAdjustment = -0.1;
@@ -94,8 +92,8 @@ union(){
 
         baseSideAdjustment = bSideAdjustment,
         
-        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+        unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
@@ -130,8 +128,8 @@ union(){
         
         baseSideAdjustment = bSideAdjustment,
     
-        unitMbu=overrideConfig ? overrideUnitMbu : unitMbu,
-    unitGrid=overrideConfig ? overrideUnitGrid : unitGrid,
+        unitMbu=unitMbu,
+    unitGrid=unitGrid,
     scale=overrideConfig ? overrideScale : scale,
     baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
     baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
