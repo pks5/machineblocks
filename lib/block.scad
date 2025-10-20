@@ -439,6 +439,8 @@ module machineblock(
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
     knobRounding = studRounding * mbuToMm;
+    knobSink = 0.4;
+    knobPartsOverlap = 0.01;
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
@@ -1562,15 +1564,17 @@ module machineblock(
                                                     union(){
                                                         difference(){
                                                             union(){
-                                                                translate([0, 0, -0.5 * (knobRounding + studClampHeight * mbuToMm)])
-                                                                    cylinder(h=knobHeight - knobRounding - studClampHeight * mbuToMm, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                translate([0, 0, -0.5 * (knobRounding + studClampHeight * mbuToMm) - 0.5 * knobSink])
+                                                                    cylinder(h=knobHeight - knobRounding - studClampHeight * mbuToMm + knobSink + knobPartsOverlap, r=0.5 * knobSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
 
                                                                 
                                                                 translate([0, 0, 0.5 * (knobHeight - studClampHeight * mbuToMm) - knobRounding ])
-                                                                    cylinder(h=studClampHeight * mbuToMm, r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                    cylinder(h=studClampHeight * mbuToMm + (knobRounding > knobPartsOverlap ? knobPartsOverlap : 0), r=0.5 * knobSize + studClampThickness, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
                                                                 
-                                                                translate([0, 0, 0.5 * (knobHeight - knobRounding)])
-                                                                    cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                if(knobRounding > 0){
+                                                                    translate([0, 0, 0.5 * (knobHeight - knobRounding)])
+                                                                        cylinder(h=knobRounding, r=0.5 * knobSize + studClampThickness - knobRounding, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                                }
                                                             }
                                                             
                                                             if(kType == "hollow"){
@@ -1582,13 +1586,15 @@ module machineblock(
                                                         } // end difference
                                                         
                                                         //Knob Rounding
-                                                        translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
-                                                            mb_torus(
-                                                                circleRadius = knobRounding, 
-                                                                torusRadius = 0.5 * knobSize + studClampThickness, 
-                                                                circleResolution = ($preview ? previewQuality : 1) * studRoundingResolution,
-                                                                torusResolution = ($preview ? previewQuality : 1) * studRoundingResolution
-                                                            );
+                                                        if(knobRounding > 0){
+                                                            translate([0, 0, 0.5 * knobHeight - knobRounding]){ 
+                                                                mb_torus(
+                                                                    circleRadius = knobRounding, 
+                                                                    torusRadius = 0.5 * knobSize + studClampThickness, 
+                                                                    circleResolution = ($preview ? previewQuality : 1) * studRoundingResolution,
+                                                                    torusResolution = ($preview ? previewQuality : 1) * studRoundingResolution
+                                                                );
+                                                            }
                                                         }
 
                                                         if(studIcon && studIconDepth > 0 && kType != "hollow"){

@@ -38,8 +38,8 @@ baseRoundingRadiusZ = 0; // [0:0.1:128]
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
-surfacePattern = false;
-surfacePatternScale = 0.2;
+surfacePattern = true;
+surfacePatternScale = 0.3;
 surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
 
 // Whether to draw pillars.

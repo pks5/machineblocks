@@ -151,7 +151,9 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "studPadding": [3, 0.2, 0.2, 0.2]
+                        "studPadding": [3, 0.2, 0.2, 0.2],
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
