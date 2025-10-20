@@ -151,7 +151,7 @@ module mb_base_cutout(
             /*
             * Slope
             */
-            if(slope != false){
+            if(slope != false && slope != [0, 0, 0, 0]){
                 for(side = [0 : 1 : 3]){
                     if(slope[side] > 0){
                         slopeSide0 = slopeSize(side);
@@ -319,7 +319,7 @@ module mb_base(
                     /*
                     * Slope
                     */
-                    if(slope != false){
+                    if(slope != false && slope != [0, 0, 0, 0]){
                         for(side = [0 : 1 : 3]){
                             if(slope[side] != 0){
                                 slopeSide0 = slopeSize(side);

@@ -28,20 +28,22 @@ baseLayers = 3; // [1:24]
 // Type of cut-out on the underside.
 baseCutoutType = "classic"; // [none, classic]
 // Rounding Radius X
-baseRoundingRadiusX = 0;
+baseRoundingRadiusX = 0; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0;
+baseRoundingRadiusY = 0; // [0:0.1:128]
 // Rounding Radius Z
-baseRoundingRadiusZ = 0;
+baseRoundingRadiusZ = 0; // [0:0.1:128]
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
 
+surfacePattern = false;
+surfacePatternScale = 0.2;
 
 // Whether to draw pillars.
 pillars = true;
 baseReliefCut = false;
-baseReliefCutHeight = 0.4;
-baseReliefCutThickness = 0.4;
+baseReliefCutHeight = 0.4; // [0:0.1:128]
+baseReliefCutThickness = 0.4; // [0:0.1:128]
 
 /*{BASE_VARIABLES}*/
 
@@ -55,44 +57,40 @@ knobCenteredX = false;
 knobCenteredY = false;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
-// Knob Padding Side 0
-knobPadding0 = 0.2;
-// Knob Padding Side 1
-knobPadding1 = 0.2;
-// Knob Padding Side 2
-knobPadding2 = 0.2;
-// Knob Padding Side 3
-knobPadding3 = 0.2;
+// Stud Padding
+studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
+//Whether to render the stud icon
+studIcon = true;
 
 /* [Bevel] */
 
 // Bevel X and Y for the corner 0,0
-bevel0 = [0, 0];
+bevel0 = [0, 0]; // [0:0.1:128]
 // Bevel X and Y for the corner 0,1
-bevel1 = [0, 0];
+bevel1 = [0, 0]; // [0:0.1:128]
 // Bevel X and Y for the corner 1,1
-bevel2 = [0, 0];
+bevel2 = [0, 0]; // [0:0.1:128]
 // Bevel X and Y for the corner 1,0
-bevel3 = [0, 0];
+bevel3 = [0, 0]; // [0:0.1:128]
 
 /* [Holes] */
 
 // Whether brick should have Technic holes along X-axis.
 holesX = false;
 // Type of X Holes.
-holeXType = "pin";
+holeXType = "pin"; // [pin, axle]
 // Whether X Holes should be centered
 holeXCentered = true;
 // Hole X Grid Offset Z
-holeXGridOffsetZ = 3.5;
+holeXGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Type of Y Holes.
-holeYType = "pin";
+holeYType = "pin"; // [pin, axle]
 // Whether Y Holes should be centered
 holeYCentered = true;
 // Hole Y Grid Offset Z
-holeYGridOffsetZ = 3.5;
+holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
 // Type of Z Holes.
@@ -109,18 +107,11 @@ pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
 // Pit wall thickness as multiple of one brick side length
-pitWallThickness = 0.333;
+pitWallThickness = 0.333; // [0:0.001:128]
 
 /* [Slope] */
 
-// Slope side 0
-slope0 = 0;
-// Slope side 1
-slope1 = 0;
-// Slope side 2
-slope2 = 0;
-// Slope side 3
-slope3 = 0;
+slope = [0, 0, 0, 0]; // [-128:0.1:128]
 
 /* [Grille] */
 // Grille in X direction
@@ -130,9 +121,9 @@ grilleY = false;
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
-
 /* [Hidden] */
-slope = ((slope0 != 0) || (slope1 != 0) || (slope2 != 0) || (slope3 != 0)) ? [slope0, slope1, slope2, slope3] : false;
+
+
 
 /*{HIDDEN_PARAMETERS}*/
 
@@ -153,7 +144,8 @@ machineblock(
     studCenteredX = knobCenteredX,
     studCenteredY = knobCenteredY,
     studType = knobType,
-    studPadding = [knobPadding0, knobPadding1, knobPadding2, knobPadding3],
+    studPadding = studPadding,
+    studIcon = studIcon,
     
     pillars = pillars,
     
@@ -178,6 +170,9 @@ machineblock(
 
     grilleX = grilleX,
     grilleY = grilleY,
+
+    surfacePattern = surfacePattern,
+    surfacePatternScale = surfacePatternScale,
 
     baseSideAdjustment = bSideAdjustment,
     

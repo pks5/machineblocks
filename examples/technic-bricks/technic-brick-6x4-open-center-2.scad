@@ -38,6 +38,8 @@ borderSize = 1; // [1:8]
 knobs = true;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
+//Whether to render the stud icon
+studIcon = true;
 
 /* [Pin Holes] */
 
@@ -79,6 +81,7 @@ union(){
         size=[borderSize, brickSizeY,baseLayers], 
         studs=knobs,
         studType=knobType,
+        studIcon = studIcon,
         baseColor = baseColor,
 
         holeYCentered = pinHolesCentered,
@@ -115,6 +118,7 @@ union(){
         size=[brickSizeX-2,borderSize,baseLayers],
         studs=knobs,
         studType=knobType,
+        studIcon = studIcon,
         baseRoundingRadius=[0,0,[cornerRadius,0,0,cornerRadius]],
         baseColor = baseColor,
 
@@ -152,6 +156,7 @@ union(){
         size=[borderSize, brickSizeY,baseLayers], 
         studs=knobs,
         studType=knobType,
+        studIcon = studIcon,
         baseColor = baseColor,
 
         holeYCentered = pinHolesCentered,
@@ -188,6 +193,7 @@ union(){
         size=[brickSizeX-2,borderSize,baseLayers], 
         studs=knobs,
         studType=knobType,
+        studIcon = studIcon,
         baseRoundingRadius=[0,0,[0, cornerRadius,cornerRadius,0]],
         baseColor = baseColor,
 

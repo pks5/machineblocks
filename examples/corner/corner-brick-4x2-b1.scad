@@ -48,6 +48,8 @@ baseLayers = 3; // [1:48]
 knobs = true;
 // Type of the knobs
 knobType = "classic"; // [classic, technic]
+//Whether to render the stud icon
+studIcon = true;
 
 /* [Override Config] */
     overrideConfig=false;
@@ -87,6 +89,7 @@ union(){
 
         studs = knobs,
         studType = knobType,
+        studIcon = studIcon,
         align="ccs",
 
         baseSideAdjustment = bSideAdjustment,
@@ -122,6 +125,7 @@ union(){
 
         studs = knobs,
         studType = knobType,
+        studIcon = studIcon,
         align="ccs",
         
         baseSideAdjustment = bSideAdjustment,

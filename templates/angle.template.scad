@@ -45,6 +45,8 @@ brick1KnobType = "solid"; // [solid, hollow]
 brick2Knobs = true;
 // Type of second brick's knobs
 brick2KnobType = "hollow"; // [solid, hollow]
+//Whether to render the stud icon
+studIcon = true;
 
 /* [Render] */
 
@@ -68,6 +70,7 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
         connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
         studs = brick1Knobs,
         studType = brick1KnobType,
+        studIcon = studIcon,
 
         baseSideAdjustment =
             [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
@@ -87,6 +90,7 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
           studs = brick2Knobs,
           studType = brick2KnobType,
+          studIcon = studIcon,
           connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
           connectorHeight = brick1BaseLayers * unitGrid[1],
           

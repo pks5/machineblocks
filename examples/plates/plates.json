@@ -151,7 +151,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 1,
-                        "knobPadding0": 3
+                        "studPadding": [3, 0.2, 0.2, 0.2]
                     }
                 },
                 {
@@ -252,7 +252,9 @@
                         "brickSizeY": 2,
                         "baseLayers": 1,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -262,7 +264,9 @@
                         "brickSizeY": 3,
                         "baseLayers": 1,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -273,7 +277,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -284,7 +290,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -295,7 +303,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -306,7 +316,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -317,7 +329,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -328,7 +342,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -339,7 +355,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -350,7 +368,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -361,7 +381,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -372,7 +394,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -383,7 +407,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 },
                 {
@@ -394,7 +420,9 @@
                         "baseLayers": 1,
                         "knobCenteredX": true,
                         "knobCenteredY": true,
-                        "knobType": "hollow"
+                        "knobType": "hollow",
+                        "surfacePattern": true,
+                        "surfacePatternScale": 0.3
                     }
                 }
             ]

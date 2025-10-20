@@ -26,6 +26,10 @@ brick3Size = [3, 3, 1];
 
 /*{BASE_VARIABLES}*/
 
+/* [Studs] */
+//Whether to render the stud icon
+studIcon = true;
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -34,6 +38,7 @@ brick3Size = [3, 3, 1];
 
 machineblock(
     size=brick1Size, 
+    studIcon = studIcon,
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -43,6 +48,7 @@ machineblock(
 machineblock(
     size=brick2Size,
     offset = [brick1Size[0] + 0.5, 0, 0],
+    studIcon = studIcon,
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -52,6 +58,7 @@ machineblock(
 machineblock(
     size=brick3Size, 
     offset = [brick1Size[0] + 0.5 + brick2Size[0] + 0.5, 0, 0],
+    studIcon = studIcon,
     
     baseSideAdjustment = bSideAdjustment,
     

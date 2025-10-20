@@ -39,6 +39,10 @@ inverted = false;
 
 /*{BASE_VARIABLES}*/
 
+/* [Studs] */
+//Whether to render the stud icon
+studIcon = true;
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -54,6 +58,7 @@ difference(){
     // First Column
     machineblock(
         size = [inverted ? brickSizeX : column1SizeX, brickSizeY, brickHeight],
+        studIcon = studIcon,
 
         /*{BASE_PARAMETERS}*/
 
@@ -67,6 +72,7 @@ difference(){
                 machineblock(
                     size = [column2SizeX, brickSizeY, brickHeight],
                     offset = [brickSizeX - column2SizeX, 0, 0],
+                    studIcon = studIcon,
 
                     /*{BASE_PARAMETERS}*/
 
@@ -83,6 +89,7 @@ difference(){
                     size = [brickSizeX - column1SizeX - (secondColumn ? column2SizeX : 0), brickSizeY, brickHeight],
                     offset = [column1SizeX,0,0],
                     baseCutoutType = "none",
+                    studIcon = studIcon,
                     
                     /*{BASE_PARAMETERS}*/
                     

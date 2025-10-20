@@ -40,6 +40,8 @@ knobCentered = false;
 knobType = "solid"; // [solid, hollow]
 // Whether to draw pillars.
 pillars = true;
+//Whether to render the stud icon
+studIcon = true;
 
 /* [Text] */
 
@@ -74,8 +76,10 @@ machineblock(
     /*{BASE_PARAMETERS}*/
 
     studs = knobs,
-    studCentered = knobCentered,
+    studCenteredX = knobCentered,
+    studCenteredY = knobCentered,
     studType = knobType,
+    studIcon = studIcon,
     pillars = pillars,
 
     textSide = textSide,

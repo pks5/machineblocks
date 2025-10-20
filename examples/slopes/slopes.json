@@ -16,7 +16,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "slope0": 3
+                        "slope": [3, 0, 0, 0]
                     }
                 },
 
@@ -25,7 +25,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 2,
-                        "slope0": 3
+                        "slope": [3, 0, 0, 0]
                     }
                 },
 
@@ -34,7 +34,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 1,
-                        "slope0": 2
+                        "slope": [2, 0, 0, 0]
                     }
                 },
 
@@ -43,7 +43,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 2,
-                        "slope0": 2
+                        "slope": [2, 0, 0, 0]
                     }
                 },
 
@@ -52,7 +52,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 3,
-                        "slope0": 2
+                        "slope": [2, 0, 0, 0]
                     }
                 },
 
@@ -61,7 +61,7 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 4,
-                        "slope0": 2
+                        "slope": [2, 0, 0, 0]
                     }
                 },
 
@@ -70,7 +70,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -79,7 +79,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -88,7 +88,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 3,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -97,7 +97,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 4,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -106,7 +106,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 6,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -115,7 +115,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 8,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -124,7 +124,7 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 4,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -134,7 +134,7 @@
                         "brickSizeX": 8,
                         "brickSizeY": 1,
                         "baseLayers": 9,
-                        "slope0": 7
+                        "slope": [7, 0, 0, 0]
                     }
                 },
 
@@ -144,7 +144,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "baseLayers": 6,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -154,7 +154,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "baseLayers": 2,
-                        "slope0": 2
+                        "slope": [2, 0, 0, 0]
                     }
                 },
 
@@ -164,7 +164,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 1,
                         "baseLayers": 2,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -174,7 +174,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 2,
                         "baseLayers": 2,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -184,8 +184,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 2,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -195,8 +194,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 4,
                         "baseLayers": 2,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -206,8 +204,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -217,8 +214,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 3,
                         "baseLayers": 3,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -228,8 +224,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -239,8 +234,7 @@
                         "brickSizeX": 6,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -250,8 +244,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 1,
                         "baseLayers": 2,
-                        "slope0": 0.5,
-                        "slope1": 0.5
+                        "slope": [0.5, 0.5, 0, 0]
                     }
                 },
 
@@ -261,8 +254,7 @@
                         "brickSizeX": 6,
                         "brickSizeY": 8,
                         "baseLayers": 3,
-                        "slope0": 1,
-                        "slope1": 1
+                        "slope": [1, 1, 0, 0]
                     }
                 },
 
@@ -272,9 +264,7 @@
                         "brickSizeX": 3,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "slope2": 1,
-                        "slope3": 1,
-                        "slope0": 2
+                        "slope": [2, 0, 1, 1]
                     }
                 },
 
@@ -284,7 +274,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "baseLayers": 9,
-                        "slope0": 1,
+                        "slope": [1, 0, 0, 0],
                         "knobType": "hollow"
                     }
                 },
@@ -295,7 +285,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 9,
-                        "slope0": 1
+                        "slope": [1, 0, 0, 0]
                     }
                 },
 
@@ -305,7 +295,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 9,
-                        "slope0": 1,
+                        "slope": [1, 0, 0, 0],
                         "knobType": "hollow"
                     }
                 },
@@ -316,8 +306,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 9,
-                        "slope0": 1,
-                        "slope2": 1,
+                        "slope": [1, 0, 1, 0],
                         "knobType": "hollow"
                     }
                 },
@@ -328,7 +317,7 @@
                         "brickSizeX": 3,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "slope0": -2
+                        "slope": [-2, 0, 0, 0]
                     }
                 },
 
@@ -338,7 +327,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "slope0": -1
+                        "slope": [-1, 0, 0, 0]
                     }
                 },
 
@@ -348,8 +337,7 @@
                         "brickSizeX": 3,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "slope0": -1,
-                        "slope1": -1
+                        "slope": [-1, -1, 0, 0]
                     }
                 },
 
@@ -359,8 +347,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "slope0": -1,
-                        "slope1": -1
+                        "slope": [-1, -1, 0, 0]
                     }
                 },
 
@@ -370,8 +357,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 4,
                         "baseLayers": 3,
-                        "slope0": -1,
-                        "slope1": -1
+                        "slope": [-1, -1, 0, 0]
                     }
                 },
 
@@ -381,7 +367,7 @@
                         "brickSizeX": 4,
                         "brickSizeY": 1,
                         "baseLayers": 9,
-                        "slope0": -2
+                        "slope": [-2, 0, 0, 0]
                     }
                 },
 
@@ -391,7 +377,7 @@
                         "brickSizeX": 2,
                         "brickSizeY": 1,
                         "baseLayers": 9,
-                        "slope0": -1
+                        "slope": [-1, 0, 0, 0]
                     }
                 }
             ]

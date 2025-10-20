@@ -36,6 +36,10 @@ middleLayers = 2;
 
 /*{BASE_VARIABLES}*/
 
+/* [Studs] */
+//Whether to render the stud icon
+studIcon = true;
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -49,6 +53,7 @@ machineblock(
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
     holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
     studType = brick1KnobType,
+    studIcon = studIcon,
     align="ccs",
 
     /*{BASE_PARAMETERS}*/
@@ -65,6 +70,7 @@ machineblock(
     studs = false,
     tongue = multipart,
     align="ccs",
+    studIcon = studIcon,
 
     /*{BASE_PARAMETERS}*/
 
@@ -81,6 +87,7 @@ machineblock(
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
     align="ccs",
+    studIcon = studIcon,
 
     /*{BASE_PARAMETERS}*/
 
@@ -96,6 +103,7 @@ machineblock(
     holeZ=brick2HolesZ,
     studType = brick2KnobType,
     align="ccs",
+    studIcon = studIcon,
 
     /*{BASE_PARAMETERS}*/
 

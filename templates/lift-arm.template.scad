@@ -38,6 +38,10 @@ leg2Rotation=0;
 
 /*{BASE_VARIABLES}*/
 
+/* [Studs] */
+//Whether to render the stud icon
+studIcon = true;
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */

@@ -43,6 +43,10 @@ baseRoundingRadiusZ = 0;
 
 /*{BASE_VARIABLES}*/
 
+/* [Studs] */
+//Whether to render the stud icon
+studIcon = true;
+
 /* [Pit] */
 
 // Pit wall thickness
@@ -92,15 +96,18 @@ machineblock(
 
     studs = baseKnobs,
     studType = baseKnobType,
-    studCentered = baseKnobCentered,
+    studCenteredX = baseKnobCentered,
+    studCenteredY = baseKnobCentered,
+    studIcon = studIcon,
     
     pit=true,
     pitWallGaps = basePitWallGaps,
     pitWallThickness = basePitWallThickness,
     pitKnobs = basePitKnobs,
     pitKnobType = basePitKnobType,
-    pitKnobCentered = basePitKnobCentered,
-
+    pitKnobCenteredX = basePitKnobCentered,
+    pitKnobCenteredY = basePitKnobCentered,
+    
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
     
@@ -124,7 +131,9 @@ if(lid){
 
             studs = lidKnobs,
             studType = lidKnobType,
-            studCentered = lidKnobCentered,
+            studCenteredX = lidKnobCentered,
+            studCenteredY = lidKnobCentered,
+            studIcon = studIcon,
 
             textSide = 5,
             textSize = 10,
