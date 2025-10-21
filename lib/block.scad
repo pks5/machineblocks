@@ -27,24 +27,32 @@ use <tongue.scad>;
  * @module machineblock
  * @brief Generates 3D-printable models of LEGO® compatible building blocks.
  *
- * Erzeugt einen blockförmigen Körper auf einem Raster (gridSize) in „mbu“-Einheiten inklusive zahlreicher
- * Optionen für Wände, Stabilisierung, Kanten, Löcher, Noppen (studs), Zunge/Nut (tongue), Vertiefung (pit),
- * Gravur/Relief (Text/SVG), Schraubhilfen und Leiterplattenhalterungen.
+ * The machineblock() module can generate 3D models of various types of LEGO®-compatible building blocks, such as classic bricks, plates, round bricks, wedges, slopes, liftarms, and many more.
+ * The different output forms can be controlled through a wide range of parameters. For more complex parts, multiple modules can be nested to create a new custom brick.
+ * The module is pre-calibrated to ensure good fitting accuracy on most 3D printers. For optimal precision, calibration settings can be adjusted individually.*
  *
  * @requires OpenSCAD 2021.01 or newer
  *
- * @note Einheiten: „mbu“ und „grid“ beziehen sich auf das interne Raster; mm sind reale Maße. Standardmässig entspricht 1mbu dem Vielfachen von 1.6mm; "grid" ist eine dreidimensionale Einheit (x, y, z) und entspricht 5mbu in x und y Richtung sowie 2mbu in z Richtung.
- * @note Einige Parameter akzeptieren verschiedene Datentypen oder "auto" zur Ableitung sinnvoller Standardwerte.
- * @note 
+ * @note Units: “mbu” and “grid” refer to the internal coordinate system, while mm represents real-world measurements. By default, 1 mbu = 1.6 mm. The “grid” unit is three-dimensional (x, y, z) and corresponds to 5 mbu in the x and y directions and 2 mbu in the z direction.
+ * @note Most parameters are restricted to a single data type. However, certain parameters can accept multiple data types.
+ * @note Some parameters support the keyword “auto”, which automatically derives appropriate default values.
  *
- * @example Minimal
+ * @example Minimal (1x1 Plate)
  * machineblock();
  *
  * @example 2x4 Brick
- * machineblock(size=[2, 4, 3]);
+ * machineblock(size = [2, 4, 3]);
  *
  * @example 2x2 Plate
- * machineblock(size=[2, 2, 1]);
+ * machineblock(size = [2, 2, 1]);
+ *
+ * @example 8x2 Plate with Pin Holes and Hollow Studs
+ * machineblock(size = [8, 2, 1], holeZ = true, studType = "hollow");
+ *
+ * @examples Custom composite Brick
+ * machineblock(size = [6, 2, 3]){
+ *      machineblock(size = [2, 2, 3], offset = [2, 0, 3]);
+ * }
  */
 module machineblock(
         //Grid units
@@ -52,20 +60,20 @@ module machineblock(
         unitGrid = [5, 2], // vector2 x mbu ([xy, z]) - The MachineBlocks grid relative to the base unit.
         
         //Scale
-        scale = 1.0, // float - Defines the scale of the block. Only affects parameters given in mbu and grid.
+        scale = 1.0, // float - Scale of the block. Only affects parameters given in mbu and grid.
 
         //Rotation
-        rotation = [0, 0, 0], // vector3 x int
-        rotationOffset = [0, 0, 0], // grid ([x, y, z])
+        rotation = [0, 0, 0], // vector3 x int - Rotation of the brick around the x, y and z - axis.
+        rotationOffset = [0, 0, 0], // grid ([x, y, z]) - Origin of the rotation relative to the Bricks origin.
 
         //Size
-        size = [1, 1, 1], // vector3 x float ([x, y, z])
-        offset = [0, 0, 0], // grid ([x, y, z])
+        size = [1, 1, 1], // vector3 x grid ([x, y, z]) - Size of the brick as multiple of the grid unit.
+        offset = [0, 0, 0], // grid ([x, y, z]) - Position of the brick relative to the origin.
 
         //Base
         base = true, // bool
         baseColor = "#EAC645", // color - Color of the block.
-        baseHeight = "auto", // mm | "auto"
+        baseHeight = "auto", // mm | "auto" - Fixed height in mm or auto to calculate height based on the size parameter.
         
         baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and pitDepth.
         baseTopPlateHeightAdjustment = -0.6, // mm
