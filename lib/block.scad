@@ -143,6 +143,7 @@ module machineblock(
         // Slope
         slope = false, // false | vector4
         slopeBaseHeightLower = 1.333, // mbu
+        slopeBaseHeightLowerInner = 1.125, // mbu
         slopeBaseHeightUpper = 1, // mbu
 
         // Bevel
@@ -642,6 +643,8 @@ module machineblock(
         topPlateHeight = topPlateHeight,
         resultingTopPlateHeight = resultingTopPlateHeight, 
         baseCutoutDepth = baseCutoutDepth,
+        baseCutoutMinDepth = baseCutoutMinDepth,
+        slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
         pitDepth = resultingPitDepth, 
         knobSize = knobSize,
         knobHeight = knobHeight,
@@ -748,7 +751,7 @@ module machineblock(
                                                         pitDepth = resultingPitDepth,
                                                         
                                                         slope = slope,
-                                                        slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
+                                                        slopeBaseHeightLowerInner = slopeBaseHeightLowerInner * mbuToMm,
                                                         
                                                         beveled = beveled,
                                                         bevelOuter = bevelOuter,

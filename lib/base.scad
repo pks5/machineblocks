@@ -49,7 +49,7 @@ module mb_base_cutout(
     
     //Slope
     slope,
-    slopeBaseHeightLower,
+    slopeBaseHeightLowerInner,
 
     //Bevel
     beveled,
@@ -87,12 +87,7 @@ module mb_base_cutout(
     bevelClamp = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness);
     
     
-    //function posX(a) = (a - (0.5 * (grid[0] - 1))) * gridSizeXY;
-    //function posY(b) = (b - (0.5 * (grid[1] - 1))) * gridSizeXY;
-
     function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slope[side] + baseSideAdjustment[side])) + cutTolerance;
-    //function slan2ting(s) = s > 0 ? 0 : s;
-
     
     translate([offsetX, offsetY, 0]){ 
         difference(){
@@ -156,35 +151,10 @@ module mb_base_cutout(
                     if(slope[side] > 0){
                         slopeSide0 = slopeSize(side);
                         tx = ((side % 2 == 0) ? -0.5 : 0.5) * (objectSize[side < 2 ? 0 : 1] - 2*wallThickness - slopeSide0 + cutTolerance);
-                        translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, 0.5*(slopeBaseHeightLower + cutTolerance)])
-                            mb_slant_prism(side, slopeSide0, objectSize[side < 2 ? 1 : 0] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
+                        translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, 0.5*(slopeBaseHeightLowerInner + cutTolerance)])
+                            mb_slant_prism(side, slopeSide0, objectSize[side < 2 ? 1 : 0] * cutMultiplier, baseHeight - slopeBaseHeightLowerInner + cutTolerance, false);
                     }
                 }
-                /*
-                if(slope[0] > 0){
-                    slopeSide0 = slopeSize(0);
-                    translate([-0.5 * (objectSize[0] - 2*wallThickness - slopeSide0 + cutTolerance), 0, 0.5*(slopeBaseHeightLower + cutTolerance)])
-                        mb_slant_prism(0, slopeSide0, objectSize[1] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
-                }
-
-                if(slope[1] > 0){
-                    slopeSide1 = slopeSize(1);
-                    translate([0.5 * (objectSize[0] - 2*wallThickness - slopeSide1 + cutTolerance), 0, 0.5*(slopeBaseHeightLower + cutTolerance)])
-                        mb_slant_prism(1, slopeSide1, objectSize[1] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
-                }
-
-                if(slope[2] > 0){
-                    slopeSide2 = slopeSize(2);
-                    translate([0, -0.5 * (objectSize[1] - 2*wallThickness - slopeSide2 + cutTolerance), 0.5*(slopeBaseHeightLower + cutTolerance)])
-                        mb_slant_prism(2, slopeSide2, objectSize[0] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
-                }
-                
-                if(slope[3] > 0){
-                    slopeSide3 = slopeSize(3);
-                    translate([0, 0.5 * (objectSize[1] - 2*wallThickness - slopeSide3 + cutTolerance), 0.5*(slopeBaseHeightLower + cutTolerance)])
-                        mb_slant_prism(3, slopeSide3, objectSize[0] * cutMultiplier, baseHeight - slopeBaseHeightLower + cutTolerance, false);
-                }*/
-                
             }
         }
     } 
@@ -329,35 +299,6 @@ module mb_base(
                                     mb_slant_prism(side, slopeSide0, (side < 2 ? objectSizeYAdjusted : objectSizeXAdjusted) * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slope[side] < 0);
                             }
                         }
-
-                        /*
-                        if(slope[0] != 0){
-                            slopeSide0 = slopeSize(0);
-                            slopeBaseHeight0 = slopeBaseHeight(0);
-                            translate([-0.5 * (objectSizeXAdjusted - slopeSide0 + cutTolerance), 0, sign(slope[0])*0.5*(slopeBaseHeight0 + cutTolerance)])
-                                mb_slant_prism(0, slopeSide0, objectSizeYAdjusted * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slope[0] < 0);
-                        }
-
-                        if(slope[1] != 0){
-                            slopeSide1 = slopeSize(1);
-                            slopeBaseHeight1 = slopeBaseHeight(1);
-                            translate([0.5 * (objectSizeXAdjusted - slopeSide1 + cutTolerance), 0, sign(slope[1])*0.5*(slopeBaseHeight1 + cutTolerance)])
-                                mb_slant_prism(1, slopeSide1, objectSizeYAdjusted * cutMultiplier, height - slopeBaseHeight1 + cutTolerance, slope[1] < 0);
-                        }
-
-                        if(slope[2] != 0){
-                            slopeSide2 = slopeSize(2);
-                            slopeBaseHeight2 = slopeBaseHeight(2);
-                            translate([0, -0.5 * (objectSizeYAdjusted - slopeSide2 + cutTolerance), sign(slope[2])*0.5*(slopeBaseHeight2 + cutTolerance)])
-                                mb_slant_prism(2, slopeSide2, objectSizeXAdjusted * cutMultiplier, height - slopeBaseHeight2 + cutTolerance, slope[2] < 0);
-                        }
-
-                        if(slope[3] != 0){
-                            slopeSide3 = slopeSize(3);
-                            slopeBaseHeight3 = slopeBaseHeight(3);
-                            translate([0, 0.5 * (objectSizeYAdjusted - slopeSide3 + cutTolerance), sign(slope[3])*0.5*(slopeBaseHeight3 + cutTolerance)])
-                                mb_slant_prism(3, slopeSide3, objectSizeXAdjusted * cutMultiplier, height - slopeBaseHeight3 + cutTolerance, slope[3] < 0);
-                        }*/
                     }
                } // End difference
                 
