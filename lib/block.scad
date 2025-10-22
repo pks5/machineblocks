@@ -206,8 +206,7 @@ module machineblock(
         studHeight = 1, // mbu (constant, should not be changed normally)
         studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
 
-        studIcon = true,
-        studIconSvg = "../pattern/bolt.svg",
+        studIcon = "../pattern/bolt-solid-full.svg",
         studIconDimensions = [169.333, 169.333],
         studIconScale = 0.024,
         studIconDepth = -0.2,
@@ -1608,12 +1607,12 @@ module machineblock(
                                                             }
                                                         }
 
-                                                        if(studIcon && studIconDepth > 0 && kType != "hollow"){
+                                                        if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth > 0 && kType != "hollow"){
                                                             color(studIconColor == "inherit" ? baseColor : studIconColor){
                                                                 translate([0, 0, 0.5*knobHeight])
                                                                     rotate(decoratorRotations[surfacePatternSide])
                                                                         mb_svg3d(
-                                                                            file = studIconSvg,
+                                                                            file = studIcon,
                                                                             orgWidth = studIconDimensions[0],
                                                                             orgHeight = studIconDimensions[1],
                                                                             depth = 2 * abs(studIconDepth),
@@ -1625,12 +1624,12 @@ module machineblock(
                                                         }
                                                     } // End union
 
-                                                    if(studIcon && studIconDepth < 0 && kType != "hollow"){
+                                                    if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth < 0 && kType != "hollow"){
                                                         color(studIconColor == "inherit" ? baseColor : studIconColor){
                                                             translate([0, 0, 0.5*knobHeight])
                                                                 rotate(decoratorRotations[surfacePatternSide])
                                                                     mb_svg3d(
-                                                                        file = studIconSvg,
+                                                                        file = studIcon,
                                                                         orgWidth = studIconDimensions[0],
                                                                         orgHeight = studIconDimensions[1],
                                                                         depth = 2 * abs(studIconDepth),
