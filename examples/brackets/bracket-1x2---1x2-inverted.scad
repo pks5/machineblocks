@@ -35,6 +35,9 @@ brick1BaseLayers = 1; // [1:24]
 // Type of cut-out on the underside.
 brick1BaseCutoutType = "classic"; // [none, classic]
 
+// Radius of the vertical brick
+baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
+
 // Color of the brick
     baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
     surfacePatternScale = 0.12; // [0:0.001:1]
@@ -133,7 +136,7 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
           size = [ brickSizeX, brick2SizeY, 0.5 ],
           //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
-          baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
+          baseRoundingRadius=[0,0,baseRoundingRadiusZ],
 
           baseColor = baseColor,
     surfacePattern = surfacePattern,

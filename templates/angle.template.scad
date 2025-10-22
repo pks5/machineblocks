@@ -33,6 +33,9 @@ brick1BaseLayers = 1; // [1:24]
 // Type of cut-out on the underside.
 brick1BaseCutoutType = "classic"; // [none, classic]
 
+// Radius of the vertical brick
+baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
+
 /*{BASE_VARIABLES}*/
 
 /* [Knobs] */
@@ -86,7 +89,7 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
           size = [ brickSizeX, brick2SizeY, 0.5 ],
           //baseHeight = brick2BaseHeight,
           baseCutoutType = "none",
-          baseRoundingRadius=[0,0,[0,0.1,0.1,0]],
+          baseRoundingRadius=[0,0,baseRoundingRadiusZ],
 
           /*{BASE_PARAMETERS}*/
 
