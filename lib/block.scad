@@ -1564,7 +1564,7 @@ module machineblock(
                                         pitKnobOffsetX = pitKnobCenteredX ? 0.5 : 0;
                                         pitKnobOffsetY = pitKnobCenteredY ? 0.5 : 0;
                                         inPit = pit && pitKnobs && inPit(a + pitKnobOffsetX, b + pitKnobOffsetY);
-                                        onPitBorder = !pit || onPitBorder(a + knobOffset, b + knobOffset);
+                                        onPitBorder = !pit || onPitBorder(a + knobOffsetX, b + knobOffsetY);
                                         if(onPitBorder || inPit){
                                             posOffsetX = (inPit ? pitKnobCenteredX : studCenteredX) ? 0.5 : 0;
                                             posOffsetY = (inPit ? pitKnobCenteredY : studCenteredY) ? 0.5 : 0;
