@@ -256,7 +256,7 @@ module machineblock(
         textColor = "#2c3e50", // color - Color of text.
 
         //Surface Pattern
-        surfacePattern = "../pattern/squares.svg",
+        surfacePattern = "none",
         surfacePatternDimensions = [451.556, 451.556],
         surfacePatternOffset = [0,0],
         surfacePatternScale=0.25,
