@@ -17,7 +17,7 @@
                         "brickSizeX": 1,
                         "brick1SizeY": 1,
                         "brick2SizeY": 1,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -27,7 +27,7 @@
                         "brickSizeX": 1,
                         "brick1SizeY": 1,
                         "brick2SizeY": 2,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -37,7 +37,7 @@
                         "brickSizeX": 1,
                         "brick1SizeY": 2,
                         "brick2SizeY": 2,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -47,7 +47,7 @@
                         "brickSizeX": 2,
                         "brick1SizeY": 1,
                         "brick2SizeY": 1,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -57,7 +57,7 @@
                         "brickSizeX": 2,
                         "brick1SizeY": 1,
                         "brick2SizeY": 2,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -67,7 +67,7 @@
                         "brickSizeX": 6,
                         "brick1SizeY": 1,
                         "brick2SizeY": 2,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 },
@@ -77,7 +77,7 @@
                         "brickSizeX": 6,
                         "brick1SizeY": 2,
                         "brick2SizeY": 1,
-                        "surfacePattern": true,
+                        "surfacePattern": "../pattern/squares.svg",
                         "surfacePatternScale": 0.3
                     }
                 }
