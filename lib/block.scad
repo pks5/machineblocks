@@ -256,8 +256,7 @@ module machineblock(
         textColor = "#2c3e50", // color - Color of text.
 
         //Surface Pattern
-        surfacePattern = false,
-        surfacePatternSvg = "../pattern/squares.svg",
+        surfacePattern = "../pattern/squares.svg",
         surfacePatternDimensions = [451.556, 451.556],
         surfacePatternOffset = [0,0],
         surfacePatternScale=0.25,
@@ -1349,14 +1348,14 @@ module machineblock(
                             /*
                             * Surface Pattern Cutout
                             */
-                            if(surfacePattern && surfacePatternDepth < 0){
+                            if(!mb_is_empty_string(surfacePattern) && surfacePattern != "none" && surfacePatternDepth < 0){
                                 
                                 color(surfacePatternColor == "inherit" ? baseColor : surfacePatternColor){
                                     translate([decoratorX(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[0]), decoratorY(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1]), decoratorZ(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1])])
                                         rotate(decoratorRotations[surfacePatternSide])
                                             intersection(){
                                                 mb_svg3d(
-                                                    file = surfacePatternSvg,
+                                                    file = surfacePattern,
                                                     orgWidth = surfacePatternDimensions[0],
                                                     orgHeight = surfacePatternDimensions[1],
                                                     depth = 2 * abs(surfacePatternDepth),
@@ -1738,35 +1737,6 @@ module machineblock(
                                     );
                     } // End if svg
 
-                    /*
-                    * Surface Pattern
-                    */
-                    /*
-                    if(surfacePattern && surfacePatternDepth > 0){
-                        color(surfacePatternColor == "inherit" ? baseColor : surfacePatternColor)
-                            translate([decoratorX(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[0]), decoratorY(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1]), decoratorZ(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1])])
-                                rotate(decoratorRotations[surfacePatternSide])
-                                    intersection(){
-                                        mb_svg3d(
-                                            file = surfacePatternSvg,
-                                            orgWidth = surfacePatternDimensions[0],
-                                            orgHeight = surfacePatternDimensions[1],
-                                            depth = surfacePatternDepth,
-                                            size = surfacePatternScale,
-                                            center = true
-                                        );
-                                        mb_beveled_rounded_block(
-                                            bevel = beveled ? bevelInner : false,
-                                            sizeX = objectSizeX - 2*wallThickness,
-                                            sizeY = objectSizeY - 2*wallThickness,
-                                            height = 2.1 * abs(surfacePatternDepth),
-                                            roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                            roundingResolution = baseRoundingResolution
-                                        );
-                                    }
-                    } */ // End if surface pattern
-
-                    
                 } // End pre_render
             } // End rotation Offset
         } // End rotation
