@@ -18,7 +18,7 @@
                         "brick1SizeY": 1,
                         "brick2SizeY": 1,
                         "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "surfacePatternScale": 0.08
                     }
                 },
                 {
@@ -28,7 +28,7 @@
                         "brick1SizeY": 1,
                         "brick2SizeY": 2,
                         "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "surfacePatternScale": 0.08
                     }
                 },
                 {
@@ -38,7 +38,7 @@
                         "brick1SizeY": 2,
                         "brick2SizeY": 2,
                         "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "surfacePatternScale": 0.12
                     }
                 },
                 {
@@ -48,7 +48,7 @@
                         "brick1SizeY": 1,
                         "brick2SizeY": 1,
                         "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "surfacePatternScale": 0.12
                     }
                 },
                 {
@@ -58,7 +58,7 @@
                         "brick1SizeY": 1,
                         "brick2SizeY": 2,
                         "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "surfacePatternScale": 0.12
                     }
                 },
                 {

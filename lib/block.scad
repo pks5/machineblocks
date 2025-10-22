@@ -398,7 +398,7 @@ module machineblock(
     baseRoundingRadiusResolved = mb_base_rounding_radius(baseRoundingRadius, gridSizeXY * min(adjustedSizeRelation[0], adjustedSizeRelation[1]), gridSizeZ * adjustedSizeRelation[2]);
     baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
     
-    
+    textureRoundingRadius = mb_base_cutout_radius(-0.5 * wallThickness, baseRoundingRadiusZ, minObjectSide);
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
     minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
@@ -420,6 +420,7 @@ module machineblock(
     bevelOuter = mb_resolve_bevel_horizontal(bevel, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
+    bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
@@ -1363,11 +1364,11 @@ module machineblock(
                                                     center = true
                                                 );
                                                 mb_beveled_rounded_block(
-                                                    bevel = beveled ? bevelInner : false,
-                                                    sizeX = objectSizeX - 2*wallThickness,
-                                                    sizeY = objectSizeY - 2*wallThickness,
-                                                    height = 2.1 * abs(surfacePatternDepth),
-                                                    roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                                    bevel = beveled ? bevelTexture : false,
+                                                    sizeX = objectSizeX - wallThickness,
+                                                    sizeY = objectSizeY - wallThickness,
+                                                    height = (2 + 0.1) * abs(surfacePatternDepth),
+                                                    roundingRadius = textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius],
                                                     roundingResolution = baseRoundingResolution
                                                 );
                                             }
