@@ -39,8 +39,8 @@ baseRoundingRadiusZ = 4; // [0:0.1:128]
 baseCutoutRoundingRadius = "auto";
 
 surfacePattern = false;
-surfacePatternScale = 0.2;
-surfacePatternSvg = "../pattern/circuit-board.svg"; // [../pattern/circuit-board.svg:Circuit Board]
+surfacePatternScale = 0.2; // [0:0.001:128]
+surfacePatternSvg = "../pattern/honeycombs.svg"; // [../pattern/honeycombs.svg:Honeycombs, ../pattern/squares.svg:Squares, ../pattern/squares-diagonal.svg:Squares Diagonal, ../pattern/diamonds.svg:Diamonds, ../pattern/textile.svg:Textile, ../pattern/card-background.svg:Card Background, ../pattern/dots.svg:Dots, ../pattern/circuit-board.svg:Circuit Board]
 
 // Whether to draw pillars.
 pillars = true;

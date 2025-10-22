@@ -257,8 +257,8 @@ module machineblock(
 
         //Surface Pattern
         surfacePattern = false,
-        surfacePatternSvg = "../pattern/circuit-board.svg",
-        surfacePatternDimensions = [160, 160],
+        surfacePatternSvg = "../pattern/honeycombs.svg",
+        surfacePatternDimensions = [451.556, 451.556],
         surfacePatternOffset = [0,0],
         surfacePatternScale=0.25,
         surfacePatternDepth=-0.2,
