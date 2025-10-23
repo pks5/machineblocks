@@ -1,0 +1,100 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Brackets",
+    "examples" : [
+        {
+            "template": "../../templates/angle.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/angle",
+            "bricks": [
+                {
+                    "name": "Bracket 1x1 - 1x1 Inverted",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 1,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.08
+                    }
+                },
+                {
+                    "name": "Bracket 1x1 - 1x2 Inverted",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 2,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.08
+                    }
+                },
+                {
+                    "name": "Bracket 1x2 - 1x2 Inverted",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brick1SizeY": 2,
+                        "brick2SizeY": 2,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.12
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 2x1 Inverted",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 1,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.12
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 2x2 Inverted",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 2,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.12
+                    }
+                },
+                {
+                    "name": "Bracket 6x1 - 6x2 Inverted",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brick1SizeY": 1,
+                        "brick2SizeY": 2,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Bracket 6x2 - 6x1 Inverted",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brick1SizeY": 2,
+                        "brick2SizeY": 1,
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                }
+            ]
+        },
+        {
+            "template": "../../templates/bracket.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/bracket",
+            "bricks" : [
+                {
+                    "name": "Bracket",
+                    "parameters": {
+                        
+                    }
+                }
+            ]
+        }
+    ]
+}

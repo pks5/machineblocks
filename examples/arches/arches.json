@@ -1,0 +1,122 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Arch Bricks",
+    "examples" : [
+        {
+            "template": "../../templates/arch.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/arch",
+            "bricks" : [
+                {
+                    "name": "Arch 2x1",
+                    "parameters": {
+                        "brickSizeX" : 2,
+                        "brickSizeY" : 1
+                    }
+                },
+                {
+                    "name": "Arch 2x1 Inverted",
+                    "parameters": {
+                        "brickSizeX" : 2,
+                        "brickSizeY" : 1,
+                        "brickHeight" : 3,
+                        "column1SizeX" : 1,
+                        "deckHeight" : 1,
+                        "secondColumn" : false,  
+                        "column2SizeX" : 1,
+                        "inverted" : true
+                    }
+                },
+                {
+                    "name": "Arch 3x1",
+                    "parameters": {
+                        "brickSizeX" : 3,
+                        "brickSizeY" : 1,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 3x1 Inverted",
+                    "parameters": {
+                        "brickSizeX" : 3,
+                        "brickSizeY" : 1,
+                        "brickHeight" : 3,
+                        "column1SizeX" : 1,
+                        "deckHeight" : 1,
+                        "secondColumn" : false,  
+                        "column2SizeX" : 1,
+                        "inverted" : true
+                    }
+                },
+                {
+                    "name": "Arch 3x1x2 Inverted",
+                    "parameters": {
+                        "brickSizeX" : 3,
+                        "brickSizeY" : 1,
+                        "brickHeight" : 6,
+                        "inverted" : true
+                    }
+                },
+                {
+                    "name": "Arch 4x1",
+                    "parameters": {
+                        "brickSizeX" : 4,
+                        "brickSizeY" : 1,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 4x1x2",
+                    "parameters": {
+                        "brickSizeX" : 4,
+                        "brickSizeY" : 1,
+                        "brickHeight": 6,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 6x1",
+                    "parameters": {
+                        "brickSizeX" : 6,
+                        "brickSizeY" : 1,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 6x1x2",
+                    "parameters": {
+                        "brickSizeX" : 6,
+                        "brickSizeY" : 1,
+                        "brickHeight": 6,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 8x1x2",
+                    "parameters": {
+                        "brickSizeX" : 8,
+                        "brickSizeY" : 1,
+                        "brickHeight": 6,
+                        "secondColumn" : true
+                    }
+                },
+                {
+                    "name": "Arch 8x2x3",
+                    "parameters": {
+                        "brickSizeX" : 8,
+                        "brickSizeY" : 2,
+                        "brickHeight": 9,
+                        "column1SizeX" : 2,
+                        "column2SizeX" : 2,
+                        "deckHeight": 2,
+                        "secondColumn" : true
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,222 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Technic Bricks",
+    "examples" : [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/technic-bricks",
+            "bricks" : [
+                {
+                    "name": "Technic Brick 1x1 with Axle Hole",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "holesY" : true,
+                        "holeYType": "axle",
+                        "holeYCentered": false,
+                        "knobType": "hollow"
+                    }
+                },
+                {
+                    "name": "Technic Brick 1x1 with Hole",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "holesY" : true,
+                        "holeYCentered": false,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x2",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x2 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "holesY" : true,
+                        "holeYCentered": false,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x2 with Axle Hole",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "holesY" : true,
+                        "holeYType": "axle",
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x3 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 3,
+                        "holesY" : true,
+                        "holeYCentered": false,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x4 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 4,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },    
+
+                {
+                    "name": "Technic Brick 1x6 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 6,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+                
+                {
+                    "name": "Technic Brick 1x8 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 8,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+                
+                {
+                    "name": "Technic Brick 1x10 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 10,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+                
+                {
+                    "name": "Technic Brick 1x12 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 12,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x14 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 14,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Technic Brick 1x16 with Holes",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 16,
+                        "holesY" : true,
+                        "knobType": "hollow"
+                    }
+                },
+
+
+                {
+                    "name": "Technic Brick 2x4 with 3 Axle Holes",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "holesZ" : true,
+                        "holeZType": "axle"
+                    }
+                }, 
+
+                {
+                    "name": "Technic Brick 2x4 with Holes on All Sides",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "holesX" : true,
+                        "holesY" : true,
+                        "holesZ" : true,
+                        "knobType": "hollow"
+                    }
+                }, 
+
+                {
+                    "name": "Technic Brick 2x4 with Holes on All Sides Solid Studs",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "holesX" : true,
+                        "holesY" : true,
+                        "holesZ" : true
+                    }
+                }
+                
+
+                
+            ]
+        },
+        {
+            "template": "../../templates/hole-plate.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/technic-bricks",
+            "bricks": [
+                {
+                    "name": "Technic Brick 6x4 Open Center",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "borderSize": 1,
+                        "baseLayers": 3,
+                        "pinHoles": true
+                    }
+                }
+            ]
+        },
+        {
+            "template": "../../templates/technic-brick-open-center.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/technic-bricks",
+            "bricks": [
+                {
+                    "name": "Technic Brick 6x4 Open Center 2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "borderSize": 1,
+                        "baseLayers": 3,
+                        "pinHoles": true
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 639.99998 639.99998"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="futbol-solid-full.svg"
+   width="169.33333mm"
+   height="169.33333mm"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.36875"
+     inkscape:cx="318.64407"
+     inkscape:cy="320"
+     inkscape:window-width="1376"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+  <path
+     d="m 481.3,424.1 -71.6,-4.8 c -5.2,-0.3 -10.3,1.1 -14.5,4.2 -4.2,3.1 -7.2,7.4 -8.4,12.5 l -17.6,69.6 c -15.7,4.2 -32.2,6.4 -49.2,6.4 -17,0 -33.5,-2.2 -49.2,-6.4 L 253.2,436 c -1.3,-5 -4.3,-9.4 -8.4,-12.5 -4.1,-3.1 -9.3,-4.5 -14.5,-4.2 l -71.6,4.8 C 141.1,396.9 130.2,364.9 128.3,330.5 L 189,292.3 c 4.4,-2.8 7.6,-7 9.2,-11.9 1.6,-4.9 1.4,-10.2 -0.5,-15 L 171,198.8 c 21,-25.6 48.3,-45.8 79.7,-57.9 l 55.2,46 c 4,3.3 9,5.1 14.1,5.1 5.1,0 10.2,-1.8 14.1,-5.1 l 55.2,-46 c 31.3,12.1 58.7,32.3 79.6,57.9 l -26.7,66.6 c -1.9,4.8 -2.1,10.1 -0.5,15 1.6,4.9 4.9,9.1 9.2,11.9 l 60.7,38.2 c -1.9,34.4 -12.8,66.4 -30.4,93.6 z M 320,576 C 461.4,576 576,461.4 576,320 576,178.6 461.4,64 320,64 178.6,64 64,178.6 64,320 64,461.4 178.6,576 320,576 Z m 14.1,-325.7 c -8.4,-6.1 -19.8,-6.1 -28.2,0 L 258,285 c -8.4,6.1 -11.9,16.9 -8.7,26.8 l 18.3,56.3 c 3.2,9.9 12.4,16.6 22.8,16.6 h 59.2 c 10.4,0 19.6,-6.7 22.8,-16.6 l 18.3,-56.3 c 3.2,-9.9 -0.3,-20.7 -8.7,-26.8 l -47.9,-34.8 z"
+     id="path1" />
+</svg>

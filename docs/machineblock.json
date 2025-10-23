@@ -1,0 +1,268 @@
+{
+    "module": "machineblock",
+    "requires": "OpenSCAD 2021.01+",
+    "units": {
+      "mbu": "Machine Blocks base unit; default 1 mbu = 1.6 mm",
+      "grid": "Discrete LEGO-like grid; XY = 5 mbu per step, Z = 2 mbu per step",
+      "mm": "Millimeters (real-world)"
+    },
+    "description": "Generates 3D-printable LEGO®-compatible building blocks. Supports classic bricks, plates, round bricks, slopes, liftarms, etc. Output is controlled by many parameters; complex parts can be composed by nesting modules. Defaults are pre-calibrated for good fit; fine-tune with calibration parameters. Some parameters accept multiple types or the keyword \"auto\" to derive suitable values.",
+    "notes": [
+      "Some parameters accept multiple data types (e.g., number | vector | \"auto\").",
+      "Where type is vector, units usually follow grid semantics unless specified.",
+      "\"auto\" lets the module infer dimensions from related parameters (commonly size and unit settings)."
+    ],
+    "examples": [
+      {
+        "title": "Minimal (1x1 Plate)",
+        "code": "machineblock();"
+      },
+      {
+        "title": "2x4 Brick",
+        "code": "machineblock(size = [2, 4, 3]);"
+      },
+      {
+        "title": "2x2 Plate",
+        "code": "machineblock(size = [2, 2, 1]);"
+      },
+      {
+        "title": "8x2 Plate with Pin Holes and Hollow Studs",
+        "code": "machineblock(size = [8, 2, 1], holeZ = true, studType = \"hollow\");"
+      },
+      {
+        "title": "Custom composite Brick",
+        "code": "machineblock(size = [6, 2, 3]){\n  machineblock(size = [2, 2, 3], offset = [2, 0, 3]);\n}"
+      }
+    ],
+    "parameters": [
+      { "name": "unitMbu", "type": "number", "unit": "mm", "default": 1.6, "possible_values": "> 0", "examples": [1.6], "description": "Base unit conversion to mm (1 mbu)." },
+      { "name": "unitGrid", "type": "vector2<number>", "unit": "mbu ([xy, z])", "default": [5, 2], "possible_values": "> 0 per axis", "examples": [[5,2]], "description": "Grid step size in mbu (XY and Z)." },
+  
+      { "name": "scale", "type": "number", "unit": "—", "default": 1.0, "possible_values": "> 0", "examples": [1, 0.5, 2], "description": "Scales mbu/grid-based values; mm values are absolute." },
+  
+      { "name": "rotation", "type": "vector3<number>", "unit": "deg", "default": [0,0,0], "possible_values": "any angles", "examples": [[0,0,90]], "description": "Rotation around x, y, z." },
+      { "name": "rotationOffset", "type": "vector3<number>", "unit": "grid", "default": [0,0,0], "possible_values": "grid coords", "examples": [[0,0,0],[0.5,0.5,0]], "description": "Origin for rotation relative to brick origin." },
+  
+      { "name": "size", "type": "vector3<number>", "unit": "grid", "default": [1,1,1], "possible_values": ">= 1 per axis typically", "examples": [[2,4,3],[2,2,1]], "description": "Brick size in grid steps [x,y,z]. For LEGO®: z=1=plate, z=3=brick." },
+      { "name": "offset", "type": "vector3<number>", "unit": "grid", "default": [0,0,0], "possible_values": "any grid coords", "examples": [[2,0,3]], "description": "Position relative to scene origin." },
+  
+      { "name": "base", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Render main body." },
+      { "name": "baseColor", "type": "color", "unit": "—", "default": "#EAC645", "possible_values": "CSS hex/color", "examples": ["#EAC645","#ff0000"], "description": "Body color for preview." },
+      { "name": "baseHeight", "type": "number|string", "unit": "mm | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto", 9.6], "description": "Override body height in mm; auto derives from size.z." },
+  
+      { "name": "baseTopPlateHeight", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Minimum top plate thickness; final may change due to cutouts/pits." },
+      { "name": "baseTopPlateHeightAdjustment", "type": "number", "unit": "mm", "default": -0.6, "possible_values": "any", "examples": [-0.6], "description": "Fine adjustment to top plate height (tuning fit)." },
+  
+      { "name": "baseCutoutType", "type": "string", "unit": "—", "default": "classic", "possible_values": ["classic","groove","none"], "examples": ["classic"], "description": "Underside style." },
+      { "name": "baseCutoutMaxDepth", "type": "number", "unit": "mbu", "default": 5, "possible_values": ">= 0", "examples": [5], "description": "Max underside cut depth." },
+  
+      { "name": "baseClampOffset", "type": "number", "unit": "mbu", "default": 0.25, "possible_values": ">= 0", "examples": [0.25], "description": "Offset of internal clamps." },
+      { "name": "baseClampHeight", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Clamp height." },
+      { "name": "baseClampThickness", "type": "number", "unit": "mm", "default": 0.1, "possible_values": ">= 0", "examples": [0.1], "description": "Clamp thickness in mm (printable wall tuning)." },
+      { "name": "baseClampOuter", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Place clamps on outer wall if true." },
+  
+      { "name": "baseRoundingRadius", "type": "number|vector3<number>|vector3<vector4<number>>", "unit": "grid", "default": 0.0, "possible_values": ">= 0", "examples": [0.5,[1,2,3]], "description": "Corner rounding; supports per-axis/per-corner detail." },
+      { "name": "baseCutoutRoundingRadius", "type": "number|vector4<number>|string", "unit": "mm | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto",2.7,[2.7,2.7,2.7,2.7]], "description": "Underside rounding." },
+      { "name": "baseRoundingResolution", "type": "integer", "unit": "—", "default": 64, "possible_values": ">= 3", "examples": [64], "description": "Facet resolution for roundings." },
+  
+      { "name": "baseReliefCut", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Enable relief cuts in base." },
+      { "name": "baseReliefCutHeight", "type": "number", "unit": "mbu", "default": 0.375, "possible_values": ">= 0", "examples": [0.375], "description": "Relief cut height." },
+      { "name": "baseReliefCutThickness", "type": "number", "unit": "mbu", "default": 0.375, "possible_values": ">= 0", "examples": [0.375], "description": "Relief cut thickness." },
+  
+      { "name": "baseSideAdjustment", "type": "number", "unit": "mm", "default": -0.1, "possible_values": "any", "examples": [-0.1], "description": "XY shrink/expand for fit (mm)." },
+      { "name": "baseHeightAdjustment", "type": "number", "unit": "mm", "default": 0.0, "possible_values": "any", "examples": [0], "description": "Z fine adjustment (mm)." },
+  
+      { "name": "baseWallThickness", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto",0.5], "description": "Wall thickness of shell." },
+      { "name": "baseWallThicknessAdjustment", "type": "number", "unit": "mm", "default": -0.1, "possible_values": "any", "examples": [-0.1], "description": "Fine wall compensation (printer/flow)." },
+      { "name": "baseWallGapsX", "type": "vector<number>", "unit": "grid index list", "default": [], "possible_values": "indices", "examples": [[2,5]], "description": "Remove internal walls along X at indices." },
+      { "name": "baseWallGapsY", "type": "vector<number>", "unit": "grid index list", "default": [], "possible_values": "indices", "examples": [[1]], "description": "Remove internal walls along Y at indices." },
+  
+      { "name": "topPlateHelpers", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Add printability helpers to the top plate." },
+      { "name": "topPlateHelperHeight", "type": "number", "unit": "mm", "default": 0.2, "possible_values": ">= 0", "examples": [0.2], "description": "Helper feature height." },
+      { "name": "topPlateHelperThickness", "type": "number", "unit": "mm", "default": 0.4, "possible_values": ">= 0", "examples": [0.4], "description": "Helper feature thickness." },
+  
+      { "name": "stabilizerGrid", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Enable a stabilizing grid inside the body." },
+      { "name": "stabilizerGridOffset", "type": "number", "unit": "mm", "default": 0.2, "possible_values": ">= 0", "examples": [0.2], "description": "Z offset of stabilizer grid." },
+      { "name": "stabilizerGridHeight", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Stabilizer height." },
+      { "name": "stabilizerGridThickness", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Stabilizer thickness." },
+      { "name": "stabilizerExpansion", "type": "integer", "unit": "—", "default": 2, "possible_values": ">= 1", "examples": [2], "description": "Insert expansion relief every N bricks." },
+      { "name": "stabilizerExpansionOffset", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Expansion relief offset." },
+  
+      { "name": "pillars", "type": "boolean|vector", "unit": "—", "default": true, "possible_values": "true|false|indices", "examples": [true], "description": "Enable internal pillars (tubes/pins) or specify pattern." },
+      { "name": "pillarRoundingResolution", "type": "integer", "unit": "—", "default": 64, "possible_values": ">= 3", "examples": [64], "description": "Round pillar facet count." },
+      { "name": "pillarGapCornerLength", "type": "integer", "unit": "—", "default": 2, "possible_values": ">= 0", "examples": [2], "description": "Gap length near corners." },
+      { "name": "pillarGapMiddle", "type": "integer", "unit": "—", "default": 10, "possible_values": ">= 0", "examples": [10], "description": "Gap length in middle spans." },
+  
+      { "name": "pinDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "For 1-stud-side blocks." },
+      { "name": "pinDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.0, "possible_values": "any", "examples": [0], "description": "Pin diameter compensation." },
+  
+      { "name": "tubeWallThickness", "type": "number", "unit": "mbu", "default": 0.53125, "possible_values": ">= 0", "examples": [0.53125], "description": "Constant tube wall; rarely changed." },
+      { "name": "tubeXDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Tube diameter for X spans." },
+      { "name": "tubeXDiameterAdjustment", "type": "number", "unit": "mm", "default": -0.1, "possible_values": "any", "examples": [-0.1], "description": "Compensation (X tubes)." },
+      { "name": "tubeYDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Tube diameter for Y spans." },
+      { "name": "tubeYDiameterAdjustment", "type": "number", "unit": "mm", "default": -0.1, "possible_values": "any", "examples": [-0.1], "description": "Compensation (Y tubes)." },
+      { "name": "tubeZDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Tube diameter along Z." },
+      { "name": "tubeZDiameterAdjustment", "type": "number", "unit": "mm", "default": -0.1, "possible_values": "any", "examples": [-0.1], "description": "Compensation (Z tubes)." },
+      { "name": "tubeInnerClampThickness", "type": "number", "unit": "mm", "default": 0.1, "possible_values": ">= 0", "examples": [0.1], "description": "Inner clamp thickness for tube friction." },
+  
+      { "name": "slope", "type": "boolean|vector4<number>", "unit": "—", "default": false, "possible_values": "false or per-side slope", "examples": [false], "description": "Enable beveled slope; vector defines sides." },
+      { "name": "slopeBaseHeightLower", "type": "number", "unit": "mbu", "default": 1.333, "possible_values": ">= 0", "examples": [1.333], "description": "Lower slope base height." },
+      { "name": "slopeBaseHeightUpper", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Upper slope base height." },
+  
+      { "name": "bevel", "type": "vector4<vector2<number>>", "unit": "grid", "default": [[0,0],[0,0],[0,0],[0,0]], "possible_values": ">= 0", "examples": [[[0.5,0.5],[0,0],[0,0],[0,0]]], "description": "Per-edge bevel size." },
+  
+      { "name": "holeX", "type": "boolean|vector", "unit": "—", "default": false, "possible_values": "true|false|grid indices", "examples": [false], "description": "Enable X-axis through-holes." },
+      { "name": "holeXType", "type": "string", "unit": "—", "default": "pin", "possible_values": ["pin","axle"], "examples": ["pin"], "description": "Hole profile." },
+      { "name": "holeXCentered", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Center hole on face." },
+      { "name": "holeXDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Hole diameter." },
+      { "name": "holeXDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.3, "possible_values": "any", "examples": [0.3], "description": "Fit compensation." },
+      { "name": "holeXInsetThickness", "type": "number", "unit": "mbu", "default": 0.375, "possible_values": ">= 0", "examples": [0.375], "description": "Inset ring thickness." },
+      { "name": "holeXInsetDepth", "type": "number", "unit": "mbu", "default": 0.25, "possible_values": ">= 0", "examples": [0.25], "description": "Inset depth." },
+      { "name": "holeXGridOffsetZ", "type": "number", "unit": "mbu", "default": 3.5, "possible_values": ">= 0", "examples": [3.5], "description": "Vertical offset in mbu." },
+      { "name": "holeXGridSizeZ", "type": "number", "unit": "mbu", "default": 6, "possible_values": ">= 0", "examples": [6], "description": "Vertical span (mbu)." },
+      { "name": "holeXMinTopMargin", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Min material above hole." },
+  
+      { "name": "holeY", "type": "boolean|vector", "unit": "—", "default": false, "possible_values": "true|false|grid indices", "examples": [false], "description": "Enable Y-axis through-holes." },
+      { "name": "holeYType", "type": "string", "unit": "—", "default": "pin", "possible_values": ["pin","axle"], "examples": ["pin"], "description": "Hole profile." },
+      { "name": "holeYCentered", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Center hole on face." },
+      { "name": "holeYDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Hole diameter." },
+      { "name": "holeYDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.3, "possible_values": "any", "examples": [0.3], "description": "Fit compensation." },
+      { "name": "holeYInsetThickness", "type": "number", "unit": "mbu", "default": 0.375, "possible_values": ">= 0", "examples": [0.375], "description": "Inset ring thickness." },
+      { "name": "holeYInsetDepth", "type": "number", "unit": "mbu", "default": 0.25, "possible_values": ">= 0", "examples": [0.25], "description": "Inset depth." },
+      { "name": "holeYGridOffsetZ", "type": "number", "unit": "mbu", "default": 3.5, "possible_values": ">= 0", "examples": [3.5], "description": "Vertical offset in mbu." },
+      { "name": "holeYGridSizeZ", "type": "number", "unit": "mbu", "default": 6, "possible_values": ">= 0", "examples": [6], "description": "Vertical span (mbu)." },
+      { "name": "holeYMinTopMargin", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Min material above hole." },
+  
+      { "name": "holeZ", "type": "boolean|vector", "unit": "—", "default": false, "possible_values": "true|false|grid indices", "examples": [true], "description": "Enable Z-axis (top/bottom) pin/axle holes." },
+      { "name": "holeZType", "type": "string", "unit": "—", "default": "pin", "possible_values": ["pin","axle"], "examples": ["pin"], "description": "Hole profile." },
+      { "name": "holeZCenteredX", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Center in X." },
+      { "name": "holeZCenteredY", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Center in Y." },
+      { "name": "holeZDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Hole diameter." },
+      { "name": "holeZDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.3, "possible_values": "any", "examples": [0.3], "description": "Fit compensation." },
+      { "name": "holeRoundingResolution", "type": "integer", "unit": "—", "default": 64, "possible_values": ">= 3", "examples": [64], "description": "Facet resolution for round holes." },
+  
+      { "name": "holeAxleThickness", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Axle wall thickness." },
+  
+      { "name": "studs", "type": "boolean|vector", "unit": "—", "default": true, "possible_values": "true|false|indices", "examples": [true], "description": "Enable top studs; vector to select positions." },
+      { "name": "studType", "type": "string", "unit": "—", "default": "solid", "possible_values": ["solid","hollow"], "examples": ["hollow"], "description": "Stud style." },
+      { "name": "studCenteredX", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Center studs in X, ignoring grid alignment." },
+      { "name": "studCenteredY", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Center studs in Y." },
+      { "name": "studMaxOverhang", "type": "number", "unit": "mm", "default": 0.3, "possible_values": ">= 0", "examples": [0.3], "description": "Printing overhang limit for studs." },
+      { "name": "studPadding", "type": "number", "unit": "grid", "default": 0, "possible_values": ">= 0", "examples": [0], "description": "Stud ring padding from edges." },
+  
+      { "name": "studClampHeight", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Clamp height below stud for clutch." },
+      { "name": "studClampThickness", "type": "number", "unit": "mm", "default": 0.0, "possible_values": ">= 0", "examples": [0], "description": "Clamp thickness in mm." },
+  
+      { "name": "studHoleDiameter", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Hole in stud top (for hollow studs)." },
+      { "name": "studHoleDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.3, "possible_values": "any", "examples": [0.3], "description": "Fit compensation." },
+      { "name": "studHoleClampThickness", "type": "number", "unit": "mm", "default": 0.1, "possible_values": ">= 0", "examples": [0.1], "description": "Clamp thickness around stud hole." },
+  
+      { "name": "studRounding", "type": "number", "unit": "mbu", "default": 0.0625, "possible_values": ">= 0", "examples": [0.0625], "description": "Top edge rounding of studs." },
+      { "name": "studRoundingResolution", "type": "integer", "unit": "—", "default": 64, "possible_values": ">= 3", "examples": [64], "description": "Facet resolution for stud rounding." },
+  
+      { "name": "studDiameter", "type": "number", "unit": "mbu", "default": 3, "possible_values": ">= 0", "examples": [3], "description": "Stud outer diameter (constant; keep default)." },
+      { "name": "studDiameterAdjustment", "type": "number", "unit": "mm", "default": 0.2, "possible_values": "any", "examples": [0.2], "description": "Stud diameter fit tuning." },
+      { "name": "studHeight", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Stud height (constant; keep default)." },
+      { "name": "studCutoutAdjustment", "type": "vector2<number>", "unit": "mm [diameter,height]", "default": [0,0.2], "possible_values": "any", "examples": [[0,0.2]], "description": "Top cut sizing compensation." },
+  
+      { "name": "studIcon", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Emboss/deboss icon on studs." },
+      { "name": "studIconSvg", "type": "string", "unit": "path", "default": "../pattern/bolt.svg", "possible_values": "SVG path", "examples": ["../pattern/bolt.svg"], "description": "SVG file for stud icon." },
+      { "name": "studIconDimensions", "type": "vector2<number>", "unit": "SVG units", "default": [169.333,169.333], "possible_values": "> 0", "examples": [[169.333,169.333]], "description": "Original SVG width/height." },
+      { "name": "studIconScale", "type": "number", "unit": "—", "default": 0.024, "possible_values": ">= 0", "examples": [0.024], "description": "Scale factor applied to icon." },
+      { "name": "studIconDepth", "type": "number", "unit": "mm", "default": -0.2, "possible_values": "any", "examples": [-0.2], "description": "Positive = emboss, negative = deboss." },
+      { "name": "studIconColor", "type": "color|string", "unit": "—", "default": "inherit", "possible_values": "CSS color or 'inherit'", "examples": ["inherit","#000"], "description": "Preview color of icon." },
+  
+      { "name": "tongue", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Enable tongue feature for sliding connections." },
+      { "name": "tongueHeight", "type": "number", "unit": "mbu", "default": 1.25, "possible_values": ">= 0", "examples": [1.25], "description": "Tongue height." },
+      { "name": "tongueGrooveDepth", "type": "number", "unit": "mbu", "default": 1.5, "possible_values": ">= 0", "examples": [1.5], "description": "Groove depth for mating." },
+      { "name": "tongueRoundingRadius", "type": "number|vector4<number>|string", "unit": "grid | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto",1,[1,2,3,4]], "description": "Outer rounding of tongue." },
+      { "name": "tongueInnerRoundingRadius", "type": "number|vector4<number>|string", "unit": "grid | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Inner groove rounding." },
+      { "name": "tongueThickness", "type": "number", "unit": "mbu", "default": 0.666, "possible_values": ">= 0", "examples": [0.666], "description": "Tongue thickness." },
+      { "name": "tongueThicknessAdjustment", "type": "number", "unit": "mm", "default": 0, "possible_values": "any", "examples": [0], "description": "Fit compensation." },
+      { "name": "tongueOffset", "type": "number", "unit": "mbu", "default": 1, "possible_values": "any", "examples": [1], "description": "Offset from reference edge." },
+      { "name": "tongueClampHeight", "type": "number", "unit": "mbu", "default": 0.5, "possible_values": ">= 0", "examples": [0.5], "description": "Clamp height." },
+      { "name": "tongueClampOffset", "type": "number", "unit": "mbu", "default": 0.25, "possible_values": ">= 0", "examples": [0.25], "description": "Clamp offset." },
+      { "name": "tongueClampThickness", "type": "number", "unit": "mm", "default": 0.1, "possible_values": ">= 0", "examples": [0.1], "description": "Clamp thickness in mm." },
+  
+      { "name": "grilleX", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Add grille detail along X." },
+      { "name": "grilleY", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Add grille detail along Y." },
+      { "name": "grilleDepth", "type": "number", "unit": "mbu", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Depth of grooves." },
+      { "name": "grilleCount", "type": "integer", "unit": "—", "default": 5, "possible_values": ">= 0", "examples": [5], "description": "Number of ribs/grooves." },
+  
+      { "name": "pit", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Create a recessed pit on the top surface." },
+      { "name": "pitRoundingRadius", "type": "number|vector4<number>|string", "unit": "grid | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto",2.7], "description": "Pit corner rounding." },
+      { "name": "pitDepth", "type": "number|string", "unit": "mm | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto",1.2], "description": "Pit depth." },
+      { "name": "pitWallThickness", "type": "number|vector4<number>", "unit": "grid", "default": 0.333, "possible_values": ">= 0", "examples": [0.333], "description": "Pit wall thickness." },
+      { "name": "pitKnobs", "type": "boolean", "unit": "—", "default": true, "possible_values": "true|false", "examples": [true], "description": "Studs inside pit." },
+      { "name": "pitKnobPadding", "type": "number", "unit": "grid", "default": 0.2, "possible_values": ">= 0", "examples": [0.2], "description": "Padding from pit walls." },
+      { "name": "pitKnobType", "type": "string", "unit": "—", "default": "solid", "possible_values": ["solid","hollow"], "examples": ["solid"], "description": "Stud style inside pit." },
+      { "name": "pitKnobCenteredX", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Center pit studs in X." },
+      { "name": "pitKnobCenteredY", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Center pit studs in Y." },
+      { "name": "pitWallGaps", "type": "vector<number>", "unit": "indices", "default": [], "possible_values": "indices", "examples": [[1,3]], "description": "Openings in pit walls." },
+  
+      { "name": "text", "type": "string", "unit": "—", "default": "", "possible_values": "any", "examples": ["MBRICK"], "description": "Emboss/deboss text on a side." },
+      { "name": "textSide", "type": "integer", "unit": "side index", "default": 0, "possible_values": "0–5 (faces)", "examples": [0], "description": "Target side (0..5; convention: +X, -X, +Y, -Y, +Z, -Z or module-specific)." },
+      { "name": "textDepth", "type": "number", "unit": "mm", "default": -0.6, "possible_values": "any", "examples": [-0.6], "description": "Positive emboss, negative deboss." },
+      { "name": "textFont", "type": "string", "unit": "font", "default": "Liberation Sans", "possible_values": "installed fonts", "examples": ["Liberation Sans"], "description": "Font family." },
+      { "name": "textSize", "type": "number", "unit": "pt", "default": 4, "possible_values": ">= 0", "examples": [4], "description": "Point size." },
+      { "name": "textSpacing", "type": "integer", "unit": "—", "default": 1, "possible_values": ">= 0", "examples": [1], "description": "Letter spacing multiplier." },
+      { "name": "textVerticalAlign", "type": "string", "unit": "—", "default": "center", "possible_values": ["start","center","end"], "examples": ["center"], "description": "Vertical text alignment." },
+      { "name": "textHorizontalAlign", "type": "string", "unit": "—", "default": "center", "possible_values": ["start","center","end"], "examples": ["center"], "description": "Horizontal text alignment." },
+      { "name": "textOffset", "type": "vector2<number>", "unit": "grid multipliers", "default": [0,0], "possible_values": "any", "examples": [[0.2, -0.1]], "description": "Offset on target face (grid-based multipliers)." },
+      { "name": "textColor", "type": "color", "unit": "—", "default": "#2c3e50", "possible_values": "CSS color", "examples": ["#2c3e50"], "description": "Preview color of text." },
+  
+      { "name": "surfacePattern", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Enable top surface SVG pattern." },
+      { "name": "surfacePatternSvg", "type": "string", "unit": "path", "default": "../pattern/circuit-board.svg", "possible_values": "SVG path", "examples": ["../pattern/circuit-board.svg"], "description": "SVG file for surface." },
+      { "name": "surfacePatternDimensions", "type": "vector2<number>", "unit": "SVG units", "default": [160,160], "possible_values": "> 0", "examples": [[160,160]], "description": "Original SVG width/height." },
+      { "name": "surfacePatternOffset", "type": "vector2<number>", "unit": "—", "default": [0,0], "possible_values": "any", "examples": [[0,0]], "description": "Offset of pattern." },
+      { "name": "surfacePatternScale", "type": "number", "unit": "—", "default": 0.25, "possible_values": ">= 0", "examples": [0.25], "description": "Scale factor of pattern." },
+      { "name": "surfacePatternDepth", "type": "number", "unit": "mm", "default": -0.2, "possible_values": "any", "examples": [-0.2], "description": "Positive emboss, negative deboss." },
+      { "name": "surfacePatternColor", "type": "color|string", "unit": "—", "default": "inherit", "possible_values": "CSS color or 'inherit'", "examples": ["inherit"], "description": "Preview color." },
+  
+      { "name": "svg", "type": "string", "unit": "path", "default": "", "possible_values": "SVG path or empty", "examples": ["../logo.svg"], "description": "General-purpose SVG engraving on a side." },
+      { "name": "svgSide", "type": "integer", "unit": "side index", "default": 5, "possible_values": "0–5", "examples": [5], "description": "Target side for SVG." },
+      { "name": "svgDepth", "type": "number", "unit": "mm", "default": 0.4, "possible_values": "any", "examples": [0.4], "description": "Positive emboss, negative deboss." },
+      { "name": "svgDimensions", "type": "vector2<number>", "unit": "int", "default": [100,100], "possible_values": "> 0", "examples": [[100,100]], "description": "Original SVG width/height." },
+      { "name": "svgScale", "type": "number", "unit": "—", "default": 1.0, "possible_values": ">= 0", "examples": [1], "description": "Scaling applied to SVG." },
+      { "name": "svgOffset", "type": "vector2<number>", "unit": "grid multipliers", "default": [0,0], "possible_values": "any", "examples": [[0.1,0.1]], "description": "Offset on target face." },
+      { "name": "svgColor", "type": "color", "unit": "—", "default": "#2c3e50", "possible_values": "CSS color", "examples": ["#2c3e50"], "description": "Preview color." },
+  
+      { "name": "connectors", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Enable side snap connectors." },
+      { "name": "connectorHeight", "type": "number|string", "unit": "mbu | \"auto\"", "default": "auto", "possible_values": ">= 0 or \"auto\"", "examples": ["auto"], "description": "Connector height." },
+      { "name": "connectorDepth", "type": "number", "unit": "mbu", "default": 0.75, "possible_values": ">= 0", "examples": [0.75], "description": "Connector penetration depth." },
+      { "name": "connectorWidth", "type": "number", "unit": "mbu", "default": 2.5, "possible_values": ">= 0", "examples": [2.5], "description": "Connector width." },
+      { "name": "connectorDepthTolerance", "type": "number", "unit": "mm", "default": 0.2, "possible_values": "any", "examples": [0.2], "description": "Depth tolerance for fit." },
+      { "name": "connectorSideTolerance", "type": "number", "unit": "mm", "default": 0.1, "possible_values": "any", "examples": [0.1], "description": "Side tolerance for fit." },
+  
+      { "name": "screwHolesZ", "type": "vector<number>", "unit": "indices/coords", "default": [], "possible_values": "indices", "examples": [[0,1]], "description": "Array of Z-oriented screw holes." },
+      { "name": "screwHoleZSize", "type": "number", "unit": "mm", "default": 2.3, "possible_values": ">= 0", "examples": [2.3], "description": "Screw hole diameter (Z)." },
+      { "name": "screwHoleZHelperThickness", "type": "number", "unit": "mm", "default": 0.8, "possible_values": ">= 0", "examples": [0.8], "description": "Helper disc thickness." },
+      { "name": "screwHoleZHelperOffset", "type": "number", "unit": "mm", "default": 0.2, "possible_values": ">= 0", "examples": [0.2], "description": "Helper offset from face." },
+      { "name": "screwHoleZHelperHeight", "type": "number", "unit": "mm", "default": 0.2, "possible_values": ">= 0", "examples": [0.2], "description": "Helper height." },
+  
+      { "name": "screwHolesX", "type": "vector<number>", "unit": "indices/coords", "default": [], "possible_values": "indices", "examples": [[1,3]], "description": "Array of X-oriented screw holes." },
+      { "name": "screwHoleXSize", "type": "number", "unit": "mm", "default": 2.1, "possible_values": ">= 0", "examples": [2.1], "description": "Diameter." },
+      { "name": "screwHoleXDepth", "type": "number", "unit": "mm", "default": 4, "possible_values": ">= 0", "examples": [4], "description": "Depth." },
+  
+      { "name": "screwHolesY", "type": "vector<number>", "unit": "indices/coords", "default": [], "possible_values": "indices", "examples": [[2]], "description": "Array of Y-oriented screw holes." },
+      { "name": "screwHoleYSize", "type": "number", "unit": "mm", "default": 2.1, "possible_values": ">= 0", "examples": [2.1], "description": "Diameter." },
+      { "name": "screwHoleYDepth", "type": "number", "unit": "mm", "default": 4, "possible_values": ">= 0", "examples": [4], "description": "Depth." },
+  
+      { "name": "pcb", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Enable PCB mounting features." },
+      { "name": "pcbMountingType", "type": "string", "unit": "—", "default": "clips", "possible_values": ["clips","screws","mixed"], "examples": ["clips"], "description": "How the PCB is held (inferred options)." },
+      { "name": "pcbDimensions", "type": "vector3<number>", "unit": "mm [x,y,z]", "default": [20,30,3], "possible_values": "> 0", "examples": [[20,30,1.6]], "description": "PCB size in mm." },
+      { "name": "pcbOffset", "type": "vector2<number>", "unit": "grid", "default": [0,0], "possible_values": "any", "examples": [[0,0]], "description": "PCB XY offset in grid units." },
+      { "name": "pcbScrewSocketSize", "type": "number", "unit": "mm", "default": 5, "possible_values": ">= 0", "examples": [5], "description": "Outer diameter of screw socket." },
+      { "name": "pcbScrewSocketHoleSize", "type": "number", "unit": "mm", "default": 2.2, "possible_values": ">= 0", "examples": [2.2], "description": "Inner hole diameter for screw." },
+      { "name": "pcbScrewSocketHeight", "type": "number", "unit": "mm", "default": 3, "possible_values": ">= 0", "examples": [3], "description": "Socket height." },
+      { "name": "pcbScrewSockets", "type": "vector<number>", "unit": "indices/coords", "default": [], "possible_values": "indices", "examples": [[0,1,2,3]], "description": "Placement of screw sockets." },
+  
+      { "name": "align", "type": "string|vector3<string>", "unit": "—", "default": "start", "possible_values": ["start","center","end"], "examples": ["start"], "description": "Align the brick in scene per axis." },
+      { "name": "alignChildren", "type": "string|vector3<string>", "unit": "—", "default": "start", "possible_values": ["start","center","end"], "examples": ["start"], "description": "Align nested machineblocks." },
+  
+      { "name": "previewQuality", "type": "number", "unit": "0..1", "default": 0.5, "possible_values": "0..1", "examples": [0.5], "description": "Detail/performance trade-off in preview." },
+      { "name": "previewRender", "type": "boolean", "unit": "—", "default": false, "possible_values": "true|false", "examples": [false], "description": "Force render() in preview." },
+      { "name": "previewRenderConvexity", "type": "integer", "unit": "—", "default": 15, "possible_values": ">= 1", "examples": [15], "description": "Convexity for preview." }
+    ]
+  }
+  

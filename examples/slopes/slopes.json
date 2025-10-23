@@ -1,0 +1,386 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Slanted Bricks",
+    "examples": [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/slanted",
+            "bricks": [
+                {
+                    "name": "Slope 18 4x1",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "slope": [3, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 18 4x2",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 2,
+                        "slope": [3, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "slope": [2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2,
+                        "slope": [2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x3",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 3,
+                        "slope": [2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 3x4",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 4,
+                        "slope": [2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x3",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 3,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x4",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x6",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 6,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x8",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 8,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 25 8x1x3",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope": [7, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 65 2x1x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 6,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 18 2x1x2_3",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 2,
+                        "slope": [2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 30 1x1x2_3",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 2,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 30 1x2x2_3",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "baseLayers": 2,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 2x2 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 2,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 33 2x4 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 2,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x2 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 3,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x3 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 3,
+                        "baseLayers": 3,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 2x4 Double",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 6x4 Double",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 1x1x2_3 Double",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 2,
+                        "slope": [0.5, 0.5, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 6x8 Double",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 8,
+                        "baseLayers": 3,
+                        "slope": [1, 1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 45 3x4 Double 33",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope": [2, 0, 1, 1]
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x1x3 Open Stud",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope": [1, 0, 0, 0],
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Solid Studs",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope": [1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Hollow Studs",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope": [1, 0, 0, 0],
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Slope 75 2x2x3 Double Convex",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 9,
+                        "slope": [1, 0, 1, 0],
+                        "knobType": "hollow"
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 33 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope": [-2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope": [-1, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 3x1 Double",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope": [-1, -1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 4x1 Double",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 3,
+                        "slope": [-1, -1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 45 4x4 Double",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 3,
+                        "slope": [-1, -1, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 60 4x1x3",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope": [-2, 0, 0, 0]
+                    }
+                },
+
+                {
+                    "name": "Slope Inverted 75 2x1x3",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 9,
+                        "slope": [-1, 0, 0, 0]
+                    }
+                }
+            ]
+        }
+    ]
+}

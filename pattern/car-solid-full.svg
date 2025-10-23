@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 639.99998 639.99998"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="car-solid-full.svg"
+   width="169.33333mm"
+   height="169.33333mm"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.36875"
+     inkscape:cx="318.64407"
+     inkscape:cy="320"
+     inkscape:window-width="1376"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+  <path
+     d="M 199.2,181.4 173.1,256 H 466.9 L 440.8,181.4 C 436.3,168.6 424.2,160 410.6,160 H 229.4 c -13.6,0 -25.7,8.6 -30.2,21.4 z m -95.6,79.4 35.2,-100.5 C 152.3,121.8 188.6,96 229.4,96 h 181.2 c 40.8,0 77.1,25.8 90.6,64.3 l 35.2,100.5 c 23.2,9.6 39.6,32.5 39.6,59.2 v 192 c 0,17.7 -14.3,32 -32,32 h -32 c -17.7,0 -32,-14.3 -32,-32 V 480 H 160 v 32 c 0,17.7 -14.3,32 -32,32 H 96 C 78.3,544 64,529.7 64,512 V 320 c 0,-26.7 16.4,-49.6 39.6,-59.2 z M 192,368 c 0,-17.7 -14.3,-32 -32,-32 -17.7,0 -32,14.3 -32,32 0,17.7 14.3,32 32,32 17.7,0 32,-14.3 32,-32 z m 288,32 c 17.7,0 32,-14.3 32,-32 0,-17.7 -14.3,-32 -32,-32 -17.7,0 -32,14.3 -32,32 0,17.7 14.3,32 32,32 z"
+     id="path1" />
+</svg>

@@ -1,3 +1,5 @@
+use <polygon.scad>;
+
 module mb_roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "all", resolution = 20) {
 	// If single value, convert to [x, y, z] vector
 	size = (size[0] == undef) ? [size, size, size] : size;
@@ -107,7 +109,7 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 							else
 							rotate([0,0,rots[i]])
 								translate([0,0,-0.5*size[2]])
-									rotate_extrude(angle=90) 
+									rotate_extrude(angle=90, $fn = resolution) 
 										square([cornerRadius, size[2]]);
 							//cylinder(h = size[2], r = cornerRadius, center = true, $fn = resolution);
 					}
@@ -168,4 +170,33 @@ module mb_torus(circleRadius, torusRadius, circleResolution = 30, torusResolutio
     rotate_extrude(convexity = 10, $fn = torusResolution)
         translate([torusRadius - circleRadius, 0, 0])
             circle(r = circleRadius, $fn = circleResolution);
+}
+
+module mb_beveled_rounded_block(
+	bevel,
+	sizeX,
+	sizeY,
+	height,
+	roundingRadius,
+	roundingResolution
+){
+	if(bevel == false){
+		mb_rounded_block(
+			size=[sizeX, sizeY, height], 
+			center = true, 
+			radius = roundingRadius, 
+			resolution = roundingResolution
+		);
+	}
+	else{
+		intersection(){
+			make_bevel(bevel, height);
+			mb_rounded_block(
+				size=[sizeX, sizeY, height], 
+				center = true, 
+				radius = roundingRadius, 
+				resolution = roundingResolution
+			);
+		}
+	}
 }

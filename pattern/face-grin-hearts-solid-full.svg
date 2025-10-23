@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 639.99998 639.99998"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="face-grin-hearts-solid-full.svg"
+   width="169.33333mm"
+   height="169.33333mm"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.36875"
+     inkscape:cx="318.64407"
+     inkscape:cy="320"
+     inkscape:window-width="1376"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+  <path
+     d="m 320,576 c 141.4,0 256,-114.6 256,-256 0,-23.3 -3.1,-45.9 -8.9,-67.3 5.5,-13.5 8.9,-28.4 8.9,-44.7 0,-53 -43,-96 -96,-96 h -2.9 c -2.5,0 -5,0.1 -7.4,0.3 C 427.6,81.9 375.9,64 320,64 264.1,64 212.4,81.9 170.3,112.3 167.8,112.1 165.4,112 162.9,112 H 160 c -53,0 -96,43 -96,96 0,16.3 3.5,31.2 8.9,44.7 -5.8,21.4 -8.9,44 -8.9,67.3 0,141.4 114.6,256 256,256 z M 450.7,388.9 c 11.9,-3.7 23.9,6.3 19.6,18.1 -22.4,61.3 -81.3,105.1 -150.3,105.1 -69,0 -127.9,-43.9 -150.3,-105.2 -4.3,-11.8 7.7,-21.8 19.6,-18.1 39.2,12.2 83.7,19.1 130.7,19.1 47,0 91.5,-6.9 130.7,-19.1 z M 386.9,160 c 13.5,0 26.5,5.4 36,14.9 l 9.1,9.1 9.1,-9.1 c 9.5,-9.5 22.5,-14.9 36,-14.9 h 2.9 c 26.5,0 48,21.5 48,48 0,53.4 -66.9,95.7 -89,108.2 -4.4,2.5 -9.6,2.5 -14,0 -22.1,-12.5 -89,-54.8 -89,-108.2 0,-26.5 21.5,-48 48,-48 z m -188,14.9 9.1,9.1 9.1,-9.1 c 9.5,-9.5 22.5,-14.9 36,-14.9 h 2.9 c 26.5,0 48,21.5 48,48 0,53.4 -66.9,95.7 -89,108.2 -4.4,2.5 -9.6,2.5 -14,0 -22.1,-12.5 -89,-54.8 -89,-108.2 0,-26.5 21.5,-48 48,-48 h 2.9 c 13.5,0 26.5,5.4 36,14.9 z"
+     id="path1" />
+</svg>

@@ -1,0 +1,62 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Base Plates",
+    "examples" : [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/base-plates",
+            "bricks" : [
+                {
+                    "name": "Base Plate 16x16",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 16,
+                        "baseCutoutType": "none",
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Base Plate 32x16",
+                    "parameters": {
+                        "brickSizeX": 32,
+                        "brickSizeY": 16,
+                        "baseCutoutType": "none",
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Base Plate 24x24",
+                    "parameters": {
+                        "brickSizeX": 24,
+                        "brickSizeY": 24,
+                        "baseCutoutType": "none",
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Base Plate 32x32",
+                    "parameters": {
+                        "brickSizeX": 32,
+                        "brickSizeY": 32,
+                        "baseCutoutType": "none",
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Base Plate 30x24",
+                    "parameters": {
+                        "brickSizeX": 30,
+                        "brickSizeY": 24,
+                        "baseCutoutType": "none",
+                        "baseLayers": 1
+                    }
+                }
+            ]
+        }
+    ]
+}

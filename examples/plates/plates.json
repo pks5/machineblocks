@@ -1,0 +1,433 @@
+{
+    "type": "com.machineblocks.examples",
+    "config":{
+        "lib": "../../lib",
+        "presets": "../../config/config.scad"
+    },
+    "name": "Classic Bricks",
+    "examples" : [
+        {
+            "template": "../../templates/brick.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/classic-bricks",
+            "bricks" : [
+                
+
+                {
+                    "name": "Plate 1x1",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 2x1",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                
+                {
+                    "name": "Plate 3x1",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 4x1",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 6x1",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 8x1",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 12x1",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 16x1",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 1,
+                        "baseLayers": 1
+                    }
+                },
+
+
+
+                {
+                    "name": "Plate 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 4x2",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 6x2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 8x2",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 12x2",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 16x2",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 2,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 4x4 with Studs on One Edge",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "studPadding": [3, 0.2, 0.2, 0.2],
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Plate 6x4",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 8x4",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 4,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 12x4",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 4,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 16x4",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 4,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 6x6",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 6,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 8x6",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 6,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 12x6",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 6,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 16x6",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 6,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 8x8",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 8,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 12x8",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 8,
+                        "baseLayers": 1
+                    }
+                },
+                {
+                    "name": "Plate 16x8",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 8,
+                        "baseLayers": 1
+                    }
+                },
+
+
+                
+                {
+                    "name": "Centered Plate 1x2",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 1x3",
+                    "parameters": {
+                        "brickSizeX": 1,
+                        "brickSizeY": 3,
+                        "baseLayers": 1,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 2x2",
+                    "parameters": {
+                        "brickSizeX": 2,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 3x2",
+                    "parameters": {
+                        "brickSizeX": 3,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 4x2",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 6x2",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 8x2",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 12x2",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 16x2",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 2,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 4x4",
+                    "parameters": {
+                        "brickSizeX": 4,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 6x4",
+                    "parameters": {
+                        "brickSizeX": 6,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 8x4",
+                    "parameters": {
+                        "brickSizeX": 8,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 12x4",
+                    "parameters": {
+                        "brickSizeX": 12,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                },
+                {
+                    "name": "Centered Plate 16x4",
+                    "parameters": {
+                        "brickSizeX": 16,
+                        "brickSizeY": 4,
+                        "baseLayers": 1,
+                        "knobCenteredX": true,
+                        "knobCenteredY": true,
+                        "knobType": "hollow",
+                        "surfacePattern": "../pattern/squares.svg",
+                        "surfacePatternScale": 0.3
+                    }
+                }
+            ]
+        }
+    ]
+}

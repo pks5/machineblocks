@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 639.99998 639.99998"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="fish-solid-full.svg"
+   width="169.33333mm"
+   height="169.33333mm"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.36875"
+     inkscape:cx="318.64407"
+     inkscape:cy="320"
+     inkscape:window-width="1376"
+     inkscape:window-height="449"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+  <path
+     d="m 212.5,205.5 c 39.2,-33 92.1,-61.5 155.5,-61.5 63.4,0 116.3,28.5 155.5,61.5 39.1,33 66.9,72.4 81,99.8 4.7,9.2 4.7,20.1 0,29.3 -14.1,27.4 -41.9,66.8 -81,99.8 -39.2,33.1 -92,61.5 -155.5,61.5 -63.5,0 -116.3,-28.5 -155.5,-61.5 C 196.3,420.7 182,405.9 169.8,391.3 L 80.1,443.6 C 67.6,450.9 51.7,448.9 41.4,438.7 31.1,428.5 29,412.7 36.1,400.1 L 82,320 36.2,239.9 c -7.2,-12.6 -5,-28.4 5.3,-38.6 10.3,-10.2 26.1,-12.2 38.7,-4.9 l 89.7,52.3 c 12.2,-14.6 26.5,-29.4 42.7,-43.1 z M 480,320 c 0,-17.7 -14.3,-32 -32,-32 -17.7,0 -32,14.3 -32,32 0,17.7 14.3,32 32,32 17.7,0 32,-14.3 32,-32 z"
+     id="path1" />
+</svg>
