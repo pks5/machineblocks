@@ -910,8 +910,8 @@ module machineblock(
                                                             * Cut TubeZ area
                                                             */
                                                             
-                                                            for (a = [ startX : 1 : endX - 1 ]){
-                                                                for (b = [ startY : 1 : endY - 1 ]){
+                                                            for (a = [ startX : 1 : ceil(endX) - 1 ]){
+                                                                for (b = [ startY : 1 : ceil(endY) - 1 ]){
                                                                     if(drawPillar(a, b)){
                                                                             translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
                                                                                 cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1030,7 +1030,7 @@ module machineblock(
                                                 //X-Holes Outer
                                                 if(holeX != false){
                                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                                        for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
+                                                        for (a = [ startX : 1 : (holeXCentered ? round(endX) - 1 : endX) ]){
                                                             if(drawHoleX(a, r) != false){
                                                                 translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
                                                                     rotate([90, 0, 0]){ 
@@ -1045,7 +1045,7 @@ module machineblock(
                                                 //Y-Holes Outer
                                                 if(holeY != false){
                                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                                        for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
+                                                        for (b = [ startY : 1 : (holeYCentered ? round(endY) - 1 : endY) ]){
                                                             if(drawHoleY(b, r) != false){
                                                                 translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
                                                                     rotate([0, 90, 0]){ 
@@ -1211,7 +1211,7 @@ module machineblock(
                             if(holeX != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                        for (a = [ startX : 1 : endX - (holeXCentered ? 1 : 0) ]){
+                                        for (a = [ startX : 1 : (holeXCentered ? round(endX) - 1 : endX) ]){
                                             xHole = drawHoleX(a, r);
                                             if(xHole != false){
                                                 translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + r * holeXGridSizeZ*mbuToMm]){
@@ -1248,7 +1248,7 @@ module machineblock(
                             if(holeY != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                        for (b = [ startY : 1 : endY - (holeYCentered ? 1 : 0) ]){
+                                        for (b = [ startY : 1 : (holeYCentered ? round(endY) - 1 : endY) ]){
                                             yHole = drawHoleY(b, r);
                                             if(yHole != false){
                                                 translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + r * holeYGridSizeZ*mbuToMm]){
