@@ -1109,6 +1109,15 @@ module machineblock(
                                                     } // End union
 
                                                     union(){
+                                                        /* Test
+                                                        mb_beveled_rounded_block(
+                                                            bevel = beveled ? bevelInner : false,
+                                                            sizeX = objectSizeX - 2 * wallThickness,
+                                                            sizeY = objectSizeY - 2 * wallThickness,
+                                                            height = cutMultiplier * (knobCutHeight + cutOffset),
+                                                            roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
+                                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                        );*/
                                                         mb_beveled_rounded_block(
                                                             bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
                                                             sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
@@ -1117,7 +1126,10 @@ module machineblock(
                                                             roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                                         );
+                                                        
                                                         /*
+                                                        
+
                                                         map = [[0,1],[2,3],[0,3],[1,2]];
                                                         for (side = [ 0 : 1 : 1 ]){
                                                             
