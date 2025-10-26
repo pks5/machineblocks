@@ -969,8 +969,8 @@ module machineblock(
 
                                                 if(pillars != false){
                                                     //Tubes with holes
-                                                    for (a = [ startX : 1 : endX - 1 ]){
-                                                        for (b = [ startY : 1 : endY - 1 ]){
+                                                    for (a = [ startX : 1 : ceil(endX) - 1 ]){
+                                                        for (b = [ startY : 1 : ceil(endY) - 1 ]){
                                                             if(drawPillar(a, b)){
                                                                 translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                                                     difference(){
@@ -998,8 +998,8 @@ module machineblock(
                                                     */
                                                     //Middle Pin X
                                                     if(gridSizeX > 1 && gridSizeY == 1){
-                                                        for (b = [ startY : 1 : endY ]){
-                                                            for (a = [ startX : 1 : endX - 1 ]){
+                                                        for (b = [ startY : 1 : ceil(endY) ]){
+                                                            for (a = [ startX : 1 : ceil(endX) - 1 ]){
                                                                 if(drawPin(a, b, true)){
                                                                     translate([posX(a + 0.5), posY(b), baseCutoutZ]){
                                                                         cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
@@ -1013,8 +1013,8 @@ module machineblock(
                                                     
                                                     //Middle Pin Y
                                                     if(gridSizeX == 1 && gridSizeY > 1){
-                                                        for (a = [ startX : 1 : endX]){
-                                                            for (b = [ startY : 1 : endY - 1 ]){
+                                                        for (a = [ startX : 1 : ceil(endX)]){
+                                                            for (b = [ startY : 1 : ceil(endY) - 1 ]){
                                                                 if(drawPin(a, b, false)){
                                                                     translate([posX(a), posY(b + 0.5), baseCutoutZ]){
                                                                         cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
@@ -1085,8 +1085,8 @@ module machineblock(
                                             translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
                                                 difference(){
                                                     union(){
-                                                        for (a = [ startX : 1 : endX ]){
-                                                            for (b = [ startY : 1 : endY ]){
+                                                        for (a = [ startX : 1 : ceil(endX) ]){
+                                                            for (b = [ startY : 1 : ceil(endY) ]){
                                                                 if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
                                                                     || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)){
                                                                     translate([posX(a), posY(b), 0]){
@@ -1117,6 +1117,7 @@ module machineblock(
                                                             roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                                         );
+                                                        /*
                                                         map = [[0,1],[2,3],[0,3],[1,2]];
                                                         for (side = [ 0 : 1 : 1 ]){
                                                             
@@ -1148,7 +1149,7 @@ module machineblock(
                                                                     ], center=true);
                                                                 }
                                                             }
-                                                        }
+                                                        }*/
                                                     }
                                                 } //End difference final cutout elements
                                             } // End translate
@@ -1555,8 +1556,8 @@ module machineblock(
                             /*
                             * Normal studs
                             */
-                            for (a = [ startX : 1 : (endX - (studCenteredX ? 1 : 0)) ]){
-                                for (b = [ startY : 1 : (endY - (studCenteredY ? 1 : 0)) ]){
+                            for (a = [ startX : 1 : (ceil(endX) - (studCenteredX ? 1 : 0)) ]){
+                                for (b = [ startY : 1 : (ceil(endY) - (studCenteredY ? 1 : 0)) ]){
                                     knobOffsetX = studCenteredX ? 0.5 : 0;
                                     knobOffsetY = studCenteredY ? 0.5 : 0;
                                     if(drawGridItem(studs, a, b, 0, false) && drawKnob(a + knobOffsetX, b + knobOffsetY)){
