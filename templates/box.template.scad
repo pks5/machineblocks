@@ -35,7 +35,7 @@ baseTongue = false;
 // Whether the base should have knobs
 baseKnobs = true;
 // Type of the base knobs
-baseKnobType = "classic"; // [classic, technic]
+baseKnobType = "classic"; // [classic, hollow]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // The box rounding radius
