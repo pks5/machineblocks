@@ -31,11 +31,6 @@ borderSize = 1; // [1:8]
 
 /* [Knobs] */
 
-// Whether to draw knobs.
-knobs = true;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
-
 /*{STUD_VARIABLES}*/
 
 /* [Pin Holes] */
@@ -59,17 +54,16 @@ cornerRadius = 0.5;
 union(){
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[-0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
-        offset=[-0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
+        
 
         /*{STYLE_PARAMETERS}*/
         
@@ -80,9 +74,9 @@ union(){
 
     machineblock(
         size=[brickSizeX-2,borderSize,baseLayers],
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[0,0.5*(brickSizeY-borderSize),0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         baseRoundingRadius=[0,0,[cornerRadius,0,0,cornerRadius]],
@@ -90,8 +84,7 @@ union(){
 
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [0,0,brickSizeX - 1,0]] : false,
-        offset=[0,0.5*(brickSizeY-borderSize),0],
-        align="ccs",
+        
 
         /*{STYLE_PARAMETERS}*/
 
@@ -102,18 +95,16 @@ union(){
 
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
-        offset=[0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
@@ -123,8 +114,8 @@ union(){
 
     machineblock(
         size=[brickSizeX-2,borderSize,baseLayers], 
-        studs=knobs,
-        studType=knobType,
+        offset=[0,-0.5*(brickSizeY-borderSize),0],
+        align="ccs",
         
         /*{STUD_PARAMETERS}*/
 
@@ -133,9 +124,7 @@ union(){
 
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [0,0,brickSizeX - 1,0]] : false,
-        offset=[0,-0.5*(brickSizeY-borderSize),0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = [-bSideAdjustment,-bSideAdjustment,bSideAdjustment,bSideAdjustment],

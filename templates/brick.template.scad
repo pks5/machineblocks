@@ -36,18 +36,7 @@ baseCutoutRoundingRadius = "auto";
 
 /*{BASE_VARIABLES}*/
 
-/* [Knobs] */
-
-// Whether to draw knobs.
-knobs = true;
-// Whether knobs should be centered in X direction.
-knobCenteredX = false;
-// Whether knobs should be centered in Y direction.
-knobCenteredY = false;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
-// Stud Padding
-studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
+/* [Studs] */
 
 /*{STUD_VARIABLES}*/
 
@@ -123,12 +112,6 @@ machineblock(
 
     bevel = [bevel0, bevel1, bevel2, bevel3],
 
-    studs = knobs,
-    studCenteredX = knobCenteredX,
-    studCenteredY = knobCenteredY,
-    studType = knobType,
-    studPadding = studPadding,
-    
     /*{STUD_PARAMETERS}*/
     
     holeX = holesX,

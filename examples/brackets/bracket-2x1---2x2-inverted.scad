@@ -46,12 +46,14 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
-/* [Knobs] */
+/* [Studs] */
 
 // Whether first brick should have knobs.
 brick1Knobs = true;
@@ -61,8 +63,6 @@ brick1KnobType = "solid"; // [solid, hollow]
 brick2Knobs = true;
 // Type of second brick's knobs
 brick2KnobType = "hollow"; // [solid, hollow]
-
-
 
 /* [Render] */
 
@@ -162,14 +162,13 @@ pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
       studs = brick1Knobs,
       studType = brick1KnobType,
       
-      
-
       connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
       connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
 
@@ -235,8 +234,6 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
         studs = brick2Knobs,
         studType = brick2KnobType,
         
-        
-
         connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
         connectorHeight = brick1BaseLayers * unitGrid[1],
         

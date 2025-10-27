@@ -40,19 +40,26 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
-/* [Knobs] */
+/* [Studs] */
+
 
 // Whether to draw knobs.
 knobs = true;
+// Whether knobs should be centered in X direction.
+knobCenteredX = false;
+// Whether knobs should be centered in Y direction.
+knobCenteredY = false;
 // Type of the knobs
 knobType = "solid"; // [solid, hollow]
-
-
+// Stud Padding
+studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
 /* [Pin Holes] */
 
@@ -145,25 +152,28 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
 union(){
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
-        
+        offset=[-0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
+        studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
-        offset=[-0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
-
+        
         baseColor = baseColor,
 surfacePattern = surfacePattern,
 surfacePatternScale = surfacePatternScale,
@@ -216,25 +226,28 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 
     machineblock(
         size=[brickSizeX,borderSize,baseLayers],
-        studs=knobs,
-        studType=knobType,
-        
-        
+        offset=[0,0.5*(brickSizeY-borderSize),0],
+        align="ccs",
+
+        studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
-        offset=[0,0.5*(brickSizeY-borderSize),0],
-        align="ccs",
-
+        
         baseColor = baseColor,
 surfacePattern = surfacePattern,
 surfacePatternScale = surfacePatternScale,
@@ -287,25 +300,28 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
-        
+        offset=[0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
+        studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
-        offset=[0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
-
+        
         baseColor = baseColor,
 surfacePattern = surfacePattern,
 surfacePatternScale = surfacePatternScale,
@@ -358,25 +374,28 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 
     machineblock(
         size=[brickSizeX,borderSize,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
-        
+        offset=[0,-0.5*(brickSizeY-borderSize),0],
+        align="ccs",
+
+        studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
-        offset=[0,-0.5*(brickSizeY-borderSize),0],
-        align="ccs",
-
+        
         baseColor = baseColor,
 surfacePattern = surfacePattern,
 surfacePatternScale = surfacePatternScale,

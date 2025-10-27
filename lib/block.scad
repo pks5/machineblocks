@@ -237,8 +237,7 @@ module machineblock(
         tongueClampThickness = 0.1, // mm
         
         //Grille
-        grilleX = false, // bool
-        grilleY = false, // bool
+        grille = "none", // "none" | "x" | "y"
         grilleDepth = 1, // mbu
         grilleCount = 5, // int
         
@@ -1422,24 +1421,26 @@ module machineblock(
                             /*
                             * Grille
                             */
-                            if(grilleX){
-                                grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
-                                for (g = [ 0 : 1 : size[1] * grilleCount - 1 ]){
-                                    if(g % 2 == 1){
-                                        translate([0, sideY(0) + (0.5 + g) * grilleWidth, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
-                                            cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidth, grilleHeight], center=true);
+                            color(baseColor){
+                                if(grille == "x"){
+                                    grilleHeight = grilleDepth * mbuToMm + cutOffset;
+                                    grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
+                                    for (g = [ 0 : 1 : size[1] * grilleCount - 1 ]){
+                                        if(g % 2 == 1){
+                                            translate([0, sideY(0) + (0.5 + g) * grilleWidth, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                                cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidth, grilleHeight], center=true);
+                                        }
                                     }
                                 }
-                            }
 
-                            if(grilleY){
-                                grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
-                                for (g = [ 0 : 1 : size[0] * grilleCount - 1 ]){
-                                    if(g % 2 == 1){
-                                        translate([sideX(0) + (0.5 + g) * grilleWidth, 0, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
-                                            cube(size=[grilleWidth, objectSizeYAdjusted*cutMultiplier, grilleHeight], center=true);
+                                if(grille == "y"){
+                                    grilleHeight = grilleDepth * mbuToMm + cutOffset;
+                                    grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
+                                    for (g = [ 0 : 1 : size[0] * grilleCount - 1 ]){
+                                        if(g % 2 == 1){
+                                            translate([sideX(0) + (0.5 + g) * grilleWidth, 0, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                                cube(size=[grilleWidth, objectSizeYAdjusted*cutMultiplier, grilleHeight], center=true);
+                                        }
                                     }
                                 }
                             }

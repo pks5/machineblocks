@@ -47,12 +47,15 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
-/* [Knobs] */
+/* [Studs] */
+
 
 // Whether to draw knobs.
 knobs = true;
@@ -64,8 +67,6 @@ knobCenteredY = false;
 knobType = "hollow"; // [solid, hollow]
 // Stud Padding
 studPadding = [0, 0, 0, 0]; // [0:0.1:128]
-
-
 
 /* [Bevel] */
 
@@ -212,18 +213,17 @@ pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
     bevel = [bevel0, bevel1, bevel2, bevel3],
 
     studs = knobs,
-    studCenteredX = knobCenteredX,
-    studCenteredY = knobCenteredY,
-    studType = knobType,
-    studPadding = studPadding,
-    
-    
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
     
     holeX = holesX,
     holeXType = holeXType,

@@ -50,19 +50,26 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
-/* [Appearance] */
+/* [Studs] */
+
 
 // Whether to draw knobs.
 knobs = false;
+// Whether knobs should be centered in X direction.
+knobCenteredX = false;
+// Whether knobs should be centered in Y direction.
+knobCenteredY = false;
 // Type of the knobs
-knobType = "classic"; // [classic, technic]
-
-
+knobType = "solid"; // [solid, hollow]
+// Stud Padding
+studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
 /* [Style] */
 
@@ -151,6 +158,8 @@ union(){
     machineblock(
         size = [brick1SizeX, brick1SizeY,baseLayers],
         offset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
+        align="ccs",
+        
         baseWallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
         
         baseCutoutType = baseCutoutType,
@@ -158,15 +167,15 @@ pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         studs = knobs,
-        studType = knobType,
-        
-        
-
-        align="ccs",
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -221,21 +230,23 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
     machineblock(
         size = [brick2SizeX, brick2SizeY,baseLayers],
         offset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
+        align="ccs",
+
         baseWallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
         baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
         studs = knobs,
-        studType = knobType,
-        
-        
-
-        align="ccs",
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseColor = baseColor,
 surfacePattern = surfacePattern,

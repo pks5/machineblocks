@@ -50,14 +50,26 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
 /* [Studs] */
 
 
+// Whether to draw knobs.
+knobs = true;
+// Whether knobs should be centered in X direction.
+knobCenteredX = false;
+// Whether knobs should be centered in Y direction.
+knobCenteredY = false;
+// Type of the knobs
+knobType = "solid"; // [solid, hollow]
+// Stud Padding
+studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
 /* [Style] */
 
@@ -156,10 +168,15 @@ pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
-        
+        studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
         baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -217,15 +234,20 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
                     size = [column2SizeX, brickSizeY, brickHeight],
                     offset = [brickSizeX - column2SizeX, 0, 0],
                     
-                    
+                    studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
                     baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
                     baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -286,7 +308,11 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
                     offset = [column1SizeX,0,0],
                     baseCutoutType = "none",
                     
-                    
+                    studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
                     baseColor = baseColor,
 surfacePattern = surfacePattern,

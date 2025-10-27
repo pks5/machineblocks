@@ -41,10 +41,6 @@ baseKnobCentered = false;
 // The box rounding radius
 baseRoundingRadiusZ = 0;
 
-/* [Studs] */
-
-/*{STUD_VARIABLES}*/
-
 /* [Pit] */
 
 // Pit wall thickness
@@ -95,13 +91,10 @@ machineblock(
     baseCutoutType = baseCutoutType,
     baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
     
-
     studs = baseKnobs,
     studType = baseKnobType,
     studCenteredX = baseKnobCentered,
     studCenteredY = baseKnobCentered,
-    
-    /*{STUD_PARAMETERS}*/
     
     pit=true,
     pitWallGaps = basePitWallGaps,

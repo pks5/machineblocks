@@ -35,7 +35,7 @@ baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 
 /*{BASE_VARIABLES}*/
 
-/* [Knobs] */
+/* [Studs] */
 
 // Whether first brick should have knobs.
 brick1Knobs = true;
@@ -45,8 +45,6 @@ brick1KnobType = "solid"; // [solid, hollow]
 brick2Knobs = true;
 // Type of second brick's knobs
 brick2KnobType = "hollow"; // [solid, hollow]
-
-/*{STUD_VARIABLES}*/
 
 /* [Render] */
 
@@ -74,8 +72,6 @@ machineblock(
       studs = brick1Knobs,
       studType = brick1KnobType,
       
-      /*{STUD_PARAMETERS}*/
-
       connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
       connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
 
@@ -98,8 +94,6 @@ machineblock(
         studs = brick2Knobs,
         studType = brick2KnobType,
         
-        /*{STUD_PARAMETERS}*/
-
         connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
         connectorHeight = brick1BaseLayers * unitGrid[1],
         

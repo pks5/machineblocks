@@ -55,12 +55,11 @@ assembled = assemblyMode != "unassembled";
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
+    align="ccs",
+    
     holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
-    studType = brick1KnobType,
     
     /*{STUD_PARAMETERS}*/
-
-    align="ccs",
 
     /*{BASE_PARAMETERS}*/
 
@@ -75,11 +74,11 @@ machineblock(
 machineblock(
     size=[middleSizeX,gridSizeY,middleLayers],
     offset=[0,0,1],
-    studs = false,
-    tongue = multipart,
     align="ccs",
     
-
+    studs = false,
+    tongue = multipart,
+    
     /*{BASE_PARAMETERS}*/
 
     /*{STYLE_PARAMETERS}*/
@@ -93,11 +92,12 @@ machineblock(
 machineblock(
     size=[middleSizeX,gridSizeY,1],
     offset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    studType = brick2KnobType,
-    baseCutoutType = multipart ? "groove" : "none",
-    tongueThicknessAdjustment = 0.1,
     align="ccs",
     
+    baseCutoutType = multipart ? "groove" : "none",
+    tongueThicknessAdjustment = 0.1,
+    
+    /*{STUD_PARAMETERS}*/
 
     /*{STYLE_PARAMETERS}*/
 
@@ -110,12 +110,13 @@ machineblock(
 machineblock(
     size=[brick2SizeX-middleSizeX,gridSizeY,1],
     offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    holeZ=brick2HolesZ,
-    studType = brick2KnobType,
     align="ccs",
     
-
+    holeZ=brick2HolesZ,
+    
     /*{BASE_PARAMETERS}*/
+
+    /*{STUD_PARAMETERS}*/
 
     /*{STYLE_PARAMETERS}*/
 

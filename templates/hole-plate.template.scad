@@ -29,12 +29,7 @@ borderSize = 1; // [1:8]
 
 /*{BASE_VARIABLES}*/
 
-/* [Knobs] */
-
-// Whether to draw knobs.
-knobs = true;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
+/* [Studs] */
 
 /*{STUD_VARIABLES}*/
 
@@ -57,9 +52,9 @@ pinHolesCentered = true;
 union(){
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[-0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
@@ -67,9 +62,7 @@ union(){
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
-        offset=[-0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
@@ -79,9 +72,9 @@ union(){
 
     machineblock(
         size=[brickSizeX,borderSize,baseLayers],
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[0,0.5*(brickSizeY-borderSize),0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
@@ -89,9 +82,7 @@ union(){
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
-        offset=[0,0.5*(brickSizeY-borderSize),0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
 
         baseSideAdjustment = bSideAdjustment,
@@ -101,9 +92,9 @@ union(){
 
     machineblock(
         size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[0.5*(brickSizeX-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
@@ -111,9 +102,7 @@ union(){
         holeYCentered = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
-        offset=[0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
@@ -123,9 +112,9 @@ union(){
 
     machineblock(
         size=[brickSizeX,borderSize,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        offset=[0,-0.5*(brickSizeY-borderSize),0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
@@ -133,9 +122,7 @@ union(){
         holeXCentered = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
-        offset=[0,-0.5*(brickSizeY-borderSize),0],
-        align="ccs",
-
+        
         /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,

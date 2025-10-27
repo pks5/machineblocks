@@ -27,15 +27,7 @@ baseLayers = 1; // [1:24]
 
 /*{BASE_VARIABLES}*/
 
-/* [Knobs] */
-
-// Whether to draw knobs
-knobs = false;
-// Whether knobs should be centered.
-knobCentered = false;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
-
+/* [Studs] */
 
 /*{STUD_VARIABLES}*/
 
@@ -74,11 +66,6 @@ machineblock(
     
     /*{BASE_PARAMETERS}*/
 
-    studs = knobs,
-    studCenteredX = knobCentered,
-    studCenteredY = knobCentered,
-    studType = knobType,
-    
     /*{STUD_PARAMETERS}*/
     
     textSide = textSide,

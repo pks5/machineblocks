@@ -47,14 +47,26 @@ baseReliefCut = false;
 baseReliefCutHeight = 0.4; // [0:0.1:128]
 // Relief Cut Thickness (mbu)
 baseReliefCutThickness = 0.4; // [0:0.1:128]
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+// Grille
+grille = "none"; // [none, x, y]
+// Depth of Grille
+grilleDepth = 1; // [0.1:0.1:1]
+// Count of Grille elements
+grilleCount = 5; // [2:10]
 
 /* [Studs] */
 
 
+// Whether to draw knobs.
+knobs = true;
+// Whether knobs should be centered in X direction.
+knobCenteredX = false;
+// Whether knobs should be centered in Y direction.
+knobCenteredY = false;
+// Type of the knobs
+knobType = "solid"; // [solid, hollow]
+// Stud Padding
+studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
 /* [Style] */
 
@@ -143,20 +155,24 @@ bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustme
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
-    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
-    studType = brick1KnobType,
-    
-    
-
     align="ccs",
+    
+    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
+    
+    studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
     baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
     baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -212,18 +228,19 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 machineblock(
     size=[middleSizeX,gridSizeY,middleLayers],
     offset=[0,0,1],
-    studs = false,
-    tongue = multipart,
     align="ccs",
     
-
+    studs = false,
+    tongue = multipart,
+    
     baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
 
     baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -279,11 +296,16 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 machineblock(
     size=[middleSizeX,gridSizeY,1],
     offset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    studType = brick2KnobType,
-    baseCutoutType = multipart ? "groove" : "none",
-    tongueThicknessAdjustment = 0.1,
     align="ccs",
     
+    baseCutoutType = multipart ? "groove" : "none",
+    tongueThicknessAdjustment = 0.1,
+    
+    studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
     baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -339,18 +361,24 @@ pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingR
 machineblock(
     size=[brick2SizeX-middleSizeX,gridSizeY,1],
     offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    holeZ=brick2HolesZ,
-    studType = brick2KnobType,
     align="ccs",
     
-
+    holeZ=brick2HolesZ,
+    
     baseCutoutType = baseCutoutType,
 pillars = pillars,
 baseReliefCut = baseReliefCut,
 baseReliefCutHeight = baseReliefCutHeight,
 baseReliefCutThickness = baseReliefCutThickness,
-grilleX = grilleX,
-grilleY = grilleY,
+grille = grille,
+grilleDepth = grilleDepth,
+grilleCount = grilleCount,
+
+    studs = knobs,
+studCenteredX = knobCenteredX,
+studCenteredY = knobCenteredY,
+studType = knobType,
+studPadding = studPadding,
 
     baseColor = baseColor,
 surfacePattern = surfacePattern,

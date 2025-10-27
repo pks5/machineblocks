@@ -39,12 +39,7 @@ baseLayers = 1; // [1:48]
 
 /*{BASE_VARIABLES}*/
 
-/* [Appearance] */
-
-// Whether to draw knobs.
-knobs = true;
-// Type of the knobs
-knobType = "classic"; // [classic, technic]
+/* [Studs] */
 
 /*{STUD_VARIABLES}*/
 
@@ -63,16 +58,13 @@ union(){
     machineblock(
         size = [brick1SizeX, brick1SizeY,baseLayers],
         offset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
+        align="ccs",
+        
         baseWallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
         
         /*{BASE_PARAMETERS}*/
 
-        studs = knobs,
-        studType = knobType,
-        
         /*{STUD_PARAMETERS}*/
-
-        align="ccs",
 
         /*{STYLE_PARAMETERS}*/
 
@@ -84,15 +76,12 @@ union(){
     machineblock(
         size = [brick2SizeX, brick2SizeY,baseLayers],
         offset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
+        align="ccs",
+
         baseWallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
         /*{BASE_PARAMETERS}*/
 
-        studs = knobs,
-        studType = knobType,
-        
         /*{STUD_PARAMETERS}*/
-
-        align="ccs",
 
         /*{STYLE_PARAMETERS}*/
         
