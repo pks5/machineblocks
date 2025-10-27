@@ -72,7 +72,7 @@ overrideTubeYDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
 overrideTubeZDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
 
 // Adjustment of hole X diameter
-overrideHoleXDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
+overrideHoleXDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset thickness
 overrideHoleXInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset depth
@@ -83,7 +83,7 @@ overrideHoleXGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
 overrideHoleXGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Y diameter
-overrideHoleYDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
+overrideHoleYDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset thickness
 overrideHoleYInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset depth
@@ -94,7 +94,7 @@ overrideHoleYGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
 overrideHoleYGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Z diameter
-overrideHoleZDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
+overrideHoleZDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
 
 // Adjustment of pin diameter
 overridePinDiameterAdjustment = 0.0; // [-10.0:0.1:10.0]

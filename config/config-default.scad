@@ -55,19 +55,19 @@ tubeYDiameterAdjustment = -0.1; // mm
 tubeZDiameterAdjustment = -0.1; // mm
 
 // Adjustment of pin holes diameter and inset and vertical grid
-holeXDiameterAdjustment = 0.3; // mm
+holeXDiameterAdjustment = 0.2; // mm
 holeXInsetThicknessAdjustment = 0.0; // mm
 holeXInsetDepthAdjustment = 0.0; // mm
 holeXGridOffsetZAdjustment = 0.0; // mm
 holeXGridSizeZAdjustment = 0.0; // mm
 
-holeYDiameterAdjustment = 0.3; // mm
+holeYDiameterAdjustment = 0.2; // mm
 holeYInsetThicknessAdjustment = 0.0; // mm
 holeYInsetDepthAdjustment = 0.0; // mm
 holeYGridOffsetZAdjustment = 0.0; // mm
 holeYGridSizeZAdjustment = 0.0; // mm
 
-holeZDiameterAdjustment = 0.3; // mm
+holeZDiameterAdjustment = 0.2; // mm
 
 // Adjustment of pin diameter
 pinDiameterAdjustment = 0.0; // mm
