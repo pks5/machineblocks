@@ -1079,88 +1079,8 @@ module machineblock(
                                                         }   
                                                     }
                                                 } // End if holeZ
-                                            } // End Difference Base Cutout
-
-                                            
-                                            
-                                            /*
-                                            * Knob subtraction from the resulting hollowed base
-                                            */
-                                            translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
-                                                difference(){
-                                                    union(){
-                                                        for (a = [ startX : 1 : ceil(endX) ]){
-                                                            for (b = [ startY : 1 : ceil(endY) ]){
-                                                                if(!mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                                                    || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
-                                                                    translate([posX(a), posY(b), 0]){
-                                                                        if(bClampOffset > 0){
-                                                                            translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
-                                                                                cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
-                                                                        }
-                                                                        //color("red")
-                                                                        cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
-                                                                        
-                                                                        //color("green")
-                                                                        translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
-                                                                            cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-
-                                                        
-                                                    } // End union
-
-                                                    union(){
-                                                        mb_beveled_rounded_block(
-                                                            bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
-                                                            sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
-                                                            sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
-                                                            height = cutMultiplier * (knobCutHeight + cutOffset),
-                                                            roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
-                                                        );
-                                                        
-                                                        /*
-                                                        
-
-                                                        map = [[0,1],[2,3],[0,3],[1,2]];
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            
-                                                            if((baseRoundingRadiusZ[map[side][0]] == 0) 
-                                                                && (baseRoundingRadiusZ[map[side][1]] == 0)
-                                                                && (bevel[map[side][0]] == [0,0])
-                                                                && (bevel[map[side][1]] == [0,0])){
-                                                                translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
-                                                                    cube([
-                                                                        cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
-                                                                        objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                        
-                                                                        cutMultiplier * (knobCutHeight + cutOffset)
-                                                                    ], center=true);
-                                                                }
-                                                            }
-                                                        }
-                                                        
-                                                        for (side = [ 0 : 1 : 1 ]){
-                                                            if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
-                                                                && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
-                                                                && (bevel[map[2+side][0]] == [0,0])
-                                                                && (bevel[map[2+side][1]] == [0,0])){
-                                                                translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
-                                                                    cube([
-                                                                        objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                        cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
-                                                                        cutMultiplier * (knobCutHeight + cutOffset)
-                                                                    ], center=true);
-                                                                }
-                                                            }
-                                                        }*/
-                                                    }
-                                                } //End difference final cutout elements
-                                            } // End translate
-                                        } // End difference base
+                                            } // End Difference (subtract from cutout)
+                                        } // End difference (subtract cutout from base)
                                     }
                                     else{
                                         /*
@@ -1213,6 +1133,86 @@ module machineblock(
                             * Starting from here, everything applies to the final block
                             *
                             */
+
+                            if(baseCutoutType != "none"){
+                                /*
+                                * Knob subtraction from base
+                                */
+                                translate([0, 0, -0.5 * resultingBaseHeight + 0.5 * knobCutHeight - 0.5*cutOffset]){
+                                    difference(){
+                                        union(){
+                                            for (a = [ startX : 1 : ceil(endX) ]){
+                                                for (b = [ startY : 1 : ceil(endY) ]){
+                                                    if(baseCutoutType == "studs" || !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                                        || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
+                                                        translate([posX(a), posY(b), 0]){
+                                                            if(bClampOffset > 0){
+                                                                translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
+                                                                    cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                            }
+                                                            //color("red")
+                                                            cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                            
+                                                            //color("green")
+                                                            translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
+                                                                cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=($preview ? previewQuality : 1) * studRoundingResolution);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } // End union
+
+                                        if(baseCutoutType != "studs"){
+                                            union(){
+                                                mb_beveled_rounded_block(
+                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                                    sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
+                                                    sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
+                                                    height = cutMultiplier * (knobCutHeight + cutOffset),
+                                                    roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
+                                                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                );
+                                                
+                                                /*
+                                                TODO: remove?
+
+                                                map = [[0,1],[2,3],[0,3],[1,2]];
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    
+                                                    if((baseRoundingRadiusZ[map[side][0]] == 0) 
+                                                        && (baseRoundingRadiusZ[map[side][1]] == 0)
+                                                        && (bevel[map[side][0]] == [0,0])
+                                                        && (bevel[map[side][1]] == [0,0])){
+                                                        translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
+                                                            cube([
+                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
+                                                                objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                
+                                                                cutMultiplier * (knobCutHeight + cutOffset)
+                                                            ], center=true);
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                for (side = [ 0 : 1 : 1 ]){
+                                                    if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
+                                                        && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
+                                                        && (bevel[map[2+side][0]] == [0,0])
+                                                        && (bevel[map[2+side][1]] == [0,0])){
+                                                        translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
+                                                            cube([
+                                                                objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
+                                                                cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
+                                                                cutMultiplier * (knobCutHeight + cutOffset)
+                                                            ], center=true);
+                                                        }
+                                                    }
+                                                }*/
+                                            }
+                                        }
+                                    } //End difference final cutout elements
+                                } // End translate
+                            }
 
                             //Cut X-Holes
                             if(holeX != false){
