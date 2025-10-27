@@ -43,6 +43,10 @@ knobType = "solid"; // [solid, hollow]
 pinHoles = false;
 pinHolesCentered = true;
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -65,6 +69,8 @@ union(){
         baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
         offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
         
@@ -86,6 +92,8 @@ union(){
         offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
 
+        /*{STYLE_PARAMETERS}*/
+
         baseSideAdjustment = bSideAdjustment,
     
         /*{PRESET_PARAMETERS}*/
@@ -105,6 +113,8 @@ union(){
         baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
         offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     
@@ -125,6 +135,8 @@ union(){
         baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
         offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     

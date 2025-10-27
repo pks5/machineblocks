@@ -48,6 +48,10 @@ knobType = "classic"; // [classic, technic]
 
 /*{STUD_VARIABLES}*/
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -70,6 +74,8 @@ union(){
 
         align="ccs",
 
+        /*{STYLE_PARAMETERS}*/
+
         baseSideAdjustment = bSideAdjustment,
         
         /*{PRESET_PARAMETERS}*/
@@ -87,6 +93,8 @@ union(){
         /*{STUD_PARAMETERS}*/
 
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     

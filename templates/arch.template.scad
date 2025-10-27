@@ -43,6 +43,10 @@ inverted = false;
 
 /*{STUD_VARIABLES}*/
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -63,6 +67,8 @@ difference(){
 
         /*{STUD_PARAMETERS}*/
 
+        /*{STYLE_PARAMETERS}*/
+
         baseSideAdjustment = bSideAdjustment,
         baseCutoutMaxDepth = inverted ? 2 : 5,
 
@@ -78,6 +84,8 @@ difference(){
 
                     /*{BASE_PARAMETERS}*/
 
+                    /*{STYLE_PARAMETERS}*/
+
                     baseSideAdjustment = bSideAdjustment,
 
                     /*{PRESET_PARAMETERS}*/
@@ -92,9 +100,9 @@ difference(){
                     offset = [column1SizeX,0,0],
                     baseCutoutType = "none",
                     
-                    /*{BASE_PARAMETERS}*/
-
                     /*{STUD_PARAMETERS}*/
+
+                    /*{STYLE_PARAMETERS}*/
                     
                     baseSideAdjustment = [-bSideAdjustment, secondColumn ? -bSideAdjustment : bSideAdjustment, bSideAdjustment, bSideAdjustment],
 

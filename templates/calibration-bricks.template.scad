@@ -22,13 +22,9 @@ brick2Size = [3, 1, 1];
 
 brick3Size = [3, 3, 1];
 
-/* [Base] */
+/* [Style] */
 
-/*{BASE_VARIABLES}*/
-
-/* [Studs] */
-
-/*{STUD_VARIABLES}*/
+/*{STYLE_VARIABLES}*/
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
@@ -39,7 +35,7 @@ brick3Size = [3, 3, 1];
 machineblock(
     size=brick1Size, 
     
-    /*{STUD_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -50,7 +46,7 @@ machineblock(
     size=brick2Size,
     offset = [brick1Size[0] + 0.5, 0, 0],
     
-    /*{STUD_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -61,7 +57,7 @@ machineblock(
     size=brick3Size, 
     offset = [brick1Size[0] + 0.5 + brick2Size[0] + 0.5, 0, 0],
     
-    /*{STUD_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     

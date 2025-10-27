@@ -40,6 +40,10 @@ middleLayers = 2;
 
 /*{STUD_VARIABLES}*/
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -60,6 +64,8 @@ machineblock(
 
     /*{BASE_PARAMETERS}*/
 
+    /*{STYLE_PARAMETERS}*/
+
     baseSideAdjustment = bSideAdjustment,
     
     /*{PRESET_PARAMETERS}*/
@@ -72,9 +78,11 @@ machineblock(
     studs = false,
     tongue = multipart,
     align="ccs",
-    studIcon = studIcon,
+    
 
     /*{BASE_PARAMETERS}*/
+
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     
@@ -89,9 +97,9 @@ machineblock(
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
     align="ccs",
-    studIcon = studIcon,
+    
 
-    /*{BASE_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = [bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
     
@@ -105,9 +113,11 @@ machineblock(
     holeZ=brick2HolesZ,
     studType = brick2KnobType,
     align="ccs",
-    studIcon = studIcon,
+    
 
     /*{BASE_PARAMETERS}*/
+
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     

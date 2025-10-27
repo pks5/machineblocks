@@ -30,9 +30,6 @@ brick1BaseLayers = 1; // [1:24]
 
 /* [Base] */
 
-// Type of cut-out on the underside.
-brick1BaseCutoutType = "classic"; // [none, classic]
-
 // Radius of the vertical brick
 baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 
@@ -56,6 +53,10 @@ brick2KnobType = "hollow"; // [solid, hollow]
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -65,49 +66,51 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 // Generate the block
 
 
-  machineblock(size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
-        baseCutoutType = brick1BaseCutoutType,
-        /*{BASE_PARAMETERS}*/
+machineblock(
+      size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
+      
+      /*{BASE_PARAMETERS}*/
 
-        connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
-        connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
-        studs = brick1Knobs,
-        studType = brick1KnobType,
+      studs = brick1Knobs,
+      studType = brick1KnobType,
+      
+      /*{STUD_PARAMETERS}*/
+
+      connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
+      connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
+
+      /*{STYLE_PARAMETERS}*/
+
+      baseSideAdjustment =
+          [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
+      
+      /*{PRESET_PARAMETERS}*/
+){
+
+  machineblock(
+        size = [ brickSizeX, brick2SizeY, 0.5 ],
+        offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
+        rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
+        
+        baseCutoutType = "none",
+        baseRoundingRadius=[0,0,baseRoundingRadiusZ],
+
+        studs = brick2Knobs,
+        studType = brick2KnobType,
         
         /*{STUD_PARAMETERS}*/
 
-        baseSideAdjustment =
-            [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
+        connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
+        connectorHeight = brick1BaseLayers * unitGrid[1],
         
+        /*{STYLE_PARAMETERS}*/
+
+        baseSideAdjustment =
+          [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
+
         /*{PRESET_PARAMETERS}*/
-  ){
-
-    machineblock(
-          rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
-          offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
-    
-          size = [ brickSizeX, brick2SizeY, 0.5 ],
-          //baseHeight = brick2BaseHeight,
-          baseCutoutType = "none",
-          baseRoundingRadius=[0,0,baseRoundingRadiusZ],
-
-          /*{BASE_PARAMETERS}*/
-
-          studs = brick2Knobs,
-          studType = brick2KnobType,
-          
-          /*{STUD_PARAMETERS}*/
-
-          connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-          connectorHeight = brick1BaseLayers * unitGrid[1],
-          
-
-          baseSideAdjustment =
-            [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
-
-          /*{PRESET_PARAMETERS}*/
-    );
-  }
+  );
+}
 
 
 

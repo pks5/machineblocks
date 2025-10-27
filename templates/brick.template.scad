@@ -25,8 +25,6 @@ baseLayers = 3; // [1:24]
 
 /* [Base] */
 
-// Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic]
 // Rounding Radius X
 baseRoundingRadiusX = 0; // [0:0.1:128]
 // Rounding Radius Y
@@ -35,12 +33,6 @@ baseRoundingRadiusY = 0; // [0:0.1:128]
 baseRoundingRadiusZ = 0; // [0:0.1:128]
 // Cutout Rounding Radius
 baseCutoutRoundingRadius = "auto";
-
-// Whether to draw pillars.
-pillars = true;
-baseReliefCut = false;
-baseReliefCutHeight = 0.4; // [0:0.1:128]
-baseReliefCutThickness = 0.4; // [0:0.1:128]
 
 /*{BASE_VARIABLES}*/
 
@@ -110,29 +102,23 @@ pitWallThickness = 0.333; // [0:0.001:128]
 
 slope = [0, 0, 0, 0]; // [-128:0.1:128]
 
-/* [Grille] */
-// Grille in X direction
-grilleX = false;
-// Grille in Y direction
-grilleY = false;
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
-
-
 
 /*{HIDDEN_PARAMETERS}*/
 
 // Generate the block
 machineblock(
     size = [brickSizeX, brickSizeY,baseLayers],
-    baseCutoutType = baseCutoutType,
+    
     baseRoundingRadius=[baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ],
     baseCutoutRoundingRadius = baseCutoutRoundingRadius,
-    baseReliefCut = baseReliefCut,
-    baseReliefCutHeight = baseReliefCutHeight,
-    baseReliefCutThickness = baseReliefCutThickness,
+    
     /*{BASE_PARAMETERS}*/
 
     bevel = [bevel0, bevel1, bevel2, bevel3],
@@ -144,8 +130,6 @@ machineblock(
     studPadding = studPadding,
     
     /*{STUD_PARAMETERS}*/
-    
-    pillars = pillars,
     
     holeX = holesX,
     holeXType = holeXType,
@@ -166,11 +150,7 @@ machineblock(
     
     slope = slope, 
 
-    grilleX = grilleX,
-    grilleY = grilleY,
-
-    
-    
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     

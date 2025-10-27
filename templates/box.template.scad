@@ -41,8 +41,6 @@ baseKnobCentered = false;
 // The box rounding radius
 baseRoundingRadiusZ = 0;
 
-/*{BASE_VARIABLES}*/
-
 /* [Studs] */
 
 /*{STUD_VARIABLES}*/
@@ -81,6 +79,10 @@ lidText = "";
 //Text Font
 textFont = "RBNo3.1";
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -92,7 +94,7 @@ machineblock(
     
     baseCutoutType = baseCutoutType,
     baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
-    /*{BASE_PARAMETERS}*/
+    
 
     studs = baseKnobs,
     studType = baseKnobType,
@@ -111,6 +113,8 @@ machineblock(
     
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
+
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -126,7 +130,7 @@ if(lid){
             pitWallGaps = basePitWallGaps,
             baseCutoutType = baseTongue ? "groove" : "classic",
             baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
-            /*{BASE_PARAMETERS}*/
+            
 
             tongueThicknessAdjustment = 0.1,
 
@@ -134,13 +138,15 @@ if(lid){
             studType = lidKnobType,
             studCenteredX = lidKnobCentered,
             studCenteredY = lidKnobCentered,
-            studIcon = studIcon,
+            
 
             textSide = 5,
             textSize = 10,
             textDepth = 0.8,
             text = lidText,
             textFont = textFont,
+
+            /*{STYLE_PARAMETERS}*/
 
             baseSideAdjustment = bSideAdjustment,
 

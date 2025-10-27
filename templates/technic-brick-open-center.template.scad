@@ -45,6 +45,10 @@ pinHolesCentered = true;
 
 cornerRadius = 0.5;
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -66,6 +70,8 @@ union(){
         holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
         offset=[-0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
         
@@ -87,6 +93,8 @@ union(){
         offset=[0,0.5*(brickSizeY-borderSize),0],
         align="ccs",
 
+        /*{STYLE_PARAMETERS}*/
+
         baseSideAdjustment = [-bSideAdjustment,-bSideAdjustment,bSideAdjustment,bSideAdjustment],
     
         /*{PRESET_PARAMETERS}*/
@@ -105,6 +113,8 @@ union(){
         holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
         offset=[0.5*(brickSizeX-borderSize),0,0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     
@@ -125,6 +135,8 @@ union(){
         holeX = pinHoles ? [false, [0,0,brickSizeX - 1,0]] : false,
         offset=[0,-0.5*(brickSizeY-borderSize),0],
         align="ccs",
+
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = [-bSideAdjustment,-bSideAdjustment,bSideAdjustment,bSideAdjustment],
     
