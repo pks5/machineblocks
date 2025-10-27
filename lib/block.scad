@@ -1071,8 +1071,8 @@ module machineblock(
                                                     /*
                                                     * Z-Holes Outer
                                                     */
-                                                    for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
-                                                        for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
+                                                    for (a = [ startX : 1 : (holeZCenteredX ? round(endX) - 1 : endX) ]){
+                                                        for (b = [ startY : 1 : (holeZCenteredY ? round(endY) - 1 : endY) ]){
                                                             if(drawHoleZ(a, b) != false){
                                                                 translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b +(holeZCenteredY ? 0.5 : 0)), baseCutoutZ]){
                                                                     cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
@@ -1296,8 +1296,8 @@ module machineblock(
                             if(holeZ != false){
                                 color(baseColor){
                                     //Cut Z-Holes
-                                    for (a = [ startX : 1 : endX - (holeZCenteredX ? 1 : 0) ]){
-                                        for (b = [ startY : 1 : endY - (holeZCenteredY ? 1 : 0) ]){
+                                    for (a = [ startX : 1 :  (holeZCenteredX ? round(endX) - 1 : endX) ]){
+                                        for (b = [ startY : 1 : (holeZCenteredY ? round(endY) - 1 : endX) ]){
                                             zHole = drawHoleZ(a, b);
                                             if(zHole != false){
                                                 translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
