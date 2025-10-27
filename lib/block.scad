@@ -208,7 +208,7 @@ module machineblock(
         studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
         studHeight = 1, // mbu (constant, should not be changed normally)
-        studCutoutAdjustment = [0.2, 0.2], // mm [diameter, height]
+        studCutoutAdjustment = [0.2, 0.4], // mm [diameter, height]
 
         studIcon = "../pattern/bolt-solid-full.svg",
         studIconDimensions = [169.333, 169.333],
@@ -995,7 +995,10 @@ module machineblock(
                                                                         }
                                                                         intersection(){
                                                                             cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                            cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
+                                                                            //We do not need to make the clamp for z holes, as it will be cut anyhow
+                                                                            //if(drawHoleZ(a, b) == false){
+                                                                                cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
+                                                                            //}
                                                                         };
                                                                     }
                                                                 };
