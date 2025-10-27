@@ -207,7 +207,10 @@ module machineblock(
         
         studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
+        
         studHeight = 1, // mbu (constant, should not be changed normally)
+        studHeightAdjustment = 0.0, // mm
+        
         studCutoutAdjustment = [0.2, 0.4], // mm [diameter, height]
 
         studIcon = "../pattern/bolt-solid-full.svg",
@@ -448,10 +451,11 @@ module machineblock(
     // Studs
     knobSizeOrg = studDiameter * mbuToMm;
     knobSize = knobSizeOrg + studDiameterAdjustment;
-    knobHeight = studHeight * mbuToMm;
+    knobHeightOrg = studHeight * mbuToMm;
+    knobHeight = knobHeightOrg + studHeightAdjustment;
 
     knobCutSize = knobSizeOrg + studCutoutAdjustment[0];
-    knobCutHeight = knobHeight + studCutoutAdjustment[1];
+    knobCutHeight = knobHeightOrg + studCutoutAdjustment[1];
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
     knobRounding = studRounding * mbuToMm;
@@ -1008,13 +1012,12 @@ module machineblock(
                                                                             translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
                                                                                 cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                         }
-                                                                        intersection(){
-                                                                            cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
-                                                                            //We do not need to make the clamp for z holes, as it will be cut anyhow
-                                                                            //if(drawHoleZ(a, b) == false){
+                                                                        if(drawHoleZ(a, b) == false){
+                                                                            intersection(){
+                                                                                cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                                 cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
-                                                                            //}
-                                                                        };
+                                                                            };
+                                                                        }
                                                                     }
                                                                 };
                                                             }

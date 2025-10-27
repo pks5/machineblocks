@@ -2,7 +2,7 @@
 * MachineBlocks
 * https://machineblocks.com/
 *
-* Default Configuration
+* X2 Configuration
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 *
 * Published under license:
@@ -12,7 +12,7 @@
 */
 
 /*
- * Default configuration used by all example files.
+ * X2 configuration.
  *
  * ⚠️  Note: It is not recommended to modify values in this file directly.
  * Instead, copy this file and reference the new version in config.scad.
@@ -38,11 +38,9 @@ scale = 2.0; // Float
 */
 
 // Adjustment of the height
-// Amount will be added to/subtracted from the top side of the brick's base
 baseHeightAdjustment = 0.0; // mm
 
 // Adjustment of each side
-// Amount will be added to/subtracted from each side of the brick's base
 baseSideAdjustment = -0.1; // mm
 
 // Adjustment of base walls
@@ -52,25 +50,29 @@ baseWallThicknessAdjustment = -0.1; // mm
 baseClampThickness = 0.1; // mm
 
 // Adjustment of tube diameter
-// Amount will be added to/subtracted from tube diameter
 tubeXDiameterAdjustment = -0.1; // mm
 tubeYDiameterAdjustment = -0.1; // mm
 tubeZDiameterAdjustment = -0.1; // mm
 
-// Adjustment of hole diameter
-// Amount will be added to/subtracted from hole diameter
+// Adjustment of pin holes diameter and inset
 holeXDiameterAdjustment = 0.3; // mm
+holeXInsetThicknessAdjustment = 0.0; // mm
+holeXInsetDepthAdjustment = 0.0; // mm
+
 holeYDiameterAdjustment = 0.3; // mm
+holeYInsetThicknessAdjustment = 0.0; // mm
+holeYInsetDepthAdjustment = 0.0; // mm
+
 holeZDiameterAdjustment = 0.3; // mm
 
 // Adjustment of pin diameter
-// Amount will be added to/subtracted from pin diameter
 pinDiameterAdjustment = 0.0; // mm
 
 // Adjustment of stud diameter and cutout
-// Amount will be added to/subtracted from stud diameter
 studDiameterAdjustment = 0.2; // mm
+studHeightAdjustment = 0.0; // mm
 studCutoutAdjustment = [0.2, 0.4]; // mm [diameter, height]
+studHoleDiameterAdjustment = 0.3; // mm
 
 /*
 * Preview
