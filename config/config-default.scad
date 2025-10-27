@@ -70,7 +70,7 @@ pinDiameterAdjustment = 0.0; // mm
 // Adjustment of stud diameter and cutout
 // Amount will be added to/subtracted from stud diameter
 studDiameterAdjustment = 0.2; // mm
-studCutoutAdjustment = [0, 0.2]; // mm [diameter, height]
+studCutoutAdjustment = [0.2, 0.2]; // mm [diameter, height]
 
 /*
 * Preview

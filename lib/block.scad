@@ -204,7 +204,7 @@ module machineblock(
         studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
         studHeight = 1, // mbu (constant, should not be changed normally)
-        studCutoutAdjustment = [0, 0.2], // mm [diameter, height]
+        studCutoutAdjustment = [0.2, 0.2], // mm [diameter, height]
 
         studIcon = "../pattern/bolt-solid-full.svg",
         studIconDimensions = [169.333, 169.333],
@@ -392,7 +392,8 @@ module machineblock(
     //Default thickness of a base wall multiplied by 2
     pDiameter = unitGrid[0] - studDiameter;
 
-    wallThickness = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm + baseWallThicknessAdjustment;
+    wallThicknessOrg = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm;
+    wallThickness = wallThicknessOrg + baseWallThicknessAdjustment;
     baseClampWallThickness = wallThickness + baseClampThickness;
 
     baseRoundingRadiusResolved = mb_base_rounding_radius(baseRoundingRadius, gridSizeXY * min(adjustedSizeRelation[0], adjustedSizeRelation[1]), gridSizeZ * adjustedSizeRelation[2]);
@@ -420,10 +421,12 @@ module machineblock(
     bevelOuter = mb_resolve_bevel_horizontal(bevel, grid, gridSizeXY);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
+    bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
+    cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
 
     // Pit
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+studMaxOverhang, pWallThickness[1]*gridSizeXY+studMaxOverhang, pWallThickness[2]*gridSizeXY+studMaxOverhang, pWallThickness[3]*gridSizeXY+studMaxOverhang]);
@@ -439,10 +442,11 @@ module machineblock(
     pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
     // Studs
-    knobSize = studDiameter * mbuToMm + studDiameterAdjustment;
+    knobSizeOrg = studDiameter * mbuToMm;
+    knobSize = knobSizeOrg + studDiameterAdjustment;
     knobHeight = studHeight * mbuToMm;
 
-    knobCutSize = knobSize + studCutoutAdjustment[0];
+    knobCutSize = knobSizeOrg + studCutoutAdjustment[0];
     knobCutHeight = knobHeight + studCutoutAdjustment[1];
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
@@ -569,11 +573,11 @@ module machineblock(
     /*
     * Pit
     */
-    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuterAdjusted, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
-                                && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, touch=true, overhang=0);
+    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuter, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, touch=true, overhang=0);
     
-    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
-                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang);
+    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
     
     function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
@@ -589,8 +593,8 @@ module machineblock(
     */ 
     function drawKnob(a, b) = 
             !onSlope(a, b, false, 2)
-            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
-            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
+            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
             ;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
@@ -1087,8 +1091,8 @@ module machineblock(
                                                     union(){
                                                         for (a = [ startX : 1 : ceil(endX) ]){
                                                             for (b = [ startY : 1 : ceil(endY) ]){
-                                                                if(!mb_circle_in_rounded_rect(cornersInner, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)
-                                                                    || !mb_circle_in_convex_quad(bevelInner, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSize, overhang = studMaxOverhang)){
+                                                                if(!mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                                                    || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
                                                                     translate([posX(a), posY(b), 0]){
                                                                         if(bClampOffset > 0){
                                                                             translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
@@ -1109,15 +1113,6 @@ module machineblock(
                                                     } // End union
 
                                                     union(){
-                                                        /* Test
-                                                        mb_beveled_rounded_block(
-                                                            bevel = beveled ? bevelInner : false,
-                                                            sizeX = objectSizeX - 2 * wallThickness,
-                                                            sizeY = objectSizeY - 2 * wallThickness,
-                                                            height = cutMultiplier * (knobCutHeight + cutOffset),
-                                                            roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
-                                                        );*/
                                                         mb_beveled_rounded_block(
                                                             bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
                                                             sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
