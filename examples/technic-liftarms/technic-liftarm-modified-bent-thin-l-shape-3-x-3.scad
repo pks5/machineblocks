@@ -75,6 +75,10 @@ overrideHoleXDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
 overrideHoleXInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset depth
 overrideHoleXInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+// Adjustment of hole X grid offset Z
+overrideHoleXGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+// Adjustment of hole X grid size Z
+overrideHoleXGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Y diameter
 overrideHoleYDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
@@ -82,6 +86,10 @@ overrideHoleYDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
 overrideHoleYInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset depth
 overrideHoleYInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+// Adjustment of hole Y grid offset Z
+overrideHoleYGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+// Adjustment of hole Y grid size Z
+overrideHoleYGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Z diameter
 overrideHoleZDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
@@ -141,10 +149,14 @@ tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZ
 holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
 holeXInsetThicknessAdjustment=overrideConfig ? overrideHoleXInsetThicknessAdjustment : holeXInsetThicknessAdjustment,
 holeXInsetDepthAdjustment=overrideConfig ? overrideHoleXInsetDepthAdjustment : holeXInsetDepthAdjustment,
+holeXGridOffsetZAdjustment=overrideConfig ? overrideHoleXGridOffsetZAdjustment : holeXGridOffsetZAdjustment,
+holeXGridSizeZAdjustment=overrideConfig ? overrideHoleXGridSizeZAdjustment : holeXGridSizeZAdjustment,
 
 holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
 holeYInsetThicknessAdjustment=overrideConfig ? overrideHoleYInsetThicknessAdjustment : holeYInsetThicknessAdjustment,
 holeYInsetDepthAdjustment=overrideConfig ? overrideHoleYInsetDepthAdjustment : holeYInsetDepthAdjustment,
+holeYGridOffsetZAdjustment=overrideConfig ? overrideHoleYGridOffsetZAdjustment : holeYGridOffsetZAdjustment,
+holeYGridSizeZAdjustment=overrideConfig ? overrideHoleYGridSizeZAdjustment : holeYGridSizeZAdjustment,
 
 holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
 
@@ -195,10 +207,14 @@ tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZ
 holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
 holeXInsetThicknessAdjustment=overrideConfig ? overrideHoleXInsetThicknessAdjustment : holeXInsetThicknessAdjustment,
 holeXInsetDepthAdjustment=overrideConfig ? overrideHoleXInsetDepthAdjustment : holeXInsetDepthAdjustment,
+holeXGridOffsetZAdjustment=overrideConfig ? overrideHoleXGridOffsetZAdjustment : holeXGridOffsetZAdjustment,
+holeXGridSizeZAdjustment=overrideConfig ? overrideHoleXGridSizeZAdjustment : holeXGridSizeZAdjustment,
 
 holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
 holeYInsetThicknessAdjustment=overrideConfig ? overrideHoleYInsetThicknessAdjustment : holeYInsetThicknessAdjustment,
 holeYInsetDepthAdjustment=overrideConfig ? overrideHoleYInsetDepthAdjustment : holeYInsetDepthAdjustment,
+holeYGridOffsetZAdjustment=overrideConfig ? overrideHoleYGridOffsetZAdjustment : holeYGridOffsetZAdjustment,
+holeYGridSizeZAdjustment=overrideConfig ? overrideHoleYGridSizeZAdjustment : holeYGridSizeZAdjustment,
 
 holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
 
