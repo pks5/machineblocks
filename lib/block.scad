@@ -156,7 +156,9 @@ module machineblock(
         holeXDiameter = "auto", // mbu | "auto"
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
+        holeXInsetThicknessAdjustment = 0.0, // mm
         holeXInsetDepth = 0.25, // mbu
+        holeXInsetDepthAdjustment = 0.0, // mm
         holeXGridOffsetZ = 3.5, // mbu
         holeXGridSizeZ = 6, // mbu
         holeXMinTopMargin = 0.5, // mbu
@@ -167,7 +169,9 @@ module machineblock(
         holeYDiameter = "auto", // mbu | "auto"
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
+        holeYInsetThicknessAdjustment = 0.0, // mm
         holeYInsetDepth = 0.25, // mbu
+        holeYInsetDepthAdjustment = 0.0, // mm
         holeYGridOffsetZ = 3.5, // mbu
         holeYGridSizeZ = 6, // mbu
         holeYMinTopMargin = 0.5, // mbu
@@ -480,10 +484,12 @@ module machineblock(
     holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * mbuToMm + holeYDiameterAdjustment;
     holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm + holeZDiameterAdjustment;
     
-    holeXBottomMargin = holeXGridOffsetZ*mbuToMm - 0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm);
+    holeXInsetThicknessFinal = holeXInsetThickness * mbuToMm + holeXInsetThicknessAdjustment;
+    holeXBottomMargin = holeXGridOffsetZ*mbuToMm - 0.5 * (holeXSize + 2 * holeXInsetThicknessFinal);
     holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * mbuToMm) / (holeXGridSizeZ * mbuToMm)); 
 
-    holeYBottomMargin = holeYGridOffsetZ*mbuToMm - 0.5*(holeYSize + 2 * holeYInsetThickness * mbuToMm);
+    holeYInsetThicknessFinal = holeYInsetThickness * mbuToMm + holeYInsetThicknessAdjustment;
+    holeYBottomMargin = holeYGridOffsetZ*mbuToMm - 0.5*(holeYSize + 2 * holeYInsetThicknessFinal);
     holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin * mbuToMm) / (holeYGridSizeZ * mbuToMm)); 
 
     //Stabilizer
@@ -1227,9 +1233,9 @@ module machineblock(
                                                             cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         
                                                             translate([0, 0, 0.5 * objectSizeY])
-                                                                cylinder(h=2*holeXInsetDepth * mbuToMm, r=0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                cylinder(h=2 * (holeXInsetDepth * mbuToMm + holeXInsetDepthAdjustment), r=0.5 * (holeXSize + 2 * holeXInsetThicknessFinal), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                             translate([0, 0, -0.5 * objectSizeY])
-                                                                cylinder(h=2*holeXInsetDepth * mbuToMm, r=0.5 * (holeXSize + 2 * holeXInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                cylinder(h=2 * (holeXInsetDepth * mbuToMm + holeXInsetDepthAdjustment), r=0.5 * (holeXSize + 2 * holeXInsetThicknessFinal), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         
                                                         }
                                                         else if(xHole == "axle"){
@@ -1264,9 +1270,9 @@ module machineblock(
                                                             cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         
                                                             translate([0, 0, 0.5 * objectSizeX])
-                                                                cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                cylinder(h=2 * (holeYInsetDepth * mbuToMm + holeYInsetDepthAdjustment), r=0.5 * (holeYSize + 2 * holeYInsetThicknessFinal), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                             translate([0, 0, -0.5 * objectSizeX])
-                                                                cylinder(h=2*holeYInsetDepth * mbuToMm, r=0.5 * (holeYSize + 2 * holeYInsetThickness * mbuToMm), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                                cylinder(h=2 * (holeYInsetDepth * mbuToMm + holeYInsetDepthAdjustment), r=0.5 * (holeYSize + 2 * holeYInsetThicknessFinal), center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                         }
                                                         else if(yHole == "axle"){
                                                             mb_axis(
