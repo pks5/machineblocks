@@ -23,7 +23,7 @@ brickSizeX = 12; // [1:32]
 // Brick size in Y-direction specified as multiple of an 1x1 brick.
 brickSizeY = 1; // [1:32]  
 // Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 2.5; // [1:24]
+baseLayers = 2.3125; // [1:24]
 
 /* [Base] */
 
@@ -32,7 +32,7 @@ baseCutoutType = "none"; // [none, classic]
 // Rounding Radius X
 baseRoundingRadiusX = 0; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 1.25; // [0:0.1:128]
+baseRoundingRadiusY = 1.15625; // [0:0.1:128]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0; // [0:0.1:128]
 // Cutout Rounding Radius
@@ -85,7 +85,7 @@ holeXType = "pin"; // [pin, axle]
 // Whether X Holes should be centered
 holeXCentered = false;
 // Hole X Grid Offset Z
-holeXGridOffsetZ = 2.5; // [0:0.1:128]
+holeXGridOffsetZ = 2.3125; // [0:0.1:128]
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
 // Type of Y Holes.

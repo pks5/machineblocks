@@ -101,3 +101,20 @@ module pre_render(do_render, convexity){
         children();
     }
 }
+
+// Returns how many round holes fit vertically inside a rectangle
+// without violating the bottom/top margins.
+function mb_vertical_hole_count(
+    rect_height,                    // total rectangle height
+    first_hole_center_from_bottom,  // center of first hole measured from bottom edge
+    hole_diameter,                  // hole diameter
+    hole_center_spacing,            // vertical spacing between hole centers
+    min_top_margin                  // required minimum margin at the top
+) =
+    (hole_center_spacing <= 0) ? 0 :
+    (first_hole_center_from_bottom < hole_diameter/2 ||
+     (rect_height - min_top_margin - hole_diameter/2) < first_hole_center_from_bottom) ? 0 :
+    floor(
+        (rect_height - min_top_margin - hole_diameter/2 - first_hole_center_from_bottom)
+        / hole_center_spacing
+    ) + 1;

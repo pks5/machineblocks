@@ -16,12 +16,12 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
@@ -30,12 +30,12 @@
                     "parameters": {
                         "brickSizeX": 3,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
@@ -44,12 +44,12 @@
                     "parameters": {
                         "brickSizeX": 4,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
@@ -58,12 +58,12 @@
                     "parameters": {
                         "brickSizeX": 6,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
@@ -72,12 +72,12 @@
                     "parameters": {
                         "brickSizeX": 8,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
@@ -86,12 +86,12 @@
                     "parameters": {
                         "brickSizeX": 12,
                         "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "baseLayers": 2.3125,
                         "holesX" : true,
                         "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
+                        "holeXGridOffsetZ": 2.3125,
                         "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 }

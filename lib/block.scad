@@ -157,9 +157,9 @@ module machineblock(
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
         holeXInsetThicknessAdjustment = 0.0, // mm
-        holeXInsetDepth = 0.25, // mbu
+        holeXInsetDepth = 0.5, // mbu
         holeXInsetDepthAdjustment = 0.0, // mm
-        holeXGridOffsetZ = 3.5, // mbu
+        holeXGridOffsetZ = 3.625, // mbu
         holeXGridSizeZ = 6, // mbu
         holeXMinTopMargin = 0.5, // mbu
 
@@ -170,9 +170,9 @@ module machineblock(
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
         holeYInsetThicknessAdjustment = 0.0, // mm
-        holeYInsetDepth = 0.25, // mbu
+        holeYInsetDepth = 0.5, // mbu
         holeYInsetDepthAdjustment = 0.0, // mm
-        holeYGridOffsetZ = 3.5, // mbu
+        holeYGridOffsetZ = 3.625, // mbu
         holeYGridSizeZ = 6, // mbu
         holeYMinTopMargin = 0.5, // mbu
 
@@ -480,18 +480,33 @@ module machineblock(
     pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * mbuToMm + pinDiameterAdjustment;
     
     //Holes XYZ
-    holeXSize = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * mbuToMm + holeXDiameterAdjustment;
-    holeYSize = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * mbuToMm + holeYDiameterAdjustment;
-    holeZSize = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm + holeZDiameterAdjustment;
-    
+    holeXDiameterResolved = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * mbuToMm;
+    holeXSize = holeXDiameterResolved + holeXDiameterAdjustment;
+
     holeXInsetThicknessFinal = holeXInsetThickness * mbuToMm + holeXInsetThicknessAdjustment;
-    holeXBottomMargin = holeXGridOffsetZ*mbuToMm - 0.5 * (holeXSize + 2 * holeXInsetThicknessFinal);
-    holeXMaxRows = ceil((resultingBaseHeight - holeXBottomMargin - holeXMinTopMargin * mbuToMm) / (holeXGridSizeZ * mbuToMm)); 
+    holeXMaxRows = mb_vertical_hole_count(
+        rect_height = baseHeightResolved,
+        first_hole_center_from_bottom = holeXGridOffsetZ * mbuToMm,
+        hole_diameter = holeXDiameterResolved + holeXInsetThickness * mbuToMm,
+        hole_center_spacing = holeXGridSizeZ * mbuToMm,
+        min_top_margin = holeXMinTopMargin * mbuToMm
+    );
+
+    holeYDiameterResolved = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * mbuToMm;
+    holeYSize = holeYDiameterResolved + holeYDiameterAdjustment;
 
     holeYInsetThicknessFinal = holeYInsetThickness * mbuToMm + holeYInsetThicknessAdjustment;
-    holeYBottomMargin = holeYGridOffsetZ*mbuToMm - 0.5*(holeYSize + 2 * holeYInsetThicknessFinal);
-    holeYMaxRows = ceil((resultingBaseHeight - holeYBottomMargin - holeYMinTopMargin * mbuToMm) / (holeYGridSizeZ * mbuToMm)); 
+    holeYMaxRows = mb_vertical_hole_count(
+        rect_height = baseHeightResolved,
+        first_hole_center_from_bottom = holeYGridOffsetZ * mbuToMm,
+        hole_diameter = holeYDiameterResolved + holeYInsetThickness * mbuToMm,
+        hole_center_spacing = holeYGridSizeZ * mbuToMm,
+        min_top_margin = holeYMinTopMargin * mbuToMm
+    );
 
+    holeZDiameterResolved = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm;
+    holeZSize = holeZDiameterResolved + holeZDiameterAdjustment;
+    
     //Stabilizer
     sGridThickness = stabilizerGridThickness * mbuToMm;
     sGridHeight = stabilizerGridHeight * mbuToMm;
