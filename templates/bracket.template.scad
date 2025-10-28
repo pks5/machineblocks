@@ -22,11 +22,9 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 brick1SizeX = 4;
 brick1HolesZ = true;
-brick1KnobType = "classic"; // [classic, technic]
 
 brick2SizeX = 4;
 brick2HolesZ = true;
-brick2KnobType = "classic"; // [classic, technic]
 
 gridSizeY = 2;
 middleSizeX = 1;
@@ -38,7 +36,9 @@ middleLayers = 2;
 
 /* [Studs] */
 
-/*{STUD_VARIABLES}*/
+/*{STUD_VARIABLES_1}*/
+
+/*{STUD_VARIABLES_2}*/
 
 /* [Style] */
 
@@ -59,7 +59,7 @@ machineblock(
     
     holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
     
-    /*{STUD_PARAMETERS}*/
+    /*{STUD_PARAMETERS_1}*/
 
     /*{BASE_PARAMETERS}*/
 
@@ -97,7 +97,7 @@ machineblock(
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
     
-    /*{STUD_PARAMETERS}*/
+    /*{STUD_PARAMETERS_2}*/
 
     /*{STYLE_PARAMETERS}*/
 
@@ -116,7 +116,7 @@ machineblock(
     
     /*{BASE_PARAMETERS}*/
 
-    /*{STUD_PARAMETERS}*/
+    /*{STUD_PARAMETERS_2}*/
 
     /*{STYLE_PARAMETERS}*/
 

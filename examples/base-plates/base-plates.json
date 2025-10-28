@@ -14,46 +14,36 @@
                 {
                     "name": "Base Plate 16x16",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 16,
-                        "baseCutoutType": "none",
-                        "baseLayers": 1
+                        "size": [16, 16, 1],
+                        "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Base Plate 32x16",
                     "parameters": {
-                        "brickSizeX": 32,
-                        "brickSizeY": 16,
-                        "baseCutoutType": "none",
-                        "baseLayers": 1
+                        "size": [32, 16, 1],
+                        "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Base Plate 24x24",
                     "parameters": {
-                        "brickSizeX": 24,
-                        "brickSizeY": 24,
-                        "baseCutoutType": "none",
-                        "baseLayers": 1
+                        "size": [24, 24, 1],
+                        "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Base Plate 32x32",
                     "parameters": {
-                        "brickSizeX": 32,
-                        "brickSizeY": 32,
-                        "baseCutoutType": "none",
-                        "baseLayers": 1
+                        "size": [32, 32, 1],
+                        "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Base Plate 30x24",
                     "parameters": {
-                        "brickSizeX": 30,
-                        "brickSizeY": 24,
-                        "baseCutoutType": "none",
-                        "baseLayers": 1
+                        "size": [30, 24, 1],
+                        "baseCutoutType": "none"
                     }
                 }
             ]

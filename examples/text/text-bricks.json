@@ -16,6 +16,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "a",
                         "textSize": 5
                     }
@@ -25,6 +26,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "b",
                         "textSize": 5
                     }
@@ -34,6 +36,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "c",
                         "textSize": 5
                     }
@@ -43,6 +46,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "d",
                         "textSize": 5
                     }
@@ -52,6 +56,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "e",
                         "textSize": 5
                     }
@@ -61,6 +66,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "f",
                         "textSize": 5
                     }
@@ -70,6 +76,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "g",
                         "textSize": 5
                     }
@@ -79,6 +86,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "h",
                         "textSize": 5
                     }
@@ -88,6 +96,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "i",
                         "textSize": 5
                     }
@@ -97,6 +106,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "j",
                         "textSize": 5
                     }
@@ -106,6 +116,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "k",
                         "textSize": 5
                     }
@@ -115,6 +126,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "l",
                         "textSize": 5
                     }
@@ -124,6 +136,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "m",
                         "textSize": 5
                     }
@@ -133,6 +146,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "n",
                         "textSize": 5
                     }
@@ -142,6 +156,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "o",
                         "textSize": 5
                     }
@@ -151,6 +166,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "p",
                         "textSize": 5
                     }
@@ -160,6 +176,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "q",
                         "textSize": 5
                     }
@@ -169,6 +186,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "r",
                         "textSize": 5
                     }
@@ -178,6 +196,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "s",
                         "textSize": 5
                     }
@@ -187,6 +206,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "t",
                         "textSize": 5
                     }
@@ -196,6 +216,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "u",
                         "textSize": 5
                     }
@@ -205,6 +226,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "v",
                         "textSize": 5
                     }
@@ -214,6 +236,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "w",
                         "textSize": 5
                     }
@@ -223,6 +246,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "x",
                         "textSize": 5
                     }
@@ -232,6 +256,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "y",
                         "textSize": 5
                     }
@@ -241,6 +266,7 @@
                     "parameters": {
                         "brickSizeX": 1,
                         "brickSizeY": 1,
+                        "studs": false,
                         "text": "z",
                         "textSize": 5
                     }
@@ -251,6 +277,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "A"
                     }
                 },
@@ -259,6 +286,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "B"
                     }
                 },
@@ -267,6 +295,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "C"
                     }
                 },
@@ -275,6 +304,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "D"
                     }
                 },
@@ -283,6 +313,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "E"
                     }
                 },
@@ -291,6 +322,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "F"
                     }
                 },
@@ -299,6 +331,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "G"
                     }
                 },
@@ -307,6 +340,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "H"
                     }
                 },
@@ -315,6 +349,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "I"
                     }
                 },
@@ -323,6 +358,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "J"
                     }
                 },
@@ -331,6 +367,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "K"
                     }
                 },
@@ -339,6 +376,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "L"
                     }
                 },
@@ -347,6 +385,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "M"
                     }
                 },
@@ -355,6 +394,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "N"
                     }
                 },
@@ -363,6 +403,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "O"
                     }
                 },
@@ -371,6 +412,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "P"
                     }
                 },
@@ -379,6 +421,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "Q"
                     }
                 },
@@ -387,6 +430,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "R"
                     }
                 },
@@ -395,6 +439,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "S"
                     }
                 },
@@ -403,6 +448,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "T"
                     }
                 },
@@ -411,6 +457,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "U"
                     }
                 },
@@ -419,6 +466,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "V"
                     }
                 },
@@ -427,6 +475,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "W"
                     }
                 },
@@ -435,6 +484,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "X"
                     }
                 },
@@ -443,6 +493,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "Y"
                     }
                 },
@@ -451,6 +502,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "Z"
                     }
                 },
@@ -461,6 +513,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "0"
                     }
                 },
@@ -469,6 +522,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "1"
                     }
                 },
@@ -477,6 +531,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "2"
                     }
                 },
@@ -485,6 +540,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "3"
                     }
                 },
@@ -493,6 +549,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "4"
                     }
                 },
@@ -501,6 +558,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "5"
                     }
                 },
@@ -509,6 +567,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "6"
                     }
                 },
@@ -517,6 +576,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "7"
                     }
                 },
@@ -525,6 +585,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "text": "8"
                     }
                 },
@@ -543,6 +604,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf015",
                         "textSize": 8
@@ -553,6 +615,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf810",
                         "textSize": 8
@@ -563,6 +626,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf533",
                         "textSize": 8
@@ -573,6 +637,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf005",
                         "textSize": 8
@@ -583,6 +648,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf44e",
                         "textSize": 8
@@ -593,6 +659,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf52e",
                         "textSize": 8
@@ -603,6 +670,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\ue19b",
                         "textSize": 8
@@ -613,6 +681,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf7a6",
                         "textSize": 8
@@ -623,6 +692,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf6d3",
                         "textSize": 8
@@ -633,6 +703,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf6c8",
                         "textSize": 8
@@ -643,6 +714,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf76c",
                         "textSize": 8
@@ -653,6 +725,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1b9",
                         "textSize": 8
@@ -663,6 +736,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf086",
                         "textSize": 8
@@ -673,6 +747,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1bb",
                         "textSize": 8
@@ -683,6 +758,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf57d",
                         "textSize": 8
@@ -693,6 +769,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf0c3",
                         "textSize": 8
@@ -703,6 +780,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf13d",
                         "textSize": 8
@@ -713,6 +791,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf06c",
                         "textSize": 8
@@ -723,6 +802,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf091",
                         "textSize": 8
@@ -733,6 +813,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf544",
                         "textSize": 8
@@ -743,6 +824,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf071",
                         "textSize": 8
@@ -753,6 +835,7 @@
                     "parameters": {
                         "brickSizeX": 2,
                         "brickSizeY": 2,
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf535",
                         "textSize": 8
@@ -765,7 +848,6 @@
                         "brickSizeX": 3,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "knobs": true,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf714\uf54c",
                         "textSide": 2,
@@ -781,7 +863,6 @@
                         "brickSizeX": 2,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "knobs": true,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf004",
                         "textSide": 2,
@@ -796,7 +877,6 @@
                         "brickSizeX": 4,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "knobs": true,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1e2\ue4dc\uf714",
                         "textSide": 2,
@@ -812,7 +892,6 @@
                         "brickSizeX": 3,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "Azul",
                         "textSide": 2,
                         "textSize": 6,
@@ -826,7 +905,6 @@
                         "brickSizeX": 6,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "Achtung",
                         "textSide": 2,
                         "textSize": 6,
@@ -840,7 +918,6 @@
                         "brickSizeX": 8,
                         "brickSizeY": 1,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "C'est la vie",
                         "textSide": 2,
                         "textSize": 6,
@@ -855,7 +932,6 @@
                         "brickSizeX": 4,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "Hello",
                         "textSide": 2,
                         "textSize": 6,
@@ -868,7 +944,6 @@
                         "brickSizeX": 6,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "Good Bye",
                         "textSide": 2,
                         "textSize": 6,
@@ -881,7 +956,6 @@
                         "brickSizeX": 10,
                         "brickSizeY": 2,
                         "baseLayers": 3,
-                        "knobs": true,
                         "text": "A long sentence",
                         "textSide": 2,
                         "textSize": 6,

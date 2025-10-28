@@ -19,7 +19,7 @@
                         "holesY" : true,
                         "holeYType": "axle",
                         "holeYCentered": false,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
                 {
@@ -29,7 +29,7 @@
                         "brickSizeY": 1,
                         "holesY" : true,
                         "holeYCentered": false,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -39,7 +39,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 2,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -50,7 +50,7 @@
                         "brickSizeY": 2,
                         "holesY" : true,
                         "holeYCentered": false,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -61,7 +61,7 @@
                         "brickSizeY": 2,
                         "holesY" : true,
                         "holeYType": "axle",
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -72,7 +72,7 @@
                         "brickSizeY": 3,
                         "holesY" : true,
                         "holeYCentered": false,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -82,7 +82,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 4,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },    
 
@@ -92,7 +92,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 6,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
                 
@@ -102,7 +102,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 8,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
                 
@@ -112,7 +112,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 10,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
                 
@@ -122,7 +122,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 12,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -132,7 +132,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 14,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -142,7 +142,7 @@
                         "brickSizeX": 1,
                         "brickSizeY": 16,
                         "holesY" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 },
 
@@ -165,7 +165,7 @@
                         "holesX" : true,
                         "holesY" : true,
                         "holesZ" : true,
-                        "knobType": "hollow"
+                        "studType": "hollow"
                     }
                 }, 
 

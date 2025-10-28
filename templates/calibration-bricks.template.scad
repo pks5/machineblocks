@@ -16,11 +16,11 @@
 
 /* [Size] */
 
-brick1Size = [1, 1, 1];
+size_1 = [1, 1, 1];
 
-brick2Size = [3, 1, 1];
+size_2 = [3, 1, 1];
 
-brick3Size = [3, 3, 1];
+size_3 = [3, 3, 1];
 
 /* [Style] */
 
@@ -33,7 +33,7 @@ brick3Size = [3, 3, 1];
 /*{HIDDEN_PARAMETERS}*/
 
 machineblock(
-    size=brick1Size, 
+    size = size_1, 
     
     /*{STYLE_PARAMETERS}*/
     
@@ -43,8 +43,8 @@ machineblock(
 );
 
 machineblock(
-    size=brick2Size,
-    offset = [brick1Size[0] + 0.5, 0, 0],
+    size = size_2,
+    offset = [size_1[0] + 0.5, 0, 0],
     
     /*{STYLE_PARAMETERS}*/
     
@@ -54,8 +54,8 @@ machineblock(
 );
 
 machineblock(
-    size=brick3Size, 
-    offset = [brick1Size[0] + 0.5 + brick2Size[0] + 0.5, 0, 0],
+    size = size_3, 
+    offset = [size_1[0] + 0.5 + size_2[0] + 0.5, 0, 0],
     
     /*{STYLE_PARAMETERS}*/
     

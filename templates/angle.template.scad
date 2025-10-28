@@ -25,9 +25,6 @@ brick2SizeY = 2; // [1:32]
 // First brick's height specified as number of layers. Each layer has the height of one plate.
 brick1BaseLayers = 1; // [1:24]
 
-// Second brick's base height in mm
-//brick2BaseHeight = 1.8;
-
 /* [Base] */
 
 // Radius of the vertical brick
@@ -37,14 +34,9 @@ baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 
 /* [Studs] */
 
-// Whether first brick should have knobs.
-brick1Knobs = true;
-// Type of first brick's knobs
-brick1KnobType = "solid"; // [solid, hollow]
-// Whether second brick should have knobs.
-brick2Knobs = true;
-// Type of second brick's knobs
-brick2KnobType = "hollow"; // [solid, hollow]
+/*{STUD_VARIABLES_1}*/
+
+/*{STUD_VARIABLES_2}*/
 
 /* [Render] */
 
@@ -69,8 +61,7 @@ machineblock(
       
       /*{BASE_PARAMETERS}*/
 
-      studs = brick1Knobs,
-      studType = brick1KnobType,
+      /*{STUD_PARAMETERS_1}*/
       
       connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
       connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
@@ -91,8 +82,7 @@ machineblock(
         baseCutoutType = "none",
         baseRoundingRadius=[0,0,baseRoundingRadiusZ],
 
-        studs = brick2Knobs,
-        studType = brick2KnobType,
+        /*{STUD_PARAMETERS_2}*/
         
         connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
         connectorHeight = brick1BaseLayers * unitGrid[1],

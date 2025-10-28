@@ -20,7 +20,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
@@ -34,7 +34,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
@@ -48,7 +48,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
@@ -62,7 +62,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
@@ -76,7 +76,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
@@ -90,7 +90,7 @@
                         "holesX" : true,
                         "holeXCentered" : false,
                         "holeXGridOffsetZ": 2.3125,
-                        "knobs": false,
+                        "studs": false,
                         "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }

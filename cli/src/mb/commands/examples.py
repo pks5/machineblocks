@@ -4,113 +4,113 @@ import re
 from typing import List
 
 override_config_variables = """/* [Override Config] */
-// Whether to override global config
+// Whether to override global configuration with ovr parameters. 
 overrideConfig=false;
 // Scale of the brick
-overrideScale = 1.0; // [0.1:0.1:128]
+scale_ovr = 1.0; // [0.1:0.1:128]
 
 // Adjustment of base height
-overrideBaseHeightAdjustment = 0.0; // [-10.0:0.1:10.0]
+baseHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of sides
-overrideBaseSideAdjustment = -0.1; // [-10.0:0.1:10.0]
+baseSideAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of wall thickness
-overrideBaseWallThicknessAdjustment = -0.1; // [-10.0:0.1:10.0]
+baseWallThicknessAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Clamp thickness
-overrideBaseClampThickness = 0.1; // [-10.0:0.1:10.0]
+baseClampThickness_ovr = 0.1; // [-10.0:0.1:10.0]
 
 // Adjustment of tube X diameter
-overrideTubeXDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeXDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of tube Y diameter
-overrideTubeYDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeYDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of tube Z diameter
-overrideTubeZDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeZDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 
 // Adjustment of hole X diameter
-overrideHoleXDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeXDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset thickness
-overrideHoleXInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset depth
-overrideHoleXInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X grid offset Z
-overrideHoleXGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X grid size Z
-overrideHoleXGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
+holeXGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Y diameter
-overrideHoleYDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeYDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset thickness
-overrideHoleYInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset depth
-overrideHoleYInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y grid offset Z
-overrideHoleYGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y grid size Z
-overrideHoleYGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
+holeYGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Z diameter
-overrideHoleZDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeZDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 
 // Adjustment of pin diameter
-overridePinDiameterAdjustment = 0.0; // [-10.0:0.1:10.0]
+pinDiameterAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 
 // Adjustment of stud diameter
-overrideStudDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+studDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of stud height
-overrideStudHeightAdjustment = 0.0; // [-10.0:0.1:10.0]
+studHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of stud hole diameter
-overrideStudHoleDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
+studHoleDiameterAdjustment_ovr = 0.3; // [-10.0:0.1:10.0]
 // Adjustment of stud cutout
-overrideStudCutoutAdjustment = [0.2, 0.4]; // [-10.0:0.1:10.0]
+studCutoutAdjustment_ovr = [0.2, 0.4]; // [-10.0:0.1:10.0]
 
 // Whether to render in preview mode
-overridePreviewRender = true;
+previewRender_ovr = true;
 // Quality of preview rendering
-overridePreviewQuality = 0.5; // [0.1:0.1:1.0]
+previewQuality_ovr = 0.5; // [0.1:0.1:1.0]
 
 // Rounding resolution of final rendering
-overrideRoundingResolution = 64; // [16:1:512]
+roundingResolution_ovr = 64; // [16:1:512]
 """
 
 preset_params = """unitMbu=unitMbu,
 unitGrid=unitGrid,
-scale=overrideConfig ? overrideScale : scale,
+scale=overrideConfig ? scale_ovr : scale,
 
-baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
-baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
-baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
+baseHeightAdjustment=overrideConfig ? baseHeightAdjustment_ovr : baseHeightAdjustment,
+baseWallThicknessAdjustment=overrideConfig ? baseWallThicknessAdjustment_ovr : baseWallThicknessAdjustment,
+baseClampThickness=overrideConfig ? baseClampThickness_ovr : baseClampThickness,
 
-tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
-tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
-tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
+tubeXDiameterAdjustment=overrideConfig ? tubeXDiameterAdjustment_ovr : tubeXDiameterAdjustment,
+tubeYDiameterAdjustment=overrideConfig ? tubeYDiameterAdjustment_ovr : tubeYDiameterAdjustment,
+tubeZDiameterAdjustment=overrideConfig ? tubeZDiameterAdjustment_ovr : tubeZDiameterAdjustment,
 
-holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
-holeXInsetThicknessAdjustment=overrideConfig ? overrideHoleXInsetThicknessAdjustment : holeXInsetThicknessAdjustment,
-holeXInsetDepthAdjustment=overrideConfig ? overrideHoleXInsetDepthAdjustment : holeXInsetDepthAdjustment,
-holeXGridOffsetZAdjustment=overrideConfig ? overrideHoleXGridOffsetZAdjustment : holeXGridOffsetZAdjustment,
-holeXGridSizeZAdjustment=overrideConfig ? overrideHoleXGridSizeZAdjustment : holeXGridSizeZAdjustment,
+holeXDiameterAdjustment=overrideConfig ? holeXDiameterAdjustment_ovr : holeXDiameterAdjustment,
+holeXInsetThicknessAdjustment=overrideConfig ? holeXInsetThicknessAdjustment_ovr : holeXInsetThicknessAdjustment,
+holeXInsetDepthAdjustment=overrideConfig ? holeXInsetDepthAdjustment_ovr : holeXInsetDepthAdjustment,
+holeXGridOffsetZAdjustment=overrideConfig ? holeXGridOffsetZAdjustment_ovr : holeXGridOffsetZAdjustment,
+holeXGridSizeZAdjustment=overrideConfig ? holeXGridSizeZAdjustment_ovr : holeXGridSizeZAdjustment,
 
-holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
-holeYInsetThicknessAdjustment=overrideConfig ? overrideHoleYInsetThicknessAdjustment : holeYInsetThicknessAdjustment,
-holeYInsetDepthAdjustment=overrideConfig ? overrideHoleYInsetDepthAdjustment : holeYInsetDepthAdjustment,
-holeYGridOffsetZAdjustment=overrideConfig ? overrideHoleYGridOffsetZAdjustment : holeYGridOffsetZAdjustment,
-holeYGridSizeZAdjustment=overrideConfig ? overrideHoleYGridSizeZAdjustment : holeYGridSizeZAdjustment,
+holeYDiameterAdjustment=overrideConfig ? holeYDiameterAdjustment_ovr : holeYDiameterAdjustment,
+holeYInsetThicknessAdjustment=overrideConfig ? holeYInsetThicknessAdjustment_ovr : holeYInsetThicknessAdjustment,
+holeYInsetDepthAdjustment=overrideConfig ? holeYInsetDepthAdjustment_ovr : holeYInsetDepthAdjustment,
+holeYGridOffsetZAdjustment=overrideConfig ? holeYGridOffsetZAdjustment_ovr : holeYGridOffsetZAdjustment,
+holeYGridSizeZAdjustment=overrideConfig ? holeYGridSizeZAdjustment_ovr : holeYGridSizeZAdjustment,
 
-holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
+holeZDiameterAdjustment=overrideConfig ? holeZDiameterAdjustment_ovr : holeZDiameterAdjustment,
 
-pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
+pinDiameterAdjustment=overrideConfig ? pinDiameterAdjustment_ovr : pinDiameterAdjustment,
 
-studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
-studHeightAdjustment=overrideConfig ? overrideStudHeightAdjustment : studHeightAdjustment,
-studHoleDiameterAdjustment=overrideConfig ? overrideStudHoleDiameterAdjustment : studHoleDiameterAdjustment,
-studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
+studDiameterAdjustment=overrideConfig ? studDiameterAdjustment_ovr : studDiameterAdjustment,
+studHeightAdjustment=overrideConfig ? studHeightAdjustment_ovr : studHeightAdjustment,
+studHoleDiameterAdjustment=overrideConfig ? studHoleDiameterAdjustment_ovr : studHoleDiameterAdjustment,
+studCutoutAdjustment=overrideConfig ? studCutoutAdjustment_ovr : studCutoutAdjustment,
 
-previewRender=overrideConfig ? overridePreviewRender : previewRender,
-previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
+previewRender=overrideConfig ? previewRender_ovr : previewRender,
+previewQuality=overrideConfig ? previewQuality_ovr : previewQuality,
 
-baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution"""
+baseRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+holeRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+studRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution"""
 
 base_variables = """
 // Type of cut-out on the underside.
@@ -153,25 +153,27 @@ surfacePatternScale = surfacePatternScale,
 studIcon = studIcon,
 """
 
-stud_variables = """
-// Whether to draw knobs.
-knobs = true;
-// Whether knobs should be centered in X direction.
-knobCenteredX = false;
-// Whether knobs should be centered in Y direction.
-knobCenteredY = false;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
+hidden_params = """bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;"""
+
+def stud_variables(suffix: str):
+    return f"""
+// Whether to draw studs.
+studs{suffix} = true;
+// Whether studs should be centered in X direction.
+studCenteredX{suffix} = false;
+// Whether studs should be centered in Y direction.
+studCenteredY{suffix} = false;
+// Type of the studs
+studType{suffix} = "solid"; // [solid, hollow]
 // Stud Padding
-studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]"""
+studPadding{suffix} = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]"""
 
-stud_params = """studs = knobs,
-studCenteredX = knobCenteredX,
-studCenteredY = knobCenteredY,
-studType = knobType,
-studPadding = studPadding,"""
-
-hidden_params = """bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;"""
+def stud_params(suffix: str):
+    return f"""studs = studs{suffix},
+studCenteredX = studCenteredX{suffix},
+studCenteredY = studCenteredY{suffix},
+studType = studType{suffix},
+studPadding = studPadding{suffix},"""
 
 def process_examples_file(example_file_path: str):
     if not os.path.exists(example_file_path):
@@ -218,8 +220,12 @@ def process_examples_file(example_file_path: str):
             scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
             scad = scad.replace('/*{STYLE_VARIABLES}*/', style_variables)
             scad = scad.replace('/*{STYLE_PARAMETERS}*/', style_params)
-            scad = scad.replace('/*{STUD_VARIABLES}*/', stud_variables)
-            scad = scad.replace('/*{STUD_PARAMETERS}*/', stud_params)
+            scad = scad.replace('/*{STUD_VARIABLES}*/', stud_variables(''))
+            scad = scad.replace('/*{STUD_PARAMETERS}*/', stud_params(''))
+            scad = scad.replace('/*{STUD_VARIABLES_1}*/', stud_variables('_1'))
+            scad = scad.replace('/*{STUD_PARAMETERS_1}*/', stud_params('_1'))
+            scad = scad.replace('/*{STUD_VARIABLES_2}*/', stud_variables('_2'))
+            scad = scad.replace('/*{STUD_PARAMETERS_2}*/', stud_params('_2'))
             scad = scad.replace('/*{IMPORTS}*/', "use <" + d['config']['lib'] + "/block.scad>;\ninclude <" + d['config']['presets'] + ">;\n")
 
             for param in brick['parameters']:

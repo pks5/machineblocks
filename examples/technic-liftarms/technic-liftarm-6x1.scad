@@ -18,12 +18,8 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 6; // [1:32]  
-// Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 1; // [1:32]  
-// Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 2.3125; // [1:24]
+// Brick size
+size = [4, 2, 3]; // [1:32]
 
 /* [Base] */
 
@@ -33,8 +29,6 @@ baseRoundingRadiusX = 0; // [0:0.1:128]
 baseRoundingRadiusY = 1.15625; // [0:0.1:128]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0; // [0:0.1:128]
-// Cutout Rounding Radius
-baseCutoutRoundingRadius = "auto";
 
 
 // Type of cut-out on the underside.
@@ -57,14 +51,14 @@ grilleCount = 5; // [2:10]
 /* [Studs] */
 
 
-// Whether to draw knobs.
-knobs = false;
-// Whether knobs should be centered in X direction.
-knobCenteredX = false;
-// Whether knobs should be centered in Y direction.
-knobCenteredY = false;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
+// Whether to draw studs.
+studs = false;
+// Whether studs should be centered in X direction.
+studCenteredX = false;
+// Whether studs should be centered in Y direction.
+studCenteredY = false;
+// Type of the studs
+studType = "solid"; // [solid, hollow]
 // Stud Padding
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
@@ -130,83 +124,82 @@ surfacePattern = "none"; // [none:None, ../pattern/honeycombs.svg:Honeycombs, ..
 studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-solid-full.svg:Anchor, ../pattern/bell-solid-full.svg:Bell, ../pattern/bolt-solid-full.svg:Bolt, ../pattern/bomb-solid-full.svg:Bomb, ../pattern/bullhorn-solid-full.svg:Bullhorn, ../pattern/car-side-solid-full.svg:CarSide, ../pattern/car-solid-full.svg:Car, ../pattern/cat-solid-full.svg:Cat, ../pattern/certificate-solid-full.svg:Certificate, ../pattern/circle-radiation-solid-full.svg:CircleRadiation, ../pattern/circle-solid-full.svg:Circle, ../pattern/diamond-solid-full.svg:Diamond, ../pattern/dog-solid-full.svg:Dog, ../pattern/earth-americas-solid-full.svg:EarthAmericas, ../pattern/face-flushed-solid-full.svg:FaceFlushed, ../pattern/face-grin-hearts-solid-full.svg:FaceGrinHearts, ../pattern/face-laugh-solid-full.svg:FaceLaugh, ../pattern/face-smile-solid-full.svg:FaceSmile, ../pattern/fish-solid-full.svg:Fish, ../pattern/flag-solid-full.svg:Flag, ../pattern/flask-solid-full.svg:Flask, ../pattern/football-solid-full.svg:Football, ../pattern/frog-solid-full.svg:Frog, ../pattern/futbol-solid-full.svg:Futbol, ../pattern/ghost-solid-full.svg:Ghost, ../pattern/graduation-cap-solid-full.svg:GraduationCap, ../pattern/hand-middle-finger-solid-full.svg:HandMiddleFinger, ../pattern/hand-solid-full.svg:Hand, ../pattern/heart-solid-full.svg:Heart, ../pattern/horse-head-solid-full.svg:HorseHead, ../pattern/key-solid-full.svg:Key, ../pattern/leaf-solid-full.svg:Leaf, ../pattern/lightbulb-solid-full.svg:Lightbulb, ../pattern/microphone-solid-full.svg:Microphone, ../pattern/moon-solid-full.svg:Moon, ../pattern/plane-solid-full.svg:Plane, ../pattern/plug-solid-full.svg:Plug, ../pattern/poo-solid-full.svg:Poo, ../pattern/puzzle-piece-solid-full.svg:PuzzlePiece, ../pattern/robot-solid-full.svg:Robot, ../pattern/rocket-solid-full.svg:Rocket, ../pattern/sack-dollar-solid-full.svg:SackDollar, ../pattern/skull-solid-full.svg:Skull, ../pattern/square-solid-full.svg:Square, ../pattern/star-solid-full.svg:Star, ../pattern/thumbs-down-solid-full.svg:ThumbsDown, ../pattern/thumbs-up-solid-full.svg:ThumbsUp, ../pattern/tooth-solid-full.svg:Tooth, ../pattern/tree-solid-full.svg:Tree, ../pattern/trophy-solid-full.svg:Trophy]
 
 /* [Override Config] */
-// Whether to override global config
+// Whether to override global configuration with ovr parameters. 
 overrideConfig=false;
 // Scale of the brick
-overrideScale = 1.0; // [0.1:0.1:128]
+scale_ovr = 1.0; // [0.1:0.1:128]
 
 // Adjustment of base height
-overrideBaseHeightAdjustment = 0.0; // [-10.0:0.1:10.0]
+baseHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of sides
-overrideBaseSideAdjustment = -0.1; // [-10.0:0.1:10.0]
+baseSideAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of wall thickness
-overrideBaseWallThicknessAdjustment = -0.1; // [-10.0:0.1:10.0]
+baseWallThicknessAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Clamp thickness
-overrideBaseClampThickness = 0.1; // [-10.0:0.1:10.0]
+baseClampThickness_ovr = 0.1; // [-10.0:0.1:10.0]
 
 // Adjustment of tube X diameter
-overrideTubeXDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeXDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of tube Y diameter
-overrideTubeYDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeYDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 // Adjustment of tube Z diameter
-overrideTubeZDiameterAdjustment = -0.1; // [-10.0:0.1:10.0]
+tubeZDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
 
 // Adjustment of hole X diameter
-overrideHoleXDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeXDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset thickness
-overrideHoleXInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X inset depth
-overrideHoleXInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X grid offset Z
-overrideHoleXGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeXGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole X grid size Z
-overrideHoleXGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
+holeXGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Y diameter
-overrideHoleYDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeYDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset thickness
-overrideHoleYInsetThicknessAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y inset depth
-overrideHoleYInsetDepthAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y grid offset Z
-overrideHoleYGridOffsetZAdjustment = 0.0; // [-10.0:0.1:10.0]
+holeYGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of hole Y grid size Z
-overrideHoleYGridSizeZAdjustment = 0.0; // [-10.0:0.1:10.0] 
+holeYGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
 
 // Adjustment of hole Z diameter
-overrideHoleZDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+holeZDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 
 // Adjustment of pin diameter
-overridePinDiameterAdjustment = 0.0; // [-10.0:0.1:10.0]
+pinDiameterAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 
 // Adjustment of stud diameter
-overrideStudDiameterAdjustment = 0.2; // [-10.0:0.1:10.0]
+studDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
 // Adjustment of stud height
-overrideStudHeightAdjustment = 0.0; // [-10.0:0.1:10.0]
+studHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
 // Adjustment of stud hole diameter
-overrideStudHoleDiameterAdjustment = 0.3; // [-10.0:0.1:10.0]
+studHoleDiameterAdjustment_ovr = 0.3; // [-10.0:0.1:10.0]
 // Adjustment of stud cutout
-overrideStudCutoutAdjustment = [0.2, 0.4]; // [-10.0:0.1:10.0]
+studCutoutAdjustment_ovr = [0.2, 0.4]; // [-10.0:0.1:10.0]
 
 // Whether to render in preview mode
-overridePreviewRender = true;
+previewRender_ovr = true;
 // Quality of preview rendering
-overridePreviewQuality = 0.5; // [0.1:0.1:1.0]
+previewQuality_ovr = 0.5; // [0.1:0.1:1.0]
 
 // Rounding resolution of final rendering
-overrideRoundingResolution = 64; // [16:1:512]
+roundingResolution_ovr = 64; // [16:1:512]
 
 
 /* [Hidden] */
 
-bSideAdjustment = overrideConfig ? overrideBaseSideAdjustment : baseSideAdjustment;
+bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 // Generate the block
 machineblock(
-    size = [brickSizeX, brickSizeY,baseLayers],
+    size = size,
     
     baseRoundingRadius=[baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ],
-    baseCutoutRoundingRadius = baseCutoutRoundingRadius,
     
     baseCutoutType = baseCutoutType,
 pillars = pillars,
@@ -219,10 +212,10 @@ grilleCount = grilleCount,
 
     bevel = [bevel0, bevel1, bevel2, bevel3],
 
-    studs = knobs,
-studCenteredX = knobCenteredX,
-studCenteredY = knobCenteredY,
-studType = knobType,
+    studs = studs,
+studCenteredX = studCenteredX,
+studCenteredY = studCenteredY,
+studType = studType,
 studPadding = studPadding,
     
     holeX = holesX,
@@ -254,42 +247,42 @@ studIcon = studIcon,
     
     unitMbu=unitMbu,
 unitGrid=unitGrid,
-scale=overrideConfig ? overrideScale : scale,
+scale=overrideConfig ? scale_ovr : scale,
 
-baseHeightAdjustment=overrideConfig ? overrideBaseHeightAdjustment : baseHeightAdjustment,
-baseWallThicknessAdjustment=overrideConfig ? overrideBaseWallThicknessAdjustment : baseWallThicknessAdjustment,
-baseClampThickness=overrideConfig ? overrideBaseClampThickness : baseClampThickness,
+baseHeightAdjustment=overrideConfig ? baseHeightAdjustment_ovr : baseHeightAdjustment,
+baseWallThicknessAdjustment=overrideConfig ? baseWallThicknessAdjustment_ovr : baseWallThicknessAdjustment,
+baseClampThickness=overrideConfig ? baseClampThickness_ovr : baseClampThickness,
 
-tubeXDiameterAdjustment=overrideConfig ? overrideTubeXDiameterAdjustment : tubeXDiameterAdjustment,
-tubeYDiameterAdjustment=overrideConfig ? overrideTubeYDiameterAdjustment : tubeYDiameterAdjustment,
-tubeZDiameterAdjustment=overrideConfig ? overrideTubeZDiameterAdjustment : tubeZDiameterAdjustment,
+tubeXDiameterAdjustment=overrideConfig ? tubeXDiameterAdjustment_ovr : tubeXDiameterAdjustment,
+tubeYDiameterAdjustment=overrideConfig ? tubeYDiameterAdjustment_ovr : tubeYDiameterAdjustment,
+tubeZDiameterAdjustment=overrideConfig ? tubeZDiameterAdjustment_ovr : tubeZDiameterAdjustment,
 
-holeXDiameterAdjustment=overrideConfig ? overrideHoleXDiameterAdjustment : holeXDiameterAdjustment,
-holeXInsetThicknessAdjustment=overrideConfig ? overrideHoleXInsetThicknessAdjustment : holeXInsetThicknessAdjustment,
-holeXInsetDepthAdjustment=overrideConfig ? overrideHoleXInsetDepthAdjustment : holeXInsetDepthAdjustment,
-holeXGridOffsetZAdjustment=overrideConfig ? overrideHoleXGridOffsetZAdjustment : holeXGridOffsetZAdjustment,
-holeXGridSizeZAdjustment=overrideConfig ? overrideHoleXGridSizeZAdjustment : holeXGridSizeZAdjustment,
+holeXDiameterAdjustment=overrideConfig ? holeXDiameterAdjustment_ovr : holeXDiameterAdjustment,
+holeXInsetThicknessAdjustment=overrideConfig ? holeXInsetThicknessAdjustment_ovr : holeXInsetThicknessAdjustment,
+holeXInsetDepthAdjustment=overrideConfig ? holeXInsetDepthAdjustment_ovr : holeXInsetDepthAdjustment,
+holeXGridOffsetZAdjustment=overrideConfig ? holeXGridOffsetZAdjustment_ovr : holeXGridOffsetZAdjustment,
+holeXGridSizeZAdjustment=overrideConfig ? holeXGridSizeZAdjustment_ovr : holeXGridSizeZAdjustment,
 
-holeYDiameterAdjustment=overrideConfig ? overrideHoleYDiameterAdjustment : holeYDiameterAdjustment,
-holeYInsetThicknessAdjustment=overrideConfig ? overrideHoleYInsetThicknessAdjustment : holeYInsetThicknessAdjustment,
-holeYInsetDepthAdjustment=overrideConfig ? overrideHoleYInsetDepthAdjustment : holeYInsetDepthAdjustment,
-holeYGridOffsetZAdjustment=overrideConfig ? overrideHoleYGridOffsetZAdjustment : holeYGridOffsetZAdjustment,
-holeYGridSizeZAdjustment=overrideConfig ? overrideHoleYGridSizeZAdjustment : holeYGridSizeZAdjustment,
+holeYDiameterAdjustment=overrideConfig ? holeYDiameterAdjustment_ovr : holeYDiameterAdjustment,
+holeYInsetThicknessAdjustment=overrideConfig ? holeYInsetThicknessAdjustment_ovr : holeYInsetThicknessAdjustment,
+holeYInsetDepthAdjustment=overrideConfig ? holeYInsetDepthAdjustment_ovr : holeYInsetDepthAdjustment,
+holeYGridOffsetZAdjustment=overrideConfig ? holeYGridOffsetZAdjustment_ovr : holeYGridOffsetZAdjustment,
+holeYGridSizeZAdjustment=overrideConfig ? holeYGridSizeZAdjustment_ovr : holeYGridSizeZAdjustment,
 
-holeZDiameterAdjustment=overrideConfig ? overrideHoleZDiameterAdjustment : holeZDiameterAdjustment,
+holeZDiameterAdjustment=overrideConfig ? holeZDiameterAdjustment_ovr : holeZDiameterAdjustment,
 
-pinDiameterAdjustment=overrideConfig ? overridePinDiameterAdjustment : pinDiameterAdjustment,
+pinDiameterAdjustment=overrideConfig ? pinDiameterAdjustment_ovr : pinDiameterAdjustment,
 
-studDiameterAdjustment=overrideConfig ? overrideStudDiameterAdjustment : studDiameterAdjustment,
-studHeightAdjustment=overrideConfig ? overrideStudHeightAdjustment : studHeightAdjustment,
-studHoleDiameterAdjustment=overrideConfig ? overrideStudHoleDiameterAdjustment : studHoleDiameterAdjustment,
-studCutoutAdjustment=overrideConfig ? overrideStudCutoutAdjustment : studCutoutAdjustment,
+studDiameterAdjustment=overrideConfig ? studDiameterAdjustment_ovr : studDiameterAdjustment,
+studHeightAdjustment=overrideConfig ? studHeightAdjustment_ovr : studHeightAdjustment,
+studHoleDiameterAdjustment=overrideConfig ? studHoleDiameterAdjustment_ovr : studHoleDiameterAdjustment,
+studCutoutAdjustment=overrideConfig ? studCutoutAdjustment_ovr : studCutoutAdjustment,
 
-previewRender=overrideConfig ? overridePreviewRender : previewRender,
-previewQuality=overrideConfig ? overridePreviewQuality : previewQuality,
+previewRender=overrideConfig ? previewRender_ovr : previewRender,
+previewQuality=overrideConfig ? previewQuality_ovr : previewQuality,
 
-baseRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-holeRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-studRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution,
-pillarRoundingResolution=overrideConfig ? overrideRoundingResolution : roundingResolution
+baseRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+holeRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+studRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution,
+pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResolution
 );
