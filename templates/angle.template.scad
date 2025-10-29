@@ -20,10 +20,12 @@
 brickSizeX = 3; // [1:32]
 // First brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick1SizeY = 2; // [1:32]
-// Second brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick2SizeY = 2; // [1:32]
 // First brick's height specified as number of layers. Each layer has the height of one plate.
 brick1BaseLayers = 1; // [1:24]
+
+// Second brick's size in Y-direction specified as multiple of an 1x1 brick.
+brick2SizeY = 2; // [1:32]
+
 
 /* [Base] */
 

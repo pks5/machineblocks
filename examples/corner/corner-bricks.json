@@ -14,17 +14,14 @@
                 {
                     "name": "Hole Plate 4x4 B1",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "borderSize": 1
+                        "size": [4, 4, 1]
                     }
                 },
 
                 {
                     "name": "Hole Plate 6x6 B1",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 6,
+                        "size": [6, 6, 1],
                         "borderSize": 1
                     }
                 },
@@ -32,8 +29,7 @@
                 {
                     "name": "Hole Plate 8x8 B1",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 8,
+                        "size": [8, 8, 1],
                         "borderSize": 1
                     }
                 },
@@ -41,8 +37,7 @@
                 {
                     "name": "Hole Plate 10x10 B1",
                     "parameters": {
-                        "brickSizeX": 10,
-                        "brickSizeY": 10,
+                        "size": [10, 10, 1],
                         "borderSize": 1
                     }
                 },
@@ -50,8 +45,7 @@
                 {
                     "name": "Hole Plate 6x6 B2",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 6,
+                        "size": [6, 6, 1],
                         "borderSize": 2
                     }
                 },
@@ -59,8 +53,7 @@
                 {
                     "name": "Hole Plate 8x8 B2",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 8,
+                        "size": [8, 8, 1],
                         "borderSize": 2
                     }
                 },
@@ -68,8 +61,7 @@
                 {
                     "name": "Hole Plate 10x10 B2",
                     "parameters": {
-                        "brickSizeX": 10,
-                        "brickSizeY": 10,
+                        "size": [10, 10, 1],
                         "borderSize": 2
                     }
                 },
@@ -77,8 +69,7 @@
                 {
                     "name": "Hole Plate 8x8 B3",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 8,
+                        "size": [8, 8, 1],
                         "borderSize": 3
                     }
                 },
@@ -86,8 +77,7 @@
                 {
                     "name": "Hole Plate 10x10 B3",
                     "parameters": {
-                        "brickSizeX": 10,
-                        "brickSizeY": 10,
+                        "size": [10, 10, 1],
                         "borderSize": 3
                     }
                 },
@@ -95,20 +85,16 @@
                 {
                     "name": "Hole Brick 4x4 B1",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "borderSize": 1,
-                        "baseLayers": 3
+                        "size": [4, 4, 3],
+                        "borderSize": 1
                     }
                 },
 
                 {
                     "name": "Hole Brick 6x6 B1",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 6,
-                        "borderSize": 1,
-                        "baseLayers": 3
+                        "size": [6, 6, 3],
+                        "borderSize": 1
                     }
                 }
             ]
@@ -122,44 +108,44 @@
                 {
                     "name": "Cross Plate 3x3 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 3, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
                         "brick2OffsetX": 1
                     }
                 },
                 {
                     "name": "Cross Plate 5x3 B1",
                     "parameters": {
-                        "brick1SizeX": 5,
+                        "size": [5, 3, 1],
+                        
                         "brick1SizeY": 1,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
                         "brick2OffsetX": 1
                     }
                 },
                 {
                     "name": "Cross Plate 5x5 B1",
                     "parameters": {
-                        "brick1SizeX": 5,
+                        "size": [5, 5, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 5,
                         "brick2OffsetX": 2
                     }
                 },
                 {
                     "name": "Cross Plate 6x6 B2",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 6, 1],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 6,
                         "brick2OffsetX": 2
                     }
                 },
@@ -167,26 +153,24 @@
                 {
                     "name": "Cross Brick 3x3 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 3, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
-                        "brick2OffsetX": 1,
-                        "baseLayers": 3
+                        "brick2OffsetX": 1
                     }
                 },
 
                 {
                     "name": "Cross Brick 5x5 B1",
                     "parameters": {
-                        "brick1SizeX": 5,
+                        "size": [5, 5, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 5,
-                        "brick2OffsetX": 2,
-                        "baseLayers": 3
+                        "brick2OffsetX": 2
                     }
                 },
 
@@ -194,11 +178,11 @@
                 {
                     "name": "Corner Plate 2x2 B1",
                     "parameters": {
-                        "brick1SizeX": 2,
+                        "size": [2, 2, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
                         "brick2OffsetX": 0
                     }
                 },
@@ -206,11 +190,11 @@
                 {
                     "name": "Corner Plate 3x3 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 3, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
                         "brick2OffsetX": 0
                     }
                 },
@@ -218,11 +202,11 @@
                 {
                     "name": "Corner Plate 4x2 B1",
                     "parameters": {
-                        "brick1SizeX": 4,
+                        "size": [4, 2, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
                         "brick2OffsetX": 0
                     }
                 },
@@ -230,11 +214,11 @@
                 {
                     "name": "Corner Plate 6x4 B1",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 4, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 4,
                         "brick2OffsetX": 0
                     }
                 },
@@ -242,11 +226,11 @@
                 {
                     "name": "Corner Plate 4x4 B2",
                     "parameters": {
-                        "brick1SizeX": 4,
+                        "size": [4, 4, 1],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 4,
                         "brick2OffsetX": 0
                     }
                 },
@@ -254,11 +238,11 @@
                 {
                     "name": "Corner Plate 8x6 B2",
                     "parameters": {
-                        "brick1SizeX": 8,
+                        "size": [8, 6, 1],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 6,
                         "brick2OffsetX": 0
                     }
                 },
@@ -266,11 +250,11 @@
                 {
                     "name": "Corner Plate 8x8 B4",
                     "parameters": {
-                        "brick1SizeX": 8,
+                        "size": [8, 8, 1],
+
                         "brick1SizeY": 4,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 4,
-                        "brick2SizeY": 8,
                         "brick2OffsetX": 0
                     }
                 },
@@ -278,115 +262,110 @@
                 {
                     "name": "Corner Tile 2x2 B1",
                     "parameters": {
-                        "brick1SizeX": 2,
+                        "size": [2, 2, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
                         "brick2OffsetX": 0,
-                        "knobs": false
+                        "studs": false
                     }
                 },
 
                 {
                     "name": "Corner Tile 3x3 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 3, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
                         "brick2OffsetX": 0,
-                        "knobs": false
+                        "studs": false
                     }
                 },
 
                 {
                     "name": "Corner Brick 2x2 B1",
                     "parameters": {
-                        "brick1SizeX": 2,
+                        "size": [2, 2, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "Corner Brick 3x3 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 3, 3],
+
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "Corner Brick 4x2 B1",
                     "parameters": {
-                        "brick1SizeX": 4,
+                        "size": [4, 2, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "Corner Brick 6x4 B1",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 4, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 4,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "Corner Brick 4x4 B2",
                     "parameters": {
-                        "brick1SizeX": 4,
+                        "size": [4, 4, 3],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 4,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "Corner Brick 8x6 B2",
                     "parameters": {
-                        "brick1SizeX": 8,
+                        "size": [8, 6, 3],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 0,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 6,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
 
                 {
                     "name": "T Plate 3x2 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 2, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
                         "brick2OffsetX": 1
                     }
                 },
@@ -394,11 +373,11 @@
                 {
                     "name": "T Plate 5x3 B1",
                     "parameters": {
-                        "brick1SizeX": 5,
+                        "size": [5, 3, 1],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
                         "brick2OffsetX": 2
                     }
                 },
@@ -406,22 +385,22 @@
                 {
                     "name": "T Plate 6x4 B2",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 4, 1],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 4,
                         "brick2OffsetX": 0
                     }
                 },
                 {
                     "name": "T Plate 6x6 B2",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 6, 1],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 6,
                         "brick2OffsetX": 0
                     }
                 },
@@ -429,51 +408,48 @@
                 {
                     "name": "T Brick 3x2 B1",
                     "parameters": {
-                        "brick1SizeX": 3,
+                        "size": [3, 2, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 2,
-                        "brick2OffsetX": 1,
-                        "baseLayers": 3
+                        
+                        "brick2OffsetX": 1
                     }
                 },
 
                 {
                     "name": "T Brick 5x3 B1",
                     "parameters": {
-                        "brick1SizeX": 5,
+                        "size": [5, 3, 3],
+
                         "brick1SizeY": 1,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 1,
-                        "brick2SizeY": 3,
-                        "brick2OffsetX": 2,
-                        "baseLayers": 3
+                        "brick2OffsetX": 2
                     }
                 },
 
                 {
                     "name": "T Brick 6x4 B2",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 4, 3],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 1,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 4,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 },
                 {
                     "name": "T Brick 6x6 B2",
                     "parameters": {
-                        "brick1SizeX": 6,
+                        "size": [6, 6, 3],
+
                         "brick1SizeY": 2,
                         "brick1OffsetY": 2,
                         "brick2SizeX": 2,
-                        "brick2SizeY": 6,
-                        "brick2OffsetX": 0,
-                        "baseLayers": 3
+                        "brick2OffsetX": 0
                     }
                 }
             ]

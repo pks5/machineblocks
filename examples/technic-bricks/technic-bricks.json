@@ -176,10 +176,8 @@
                 {
                     "name": "Technic Brick 6x4 Open Center",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
+                        "size": [6, 4, 3],
                         "borderSize": 1,
-                        "baseLayers": 3,
                         "pinHoles": true
                     }
                 }
@@ -193,10 +191,8 @@
                 {
                     "name": "Technic Brick 6x4 Open Center 2",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
+                        "size": [6, 4, 3],
                         "borderSize": 1,
-                        "baseLayers": 3,
                         "pinHoles": true
                     }
                 }

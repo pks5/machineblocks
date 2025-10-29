@@ -865,6 +865,7 @@
                     "name": "Text Tile Rot 3x2",
                     "parameters": {
                         "size": [3, 2, 1],
+                        "studs": false,
                         "text": "Rot",
                         "textSize": 8
                     }
@@ -874,6 +875,7 @@
                     "name": "Text Tile Love 4x2",
                     "parameters": {
                         "size": [4, 2, 1],
+                        "studs": false,
                         "text": "Love",
                         "textSize": 8
                     }
@@ -883,6 +885,7 @@
                     "name": "Text Tile El Cielo Es Azul 18x2",
                     "parameters": {
                         "size": [18, 2, 1],
+                        "studs": false,
                         "text": "¿Por qué el cielo es azul?",
                         "textSize": 8
                     }

@@ -18,12 +18,9 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 6; // [1:32]  
-// Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 4; // [1:32]  
-// Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 3; // [1:24]
+// Brick size
+size = [6, 4, 3]; // [1:32]
+
 // Border Size as multiple of an 1x1 brick.
 borderSize = 1; // [1:8]
 
@@ -153,8 +150,8 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 // Generate the block
 union(){
     machineblock(
-        size=[borderSize, brickSizeY,baseLayers], 
-        offset=[-0.5*(brickSizeX-borderSize),0,0],
+        size=[borderSize, size[1],size[2]], 
+        offset=[-0.5*(size[0]-borderSize),0,0],
         align="ccs",
 
         studs = studs,
@@ -173,7 +170,7 @@ grilleDepth = grilleDepth,
 grilleCount = grilleCount,
 
         holeYCentered = pinHolesCentered,
-        holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
+        holeY = pinHoles ? [false, [0,0,size[1] - 1,0]] : false,
         
 
         baseColor = baseColor,
@@ -227,8 +224,8 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
     );  
 
     machineblock(
-        size=[brickSizeX-2,borderSize,baseLayers],
-        offset=[0,0.5*(brickSizeY-borderSize),0],
+        size=[size[0]-2,borderSize,size[2]],
+        offset=[0,0.5*(size[1]-borderSize),0],
         align="ccs",
 
         studs = studs,
@@ -248,7 +245,7 @@ grilleDepth = grilleDepth,
 grilleCount = grilleCount,
 
         holeXCentered = pinHolesCentered,
-        holeX = pinHoles ? [false, [0,0,brickSizeX - 1,0]] : false,
+        holeX = pinHoles ? [false, [0,0,size[0] - 1,0]] : false,
         
 
         baseColor = baseColor,
@@ -302,8 +299,8 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
     );
 
     machineblock(
-        size=[borderSize, brickSizeY,baseLayers], 
-        offset=[0.5*(brickSizeX-borderSize),0,0],
+        size=[borderSize, size[1],size[2]], 
+        offset=[0.5*(size[0]-borderSize),0,0],
         align="ccs",
 
         studs = studs,
@@ -322,7 +319,7 @@ grilleDepth = grilleDepth,
 grilleCount = grilleCount,
 
         holeYCentered = pinHolesCentered,
-        holeY = pinHoles ? [false, [0,0,brickSizeY - 1,0]] : false,
+        holeY = pinHoles ? [false, [0,0,size[1] - 1,0]] : false,
         
         baseColor = baseColor,
 surfacePattern = surfacePattern,
@@ -375,8 +372,8 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
     );    
 
     machineblock(
-        size=[brickSizeX-2,borderSize,baseLayers], 
-        offset=[0,-0.5*(brickSizeY-borderSize),0],
+        size=[size[0]-2,borderSize,size[2]], 
+        offset=[0,-0.5*(size[1]-borderSize),0],
         align="ccs",
         
         studs = studs,
@@ -396,7 +393,7 @@ grilleDepth = grilleDepth,
 grilleCount = grilleCount,
 
         holeXCentered = pinHolesCentered,
-        holeX = pinHoles ? [false, [0,0,brickSizeX - 1,0]] : false,
+        holeX = pinHoles ? [false, [0,0,size[0] - 1,0]] : false,
         
         baseColor = baseColor,
 surfacePattern = surfacePattern,

@@ -14,16 +14,13 @@
                 {
                     "name": "Arch 2x1",
                     "parameters": {
-                        "brickSizeX" : 2,
-                        "brickSizeY" : 1
+                        "size": [2, 1, 3]
                     }
                 },
                 {
                     "name": "Arch 2x1 Inverted",
                     "parameters": {
-                        "brickSizeX" : 2,
-                        "brickSizeY" : 1,
-                        "brickHeight" : 3,
+                        "size": [2, 1, 3],
                         "column1SizeX" : 1,
                         "deckHeight" : 1,
                         "secondColumn" : false,  
@@ -34,17 +31,14 @@
                 {
                     "name": "Arch 3x1",
                     "parameters": {
-                        "brickSizeX" : 3,
-                        "brickSizeY" : 1,
+                        "size": [3, 1, 3],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 3x1 Inverted",
                     "parameters": {
-                        "brickSizeX" : 3,
-                        "brickSizeY" : 1,
-                        "brickHeight" : 3,
+                        "size": [3, 1, 3],
                         "column1SizeX" : 1,
                         "deckHeight" : 1,
                         "secondColumn" : false,  
@@ -55,8 +49,7 @@
                 {
                     "name": "Arch 3x1x2 Inverted",
                     "parameters": {
-                        "brickSizeX" : 3,
-                        "brickSizeY" : 1,
+                        "size": [3, 1, 3],
                         "brickHeight" : 6,
                         "inverted" : true
                     }
@@ -64,52 +57,42 @@
                 {
                     "name": "Arch 4x1",
                     "parameters": {
-                        "brickSizeX" : 4,
-                        "brickSizeY" : 1,
+                        "size": [4, 1, 3],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 4x1x2",
                     "parameters": {
-                        "brickSizeX" : 4,
-                        "brickSizeY" : 1,
-                        "brickHeight": 6,
+                        "size": [4, 1, 6],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 6x1",
                     "parameters": {
-                        "brickSizeX" : 6,
-                        "brickSizeY" : 1,
+                        "size": [6, 1, 3],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 6x1x2",
                     "parameters": {
-                        "brickSizeX" : 6,
-                        "brickSizeY" : 1,
-                        "brickHeight": 6,
+                        "size": [6, 1, 6],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 8x1x2",
                     "parameters": {
-                        "brickSizeX" : 8,
-                        "brickSizeY" : 1,
-                        "brickHeight": 6,
+                        "size": [8, 1, 6],
                         "secondColumn" : true
                     }
                 },
                 {
                     "name": "Arch 8x2x3",
                     "parameters": {
-                        "brickSizeX" : 8,
-                        "brickSizeY" : 2,
-                        "brickHeight": 9,
+                        "size": [8, 2, 9],
                         "column1SizeX" : 2,
                         "column2SizeX" : 2,
                         "deckHeight": 2,

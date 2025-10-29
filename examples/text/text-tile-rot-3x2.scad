@@ -18,12 +18,8 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 4; // [1:32]  
-// Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
-// Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 1; // [1:24]
+// Brick size
+size = [3, 2, 1]; // [1:32]
 
 /* [Base] */
 
@@ -49,7 +45,7 @@ grilleCount = 5; // [2:10]
 
 
 // Whether to draw studs.
-studs = true;
+studs = false;
 // Whether studs should be centered in X direction.
 studCenteredX = false;
 // Whether studs should be centered in Y direction.
@@ -162,7 +158,7 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 // Generate the block
 machineblock(
-    size = [brickSizeX, brickSizeY, baseLayers],
+    size = size,
     
     baseCutoutType = baseCutoutType,
 pillars = pillars,

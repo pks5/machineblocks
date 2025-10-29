@@ -18,12 +18,8 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 6;
-// Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 1; // [1:32]  
-// Height of brick specified as number of layers. Each layer has the height of one plate.
-brickHeight = 3; // [1:24]
+// Brick size
+size = [6, 1, 3]; // [1:32]
 
 // Size of first pillar in X-direction specified as multiple of an 1x1 brick.
 column1SizeX = 1;
@@ -153,15 +149,15 @@ roundingResolution_ovr = 64; // [16:1:512]
 
 bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
-tunnelWidth = (secondColumn ? 1 : 2)*(brickSizeX - column1SizeX - (secondColumn ? column2SizeX : 0)) * unitGrid[0] * unitMbu;
-tunnelHeight = (brickHeight - deckHeight) * unitGrid[1] * unitMbu;
+tunnelWidth = (secondColumn ? 1 : 2)*(size[0] - column1SizeX - (secondColumn ? column2SizeX : 0)) * unitGrid[0] * unitMbu;
+tunnelHeight = (size[2] - deckHeight) * unitGrid[1] * unitMbu;
 
-brickTotalSizeY = (brickSizeY * unitGrid[0] * unitMbu + 2 * bSideAdjustment);
+brickTotalSizeY = (size[1] * unitGrid[0] * unitMbu + 2 * bSideAdjustment);
 
 difference(){
     // First Column
     machineblock(
-        size = [inverted ? brickSizeX : column1SizeX, brickSizeY, brickHeight],
+        size = [inverted ? size[0] : column1SizeX, size[1], size[2]],
         
         baseCutoutType = baseCutoutType,
 pillars = pillars,
@@ -231,8 +227,8 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
         if(!inverted){
             if(secondColumn){
                 machineblock(
-                    size = [column2SizeX, brickSizeY, brickHeight],
-                    offset = [brickSizeX - column2SizeX, 0, 0],
+                    size = [column2SizeX, size[1], size[2]],
+                    offset = [size[0] - column2SizeX, 0, 0],
                     
                     studs = studs,
 studCenteredX = studCenteredX,
@@ -304,7 +300,7 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
             difference(){
                 // Tunnel
                 machineblock(
-                    size = [brickSizeX - column1SizeX - (secondColumn ? column2SizeX : 0), brickSizeY, brickHeight],
+                    size = [size[0] - column1SizeX - (secondColumn ? column2SizeX : 0), size[1], size[2]],
                     offset = [column1SizeX,0,0],
                     baseCutoutType = "none",
                     
@@ -377,7 +373,7 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
     }
 
     if(inverted){
-        translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, brickHeight * unitGrid[1] * unitMbu])
+        translate([0.5*tunnelWidth + column1SizeX * unitGrid[0] * unitMbu, 0.5*(brickTotalSizeY) - bSideAdjustment, size[2] * unitGrid[1] * unitMbu])
                     rotate([90,0,0])
                         scale([1, 2* tunnelHeight / tunnelWidth, 1])
                             cylinder(h = 1.1*brickTotalSizeY, r = 0.5*tunnelWidth, center=true, $fn=roundingResolution);

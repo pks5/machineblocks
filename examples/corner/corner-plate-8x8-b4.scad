@@ -18,24 +18,20 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Brick 1 Grid Size in X-direction as multiple of an 1x1 brick.
-brick1SizeX = 8;  // [1:32]
+// Brick size
+size = [8, 8, 1]; // [1:32]
+
+
 // Brick 1 Grid Size in Y-direction as multiple of an 1x1 brick.
 brick1SizeY = 4;  // [1:32]
+// Brick 2 Grid Size in X-direction as multiple of an 1x1 brick.
+brick2SizeX = 4;  // [1:32]
 
 // Brick 1 Offset in Y-direction as multiple of an 1x1 brick.
 brick1OffsetY = 0; // [0:31]
-
-// Brick 2 Grid Size in X-direction as multiple of an 1x1 brick.
-brick2SizeX = 4;  // [1:32]
-// Brick 2 Grid Size in Y-direction as multiple of an 1x1 brick.
-brick2SizeY = 8;  // [1:32]
-
 // Brick 2 Offset in X-direction as multiple of an 1x1 brick.
 brick2OffsetX = 0; // [0:31]
 
-//Number of layers
-baseLayers = 1; // [1:48]
 
 /* [Base] */
 
@@ -156,8 +152,8 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 // Generate the block
 union(){
     machineblock(
-        size = [brick1SizeX, brick1SizeY,baseLayers],
-        offset = [0, brick1OffsetY - 0.5*(brick2SizeY-brick1SizeY), 0],
+        size = [size[0], brick1SizeY,size[2]],
+        offset = [0, brick1OffsetY - 0.5*(size[1]-brick1SizeY), 0],
         align="ccs",
         
         baseWallGapsX = [[brick2OffsetX, 2, brick2SizeX]],
@@ -228,8 +224,8 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
     );
 
     machineblock(
-        size = [brick2SizeX, brick2SizeY,baseLayers],
-        offset = [brick2OffsetX - 0.5*(brick1SizeX-brick2SizeX), 0, 0],
+        size = [brick2SizeX, size[1],size[2]],
+        offset = [brick2OffsetX - 0.5*(size[0]-brick2SizeX), 0, 0],
         align="ccs",
 
         baseWallGapsY = [[brick1OffsetY, 2, brick1SizeY]],
