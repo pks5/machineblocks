@@ -18,12 +18,8 @@ include <../../config/config.scad>;
 
 /* [Size] */
 
-// Both bricks' size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 1; // [1:32]
-// First brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick1SizeY = 2; // [1:32]
-// First brick's height specified as number of layers. Each layer has the height of one plate.
-brick1BaseLayers = 1; // [1:24]
+// Brick size
+size = [1, 2, 1]; // [1:32]
 
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick2SizeY = 2; // [1:32]
@@ -76,7 +72,7 @@ studCenteredY_2 = false;
 // Type of the studs
 studType_2 = "solid"; // [solid, hollow]
 // Stud Padding
-studPadding_2 = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
+studPadding_2 = [0, 0, 0, 0]; // [0:0.1:128]
 
 /* [Render] */
 
@@ -169,7 +165,7 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 
 machineblock(
-      size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
+      size = size,
       
       baseCutoutType = baseCutoutType,
 pillars = pillars,
@@ -241,7 +237,7 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
 ){
 
   machineblock(
-        size = [ brickSizeX, brick2SizeY, 0.5 ],
+        size = [ size[0], brick2SizeY, 0.5 ],
         offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
         rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
         
@@ -255,7 +251,7 @@ studType = studType_2,
 studPadding = studPadding_2,
         
         connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-        connectorHeight = brick1BaseLayers * unitGrid[1],
+        connectorHeight = size[2] * unitGrid[1],
         
         baseColor = baseColor,
 surfacePattern = surfacePattern,

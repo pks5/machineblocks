@@ -29,6 +29,7 @@ brick2SizeX = 4;
 brick2HolesZ = true;
 
 gridSizeY = 2;
+
 middleSizeX = 1;
 middleLayers = 2;
 

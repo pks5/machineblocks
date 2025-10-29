@@ -14,57 +14,58 @@
                 {
                     "name": "Bracket 1x1 - 1x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 1
+                        "size": [1, 1, 1],
+                        "brick2SizeY": 1,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 1x1 - 1x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "size": [1, 1, 1],
+
+                        "brick2SizeY": 2,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 1x2 - 1x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 2,
-                        "brick2SizeY": 2
+                        "size": [1, 2, 1],
+                        "brick2SizeY": 2,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 2x1 - 2x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 1
+                        "size": [2, 1, 1],
+                        "brick2SizeY": 1,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 2x1 - 2x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "size": [2, 1, 1],
+                        "brick2SizeY": 2,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 6x1 - 6x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2
+                        "size": [6, 1, 1],
+                        "brick2SizeY": 2,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 },
                 {
                     "name": "Bracket 6x2 - 6x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brick1SizeY": 2,
-                        "brick2SizeY": 1
+                        "size": [6, 2, 1],
+                        "brick2SizeY": 1,
+                        "studPadding_2": [0, 0, 0, 0]
                     }
                 }
             ]

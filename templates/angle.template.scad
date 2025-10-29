@@ -16,12 +16,8 @@
 
 /* [Size] */
 
-// Both bricks' size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 3; // [1:32]
-// First brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick1SizeY = 2; // [1:32]
-// First brick's height specified as number of layers. Each layer has the height of one plate.
-brick1BaseLayers = 1; // [1:24]
+// Brick size
+size = [3, 2, 1]; // [1:32]
 
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick2SizeY = 2; // [1:32]
@@ -59,7 +55,7 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 
 machineblock(
-      size = [ brickSizeX, brick1SizeY,brick1BaseLayers ],
+      size = size,
       
       /*{BASE_PARAMETERS}*/
 
@@ -77,7 +73,7 @@ machineblock(
 ){
 
   machineblock(
-        size = [ brickSizeX, brick2SizeY, 0.5 ],
+        size = [ size[0], brick2SizeY, 0.5 ],
         offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
         rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
         
@@ -87,7 +83,7 @@ machineblock(
         /*{STUD_PARAMETERS_2}*/
         
         connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-        connectorHeight = brick1BaseLayers * unitGrid[1],
+        connectorHeight = size[2] * unitGrid[1],
         
         /*{STYLE_PARAMETERS}*/
 
