@@ -22,6 +22,8 @@ size = [3, 2, 1]; // [1:32]
 // Second brick's size in Y-direction specified as multiple of an 1x1 brick.
 brick2SizeY = 2; // [1:32]
 
+// Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
+assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Base] */
 
@@ -35,11 +37,6 @@ baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 /*{STUD_VARIABLES_1}*/
 
 /*{STUD_VARIABLES_2}*/
-
-/* [Render] */
-
-// Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
-assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Style] */
 
@@ -55,42 +52,42 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 
 machineblock(
-      size = size,
-      
-      /*{BASE_PARAMETERS}*/
+    size = size,
+    
+    /*{BASE_PARAMETERS}*/
 
-      /*{STUD_PARAMETERS_1}*/
-      
-      connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
-      connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
+    /*{STUD_PARAMETERS_1}*/
+    
+    connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
+    connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
 
-      /*{STYLE_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
 
-      baseSideAdjustment =
-          [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
-      
-      /*{PRESET_PARAMETERS}*/
+    baseSideAdjustment =
+        [ bSideAdjustment, bSideAdjustment, assemblyMode == "merged" ? 0 : bSideAdjustment, bSideAdjustment ],
+    
+    /*{PRESET_PARAMETERS}*/
 ){
 
   machineblock(
-        size = [ size[0], brick2SizeY, 0.5 ],
-        offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
-        rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
-        
-        baseCutoutType = "none",
-        baseRoundingRadius=[0,0,baseRoundingRadiusZ],
+      size = [ size[0], brick2SizeY, 0.5 ],
+      offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
+      rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
+      
+      baseCutoutType = "none",
+      baseRoundingRadius=[0,0,baseRoundingRadiusZ],
 
-        /*{STUD_PARAMETERS_2}*/
-        
-        connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
-        connectorHeight = size[2] * unitGrid[1],
-        
-        /*{STYLE_PARAMETERS}*/
+      /*{STUD_PARAMETERS_2}*/
+      
+      connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
+      connectorHeight = size[2] * unitGrid[1],
+      
+      /*{STYLE_PARAMETERS}*/
 
-        baseSideAdjustment =
-          [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
+      baseSideAdjustment =
+        [ bSideAdjustment, bSideAdjustment, 0, bSideAdjustment ],
 
-        /*{PRESET_PARAMETERS}*/
+      /*{PRESET_PARAMETERS}*/
   );
 }
 
