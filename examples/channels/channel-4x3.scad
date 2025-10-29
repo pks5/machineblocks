@@ -21,12 +21,8 @@ viewMode = "print"; // [print, assembled, cover]
 
 /* [Size] */
 
-// Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 4; // [1:32] 
-// Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 3; // [1:32] 
-// Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 5; // [1:24]
+// Brick size
+size = [4, 3, 5]; // [1:32]
 
 /* [Base] */
 
@@ -160,7 +156,7 @@ roundingResolution_ovr = 64; // [16:1:512]
 bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 machineblock(
-    size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
+    size=[size[0], size[1],size[2] - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
     baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
@@ -232,9 +228,9 @@ pillarRoundingResolution=overrideConfig ? roundingResolution_ovr : roundingResol
 );
 
 if(lid){
-    translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
+    translate(viewMode != "print" ? [0, 0, ((size[2] - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [size[0] > size[1] ? 0 : (size[0] + 0.5) * 8.0, size[0] > size[1] ? -(size[1] + 0.5) * 8.0 : 0, 0])
         machineblock(
-            size=[boxSizeX, boxSizeY, lidLayers],
+            size=[size[0], size[1], lidLayers],
             
             pillars = lidPillars,
             pitWallGaps = basePitWallGaps,
