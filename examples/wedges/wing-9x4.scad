@@ -19,7 +19,7 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size
-size = [4, 2, 3]; // [1:32]
+size = [9, 4, 1]; // [1:32]
 
 /* [Base] */
 

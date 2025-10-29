@@ -14,8 +14,7 @@
                 {
                     "name": "Technic Brick 1x1 with Axle Hole",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 3],
                         "holesY" : true,
                         "holeYType": "axle",
                         "holeYCentered": false,
@@ -25,8 +24,7 @@
                 {
                     "name": "Technic Brick 1x1 with Hole",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 3],
                         "holesY" : true,
                         "holeYCentered": false,
                         "studType": "hollow"
@@ -36,8 +34,7 @@
                 {
                     "name": "Technic Brick 1x2",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
+                        "size": [1, 2, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -46,8 +43,7 @@
                 {
                     "name": "Technic Brick 1x2 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
+                        "size": [1, 2, 3],
                         "holesY" : true,
                         "holeYCentered": false,
                         "studType": "hollow"
@@ -57,8 +53,7 @@
                 {
                     "name": "Technic Brick 1x2 with Axle Hole",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 2,
+                        "size": [1, 2, 3],
                         "holesY" : true,
                         "holeYType": "axle",
                         "studType": "hollow"
@@ -68,8 +63,7 @@
                 {
                     "name": "Technic Brick 1x3 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 3,
+                        "size": [1, 3, 3],
                         "holesY" : true,
                         "holeYCentered": false,
                         "studType": "hollow"
@@ -79,8 +73,7 @@
                 {
                     "name": "Technic Brick 1x4 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 4,
+                        "size": [1, 4, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -89,8 +82,7 @@
                 {
                     "name": "Technic Brick 1x6 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 6,
+                        "size": [1, 6, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -99,8 +91,7 @@
                 {
                     "name": "Technic Brick 1x8 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 8,
+                        "size": [1, 8, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -109,8 +100,7 @@
                 {
                     "name": "Technic Brick 1x10 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 10,
+                        "size": [1, 10, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -119,8 +109,7 @@
                 {
                     "name": "Technic Brick 1x12 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 12,
+                        "size": [1, 12, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -129,8 +118,7 @@
                 {
                     "name": "Technic Brick 1x14 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 14,
+                        "size": [1, 14, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -139,8 +127,7 @@
                 {
                     "name": "Technic Brick 1x16 with Holes",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 16,
+                        "size": [1, 16, 3],
                         "holesY" : true,
                         "studType": "hollow"
                     }
@@ -150,8 +137,7 @@
                 {
                     "name": "Technic Brick 2x4 with 3 Axle Holes",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
+                        "size": [2, 4, 3],
                         "holesZ" : true,
                         "holeZType": "axle"
                     }
@@ -160,8 +146,7 @@
                 {
                     "name": "Technic Brick 2x4 with Holes on All Sides",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
+                        "size": [2, 4, 3],
                         "holesX" : true,
                         "holesY" : true,
                         "holesZ" : true,
@@ -172,8 +157,7 @@
                 {
                     "name": "Technic Brick 2x4 with Holes on All Sides Solid Studs",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 4,
+                        "size": [2, 4, 3],
                         "holesX" : true,
                         "holesY" : true,
                         "holesZ" : true

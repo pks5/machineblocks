@@ -14,58 +14,50 @@
                 {
                     "name": "Brick 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1
+                        "size": [1, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 2x1",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 1
+                        "size": [2, 1, 3]
                     }
                 },
                 
                 {
                     "name": "Brick 3x1",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1
+                       "size": [3, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 4x1",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1
+                        "size": [4, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 6x1",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 1
+                        "size": [6, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 8x1",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 1
+                        "size": [8, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 12x1",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 1
+                        "size": [12, 1, 3]
                     }
                 },
                 {
                     "name": "Brick 16x1",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 1
+                        "size": [16, 1, 3]
                     }
                 },
 
@@ -74,50 +66,43 @@
                 {
                     "name": "Brick 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2
+                        "size": [2, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 3x2",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2
+                        "size": [3, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 4x2",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2
+                        "size": [4, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 6x2",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2
+                        "size": [6, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 8x2",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 2
+                        "size": [8, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 12x2",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 2
+                        "size": [12, 2, 3]
                     }
                 },
                 {
                     "name": "Brick 16x2",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 2
+                        "size": [16, 2, 3]
                     }
                 },
 
@@ -129,97 +114,73 @@
                 {
                     "name": "Brick 4x4",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 4,
-                        "baseLayers": 3
+                        "size": [4, 4, 3]
                     }
                 },
                 {
                     "name": "Brick 6x4",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 4,
-                        "baseLayers": 3
+                        "size": [6, 4, 3]
                     }
                 },
                 {
                     "name": "Brick 8x4",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 4,
-                        "baseLayers": 3
+                        "size": [8, 4, 3]
                     }
                 },
                 {
                     "name": "Brick 12x4",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 4,
-                        "baseLayers": 3
+                        "size": [12, 4, 3]
                     }
                 },
                 {
                     "name": "Brick 16x4",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 4,
-                        "baseLayers": 3
+                        "size": [16, 4, 3]
                     }
                 },
                 {
                     "name": "Brick 6x6",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 6,
-                        "baseLayers": 3
+                        "size": [6, 6, 3]
                     }
                 },
                 {
                     "name": "Brick 8x6",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 6,
-                        "baseLayers": 3
+                        "size": [8, 6, 3]
                     }
                 },
                 {
                     "name": "Brick 12x6",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 6,
-                        "baseLayers": 3
+                        "size": [12, 6, 3]
                     }
                 },
                 {
                     "name": "Brick 16x6",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 6,
-                        "baseLayers": 3
+                        "size": [16, 6, 3]
                     }
                 },
                 {
                     "name": "Brick 8x8",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 8,
-                        "baseLayers": 3
+                        "size": [8, 8, 3]
                     }
                 },
                 {
                     "name": "Brick 12x8",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 8,
-                        "baseLayers": 3
+                        "size": [12, 8, 3]
                     }
                 },
                 {
                     "name": "Brick 16x8",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 8,
-                        "baseLayers": 3
+                        "size": [16, 8, 3]
                     }
                 },
 
@@ -229,66 +190,50 @@
                 {
                     "name": "Brick 1x1x4",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
-                        "baseLayers": 12
+                        "size": [1, 1, 12]
                     }
                 },
                 {
                     "name": "Brick 2x1x4",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 1,
-                        "baseLayers": 12
+                        "size": [2, 1, 12]
                     }
                 },
                 
                 {
                     "name": "Brick 3x1x4",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "baseLayers": 12
+                        "size": [3, 1, 12]
                     }
                 },
                 {
                     "name": "Brick 4x1x5",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1,
-                        "baseLayers": 15
+                        "size": [4, 1, 15]
                     }
                 },
                 {
                     "name": "Brick 6x1x5",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 1,
-                        "baseLayers": 15
+                        "size": [6, 1, 15]
                     }
                 },
                 {
                     "name": "Brick 8x1x5",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 1,
-                        "baseLayers": 15
+                        "size": [8, 1, 15]
                     }
                 },
                 {
                     "name": "Brick 12x1x6",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 1,
-                        "baseLayers": 18
+                        "size": [12, 1, 18]
                     }
                 },
                 {
                     "name": "Brick 16x1x6",
                     "parameters": {
-                        "brickSizeX": 16,
-                        "brickSizeY": 1,
-                        "baseLayers": 18
+                        "size": [16, 1, 18]
                     }
                 }
             ]
