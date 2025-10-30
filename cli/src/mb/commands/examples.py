@@ -139,8 +139,7 @@ base_params = """baseCutoutType = baseCutoutType,
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,"""
 
-style_variables = """
-// Color of the brick
+style_variables = """// Color of the brick
 baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 surfacePatternScale = 0.2; // [0:0.001:1]
 surfacePattern = "none"; // [none:None, ../pattern/honeycombs.svg:Honeycombs, ../pattern/squares.svg:Squares, ../pattern/squares-diagonal.svg:Squares Diagonal, ../pattern/diamonds.svg:Diamonds, ../pattern/textile.svg:Textile, ../pattern/card-background.svg:Card Background, ../pattern/dots.svg:Dots, ../pattern/circuit-board.svg:Circuit Board]
@@ -174,6 +173,34 @@ def stud_params(suffix: str):
     studCenteredY = studCenteredY{suffix},
     studType = studType{suffix},
     studPadding = studPadding{suffix},"""
+
+def text_variables(suffix: str):
+    return f"""// Text to write on the brick.
+text{suffix} = "Z";
+// Side of the brick on which text is written.
+textSide{suffix} = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
+// Letter Depth
+textDepth{suffix} = 1.2; // [-3.2:0.2:3.2]
+// Text Size
+textSize{suffix} = 9; // [1:32]
+// Font
+textFont{suffix} = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+// Text Style
+textStyle{suffix} = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
+// Spacing of the letters
+textSpacing{suffix} = 1; // [0.1:0.1:4]
+// Color of the text
+textColor{suffix} = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+"""
+
+def text_params(suffix: str):
+    return f"""textSide = textSide{suffix},
+    textSize = textSize{suffix},
+    text = text{suffix},
+    textDepth = textDepth{suffix},
+    textSpacing = textSpacing{suffix},
+    textFont = str(textFont{suffix}, (textStyle{suffix} == "" ? "" : str(":style=", textStyle{suffix}))),
+    textColor = textColor{suffix},"""
 
 def process_examples_file(example_file_path: str):
     if not os.path.exists(example_file_path):
@@ -211,11 +238,15 @@ def process_examples_file(example_file_path: str):
 
         for brick in example['bricks']:
             file_name = brick['name'].lower().replace(' ', '-') + '.scad'
+            
             scad = brick_template.replace('{URL}', url)
             scad = scad.replace('{BRICK_NAME}', brick['name'])
+            
             scad = scad.replace('/*{OVERRIDE_CONFIG_VARIABLES}*/', override_config_variables)
+            
             scad = scad.replace('/*{PRESET_PARAMETERS}*/', preset_params)
             scad = scad.replace('/*{HIDDEN_PARAMETERS}*/', hidden_params)
+            
             scad = scad.replace('/*{BASE_VARIABLES}*/', base_variables)
             scad = scad.replace('/*{BASE_PARAMETERS}*/', base_params)
             scad = scad.replace('/*{STYLE_VARIABLES}*/', style_variables)
@@ -226,6 +257,11 @@ def process_examples_file(example_file_path: str):
             scad = scad.replace('/*{STUD_PARAMETERS_1}*/', stud_params('_1'))
             scad = scad.replace('/*{STUD_VARIABLES_2}*/', stud_variables('_2'))
             scad = scad.replace('/*{STUD_PARAMETERS_2}*/', stud_params('_2'))
+            scad = scad.replace('/*{STUD_VARIABLES}*/', stud_variables(''))
+            scad = scad.replace('/*{STUD_PARAMETERS}*/', stud_params(''))
+            scad = scad.replace('/*{TEXT_VARIABLES}*/', text_variables(''))
+            scad = scad.replace('/*{TEXT_PARAMETERS}*/', text_params(''))
+
             scad = scad.replace('/*{IMPORTS}*/', "use <" + d['config']['lib'] + "/block.scad>;\ninclude <" + d['config']['presets'] + ">;\n")
 
             for param in brick['parameters']:
@@ -235,7 +271,8 @@ def process_examples_file(example_file_path: str):
                         print('Replaced string param ' + param + ' with value: "' + val + '"')
                     except UnicodeEncodeError:
                         print('Replaced string param ' + param + ' with unicode value')
-                        param_value = '"' + val + '"'
+                    
+                    param_value = '"' + val + '"'
                     #scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]*\"\s*;', param + ' = "' + val + '";', scad)
                 elif isinstance(val, bool):
                     print('Replaced bool param ' + param + ' with value: ' + str(val).lower())

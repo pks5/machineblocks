@@ -19,7 +19,7 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size
-size = [3, 2, 1]; // [1:32]
+size = [3, 2, 1]; // [1:0.1:32]
 
 /* [Base] */
 
@@ -113,8 +113,27 @@ pitWallThickness = 0.333; // [0:0.001:128]
 
 slope = [0, 0, 0, 0]; // [-128:0.1:128]
 
-/* [Style] */
+/* [Text] */
 
+// Text to write on the brick.
+text = "Z";
+// Side of the brick on which text is written.
+textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
+// Letter Depth
+textDepth = 1.2; // [-3.2:0.2:3.2]
+// Text Size
+textSize = 9; // [1:32]
+// Font
+textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+// Text Style
+textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
+// Spacing of the letters
+textSpacing = 1; // [0.1:0.1:4]
+// Color of the text
+textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
+
+/* [Style] */
 
 // Color of the brick
 baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
@@ -236,6 +255,14 @@ machineblock(
     pitWallThickness = pitWallThickness,
     
     slope = slope, 
+
+    textSide = textSide,
+    textSize = textSize,
+    text = text,
+    textDepth = textDepth,
+    textSpacing = textSpacing,
+    textFont = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle))),
+    textColor = textColor,
 
     baseColor = baseColor,
     surfacePattern = surfacePattern,

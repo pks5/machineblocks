@@ -19,9 +19,16 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size
-size = [2, 2, 1]; // [1:32]
+size = [2, 2, 1]; // [1:0.1:32]
 
 /* [Base] */
+
+// Rounding Radius X
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
+// Rounding Radius Y
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
+// Rounding Radius Z
+baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
 
 
 // Type of cut-out on the underside.
@@ -55,10 +62,61 @@ studType = "solid"; // [solid, hollow]
 // Stud Padding
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
+/* [Bevel] */
+
+// Bevel X and Y for the corner 0,0
+bevel0 = [0, 0]; // [0:0.1:128]
+// Bevel X and Y for the corner 0,1
+bevel1 = [0, 0]; // [0:0.1:128]
+// Bevel X and Y for the corner 1,1
+bevel2 = [0, 0]; // [0:0.1:128]
+// Bevel X and Y for the corner 1,0
+bevel3 = [0, 0]; // [0:0.1:128]
+
+/* [Holes] */
+
+// Whether brick should have Technic holes along X-axis.
+holesX = false;
+// Type of X Holes.
+holeXType = "pin"; // [pin, axle]
+// Whether X Holes should be centered
+holeXCentered = true;
+// Hole X Grid Offset Z
+holeXGridOffsetZ = 3.5; // [0:0.1:128]
+// Whether brick should have Technic holes along Y-axis.
+holesY = false;
+// Type of Y Holes.
+holeYType = "pin"; // [pin, axle]
+// Whether Y Holes should be centered
+holeYCentered = true;
+// Hole Y Grid Offset Z
+holeYGridOffsetZ = 3.5; // [0:0.1:128]
+// Whether brick should have Technic holes along Z-axis.
+holesZ = false;
+// Type of Z Holes.
+holeZType = "pin";
+// Whether Z Holes should be centered on X direction
+holeZCenteredX = true;
+// Whether Z Holes should be centered on Y direction
+holeZCenteredY = true;
+
+/* [Pit] */
+
+// Whether brick should have a pit
+pit = false;
+// Whether knobs should be drawn inside pit
+pitKnobs = false;
+// Pit wall thickness as multiple of one brick side length
+pitWallThickness = 0.333; // [0:0.001:128]
+
+/* [Slope] */
+
+slope = [0, 0, 0, 0]; // [-128:0.1:128]
+
 /* [Text] */
 
 // Text to write on the brick.
-text = false;
+text = "";
 // Side of the brick on which text is written.
 textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 // Letter Depth
@@ -66,7 +124,7 @@ textDepth = 1.2; // [-3.2:0.2:3.2]
 // Text Size
 textSize = 8; // [1:32]
 // Font
-textFont = false; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+textFont = "Font Awesome 6 Free Solid"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
 // Text Style
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
 // Spacing of the letters
@@ -74,8 +132,8 @@ textSpacing = 1; // [0.1:0.1:4]
 // Color of the text
 textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
-/* [Style] */
 
+/* [Style] */
 
 // Color of the brick
 baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
@@ -160,6 +218,8 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 machineblock(
     size = size,
     
+    baseRoundingRadius=[baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ],
+    
     baseCutoutType = baseCutoutType,
     pillars = pillars,
     baseReliefCut = baseReliefCut,
@@ -169,18 +229,39 @@ machineblock(
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
+    bevel = [bevel0, bevel1, bevel2, bevel3],
+
     studs = studs,
     studCenteredX = studCenteredX,
     studCenteredY = studCenteredY,
     studType = studType,
     studPadding = studPadding,
     
+    holeX = holesX,
+    holeXType = holeXType,
+    holeXCentered = holeXCentered,
+    holeXGridOffsetZ = holeXGridOffsetZ,
+    holeY = holesY,
+    holeYType = holeYType,
+    holeYCentered = holeYCentered,
+    holeYGridOffsetZ = holeYGridOffsetZ,
+    holeZ = holesZ,
+    holeZType = holeZType,
+    holeZCenteredX = holeZCenteredX,
+    holeZCenteredY = holeZCenteredY,
+    
+    pit = pit,
+    pitKnobs = pitKnobs,
+    pitWallThickness = pitWallThickness,
+    
+    slope = slope, 
+
     textSide = textSide,
     textSize = textSize,
-    text=text,
-    textDepth=textDepth,
+    text = text,
+    textDepth = textDepth,
     textSpacing = textSpacing,
-    textFont=str(textFont, (textStyle == "" ? "" : str(":style=", textStyle))),
+    textFont = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle))),
     textColor = textColor,
 
     baseColor = baseColor,

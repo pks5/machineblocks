@@ -17,7 +17,7 @@
 /* [Size] */
 
 // Brick size
-size = [4, 2, 3]; // [1:32]
+size = [4, 2, 3]; // [1:0.1:32]
 
 /* [Base] */
 
@@ -85,6 +85,10 @@ pitWallThickness = 0.333; // [0:0.001:128]
 
 slope = [0, 0, 0, 0]; // [-128:0.1:128]
 
+/* [Text] */
+
+/*{TEXT_VARIABLES}*/
+
 /* [Style] */
 
 /*{STYLE_VARIABLES}*/
@@ -125,6 +129,8 @@ machineblock(
     pitWallThickness = pitWallThickness,
     
     slope = slope, 
+
+    /*{TEXT_PARAMETERS}*/
 
     /*{STYLE_PARAMETERS}*/
 

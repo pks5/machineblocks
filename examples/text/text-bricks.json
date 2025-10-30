@@ -7,7 +7,7 @@
     "name": "Text Bricks",
     "examples": [
         {
-            "template": "../../templates/text.template.scad",
+            "template": "../../templates/brick.template.scad",
             "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/text",
             "bricks": [
