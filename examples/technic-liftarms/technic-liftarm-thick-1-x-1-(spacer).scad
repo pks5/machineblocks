@@ -121,7 +121,7 @@ holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"
 bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 machineblock(
-    baseRoundingRadius = [1.25,0,0],
+    baseRoundingRadius = [1.15625,0,0],
     baseCutoutRoundingRadius = 0,
     baseCutoutType = "none",
     
@@ -137,7 +137,7 @@ machineblock(
     studIcon = studIcon,
 
 
-    baseSideAdjustment = bSideAdjustment,
+    baseSideAdjustment = [bSideAdjustment, bSideAdjustment, bSideAdjustment-0.2, bSideAdjustment-0.2],
     
     unitMbu=unitMbu,
     unitGrid=unitGrid,
@@ -183,9 +183,9 @@ machineblock(
     if(leg2Size > 0){
         machineblock(
             rotation = [leg2Rotation,0,0],
-            rotationOffset = [0, -0.5, -1.25],
+            rotationOffset = [0, -0.5, -1.15625],
             offset = [0, leg1Size-1, 0],
-            baseRoundingRadius = [1.25,0,0],
+            baseRoundingRadius = [1.15625,0,0],
             baseCutoutRoundingRadius = 0,
             baseCutoutType = "none",
             
@@ -201,7 +201,7 @@ machineblock(
     studIcon = studIcon,
 
 
-            baseSideAdjustment = bSideAdjustment,
+            baseSideAdjustment = [bSideAdjustment, bSideAdjustment, bSideAdjustment-0.2, bSideAdjustment-0.2],
             
             unitMbu=unitMbu,
     unitGrid=unitGrid,

@@ -48,7 +48,7 @@ basePitWallGaps = [];
 // Whether the pit should contain knobs
 basePitKnobs = true;
 // Type of the base pit knobs
-basePitKnobType = "technic"; // [classic, technic]
+basePitKnobType = true; // [classic, technic]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = true;
 

@@ -58,7 +58,7 @@ studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 /* [Text] */
 
 // Text to write on the brick.
-text = "L";
+text = false;
 // Side of the brick on which text is written.
 textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 // Letter Depth

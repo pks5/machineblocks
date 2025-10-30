@@ -27,7 +27,7 @@ size = [8, 8, 12]; // [1:32]
 /* [Base] */
 
 // Type of cut-out on the underside.
-baseCutoutType = "none"; // [none, classic]
+baseCutoutType = true; // [none, classic]
 // Whether the base should have a tongue
 baseTongue = true;
 // Whether the base should have knobs
@@ -69,7 +69,7 @@ lidPillars = true;
 // Whether lid should be permanent (non removable)
 lidPermanent = false;
 // Text on lid
-lidText = "Jewlery";
+lidText = "";
 //Text Font
 textFont = "RBNo3.1";
 

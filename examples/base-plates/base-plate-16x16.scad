@@ -24,15 +24,15 @@ size = [16, 16, 1]; // [1:32]
 /* [Base] */
 
 // Rounding Radius X
-baseRoundingRadiusX = 0; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Z
-baseRoundingRadiusZ = 0; // [0:0.1:128]
+baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "none"; // [none, classic, studs]
+baseCutoutType = [16, 16, 1]; // [none, classic, studs]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut

@@ -232,21 +232,26 @@ def process_examples_file(example_file_path: str):
                 val = brick['parameters'][param]
                 if isinstance(val, str):
                     try:
-                        print('Replaced string param ' + param + ' with value: ' + val)
+                        print('Replaced string param ' + param + ' with value: "' + val + '"')
                     except UnicodeEncodeError:
                         print('Replaced string param ' + param + ' with unicode value')
-                    scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]*\"\s*;', param + ' = "' + val + '";', scad)
+                        param_value = '"' + val + '"'
+                    #scad = re.sub(param + r'\s*=\s*\"[a-zA-Z0-9\.\-_\s]*\"\s*;', param + ' = "' + val + '";', scad)
                 elif isinstance(val, bool):
                     print('Replaced bool param ' + param + ' with value: ' + str(val).lower())
-                    scad = re.sub(param + r'\s*=\s*((true)|(false))\s*;', param + ' = ' + str(val).lower() + ';', scad)
+                    param_value = str(val).lower()
+                    #scad = re.sub(param + r'\s*=\s*((true)|(false))\s*;', param + ' = ' + str(val).lower() + ';', scad)
                 elif isinstance(val, (int, float)):
                     print('Replaced integer param ' + param + ' with value: ' + str(val))
-                    scad = re.sub(param + r'\s*=\s*((\"auto\")|([0-9\.\-]+))\s*;', param + ' = ' + str(val) + ';', scad)
+                    param_value = str(val)
+                    #scad = re.sub(param + r'\s*=\s*((\"auto\")|([0-9\.\-]+))\s*;', param + ' = ' + str(val) + ';', scad)
                 elif isinstance(val, list):
                     print('Replaced list param ' + param + ' with value: ' + json.dumps(val))
-                    scad = re.sub(param + r'\s*=\s*((\[[\[\]0-9\.\,\s]*\])|(\"[a-zA-Z0-9\.\-_\s]+\")|([0-9\.\-]+)|((true)|(false)))\s*;', param + ' = ' + json.dumps(val) + ';', scad)
+                    param_value = json.dumps(val)
                 else:
                     print('Did not replace param ' + param + ': unknown type!')
+                
+                scad = re.sub(param + r'\s*=\s*((\[[\[\]0-9\.\,\s]*\])|(\"[a-zA-Z0-9\.\-_\s]+\")|([0-9\.\-]+)|((true)|(false)))\s*;', param + ' = ' + param_value + ';', scad)
 
             out_path = os.path.join(target_dir, file_name)
             try:

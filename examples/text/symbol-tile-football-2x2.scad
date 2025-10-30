@@ -58,7 +58,7 @@ studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 /* [Text] */
 
 // Text to write on the brick.
-text = "";
+text = false;
 // Side of the brick on which text is written.
 textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 // Letter Depth
@@ -66,7 +66,7 @@ textDepth = 1.2; // [-3.2:0.2:3.2]
 // Text Size
 textSize = 8; // [1:32]
 // Font
-textFont = "Font Awesome 6 Free Solid"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+textFont = false; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
 // Text Style
 textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
 // Spacing of the letters

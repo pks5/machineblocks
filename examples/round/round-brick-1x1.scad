@@ -24,9 +24,9 @@ size = [1, 1, 3]; // [1:32]
 /* [Base] */
 
 // Rounding Radius X
-baseRoundingRadiusX = 0; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0.5; // [0:0.1:128]
 

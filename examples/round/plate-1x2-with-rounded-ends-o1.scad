@@ -24,9 +24,9 @@ size = [1, 2, 1]; // [1:32]
 /* [Base] */
 
 // Rounding Radius X
-baseRoundingRadiusX = 0; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Z
 baseRoundingRadiusZ = 0.5; // [0:0.1:128]
 
@@ -58,7 +58,7 @@ studCenteredX = false;
 // Whether studs should be centered in Y direction.
 studCenteredY = false;
 // Type of the studs
-studType = "hollow"; // [solid, hollow]
+studType = [1, 2, 1]; // [solid, hollow]
 // Stud Padding
 studPadding = [0, 0, 0, 0]; // [0:0.1:128]
 

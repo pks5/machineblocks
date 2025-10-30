@@ -24,11 +24,11 @@ size = [2, 1, 2]; // [1:32]
 /* [Base] */
 
 // Rounding Radius X
-baseRoundingRadiusX = 0; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Z
-baseRoundingRadiusZ = 0; // [0:0.1:128]
+baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
 
 
 // Type of cut-out on the underside.

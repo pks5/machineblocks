@@ -24,9 +24,9 @@ size = [2, 2, 3]; // [1:32]
 /* [Base] */
 
 // Rounding Radius X
-baseRoundingRadiusX = 0; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Y
-baseRoundingRadiusY = 0; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
 // Rounding Radius Z
 baseRoundingRadiusZ = 1; // [0:0.1:128]
 
@@ -94,7 +94,7 @@ holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
 holesZ = true;
 // Type of Z Holes.
-holeZType = "axle";
+holeZType = true;
 // Whether Z Holes should be centered on X direction
 holeZCenteredX = true;
 // Whether Z Holes should be centered on Y direction
