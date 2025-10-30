@@ -85,8 +85,6 @@ pitWallThickness = 0.333; // [0:0.001:128]
 
 slope = [0, 0, 0, 0]; // [-128:0.1:128]
 
-/* [Text] */
-
 /*{TEXT_VARIABLES}*/
 
 /* [Style] */

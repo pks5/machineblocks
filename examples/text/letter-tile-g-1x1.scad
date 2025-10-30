@@ -120,7 +120,7 @@ text = "g";
 // Side of the brick on which text is written.
 textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 // Letter Depth
-textDepth = 1.2; // [-3.2:0.2:3.2]
+textDepth = 1.2; // [-3.2:0.1:3.2]
 // Text Size
 textSize = 5; // [1:32]
 // Font
@@ -149,57 +149,57 @@ overrideConfig=false;
 scale_ovr = 1.0; // [0.1:0.1:128]
 
 // Adjustment of base height
-baseHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+baseHeightAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of sides
-baseSideAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
+baseSideAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 // Adjustment of wall thickness
-baseWallThicknessAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
+baseWallThicknessAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 // Clamp thickness
-baseClampThickness_ovr = 0.1; // [-10.0:0.1:10.0]
+baseClampThickness_ovr = 0.1; // [-10.0:0.05:10.0]
 
 // Adjustment of tube X diameter
-tubeXDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
+tubeXDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 // Adjustment of tube Y diameter
-tubeYDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
+tubeYDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 // Adjustment of tube Z diameter
-tubeZDiameterAdjustment_ovr = -0.1; // [-10.0:0.1:10.0]
+tubeZDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 
 // Adjustment of hole X diameter
-holeXDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
+holeXDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
 // Adjustment of hole X inset thickness
-holeXInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeXInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole X inset depth
-holeXInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeXInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole X grid offset Z
-holeXGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeXGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole X grid size Z
-holeXGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
+holeXGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0] 
 
 // Adjustment of hole Y diameter
-holeYDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
+holeYDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
 // Adjustment of hole Y inset thickness
-holeYInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeYInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole Y inset depth
-holeYInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeYInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole Y grid offset Z
-holeYGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+holeYGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of hole Y grid size Z
-holeYGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.1:10.0] 
+holeYGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0] 
 
 // Adjustment of hole Z diameter
-holeZDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
+holeZDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
 
 // Adjustment of pin diameter
-pinDiameterAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+pinDiameterAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 
 // Adjustment of stud diameter
-studDiameterAdjustment_ovr = 0.2; // [-10.0:0.1:10.0]
+studDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
 // Adjustment of stud height
-studHeightAdjustment_ovr = 0.0; // [-10.0:0.1:10.0]
+studHeightAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 // Adjustment of stud hole diameter
-studHoleDiameterAdjustment_ovr = 0.3; // [-10.0:0.1:10.0]
+studHoleDiameterAdjustment_ovr = 0.3; // [-10.0:0.05:10.0]
 // Adjustment of stud cutout
-studCutoutAdjustment_ovr = [0.2, 0.4]; // [-10.0:0.1:10.0]
+studCutoutAdjustment_ovr = [0.2, 0.4]; // [-10.0:0.05:10.0]
 
 // Whether to render in preview mode
 previewRender_ovr = true;

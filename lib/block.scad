@@ -579,7 +579,7 @@ module machineblock(
     */
     function smx(s, inv=false) = max(inv ? -s : s, 0);
     //function slan2ting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
-    function onSlope(a, b, inv, qx, qy) = (slope != false) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), grid[0] - smx(slope[1], inv) - (inv ? qx : 1), grid[1] - smx(slope[3], inv) - (inv ? qy : 1)]);
+    function onSlope(a, b, inv, qx, qy) = (slope != false) && (slope != [0, 0, 0, 0]) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), ceil(grid[0]) - smx(slope[1], inv) - (inv ? qx : 1), ceil(grid[1]) - smx(slope[3], inv) - (inv ? qy : 1)]);
 
     
     /*
