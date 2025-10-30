@@ -90,7 +90,15 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 /*
 * Resolve base side adjustment
 */
-function mb_resolve_base_side_adjustment(baseSideAdjustment) = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);
+function mb_resolve_crop(crop, gridSizeXY) = 
+    is_list(crop)
+        ? (len(crop) == 2 ? [crop[0] * gridSizeXY, crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[1] * gridSizeXY] : [crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[2] * gridSizeXY, crop[3] * gridSizeXY])
+        : [crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY];
+
+function mb_resolve_base_side_adjustment(baseSideAdjustment, cropResolved) = 
+    is_list(baseSideAdjustment) 
+        ? (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[0] - cropResolved[1], baseSideAdjustment[1] - cropResolved[2], baseSideAdjustment[1] - cropResolved[3]] : [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]]) 
+        : [baseSideAdjustment - cropResolved[0], baseSideAdjustment - cropResolved[1], baseSideAdjustment - cropResolved[2], baseSideAdjustment - cropResolved[3]];
 
 module pre_render(do_render, convexity){
     if(do_render){

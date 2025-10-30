@@ -69,6 +69,7 @@ module machineblock(
         //Size
         size = [1, 1, 1], // vector3 x grid ([x, y, z]) - Size of the brick as multiple of the grid unit.
         offset = [0, 0, 0], // grid ([x, y, z]) - Position of the brick relative to the origin.
+        crop = [0, 0, 0, 0],
 
         //Base
         base = true, // bool
@@ -338,7 +339,8 @@ module machineblock(
     grid = [size[0], size[1]];
 
     //Side Adjustment
-    sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment);
+    cropResolved = mb_resolve_crop(crop, gridSizeXY);
+    sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment, cropResolved);
 
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
@@ -429,6 +431,7 @@ module machineblock(
     //Bevel
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevel, grid, gridSizeXY);
+    bevelCrop = mb_inset_quad_lrfh(bevelOuter, cropResolved);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
@@ -467,7 +470,7 @@ module machineblock(
 
     //Knob Padding
     knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
-    bevelKnobPadding = mb_inset_quad_lrfh(bevelOuter, knobPaddingResolved);
+    bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
     cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
     knobPaddingRadiusInv = [
         -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
