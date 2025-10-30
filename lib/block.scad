@@ -340,13 +340,17 @@ module machineblock(
 
     //Side Adjustment
     cropResolved = mb_resolve_crop(crop, gridSizeXY);
-    sAdjustment = mb_resolve_base_side_adjustment(baseSideAdjustment, cropResolved);
+    sAdj = mb_resolve_base_side_adjustment(baseSideAdjustment);
+    sAdjustment = mb_calc_side_adjusmtent(sAdj, cropResolved);
 
     //Object Size     
     objectSizeX = gridSizeXY * grid[0];
     objectSizeY = gridSizeXY * grid[1];
     
     //Object Size Adjusted      
+    objectSizeXAdj = objectSizeX + sAdj[0] + sAdj[1];
+    objectSizeYAdj = objectSizeY + sAdj[2] + sAdj[3];
+
     objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
@@ -355,7 +359,7 @@ module machineblock(
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     resultingBaseHeight = baseHeightResolved + baseHeightAdjustment;
 
-    adjustedSizeRelation = [objectSizeXAdjusted / objectSizeX, objectSizeYAdjusted / objectSizeY, resultingBaseHeight / baseHeightResolved];
+    adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, resultingBaseHeight / baseHeightResolved];
 
     gridSizeX = grid_size_x(grid, slope);
     gridSizeY = grid_size_y(grid, slope);

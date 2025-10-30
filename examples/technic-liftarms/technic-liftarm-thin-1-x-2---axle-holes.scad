@@ -121,6 +121,9 @@ holeY = leg1AxleHoleLast ? [true, [0,0,0,0,"axle"], [leg1Size-1,0,leg1Size-1,0,"
 bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 machineblock(
+    size=[thin ? 0.5 : 1, leg1Size, 2.3125], 
+    crop = [0, 0.0375],
+
     baseRoundingRadius = [1.15625,0,0],
     baseCutoutRoundingRadius = 0,
     baseCutoutType = "none",
@@ -128,7 +131,6 @@ machineblock(
     holeY = holeY,
     holeYCentered = false,
     holeYGridOffsetZ = 2.3125,
-    size=[thin ? 0.5 : 1, leg1Size, 2.3125], 
     studs = false,
 
     baseColor = baseColor,
@@ -137,7 +139,7 @@ machineblock(
     studIcon = studIcon,
 
 
-    baseSideAdjustment = [bSideAdjustment, bSideAdjustment, bSideAdjustment-0.2, bSideAdjustment-0.2],
+    baseSideAdjustment = bSideAdjustment,
     
     unitMbu=unitMbu,
     unitGrid=unitGrid,
@@ -182,9 +184,13 @@ machineblock(
 ){
     if(leg2Size > 0){
         machineblock(
+            size=[thin ? 0.5 : 1, leg2Size, 2.3125], 
+            crop = [0, 0.0375],
+            offset = [0, leg1Size-1, 0],
+
             rotation = [leg2Rotation,0,0],
             rotationOffset = [0, -0.5, -1.15625],
-            offset = [0, leg1Size-1, 0],
+            
             baseRoundingRadius = [1.15625,0,0],
             baseCutoutRoundingRadius = 0,
             baseCutoutType = "none",
@@ -192,7 +198,7 @@ machineblock(
             holeY = [true, [leg2Size-1, 0, leg2Size-1, 0, "axle"]],
             holeYCentered = false,
             holeYGridOffsetZ = 2.3125,
-            size=[thin ? 0.5 : 1, leg2Size, 2.3125], 
+            
             studs = false,
 
             baseColor = baseColor,
@@ -201,7 +207,7 @@ machineblock(
     studIcon = studIcon,
 
 
-            baseSideAdjustment = [bSideAdjustment, bSideAdjustment, bSideAdjustment-0.2, bSideAdjustment-0.2],
+            baseSideAdjustment = bSideAdjustment,
             
             unitMbu=unitMbu,
     unitGrid=unitGrid,
