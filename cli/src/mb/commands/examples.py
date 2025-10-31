@@ -178,7 +178,7 @@ def text_variables(group:str, suffix: str):
     return f"""/* [{group}] */
 
 // Text to write on the brick.
-text{suffix} = "Z";
+text{suffix} = false;
 // Side of the brick on which text is written.
 textSide{suffix} = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
 // Letter Depth (mbu)

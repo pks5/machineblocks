@@ -1363,7 +1363,7 @@ module machineblock(
                             /*
                             * Text Cutout
                             */
-                            if(!mb_is_empty_string(text) && txtDepth < 0){
+                            if(text != false && !mb_is_empty_string(text) && txtDepth < 0){
                                 color(textColor == "inherit" ? baseColor : textColor){
                                     translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
                                         rotate(decoratorRotations[textSide])
@@ -1759,7 +1759,7 @@ module machineblock(
                     /*
                     * Text
                     */
-                    if(!mb_is_empty_string(text) && txtDepth > 0){
+                    if(text != false && !mb_is_empty_string(text) && txtDepth > 0){
                         color(textColor == "inherit" ? baseColor : textColor)
                             translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
                                 rotate(decoratorRotations[textSide])
