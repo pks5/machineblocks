@@ -150,7 +150,7 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 union(){
     machineblock(
         size=[borderSize, size[1],size[2]], 
-        offset=[-0.5*(size[0]-borderSize),0,0],
+        offset=[-0.5*(size[0]-borderSize), 0, 0],
         align="ccs",
 
         studs = studs,
@@ -223,7 +223,7 @@ union(){
     );  
 
     machineblock(
-        size=[size[0]-2,borderSize,size[2]],
+        size=[size[0]-2*borderSize,borderSize,size[2]],
         offset=[0,0.5*(size[1]-borderSize),0],
         align="ccs",
 
@@ -371,7 +371,7 @@ union(){
     );    
 
     machineblock(
-        size=[size[0]-2,borderSize,size[2]], 
+        size=[size[0]-2*borderSize,borderSize,size[2]], 
         offset=[0,-0.5*(size[1]-borderSize),0],
         align="ccs",
         
