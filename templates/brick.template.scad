@@ -16,16 +16,16 @@
 
 /* [Size] */
 
-// Brick size
+// Brick size (grid)
 size = [4, 2, 3]; // [1:0.1:32]
 
 /* [Base] */
 
-// Rounding Radius X
+// Rounding Radius X (grid)
 baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
-// Rounding Radius Y
+// Rounding Radius Y (grid)
 baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
-// Rounding Radius Z
+// Rounding Radius Z (grid)
 baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
 
 /*{BASE_VARIABLES}*/
@@ -36,13 +36,13 @@ baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
 
 /* [Bevel] */
 
-// Bevel X and Y for the corner 0,0
+// Bevel X and Y for the corner [0,0] (grid)
 bevel0 = [0, 0]; // [0:0.1:128]
-// Bevel X and Y for the corner 0,1
+// Bevel X and Y for the corner [0,1] (grid)
 bevel1 = [0, 0]; // [0:0.1:128]
-// Bevel X and Y for the corner 1,1
+// Bevel X and Y for the corner [1,1] (grid)
 bevel2 = [0, 0]; // [0:0.1:128]
-// Bevel X and Y for the corner 1,0
+// Bevel X and Y for the corner [1,0] (grid)
 bevel3 = [0, 0]; // [0:0.1:128]
 
 /* [Holes] */
@@ -53,7 +53,7 @@ holesX = false;
 holeXType = "pin"; // [pin, axle]
 // Whether X Holes should be centered
 holeXCentered = true;
-// Hole X Grid Offset Z
+// Hole X Grid Offset Z (mbu)
 holeXGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Y-axis.
 holesY = false;
@@ -61,12 +61,12 @@ holesY = false;
 holeYType = "pin"; // [pin, axle]
 // Whether Y Holes should be centered
 holeYCentered = true;
-// Hole Y Grid Offset Z
+// Hole Y Grid Offset Z (mbu)
 holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
 holesZ = false;
 // Type of Z Holes.
-holeZType = "pin";
+holeZType = "pin"; // [pin, axle]
 // Whether Z Holes should be centered on X direction
 holeZCenteredX = true;
 // Whether Z Holes should be centered on Y direction
@@ -78,7 +78,7 @@ holeZCenteredY = true;
 pit = false;
 // Whether knobs should be drawn inside pit
 pitKnobs = false;
-// Pit wall thickness as multiple of one brick side length
+// Pit wall thickness as multiple of one brick side length (grid)
 pitWallThickness = 0.333; // [0:0.001:128]
 
 /* [Slope] */

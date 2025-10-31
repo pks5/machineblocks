@@ -88,57 +88,57 @@ overrideConfig=false;
 // Scale of the brick
 scale_ovr = 1.0; // [0.1:0.1:128]
 
-// Adjustment of base height
+// Adjustment of base height (mm)
 baseHeightAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of sides
+// Adjustment of sides (mm)
 baseSideAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
-// Adjustment of wall thickness
+// Adjustment of wall thickness (mm)
 baseWallThicknessAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
-// Clamp thickness
+// Clamp thickness (mm)
 baseClampThickness_ovr = 0.1; // [-10.0:0.05:10.0]
 
-// Adjustment of tube X diameter
+// Adjustment of tube X diameter (mm)
 tubeXDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
-// Adjustment of tube Y diameter
+// Adjustment of tube Y diameter (mm)
 tubeYDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
-// Adjustment of tube Z diameter
+// Adjustment of tube Z diameter (mm)
 tubeZDiameterAdjustment_ovr = -0.1; // [-10.0:0.05:10.0]
 
-// Adjustment of hole X diameter
+// Adjustment of hole X diameter (mm)
 holeXDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
-// Adjustment of hole X inset thickness
+// Adjustment of hole X inset thickness (mm)
 holeXInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole X inset depth
+// Adjustment of hole X inset depth (mm)
 holeXInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole X grid offset Z
+// Adjustment of hole X grid offset Z (mm)
 holeXGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole X grid size Z
+// Adjustment of hole X grid size Z (mm)
 holeXGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0] 
 
-// Adjustment of hole Y diameter
+// Adjustment of hole Y diameter (mm)
 holeYDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
-// Adjustment of hole Y inset thickness
+// Adjustment of hole Y inset thickness (mm)
 holeYInsetThicknessAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole Y inset depth
+// Adjustment of hole Y inset depth (mm)
 holeYInsetDepthAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole Y grid offset Z
+// Adjustment of hole Y grid offset Z (mm)
 holeYGridOffsetZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of hole Y grid size Z
+// Adjustment of hole Y grid size Z (mm)
 holeYGridSizeZAdjustment_ovr = 0.0; // [-10.0:0.05:10.0] 
 
-// Adjustment of hole Z diameter
+// Adjustment of hole Z diameter (mm)
 holeZDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
 
-// Adjustment of pin diameter
+// Adjustment of pin diameter (mm)
 pinDiameterAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
 
-// Adjustment of stud diameter
+// Adjustment of stud diameter (mm)
 studDiameterAdjustment_ovr = 0.2; // [-10.0:0.05:10.0]
-// Adjustment of stud height
+// Adjustment of stud height (mm)
 studHeightAdjustment_ovr = 0.0; // [-10.0:0.05:10.0]
-// Adjustment of stud hole diameter
+// Adjustment of stud hole diameter (mm)
 studHoleDiameterAdjustment_ovr = 0.3; // [-10.0:0.05:10.0]
-// Adjustment of stud cutout
+// Adjustment of stud cutout (mm)
 studCutoutAdjustment_ovr = [0.2, 0.4]; // [-10.0:0.05:10.0]
 
 // Whether to render in preview mode

@@ -257,7 +257,7 @@ module machineblock(
         //Text
         text = "", // string
         textSide = 0, // side
-        textDepth = -0.6, // mm
+        textDepth = -0.25, // mbu
         textFont = "Liberation Sans", // font
         textSize = 4, // pt
         textSpacing = 1, // int
@@ -532,6 +532,8 @@ module machineblock(
     tonClampHeightCalc = tongueClampHeight * mbuToMm;
     tonClampOffsetCalc = tongueClampOffset * mbuToMm;
     tonGrooveDepthCalc = tongueGrooveDepth * mbuToMm;
+
+    txtDepth = textDepth * mbuToMm;
 
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
@@ -1361,13 +1363,13 @@ module machineblock(
                             /*
                             * Text Cutout
                             */
-                            if(!mb_is_empty_string(text) && textDepth < 0){
+                            if(!mb_is_empty_string(text) && txtDepth < 0){
                                 color(textColor == "inherit" ? baseColor : textColor){
-                                    translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                                    translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
                                         rotate(decoratorRotations[textSide])
                                             mb_text3d(
                                                 text = text,
-                                                textDepth = 2 * abs(textDepth),
+                                                textDepth = 2 * abs(txtDepth),
                                                 textSize = scale * textSize,
                                                 textFont = textFont,
                                                 textSpacing = textSpacing,
@@ -1757,13 +1759,13 @@ module machineblock(
                     /*
                     * Text
                     */
-                    if(!mb_is_empty_string(text) && textDepth > 0){
+                    if(!mb_is_empty_string(text) && txtDepth > 0){
                         color(textColor == "inherit" ? baseColor : textColor)
-                            translate([decoratorX(textSide, textDepth, textOffset[0]), decoratorY(textSide, textDepth, textOffset[1]), decoratorZ(textSide, textDepth, textOffset[1])])
+                            translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
                                 rotate(decoratorRotations[textSide])
                                     mb_text3d(
                                         text = text,
-                                        textDepth = textDepth,
+                                        textDepth = txtDepth,
                                         textSize = scale * textSize,
                                         textFont = textFont,
                                         textSpacing = textSpacing,
