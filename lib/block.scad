@@ -239,6 +239,7 @@ module machineblock(
         
         //Grille
         grille = "none", // "none" | "x" | "y"
+        grilleInverted = false, // bool
         grilleDepth = 1, // mbu
         grilleCount = 5, // int
         
@@ -746,12 +747,15 @@ module machineblock(
                                                 pitDepth = resultingPitDepth,
                                                 pitWallThickness = pWallThickness,
                                                 pitWallGaps = pitWallGaps,
+                                                
                                                 slope = slope,
                                                 slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
                                                 slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
+                                                
                                                 beveled = beveled,
                                                 bevelOuter = bevelOuter,
                                                 bevelOuterAdjusted = bevelOuterAdjusted,
+                                                
                                                 connectors = connectors,
                                                 connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
                                                 connectorDepth = connectorDepth * mbuToMm,
@@ -1176,7 +1180,7 @@ module machineblock(
                             *
                             */
 
-                            if(baseCutoutType != "none"){
+                            if(baseCutoutType != "none" && baseCutoutType != "groove"){
                                 color(baseColor){
                                     /*
                                     * Knob subtraction from base
@@ -1430,25 +1434,46 @@ module machineblock(
                             /*
                             * Grille
                             */
-                            color(baseColor){
-                                if(grille == "x"){
-                                    grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                    grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
-                                    for (g = [ 0 : 1 : size[1] * grilleCount - 1 ]){
-                                        if(g % 2 == 1){
-                                            translate([0, sideY(0) + (0.5 + g) * grilleWidth, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
-                                                cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidth, grilleHeight], center=true);
+                            if(grille != "none"){
+                                grilleHeight = grilleDepth * mbuToMm + cutOffset;
+                                color(baseColor){
+                                    difference(){
+                                        union(){
+                                            if(grille == "x"){
+                                                
+                                                grilleWidthY = size[1] * unitGrid[0] * mbuToMm / grilleCount;
+                                                for (g = [ 0 : 1 : grilleCount - 1 ]){
+                                                    if(g % 2 == (grilleInverted ? 0 : 1)){
+                                                        translate([0, sideY(0) + (0.5 + g) * grilleWidthY, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                                            cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidthY, grilleHeight+ cutOffset], center=true);
+                                                    }
+                                                }
+                                            }
+                                            else if(grille == "y"){
+                                                grilleWidthX = size[0] * unitGrid[0] * mbuToMm / grilleCount;
+                                                for (g = [ 0 : 1 : grilleCount - 1 ]){
+                                                    if(g % 2 == (grilleInverted ? 0 : 1)){
+                                                        translate([sideX(0) + (0.5 + g) * grilleWidthX, 0, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
+                                                            cube(size=[grilleWidthX, objectSizeYAdjusted*cutMultiplier, grilleHeight+ cutOffset], center=true);
+                                                    }
+                                                }
+                                            }
                                         }
-                                    }
-                                }
 
-                                if(grille == "y"){
-                                    grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                    grilleWidth = unitGrid[0] * mbuToMm / grilleCount;
-                                    for (g = [ 0 : 1 : size[0] * grilleCount - 1 ]){
-                                        if(g % 2 == 1){
-                                            translate([sideX(0) + (0.5 + g) * grilleWidth, 0, 0.5 * (resultingBaseHeight - grilleHeight + cutOffset)])
-                                                cube(size=[grilleWidth, objectSizeYAdjusted*cutMultiplier, grilleHeight], center=true);
+                                        if(pillars != false){
+                                            /*
+                                            * Cut TubeZ area
+                                            */
+                                            
+                                            for (a = [ startX : 1 : ceil(endX) - 1 ]){
+                                                for (b = [ startY : 1 : ceil(endY) - 1 ]){
+                                                    if(drawPillar(a, b)){
+                                                            translate([posX(a + 0.5), posY(b + 0.5), 0.5 * (resultingBaseHeight - grilleHeight + cutOffset) - resultingTopPlateHeight]){
+                                                                cylinder(h=(grilleHeight + cutOffset), r=0.5 * tubeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
+                                                            };
+                                                    }
+                                                }   
+                                            }
                                         }
                                     }
                                 }

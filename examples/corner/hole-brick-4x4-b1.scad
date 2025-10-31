@@ -39,10 +39,12 @@ baseReliefCutHeight = 0.4; // [0:0.1:128]
 baseReliefCutThickness = 0.4; // [0:0.1:128]
 // Grille
 grille = "none"; // [none, x, y]
+// Whether Grille is inverted
+grilleInverted = false;
 // Depth of Grille (mbu)
-grilleDepth = 1; // [0.1:0.1:1]
+grilleDepth = 1; // [0.1:0.1:64]
 // Count of Grille elements
-grilleCount = 5; // [2:10]
+grilleCount = 5; // [2:64]
 
 /* [Studs] */
 
@@ -163,6 +165,7 @@ union(){
     baseReliefCutHeight = baseReliefCutHeight,
     baseReliefCutThickness = baseReliefCutThickness,
     grille = grille,
+    grilleInverted = grilleInverted,
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
@@ -237,6 +240,7 @@ union(){
     baseReliefCutHeight = baseReliefCutHeight,
     baseReliefCutThickness = baseReliefCutThickness,
     grille = grille,
+    grilleInverted = grilleInverted,
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
@@ -311,6 +315,7 @@ union(){
     baseReliefCutHeight = baseReliefCutHeight,
     baseReliefCutThickness = baseReliefCutThickness,
     grille = grille,
+    grilleInverted = grilleInverted,
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
@@ -385,6 +390,7 @@ union(){
     baseReliefCutHeight = baseReliefCutHeight,
     baseReliefCutThickness = baseReliefCutThickness,
     grille = grille,
+    grilleInverted = grilleInverted,
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 

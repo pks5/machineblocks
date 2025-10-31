@@ -532,6 +532,7 @@
                     "name": "Number Tile 9 2x2",
                     "parameters": {
                         "size": [2, 2, 1],
+                        "studs": false,
                         "text": "9"
                     }
                 },
