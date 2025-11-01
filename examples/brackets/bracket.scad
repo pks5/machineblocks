@@ -169,7 +169,7 @@ machineblock(
     offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
     align="ccs",
     
-    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
+    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,false]],
     
     studs = studs_1,
     studCenteredX = studCenteredX_1,
