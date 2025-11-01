@@ -575,15 +575,12 @@ module machineblock(
     * Grid
     */
     function inGridArea(a, b, rect) = (a >= rect[0]) && (b >= rect[1]) && (a <= rect[2]) && (b <= rect[3]); //[x0, y0, x1, y1]
-    function drawGridItem(items, a, b, i, prev) = (items[0] == undef ? items : ((i >= len(items)) ? prev : drawGridItem(items, a, b, i+1, items[i][0] == undef ? items[i] : (inGridArea(a, b, items[i]) ? (items[i][4] == true ? false : true) : prev))));
-    
     function getGridItem(items, defaultValue, a, b, i, prev) = (is_bool(items) ? (items == false ? false : defaultValue) : ((i >= len(items)) ? prev : getGridItem(items, defaultValue, a, b, i+1, is_bool(items[i]) ? (items[i] == false ? false : defaultValue) : (inGridArea(a, b, items[i]) ? (items[i][4] == undef ? defaultValue : items[i][4]) : prev))));
     
     /*
     * Slope
     */
     function smx(s, inv=false) = max(inv ? -s : s, 0);
-    //function slan2ting(s, inv) = inv ? (s > 0 ? 0 : abs(s)) : (s < 0 ? 0 : s);
     function onSlope(a, b, inv, qx, qy) = (slope != false) && (slope != [0, 0, 0, 0]) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), ceil(grid[0]) - smx(slope[1], inv) - (inv ? qx : 1), ceil(grid[1]) - smx(slope[3], inv) - (inv ? qy : 1)]);
 
     
@@ -604,12 +601,10 @@ module machineblock(
     function drawPillar(a, b) = //(drawHoleZ(a, b) == false)
                                 //&& 
                                 !onSlope(a, b, true, 2, 2) 
-                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
+                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
 
-    function drawPin(a, b, isX) = //(drawHoleZ(a, b) == false)
-                                //&& 
-                                !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
-                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && drawGridItem(pillars, a, b, 0, false)));
+    function drawPin(a, b, isX) = !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
+                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
 
     
     /*
@@ -633,21 +628,23 @@ module machineblock(
     /*
     * Knobs
     */ 
-    function drawKnob(a, b) = 
-            !onSlope(a, b, false, 2)
+    function drawStud(a, b) = 
+            let(sType = getGridItem(studs, studType, a, b, 0, false))
+            (sType != false
+            && !onSlope(a, b, false, 2)
             && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-            ;
+            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
+            ? sType : false;
 
     function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
-    function studType(a, b) = pit && inPit(a, b) ? pitKnobType : studType;
+    function studType(ovStudType, a, b) = is_string(ovStudType) ? ovStudType : (pit && inPit(a, b) ? pitKnobType : studType);
 
     /*
     * XYZ Holes
     */
-    function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false); //drawGridItem(holeX, a, b, 0, false); 
-    function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false); //drawGridItem(holeY, a, b, 0, false); 
-    function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false); //drawGridItem(holeZ, a, b, 0, false); 
+    function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false);
+    function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false);
+    function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false);
     
     /*
     * Wall Gaps
@@ -1064,7 +1061,7 @@ module machineblock(
                                                                             translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
                                                                                 cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                         }
-                                                                        echo(g = drawHoleZ(a, b));
+                                                                        // Hollow only if there is no z-hole here
                                                                         if(drawHoleZ(a, b) == false){
                                                                             intersection(){
                                                                                 cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1143,11 +1140,8 @@ module machineblock(
                                                     }
                                                 } // End if holeY
                                                 
-                                                
+                                                /* TODO Remove
                                                 if(false && holeZ != false){
-                                                    /*
-                                                    * Z-Holes Outer
-                                                    */
                                                     for (a = [ startX : 1 : (holeZCenteredX ? round(endX) - 1 : endX) ]){
                                                         for (b = [ startY : 1 : (holeZCenteredY ? round(endY) - 1 : endY) ]){
                                                             if(drawHoleZ(a, b) != false){
@@ -1161,7 +1155,7 @@ module machineblock(
                                                             }
                                                         }   
                                                     }
-                                                } // End if holeZ
+                                                } */
                                             } // End Difference (subtract from cutout)
                                         } // End difference (subtract cutout from base)
                                     }
@@ -1655,7 +1649,9 @@ module machineblock(
                                 for (b = [ startY : 1 : (ceil(endY) - (studCenteredY ? 1 : 0)) ]){
                                     knobOffsetX = studCenteredX ? 0.5 : 0;
                                     knobOffsetY = studCenteredY ? 0.5 : 0;
-                                    if(drawGridItem(studs, a, b, 0, false) && drawKnob(a + knobOffsetX, b + knobOffsetY)){
+                                    ovStudType = drawStud(a + knobOffsetX, b + knobOffsetY);
+                                    echo(st = ovStudType);
+                                    if(ovStudType != false){
                                         
                                         pitKnobOffsetX = pitKnobCenteredX ? 0.5 : 0;
                                         pitKnobOffsetY = pitKnobCenteredY ? 0.5 : 0;
@@ -1665,7 +1661,7 @@ module machineblock(
                                             posOffsetX = (inPit ? pitKnobCenteredX : studCenteredX) ? 0.5 : 0;
                                             posOffsetY = (inPit ? pitKnobCenteredY : studCenteredY) ? 0.5 : 0;
                                             translate([posX(a + posOffsetX), posY(b + posOffsetY), knobZ(a + posOffsetX, b + posOffsetY)]){ 
-                                                kType = studType(a + posOffsetX, b + posOffsetY);
+                                                kType = studType(ovStudType, a + posOffsetX, b + posOffsetY);
                                                 difference(){
                                                     union(){
                                                         difference(){
