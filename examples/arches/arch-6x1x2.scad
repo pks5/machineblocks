@@ -1,6 +1,6 @@
 /**
 * MachineBlocks
-* https://machineblocks.com/examples/classic-bricks
+* https://machineblocks.com/examples/arches
 *
 * Slim Plate 2x1
 * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
@@ -37,7 +37,7 @@ inverted = false;
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -58,12 +58,10 @@ grilleCount = 5; // [2:64]
 /* [Studs] */
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs = true;
-// Whether studs should be centered in X direction.
-studCenteredX = false;
-// Whether studs should be centered in Y direction.
-studCenteredY = false;
+// Whether studs should be shifted by a half brick.
+studShift = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -171,8 +169,7 @@ difference(){
     grilleCount = grilleCount,
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -233,8 +230,7 @@ difference(){
                     offset = [size[0] - column2SizeX, 0, 0],
                     
                     studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -308,8 +304,7 @@ difference(){
                     baseCutoutType = "none",
                     
                     studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 

@@ -32,7 +32,7 @@ baseRoundingRadiusZ = 1; // [0:0.1:128]
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -53,12 +53,10 @@ grilleCount = 5; // [2:64]
 /* [Studs] */
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs = true;
-// Whether studs should be centered in X direction.
-studCenteredX = false;
-// Whether studs should be centered in Y direction.
-studCenteredY = false;
+// Whether studs should be shifted by a half brick.
+studShift = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -82,7 +80,7 @@ holesX = true;
 // Type of X Holes.
 holeXType = "pin"; // [pin, axle]
 // Whether X Holes should be centered
-holeXCentered = true;
+holeXShift = true;
 // Hole X Grid Offset Z (mbu)
 holeXGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Y-axis.
@@ -90,26 +88,24 @@ holesY = false;
 // Type of Y Holes.
 holeYType = "pin"; // [pin, axle]
 // Whether Y Holes should be centered
-holeYCentered = true;
+holeYShift = true;
 // Hole Y Grid Offset Z (mbu)
 holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holeZ = false;
 // Type of Z Holes.
 holeZType = "pin"; // [pin, axle]
-// Whether Z Holes should be centered on X direction
-holeZCenteredX = true;
-// Whether Z Holes should be centered on Y direction
-holeZCenteredY = true;
+// Whether Z Holes should be shifted by a half brick.
+holeZShift = "xy"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 
-/* [Pit] */
+/* [Recess] */
 
 // Whether brick should have a pit
-pit = false;
+recess = false;
 // Whether knobs should be drawn inside pit
-pitKnobs = false;
+recessStuds = false;
 // Pit wall thickness as multiple of one brick side length (grid)
-pitWallThickness = 0.333; // [0:0.001:128]
+recessWallThickness = 0.333; // [0:0.001:128]
 
 /* [Slope] */
 
@@ -235,27 +231,25 @@ machineblock(
     bevel = [bevel0, bevel1, bevel2, bevel3],
 
     studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
     
     holeX = holesX,
     holeXType = holeXType,
-    holeXCentered = holeXCentered,
+    holeXShift = holeXShift,
     holeXGridOffsetZ = holeXGridOffsetZ,
     holeY = holesY,
     holeYType = holeYType,
-    holeYCentered = holeYCentered,
+    holeYShift = holeYShift,
     holeYGridOffsetZ = holeYGridOffsetZ,
-    holeZ = holesZ,
+    holeZ = holeZ,
     holeZType = holeZType,
-    holeZCenteredX = holeZCenteredX,
-    holeZCenteredY = holeZCenteredY,
+    holeZShift = holeZShift,
     
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
+    recess = recess,
+    recessStuds = recessStuds,
+    recessWallThickness = recessWallThickness,
     
     slope = slope, 
 

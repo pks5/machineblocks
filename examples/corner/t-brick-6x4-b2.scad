@@ -37,7 +37,7 @@ brick2OffsetX = 0; // [0:31]
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -58,12 +58,10 @@ grilleCount = 5; // [2:64]
 /* [Studs] */
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs = true;
-// Whether studs should be centered in X direction.
-studCenteredX = false;
-// Whether studs should be centered in Y direction.
-studCenteredY = false;
+// Whether studs should be shifted by a half brick.
+studShift = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -170,8 +168,7 @@ union(){
     grilleCount = grilleCount,
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -242,8 +239,7 @@ union(){
     grilleCount = grilleCount,
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 

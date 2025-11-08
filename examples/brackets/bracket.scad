@@ -37,7 +37,7 @@ middleLayers = 2;
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -58,24 +58,20 @@ grilleCount = 5; // [2:64]
 /* [Studs] */
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs_1 = true;
-// Whether studs should be centered in X direction.
-studCenteredX_1 = false;
-// Whether studs should be centered in Y direction.
-studCenteredY_1 = false;
+// Whether studs should be shifted by a half brick.
+studShift_1 = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType_1 = "solid"; // [solid, hollow]
 // Stud Padding (grid)
 studPadding_1 = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs_2 = true;
-// Whether studs should be centered in X direction.
-studCenteredX_2 = false;
-// Whether studs should be centered in Y direction.
-studCenteredY_2 = false;
+// Whether studs should be shifted by a half brick.
+studShift_2 = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType_2 = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -172,8 +168,7 @@ machineblock(
     holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,false]],
     
     studs = studs_1,
-    studCenteredX = studCenteredX_1,
-    studCenteredY = studCenteredY_1,
+    studShift = studShift_1,
     studType = studType_1,
     studPadding = studPadding_1,
 
@@ -316,8 +311,7 @@ machineblock(
     tongueThicknessAdjustment = 0.1,
     
     studs = studs_2,
-    studCenteredX = studCenteredX_2,
-    studCenteredY = studCenteredY_2,
+    studShift = studShift_2,
     studType = studType_2,
     studPadding = studPadding_2,
 
@@ -390,8 +384,7 @@ machineblock(
     grilleCount = grilleCount,
 
     studs = studs_2,
-    studCenteredX = studCenteredX_2,
-    studCenteredY = studCenteredY_2,
+    studShift = studShift_2,
     studType = studType_2,
     studPadding = studPadding_2,
 

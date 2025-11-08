@@ -28,7 +28,7 @@ borderSize = 1; // [1:8]
 
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -49,12 +49,10 @@ grilleCount = 5; // [2:64]
 /* [Studs] */
 
 
-// Whether to draw studs.
+// Whether brick has studs.
 studs = true;
-// Whether studs should be centered in X direction.
-studCenteredX = false;
-// Whether studs should be centered in Y direction.
-studCenteredY = false;
+// Whether studs should be shifted by a half brick.
+studShift = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -154,8 +152,7 @@ union(){
         align="ccs",
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -169,7 +166,7 @@ union(){
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,1,borderSize], [size[1]-borderSize,1,borderSize]],
         
@@ -229,8 +226,7 @@ union(){
         align="ccs",
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -244,7 +240,7 @@ union(){
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,0,borderSize], [size[0]-borderSize,0,borderSize]],
         
@@ -304,8 +300,7 @@ union(){
         align="ccs",
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -319,7 +314,7 @@ union(){
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,0,borderSize], [size[1]-borderSize,0,borderSize]],
         
@@ -379,8 +374,7 @@ union(){
         align="ccs",
 
         studs = studs,
-    studCenteredX = studCenteredX,
-    studCenteredY = studCenteredY,
+    studShift = studShift,
     studType = studType,
     studPadding = studPadding,
 
@@ -394,7 +388,7 @@ union(){
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,1,borderSize], [size[0]-borderSize,1,borderSize]],
         

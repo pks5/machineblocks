@@ -27,13 +27,13 @@ size = [6, 3, 5]; // [1:32]
 /* [Base] */
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether the base should have a tongue
 baseTongue = true;
 // Whether the base should have knobs
 baseKnobs = false;
 // Type of the base knobs
-baseKnobType = "classic"; // [classic, hollow]
+baseKnobType = "solid"; // [solid, hollow]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // The box rounding radius
@@ -48,7 +48,7 @@ basePitWallGaps = [[0, 0, 0], [1, 0, 0]];
 // Whether the pit should contain knobs
 basePitKnobs = false;
 // Type of the base pit knobs
-basePitKnobType = "classic"; // [classic, technic]
+basePitKnobType = "solid"; // [solid, hollow]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = false;
 
@@ -61,7 +61,7 @@ lidLayers = 1; // [1:24]
 // Whether the lid should have knobs
 lidKnobs = true;
 // Type of the lid knobs
-lidKnobType = "classic"; // [classic, technic]
+lidKnobType = "solid"; // [solid, hollow]
 // Whether lid knobs should be centered.
 lidKnobCentered = false;
 // Whether lid should have pillars
@@ -162,16 +162,14 @@ machineblock(
     
     studs = baseKnobs,
     studType = baseKnobType,
-    studCenteredX = baseKnobCentered,
-    studCenteredY = baseKnobCentered,
+    studShift = baseKnobCentered,
     
-    pit=true,
-    pitWallGaps = basePitWallGaps,
-    pitWallThickness = basePitWallThickness,
-    pitKnobs = basePitKnobs,
-    pitKnobType = basePitKnobType,
-    pitKnobCenteredX = basePitKnobCentered,
-    pitKnobCenteredY = basePitKnobCentered,
+    recess = true,
+    recessWallGaps = basePitWallGaps,
+    recessWallThickness = basePitWallThickness,
+    recessStuds = basePitKnobs,
+    recessStudType = basePitKnobType,
+    recessStudShift = basePitKnobCentered,
     
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
@@ -232,8 +230,8 @@ if(lid){
             size=[size[0], size[1], lidLayers],
             
             pillars = lidPillars,
-            pitWallGaps = basePitWallGaps,
-            baseCutoutType = baseTongue ? "groove" : "classic",
+            recessWallGaps = basePitWallGaps,
+            baseCutoutType = baseTongue ? "groove" : "standard",
             baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
             
 
@@ -241,8 +239,7 @@ if(lid){
 
             studs = lidKnobs,
             studType = lidKnobType,
-            studCenteredX = lidKnobCentered,
-            studCenteredY = lidKnobCentered,
+            studShift = lidKnobCentered,
             
 
             textSide = 5,
