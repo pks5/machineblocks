@@ -72,14 +72,14 @@ holeZCenteredX = true;
 // Whether Z Holes should be centered on Y direction
 holeZCenteredY = true;
 
-/* [Pit] */
+/* [Recess] */
 
 // Whether brick should have a pit
-pit = false;
+recess = false;
 // Whether knobs should be drawn inside pit
-pitKnobs = false;
+recessStuds = false;
 // Pit wall thickness as multiple of one brick side length (grid)
-pitWallThickness = 0.333; // [0:0.001:128]
+recessWallThickness = 0.333; // [0:0.001:128]
 
 /* [Slope] */
 
@@ -122,9 +122,9 @@ machineblock(
     holeZCenteredX = holeZCenteredX,
     holeZCenteredY = holeZCenteredY,
     
-    pit = pit,
-    pitKnobs = pitKnobs,
-    pitWallThickness = pitWallThickness,
+    recess = recess,
+    recessStuds = recessStuds,
+    recessWallThickness = recessWallThickness,
     
     slope = slope, 
 

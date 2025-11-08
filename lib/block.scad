@@ -76,10 +76,10 @@ module machineblock(
         baseColor = "#EAC645", // color - Color of the block.
         baseHeight = "auto", // mm | "auto" - Fixed height in mm or auto to calculate height based on the size parameter.
         
-        baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and pitDepth.
+        baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and recessDepth.
         baseTopPlateHeightAdjustment = -0.6, // mm
 
-        baseCutoutType = "classic", // "classic" | "groove" | "none"
+        baseCutoutType = "standard", // "standard" | "studs" | "groove" | "none"
         baseCutoutMaxDepth = 5, // mbu
         
         baseClampOffset = 0.25, // mbu
@@ -243,17 +243,16 @@ module machineblock(
         grilleDepth = 1, // mbu
         grilleCount = 5, // int
         
-        //Pit
-        pit=false, // bool
-        pitRoundingRadius = "auto", // grid | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
-        pitDepth = "auto", // mm | "auto"
-        pitWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
-        pitKnobs = true, // bool
-        pitKnobPadding = 0.2, // grid
-        pitKnobType = "solid", // "solid" | "hollow"
-        pitKnobCenteredX = false, // bool
-        pitKnobCenteredY = false, // bool
-        pitWallGaps = [], // vector
+        //Recess
+        recess = false, // bool
+        recessRoundingRadius = "auto", // grid | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
+        recessDepth = "auto", // mm | "auto"
+        recessWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
+        recessStuds = true, // bool
+        recessStudPadding = 0.2, // grid
+        recessStudType = "solid", // "solid" | "hollow"
+        recessStudShift = false, // false | "none" | "x" | "y" | true | "xy"
+        recessWallGaps = [], // vector
         
         //Text
         text = "", // string
@@ -394,10 +393,10 @@ module machineblock(
     baseCutoutMinDepth = unitGrid[1] * mbuToMm - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
     
-    resultingPitDepth = pit ? (pitDepth != "auto" ? pitDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
-    pWallThickness = pitWallThickness[0] == undef 
-                ? [pitWallThickness, pitWallThickness, pitWallThickness, pitWallThickness] 
-                : (len(pitWallThickness) == 2 ? [pitWallThickness[0], pitWallThickness[0], pitWallThickness[1], pitWallThickness[1]] : pitWallThickness);
+    resultingPitDepth = recess ? (recessDepth != "auto" ? recessDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
+    pWallThickness = recessWallThickness[0] == undef 
+                ? [recessWallThickness, recessWallThickness, recessWallThickness, recessWallThickness] 
+                : (len(recessWallThickness) == 2 ? [recessWallThickness[0], recessWallThickness[0], recessWallThickness[1], recessWallThickness[1]] : recessWallThickness);
     pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * gridSizeXY;
     pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * gridSizeXY;
 
@@ -448,8 +447,8 @@ module machineblock(
 
     // Pit
     pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+studMaxOverhang, pWallThickness[1]*gridSizeXY+studMaxOverhang, pWallThickness[2]*gridSizeXY+studMaxOverhang, pWallThickness[3]*gridSizeXY+studMaxOverhang]);
-    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
-    cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + pitKnobPadding)*gridSizeXY, (pWallThickness[1] + pitKnobPadding)*gridSizeXY, (pWallThickness[2] + pitKnobPadding)*gridSizeXY, (pWallThickness[3] + pitKnobPadding)*gridSizeXY]);
+    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + recessStudPadding)*gridSizeXY, (pWallThickness[1] + recessStudPadding)*gridSizeXY, (pWallThickness[2] + recessStudPadding)*gridSizeXY, (pWallThickness[3] + recessStudPadding)*gridSizeXY]);
+    cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + recessStudPadding)*gridSizeXY, (pWallThickness[1] + recessStudPadding)*gridSizeXY, (pWallThickness[2] + recessStudPadding)*gridSizeXY, (pWallThickness[3] + recessStudPadding)*gridSizeXY]);
     
     pMinThickness = [
         -min(pWallThickness[2], pWallThickness[0])*gridSizeXY, 
@@ -457,7 +456,7 @@ module machineblock(
         -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, 
         -min(pWallThickness[1], pWallThickness[2])*gridSizeXY
     ];
-    pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
+    pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
     // Studs
     knobSizeOrg = studDiameter * mbuToMm;
@@ -616,7 +615,7 @@ module machineblock(
     function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
                         && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
     
-    function inPitWallGaps(a, b, mx, i) = (i < len(pitWallGaps)) && (inPitWallGap(a, b, pitWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
+    function inPitWallGaps(a, b, mx, i) = (i < len(recessWallGaps)) && (inPitWallGap(a, b, recessWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
     function mxRound(v, mx) = mx ? floor(v) : ceil(v);
     function inPitWallGap(a, b, gap, mx) = ((gap[0] == 0) && inPitWallGap0(a, b, gap, mx)) || ((gap[0] == 1) && inPitWallGap1(a, b, gap, mx)) || ((gap[0] == 2) && inPitWallGap2(a, b, gap, mx)) || ((gap[0] == 3) && inPitWallGap3(a, b, gap, mx));
@@ -636,8 +635,8 @@ module machineblock(
             && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
             ? sType : false;
 
-    function knobZ(a, b) = pit && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
-    function studType(ovStudType, a, b) = is_string(ovStudType) ? ovStudType : (pit && inPit(a, b) ? pitKnobType : studType);
+    function knobZ(a, b) = recess && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
+    function studType(ovStudType, a, b) = is_string(ovStudType) ? ovStudType : (recess && inPit(a, b) ? recessStudType : studType);
 
     /*
     * XYZ Holes
@@ -687,7 +686,7 @@ module machineblock(
         baseCutoutDepth = baseCutoutDepth,
         baseCutoutMinDepth = baseCutoutMinDepth,
         slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
-        pitDepth = resultingPitDepth, 
+        recessDepth = resultingPitDepth, 
         knobSize = knobSize,
         knobHeight = knobHeight,
         wallThickness = wallThickness,
@@ -719,7 +718,7 @@ module machineblock(
                         difference(){
                             color(baseColor){
                                 union(){
-                                    if(baseCutoutType == "classic"){
+                                    if(baseCutoutType == "standard"){
                                         difference() {
                                             /*
                                             * Base Block
@@ -741,11 +740,11 @@ module machineblock(
 
                                                 roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                                 
-                                                pit = pit,
-                                                pitRoundingRadius = pitRoundingRadius,
+                                                pit = recess,
+                                                pitRoundingRadius = recessRoundingRadius,
                                                 pitDepth = resultingPitDepth,
                                                 pitWallThickness = pWallThickness,
-                                                pitWallGaps = pitWallGaps,
+                                                pitWallGaps = recessWallGaps,
                                                 
                                                 slope = slope,
                                                 slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
@@ -792,7 +791,7 @@ module machineblock(
                                                         topPlateHelperHeight = topPlateHelperHeight,
                                                         topPlateHelperThickness = topPlateHelperThickness,
                                                         
-                                                        pit = pit,
+                                                        pit = recess,
                                                         pitDepth = resultingPitDepth,
                                                         
                                                         slope = slope,
@@ -1181,11 +1180,11 @@ module machineblock(
 
                                             roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                             
-                                            pit = pit,
-                                            pitRoundingRadius = pitRoundingRadius,
+                                            pit = recess,
+                                            pitRoundingRadius = recessRoundingRadius,
                                             pitDepth = resultingPitDepth,
                                             pitWallThickness = pWallThickness,
-                                            pitWallGaps = pitWallGaps,
+                                            pitWallGaps = recessWallGaps,
                                             
                                             slope = slope,
                                             slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
@@ -1465,7 +1464,7 @@ module machineblock(
                             /*
                             * Grille
                             */
-                            if(grille != "none" && baseCutoutType != "classic"){
+                            if(grille != "none" && baseCutoutType != "standard"){
                                 grilleHeight = grilleDepth * mbuToMm + cutOffset;
                                 color(baseColor){
                                     if(grille == "x"){
@@ -1561,7 +1560,7 @@ module machineblock(
                                                 tongueRoundingRadius = tongueRoundingRadius,
                                                 tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                                                 pit = true,
-                                                pitWallGaps = pitWallGaps,
+                                                pitWallGaps = recessWallGaps,
                                                 pitSizeX = pitSizeX,
                                                 pitSizeY = pitSizeY,
                                                 previewQuality = previewQuality
@@ -1652,14 +1651,15 @@ module machineblock(
                                     ovStudType = drawStud(a + knobOffsetX, b + knobOffsetY);
                                     echo(st = ovStudType);
                                     if(ovStudType != false){
-                                        
-                                        pitKnobOffsetX = pitKnobCenteredX ? 0.5 : 0;
-                                        pitKnobOffsetY = pitKnobCenteredY ? 0.5 : 0;
-                                        inPit = pit && pitKnobs && inPit(a + pitKnobOffsetX, b + pitKnobOffsetY);
-                                        onPitBorder = !pit || onPitBorder(a + knobOffsetX, b + knobOffsetY);
+                                        pitKnobShiftedX = (recessStudShift == true || recessStudShift == "x" || recessStudShift == "xy");
+                                        pitKnobShiftedY = (recessStudShift == true || recessStudShift == "y" || recessStudShift == "xy");
+                                        pitKnobOffsetX = pitKnobShiftedX ? 0.5 : 0;
+                                        pitKnobOffsetY = pitKnobShiftedY ? 0.5 : 0;
+                                        inPit = recess && recessStuds && inPit(a + pitKnobOffsetX, b + pitKnobOffsetY);
+                                        onPitBorder = !recess || onPitBorder(a + knobOffsetX, b + knobOffsetY);
                                         if(onPitBorder || inPit){
-                                            posOffsetX = (inPit ? pitKnobCenteredX : studCenteredX) ? 0.5 : 0;
-                                            posOffsetY = (inPit ? pitKnobCenteredY : studCenteredY) ? 0.5 : 0;
+                                            posOffsetX = (inPit ? pitKnobShiftedX : studCenteredX) ? 0.5 : 0;
+                                            posOffsetY = (inPit ? pitKnobShiftedY : studCenteredY) ? 0.5 : 0;
                                             translate([posX(a + posOffsetX), posY(b + posOffsetY), knobZ(a + posOffsetX, b + posOffsetY)]){ 
                                                 kType = studType(ovStudType, a + posOffsetX, b + posOffsetY);
                                                 difference(){
@@ -1763,8 +1763,8 @@ module machineblock(
                                     tongueClampOffset = tonClampOffsetCalc,
                                     tongueRoundingRadius = tongueRoundingRadius,
                                     tongueInnerRoundingRadius = tongueInnerRoundingRadius,
-                                    pit = pit,
-                                    pitWallGaps = pitWallGaps,
+                                    pit = recess,
+                                    pitWallGaps = recessWallGaps,
                                     pitSizeX = pitSizeX,
                                     pitSizeY = pitSizeY,
                                     previewQuality = previewQuality

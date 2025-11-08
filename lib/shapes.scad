@@ -138,7 +138,7 @@ module mb_rounded_block(size, resolution, center=true, radius = 0){
 		intersection() {
 			
 			//X-Axis
-			rotate([0,90,0])     
+			rotate([0,-90,0])     
 				mb_roundedcube_custom(
 					size = [size[2], size[1], size[0]], 
 					center = center, 
