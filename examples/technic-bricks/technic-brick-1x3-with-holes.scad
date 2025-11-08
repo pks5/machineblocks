@@ -88,7 +88,7 @@ holesY = true;
 // Type of Y Holes.
 holeYType = "pin"; // [pin, axle]
 // Whether Y Holes should be centered
-holeYShift = true;
+holeYShift = false;
 // Hole Y Grid Offset Z (mbu)
 holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
