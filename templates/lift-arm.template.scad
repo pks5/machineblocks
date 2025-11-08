@@ -55,7 +55,7 @@ machineblock(
     baseCutoutType = "none",
     
     holeY = holeY,
-    holeYCentered = false,
+    holeYShift = false,
     holeYGridOffsetZ = 2.3125,
     studs = false,
 
@@ -79,7 +79,7 @@ machineblock(
             baseCutoutType = "none",
             
             holeY = [true, [leg2Size-1, 0, leg2Size-1, 0, "axle"]],
-            holeYCentered = false,
+            holeYShift = false,
             holeYGridOffsetZ = 2.3125,
             
             studs = false,
