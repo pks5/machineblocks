@@ -16,7 +16,7 @@
                     "parameters": {
                         "size": [2, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,
@@ -28,7 +28,7 @@
                     "parameters": {
                         "size": [3, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,
@@ -40,7 +40,7 @@
                     "parameters": {
                         "size": [4, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,
@@ -52,7 +52,7 @@
                     "parameters": {
                         "size": [6, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,
@@ -64,7 +64,7 @@
                     "parameters": {
                         "size": [8, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,
@@ -76,7 +76,7 @@
                     "parameters": {
                         "size": [12, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
+                        "holeXShift" : false,
                         "holeXGridOffsetZ": 2.3125,
                         "studs": false,
                         "baseRoundingRadiusY":1.15625,

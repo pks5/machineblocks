@@ -138,7 +138,7 @@
                     "name": "Technic Brick 2x4 with 3 Axle Holes",
                     "parameters": {
                         "size": [2, 4, 3],
-                        "holesZ" : true,
+                        "holeZ" : true,
                         "holeZType": "axle"
                     }
                 }, 
@@ -149,7 +149,7 @@
                         "size": [2, 4, 3],
                         "holesX" : true,
                         "holesY" : true,
-                        "holesZ" : true,
+                        "holeZ" : true,
                         "studType": "hollow"
                     }
                 }, 
@@ -160,7 +160,7 @@
                         "size": [2, 4, 3],
                         "holesX" : true,
                         "holesY" : true,
-                        "holesZ" : true
+                        "holeZ" : true
                     }
                 }
                 

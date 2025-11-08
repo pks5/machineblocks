@@ -114,7 +114,7 @@ preset_params = """unitMbu=unitMbu,
 
 base_variables = """
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic, studs]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether to draw pillars.
 pillars = true;
 // Whether to draw a relief cut
@@ -159,12 +159,10 @@ hidden_params = """bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : b
 
 def stud_variables(suffix: str):
     return f"""
-// Whether to draw studs.
+// Whether brick has studs.
 studs{suffix} = true;
-// Whether studs should be centered in X direction.
-studCenteredX{suffix} = false;
-// Whether studs should be centered in Y direction.
-studCenteredY{suffix} = false;
+// Whether studs should be shifted by a half brick.
+studShift{suffix} = "none"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 // Type of the studs
 studType{suffix} = "solid"; // [solid, hollow]
 // Stud Padding (grid)
@@ -172,8 +170,7 @@ studPadding{suffix} = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]"""
 
 def stud_params(suffix: str):
     return f"""studs = studs{suffix},
-    studCenteredX = studCenteredX{suffix},
-    studCenteredY = studCenteredY{suffix},
+    studShift = studShift{suffix},
     studType = studType{suffix},
     studPadding = studPadding{suffix},"""
 

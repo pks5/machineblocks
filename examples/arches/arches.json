@@ -9,7 +9,7 @@
         {
             "template": "../../templates/arch.template.scad",
             "targetDirectory" : ".",
-            "url": "https://machineblocks.com/examples/arch",
+            "url": "https://machineblocks.com/examples/arches",
             "bricks" : [
                 {
                     "name": "Arch 2x1",

@@ -37,7 +37,7 @@
                     "parameters": {
                         "size": [2, 2, 3],
                         "baseRoundingRadiusZ": 1,
-                        "holesZ": true,
+                        "holeZ": true,
                         "holeZType": "axle",
                         "studPadding": [0, 0, 0, 0]
                     }
@@ -47,7 +47,7 @@
                     "parameters": {
                         "size": [2, 2, 3],
                         "baseRoundingRadiusZ": 1,
-                        "holesZ": true,
+                        "holeZ": true,
                         "holeZType": "axle",
                         "studPadding": [0, 0, 0, 0]
                     }
@@ -67,7 +67,7 @@
                         "size": [4, 4, 3],
                         "baseRoundingRadiusZ": 2,
                         "studPadding": [0, 0, 0, 0],
-                        "holesZ":[[1,1,1,1]]
+                        "holeZ":[[1,1,1,1]]
                     }
                 },
                 {
@@ -124,8 +124,7 @@
                         "baseRoundingRadiusZ": 1,
                         "studPadding": [0, 0, 0, 0],
                         "studType": "hollow",
-                        "studCenteredX": true,
-                        "studCenteredY": true
+                        "studShift": "xy"
                     }
                 },
                 {
@@ -134,7 +133,7 @@
                         "size": [2, 2, 1],
                         "baseRoundingRadiusZ": 1,
                         "studPadding": [0, 0, 0, 0],
-                        "holesZ": [[0,0,0,0]],
+                        "holeZ": [[0,0,0,0]],
                         "holeZType": "axle"
                     }
                 },
@@ -168,7 +167,7 @@
                         "size": [4, 4, 1],
                         "baseRoundingRadiusZ": 2,
                         "studPadding": [0, 0, 0, 0],
-                        "holesZ": [[1,1,1,1]]
+                        "holeZ": [[1,1,1,1]]
                     }
                 },
                 {
@@ -177,8 +176,8 @@
                         "size": [3, 2, 1],
                         "baseRoundingRadiusZ": [1, 1, 0, 0],
                         "studPadding": [0.2, 0, 0, 0],
-                        "holesZ": [[0,0,0,0]],
-                        "holeZCenteredX":false
+                        "holeZ": [[0,0,0,0]],
+                        "holeZShift":"y"
                     }
                 },
                 {
@@ -187,7 +186,7 @@
                         "size": [6, 6, 1],
                         "baseRoundingRadiusZ": 3,
                         "studPadding": [0, 0, 0, 0],
-                        "holesZ": [[2,2,2,2]]
+                        "holeZ": [[2,2,2,2]]
                     }
                 },
                 {
@@ -274,7 +273,7 @@
                         "size": [2, 2, 1],
                         "baseRoundingRadiusZ": 1,
                         "studs": false,
-                        "holesZ": true
+                        "holeZ": true
                     }
                 },
                 {

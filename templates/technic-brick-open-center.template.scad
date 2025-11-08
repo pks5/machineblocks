@@ -58,7 +58,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [0,0,size[1] - 1,0]] : false,
         
 
@@ -79,7 +79,7 @@ union(){
         baseRoundingRadius=[0,0,[cornerRadius,0,0,cornerRadius]],
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [0,0,size[0] - 1,0]] : false,
         
 
@@ -99,7 +99,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [0,0,size[1] - 1,0]] : false,
         
         /*{STYLE_PARAMETERS}*/
@@ -119,7 +119,7 @@ union(){
         baseRoundingRadius=[0,0,[0, cornerRadius,cornerRadius,0]],
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [0,0,size[0] - 1,0]] : false,
         
         /*{STYLE_PARAMETERS}*/
