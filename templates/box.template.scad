@@ -89,8 +89,7 @@ machineblock(
     
     studs = baseKnobs,
     studType = baseKnobType,
-    studCenteredX = baseKnobCentered,
-    studCenteredY = baseKnobCentered,
+    studShift = baseKnobCentered,
     
     recess = true,
     recessWallGaps = basePitWallGaps,
@@ -116,7 +115,7 @@ if(lid){
             
             pillars = lidPillars,
             recessWallGaps = basePitWallGaps,
-            baseCutoutType = baseTongue ? "groove" : "classic",
+            baseCutoutType = baseTongue ? "groove" : "standard",
             baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
             
 
@@ -124,8 +123,7 @@ if(lid){
 
             studs = lidKnobs,
             studType = lidKnobType,
-            studCenteredX = lidKnobCentered,
-            studCenteredY = lidKnobCentered,
+            studShift = lidKnobCentered,
             
 
             textSide = 5,

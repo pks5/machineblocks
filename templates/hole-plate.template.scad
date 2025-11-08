@@ -56,7 +56,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,1,borderSize], [size[1]-borderSize,1,borderSize]],
         
@@ -76,7 +76,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,0,borderSize], [size[0]-borderSize,0,borderSize]],
         
@@ -96,7 +96,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
+        holeYShift = pinHolesCentered,
         holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsY=[[0,0,borderSize], [size[1]-borderSize,0,borderSize]],
         
@@ -116,7 +116,7 @@ union(){
 
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
+        holeXShift = pinHolesCentered,
         holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
         baseWallGapsX=[[0,1,borderSize], [size[0]-borderSize,1,borderSize]],
         

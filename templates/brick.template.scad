@@ -52,7 +52,7 @@ holesX = false;
 // Type of X Holes.
 holeXType = "pin"; // [pin, axle]
 // Whether X Holes should be centered
-holeXCentered = true;
+holeXShift = true;
 // Hole X Grid Offset Z (mbu)
 holeXGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Y-axis.
@@ -60,17 +60,15 @@ holesY = false;
 // Type of Y Holes.
 holeYType = "pin"; // [pin, axle]
 // Whether Y Holes should be centered
-holeYCentered = true;
+holeYShift = true;
 // Hole Y Grid Offset Z (mbu)
 holeYGridOffsetZ = 3.5; // [0:0.1:128]
 // Whether brick should have Technic holes along Z-axis.
-holesZ = false;
+holeZ = false;
 // Type of Z Holes.
 holeZType = "pin"; // [pin, axle]
-// Whether Z Holes should be centered on X direction
-holeZCenteredX = true;
-// Whether Z Holes should be centered on Y direction
-holeZCenteredY = true;
+// Whether Z Holes should be shifted by a half brick.
+holeZShift = "xy"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directions]
 
 /* [Recess] */
 
@@ -111,16 +109,15 @@ machineblock(
     
     holeX = holesX,
     holeXType = holeXType,
-    holeXCentered = holeXCentered,
+    holeXShift = holeXShift,
     holeXGridOffsetZ = holeXGridOffsetZ,
     holeY = holesY,
     holeYType = holeYType,
-    holeYCentered = holeYCentered,
+    holeYShift = holeYShift,
     holeYGridOffsetZ = holeYGridOffsetZ,
-    holeZ = holesZ,
+    holeZ = holeZ,
     holeZType = holeZType,
-    holeZCenteredX = holeZCenteredX,
-    holeZCenteredY = holeZCenteredY,
+    holeZShift = holeZShift,
     
     recess = recess,
     recessStuds = recessStuds,

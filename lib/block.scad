@@ -153,7 +153,7 @@ module machineblock(
         //Holes
         holeX = false, // bool | vector
         holeXType = "pin", // "pin" | "axle"
-        holeXCentered = true, // bool
+        holeXShift = true, // bool
         holeXDiameter = "auto", // mbu | "auto"
         holeXDiameterAdjustment = 0.3, // mm
         holeXInsetThickness = 0.375, // mbu
@@ -168,7 +168,7 @@ module machineblock(
 
         holeY = false, // bool or vector
         holeYType = "pin", // "pin" | "axle"
-        holeYCentered = true, // bool
+        holeYShift = true, // bool
         holeYDiameter = "auto", // mbu | "auto"
         holeYDiameterAdjustment = 0.3, // mm
         holeYInsetThickness = 0.375, // mbu
@@ -183,8 +183,7 @@ module machineblock(
 
         holeZ = false, // bool or vector
         holeZType = "pin", // "pin" | "axle"
-        holeZCenteredX = true, // bool
-        holeZCenteredY = true, // bool
+        holeZShift = true, // false | "none" | "x" | "y" | true | "xy"
         holeZDiameter = "auto", // mbu | "auto"
         holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64, // int
@@ -192,11 +191,10 @@ module machineblock(
         //Axle Holes
         holeAxleThickness = 1, //mbu
         
-        //Knobs
+        //Studs
         studs = true, // bool or vector
         studType = "solid", // "solid" | "hollow"
-        studCenteredX = false, // bool
-        studCenteredY = false, // bool
+        studShift = false, // false | "none" | "x" | "y" | true | "xy"
         studMaxOverhang = 0.3, // mm
         studPadding = 0, // grid
         
@@ -520,6 +518,9 @@ module machineblock(
 
     holeZDiameterResolved = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm;
     holeZSize = holeZDiameterResolved + holeZDiameterAdjustment;
+
+    holeZCenteredX = (holeZShift == true || holeZShift == "x" || holeZShift == "xy");
+    holeZCenteredY = (holeZShift == true || holeZShift == "y" || holeZShift == "xy");
     
     //Stabilizer
     sGridThickness = stabilizerGridThickness * mbuToMm;
@@ -1112,9 +1113,9 @@ module machineblock(
                                                 //X-Holes Outer
                                                 if(holeX != false){
                                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                                        for (a = [ startX : 1 : (holeXCentered ? round(endX) - 1 : endX) ]){
+                                                        for (a = [ startX : 1 : (holeXShift ? round(endX) - 1 : endX) ]){
                                                             if(drawHoleX(a, r) != false){
-                                                                translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
+                                                                translate([posX(a + (holeXShift ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
                                                                     rotate([90, 0, 0]){ 
                                                                         cylinder(h=objectSizeY - 2*wallThickness, r=0.5 * tubeXSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                     }
@@ -1127,9 +1128,9 @@ module machineblock(
                                                 //Y-Holes Outer
                                                 if(holeY != false){
                                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                                        for (b = [ startY : 1 : (holeYCentered ? round(endY) - 1 : endY) ]){
+                                                        for (b = [ startY : 1 : (holeYShift ? round(endY) - 1 : endY) ]){
                                                             if(drawHoleY(b, r) != false){
-                                                                translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
+                                                                translate([0, posY(b + (holeYShift ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
                                                                     rotate([0, 90, 0]){ 
                                                                         cylinder(h=objectSizeX - 2*wallThickness, r=0.5 * tubeYSize, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                     };
@@ -1296,10 +1297,10 @@ module machineblock(
                             if(holeX != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                        for (a = [ startX : 1 : (holeXCentered ? round(endX) - 1 : endX) ]){
+                                        for (a = [ startX : 1 : (holeXShift ? round(endX) - 1 : endX) ]){
                                             xHole = drawHoleX(a, r);
                                             if(xHole != false){
-                                                translate([posX(a + (holeXCentered ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
+                                                translate([posX(a + (holeXShift ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
                                                     rotate([90, 0, 0]){ 
                                                         if(xHole == true || xHole == "pin"){
                                                             cylinder(h=objectSizeY*cutMultiplier, r=0.5 * holeXSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1333,10 +1334,10 @@ module machineblock(
                             if(holeY != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                        for (b = [ startY : 1 : (holeYCentered ? round(endY) - 1 : endY) ]){
+                                        for (b = [ startY : 1 : (holeYShift ? round(endY) - 1 : endY) ]){
                                             yHole = drawHoleY(b, r);
                                             if(yHole != false){
-                                                translate([0, posY(b + (holeYCentered ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
+                                                translate([0, posY(b + (holeYShift ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
                                                     rotate([0, 90, 0]){ 
                                                         if(yHole == true || yHole == "pin"){
                                                             cylinder(h=objectSizeX*cutMultiplier, r=0.5 * holeYSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1641,13 +1642,16 @@ module machineblock(
                     */
                     if(studs != false){
                         color(baseColor){
+                            knobShiftedX = (studShift == true || studShift == "x" || studShift == "xy");
+                            knobShiftedY = (studShift == true || studShift == "y" || studShift == "xy");
+
                             /*
                             * Normal studs
                             */
-                            for (a = [ startX : 1 : (ceil(endX) - (studCenteredX ? 1 : 0)) ]){
-                                for (b = [ startY : 1 : (ceil(endY) - (studCenteredY ? 1 : 0)) ]){
-                                    knobOffsetX = studCenteredX ? 0.5 : 0;
-                                    knobOffsetY = studCenteredY ? 0.5 : 0;
+                            for (a = [ startX : 1 : (ceil(endX) - (knobShiftedX ? 1 : 0)) ]){
+                                for (b = [ startY : 1 : (ceil(endY) - (knobShiftedY ? 1 : 0)) ]){
+                                    knobOffsetX = knobShiftedX ? 0.5 : 0;
+                                    knobOffsetY = knobShiftedY ? 0.5 : 0;
                                     ovStudType = drawStud(a + knobOffsetX, b + knobOffsetY);
                                     echo(st = ovStudType);
                                     if(ovStudType != false){
@@ -1658,8 +1662,8 @@ module machineblock(
                                         inPit = recess && recessStuds && inPit(a + pitKnobOffsetX, b + pitKnobOffsetY);
                                         onPitBorder = !recess || onPitBorder(a + knobOffsetX, b + knobOffsetY);
                                         if(onPitBorder || inPit){
-                                            posOffsetX = (inPit ? pitKnobShiftedX : studCenteredX) ? 0.5 : 0;
-                                            posOffsetY = (inPit ? pitKnobShiftedY : studCenteredY) ? 0.5 : 0;
+                                            posOffsetX = (inPit ? pitKnobShiftedX : knobShiftedX) ? 0.5 : 0;
+                                            posOffsetY = (inPit ? pitKnobShiftedY : knobShiftedY) ? 0.5 : 0;
                                             translate([posX(a + posOffsetX), posY(b + posOffsetY), knobZ(a + posOffsetX, b + posOffsetY)]){ 
                                                 kType = studType(ovStudType, a + posOffsetX, b + posOffsetY);
                                                 difference(){
