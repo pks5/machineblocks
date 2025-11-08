@@ -392,11 +392,13 @@ module machineblock(
     maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
     
     resultingPitDepth = recess ? (recessDepth != "auto" ? recessDepth : (resultingBaseHeight - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
-    pWallThickness = recessWallThickness[0] == undef 
-                ? [recessWallThickness, recessWallThickness, recessWallThickness, recessWallThickness] 
-                : (len(recessWallThickness) == 2 ? [recessWallThickness[0], recessWallThickness[0], recessWallThickness[1], recessWallThickness[1]] : recessWallThickness);
-    pitSizeX = objectSizeX - (pWallThickness[0] + pWallThickness[1]) * gridSizeXY;
-    pitSizeY = objectSizeY - (pWallThickness[2] + pWallThickness[3]) * gridSizeXY;
+    
+    pWallThickness = mb_resolve_side_quad(recessWallThickness, 1);
+    recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
+    recStudPaddingResolved = mb_resolve_side_quad(recessStudPadding, gridSizeXY);
+
+    pitSizeX = objectSizeX - (recWallThickness[0] + recWallThickness[1]);
+    pitSizeY = objectSizeY - (recWallThickness[2] + recWallThickness[3]);
 
     calculatedBaseCutoutDepth = resultingBaseHeight - topPlateHeight - resultingPitDepth;  
     resultingTopPlateHeight = topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
@@ -444,15 +446,16 @@ module machineblock(
     cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
 
     // Pit
-    pitBevel = mb_inset_quad_lrfh(bevelOuter, [pWallThickness[0]*gridSizeXY+studMaxOverhang, pWallThickness[1]*gridSizeXY+studMaxOverhang, pWallThickness[2]*gridSizeXY+studMaxOverhang, pWallThickness[3]*gridSizeXY+studMaxOverhang]);
-    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, [(pWallThickness[0] + recessStudPadding)*gridSizeXY, (pWallThickness[1] + recessStudPadding)*gridSizeXY, (pWallThickness[2] + recessStudPadding)*gridSizeXY, (pWallThickness[3] + recessStudPadding)*gridSizeXY]);
-    cornersPitPadding = mb_inset_quad_lrfh(corners, [(pWallThickness[0] + recessStudPadding)*gridSizeXY, (pWallThickness[1] + recessStudPadding)*gridSizeXY, (pWallThickness[2] + recessStudPadding)*gridSizeXY, (pWallThickness[3] + recessStudPadding)*gridSizeXY]);
+    pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
+    pitBevel = mb_inset_quad_lrfh(bevelOuter, [recWallThickness[0]+studMaxOverhang, recWallThickness[1]+studMaxOverhang, recWallThickness[2]+studMaxOverhang, recWallThickness[3]+studMaxOverhang]);
+    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, pBevelPad);
+    cornersPitPadding = mb_inset_quad_lrfh(corners, pBevelPad);
     
     pMinThickness = [
-        -min(pWallThickness[2], pWallThickness[0])*gridSizeXY, 
-        -min(pWallThickness[0], pWallThickness[3])*gridSizeXY, 
-        -min(pWallThickness[3], pWallThickness[1])*gridSizeXY, 
-        -min(pWallThickness[1], pWallThickness[2])*gridSizeXY
+        -min(recWallThickness[2], recWallThickness[0]), 
+        -min(recWallThickness[0], recWallThickness[3]), 
+        -min(recWallThickness[3], recWallThickness[1]), 
+        -min(recWallThickness[1], recWallThickness[2])
     ];
     pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
@@ -471,7 +474,7 @@ module machineblock(
     knobPartsOverlap = 0.01;
 
     //Knob Padding
-    knobPaddingResolved = mb_resolve_quadruple(studPadding, gridSizeXY);
+    knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
     bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
     cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
     knobPaddingRadiusInv = [
@@ -744,7 +747,7 @@ module machineblock(
                                                 pit = recess,
                                                 pitRoundingRadius = recessRoundingRadius,
                                                 pitDepth = resultingPitDepth,
-                                                pitWallThickness = pWallThickness,
+                                                pitWallThickness = recWallThickness,
                                                 pitWallGaps = recessWallGaps,
                                                 
                                                 slope = slope,
@@ -1184,7 +1187,7 @@ module machineblock(
                                             pit = recess,
                                             pitRoundingRadius = recessRoundingRadius,
                                             pitDepth = resultingPitDepth,
-                                            pitWallThickness = pWallThickness,
+                                            pitWallThickness = recWallThickness,
                                             pitWallGaps = recessWallGaps,
                                             
                                             slope = slope,

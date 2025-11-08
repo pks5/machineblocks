@@ -49,7 +49,10 @@ function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) =
 
 function mb_calc_rel_radius(radius, baseRadius, minSide) = max(0, baseRadius * ((minSide + 2*radius) / minSide));
 
-function mb_resolve_quadruple(quad, multiplier) = is_list(quad) ? [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]  : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
+function mb_resolve_side_quad(quad, multiplier) = 
+    is_list(quad) ? 
+    (len(quad) == 2 ? [quad[0]*multiplier, quad[0]*multiplier, quad[1]*multiplier, quad[1]*multiplier] : [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]) 
+    : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
 
 /*
 * Whether a given string is empty
