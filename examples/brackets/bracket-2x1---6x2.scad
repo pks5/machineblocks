@@ -19,10 +19,12 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size
-size = [2, 1, 1]; // [1:32]
+size = [2, 1, 1]; // [1:1:32]
 
 // Brick 2 Size
-size_2 = [6, 2];
+size_2 = [6, 2]; // [1:1:32]
+
+/* [Bracket] */
 
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
@@ -30,12 +32,10 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 // Whether bracked should be inverted
 inverted = false;
 
-offset = -2;
+// Offset of brick 2
+offset = -2; // [-32:1:32]
 
 /* [Base] */
-
-// Radius of the vertical brick
-baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 
 
 // Type of cut-out on the underside.
@@ -56,6 +56,12 @@ grilleInverted = false;
 grilleDepth = 1; // [0.1:0.1:64]
 // Count of Grille elements
 grilleCount = 5; // [2:64]
+
+// Radius of the brick 1 (grid)
+roundingRadius_1 = [0.0, 0.0, 0.0, 0.0]; // [0:0.1:8]
+
+// Radius of the brick 2 (grid)
+roundingRadius_2 = [0.0, 0.5, 0.5, 0.0]; // [0:0.1:8]
 
 /* [Studs] */
 
@@ -183,12 +189,14 @@ machineblock(
     grilleDepth = grilleDepth,
     grilleCount = grilleCount,
 
+    baseRoundingRadius=[0,0,roundingRadius_1],
+
     studs = studs_1,
     studShift = studShift_1,
     studType = studType_1,
     studPadding = studPadding_1,
     
-    connectors = assemblyMode == "merged" ? false : [[ inverted ? 2 : 3, 0 ] ],
+    connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
     connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
     connectorPadding = [connectorPaddingStart1, connectorPaddingEnd1],
 
@@ -253,7 +261,7 @@ machineblock(
       rotationOffset = assemblyMode == "unassembled" ? [0, 0, 0] : (inverted ? [0,0,0] : [-0.5*size_2[0],0,0]),
       
       baseCutoutType = "none",
-      baseRoundingRadius=[0,0,baseRoundingRadiusZ],
+      baseRoundingRadius=[0,0,roundingRadius_2],
 
       studs = studs_2,
     studShift = studShift_2,
