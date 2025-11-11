@@ -22,16 +22,21 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Size] */
 
-brick1SizeX = 4;
-brick1HolesZ = true;
+size = [5, 1, 4];
 
-brick2SizeX = 4;
-brick2HolesZ = true;
+middleWidth = 1;
 
-gridSizeY = 2;
+holeZ_1 = true;
+holeZ_2 = true;
 
-middleSizeX = 1;
-middleLayers = 2;
+middleLayers = size[2] - 2;
+brick1SizeX = 0.5 * (size[0] + middleWidth);
+brick2SizeX = 0.5 * (size[0] + middleWidth);
+
+gridSizeY = size[1];
+
+
+
 
 /* [Base] */
 
@@ -162,10 +167,10 @@ bSideAdjustment = overrideConfig ? baseSideAdjustment_ovr : baseSideAdjustment;
 
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
-    offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
+    offset=[-0.5*(brick1SizeX-middleWidth),0,0],
     align="ccs",
     
-    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,false]],
+    holeZ=[holeZ_1,[brick1SizeX-middleWidth-1,0,brick1SizeX-2,gridSizeY-2,false]],
     
     studs = studs_1,
     studShift = studShift_1,
@@ -234,7 +239,7 @@ machineblock(
 );
 
 machineblock(
-    size=[middleSizeX,gridSizeY,middleLayers],
+    size=[middleWidth,gridSizeY,middleLayers],
     offset=[0,0,1],
     align="ccs",
     
@@ -303,7 +308,7 @@ machineblock(
 );
 
 machineblock(
-    size=[middleSizeX,gridSizeY,1],
+    size=[middleWidth,gridSizeY,1],
     offset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
     align="ccs",
     
@@ -367,11 +372,11 @@ machineblock(
 
 
 machineblock(
-    size=[brick2SizeX-middleSizeX,gridSizeY,1],
-    offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
+    size=[brick2SizeX-middleWidth,gridSizeY,1],
+    offset=[0.5*(brick2SizeX-middleWidth+middleWidth), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
     align="ccs",
     
-    holeZ=brick2HolesZ,
+    holeZ=holeZ_2,
     
     baseCutoutType = baseCutoutType,
     pillars = pillars,

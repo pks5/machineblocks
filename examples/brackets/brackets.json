@@ -163,9 +163,30 @@
             "url": "https://machineblocks.com/examples/bracket",
             "bricks" : [
                 {
-                    "name": "Bracket",
+                    "name": "Bracket 3x2x1_1_3",
                     "parameters": {
-                        
+                        "size": [3, 2, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x1x1_1_3",
+                    "parameters": {
+                        "size": [5, 1, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x2x1_1_3",
+                    "parameters": {
+                        "size": [5, 2, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x2x2_1_3",
+                    "parameters": {
+                        "size": [5, 2, 7]
                     }
                 }
             ]
