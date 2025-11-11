@@ -282,6 +282,7 @@ module machineblock(
         svgColor = "#2c3e50", // color - Color of svg
 
         connectors = false, // bool
+        connectorPadding = [0, 0],
         connectorHeight = "auto", // mbu
         connectorDepth = 0.75, // mbu
         connectorWidth = 2.5, // mbu
@@ -759,6 +760,7 @@ module machineblock(
                                                 bevelOuterAdjusted = bevelOuterAdjusted,
                                                 
                                                 connectors = connectors,
+                                                connectorPadding = connectorPadding,
                                                 connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
                                                 connectorDepth = connectorDepth * mbuToMm,
                                                 connectorSize = connectorWidth * mbuToMm,
@@ -1198,6 +1200,7 @@ module machineblock(
                                             bevelOuter = bevelOuter,
                                             bevelOuterAdjusted = bevelOuterAdjusted,
                                             connectors = connectors,
+                                            connectorPadding = connectorPadding,
                                             connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
                                             connectorDepth = connectorDepth * mbuToMm,
                                             connectorSize = connectorWidth * mbuToMm,

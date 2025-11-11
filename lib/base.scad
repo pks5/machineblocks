@@ -197,6 +197,7 @@ module mb_base(
     bevelOuterAdjusted,
 
     connectors = [],
+    connectorPadding,
     connectorHeight,
     connectorDepth,
     connectorSize,
@@ -344,6 +345,7 @@ module mb_base(
                     if(connectors[con][1] == 1){
                         mb_connectors(side = connectors[con][0],
                                 grid = grid,
+                                padding = connectorPadding,
                                 height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                                 baseHeight = height,
                                 inverse=true,
@@ -354,6 +356,7 @@ module mb_base(
                     else if(connectors[con][1] > 1){
                         mb_connector_grooves(side = connectors[con][0],
                             grid = grid,
+                            padding = connectorPadding,
                             depth = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                             baseHeight = height,
                             inverse=connectors[con][1]==3,
@@ -375,6 +378,7 @@ module mb_base(
                 if(connectors[con][1] == 0){
                     mb_connectors(side = connectors[con][0],
                             grid = grid,
+                            padding = connectorPadding,
                             height = (connectorHeight == "auto" ? height : connectorHeight),
                             baseHeight = height,
                             inverse=connectors[con][1]==1,

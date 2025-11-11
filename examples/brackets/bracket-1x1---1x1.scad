@@ -2,7 +2,7 @@
  * MachineBlocks
  * https://machineblocks.com/examples/angle
  *
- * Bracket 1x1 - 1x1 Inverted
+ * Bracket 1x1 - 1x1
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -28,7 +28,7 @@ size_2 = [1, 1];
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 // Whether bracked should be inverted
-inverted = true;
+inverted = false;
 
 offset = 0;
 

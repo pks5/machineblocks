@@ -19,11 +19,16 @@
 // Brick size
 size = [3, 2, 1]; // [1:32]
 
-// Second brick's size in Y-direction specified as multiple of an 1x1 brick.
-brick2SizeY = 2; // [1:32]
+// Brick 2 Size
+size_2 = [3, 2];
 
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
+
+// Whether bracked should be inverted
+inverted = false;
+
+offset = 0;
 
 /* [Base] */
 
@@ -47,6 +52,13 @@ baseRoundingRadiusZ = [0, 0.5, 0.5, 0];
 /* [Hidden] */
 
 /*{HIDDEN_PARAMETERS}*/
+connectorPaddingStart1 = max(0, offset);
+connectorPaddingEnd1 = max(0, size[0] - size_2[0] - offset);
+
+connectorPaddingStart2 = max(0, -offset);
+connectorPaddingEnd2 = max(0, size_2[0] - size[0] + offset);
+
+echo (connectorPaddingEnd1 = connectorPaddingEnd1, connectorPaddingEnd2 = connectorPaddingEnd2);
 
 // Generate the block
 
@@ -58,8 +70,9 @@ machineblock(
 
     /*{STUD_PARAMETERS_1}*/
     
-    connectors = assemblyMode == "merged" ? false : [[ 2, 0 ] ],
+    connectors = assemblyMode == "merged" ? false : [[ inverted ? 2 : 3, 0 ] ],
     connectorSideTolerance = assemblyMode == "merged" ? 0 : 0.1,
+    connectorPadding = [connectorPaddingStart1, connectorPaddingEnd1],
 
     /*{STYLE_PARAMETERS}*/
 
@@ -70,9 +83,13 @@ machineblock(
 ){
 
   machineblock(
-      size = [ size[0], brick2SizeY, 0.5 ],
-      offset = [assemblyMode == "unassembled" ? 2.5 : 0, 0,0],
-      rotation = [assemblyMode == "unassembled" ? 0 : 90,0,0],
+      size = [ size_2[0], size_2[1], 0.5 ],
+
+      offset = assemblyMode == "unassembled" ? [size[0] + 0.5, 0, 0] : (inverted ? [offset, 0, 0] : [offset, 0, size[2]]),
+      
+      rotation = assemblyMode == "unassembled" ? [0, 0, 0] : (inverted ? [90,0,0] : [-90,0,180]),
+      
+      rotationOffset = assemblyMode == "unassembled" ? [0, 0, 0] : (inverted ? [0,0,0] : [-0.5*size_2[0],0,0]),
       
       baseCutoutType = "none",
       baseRoundingRadius=[0,0,baseRoundingRadiusZ],
@@ -81,6 +98,7 @@ machineblock(
       
       connectors = assemblyMode == "merged" ? false : [ [ 2, 2 ] ],
       connectorHeight = size[2] * unitGrid[1],
+      connectorPadding = [connectorPaddingStart2, connectorPaddingEnd2],
       
       /*{STYLE_PARAMETERS}*/
 

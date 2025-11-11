@@ -2,7 +2,7 @@
  * MachineBlocks
  * https://machineblocks.com/examples/angle
  *
- * Bracket 1x1 - 1x1 Inverted
+ * Bracket 2x1 - 2x2
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -19,16 +19,16 @@ include <../../config/config.scad>;
 /* [Size] */
 
 // Brick size
-size = [1, 1, 1]; // [1:32]
+size = [2, 1, 1]; // [1:32]
 
 // Brick 2 Size
-size_2 = [1, 1];
+size_2 = [2, 2];
 
 // Select "unassembled" for printing without support. Select "merged" for printing as one piece. Use "assembled" only for preview.
 assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 // Whether bracked should be inverted
-inverted = true;
+inverted = false;
 
 offset = 0;
 
