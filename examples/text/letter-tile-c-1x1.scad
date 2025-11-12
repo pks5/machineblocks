@@ -105,7 +105,7 @@ recess = false;
 // Whether knobs should be drawn inside pit
 recessStuds = false;
 // Pit wall thickness as multiple of one brick side length (grid)
-recessWallThickness = 0.333; // [0:0.001:128]
+recessWallThickness = [0.333, 0.333, 0.333, 0.333]; // [0:0.001:128]
 
 /* [Slope] */
 

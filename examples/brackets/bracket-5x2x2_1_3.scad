@@ -22,18 +22,18 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Size] */
 
-size = [5, 2, 7];
+// Bracke Size
+size = [5, 2, 7]; // [0:1:128]
 
 middleWidth = 1;
 
+//Whether first plate has pin holes
 holeZ_1 = true;
+
+//Whether second plate has pin holes
 holeZ_2 = true;
 
-middleLayers = size[2] - 2;
-brick1SizeX = 0.5 * (size[0] + middleWidth);
-brick2SizeX = 0.5 * (size[0] + middleWidth);
 
-gridSizeY = size[1];
 
 
 
@@ -160,6 +160,12 @@ roundingResolution_ovr = 64; // [16:1:512]
 
 
 /* [Hidden] */
+middleLayers = size[2] - 2;
+brick1SizeX = 0.5 * (size[0] + middleWidth);
+brick2SizeX = 0.5 * (size[0] + middleWidth);
+
+gridSizeY = size[1];
+
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
 

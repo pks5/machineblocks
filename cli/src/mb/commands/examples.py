@@ -231,7 +231,7 @@ def process_examples_file(example_file_path: str):
 
         try:
             with open(template_file_path, "r", encoding="utf-8") as file:
-                brick_template = file.read()
+                brick_template = clean_text(file.read())
         except OSError as e:
             print(f"Cannot open template '{template_file_path}': {e}")
             continue
@@ -299,6 +299,10 @@ def process_examples_file(example_file_path: str):
                 print("Wrote " + out_path)
             except OSError as e:
                 print(f"Failed to write '{out_path}': {e}")
+
+def clean_text(s: str) -> str:
+    # Entfernt alle unsichtbaren oder nicht druckbaren Unicode-Zeichen
+    return ''.join(ch for ch in s if ch.isprintable() or ch in '\n\r\t')
 
 def _collect_json_files_recursive(root_dir: str) -> List[str]:
     """Return a sorted list of absolute paths to all .json files under root_dir (recursive)."""

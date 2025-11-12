@@ -31,6 +31,13 @@
                         "size": [2, 8, 1],
                         "holeZ" : true
                     }
+                },
+                {
+                    "name": "Technic Plate 4x4 with 9 Holes",
+                    "parameters": {
+                        "size": [4, 4, 1],
+                        "holeZ" : true
+                    }
                 }
             ]
         }

@@ -38,10 +38,10 @@ offset = 0; // [-32:1:32]
 /*{BASE_VARIABLES}*/
 
 // Radius of the brick 1 (grid)
-roundingRadius_1 = [0.0, 0.0, 0.0, 0.0]; // [0:0.1:8]
+roundingRadius_1 = [0, 0, 0, 0]; // [0:0.1:8]
 
 // Radius of the brick 2 (grid)
-roundingRadius_2 = [0.0, 0.5, 0.5, 0.0]; // [0:0.1:8]
+roundingRadius_2 = [0, 0.5, 0.5, 0]; // [0:0.1:8]
 
 /* [Studs] */
 

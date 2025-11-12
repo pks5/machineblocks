@@ -23,7 +23,9 @@ def _safe_title_32(s: str) -> str:
     base = os.path.basename(s)
     if base.lower().endswith(".scad"):
         base = base[:-5]
+    base = base.replace("---", "&spaceminusspace;")
     base = base.replace("-", " ")
+    base = base.replace("&spaceminusspace;", " - ")
     return base[:32].title()
 
 def _ensure_font(font_path: str, font_file: str, size: int) -> ImageFont.FreeTypeFont:

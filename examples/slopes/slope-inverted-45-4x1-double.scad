@@ -101,11 +101,11 @@ holeZShift = "xy"; // [none:None, x:X-Direction, y:Y-Direction, xy:Both Directio
 /* [Recess] */
 
 // Whether brick should have a pit
-recess = false;
+recess = true;
 // Whether knobs should be drawn inside pit
-recessStuds = false;
+recessStuds = true;
 // Pit wall thickness as multiple of one brick side length (grid)
-recessWallThickness = 0.333; // [0:0.001:128]
+recessWallThickness = [1, 1, 0, 0]; // [0:0.001:128]
 
 /* [Slope] */
 
