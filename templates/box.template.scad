@@ -19,33 +19,23 @@ viewMode = "print"; // [print, assembled, cover]
 
 /* [Size] */
 
-// Box size in X-direction specified as multiple of an 1x1 brick.
-boxSizeX = 6; // [1:32] 
-// Box size in Y-direction specified as multiple of an 1x1 brick.
-boxSizeY = 6; // [1:32] 
-// Total box height specified as number of layers. Each layer has the height of one plate.
-boxLayers = 9; // [1:24]
+// Brick size
+size = [6, 6, 9]; // [1:32]
 
 /* [Base] */
 
 // Type of cut-out on the underside.
-baseCutoutType = "classic"; // [none, classic]
+baseCutoutType = "standard"; // [none, standard, studs, groove]
 // Whether the base should have a tongue
 baseTongue = false;
 // Whether the base should have knobs
 baseKnobs = true;
 // Type of the base knobs
-baseKnobType = "classic"; // [classic, technic]
+baseKnobType = "solid"; // [solid, hollow]
 // Whether base knobs should be centered.
 baseKnobCentered = false;
 // The box rounding radius
 baseRoundingRadiusZ = 0;
-
-/*{BASE_VARIABLES}*/
-
-/* [Studs] */
-
-/*{STUD_VARIABLES}*/
 
 /* [Pit] */
 
@@ -56,7 +46,7 @@ basePitWallGaps = [];
 // Whether the pit should contain knobs
 basePitKnobs = false;
 // Type of the base pit knobs
-basePitKnobType = "classic"; // [classic, technic]
+basePitKnobType = "solid"; // [solid, hollow]
 // Whether base pit knobs should be centered.
 basePitKnobCentered = false;
 
@@ -69,7 +59,7 @@ lidLayers = 1; // [1:24]
 // Whether the lid should have knobs
 lidKnobs = true;
 // Type of the lid knobs
-lidKnobType = "classic"; // [classic, technic]
+lidKnobType = "solid"; // [solid, hollow]
 // Whether lid knobs should be centered.
 lidKnobCentered = false;
 // Whether lid should have pillars
@@ -81,6 +71,10 @@ lidText = "";
 //Text Font
 textFont = "RBNo3.1";
 
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
+
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
@@ -88,29 +82,26 @@ textFont = "RBNo3.1";
 /*{HIDDEN_PARAMETERS}*/
 
 machineblock(
-    size=[boxSizeX, boxSizeY,boxLayers - (lid ? lidLayers : 0)],
+    size=[size[0], size[1],size[2] - (lid ? lidLayers : 0)],
     
     baseCutoutType = baseCutoutType,
     baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
-    /*{BASE_PARAMETERS}*/
-
+    
     studs = baseKnobs,
     studType = baseKnobType,
-    studCenteredX = baseKnobCentered,
-    studCenteredY = baseKnobCentered,
+    studShift = baseKnobCentered,
     
-    /*{STUD_PARAMETERS}*/
-    
-    pit=true,
-    pitWallGaps = basePitWallGaps,
-    pitWallThickness = basePitWallThickness,
-    pitKnobs = basePitKnobs,
-    pitKnobType = basePitKnobType,
-    pitKnobCenteredX = basePitKnobCentered,
-    pitKnobCenteredY = basePitKnobCentered,
+    recess = true,
+    recessWallGaps = basePitWallGaps,
+    recessWallThickness = basePitWallThickness,
+    recessStuds = basePitKnobs,
+    recessStudType = basePitKnobType,
+    recessStudShift = basePitKnobCentered,
     
     tongue = baseTongue,
     tongueClampThickness = lidPermanent ? 0.1 : 0,
+
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -118,29 +109,30 @@ machineblock(
 );
 
 if(lid){
-    translate(viewMode != "print" ? [0, 0, ((boxLayers - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [boxSizeX > boxSizeY ? 0 : (boxSizeX + 0.5) * 8.0, boxSizeX > boxSizeY ? -(boxSizeY + 0.5) * 8.0 : 0, 0])
+    translate(viewMode != "print" ? [0, 0, ((size[2] - lidLayers) + (viewMode == "cover" ? 2*lidLayers : 0)) * 3.2] : [size[0] > size[1] ? 0 : (size[0] + 0.5) * 8.0, size[0] > size[1] ? -(size[1] + 0.5) * 8.0 : 0, 0])
         machineblock(
-            size=[boxSizeX, boxSizeY, lidLayers],
+            size=[size[0], size[1], lidLayers],
             
             pillars = lidPillars,
-            pitWallGaps = basePitWallGaps,
-            baseCutoutType = baseTongue ? "groove" : "classic",
+            recessWallGaps = basePitWallGaps,
+            baseCutoutType = baseTongue ? "groove" : "standard",
             baseRoundingRadius = [0, 0, baseRoundingRadiusZ],
-            /*{BASE_PARAMETERS}*/
+            
 
             tongueThicknessAdjustment = 0.1,
 
             studs = lidKnobs,
             studType = lidKnobType,
-            studCenteredX = lidKnobCentered,
-            studCenteredY = lidKnobCentered,
-            studIcon = studIcon,
+            studShift = lidKnobCentered,
+            
 
             textSide = 5,
             textSize = 10,
             textDepth = 0.8,
             text = lidText,
             textFont = textFont,
+
+            /*{STYLE_PARAMETERS}*/
 
             baseSideAdjustment = bSideAdjustment,
 

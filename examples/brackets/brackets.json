@@ -12,73 +12,147 @@
             "url": "https://machineblocks.com/examples/angle",
             "bricks": [
                 {
+                    "name": "Bracket 1x1 - 1x1",
+                    "parameters": {
+                        "size": [1, 1, 1],
+                        "size_2": [1, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": 0
+                    }
+                },
+                {
+                    "name": "Bracket 1x1 - 1x2",
+                    "parameters": {
+                        "size": [1, 1, 1],
+                        "size_2": [1, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": 0
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 2x1",
+                    "parameters": {
+                        "size": [2, 1, 1],
+                        "size_2": [2, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": 0
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 4x1",
+                    "parameters": {
+                        "size": [2, 1, 1],
+                        "size_2": [4, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": -1
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 2x2",
+                    "parameters": {
+                        "size": [2, 1, 1],
+                        "size_2": [2, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": 0
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 4x2",
+                    "parameters": {
+                        "size": [2, 1, 1],
+                        "size_2": [4, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": -1
+                    }
+                },
+                {
+                    "name": "Bracket 2x1 - 6x2",
+                    "parameters": {
+                        "size": [2, 1, 1],
+                        "size_2": [6, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": -2
+                    }
+                },
+                {
+                    "name": "Bracket 4x2 - 4x1",
+                    "parameters": {
+                        "size": [4, 2, 1],
+                        "size_2": [4, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : false,
+                        "offset": 0
+                    }
+                },
+                {
                     "name": "Bracket 1x1 - 1x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 1,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.08
+                        "size": [1, 1, 1],
+                        "size_2": [1, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 1x1 - 1x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.08
+                        "size": [1, 1, 1],
+
+                        "size_2": [1, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 1x2 - 1x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brick1SizeY": 2,
-                        "brick2SizeY": 2,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.12
+                        "size": [1, 2, 1],
+                        "size_2": [1, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 2x1 - 2x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 1,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.12
+                        "size": [2, 1, 1],
+                        "size_2": [2, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 2x1 - 2x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.12
+                        "size": [2, 1, 1],
+                        "size_2": [2, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 6x1 - 6x2 Inverted",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brick1SizeY": 1,
-                        "brick2SizeY": 2,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "size": [6, 1, 1],
+                        "size_2": [6, 2],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 },
                 {
                     "name": "Bracket 6x2 - 6x1 Inverted",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brick1SizeY": 2,
-                        "brick2SizeY": 1,
-                        "surfacePattern": "../pattern/squares.svg",
-                        "surfacePatternScale": 0.3
+                        "size": [6, 2, 1],
+                        "size_2": [6, 1],
+                        "studPadding_2": [0, 0, 0, 0],
+                        "inverted" : true
                     }
                 }
             ]
@@ -89,9 +163,30 @@
             "url": "https://machineblocks.com/examples/bracket",
             "bricks" : [
                 {
-                    "name": "Bracket",
+                    "name": "Bracket 3x2x1_1_3",
                     "parameters": {
-                        
+                        "size": [3, 2, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x1x1_1_3",
+                    "parameters": {
+                        "size": [5, 1, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x2x1_1_3",
+                    "parameters": {
+                        "size": [5, 2, 4]
+                    }
+                },
+
+                {
+                    "name": "Bracket 5x2x2_1_3",
+                    "parameters": {
+                        "size": [5, 2, 7]
                     }
                 }
             ]

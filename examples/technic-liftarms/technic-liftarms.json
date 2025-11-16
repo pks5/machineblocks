@@ -14,84 +14,72 @@
                 {
                     "name": "Technic Liftarm Thick 2x1",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [2, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Technic Liftarm 3x1",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [3, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Technic Liftarm 4x1",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [4, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Technic Liftarm 6x1",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [6, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Technic Liftarm 8x1",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [8, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 },
                 {
                     "name": "Technic Liftarm 12x1",
                     "parameters": {
-                        "brickSizeX": 12,
-                        "brickSizeY": 1,
-                        "baseLayers": 2.5,
+                        "size": [12, 1, 2.3125],
                         "holesX" : true,
-                        "holeXCentered" : false,
-                        "holeXGridOffsetZ": 2.5,
-                        "knobs": false,
-                        "baseRoundingRadiusY":1.25,
+                        "holeXShift" : false,
+                        "holeXGridOffsetZ": 2.3125,
+                        "studs": false,
+                        "baseRoundingRadiusY":1.15625,
                         "baseCutoutType": "none"
                     }
                 }

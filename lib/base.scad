@@ -181,7 +181,7 @@ module mb_base(
     baseRoundingRadius,
 
     roundingResolution,
-    
+
     pit,
     pitRoundingRadius,
     pitWallThickness,
@@ -197,6 +197,7 @@ module mb_base(
     bevelOuterAdjusted,
 
     connectors = [],
+    connectorPadding,
     connectorHeight,
     connectorDepth,
     connectorSize,
@@ -308,16 +309,16 @@ module mb_base(
             * Pit
             */
             if(pit){
-                pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]) * gridSizeXY;
-                pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]) * gridSizeXY;
-                pitBevelInner = mb_inset_quad_lrfh(bevelOuter, [pitWallThickness[0]*gridSizeXY, pitWallThickness[1]*gridSizeXY, pitWallThickness[2]*gridSizeXY, pitWallThickness[3]*gridSizeXY]);
-                pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0])*gridSizeXY, -min(pitWallThickness[0], pitWallThickness[3])*gridSizeXY, -min(pitWallThickness[3], pitWallThickness[1])*gridSizeXY, -min(pitWallThickness[1], pitWallThickness[2])*gridSizeXY];
+                pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]);
+                pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]);
+                pitBevelInner = mb_inset_quad_lrfh(bevelOuter, pitWallThickness);
+                pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
                     
                 translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
-                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]) * gridSizeXY, 0.5 * (pitWallThickness[2] - pitWallThickness[3]) * gridSizeXY, 0])
+                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
                             mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=roundingResolution, center = true);
                     }
                 }
@@ -327,11 +328,11 @@ module mb_base(
                     gap = pitWallGaps[gapIndex];
                     if(gap[0] < 2){
                         translate([sideX(gap[0]), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
-                            cube([2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
+                            cube([2 * pitWallThickness[gap[0]] * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
                     }  
                     else{
                         translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(gap[0] - 2), 0.5*(height - pitDepth + cutOffset)])
-                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * gridSizeXY * cutMultiplier, pitDepth + cutOffset], center = true);     
+                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[gap[0]] * cutMultiplier, pitDepth + cutOffset], center = true);     
                     } 
                 }
             } // End Pit
@@ -344,6 +345,7 @@ module mb_base(
                     if(connectors[con][1] == 1){
                         mb_connectors(side = connectors[con][0],
                                 grid = grid,
+                                padding = connectorPadding,
                                 height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                                 baseHeight = height,
                                 inverse=true,
@@ -354,6 +356,7 @@ module mb_base(
                     else if(connectors[con][1] > 1){
                         mb_connector_grooves(side = connectors[con][0],
                             grid = grid,
+                            padding = connectorPadding,
                             depth = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
                             baseHeight = height,
                             inverse=connectors[con][1]==3,
@@ -375,6 +378,7 @@ module mb_base(
                 if(connectors[con][1] == 0){
                     mb_connectors(side = connectors[con][0],
                             grid = grid,
+                            padding = connectorPadding,
                             height = (connectorHeight == "auto" ? height : connectorHeight),
                             baseHeight = height,
                             inverse=connectors[con][1]==1,

@@ -20,17 +20,21 @@ assemblyMode = "merged"; // [unassembled, assembled, merged]
 
 /* [Size] */
 
-brick1SizeX = 4;
-brick1HolesZ = true;
-brick1KnobType = "classic"; // [classic, technic]
+// Bracke Size
+size = [7, 2, 4]; // [0:1:128]
 
-brick2SizeX = 4;
-brick2HolesZ = true;
-brick2KnobType = "classic"; // [classic, technic]
+middleWidth = 1;
 
-gridSizeY = 2;
-middleSizeX = 1;
-middleLayers = 2;
+//Whether first plate has pin holes
+holeZ_1 = true;
+
+//Whether second plate has pin holes
+holeZ_2 = true;
+
+
+
+
+
 
 /* [Base] */
 
@@ -38,11 +42,23 @@ middleLayers = 2;
 
 /* [Studs] */
 
-/*{STUD_VARIABLES}*/
+/*{STUD_VARIABLES_1}*/
+
+/*{STUD_VARIABLES_2}*/
+
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
 /* [Hidden] */
+middleLayers = size[2] - 2;
+brick1SizeX = 0.5 * (size[0] + middleWidth);
+brick2SizeX = 0.5 * (size[0] + middleWidth);
+
+gridSizeY = size[1];
+
 multipart = assemblyMode != "merged";
 assembled = assemblyMode != "unassembled";
 
@@ -50,15 +66,16 @@ assembled = assemblyMode != "unassembled";
 
 machineblock(
     size=[brick1SizeX,gridSizeY,1],
-    offset=[-0.5*(brick1SizeX-middleSizeX),0,0],
-    holeZ=[brick1HolesZ,[brick1SizeX-middleSizeX-1,0,brick1SizeX-2,gridSizeY-2,true]],
-    studType = brick1KnobType,
-    
-    /*{STUD_PARAMETERS}*/
-
+    offset=[-0.5*(brick1SizeX-middleWidth),0,0],
     align="ccs",
+    
+    holeZ=[holeZ_1,[brick1SizeX-middleWidth-1,0,brick1SizeX-2,gridSizeY-2,false]],
+    
+    /*{STUD_PARAMETERS_1}*/
 
     /*{BASE_PARAMETERS}*/
+
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     
@@ -67,14 +84,16 @@ machineblock(
 );
 
 machineblock(
-    size=[middleSizeX,gridSizeY,middleLayers],
+    size=[middleWidth,gridSizeY,middleLayers],
     offset=[0,0,1],
+    align="ccs",
+    
     studs = false,
     tongue = multipart,
-    align="ccs",
-    studIcon = studIcon,
-
+    
     /*{BASE_PARAMETERS}*/
+
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     
@@ -83,15 +102,16 @@ machineblock(
 );
 
 machineblock(
-    size=[middleSizeX,gridSizeY,1],
+    size=[middleWidth,gridSizeY,1],
     offset=[0, assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    studType = brick2KnobType,
+    align="ccs",
+    
     baseCutoutType = multipart ? "groove" : "none",
     tongueThicknessAdjustment = 0.1,
-    align="ccs",
-    studIcon = studIcon,
+    
+    /*{STUD_PARAMETERS_2}*/
 
-    /*{BASE_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = [bSideAdjustment, -bSideAdjustment, bSideAdjustment, bSideAdjustment],
     
@@ -100,14 +120,17 @@ machineblock(
 
 
 machineblock(
-    size=[brick2SizeX-middleSizeX,gridSizeY,1],
-    offset=[0.5*(brick2SizeX-middleSizeX+middleSizeX), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
-    holeZ=brick2HolesZ,
-    studType = brick2KnobType,
+    size=[brick2SizeX-middleWidth,gridSizeY,1],
+    offset=[0.5*(brick2SizeX-middleWidth+middleWidth), assembled ? 0 : -gridSizeY-0.5, assembled ? middleLayers+1 : 0],
     align="ccs",
-    studIcon = studIcon,
-
+    
+    holeZ=holeZ_2,
+    
     /*{BASE_PARAMETERS}*/
+
+    /*{STUD_PARAMETERS_2}*/
+
+    /*{STYLE_PARAMETERS}*/
 
     baseSideAdjustment = bSideAdjustment,
     

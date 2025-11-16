@@ -7,15 +7,15 @@
     "name": "Text Bricks",
     "examples": [
         {
-            "template": "../../templates/text.template.scad",
+            "template": "../../templates/brick.template.scad",
             "targetDirectory": ".",
             "url": "https://machineblocks.com/examples/text",
             "bricks": [
                 {
                     "name": "Letter Tile A 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "a",
                         "textSize": 5
                     }
@@ -23,8 +23,8 @@
                 {
                     "name": "Letter Tile B 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "b",
                         "textSize": 5
                     }
@@ -32,8 +32,8 @@
                 {
                     "name": "Letter Tile C 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "c",
                         "textSize": 5
                     }
@@ -41,8 +41,8 @@
                 {
                     "name": "Letter Tile D 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "d",
                         "textSize": 5
                     }
@@ -50,8 +50,8 @@
                 {
                     "name": "Letter Tile E 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "e",
                         "textSize": 5
                     }
@@ -59,8 +59,8 @@
                 {
                     "name": "Letter Tile F 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "f",
                         "textSize": 5
                     }
@@ -68,8 +68,8 @@
                 {
                     "name": "Letter Tile G 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "g",
                         "textSize": 5
                     }
@@ -77,8 +77,8 @@
                 {
                     "name": "Letter Tile H 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "h",
                         "textSize": 5
                     }
@@ -86,8 +86,8 @@
                 {
                     "name": "Letter Tile I 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "i",
                         "textSize": 5
                     }
@@ -95,8 +95,8 @@
                 {
                     "name": "Letter Tile J 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "j",
                         "textSize": 5
                     }
@@ -104,8 +104,8 @@
                 {
                     "name": "Letter Tile K 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "k",
                         "textSize": 5
                     }
@@ -113,8 +113,8 @@
                 {
                     "name": "Letter Tile L 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "l",
                         "textSize": 5
                     }
@@ -122,8 +122,8 @@
                 {
                     "name": "Letter Tile M 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "m",
                         "textSize": 5
                     }
@@ -131,8 +131,8 @@
                 {
                     "name": "Letter Tile N 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "n",
                         "textSize": 5
                     }
@@ -140,8 +140,8 @@
                 {
                     "name": "Letter Tile O 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "o",
                         "textSize": 5
                     }
@@ -149,8 +149,8 @@
                 {
                     "name": "Letter Tile P 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "p",
                         "textSize": 5
                     }
@@ -158,8 +158,8 @@
                 {
                     "name": "Letter Tile Q 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "q",
                         "textSize": 5
                     }
@@ -167,8 +167,8 @@
                 {
                     "name": "Letter Tile R 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "r",
                         "textSize": 5
                     }
@@ -176,8 +176,8 @@
                 {
                     "name": "Letter Tile S 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "s",
                         "textSize": 5
                     }
@@ -185,8 +185,8 @@
                 {
                     "name": "Letter Tile T 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "t",
                         "textSize": 5
                     }
@@ -194,8 +194,8 @@
                 {
                     "name": "Letter Tile U 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "u",
                         "textSize": 5
                     }
@@ -203,8 +203,8 @@
                 {
                     "name": "Letter Tile V 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "v",
                         "textSize": 5
                     }
@@ -212,8 +212,8 @@
                 {
                     "name": "Letter Tile W 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "w",
                         "textSize": 5
                     }
@@ -221,8 +221,8 @@
                 {
                     "name": "Letter Tile X 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "x",
                         "textSize": 5
                     }
@@ -230,8 +230,8 @@
                 {
                     "name": "Letter Tile Y 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "y",
                         "textSize": 5
                     }
@@ -239,8 +239,8 @@
                 {
                     "name": "Letter Tile Z 1x1",
                     "parameters": {
-                        "brickSizeX": 1,
-                        "brickSizeY": 1,
+                        "size": [1, 1, 1],
+                        "studs": false,
                         "text": "z",
                         "textSize": 5
                     }
@@ -249,208 +249,208 @@
                 {
                     "name": "Letter Tile A 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "A"
                     }
                 },
                 {
                     "name": "Letter Tile B 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "B"
                     }
                 },
                 {
                     "name": "Letter Tile C 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "C"
                     }
                 },
                 {
                     "name": "Letter Tile D 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "D"
                     }
                 },
                 {
                     "name": "Letter Tile E 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "E"
                     }
                 },
                 {
                     "name": "Letter Tile F 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "F"
                     }
                 },
                 {
                     "name": "Letter Tile G 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "G"
                     }
                 },
                 {
                     "name": "Letter Tile H 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "H"
                     }
                 },
                 {
                     "name": "Letter Tile I 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "I"
                     }
                 },
                 {
                     "name": "Letter Tile J 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "J"
                     }
                 },
                 {
                     "name": "Letter Tile K 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "K"
                     }
                 },
                 {
                     "name": "Letter Tile L 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "L"
                     }
                 },
                 {
                     "name": "Letter Tile M 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "M"
                     }
                 },
                 {
                     "name": "Letter Tile N 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "N"
                     }
                 },
                 {
                     "name": "Letter Tile O 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "O"
                     }
                 },
                 {
                     "name": "Letter Tile P 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "P"
                     }
                 },
                 {
                     "name": "Letter Tile Q 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "Q"
                     }
                 },
                 {
                     "name": "Letter Tile R 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "R"
                     }
                 },
                 {
                     "name": "Letter Tile S 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "S"
                     }
                 },
                 {
                     "name": "Letter Tile T 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "T"
                     }
                 },
                 {
                     "name": "Letter Tile U 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "U"
                     }
                 },
                 {
                     "name": "Letter Tile V 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "V"
                     }
                 },
                 {
                     "name": "Letter Tile W 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "W"
                     }
                 },
                 {
                     "name": "Letter Tile X 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "X"
                     }
                 },
                 {
                     "name": "Letter Tile Y 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "Y"
                     }
                 },
                 {
                     "name": "Letter Tile Z 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "Z"
                     }
                 },
@@ -459,80 +459,80 @@
                 {
                     "name": "Number Tile 0 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "0"
                     }
                 },
                 {
                     "name": "Number Tile 1 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "1"
                     }
                 },
                 {
                     "name": "Number Tile 2 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "2"
                     }
                 },
                 {
                     "name": "Number Tile 3 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "3"
                     }
                 },
                 {
                     "name": "Number Tile 4 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "4"
                     }
                 },
                 {
                     "name": "Number Tile 5 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "5"
                     }
                 },
                 {
                     "name": "Number Tile 6 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "6"
                     }
                 },
                 {
                     "name": "Number Tile 7 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "7"
                     }
                 },
                 {
                     "name": "Number Tile 8 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "8"
                     }
                 },
                 {
                     "name": "Number Tile 9 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "text": "9"
                     }
                 },
@@ -541,8 +541,8 @@
                 {
                     "name": "Symbol Tile House 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf015",
                         "textSize": 8
@@ -551,8 +551,8 @@
                 {
                     "name": "Symbol Tile Ice Cream 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf810",
                         "textSize": 8
@@ -561,8 +561,8 @@
                 {
                     "name": "Symbol Tile Helicopter 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf533",
                         "textSize": 8
@@ -571,8 +571,8 @@
                 {
                     "name": "Symbol Tile Star 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf005",
                         "textSize": 8
@@ -581,8 +581,8 @@
                 {
                     "name": "Symbol Tile Football 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf44e",
                         "textSize": 8
@@ -591,8 +591,8 @@
                 {
                     "name": "Symbol Tile Frog 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf52e",
                         "textSize": 8
@@ -601,8 +601,8 @@
                 {
                     "name": "Symbol Tile Gun 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                       "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\ue19b",
                         "textSize": 8
@@ -611,8 +611,8 @@
                 {
                     "name": "Symbol Tile Guitar 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf7a6",
                         "textSize": 8
@@ -621,8 +621,8 @@
                 {
                     "name": "Symbol Tile Dog 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf6d3",
                         "textSize": 8
@@ -631,8 +631,8 @@
                 {
                     "name": "Symbol Tile Cow 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf6c8",
                         "textSize": 8
@@ -641,8 +641,8 @@
                 {
                     "name": "Symbol Tile Cloud Bolt 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf76c",
                         "textSize": 8
@@ -651,8 +651,8 @@
                 {
                     "name": "Symbol Tile Car 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1b9",
                         "textSize": 8
@@ -661,8 +661,8 @@
                 {
                     "name": "Symbol Tile Comments 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf086",
                         "textSize": 8
@@ -671,8 +671,8 @@
                 {
                     "name": "Symbol Tile Tree 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1bb",
                         "textSize": 8
@@ -681,8 +681,8 @@
                 {
                     "name": "Symbol Tile Earth Americas 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf57d",
                         "textSize": 8
@@ -691,8 +691,8 @@
                 {
                     "name": "Symbol Tile Flask 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf0c3",
                         "textSize": 8
@@ -701,8 +701,8 @@
                 {
                     "name": "Symbol Tile Anchor 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf13d",
                         "textSize": 8
@@ -711,8 +711,8 @@
                 {
                     "name": "Symbol Tile Leaf 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf06c",
                         "textSize": 8
@@ -721,8 +721,8 @@
                 {
                     "name": "Symbol Tile Trophy 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf091",
                         "textSize": 8
@@ -731,8 +731,8 @@
                 {
                     "name": "Symbol Tile Robot 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf544",
                         "textSize": 8
@@ -741,8 +741,8 @@
                 {
                     "name": "Symbol Tile Triangle Exclaimation 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf071",
                         "textSize": 8
@@ -751,8 +751,8 @@
                 {
                     "name": "Symbol Tile Kiwi Bird 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
+                        "size": [2, 2, 1],
+                        "studs": false,
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf535",
                         "textSize": 8
@@ -762,10 +762,7 @@
                 {
                     "name": "Symbol Brick Skulls 3x1",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [3, 1, 3],
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf714\uf54c",
                         "textSide": 2,
@@ -778,10 +775,7 @@
                 {
                     "name": "Symbol Brick Heart 2x2",
                     "parameters": {
-                        "brickSizeX": 2,
-                        "brickSizeY": 2,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [2, 2, 3],
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf004",
                         "textSide": 2,
@@ -793,10 +787,7 @@
                 {
                     "name": "Symbol Brick Danger 4x2",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [4, 2, 3],
                         "textFont": "Font Awesome 6 Free Solid",
                         "text": "\uf1e2\ue4dc\uf714",
                         "textSide": 2,
@@ -809,10 +800,7 @@
                 {
                     "name": "Text Brick Hello 3x1",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 1,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [3, 1, 3],
                         "text": "Azul",
                         "textSide": 2,
                         "textSize": 6,
@@ -823,10 +811,7 @@
                 {
                     "name": "Text Brick Achtung 6x1",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 1,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [6, 1, 3],
                         "text": "Achtung",
                         "textSide": 2,
                         "textSize": 6,
@@ -837,10 +822,7 @@
                 {
                     "name": "Text Brick Cest La Vie 8x1",
                     "parameters": {
-                        "brickSizeX": 8,
-                        "brickSizeY": 1,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [8, 1, 3],
                         "text": "C'est la vie",
                         "textSide": 2,
                         "textSize": 6,
@@ -852,10 +834,7 @@
                 {
                     "name": "Text Brick Hello 4x2",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [4, 2, 3],
                         "text": "Hello",
                         "textSide": 2,
                         "textSize": 6,
@@ -865,10 +844,7 @@
                 {
                     "name": "Text Brick Good Bye 6x2",
                     "parameters": {
-                        "brickSizeX": 6,
-                        "brickSizeY": 2,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [6, 2, 3],
                         "text": "Good Bye",
                         "textSide": 2,
                         "textSize": 6,
@@ -878,10 +854,7 @@
                 {
                     "name": "Text Brick A Long Sentence 10x2",
                     "parameters": {
-                        "brickSizeX": 10,
-                        "brickSizeY": 2,
-                        "baseLayers": 3,
-                        "knobs": true,
+                        "size": [10, 2, 3],
                         "text": "A long sentence",
                         "textSide": 2,
                         "textSize": 6,
@@ -892,8 +865,8 @@
                 {
                     "name": "Text Tile Rot 3x2",
                     "parameters": {
-                        "brickSizeX": 3,
-                        "brickSizeY": 2,
+                        "size": [3, 2, 1],
+                        "studs": false,
                         "text": "Rot",
                         "textSize": 8
                     }
@@ -902,8 +875,8 @@
                 {
                     "name": "Text Tile Love 4x2",
                     "parameters": {
-                        "brickSizeX": 4,
-                        "brickSizeY": 2,
+                        "size": [4, 2, 1],
+                        "studs": false,
                         "text": "Love",
                         "textSize": 8
                     }
@@ -912,8 +885,8 @@
                 {
                     "name": "Text Tile El Cielo Es Azul 18x2",
                     "parameters": {
-                        "brickSizeX": 18,
-                        "brickSizeY": 2,
+                        "size": [18, 2, 1],
+                        "studs": false,
                         "text": "¿Por qué el cielo es azul?",
                         "textSize": 8
                     }

@@ -49,7 +49,10 @@ function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) =
 
 function mb_calc_rel_radius(radius, baseRadius, minSide) = max(0, baseRadius * ((minSide + 2*radius) / minSide));
 
-function mb_resolve_quadruple(quad, multiplier) = is_list(quad) ? [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]  : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
+function mb_resolve_side_quad(quad, multiplier) = 
+    is_list(quad) ? 
+    (len(quad) == 2 ? [quad[0]*multiplier, quad[0]*multiplier, quad[1]*multiplier, quad[1]*multiplier] : [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]) 
+    : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
 
 /*
 * Whether a given string is empty
@@ -90,7 +93,18 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 /*
 * Resolve base side adjustment
 */
-function mb_resolve_base_side_adjustment(baseSideAdjustment) = baseSideAdjustment[0] == undef ? [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment] : (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment);
+function mb_resolve_crop(crop, gridSizeXY) = 
+    is_list(crop)
+        ? (len(crop) == 2 ? [crop[0] * gridSizeXY, crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[1] * gridSizeXY] : [crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[2] * gridSizeXY, crop[3] * gridSizeXY])
+        : [crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY];
+
+function mb_resolve_base_side_adjustment(baseSideAdjustment) = 
+    is_list(baseSideAdjustment) 
+        ? (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment) 
+        : [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment];
+
+function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
+    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
 module pre_render(do_render, convexity){
     if(do_render){
@@ -101,3 +115,20 @@ module pre_render(do_render, convexity){
         children();
     }
 }
+
+// Returns how many round holes fit vertically inside a rectangle
+// without violating the bottom/top margins.
+function mb_vertical_hole_count(
+    rect_height,                    // total rectangle height
+    first_hole_center_from_bottom,  // center of first hole measured from bottom edge
+    hole_diameter,                  // hole diameter
+    hole_center_spacing,            // vertical spacing between hole centers
+    min_top_margin                  // required minimum margin at the top
+) =
+    (hole_center_spacing <= 0) ? 0 :
+    (first_hole_center_from_bottom < hole_diameter/2 ||
+     (rect_height - min_top_margin - hole_diameter/2) < first_hole_center_from_bottom) ? 0 :
+    floor(
+        (rect_height - min_top_margin - hole_diameter/2 - first_hole_center_from_bottom)
+        / hole_center_spacing
+    ) + 1;

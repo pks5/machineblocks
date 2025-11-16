@@ -16,12 +16,9 @@
 
 /* [Size] */
 
-// Brick size in X-direction specified as multiple of an 1x1 brick.
-brickSizeX = 4; // [1:32]  
-// Brick size in Y-direction specified as multiple of an 1x1 brick.
-brickSizeY = 2; // [1:32]  
-// Height of brick specified as number of layers. Each layer has the height of one plate.
-baseLayers = 1; // [1:24]
+// Brick size
+size = [4, 2, 1]; // [1:32]
+
 // Border Size as multiple of an 1x1 brick.
 borderSize = 1; // [1:8]
 
@@ -29,12 +26,7 @@ borderSize = 1; // [1:8]
 
 /*{BASE_VARIABLES}*/
 
-/* [Knobs] */
-
-// Whether to draw knobs.
-knobs = true;
-// Type of the knobs
-knobType = "solid"; // [solid, hollow]
+/* [Studs] */
 
 /*{STUD_VARIABLES}*/
 
@@ -42,6 +34,10 @@ knobType = "solid"; // [solid, hollow]
 
 pinHoles = false;
 pinHolesCentered = true;
+
+/* [Style] */
+
+/*{STYLE_VARIABLES}*/
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
@@ -52,19 +48,19 @@ pinHolesCentered = true;
 // Generate the block
 union(){
     machineblock(
-        size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        size=[borderSize, size[1],size[2]], 
+        offset=[-0.5*(size[0]-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
-        holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
-        baseWallGapsY=[[0,1,borderSize], [brickSizeY-borderSize,1,borderSize]],
-        offset=[-0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
+        holeYShift = pinHolesCentered,
+        holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
+        baseWallGapsY=[[0,1,borderSize], [size[1]-borderSize,1,borderSize]],
+        
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
         
@@ -72,19 +68,19 @@ union(){
     );  
 
     machineblock(
-        size=[brickSizeX,borderSize,baseLayers],
-        studs=knobs,
-        studType=knobType,
-        
+        size=[size[0],borderSize,size[2]],
+        offset=[0,0.5*(size[1]-borderSize),0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
-        holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
-        baseWallGapsX=[[0,0,borderSize], [brickSizeX-borderSize,0,borderSize]],
-        offset=[0,0.5*(brickSizeY-borderSize),0],
-        align="ccs",
+        holeXShift = pinHolesCentered,
+        holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
+        baseWallGapsX=[[0,0,borderSize], [size[0]-borderSize,0,borderSize]],
+        
+        /*{STYLE_PARAMETERS}*/
 
         baseSideAdjustment = bSideAdjustment,
     
@@ -92,19 +88,19 @@ union(){
     );
 
     machineblock(
-        size=[borderSize, brickSizeY,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        size=[borderSize, size[1],size[2]], 
+        offset=[0.5*(size[0]-borderSize),0,0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
-        holeYCentered = pinHolesCentered,
-        holeY = pinHoles ? [false, [1,0,brickSizeY - (pinHolesCentered ? 3 : 2),0]] : false,
-        baseWallGapsY=[[0,0,borderSize], [brickSizeY-borderSize,0,borderSize]],
-        offset=[0.5*(brickSizeX-borderSize),0,0],
-        align="ccs",
+        holeYShift = pinHolesCentered,
+        holeY = pinHoles ? [false, [1,0,size[1] - (pinHolesCentered ? 3 : 2),0]] : false,
+        baseWallGapsY=[[0,0,borderSize], [size[1]-borderSize,0,borderSize]],
+        
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     
@@ -112,19 +108,19 @@ union(){
     );    
 
     machineblock(
-        size=[brickSizeX,borderSize,baseLayers], 
-        studs=knobs,
-        studType=knobType,
-        
+        size=[size[0],borderSize,size[2]], 
+        offset=[0,-0.5*(size[1]-borderSize),0],
+        align="ccs",
+
         /*{STUD_PARAMETERS}*/
 
         /*{BASE_PARAMETERS}*/
 
-        holeXCentered = pinHolesCentered,
-        holeX = pinHoles ? [false, [1,0,brickSizeX - (pinHolesCentered ? 3 : 2),0]] : false,
-        baseWallGapsX=[[0,1,borderSize], [brickSizeX-borderSize,1,borderSize]],
-        offset=[0,-0.5*(brickSizeY-borderSize),0],
-        align="ccs",
+        holeXShift = pinHolesCentered,
+        holeX = pinHoles ? [false, [1,0,size[0] - (pinHolesCentered ? 3 : 2),0]] : false,
+        baseWallGapsX=[[0,1,borderSize], [size[0]-borderSize,1,borderSize]],
+        
+        /*{STYLE_PARAMETERS}*/
         
         baseSideAdjustment = bSideAdjustment,
     

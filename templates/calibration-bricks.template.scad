@@ -16,19 +16,15 @@
 
 /* [Size] */
 
-brick1Size = [1, 1, 1];
+size_1 = [1, 1, 1];
 
-brick2Size = [3, 1, 1];
+size_2 = [3, 1, 1];
 
-brick3Size = [3, 3, 1];
+size_3 = [3, 3, 1];
 
-/* [Base] */
+/* [Style] */
 
-/*{BASE_VARIABLES}*/
-
-/* [Studs] */
-
-/*{STUD_VARIABLES}*/
+/*{STYLE_VARIABLES}*/
 
 /*{OVERRIDE_CONFIG_VARIABLES}*/
 
@@ -37,20 +33,9 @@ brick3Size = [3, 3, 1];
 /*{HIDDEN_PARAMETERS}*/
 
 machineblock(
-    size=brick1Size, 
+    size = size_1, 
     
-    /*{STUD_PARAMETERS}*/
-    
-    baseSideAdjustment = bSideAdjustment,
-    
-    /*{PRESET_PARAMETERS}*/
-);
-
-machineblock(
-    size=brick2Size,
-    offset = [brick1Size[0] + 0.5, 0, 0],
-    
-    /*{STUD_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
@@ -58,10 +43,21 @@ machineblock(
 );
 
 machineblock(
-    size=brick3Size, 
-    offset = [brick1Size[0] + 0.5 + brick2Size[0] + 0.5, 0, 0],
+    size = size_2,
+    offset = [size_1[0] + 0.5, 0, 0],
     
-    /*{STUD_PARAMETERS}*/
+    /*{STYLE_PARAMETERS}*/
+    
+    baseSideAdjustment = bSideAdjustment,
+    
+    /*{PRESET_PARAMETERS}*/
+);
+
+machineblock(
+    size = size_3, 
+    offset = [size_1[0] + 0.5 + size_2[0] + 0.5, 0, 0],
+    
+    /*{STYLE_PARAMETERS}*/
     
     baseSideAdjustment = bSideAdjustment,
     
