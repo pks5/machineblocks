@@ -165,6 +165,7 @@ module machineblock(
         holeXGridSizeZ = 6, // mbu
         holeXGridSizeZAdjustment = 0.0, // mm
         holeXMinTopMargin = 0.5, // mbu
+        holeXPartial = "none", // "none", "start", "end", "all"
 
         holeY = false, // bool or vector
         holeYType = "pin", // "pin" | "axle"
@@ -180,6 +181,7 @@ module machineblock(
         holeYGridSizeZ = 6, // mbu
         holeYGridSizeZAdjustment = 0.0, // mm
         holeYMinTopMargin = 0.5, // mbu
+        holeYPartial = "none", // "none", "start", "end", "all"
 
         holeZ = false, // bool or vector
         holeZType = "pin", // "pin" | "axle"
@@ -187,6 +189,8 @@ module machineblock(
         holeZDiameter = "auto", // mbu | "auto"
         holeZDiameterAdjustment = 0.3, // mm
         holeRoundingResolution = 64, // int
+        holeZPartialX = "none", // "none", "start", "end", "all"
+        holeZPartialY = "none", // "none", "start", "end", "all"
 
         //Axle Holes
         holeAxleThickness = 1, //mbu
@@ -562,7 +566,24 @@ module machineblock(
     offsetX = 0.5 * (grid[0] - 1);
     offsetY = 0.5 * (grid[1] - 1);
 
-    
+    holeXStart = holeXShift ? (holeXPartial == "start" || holeXPartial == "all" ? -1 : startX) : startX;
+    holeXEnd = holeXShift ? (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) : round(endX) - 1) : (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) + 1 : floor(endX));
+
+    holeYStart = holeYShift ? (holeYPartial == "start" || holeYPartial == "all" ? -1 : startY) : startY;
+    holeYEnd = holeYShift ? (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) : round(endY) - 1) : (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) + 1 : floor(endY));
+
+    holeZStartX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? -1 : startX) : startX;
+    holeZEndX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) : round(endX) - 1) : (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) + 1 : floor(endX));
+
+    holeZStartY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? -1 : startY) : startY;
+    holeZEndY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) : round(endY) - 1) : (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) + 1 : floor(endY));
+
+    pillarStartX = holeZCenteredX ? holeZStartX : startX;
+    pillarEndX = holeZCenteredX ? holeZEndX : ceil(endX) - 1;
+
+    pillarStartY = holeZCenteredX ? holeZStartY : startY;
+    pillarEndY = holeZCenteredY ? holeZEndY : ceil(endY) - 1;
+
     /*
     * START Functions
     */
@@ -649,7 +670,7 @@ module machineblock(
     function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false);
     function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false);
     function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false);
-    
+
     /*
     * Wall Gaps
     */
@@ -995,8 +1016,8 @@ module machineblock(
                                                             * Cut TubeZ area
                                                             */
                                                             
-                                                            for (a = [ startX : 1 : ceil(endX) - 1 ]){
-                                                                for (b = [ startY : 1 : ceil(endY) - 1 ]){
+                                                            for (a = [ pillarStartX : 1 : pillarEndX ]){
+                                                                for (b = [ pillarStartY : 1 : pillarEndY ]){
                                                                     if(drawPillar(a, b)){
                                                                             translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
                                                                                 cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
@@ -1054,8 +1075,8 @@ module machineblock(
 
                                                 if(pillars != false){
                                                     //Tubes with holes
-                                                    for (a = [ startX : 1 : ceil(endX) - 1 ]){
-                                                        for (b = [ startY : 1 : ceil(endY) - 1 ]){
+                                                    for (a = [ pillarStartX : 1 : pillarEndX ]){
+                                                        for (b = [ pillarStartY : 1 : pillarEndY ]){
                                                             if(drawPillar(a, b)){
                                                                 translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
                                                                     difference(){
@@ -1118,7 +1139,7 @@ module machineblock(
                                                 //X-Holes Outer
                                                 if(holeX != false){
                                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                                        for (a = [ startX : 1 : (holeXShift ? round(endX) - 1 : endX) ]){
+                                                        for (a = [ holeXStart : 1 : holeXEnd ]){
                                                             if(drawHoleX(a, r) != false){
                                                                 translate([posX(a + (holeXShift ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
                                                                     rotate([90, 0, 0]){ 
@@ -1133,7 +1154,7 @@ module machineblock(
                                                 //Y-Holes Outer
                                                 if(holeY != false){
                                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                                        for (b = [ startY : 1 : (holeYShift ? round(endY) - 1 : endY) ]){
+                                                        for (b = [ holeYStart : 1 : holeYEnd ]){
                                                             if(drawHoleY(b, r) != false){
                                                                 translate([0, posY(b + (holeYShift ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
                                                                     rotate([0, 90, 0]){ 
@@ -1256,42 +1277,6 @@ module machineblock(
                                                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                                         roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
                                                     );
-                                                    
-                                                    /*
-                                                    TODO: remove?
-
-                                                    map = [[0,1],[2,3],[0,3],[1,2]];
-                                                    for (side = [ 0 : 1 : 1 ]){
-                                                        
-                                                        if((baseRoundingRadiusZ[map[side][0]] == 0) 
-                                                            && (baseRoundingRadiusZ[map[side][1]] == 0)
-                                                            && (bevel[map[side][0]] == [0,0])
-                                                            && (bevel[map[side][1]] == [0,0])){
-                                                            translate([(-0.5 + side) * ((objectSizeX - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[2+side])), 0,0]){
-                                                                cube([
-                                                                    cutMultiplier * (baseClampWallThickness + sAdjustment[2+side]), 
-                                                                    objectSizeY - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                    
-                                                                    cutMultiplier * (knobCutHeight + cutOffset)
-                                                                ], center=true);
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                    for (side = [ 0 : 1 : 1 ]){
-                                                        if((baseRoundingRadiusZ[map[2 + side][0]] == 0) 
-                                                            && (baseRoundingRadiusZ[map[2 + side][1]] == 0)
-                                                            && (bevel[map[2+side][0]] == [0,0])
-                                                            && (bevel[map[2+side][1]] == [0,0])){
-                                                            translate([0, (-0.5 + side) * ((objectSizeY - 2 * (baseClampWallThickness+cutTolerance)) + (baseClampWallThickness + sAdjustment[side])),0]){
-                                                                cube([
-                                                                    objectSizeX - 2 * (baseClampWallThickness+cutTolerance), 
-                                                                    cutMultiplier * (baseClampWallThickness + sAdjustment[side]), 
-                                                                    cutMultiplier * (knobCutHeight + cutOffset)
-                                                                ], center=true);
-                                                            }
-                                                        }
-                                                    }*/
                                                 }
                                             }
                                         } //End difference final cutout elements
@@ -1303,7 +1288,7 @@ module machineblock(
                             if(holeX != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
-                                        for (a = [ startX : 1 : (holeXShift ? round(endX) - 1 : endX) ]){
+                                        for (a = [ holeXStart : 1 : holeXEnd ]){
                                             xHole = drawHoleX(a, r);
                                             if(xHole != false){
                                                 translate([posX(a + (holeXShift ? 0.5 : 0)), 0, -0.5*resultingBaseHeight + holeXGridOffsetZ*mbuToMm + holeXGridOffsetZAdjustment + r * (holeXGridSizeZ*mbuToMm + holeXGridSizeZAdjustment)]){
@@ -1340,7 +1325,7 @@ module machineblock(
                             if(holeY != false){
                                 color(baseColor){
                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
-                                        for (b = [ startY : 1 : (holeYShift ? round(endY) - 1 : endY) ]){
+                                        for (b = [ holeYStart : 1 : holeYEnd ]){
                                             yHole = drawHoleY(b, r);
                                             if(yHole != false){
                                                 translate([0, posY(b + (holeYShift ? 0.5 : 0)), -0.5*resultingBaseHeight + holeYGridOffsetZ*mbuToMm + holeYGridOffsetZAdjustment + r * (holeYGridSizeZ*mbuToMm + holeYGridSizeZAdjustment)]){
@@ -1375,8 +1360,8 @@ module machineblock(
                             if(holeZ != false){
                                 color(baseColor){
                                     //Cut Z-Holes
-                                    for (a = [ startX : 1 :  (holeZCenteredX ? round(endX) - 1 : endX) ]){
-                                        for (b = [ startY : 1 : (holeZCenteredY ? round(endY) - 1 : endX) ]){
+                                    for (a = [ holeZStartX : 1 :  holeZEndX ]){
+                                        for (b = [ holeZStartY : 1 : holeZEndY ]){
                                             zHole = drawHoleZ(a, b);
                                             if(zHole != false){
                                                 translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
