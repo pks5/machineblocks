@@ -572,17 +572,17 @@ module machineblock(
     holeYStart = holeYShift ? (holeYPartial == "start" || holeYPartial == "all" ? -1 : startY) : startY;
     holeYEnd = holeYShift ? (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) : round(endY) - 1) : (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) + 1 : floor(endY));
 
-    holeZStartX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? -1 : startX) : startX;
+    holeZStartX = holeZCenteredX ? (holeZPartialX == "start" || holeZPartialX == "all" ? -1 : startX) : startX;
     holeZEndX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) : round(endX) - 1) : (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) + 1 : floor(endX));
 
-    holeZStartY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? -1 : startY) : startY;
+    holeZStartY = holeZCenteredY ? (holeZPartialY == "start" || holeZPartialY == "all" ? -1 : startY) : startY;
     holeZEndY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) : round(endY) - 1) : (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) + 1 : floor(endY));
 
-    pillarStartX = holeZCenteredX ? holeZStartX : startX;
-    pillarEndX = holeZCenteredX ? holeZEndX : ceil(endX) - 1;
+    pillarStartX = min(holeZStartX, startX);
+    pillarEndX = max(holeZEndX, ceil(endX) - 1);
 
-    pillarStartY = holeZCenteredX ? holeZStartY : startY;
-    pillarEndY = holeZCenteredY ? holeZEndY : ceil(endY) - 1;
+    pillarStartY = min(holeZStartY, startY);
+    pillarEndY = max(holeZEndY, ceil(endY) - 1);
 
     /*
     * START Functions
@@ -1087,8 +1087,10 @@ module machineblock(
                                                                             translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
                                                                                 cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=($preview ? previewQuality : 1) * pillarRoundingResolution);
                                                                         }
+
+                                                                        echo(ZHole = drawHoleZ(a, b));
                                                                         // Hollow only if there is no z-hole here
-                                                                        if(drawHoleZ(a, b) == false){
+                                                                        if(drawHoleZ(a, b) == false || a > holeZEndX || b > holeZEndY){
                                                                             intersection(){
                                                                                 cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=($preview ? previewQuality : 1) * holeRoundingResolution);
                                                                                 cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
