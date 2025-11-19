@@ -197,6 +197,19 @@
                     }
                 }
             ]
+        },
+        {
+            "template": "../../templates/brick-modified.template.scad",
+            "targetDirectory": ".",
+            "url": "https://machineblocks.com/examples/technic-bricks",
+            "bricks": [
+                {
+                    "name": "Technic Brick Modified 2x1 with Hole and 2x1 Plate",
+                    "parameters": {
+                        "size": [2, 1, 3]
+                    }
+                }
+            ]
         }
     ]
 }
