@@ -65,11 +65,15 @@ module machineblock(
         //Rotation
         rotation = [0, 0, 0], // vector3 x int - Rotation of the brick around the x, y and z - axis.
         rotationOffset = [0, 0, 0], // grid ([x, y, z]) - Origin of the rotation relative to the Bricks origin.
+        rotationOffsetRevert = true,
 
         //Size
         size = [1, 1, 1], // vector3 x grid ([x, y, z]) - Size of the brick as multiple of the grid unit.
         offset = [0, 0, 0], // grid ([x, y, z]) - Position of the brick relative to the origin.
         crop = [0, 0, 0, 0],
+
+        cutout = false,
+        cutoutOffset = [0, 0],
 
         //Base
         base = true, // bool
@@ -381,9 +385,9 @@ module machineblock(
     rotationOffsetZ = rotationOffset[2] * gridSizeZ;
 
     //Grid offset
-    gridOffsetX = offset[0] * gridSizeXY - rotationOffsetX;
-    gridOffsetY = offset[1] * gridSizeXY - rotationOffsetY;
-    gridOffsetZ = offset[2] * gridSizeZ - rotationOffsetZ; 
+    gridOffsetX = offset[0] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetX : 0);
+    gridOffsetY = offset[1] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetY : 0);
+    gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0); 
 
     //Children alignment
     alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
@@ -449,6 +453,8 @@ module machineblock(
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
     cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
+
+    //cornersCutout = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], cutout, gridSizeXY);
 
     // Pit
     pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
@@ -1231,6 +1237,19 @@ module machineblock(
                                             connectorSideTolerance = connectorSideTolerance
                                         );
                                     } //End baseCutoutType
+
+                                    if(cutout != false && cutout != [0, 0]){
+                                        translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
+                                            machineblock(
+                                                size = [cutout[0], cutout[1], size[2]],
+                                                studs = false,
+                                                crop = -0.2,
+                                                baseClampOuter=true,
+                                                baseCutoutType = "none"
+                                            );
+                                        }
+                                    }
+
                                 } //End base union
                             } //End base color
                             
@@ -1622,6 +1641,16 @@ module machineblock(
                                     }   
                                 } // End color
                             } // End if baseCutoutType
+
+                            if(cutout != false && cutout != [0, 0]){
+                                translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
+                                    machineblock(
+                                        size = [cutout[0], cutout[1], size[2]],
+                                        studs = false,
+                                        baseCutoutType = "none"
+                                    );
+                                }
+                            }
                         } // End main difference
                     }
 

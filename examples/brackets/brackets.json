@@ -190,6 +190,19 @@
                     }
                 }
             ]
+        },
+        {
+            "template": "../../templates/bracket-centered.template.scad",
+            "targetDirectory" : ".",
+            "url": "https://machineblocks.com/examples/bracket",
+            "bricks" : [
+                {
+                    "name": "Bracket 1x2 - 2x1 Centered",
+                    "parameters": {
+                        "studs_2": false
+                    }
+                }
+            ]
         }
     ]
 }
