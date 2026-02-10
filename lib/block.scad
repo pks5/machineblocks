@@ -327,6 +327,24 @@ module machineblock(
         alignChildren = "start", // string | vector3 x string
         //alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
         
+        //Quality
+        qualitySegBase = 1.2,
+        qualityResolutionMax = 220,
+
+        qualityFactor = [
+            0.6,  // FUNCTIONAL
+            1.0,  // VISUAL
+            1.6,  // OTHER
+            2.5   // DRAFT
+        ],
+
+        qualityResolutionMin = [
+            24, // FUNCTIONAL
+            18, // VISUAL
+            12, // OTHER
+            8  // DRAFT
+        ],
+
         //Preview
         previewQuality = 0.5, // float (between 0.0 and 1.0)
         previewRender = false, // bool (Whether the brick should always be rendered in preview mode)

@@ -87,7 +87,7 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 
 	translate(v = obj_translate) {
 		if(radius == 0 || radius == [0,0,0,0]){
-			cube(size=size);
+			cube(size=size, center = center);
 		}
 		else{
 			rots=[180,90,0,-90];
