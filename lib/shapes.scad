@@ -87,33 +87,26 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 
 	translate(v = obj_translate) {
 		if(radius == 0 || radius == [0,0,0,0]){
-			cube(size=size, center = center);
+			cube(size=size); //Kein center hier - wird nachträglich gesetzt!
 		}
 		else{
 			rots=[180,90,0,-90];
 			radius = (radius[0] == undef) ? [radius, radius, radius, radius] : radius;
 			hull() {
-			//union(){
 				for (i = [ 0 : 1 : 3 ]){
 					cornerRadius = radius[i] == 0 ? 0.1 : radius[i];
 					translateX = i < 2 ? cornerRadius : size[0] - cornerRadius;
 					translateY = (i == 0) || (i == 3) ? cornerRadius : size[1] - cornerRadius;
 				
-					//translate_min = cornerRadius;
-					//translate_zmax = size[2] - cornerRadius;						
-
-					//for (translate_z = [translate_min, translate_zmax]) {
 					translate(v = [translateX, translateY, 0.5 * size[2]]){
-							if(radius[i] == 0)
+						if(radius[i] == 0)
 							cube(size = [2*cornerRadius, 2*cornerRadius, size[2]], center = true);
-							else
+						else
 							rotate([0,0,rots[i]])
 								translate([0,0,-0.5*size[2]])
 									rotate_extrude(angle=90, $fn = resolution) 
 										square([cornerRadius, size[2]]);
-							//cylinder(h = size[2], r = cornerRadius, center = true, $fn = resolution);
 					}
-					//}
 				}
 			}
 		}
