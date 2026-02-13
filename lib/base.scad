@@ -54,7 +54,14 @@ module mb_base_cutout(
     //Bevel
     beveled,
     bevelOuter,
-    bevelInner
+    bevelInner,
+
+    qualitySegBase,
+    qualityFactor,
+    qualityResolutionMin,
+    qualityResolutionMax,
+    qualityResolutionMultiplier,
+    previewQuality
 ){
     baseClampWallThickness = wallThickness + baseClampThickness;
 
@@ -202,7 +209,14 @@ module mb_base(
     connectorDepth,
     connectorSize,
     connectorDepthTolerance,
-    connectorSideTolerance
+    connectorSideTolerance,
+
+    qualitySegBase,
+    qualityFactor,
+    qualityResolutionMin,
+    qualityResolutionMax,
+    qualityResolutionMultiplier,
+    previewQuality
 ){
     //Variables for cutouts        
     cutOffset = 0.2;

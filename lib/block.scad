@@ -346,7 +346,7 @@ module machineblock(
             8  // DRAFT
         ],
 
-        qualityResolutionMultiplier = 1.0,
+        qualityResolutionMultiplier = 0.25,
 
         //Preview
         previewQuality = 0.5, // float (between 0.0 and 1.0)
@@ -813,7 +813,14 @@ module machineblock(
                                                 connectorDepth = connectorDepth * mbuToMm,
                                                 connectorSize = connectorWidth * mbuToMm,
                                                 connectorDepthTolerance = connectorDepthTolerance,
-                                                connectorSideTolerance = connectorSideTolerance
+                                                connectorSideTolerance = connectorSideTolerance,
+
+                                                qualitySegBase = qualitySegBase,
+                                                qualityFactor = qualityFactor,
+                                                qualityResolutionMin = qualityResolutionMin,
+                                                qualityResolutionMax = qualityResolutionMax,
+                                                qualityResolutionMultiplier = qualityResolutionMultiplier,
+                                                previewQuality = previewQuality
                                             );
 
                                             /*
@@ -853,7 +860,14 @@ module machineblock(
                                                         
                                                         beveled = beveled,
                                                         bevelOuter = bevelOuter,
-                                                        bevelInner = bevelInner
+                                                        bevelInner = bevelInner,
+
+                                                        qualitySegBase = qualitySegBase,
+                                                        qualityFactor = qualityFactor,
+                                                        qualityResolutionMin = qualityResolutionMin,
+                                                        qualityResolutionMax = qualityResolutionMax,
+                                                        qualityResolutionMultiplier = qualityResolutionMultiplier,
+                                                        previewQuality = previewQuality
                                                     );
 
                                                     /*
@@ -1046,7 +1060,8 @@ module machineblock(
                                                                 qualityFactor,
                                                                 qualityResolutionMin,
                                                                 qualityResolutionMax,
-                                                                $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                                qualityResolutionMultiplier,
+                                                                previewQuality
                                                             );
                                                             /*
                                                             * Cut TubeZ area
@@ -1117,7 +1132,8 @@ module machineblock(
                                                         qualityFactor,
                                                         qualityResolutionMin,
                                                         qualityResolutionMax,
-                                                        $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
                                                     );
 
                                                     holeZRoundingRes = mb_fn_even_for_radius(
@@ -1127,7 +1143,8 @@ module machineblock(
                                                         qualityFactor,
                                                         qualityResolutionMin,
                                                         qualityResolutionMax,
-                                                        $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
                                                     );
 
                                                     //Tubes with holes
@@ -1166,7 +1183,8 @@ module machineblock(
                                                         qualityFactor,
                                                         qualityResolutionMin,
                                                         qualityResolutionMax,
-                                                        $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
                                                     );
 
                                                     /*
@@ -1212,7 +1230,8 @@ module machineblock(
                                                         qualityFactor,
                                                         qualityResolutionMin,
                                                         qualityResolutionMax,
-                                                        $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
                                                     );
 
                                                     for(r = [ 0 : 1 : holeXMaxRows-1]){
@@ -1237,7 +1256,8 @@ module machineblock(
                                                         qualityFactor,
                                                         qualityResolutionMin,
                                                         qualityResolutionMax,
-                                                        $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
                                                     );
 
                                                     for(r = [ 0 : 1 : holeYMaxRows-1]){
@@ -1297,7 +1317,14 @@ module machineblock(
                                             connectorDepth = connectorDepth * mbuToMm,
                                             connectorSize = connectorWidth * mbuToMm,
                                             connectorDepthTolerance = connectorDepthTolerance,
-                                            connectorSideTolerance = connectorSideTolerance
+                                            connectorSideTolerance = connectorSideTolerance,
+
+                                            qualitySegBase = qualitySegBase,
+                                            qualityFactor = qualityFactor,
+                                            qualityResolutionMin = qualityResolutionMin,
+                                            qualityResolutionMax = qualityResolutionMax,
+                                            qualityResolutionMultiplier = qualityResolutionMultiplier,
+                                            previewQuality = previewQuality
                                         );
                                     } //End baseCutoutType
                                     /*
@@ -1330,7 +1357,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
 
                                 color(baseColor){
@@ -1387,7 +1415,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
 
                                 color(baseColor){
@@ -1434,7 +1463,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
 
                                 color(baseColor){
@@ -1479,7 +1509,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
 
                                 color(baseColor){
@@ -1616,7 +1647,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
                                 color(baseColor){
                                     for (a = [ startX : 1 : endX ]){
@@ -1641,7 +1673,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
                                 for (b = [ 0 : 1 : len(screwHolesX) - 1]){
                                     
@@ -1668,7 +1701,8 @@ module machineblock(
                                     qualityFactor,
                                     qualityResolutionMin,
                                     qualityResolutionMax,
-                                    $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                    qualityResolutionMultiplier,
+                                    previewQuality
                                 );
                                 for (b = [ 0 : 1 : len(screwHolesY) - 1]){
                                     color(baseColor){
@@ -1806,7 +1840,8 @@ module machineblock(
                                 qualityFactor,
                                 qualityResolutionMin,
                                 qualityResolutionMax,
-                                $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                qualityResolutionMultiplier,
+                                previewQuality
                             );
 
                             studHoleRoundingRes = mb_fn_even_for_radius(
@@ -1816,7 +1851,8 @@ module machineblock(
                                 qualityFactor,
                                 qualityResolutionMin,
                                 qualityResolutionMax,
-                                $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                qualityResolutionMultiplier,
+                                previewQuality
                             );
 
                             studHelperRoundingRes = mb_fn_even_for_radius(
@@ -1826,7 +1862,8 @@ module machineblock(
                                 qualityFactor,
                                 qualityResolutionMin,
                                 qualityResolutionMax,
-                                $preview ? qualityResolutionMultiplier / previewQuality : qualityResolutionMultiplier
+                                qualityResolutionMultiplier,
+                                previewQuality
                             );
 
                             knobShiftedX = (studShift == true || studShift == "x" || studShift == "xy");
