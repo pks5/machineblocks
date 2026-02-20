@@ -17,6 +17,13 @@ function mb_preview_mult(previewQuality, previewMaxMult) =
     let(p = mb_clamp(previewQuality, 0, 1))
     1 + (1 - p) * (previewMaxMult - 1);
 
+function mb_max_radius(r) =
+    is_list(r)
+      ? (len(r) == 0
+          ? 0
+          : max([ for (e = r) mb_max_radius(e) ]))
+      : r;
+
 // Main: radius + class -> $fn, with previewQuality applied only when $preview is true
 function mb_fn_for_radius(
     r,
@@ -39,7 +46,7 @@ function mb_fn_for_radius(
     is_preview = $preview     // allow override if desired
 ) =
     let(
-        rr = max(0.01, r),
+        rr = max(0.01, mb_max_radius(r)),
 
         // preview reduces quality by INCREASING segment length
         // (bigger segment length => fewer segments => lower $fn)
