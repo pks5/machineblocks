@@ -2,13 +2,13 @@ use <utils.scad>;
 use <quad.scad>;
 use <polygon.scad>;
 use <shapes.scad>;
+use <quality.scad>;
 
 module mb_tongue(
     gridSizeXY,
     objectSize,
     objectSizeAdjusted,
     baseRoundingRadiusZ,
-    baseRoundingResolution,
     beveled,
     bevelOuter,
     tongueOffset,

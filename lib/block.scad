@@ -95,7 +95,7 @@ module machineblock(
         
         baseRoundingRadius = 0.0, // grid | vector3 x grid | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
         baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
-        baseRoundingResolution = 64, // int
+        baseRoundingResolution = 64, // int TODO remove
         
         //Relief Cut
         baseReliefCut = false, // bool
@@ -127,7 +127,7 @@ module machineblock(
         
         //Pillars: Tubes and Pins
         pillars = true, // bool | vector
-        pillarRoundingResolution = 64, // int
+        pillarRoundingResolution = 64, // int TODO remove
         pillarGapCornerLength = 2, // int
         pillarGapMiddle = 10, // int
         
@@ -193,7 +193,7 @@ module machineblock(
         holeZShift = true, // false | "none" | "x" | "y" | true | "xy"
         holeZDiameter = "auto", // mbu | "auto"
         holeZDiameterAdjustment = 0.3, // mm
-        holeRoundingResolution = 64, // int
+        holeRoundingResolution = 64, // int TODO remove
         holeZPartialX = "none", // "none", "start", "end", "all"
         holeZPartialY = "none", // "none", "start", "end", "all"
 
@@ -215,7 +215,7 @@ module machineblock(
         studHoleClampThickness = 0.1, // mm
         
         studRounding = 0.0625, // mbu
-        studRoundingResolution = 64, // int
+        studRoundingResolution = 64, // int TODO remove
         
         studDiameter = 3, // mbu (constant, should not be changed normally)
         studDiameterAdjustment = 0.2, // mm
@@ -1755,7 +1755,6 @@ module machineblock(
                                                 objectSize = [objectSizeX, objectSizeY],
                                                 objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
-                                                baseRoundingResolution = baseRoundingResolution,
                                                 beveled = beveled,
                                                 bevelOuter = bevelOuter,
                                                 tongueOffset = tonOffsetCalc,
@@ -2011,7 +2010,6 @@ module machineblock(
                                     objectSize = [objectSizeX, objectSizeY],
                                     objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
                                     baseRoundingRadiusZ = baseRoundingRadiusZ,
-                                    baseRoundingResolution = baseRoundingResolution,
                                     beveled = beveled,
                                     bevelOuter = bevelOuter,
                                     tongueOffset = tonOffsetCalc,
