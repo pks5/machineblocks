@@ -24,6 +24,12 @@ module mb_tongue(
     pitWallGaps,
     pitSizeX,
     pitSizeY,
+
+    qualitySegBase,
+    qualityFactor,
+    qualityResolutionMin,
+    qualityResolutionMax,
+    qualityResolutionMultiplier,
     previewQuality,
 ){
     //Variables for cutouts        
@@ -52,6 +58,27 @@ module mb_tongue(
     bevelTongueClampOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted - tongueClampThickness);
     bevelTongueClampInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted + tongueClampThickness);
     
+    tongueRadiusQuality = mb_fn_even_for_radius(
+                                    tongueRadius, 
+                                    1, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
+
+    tongueRadiusInnerQuality = mb_fn_even_for_radius(
+                                    tongueRadiusInner, 
+                                    1, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
 
     difference(){
         union(){
@@ -62,7 +89,7 @@ module mb_tongue(
                     sizeY = tongueSizeY,
                     height = tongueHeight,
                     roundingRadius = tongueRadius == 0 ? 0 : [0, 0, tongueRadius],
-                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                    roundingResolution = tongueRadiusQuality
                 );
                 mb_beveled_rounded_block(
                     bevel = beveled ? bevelTongueInner : false,
@@ -70,7 +97,7 @@ module mb_tongue(
                     sizeY = tongueInnerSizeY,
                     height = tongueHeight * cutMultiplier,
                     roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
-                    roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                    roundingResolution = tongueRadiusInnerQuality
                 );
 
                 /*
@@ -111,7 +138,7 @@ module mb_tongue(
                             sizeY = tongueSizeY + 2 * tongueClampThickness,
                             height = tongueClampHeight,
                             roundingRadius = tongueRadius == 0 ? 0 : [0, 0, tongueRadius],
-                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                            roundingResolution = tongueRadiusQuality
                         );
                         mb_beveled_rounded_block(
                             bevel = beveled ? bevelTongueClampInner : false,
@@ -119,7 +146,7 @@ module mb_tongue(
                             sizeY = tongueInnerSizeY - 2 * tongueClampThickness,
                             height = tongueClampHeight * cutMultiplier,
                             roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
-                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                            roundingResolution = tongueRadiusInnerQuality
                         );
                     
                         /*

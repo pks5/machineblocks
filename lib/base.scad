@@ -3,6 +3,7 @@ use <connectors.scad>;
 use <utils.scad>;
 use <quad.scad>;
 use <polygon.scad>;
+use <quality.scad>;
 
 module mb_slant_prism(side, l, w, h, inv){
     invRot = inv ? 180 : 0;
@@ -33,7 +34,6 @@ module mb_base_cutout(
     
     cutoutRoundingRadius,
     cutoutClampRoundingRadius,
-    roundingResolution,
     wallThickness,
     
     //Top Plate
@@ -104,6 +104,17 @@ module mb_base_cutout(
                 
                     
                     union(){
+                        cutoutRoundingRadiusQuality = mb_fn_even_for_radius(
+                                    cutoutRoundingRadius, 
+                                    1, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
+
                         /*
                         * Bottom Hole
                         */
@@ -114,7 +125,7 @@ module mb_base_cutout(
                                 sizeY = objectSize[1] - 2*wallThickness,
                                 height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
                                 roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                roundingResolution = roundingResolution
+                                roundingResolution = cutoutRoundingRadiusQuality
                             );
                         }
                         /*
@@ -128,7 +139,7 @@ module mb_base_cutout(
                                     sizeY = objectSize[1] - 2 * wallThickness,
                                     height = baseClampOffset + cutOffset,
                                     roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                    roundingResolution = roundingResolution
+                                    roundingResolution = cutoutRoundingRadiusQuality
                                 );
                             }
                         }
@@ -139,13 +150,24 @@ module mb_base_cutout(
                 * Clamp Skirt
                 */
                 translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+                    cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
+                                    cutoutClampRoundingRadius, 
+                                    1, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
+
                     mb_beveled_rounded_block(
                         bevel = beveled ? bevelClamp : false,
                         sizeX = objectSize[0] - 2 * baseClampWallThickness,
                         sizeY = objectSize[1] - 2 * baseClampWallThickness,
                         height = baseClampHeight * cutMultiplier,
                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                        roundingResolution = roundingResolution
+                        roundingResolution = cutoutClampRoundingRadiusQuality
                     );
                 }
             }
@@ -186,8 +208,6 @@ module mb_base(
     baseClampThicknessOuter,
     baseClampOffset,
     baseRoundingRadius,
-
-    roundingResolution,
 
     pit,
     pitRoundingRadius,
@@ -257,16 +277,38 @@ module mb_base(
                 
                 difference(){ // Subtract relief cut and slope from base
                     union(){
+                        baseRoundingRadiusQuality = mb_fn_even_for_radius(
+                            baseRoundingRadius, 
+                            1, 
+                            qualitySegBase,
+                            qualityFactor,
+                            qualityResolutionMin,
+                            qualityResolutionMax,
+                            qualityResolutionMultiplier,
+                            previewQuality
+                        );
+
                         mb_beveled_rounded_block(
                             bevel = beveled ? bevelOuterAdjusted : false,
                             sizeX = objectSizeXAdjusted,
                             sizeY = objectSizeYAdjusted,
                             height = height,
                             roundingRadius = baseRoundingRadius,
-                            roundingResolution = roundingResolution
+                            roundingResolution = baseRoundingRadiusQuality
                         );
 
                         if(baseClampThicknessOuter > 0){
+                            baseClampOuterRoundingRadiusQuality = mb_fn_even_for_radius(
+                                baseClampOuterRoundingRadius, 
+                                1, 
+                                qualitySegBase,
+                                qualityFactor,
+                                qualityResolutionMin,
+                                qualityResolutionMax,
+                                qualityResolutionMultiplier,
+                                previewQuality
+                            );
+
                             //Outer clamp
                             //Only used to produce cutouts
                             translate([0,0,-0.5*(height-baseClampHeight) + baseClampOffset])
@@ -276,7 +318,7 @@ module mb_base(
                                     sizeY = objectSizeYAdjusted + 2*baseClampThicknessOuter,
                                     height = baseClampHeight,
                                     roundingRadius = baseClampOuterRoundingRadius,
-                                    roundingResolution = roundingResolution
+                                    roundingResolution = baseClampOuterRoundingRadiusQuality
                                 );
                         }
                     }
@@ -289,13 +331,24 @@ module mb_base(
                                     center=true
                                 );
 
+                                reliefRadiusQuality = mb_fn_even_for_radius(
+                                    reliefRadius, 
+                                    1, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
+
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
                                     sizeX = objectSize[0] - 2*baseReliefCutThickness,
                                     sizeY = objectSize[1] - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
-                                    roundingResolution = roundingResolution
+                                    roundingResolution = reliefRadiusQuality
                                 );
                             }
                         }
@@ -328,12 +381,23 @@ module mb_base(
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, pitWallThickness);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
-                    
+
+                pitRadiusQuality = mb_fn_even_for_radius(
+                    pitRadius, 
+                    1, 
+                    qualitySegBase,
+                    qualityFactor,
+                    qualityResolutionMin,
+                    qualityResolutionMax,
+                    qualityResolutionMultiplier,
+                    previewQuality
+                );
+
                 translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
-                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=roundingResolution, center = true);
+                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
                     }
                 }
 

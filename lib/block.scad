@@ -791,8 +791,6 @@ module machineblock(
                                                 baseClampOffset = bClampOffset,
                                                 baseRoundingRadius = baseRoundingRadiusResolved,
 
-                                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                                
                                                 pit = recess,
                                                 pitRoundingRadius = recessRoundingRadius,
                                                 pitDepth = resultingPitDepth,
@@ -842,7 +840,6 @@ module machineblock(
                                                         
                                                         cutoutRoundingRadius = cutoutRoundingRadius,
                                                         cutoutClampRoundingRadius = cutoutClampRoundingRadius,
-                                                        roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
                                                         
                                                         wallThickness = wallThickness,
                                                         
@@ -954,6 +951,17 @@ module machineblock(
                                                     bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
                                                     topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
                                                     
+                                                    topPlateHelperRoundingRadiusQuality = mb_fn_even_for_radius(
+                                                        topPlateHelperRoundingRadius, 
+                                                        2, 
+                                                        qualitySegBase,
+                                                        qualityFactor,
+                                                        qualityResolutionMin,
+                                                        qualityResolutionMax,
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
+                                                    );
+
                                                     translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                                         difference(){
                                                             cube(
@@ -967,7 +975,7 @@ module machineblock(
                                                                 sizeY = objectSizeY - 2*wallThickness - 2*topPlateHelperThickness,
                                                                 height = cutMultiplier * (topPlateHelperHeight + cutOffset),
                                                                 roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
-                                                                roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                                roundingResolution = topPlateHelperRoundingRadiusQuality
                                                             );
 
                                                             for (a = [ startX : 1 : endX ]){
@@ -1296,8 +1304,6 @@ module machineblock(
                                             baseClampOffset = bClampOffset,
                                             baseRoundingRadius = baseRoundingRadiusResolved,
 
-                                            roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution,
-                                            
                                             pit = recess,
                                             pitRoundingRadius = recessRoundingRadius,
                                             pitDepth = resultingPitDepth,
@@ -1391,13 +1397,24 @@ module machineblock(
 
                                             if(baseCutoutType != "studs"){
                                                 union(){
+                                                    cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
+                                                        cutoutClampRoundingRadius, 
+                                                        1, 
+                                                        qualitySegBase,
+                                                        qualityFactor,
+                                                        qualityResolutionMin,
+                                                        qualityResolutionMax,
+                                                        qualityResolutionMultiplier,
+                                                        previewQuality
+                                                    );
+
                                                     mb_beveled_rounded_block(
                                                         bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
                                                         sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
                                                         sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
                                                         height = cutMultiplier * (knobCutHeight + cutOffset),
                                                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                                                        roundingResolution = ($preview ? previewQuality : 1) * baseRoundingResolution
+                                                        roundingResolution = cutoutClampRoundingRadiusQuality
                                                     );
                                                 }
                                             }
@@ -1529,9 +1546,9 @@ module machineblock(
                                                             capHeight=0, 
                                                             size = holeZSize, 
                                                             thickness = holeAxleThickness * mbuToMm,
-                                                            center=true, 
-                                                            alignBottom=false, 
-                                                            roundingResolution=holeZRoundingRes
+                                                            center = true, 
+                                                            alignBottom = false, 
+                                                            roundingResolution = holeZRoundingRes
                                                         );
                                                     }
                                                 };
@@ -1583,7 +1600,17 @@ module machineblock(
                             * Surface Pattern Cutout
                             */
                             if(!mb_is_empty_string(surfacePattern) && surfacePattern != "none" && surfacePatternDepth < 0){
-                                
+                                textureRoundingRadiusQuality = mb_fn_even_for_radius(
+                                    textureRoundingRadius, 
+                                    2, 
+                                    qualitySegBase,
+                                    qualityFactor,
+                                    qualityResolutionMin,
+                                    qualityResolutionMax,
+                                    qualityResolutionMultiplier,
+                                    previewQuality
+                                );
+
                                 color(surfacePatternColor == "inherit" ? baseColor : surfacePatternColor){
                                     translate([decoratorX(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[0]), decoratorY(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1]), decoratorZ(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1])])
                                         rotate(decoratorRotations[surfacePatternSide])
@@ -1602,7 +1629,7 @@ module machineblock(
                                                     sizeY = objectSizeY - wallThickness,
                                                     height = (2 + 0.1) * abs(surfacePatternDepth),
                                                     roundingRadius = textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius],
-                                                    roundingResolution = baseRoundingResolution
+                                                    roundingResolution = textureRoundingRadiusQuality
                                                 );
                                             }
                                 } // End color
@@ -1744,6 +1771,11 @@ module machineblock(
                                                 pitWallGaps = recessWallGaps,
                                                 pitSizeX = pitSizeX,
                                                 pitSizeY = pitSizeY,
+                                                qualitySegBase = qualitySegBase,
+                                                qualityFactor = qualityFactor,
+                                                qualityResolutionMin = qualityResolutionMin,
+                                                qualityResolutionMax = qualityResolutionMax,
+                                                qualityResolutionMultiplier = qualityResolutionMultiplier,
                                                 previewQuality = previewQuality
                                             );
                                         }
@@ -1995,6 +2027,11 @@ module machineblock(
                                     pitWallGaps = recessWallGaps,
                                     pitSizeX = pitSizeX,
                                     pitSizeY = pitSizeY,
+                                    qualitySegBase = qualitySegBase,
+                                    qualityFactor = qualityFactor,
+                                    qualityResolutionMin = qualityResolutionMin,
+                                    qualityResolutionMax = qualityResolutionMax,
+                                    qualityResolutionMultiplier = qualityResolutionMultiplier,
                                     previewQuality = previewQuality
                                 );
                             }
