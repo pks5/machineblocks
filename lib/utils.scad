@@ -132,3 +132,12 @@ function mb_vertical_hole_count(
         (rect_height - min_top_margin - hole_diameter/2 - first_hole_center_from_bottom)
         / hole_center_spacing
     ) + 1;
+
+function mb_direction_to_int(d) =
+    is_string(d) ?
+        (d == "west" ? 0 :
+         d == "north" ? 1 :
+         d == "east" ? 2 :
+         d == "south" ? 3 :
+         undef)
+    : d;
