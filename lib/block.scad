@@ -616,12 +616,12 @@ module machineblock(
         ["previewRenderConvexity", previewRenderConvexity]
     ];
 
-    mb_api(settings = settings){
+    mb_block(settings = settings){
         children();
     }
 }
 
-module mb_api(
+module mb_block(
     config,
     settings
         /*
@@ -935,7 +935,7 @@ module mb_api(
         rotation = mb_params_resolve(config, settings, "rotation", [0, 0, 0]);
         rotationOffset = mb_params_resolve(config, settings, "rotationOffset", [0, 0, 0]);
         rotationOffsetRevert = mb_params_resolve(config, settings, "rotationOffsetRevert", true);
-        direction_o = mb_params_resolve(config, settings, "direction", "west");
+        direction = mb_direction_to_int(mb_params_resolve(config, settings, "direction", "west"));
 
         size = mb_params_resolve(config, settings, "size", [1, 1, 1]);
         offset = mb_params_resolve(config, settings, "offset", [0, 0, 0]);
@@ -1226,7 +1226,7 @@ module mb_api(
     alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
     alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*resultingBaseHeight : 0.5*baseHeightAdjustment - 0.5*baseHeightResolved);
     
-    direction = mb_direction_to_int(direction_o);
+    
     directionRotationZ = direction * -90;
 
     //Rotation Offset
