@@ -72,6 +72,21 @@ function mb_params_resolve(config, settings, key, default=undef) =
 function _mb_params_valid(p) =
     p != undef && is_list(p) && len(p) > 0;  
 
+function mb_params_merge(a, b) =
+    concat(
+        // alle aus a, die NICHT in b überschrieben werden
+        [
+            for (pa = a)
+                if (!_mb_params_has_key(b, pa[0]))
+                    pa
+        ],
+        // alle aus b (haben Vorrang)
+        b
+    );
+
+function _mb_params_has_key(params, key) =
+    len(search([key], [for (p = params) p[0]])) > 0;
+
 function mb_assembly_offset(o, dir) = dir == "west" || dir == "east" ? o : [o[1], o[0], o[2]];
 
 module machineblock(
