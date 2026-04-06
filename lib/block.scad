@@ -85,7 +85,11 @@ function mb_params_merge(a, b) =
     );
 
 function _mb_params_has_key(params, key) =
-    len(search([key], [for (p = params) p[0]])) > 0;
+    len([
+        for (p = params)
+            if (p[0] == key)
+                1
+    ]) > 0;
 
 function mb_assembly_offset(o, dir) = dir == "west" || dir == "east" ? o : [o[1], o[0], o[2]];
 
