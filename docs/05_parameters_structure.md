@@ -1,0 +1,455 @@
+# Structure Parameters
+
+## Overview
+
+Structure parameters define the **physical construction, internal structure, and connection behavior** of a block.
+
+They are responsible for:
+
+- enclosure behavior
+- internal cavities
+- wall systems
+- connection mechanisms
+- printability
+
+---
+
+## Fundamental Rule
+
+> Structure parameters define how a block behaves physically — not just how it looks.
+
+---
+
+## Parameter Group
+
+- `base`
+- `baseCutoutType`
+- `baseWallThickness`
+- `recess`
+- `recessWallThickness`
+- `recessWallGaps`
+- `tongue`
+- `connectors`
+
+---
+
+# base
+
+## Definition
+
+```
+
+base = true | false
+
+```
+
+---
+
+## Semantics
+
+Controls whether the **main body of the block is generated**.
+
+---
+
+## Behavior
+
+- `true` → normal solid body
+- `false` → no body (features and children remain)
+
+---
+
+## Use Cases
+
+- wrapper blocks
+- feature-only layers (e.g. side studs)
+- multi-part constructions
+
+---
+
+## Rule
+
+> `base` toggles body existence, not structure definition.
+
+---
+
+# baseCutoutType
+
+## Definition
+
+```
+
+baseCutoutType = "standard" | "studs" | "groove" | "none"
+
+```
+
+---
+
+## Semantics
+
+Defines the **underside structure** of a block.
+
+---
+
+## Variants
+
+### standard
+- classic LEGO tube structure
+
+### studs
+- individual holes per stud
+
+### groove
+- connection system for `tongue`
+
+### none
+- fully closed bottom
+
+---
+
+## Critical Insight
+
+> The underside defines connection behavior and print efficiency.
+
+---
+
+## Rule
+
+> Choose underside type intentionally — not by default.
+
+---
+
+# baseWallThickness
+
+## Semantics
+
+Defines the wall thickness of the **standard LEGO underside structure**.
+
+---
+
+## Scope
+
+```
+
+only applies to baseCutoutType = "standard"
+
+```
+
+---
+
+## Important Distinction
+
+```
+
+baseWallThickness ≠ recessWallThickness
+
+```
+
+---
+
+## Critical Rule
+
+> This parameter is typically NOT modified.
+
+---
+
+## Adjustment
+
+Use instead:
+
+```
+
+baseWallThicknessAdjustment
+
+```
+
+---
+
+## Rule
+
+> `baseWallThickness` is a compatibility constant, not a design variable.
+
+---
+
+# recess
+
+## Definition
+
+```
+
+recess = true | false
+
+```
+
+---
+
+## Semantics
+
+Creates a **top-down cavity**, turning a block into a box-like structure.
+
+---
+
+## Behavior
+
+- always applied from top (+Z)
+- produces walls + floor
+
+---
+
+## Rule
+
+> `recess` is the foundation of all enclosure structures.
+
+---
+
+# recessWallThickness
+
+## Semantics
+
+Defines the thickness of recess walls.
+
+---
+
+## Behavior
+
+- works per side
+- defined in grid units (studs)
+- not in millimeters
+
+---
+
+## Important
+
+- can be set per side
+- controls enclosure strength
+
+---
+
+## Rule
+
+> `recessWallThickness` defines enclosure walls, not underside structure.
+
+---
+
+# recessWallGaps
+
+## Semantics
+
+Defines **partial or full openings in walls**.
+
+---
+
+## Behavior
+
+- removes sections of walls
+- defined in grid units
+- operates from corners
+
+---
+
+## Critical Rule
+
+> Use `recessWallGaps` to create openings — not wall thickness = 0.
+
+---
+
+## Important Insight
+
+- affects:
+  - geometry
+  - tongue
+  - groove behavior
+
+---
+
+## Rule
+
+> `recessWallGaps` is the preferred method for controlled wall openings.
+
+---
+
+# tongue
+
+## Definition
+
+```
+
+tongue = true | false
+
+```
+
+---
+
+## Semantics
+
+Defines a **continuous connection strip** used for joining blocks.
+
+---
+
+## Behavior
+
+- typically runs along outer edges
+- interacts with `groove`
+- compatible with LEGO-style connections
+
+---
+
+## Relationship
+
+```
+
+tongue ↔ groove
+
+```
+
+---
+
+## Important
+
+- usually replaces studs
+- sits on recess walls
+
+---
+
+## Critical Insight
+
+> Tongue is used both for connection and for splitting geometry into printable parts.
+
+---
+
+## Rule
+
+> Use `tongue` for controlled multi-part assembly.
+
+---
+
+# connectors
+
+## Semantics
+
+Defines **segmented side connection elements**.
+
+---
+
+## Behavior
+
+- multiple small connection points (triangular)
+- used for side connections
+- alternative to continuous tongue
+
+---
+
+## Use Cases
+
+- angled structures
+- vertical composites
+- modular connections
+
+---
+
+## Distinction
+
+```
+
+tongue      → continuous connection
+connectors  → segmented connection
+
+```
+
+---
+
+## Rule
+
+> Use connectors when continuous tongue is not suitable.
+
+---
+
+# Structure Systems Overview
+
+Structure parameters form three main systems:
+
+---
+
+## 1. Body System
+
+```
+
+base
+
+```
+
+---
+
+## 2. Underside System
+
+```
+
+baseCutoutType
+baseWallThickness
+
+```
+
+---
+
+## 3. Enclosure System
+
+```
+
+recess
+recessWallThickness
+recessWallGaps
+
+```
+
+---
+
+## 4. Connection System
+
+```
+
+tongue
+connectors
+
+```
+
+---
+
+# Geometry vs Structure
+
+## Critical Distinction
+
+```
+
+Geometry → defines shape
+Structure → defines function
+
+```
+
+---
+
+## Example
+
+- `slope` → visual shape
+- `recess` → functional cavity
+
+---
+
+# AI Constraint
+
+## Calibration Parameters
+
+Adjustment parameters:
+
+- are NOT part of structure logic
+- MUST NOT be generated by AI
+
+---
+
+## Rule
+
+> AI defines structure — humans calibrate it.
+
+---
+
+# Final Principle
+
+> Structure parameters define how a block behaves as a physical object — including enclosure, connection, and printability.
