@@ -22,6 +22,7 @@ use <rounded.scad>;
 use <quad.scad>;
 use <polygon.scad>;
 use <tongue.scad>;
+use <stud.scad>;
 use <quality.scad>;
 
 /**
@@ -1198,8 +1199,8 @@ module mb_block(
         qualityResolutionMultiplier = mb_params_resolve(config, settings, "qualityResolutionMultiplier", 0.25);
 
         previewQuality = mb_params_resolve(config, settings, "previewQuality", 0.5);
-        previewRender = mb_params_resolve(config, settings, "previewRender", false);
-        previewRenderConvexity = mb_params_resolve(config, settings, "previewRenderConvexity", 15);
+        previewRender = mb_params_resolve(config, settings, "previewRender", true);
+        previewRenderConvexity = mb_params_resolve(config, settings, "previewRenderConvexity", 25);
 
         //END convert
 
@@ -1540,7 +1541,7 @@ module mb_block(
             && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
             ? sType : false;
 
-    function knobZ(a, b) = recess && inPit(a, b) ? (pitFloorZ + 0.5 * knobHeight) : 0.5 * (resultingBaseHeight + knobHeight);
+    function knobZ(a, b) = (recess && inPit(a, b) ? pitFloorZ : 0.5 * resultingBaseHeight) - knobSink;
     function studType(ovStudType, a, b) = is_string(ovStudType) ? ovStudType : (recess && inPit(a, b) ? recessStudType : studType);
 
     /*
@@ -2777,7 +2778,9 @@ module mb_block(
                                                 translate([posX(a + posOffsetX), posY(b + posOffsetY), knobZ(a + posOffsetX, b + posOffsetY)]){ 
                                                     kType = studType(ovStudType, a + posOffsetX, b + posOffsetY);
                                                     difference(){
+
                                                         union(){
+                                                            /*
                                                             difference(){
                                                                 union(){
                                                                     translate([0, 0, -0.5 * (knobRounding + studClampHeight * mbuToMm) - 0.5 * knobSink])
@@ -2811,7 +2814,20 @@ module mb_block(
                                                                         torusResolution = studRoundingRes
                                                                     );
                                                                 }
-                                                            }
+                                                            }*/
+
+                                                            mb_stud(
+                                                                height = knobHeight + knobSink,
+                                                                radius = 0.5 * knobSize,
+                                                                holeRadius = kType == "hollow" ? 0.5 * knobHoleSize : 0,
+                                                                holeClampThickness = studHoleClampThickness,
+                                                                roundingRadius = knobRounding,
+                                                                clampHeight = studClampHeight,
+                                                                clampThickness = studClampThickness,
+                                                                bodyRoundingResolution = studRoundingRes,
+                                                                holeRoundingResolution = studHoleRoundingRes,
+                                                                edgeRoundingResolution = studHelperRoundingRes
+                                                            );
 
                                                             if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth > 0 && kType != "hollow"){
                                                                 color(studIconColor == "inherit" ? baseColor : studIconColor){
@@ -2829,6 +2845,8 @@ module mb_block(
                                                                 } // End color
                                                             }
                                                         } // End union
+                                                        
+                                                        
 
                                                         if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth < 0 && kType != "hollow"){
                                                             color(studIconColor == "inherit" ? baseColor : studIconColor){
