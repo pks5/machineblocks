@@ -7,6 +7,14 @@
 # accepted by mb_block(config, settings). It is designed for AI consumption
 # and deterministic code generation.
 #
+# All other documents in this project reference this file.
+# If a conflict exists between this file and any other document,
+# this file is authoritative for parameter definitions.
+#
+# ============================================================================
+
+version: "1.0.0"
+
 # ============================================================================
 # GLOBAL RULES
 # ============================================================================
@@ -16,10 +24,29 @@ global_rules:
   parameter_resolution:
     order: ["settings", "config", "default"]
     description: |
-      Parameters are resolved in this order:
+      The library always resolves every parameter in this order:
       1. Read from settings (instance-level)
       2. If missing, read from config (environment-level)
       3. If still missing, use the default value
+
+      This applies universally to all parameters. The library does not
+      restrict any parameter to config-only or settings-only at the
+      resolution level.
+
+      Individual block modules may assume certain parameters are always
+      provided in settings, but this is a module-level decision, not a
+      library-level restriction.
+
+    ai_guidance: |
+      The ai_usage field on each parameter is a recommendation for AI
+      systems generating block code:
+      - "yes": safe to use in settings for individual bricks
+      - "rarely": usually not needed, but safe if intentional
+      - "config_only": AI should only place this in config, not in
+        per-brick settings. Typically calibration/adjustment values.
+      - "never": do not use at all, internal constant
+
+      These are AI generation guidelines, not library enforcement rules.
 
   unit_system:
     mbu:
@@ -110,6 +137,24 @@ global_rules:
       - The last value can be bool (true/false) or a type string
         ("hollow"/"solid" for studs, "pin"/"axle" for holes)
 
+  per_side_format:
+    description: |
+      Several parameters (crop, baseSideAdjustment, studPadding,
+      recessWallThickness, recessStudPadding) support a per-side format:
+      - Float: applies to all 4 sides equally
+      - 2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3)
+      - 4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually
+      Side indices follow the standard side_index convention (0-3 only).
+
+  constraint_format:
+    description: |
+      Parameters may include a constraints field describing relationships
+      with other parameters. Constraint types:
+      - conflicts_with: cannot be used together with the listed parameters
+      - requires: only meaningful when the listed condition is met
+      - affects: this parameter influences the behavior of listed parameters
+      - affected_by: this parameter's behavior is influenced by listed parameters
+
 # ============================================================================
 # PARAMETERS
 # ============================================================================
@@ -185,6 +230,10 @@ parameters:
       and going the specified number of plates toward the center upward.
       Negative values: inverted slope on bottom surface (z-), starting at
       blockHeight - slopeBaseHeightUpper going down to the floor.
+    constraints:
+      conflicts_with:
+        - parameter: bevel
+          reason: "Combined slope and bevel geometry is not supported."
     example: "[1,0,0,0] creates a slope on side 0 (x-), 1 plate wide"
 
   - name: slopeBaseHeightLower
@@ -196,6 +245,10 @@ parameters:
     description: |
       Start height of the slope on the respective side for positive slopes.
       Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: slope
+          condition: "slope is not false"
 
   - name: slopeBaseHeightLowerInner
     group: core_geometry
@@ -206,6 +259,10 @@ parameters:
     description: |
       Start height of the slope on the inner wall of the brick.
       Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: slope
+          condition: "slope is not false"
 
   - name: slopeBaseHeightUpper
     group: core_geometry
@@ -216,6 +273,10 @@ parameters:
     description: |
       Height subtracted from block height for inverted (negative) slopes.
       Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: slope
+          condition: "slope contains negative values"
 
   - name: bevel
     group: core_geometry
@@ -228,16 +289,23 @@ parameters:
       Creates wedges by shifting Z-axis corners (0-3) in XY space.
       Each corner gets an [x,y] displacement value.
       The resulting shape is intersected with the bounding box.
+    constraints:
+      conflicts_with:
+        - parameter: slope
+          reason: "Combined slope and bevel geometry is not supported."
     example: |
       [[0,3],[0,0],[2,0],[0,0]] shifts corner 0 by 3 plates in y+
       and corner 2 by 2 plates in x+.
 
   - name: crop
     group: core_geometry
-    type: array
-    format: "[side0, side1, side2, side3]"
+    type: float_or_array
+    format: |
+      Float: all 4 sides equal.
+      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: unitGrid
-    default: [0, 0, 0, 0]
+    default: 0
     ai_usage: yes
     description: |
       Hard cuts or extensions per side (0-3 only, no Z-axis crop).
@@ -287,7 +355,10 @@ parameters:
     group: positioning
     type: enum_or_array
     values: ["start", "center", "end"]
-    format: "Same formats as align"
+    format: |
+      String: "start" → ["start","start","start"]
+      Shortcut: "ccs" → ["center","center","start"]
+      Full: ["start","center","end"]
     unit: dimensionless
     default: "start"
     ai_usage: yes
@@ -330,6 +401,10 @@ parameters:
     ai_usage: rarely
     description: |
       Shifts the rotation pivot before rotation is applied.
+    constraints:
+      requires:
+        - parameter: rotation
+          condition: "rotation is not [0,0,0]"
 
   - name: rotationOffsetRevert
     group: positioning
@@ -339,6 +414,10 @@ parameters:
     ai_usage: rarely
     description: |
       Whether the rotationOffset is reversed after rotation.
+    constraints:
+      requires:
+        - parameter: rotationOffset
+          condition: "rotationOffset is not [0,0,0]"
 
   # --------------------------------------------------------------------------
   # GROUP: Body
@@ -439,6 +518,10 @@ parameters:
       the topPlateHeight grows accordingly. When recess is defined, the
       baseCutoutDepth shrinks to the minimum (1 mbu) and topPlateHeight
       shrinks to baseTopPlateHeight.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   - name: baseWallThickness
     group: underside
@@ -449,6 +532,10 @@ parameters:
     description: |
       Wall thickness of the underside opening (baseCutoutType=standard).
       Automatically calculated. Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   - name: baseWallThicknessAdjustment
     group: underside
@@ -474,16 +561,29 @@ parameters:
       - position: index on the axis in studs
       - side: viewing from x- to x+: 0=front, 1=back, 2=both
       - length: gap length in + direction (multiples of 1x1 bricks, default 1)
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   - name: baseWallGapsY
     group: underside
     type: array
-    format: "Same as baseWallGapsX"
+    format: "[[position, side, length], ...] — length defaults to 1 if omitted"
     unit: "position in studs, length in 1x1 bricks"
     default: []
     ai_usage: yes
     description: |
-      Same as baseWallGapsX but along the Y-axis.
+      Gaps in the underside wall along the Y-axis (baseCutoutType=standard).
+      Used to restore grid compatibility in composite blocks where blocks cross.
+      Each entry: [position, side, length].
+      - position: index on the axis in studs
+      - side: viewing from y- to y+: 0=front, 1=back, 2=both
+      - length: gap length in + direction (multiples of 1x1 bricks, default 1)
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   # --------------------------------------------------------------------------
   # GROUP: Base Clamp
@@ -559,6 +659,10 @@ parameters:
       Rounding radius of the inner underside opening (baseCutoutType=standard).
       Z-direction only. Automatically derived from baseRoundingRadius.
       Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   # --------------------------------------------------------------------------
   # GROUP: Relief Cut
@@ -583,6 +687,10 @@ parameters:
     ai_usage: rarely
     description: |
       Height of the relief cut.
+    constraints:
+      requires:
+        - parameter: baseReliefCut
+          condition: "baseReliefCut = true"
 
   - name: baseReliefCutThickness
     group: relief_cut
@@ -592,6 +700,10 @@ parameters:
     ai_usage: rarely
     description: |
       Thickness of the cut-away portion.
+    constraints:
+      requires:
+        - parameter: baseReliefCut
+          condition: "baseReliefCut = true"
 
   # --------------------------------------------------------------------------
   # GROUP: Side / Height Adjustment (Calibration)
@@ -601,9 +713,9 @@ parameters:
     group: calibration
     type: float_or_array
     format: |
-      Float: all sides equal.
-      2-element array [X, Y]: X for x-/x+, Y for y-/y+.
-      4-element array [x-, x+, y-, y+]: each side individually.
+      Float: all 4 sides equal.
+      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: mm
     default: -0.1
     ai_usage: config_only
@@ -637,6 +749,10 @@ parameters:
       Improves adhesion when printing the ceiling (top plate).
       Two layers: horizontal (X-axis) then vertical (Y-axis).
       Usually active, does not need adjustment.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   - name: topPlateHelperHeight
     group: print_helpers
@@ -648,6 +764,10 @@ parameters:
       Height of one top plate helper layer. Typically matches the 3D print
       layer height. The horizontal layer is effectively 2× this value as
       it is printed first.
+    constraints:
+      requires:
+        - parameter: topPlateHelpers
+          condition: "topPlateHelpers = true"
 
   - name: topPlateHelperThickness
     group: print_helpers
@@ -657,6 +777,10 @@ parameters:
     ai_usage: rarely
     description: |
       Thickness of the top plate helpers in X/Y direction.
+    constraints:
+      requires:
+        - parameter: topPlateHelpers
+          condition: "topPlateHelpers = true"
 
   # --------------------------------------------------------------------------
   # GROUP: Stabilizer Grid
@@ -672,6 +796,10 @@ parameters:
       Whether a stabilizer grid connecting tubes to side walls is printed
       (baseCutoutType=standard). Provides stability and improves
       printability of the top plate. Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
 
   - name: stabilizerGridOffset
     group: print_helpers
@@ -682,6 +810,10 @@ parameters:
     description: |
       Offset between the first and subsequent grid layers.
       Ensures subsequent layers have a surface to print on.
+    constraints:
+      requires:
+        - parameter: stabilizerGrid
+          condition: "stabilizerGrid = true"
 
   - name: stabilizerGridHeight
     group: print_helpers
@@ -691,6 +823,10 @@ parameters:
     ai_usage: rarely
     description: |
       Height of the stabilizer grid.
+    constraints:
+      requires:
+        - parameter: stabilizerGrid
+          condition: "stabilizerGrid = true"
 
   - name: stabilizerGridThickness
     group: print_helpers
@@ -700,6 +836,10 @@ parameters:
     ai_usage: rarely
     description: |
       Width of a single grid strut.
+    constraints:
+      requires:
+        - parameter: stabilizerGrid
+          condition: "stabilizerGrid = true"
 
   - name: stabilizerExpansion
     group: print_helpers
@@ -710,6 +850,10 @@ parameters:
     description: |
       If > 0, every n-th grid element is taller and extends down to
       stabilizerExpansionOffset from the bottom edge.
+    constraints:
+      requires:
+        - parameter: stabilizerGrid
+          condition: "stabilizerGrid = true"
 
   - name: stabilizerExpansionOffset
     group: print_helpers
@@ -719,6 +863,10 @@ parameters:
     ai_usage: rarely
     description: |
       Distance of expanded grid elements from the bottom edge.
+    constraints:
+      requires:
+        - parameter: stabilizerExpansion
+          condition: "stabilizerExpansion > 0"
 
   # --------------------------------------------------------------------------
   # GROUP: Pillars
@@ -736,6 +884,10 @@ parameters:
     ai_usage: yes
     description: |
       Whether tubes/pins are drawn on the underside (baseCutoutType=standard).
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'standard'"
     example: |
       [false, [0,0,1,1,true]] — all off, but range (0,0)-(1,1) on
       [true, [0,1,2,2,false]] — all on, but range (0,1)-(2,2) off
@@ -847,11 +999,6 @@ parameters:
       Usually does not need adjustment.
 
   # --------------------------------------------------------------------------
-  # GROUP: Slope
-  # (slopeBaseHeight* already listed under core_geometry)
-  # --------------------------------------------------------------------------
-
-  # --------------------------------------------------------------------------
   # GROUP: Technic Holes X
   # --------------------------------------------------------------------------
 
@@ -878,6 +1025,10 @@ parameters:
     description: |
       Type of Technic holes in X-direction.
       pin: round holes. axle: cross-shaped holes.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXShift
     group: technic_holes_x
@@ -889,6 +1040,10 @@ parameters:
       Whether Technic holes in X-direction are shifted by 1/2 stud.
       true: holes align with studs.
       false: holes sit between two studs.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXDiameter
     group: technic_holes_x
@@ -899,6 +1054,10 @@ parameters:
     description: |
       Diameter of Technic holes in X-direction.
       Automatically calculated.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXDiameterAdjustment
     group: technic_holes_x
@@ -917,6 +1076,10 @@ parameters:
     ai_usage: rarely
     description: |
       Width of the inset ring around Technic holes in X-direction.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXInsetThicknessAdjustment
     group: technic_holes_x
@@ -935,6 +1098,10 @@ parameters:
     ai_usage: rarely
     description: |
       Depth of the inset ring around Technic holes in X-direction.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXInsetDepthAdjustment
     group: technic_holes_x
@@ -954,6 +1121,10 @@ parameters:
     description: |
       Distance from the block bottom to the center of the first row
       of Technic holes in X-direction.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXGridOffsetZAdjustment
     group: technic_holes_x
@@ -973,6 +1144,10 @@ parameters:
     description: |
       Center-to-center distance between two rows of Technic holes
       in X-direction.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXGridSizeZAdjustment
     group: technic_holes_x
@@ -992,6 +1167,10 @@ parameters:
     description: |
       Minimum distance between the block top and the topmost row of
       Technic holes in X-direction. Determines whether a row is drawn.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   - name: holeXPartial
     group: technic_holes_x
@@ -1007,34 +1186,57 @@ parameters:
       end: half hole after the last stud.
       all: both sides.
       Also relevant for odd size.x where the last hole may be partial.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
 
   # --------------------------------------------------------------------------
-  # GROUP: Technic Holes Y (analog to X)
+  # GROUP: Technic Holes Y
   # --------------------------------------------------------------------------
 
   - name: holeY
     group: technic_holes_y
     type: bool_or_array
-    format: "Same as holeX"
+    format: |
+      Boolean or selective array (same format as pillars/studs).
+      Last value in selective array can be "pin"|"axle"|true|false.
     unit: dimensionless
     default: false
     ai_usage: yes
     description: |
       Whether LEGO Technic holes are drawn along the Y-axis.
-      All sub-parameters are analog to their holeX counterparts.
+      Multiple rows possible depending on block height.
 
   - name: holeYType
     group: technic_holes_y
     type: enum
     values: ["pin", "axle"]
+    unit: dimensionless
     default: "pin"
     ai_usage: yes
+    description: |
+      Type of Technic holes in Y-direction.
+      pin: round holes. axle: cross-shaped holes.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYShift
     group: technic_holes_y
     type: bool
+    unit: dimensionless
     default: true
     ai_usage: yes
+    description: |
+      Whether Technic holes in Y-direction are shifted by 1/2 stud.
+      true: holes align with studs.
+      false: holes sit between two studs.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYDiameter
     group: technic_holes_y
@@ -1042,6 +1244,13 @@ parameters:
     unit: mbu
     default: "auto"
     ai_usage: rarely
+    description: |
+      Diameter of Technic holes in Y-direction.
+      Automatically calculated.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYDiameterAdjustment
     group: technic_holes_y
@@ -1049,6 +1258,8 @@ parameters:
     unit: mm
     default: 0.3
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeYDiameter.
 
   - name: holeYInsetThickness
     group: technic_holes_y
@@ -1056,6 +1267,12 @@ parameters:
     unit: mbu
     default: 0.375
     ai_usage: rarely
+    description: |
+      Width of the inset ring around Technic holes in Y-direction.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYInsetThicknessAdjustment
     group: technic_holes_y
@@ -1063,6 +1280,8 @@ parameters:
     unit: mm
     default: 0.0
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeYInsetThickness.
 
   - name: holeYInsetDepth
     group: technic_holes_y
@@ -1070,6 +1289,12 @@ parameters:
     unit: mbu
     default: 0.5
     ai_usage: rarely
+    description: |
+      Depth of the inset ring around Technic holes in Y-direction.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYInsetDepthAdjustment
     group: technic_holes_y
@@ -1077,6 +1302,8 @@ parameters:
     unit: mm
     default: 0.0
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeYInsetDepth.
 
   - name: holeYGridOffsetZ
     group: technic_holes_y
@@ -1084,6 +1311,13 @@ parameters:
     unit: mbu
     default: 3.625
     ai_usage: rarely
+    description: |
+      Distance from the block bottom to the center of the first row
+      of Technic holes in Y-direction.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYGridOffsetZAdjustment
     group: technic_holes_y
@@ -1091,6 +1325,8 @@ parameters:
     unit: mm
     default: 0.0
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeYGridOffsetZ.
 
   - name: holeYGridSizeZ
     group: technic_holes_y
@@ -1098,6 +1334,13 @@ parameters:
     unit: mbu
     default: 6
     ai_usage: rarely
+    description: |
+      Center-to-center distance between two rows of Technic holes
+      in Y-direction.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYGridSizeZAdjustment
     group: technic_holes_y
@@ -1105,6 +1348,8 @@ parameters:
     unit: mm
     default: 0.0
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeYGridSizeZ.
 
   - name: holeYMinTopMargin
     group: technic_holes_y
@@ -1112,13 +1357,32 @@ parameters:
     unit: mbu
     default: 0.5
     ai_usage: rarely
+    description: |
+      Minimum distance between the block top and the topmost row of
+      Technic holes in Y-direction. Determines whether a row is drawn.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   - name: holeYPartial
     group: technic_holes_y
     type: enum
     values: ["none", "start", "end", "all"]
+    unit: dimensionless
     default: "none"
     ai_usage: yes
+    description: |
+      Whether partial (half) Technic holes are drawn in Y-direction.
+      Only relevant when holeYShift=false.
+      start: half hole before the first stud.
+      end: half hole after the last stud.
+      all: both sides.
+      Also relevant for odd size.y where the last hole may be partial.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
 
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes Z
@@ -1127,7 +1391,9 @@ parameters:
   - name: holeZ
     group: technic_holes_z
     type: bool_or_array
-    format: "Same as holeX"
+    format: |
+      Boolean or selective array (same format as pillars/studs).
+      Last value in selective array can be "pin"|"axle"|true|false.
     unit: dimensionless
     default: false
     ai_usage: yes
@@ -1139,14 +1405,31 @@ parameters:
     group: technic_holes_z
     type: enum
     values: ["pin", "axle"]
+    unit: dimensionless
     default: "pin"
     ai_usage: yes
+    description: |
+      Type of Technic holes in Z-direction.
+      pin: round holes. axle: cross-shaped holes.
+    constraints:
+      requires:
+        - parameter: holeZ
+          condition: "holeZ is not false"
 
   - name: holeZShift
     group: technic_holes_z
     type: bool
+    unit: dimensionless
     default: true
     ai_usage: yes
+    description: |
+      Whether Technic holes in Z-direction are shifted by 1/2 stud.
+      true: holes align with studs.
+      false: holes sit between two studs.
+    constraints:
+      requires:
+        - parameter: holeZ
+          condition: "holeZ is not false"
 
   - name: holeZDiameter
     group: technic_holes_z
@@ -1154,6 +1437,13 @@ parameters:
     unit: mbu
     default: "auto"
     ai_usage: rarely
+    description: |
+      Diameter of Technic holes in Z-direction.
+      Automatically calculated.
+    constraints:
+      requires:
+        - parameter: holeZ
+          condition: "holeZ is not false"
 
   - name: holeZDiameterAdjustment
     group: technic_holes_z
@@ -1161,24 +1451,42 @@ parameters:
     unit: mm
     default: 0.3
     ai_usage: config_only
+    description: |
+      Calibration adjustment for holeZDiameter.
 
   - name: holeZPartialX
     group: technic_holes_z
     type: enum
     values: ["none", "start", "end", "all"]
+    unit: dimensionless
     default: "none"
     ai_usage: yes
     description: |
-      Whether partial Z-holes are drawn in X-direction.
+      Whether partial (half) Z-holes are drawn in X-direction.
+      start: half hole at the x- edge.
+      end: half hole at the x+ edge.
+      all: both sides.
+    constraints:
+      requires:
+        - parameter: holeZ
+          condition: "holeZ is not false"
 
   - name: holeZPartialY
     group: technic_holes_z
     type: enum
     values: ["none", "start", "end", "all"]
+    unit: dimensionless
     default: "none"
     ai_usage: yes
     description: |
-      Whether partial Z-holes are drawn in Y-direction.
+      Whether partial (half) Z-holes are drawn in Y-direction.
+      start: half hole at the y- edge.
+      end: half hole at the y+ edge.
+      all: both sides.
+    constraints:
+      requires:
+        - parameter: holeZ
+          condition: "holeZ is not false"
 
   # --------------------------------------------------------------------------
   # GROUP: Hole Axle
@@ -1193,6 +1501,9 @@ parameters:
     description: |
       Thickness of one strut of the cross axle for hole*Type="axle".
       Applies to all axes (X, Y, Z).
+    constraints:
+      requires:
+        - condition: "Any of holeXType, holeYType, or holeZType = 'axle'"
 
   # --------------------------------------------------------------------------
   # GROUP: Studs
@@ -1245,7 +1556,10 @@ parameters:
   - name: studPadding
     group: studs
     type: float_or_array
-    format: "Float (all sides) or 4-element array [side0, side1, side2, side3]"
+    format: |
+      Float: all 4 sides equal.
+      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: unitGrid
     default: 0
     ai_usage: yes
@@ -1263,6 +1577,10 @@ parameters:
       Height of the stud clamp ring at the upper stud edge.
       Creates a near-permanent connection between two bricks.
       Only active when studClampThickness > 0.
+    constraints:
+      requires:
+        - parameter: studClampThickness
+          condition: "studClampThickness > 0"
 
   - name: studClampThickness
     group: studs
@@ -1282,6 +1600,10 @@ parameters:
     description: |
       Diameter of the hole in studs (studType=hollow).
       Automatically calculated.
+    constraints:
+      requires:
+        - parameter: studType
+          condition: "studType = 'hollow'"
 
   - name: studHoleDiameterAdjustment
     group: studs
@@ -1300,8 +1622,11 @@ parameters:
     ai_usage: rarely
     description: |
       Thickness of the clamp inside the stud hole (studType=hollow).
-      Constriction so pins/axles grip in the stud.
-      Analog to tubeInnerClampThickness.
+      A constriction of the inner hole so pins/axles grip in the stud.
+    constraints:
+      requires:
+        - parameter: studType
+          condition: "studType = 'hollow'"
 
   - name: studRounding
     group: studs
@@ -1429,6 +1754,7 @@ parameters:
       bricks, typically to create a solid block from two separate parts.
       The tongue wraps around the outermost ring of studs and is compatible
       with a plate of the same size, but typically used with a groove brick.
+      Can be used with or without recess.
 
   - name: tongueHeight
     group: tongue_groove
@@ -1438,6 +1764,10 @@ parameters:
     ai_usage: rarely
     description: |
       Height of the tongue.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueGrooveDepth
     group: tongue_groove
@@ -1448,6 +1778,10 @@ parameters:
     description: |
       Depth of the groove. Typically slightly deeper than the tongue height
       to allow for tolerances.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'groove'"
 
   - name: tongueRoundingRadius
     group: tongue_groove
@@ -1458,6 +1792,10 @@ parameters:
     description: |
       Rounding radius of the tongue. Typically derived from the block's
       rounding radius. Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueInnerRoundingRadius
     group: tongue_groove
@@ -1468,6 +1806,10 @@ parameters:
     description: |
       Rounding radius of the inner side of the tongue. Derived from
       tongueRoundingRadius. Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueThickness
     group: tongue_groove
@@ -1477,6 +1819,10 @@ parameters:
     ai_usage: rarely
     description: |
       Thickness of the tongue.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueThicknessAdjustment
     group: tongue_groove
@@ -1497,6 +1843,10 @@ parameters:
     description: |
       Distance of the tongue from the side edge.
       Corresponds to the distance of studs from the side edge.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueClampHeight
     group: tongue_groove
@@ -1507,6 +1857,10 @@ parameters:
     description: |
       Height of the tongue clamp lip. Affects both the lip on the tongue
       and the matching recess in the groove for snapping together.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueClampOffset
     group: tongue_groove
@@ -1517,6 +1871,10 @@ parameters:
     description: |
       Distance of the clamp lip from the upper edge of the tongue.
       Also affects the position of the matching recess in the groove.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   - name: tongueClampThickness
     group: tongue_groove
@@ -1526,6 +1884,10 @@ parameters:
     ai_usage: rarely
     description: |
       Thickness of the tongue clamp lip / groove recess.
+    constraints:
+      requires:
+        - parameter: tongue
+          condition: "tongue = true"
 
   # --------------------------------------------------------------------------
   # GROUP: Grille
@@ -1550,6 +1912,10 @@ parameters:
     ai_usage: yes
     description: |
       Whether the grille starts with an opening instead of a solid bar.
+    constraints:
+      requires:
+        - parameter: grille
+          condition: "grille is not 'none'"
 
   - name: grilleDepth
     group: grille
@@ -1559,6 +1925,10 @@ parameters:
     ai_usage: yes
     description: |
       Depth of the grille openings.
+    constraints:
+      requires:
+        - parameter: grille
+          condition: "grille is not 'none'"
 
   - name: grilleCount
     group: grille
@@ -1568,6 +1938,10 @@ parameters:
     ai_usage: yes
     description: |
       Number of grille bars across the entire surface.
+    constraints:
+      requires:
+        - parameter: grille
+          condition: "grille is not 'none'"
 
   # --------------------------------------------------------------------------
   # GROUP: Recess
@@ -1593,6 +1967,10 @@ parameters:
     description: |
       Rounding radius of the recess cavity. Derived from the block's
       rounding radius. Usually does not need adjustment.
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
 
   - name: recessDepth
     group: recess
@@ -1605,15 +1983,27 @@ parameters:
       When set to an absolute value, the baseCutout (standard) goes up to
       baseCutoutMaxDepth and the remainder is filled with the top plate
       wall between baseCutout and recess.
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
 
   - name: recessWallThickness
     group: recess
-    type: float
+    type: float_or_array
+    format: |
+      Float: all 4 sides equal.
+      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: unitGrid
     default: 0.333
     ai_usage: yes
     description: |
       Wall thickness of the recess cavity (box wall thickness).
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
 
   - name: recessStuds
     group: recess
@@ -1625,16 +2015,29 @@ parameters:
       Whether studs are drawn on the recess floor. Studs are at the same
       X/Y position as without recess. Only drawn if a 1x1 brick fits —
       studs too close to the recess wall are hidden.
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
 
   - name: recessStudPadding
     group: recess
-    type: float
+    type: float_or_array
+    format: |
+      Float: all 4 sides equal.
+      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: unitGrid
     default: 0.2
     ai_usage: yes
     description: |
       Padding from the recess wall inward. Determines whether outer studs
-      in the recess are hidden. Analog to studPadding.
+      in the recess are hidden. Studs whose center is closer to the recess
+      wall than this padding value are not drawn.
+    constraints:
+      requires:
+        - parameter: recessStuds
+          condition: "recessStuds = true"
 
   - name: recessStudType
     group: recess
@@ -1644,7 +2047,12 @@ parameters:
     default: "solid"
     ai_usage: yes
     description: |
-      Type of studs on the recess floor. Analog to studType.
+      Type of studs on the recess floor.
+      solid: massive studs. hollow: studs with a hole in the center.
+    constraints:
+      requires:
+        - parameter: recessStuds
+          condition: "recessStuds = true"
 
   - name: recessStudShift
     group: recess
@@ -1653,7 +2061,13 @@ parameters:
     default: false
     ai_usage: yes
     description: |
-      Whether recess floor studs are shifted by 1/2 stud. Analog to studShift.
+      Whether recess floor studs are shifted by 1/2 stud in X and Y.
+      false: studs sit at standard positions.
+      true: studs are shifted by half a stud in both directions.
+    constraints:
+      requires:
+        - parameter: recessStuds
+          condition: "recessStuds = true"
 
   - name: recessWallGaps
     group: recess
@@ -1666,6 +2080,13 @@ parameters:
       Openings in recess walls. Each entry specifies a side and left/right
       offsets to create partial or full wall openings.
       Also creates matching openings in tongue and groove.
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
+      affects:
+        - tongue
+        - baseCutoutType (groove)
     example: |
       [[2,1,2], [3,0,1]] — opening on side 2 with 1 stud left offset
       and 2 studs right offset; opening on side 3 with 0 left and 1 right.
@@ -1693,6 +2114,10 @@ parameters:
     ai_usage: yes
     description: |
       Side of the brick on which text is displayed (0-5).
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textDepth
     group: text
@@ -1702,6 +2127,10 @@ parameters:
     ai_usage: yes
     description: |
       Depth/height of the text. Negative = engraved. Positive = raised.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textFont
     group: text
@@ -1711,6 +2140,10 @@ parameters:
     ai_usage: yes
     description: |
       Font family for the text.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textSize
     group: text
@@ -1720,6 +2153,10 @@ parameters:
     ai_usage: yes
     description: |
       Font size of the text.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textSpacing
     group: text
@@ -1729,6 +2166,10 @@ parameters:
     ai_usage: yes
     description: |
       Letter spacing of the text.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textVerticalAlign
     group: text
@@ -1739,6 +2180,10 @@ parameters:
     ai_usage: yes
     description: |
       Vertical alignment of the text on the brick surface.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textHorizontalAlign
     group: text
@@ -1749,6 +2194,10 @@ parameters:
     ai_usage: yes
     description: |
       Horizontal alignment of the text on the brick surface.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textOffset
     group: text
@@ -1759,16 +2208,24 @@ parameters:
     ai_usage: yes
     description: |
       Offset of the text from its normal position.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   - name: textColor
     group: text
     type: color
-    format: "Same formats as baseColor"
+    format: "Hex RGB '#ff00ff', Hex RGBA '#ff00ffaa', or RGBA float array [0..1, 0..1, 0..1, 0..1]"
     unit: dimensionless
     default: "#2c3e50"
     ai_usage: yes
     description: |
       Color of the text. Independent from baseColor.
+    constraints:
+      requires:
+        - parameter: text
+          condition: "text is not empty"
 
   # --------------------------------------------------------------------------
   # GROUP: Surface Pattern
@@ -1781,8 +2238,8 @@ parameters:
     default: "none"
     ai_usage: yes
     description: |
-      SVG file for a pattern on the brick surface. Analog to studIcon
-      but for the brick body surface.
+      SVG file for a pattern on the brick surface. Applied to the brick
+      body surface as a repeating or single pattern.
 
   - name: surfacePatternDimensions
     group: surface_pattern
@@ -1793,6 +2250,10 @@ parameters:
     ai_usage: yes
     description: |
       Dimensions of the surface pattern SVG in mm (from the SVG file).
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
 
   - name: surfacePatternOffset
     group: surface_pattern
@@ -1803,6 +2264,10 @@ parameters:
     ai_usage: yes
     description: |
       Offset of the surface pattern.
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
 
   - name: surfacePatternScale
     group: surface_pattern
@@ -1812,6 +2277,10 @@ parameters:
     ai_usage: yes
     description: |
       Scale factor for the surface pattern.
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
 
   - name: surfacePatternDepth
     group: surface_pattern
@@ -1820,7 +2289,11 @@ parameters:
     default: -0.2
     ai_usage: yes
     description: |
-      Depth of the surface pattern. Negative = engraved.
+      Depth of the surface pattern. Negative = engraved. Positive = raised.
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
 
   - name: surfacePatternColor
     group: surface_pattern
@@ -1830,6 +2303,11 @@ parameters:
     ai_usage: yes
     description: |
       Color of the surface pattern. "inherit" uses baseColor.
+      Only visually relevant when surfacePatternDepth > 0.
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
 
   # --------------------------------------------------------------------------
   # GROUP: SVG
@@ -1842,7 +2320,8 @@ parameters:
     default: ""
     ai_usage: yes
     description: |
-      SVG file to draw on a brick side. Analog to studIcon.
+      SVG file to draw on a brick side. Placed on the side specified
+      by svgSide.
 
   - name: svgSide
     group: svg
@@ -1853,6 +2332,10 @@ parameters:
     ai_usage: yes
     description: |
       Side on which the SVG is drawn (0-5).
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   - name: svgDepth
     group: svg
@@ -1862,6 +2345,10 @@ parameters:
     ai_usage: yes
     description: |
       Depth/height of the SVG. Negative = engraved. Positive = raised.
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   - name: svgDimensions
     group: svg
@@ -1872,6 +2359,10 @@ parameters:
     ai_usage: yes
     description: |
       Dimensions of the SVG in mm (from the SVG file).
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   - name: svgScale
     group: svg
@@ -1881,6 +2372,10 @@ parameters:
     ai_usage: yes
     description: |
       Scale factor for the SVG.
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   - name: svgOffset
     group: svg
@@ -1890,16 +2385,25 @@ parameters:
     default: [0, 0]
     ai_usage: yes
     description: |
-      Offset of the SVG.
+      Offset of the SVG from its default position.
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   - name: svgColor
     group: svg
     type: color
+    format: "Hex RGB '#ff00ff', Hex RGBA '#ff00ffaa', or RGBA float array [0..1, 0..1, 0..1, 0..1]"
     unit: dimensionless
     default: "#2c3e50"
     ai_usage: yes
     description: |
       Color of the SVG.
+    constraints:
+      requires:
+        - parameter: svg
+          condition: "svg is not empty"
 
   # --------------------------------------------------------------------------
   # GROUP: Connectors
@@ -1936,6 +2440,10 @@ parameters:
     description: |
       How many triangles to skip at the start and end of a side.
       Important when connecting bricks of different sizes.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   - name: connectorHeight
     group: connectors
@@ -1945,6 +2453,10 @@ parameters:
     ai_usage: yes
     description: |
       Height of the connector triangles. At "auto" equals the brick height.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   - name: connectorDepth
     group: connectors
@@ -1954,6 +2466,10 @@ parameters:
     ai_usage: yes
     description: |
       How far the connector triangles protrude.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   - name: connectorWidth
     group: connectors
@@ -1963,6 +2479,10 @@ parameters:
     ai_usage: yes
     description: |
       Width of the connector triangles.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   - name: connectorDepthTolerance
     group: connectors
@@ -1972,6 +2492,10 @@ parameters:
     ai_usage: rarely
     description: |
       Tolerance of the recess depth relative to the triangle depth.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   - name: connectorSideTolerance
     group: connectors
@@ -1981,6 +2505,10 @@ parameters:
     ai_usage: rarely
     description: |
       Tolerance of the recess width relative to the triangle width.
+    constraints:
+      requires:
+        - parameter: connectors
+          condition: "connectors is not false"
 
   # --------------------------------------------------------------------------
   # GROUP: Screw Holes X / Y
@@ -2006,6 +2534,10 @@ parameters:
     ai_usage: yes
     description: |
       Diameter of X-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesX
+          condition: "screwHolesX is not empty"
 
   - name: screwHoleXDepth
     group: screw_holes
@@ -2015,6 +2547,10 @@ parameters:
     ai_usage: yes
     description: |
       Depth of X-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesX
+          condition: "screwHolesX is not empty"
 
   - name: screwHolesY
     group: screw_holes
@@ -2036,6 +2572,10 @@ parameters:
     ai_usage: yes
     description: |
       Diameter of Y-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesY
+          condition: "screwHolesY is not empty"
 
   - name: screwHoleYDepth
     group: screw_holes
@@ -2045,6 +2585,10 @@ parameters:
     ai_usage: yes
     description: |
       Depth of Y-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesY
+          condition: "screwHolesY is not empty"
 
   # --------------------------------------------------------------------------
   # GROUP: Screw Holes Z
@@ -2070,6 +2614,10 @@ parameters:
     ai_usage: yes
     description: |
       Diameter of Z-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesZ
+          condition: "screwHolesZ is not empty"
 
   - name: screwHoleZHelperThickness
     group: screw_holes
@@ -2080,6 +2628,10 @@ parameters:
     description: |
       Thickness of helpers for Z-axis mounting holes on the underside.
       Required for baseCutoutType=standard to avoid needing print support.
+    constraints:
+      requires:
+        - parameter: screwHolesZ
+          condition: "screwHolesZ is not empty"
 
   - name: screwHoleZHelperOffset
     group: screw_holes
@@ -2088,7 +2640,11 @@ parameters:
     default: 0.2
     ai_usage: rarely
     description: |
-      Offset between the 2 helper layers. Analog to stabilizerGridOffset.
+      Offset between the two helper layers for Z-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesZ
+          condition: "screwHolesZ is not empty"
 
   - name: screwHoleZHelperHeight
     group: screw_holes
@@ -2098,6 +2654,10 @@ parameters:
     ai_usage: rarely
     description: |
       Height of the helper layers for Z-axis mounting holes.
+    constraints:
+      requires:
+        - parameter: screwHolesZ
+          condition: "screwHolesZ is not empty"
 
   # --------------------------------------------------------------------------
   # GROUP: PCB
@@ -2123,6 +2683,10 @@ parameters:
       Type of PCB mounting.
       clips: frame for clipping in the PCB.
       screws: screw sockets for screw mounting.
+    constraints:
+      requires:
+        - parameter: pcb
+          condition: "pcb = true"
 
   - name: pcbDimensions
     group: pcb
@@ -2134,6 +2698,10 @@ parameters:
     description: |
       Dimensions of the PCB in mm. Refers to the board size,
       especially relevant for pcbMountingType=clips.
+    constraints:
+      requires:
+        - parameter: pcb
+          condition: "pcb = true"
 
   - name: pcbOffset
     group: pcb
@@ -2144,6 +2712,10 @@ parameters:
     ai_usage: yes
     description: |
       Offset of the PCB from the center of the brick.
+    constraints:
+      requires:
+        - parameter: pcb
+          condition: "pcb = true"
 
   - name: pcbScrewSocketSize
     group: pcb
@@ -2152,7 +2724,11 @@ parameters:
     default: 5
     ai_usage: yes
     description: |
-      Diameter of screw sockets. Only for pcbMountingType=screws.
+      Diameter of screw sockets.
+    constraints:
+      requires:
+        - parameter: pcbMountingType
+          condition: "pcbMountingType = 'screws'"
 
   - name: pcbScrewSocketHoleSize
     group: pcb
@@ -2162,7 +2738,10 @@ parameters:
     ai_usage: yes
     description: |
       Diameter of the screw hole inside the socket.
-      Only for pcbMountingType=screws.
+    constraints:
+      requires:
+        - parameter: pcbMountingType
+          condition: "pcbMountingType = 'screws'"
 
   - name: pcbScrewSocketHeight
     group: pcb
@@ -2171,7 +2750,11 @@ parameters:
     default: 3
     ai_usage: yes
     description: |
-      Height of the screw sockets. Only for pcbMountingType=screws.
+      Height of the screw sockets.
+    constraints:
+      requires:
+        - parameter: pcbMountingType
+          condition: "pcbMountingType = 'screws'"
 
   - name: pcbScrewSockets
     group: pcb
@@ -2183,7 +2766,10 @@ parameters:
     description: |
       Positions of screw sockets. Each entry gives the distance of the
       socket center from the brick center in mm.
-      Only for pcbMountingType=screws.
+    constraints:
+      requires:
+        - parameter: pcbMountingType
+          condition: "pcbMountingType = 'screws'"
 
   # --------------------------------------------------------------------------
   # GROUP: Quality / Rendering
