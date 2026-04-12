@@ -57,1153 +57,314 @@ use <quality.scad>;
  * }
  */
 
-function mb_params_get(params, key, default=undef) =
+function mb_param_get(params, key, default=undef) =
     let(found = [for (p = params) if (p[0] == key) p[1]])
     len(found) > 0 ? found[0] : default;
 
-function mb_params_resolve(config, settings, key, default=undef) =
+function mb_param(config, settings, key, default=undef) =
     let(
-        s = _mb_params_valid(settings) ? mb_params_get(settings, key, undef) : undef,
-        c = _mb_params_valid(config)   ? mb_params_get(config, key, undef)   : undef
+        s = _mb_param_set_valid(settings) ? mb_param_get(settings, key, undef) : undef,
+        c = _mb_param_set_valid(config)   ? mb_param_get(config, key, undef)   : undef
     )
     s != undef ? s :
     c != undef ? c :
     default;
 
-function _mb_params_valid(p) =
+function _mb_param_set_valid(p) =
     p != undef && is_list(p) && len(p) > 0;  
 
-function mb_params_merge(a, b) =
-    concat(
-        // alle aus a, die NICHT in b überschrieben werden
-        [
-            for (pa = a)
-                if (!_mb_params_has_key(b, pa[0]))
-                    pa
-        ],
-        // alle aus b (haben Vorrang)
-        b
-    );
-
-function _mb_params_has_key(params, key) =
+function _mb_param_set_has_key(params, key) =
     len([
         for (p = params)
             if (p[0] == key)
                 1
     ]) > 0;
 
+function mb_param_set_merge(a, b) =
+    concat(
+        // alle aus a, die NICHT in b überschrieben werden
+        [
+            for (pa = a)
+                if (!_mb_param_set_has_key(b, pa[0]))
+                    pa
+        ],
+        // alle aus b (haben Vorrang)
+        b
+    );
+
+function mb_params_merge(a, b) = mb_param_set_merge(a, b);
+function mb_params_get(params, key, default=undef) = mb_param_get(params, key, default);
+
+function mb_params_resolve(config, settings, key, default=undef) = mb_param(config, settings, key, default);
+
+
+
 function mb_assembly_offset(o, dir) = dir == "west" || dir == "east" ? o : [o[1], o[0], o[2]];
 
-module machineblock(
 
-    // Grid units
-    unitMbu = undef,
-    unitGrid = undef,
-
-    // Scale
-    scale = undef,
-
-    // Rotation
-    rotation = undef,
-    rotationOffset = undef,
-    rotationOffsetRevert = undef,
-    direction = undef,
-
-    // Size
-    size = undef,
-    offset = undef,
-    crop = undef,
-
-    cutout = undef,
-    cutoutOffset = undef,
-
-    // Base
-    base = undef,
-    baseColor = undef,
-    baseHeight = undef,
-
-    baseTopPlateHeight = undef,
-    baseTopPlateHeightAdjustment = undef,
-
-    baseCutoutType = undef,
-    baseCutoutMaxDepth = undef,
-
-    baseClampOffset = undef,
-    baseClampHeight = undef,
-    baseClampThickness = undef,
-    baseClampOuter = undef,
-
-    baseRoundingRadius = undef,
-    baseCutoutRoundingRadius = undef,
-    baseRoundingResolution = undef,
-
-    // Relief Cut
-    baseReliefCut = undef,
-    baseReliefCutHeight = undef,
-    baseReliefCutThickness = undef,
-
-    // Base Adjustment
-    baseSideAdjustment = undef,
-    baseHeightAdjustment = undef,
-
-    // Walls
-    baseWallThickness = undef,
-    baseWallThicknessAdjustment = undef,
-    baseWallGapsX = undef,
-    baseWallGapsY = undef,
-
-    // Top Plate Helpers
-    topPlateHelpers = undef,
-    topPlateHelperHeight = undef,
-    topPlateHelperThickness = undef,
-
-    // Stabilizers
-    stabilizerGrid = undef,
-    stabilizerGridOffset = undef,
-    stabilizerGridHeight = undef,
-    stabilizerGridThickness = undef,
-    stabilizerExpansion = undef,
-    stabilizerExpansionOffset = undef,
-
-    // Pillars
-    pillars = undef,
-    pillarRoundingResolution = undef,
-    pillarGapCornerLength = undef,
-    pillarGapMiddle = undef,
-
-    // Pins
-    pinDiameter = undef,
-    pinDiameterAdjustment = undef,
-
-    // Tubes
-    tubeWallThickness = undef,
-    tubeXDiameter = undef,
-    tubeXDiameterAdjustment = undef,
-    tubeYDiameter = undef,
-    tubeYDiameterAdjustment = undef,
-    tubeZDiameter = undef,
-    tubeZDiameterAdjustment = undef,
-    tubeInnerClampThickness = undef,
-
-    // Slope
-    slope = undef,
-    slopeBaseHeightLower = undef,
-    slopeBaseHeightLowerInner = undef,
-    slopeBaseHeightUpper = undef,
-
-    // Bevel
-    bevel = undef,
-
-    // Holes X
-    holeX = undef,
-    holeXType = undef,
-    holeXShift = undef,
-    holeXDiameter = undef,
-    holeXDiameterAdjustment = undef,
-    holeXInsetThickness = undef,
-    holeXInsetThicknessAdjustment = undef,
-    holeXInsetDepth = undef,
-    holeXInsetDepthAdjustment = undef,
-    holeXGridOffsetZ = undef,
-    holeXGridOffsetZAdjustment = undef,
-    holeXGridSizeZ = undef,
-    holeXGridSizeZAdjustment = undef,
-    holeXMinTopMargin = undef,
-    holeXPartial = undef,
-
-    // Holes Y
-    holeY = undef,
-    holeYType = undef,
-    holeYShift = undef,
-    holeYDiameter = undef,
-    holeYDiameterAdjustment = undef,
-    holeYInsetThickness = undef,
-    holeYInsetThicknessAdjustment = undef,
-    holeYInsetDepth = undef,
-    holeYInsetDepthAdjustment = undef,
-    holeYGridOffsetZ = undef,
-    holeYGridOffsetZAdjustment = undef,
-    holeYGridSizeZ = undef,
-    holeYGridSizeZAdjustment = undef,
-    holeYMinTopMargin = undef,
-    holeYPartial = undef,
-
-    // Holes Z
-    holeZ = undef,
-    holeZType = undef,
-    holeZShift = undef,
-    holeZDiameter = undef,
-    holeZDiameterAdjustment = undef,
-    holeRoundingResolution = undef,
-    holeZPartialX = undef,
-    holeZPartialY = undef,
-
-    // Axle
-    holeAxleThickness = undef,
-
-    // Studs
-    studs = undef,
-    studType = undef,
-    studShift = undef,
-    studMaxOverhang = undef,
-    studPadding = undef,
-
-    studClampHeight = undef,
-    studClampThickness = undef,
-
-    studHoleDiameter = undef,
-    studHoleDiameterAdjustment = undef,
-    studHoleClampThickness = undef,
-
-    studRounding = undef,
-    studRoundingResolution = undef,
-
-    studDiameter = undef,
-    studDiameterAdjustment = undef,
-
-    studHeight = undef,
-    studHeightAdjustment = undef,
-
-    studCutoutAdjustment = undef,
-
-    studIcon = undef,
-    studIconDimensions = undef,
-    studIconScale = undef,
-    studIconDepth = undef,
-    studIconColor = undef,
-
-    // Tongue
-    tongue = undef,
-    tongueHeight = undef,
-    tongueGrooveDepth = undef,
-    tongueRoundingRadius = undef,
-    tongueInnerRoundingRadius = undef,
-    tongueThickness = undef,
-    tongueThicknessAdjustment = undef,
-    tongueOffset = undef,
-    tongueClampHeight = undef,
-    tongueClampOffset = undef,
-    tongueClampThickness = undef,
-
-    // Grille
-    grille = undef,
-    grilleInverted = undef,
-    grilleDepth = undef,
-    grilleCount = undef,
-
-    // Recess
-    recess = undef,
-    recessRoundingRadius = undef,
-    recessDepth = undef,
-    recessWallThickness = undef,
-    recessStuds = undef,
-    recessStudPadding = undef,
-    recessStudType = undef,
-    recessStudShift = undef,
-    recessWallGaps = undef,
-
-    // Text
-    text = undef,
-    textSide = undef,
-    textDepth = undef,
-    textFont = undef,
-    textSize = undef,
-    textSpacing = undef,
-    textVerticalAlign = undef,
-    textHorizontalAlign = undef,
-    textOffset = undef,
-    textColor = undef,
-
-    // Surface Pattern
-    surfacePattern = undef,
-    surfacePatternDimensions = undef,
-    surfacePatternOffset = undef,
-    surfacePatternScale = undef,
-    surfacePatternDepth = undef,
-    surfacePatternColor = undef,
-
-    // SVG
-    svg = undef,
-    svgSide = undef,
-    svgDepth = undef,
-    svgDimensions = undef,
-    svgScale = undef,
-    svgOffset = undef,
-    svgColor = undef,
-
-    // Connectors
-    connectors = undef,
-    connectorPadding = undef,
-    connectorHeight = undef,
-    connectorDepth = undef,
-    connectorWidth = undef,
-    connectorDepthTolerance = undef,
-    connectorSideTolerance = undef,
-
-    // Screws Z
-    screwHolesZ = undef,
-    screwHoleZSize = undef,
-    screwHoleZHelperThickness = undef,
-    screwHoleZHelperOffset = undef,
-    screwHoleZHelperHeight = undef,
-
-    // Screws X
-    screwHolesX = undef,
-    screwHoleXSize = undef,
-    screwHoleXDepth = undef,
-
-    // Screws Y
-    screwHolesY = undef,
-    screwHoleYSize = undef,
-    screwHoleYDepth = undef,
-
-    // PCB
-    pcb = undef,
-    pcbMountingType = undef,
-    pcbDimensions = undef,
-    pcbOffset = undef,
-    pcbScrewSocketSize = undef,
-    pcbScrewSocketHoleSize = undef,
-    pcbScrewSocketHeight = undef,
-    pcbScrewSockets = undef,
-
-    // Alignment
-    align = undef,
-    alignChildren = undef,
-
-    // Quality
-    qualitySegBase = undef,
-    qualityResolutionMax = undef,
-    qualityFactor = undef,
-    qualityResolutionMin = undef,
-    qualityResolutionMultiplier = undef,
-
-    // Preview
-    previewQuality = undef,
-    previewRender = undef,
-    previewRenderConvexity = undef
-
-){
-    settings = [
-        ["unitMbu", unitMbu],
-        ["unitGrid", unitGrid],
-        ["scale", scale],
-
-        ["rotation", rotation],
-        ["rotationOffset", rotationOffset],
-        ["rotationOffsetRevert", rotationOffsetRevert],
-        ["direction", direction],
-
-        ["size", size],
-        ["offset", offset],
-        ["crop", crop],
-
-        ["cutout", cutout],
-        ["cutoutOffset", cutoutOffset],
-
-        ["base", base],
-        ["baseColor", baseColor],
-        ["baseHeight", baseHeight],
-
-        ["baseTopPlateHeight", baseTopPlateHeight],
-        ["baseTopPlateHeightAdjustment", baseTopPlateHeightAdjustment],
-
-        ["baseCutoutType", baseCutoutType],
-        ["baseCutoutMaxDepth", baseCutoutMaxDepth],
-
-        ["baseClampOffset", baseClampOffset],
-        ["baseClampHeight", baseClampHeight],
-        ["baseClampThickness", baseClampThickness],
-        ["baseClampOuter", baseClampOuter],
-
-        ["baseRoundingRadius", baseRoundingRadius],
-        ["baseCutoutRoundingRadius", baseCutoutRoundingRadius],
-        ["baseRoundingResolution", baseRoundingResolution],
-
-        ["baseReliefCut", baseReliefCut],
-        ["baseReliefCutHeight", baseReliefCutHeight],
-        ["baseReliefCutThickness", baseReliefCutThickness],
-
-        ["baseSideAdjustment", baseSideAdjustment],
-        ["baseHeightAdjustment", baseHeightAdjustment],
-
-        ["baseWallThickness", baseWallThickness],
-        ["baseWallThicknessAdjustment", baseWallThicknessAdjustment],
-        ["baseWallGapsX", baseWallGapsX],
-        ["baseWallGapsY", baseWallGapsY],
-
-        ["topPlateHelpers", topPlateHelpers],
-        ["topPlateHelperHeight", topPlateHelperHeight],
-        ["topPlateHelperThickness", topPlateHelperThickness],
-
-        ["stabilizerGrid", stabilizerGrid],
-        ["stabilizerGridOffset", stabilizerGridOffset],
-        ["stabilizerGridHeight", stabilizerGridHeight],
-        ["stabilizerGridThickness", stabilizerGridThickness],
-        ["stabilizerExpansion", stabilizerExpansion],
-        ["stabilizerExpansionOffset", stabilizerExpansionOffset],
-
-        ["pillars", pillars],
-        ["pillarRoundingResolution", pillarRoundingResolution],
-        ["pillarGapCornerLength", pillarGapCornerLength],
-        ["pillarGapMiddle", pillarGapMiddle],
-
-        ["pinDiameter", pinDiameter],
-        ["pinDiameterAdjustment", pinDiameterAdjustment],
-
-        ["tubeWallThickness", tubeWallThickness],
-        ["tubeXDiameter", tubeXDiameter],
-        ["tubeXDiameterAdjustment", tubeXDiameterAdjustment],
-        ["tubeYDiameter", tubeYDiameter],
-        ["tubeYDiameterAdjustment", tubeYDiameterAdjustment],
-        ["tubeZDiameter", tubeZDiameter],
-        ["tubeZDiameterAdjustment", tubeZDiameterAdjustment],
-        ["tubeInnerClampThickness", tubeInnerClampThickness],
-
-        ["slope", slope],
-        ["slopeBaseHeightLower", slopeBaseHeightLower],
-        ["slopeBaseHeightLowerInner", slopeBaseHeightLowerInner],
-        ["slopeBaseHeightUpper", slopeBaseHeightUpper],
-
-        ["bevel", bevel],
-
-        ["holeX", holeX],
-        ["holeXType", holeXType],
-        ["holeXShift", holeXShift],
-        ["holeXDiameter", holeXDiameter],
-        ["holeXDiameterAdjustment", holeXDiameterAdjustment],
-        ["holeXInsetThickness", holeXInsetThickness],
-        ["holeXInsetThicknessAdjustment", holeXInsetThicknessAdjustment],
-        ["holeXInsetDepth", holeXInsetDepth],
-        ["holeXInsetDepthAdjustment", holeXInsetDepthAdjustment],
-        ["holeXGridOffsetZ", holeXGridOffsetZ],
-        ["holeXGridOffsetZAdjustment", holeXGridOffsetZAdjustment],
-        ["holeXGridSizeZ", holeXGridSizeZ],
-        ["holeXGridSizeZAdjustment", holeXGridSizeZAdjustment],
-        ["holeXMinTopMargin", holeXMinTopMargin],
-        ["holeXPartial", holeXPartial],
-
-        ["holeY", holeY],
-        ["holeYType", holeYType],
-        ["holeYShift", holeYShift],
-        ["holeYDiameter", holeYDiameter],
-        ["holeYDiameterAdjustment", holeYDiameterAdjustment],
-        ["holeYInsetThickness", holeYInsetThickness],
-        ["holeYInsetThicknessAdjustment", holeYInsetThicknessAdjustment],
-        ["holeYInsetDepth", holeYInsetDepth],
-        ["holeYInsetDepthAdjustment", holeYInsetDepthAdjustment],
-        ["holeYGridOffsetZ", holeYGridOffsetZ],
-        ["holeYGridOffsetZAdjustment", holeYGridOffsetZAdjustment],
-        ["holeYGridSizeZ", holeYGridSizeZ],
-        ["holeYGridSizeZAdjustment", holeYGridSizeZAdjustment],
-        ["holeYMinTopMargin", holeYMinTopMargin],
-        ["holeYPartial", holeYPartial],
-
-        ["holeZ", holeZ],
-        ["holeZType", holeZType],
-        ["holeZShift", holeZShift],
-        ["holeZDiameter", holeZDiameter],
-        ["holeZDiameterAdjustment", holeZDiameterAdjustment],
-        ["holeRoundingResolution", holeRoundingResolution],
-        ["holeZPartialX", holeZPartialX],
-        ["holeZPartialY", holeZPartialY],
-
-        ["holeAxleThickness", holeAxleThickness],
-
-        ["studs", studs],
-        ["studType", studType],
-        ["studShift", studShift],
-        ["studMaxOverhang", studMaxOverhang],
-        ["studPadding", studPadding],
-
-        ["studClampHeight", studClampHeight],
-        ["studClampThickness", studClampThickness],
-
-        ["studHoleDiameter", studHoleDiameter],
-        ["studHoleDiameterAdjustment", studHoleDiameterAdjustment],
-        ["studHoleClampThickness", studHoleClampThickness],
-
-        ["studRounding", studRounding],
-        ["studRoundingResolution", studRoundingResolution],
-
-        ["studDiameter", studDiameter],
-        ["studDiameterAdjustment", studDiameterAdjustment],
-
-        ["studHeight", studHeight],
-        ["studHeightAdjustment", studHeightAdjustment],
-
-        ["studCutoutAdjustment", studCutoutAdjustment],
-
-        ["studIcon", studIcon],
-        ["studIconDimensions", studIconDimensions],
-        ["studIconScale", studIconScale],
-        ["studIconDepth", studIconDepth],
-        ["studIconColor", studIconColor],
-
-        ["tongue", tongue],
-        ["tongueHeight", tongueHeight],
-        ["tongueGrooveDepth", tongueGrooveDepth],
-        ["tongueRoundingRadius", tongueRoundingRadius],
-        ["tongueInnerRoundingRadius", tongueInnerRoundingRadius],
-        ["tongueThickness", tongueThickness],
-        ["tongueThicknessAdjustment", tongueThicknessAdjustment],
-        ["tongueOffset", tongueOffset],
-        ["tongueClampHeight", tongueClampHeight],
-        ["tongueClampOffset", tongueClampOffset],
-        ["tongueClampThickness", tongueClampThickness],
-
-        ["grille", grille],
-        ["grilleInverted", grilleInverted],
-        ["grilleDepth", grilleDepth],
-        ["grilleCount", grilleCount],
-
-        ["recess", recess],
-        ["recessRoundingRadius", recessRoundingRadius],
-        ["recessDepth", recessDepth],
-        ["recessWallThickness", recessWallThickness],
-        ["recessStuds", recessStuds],
-        ["recessStudPadding", recessStudPadding],
-        ["recessStudType", recessStudType],
-        ["recessStudShift", recessStudShift],
-        ["recessWallGaps", recessWallGaps],
-
-        ["text", text],
-        ["textSide", textSide],
-        ["textDepth", textDepth],
-        ["textFont", textFont],
-        ["textSize", textSize],
-        ["textSpacing", textSpacing],
-        ["textVerticalAlign", textVerticalAlign],
-        ["textHorizontalAlign", textHorizontalAlign],
-        ["textOffset", textOffset],
-        ["textColor", textColor],
-
-        ["surfacePattern", surfacePattern],
-        ["surfacePatternDimensions", surfacePatternDimensions],
-        ["surfacePatternOffset", surfacePatternOffset],
-        ["surfacePatternScale", surfacePatternScale],
-        ["surfacePatternDepth", surfacePatternDepth],
-        ["surfacePatternColor", surfacePatternColor],
-
-        ["svg", svg],
-        ["svgSide", svgSide],
-        ["svgDepth", svgDepth],
-        ["svgDimensions", svgDimensions],
-        ["svgScale", svgScale],
-        ["svgOffset", svgOffset],
-        ["svgColor", svgColor],
-
-        ["connectors", connectors],
-        ["connectorPadding", connectorPadding],
-        ["connectorHeight", connectorHeight],
-        ["connectorDepth", connectorDepth],
-        ["connectorWidth", connectorWidth],
-        ["connectorDepthTolerance", connectorDepthTolerance],
-        ["connectorSideTolerance", connectorSideTolerance],
-
-        ["screwHolesZ", screwHolesZ],
-        ["screwHoleZSize", screwHoleZSize],
-        ["screwHoleZHelperThickness", screwHoleZHelperThickness],
-        ["screwHoleZHelperOffset", screwHoleZHelperOffset],
-        ["screwHoleZHelperHeight", screwHoleZHelperHeight],
-
-        ["screwHolesX", screwHolesX],
-        ["screwHoleXSize", screwHoleXSize],
-        ["screwHoleXDepth", screwHoleXDepth],
-
-        ["screwHolesY", screwHolesY],
-        ["screwHoleYSize", screwHoleYSize],
-        ["screwHoleYDepth", screwHoleYDepth],
-
-        ["pcb", pcb],
-        ["pcbMountingType", pcbMountingType],
-        ["pcbDimensions", pcbDimensions],
-        ["pcbOffset", pcbOffset],
-        ["pcbScrewSocketSize", pcbScrewSocketSize],
-        ["pcbScrewSocketHoleSize", pcbScrewSocketHoleSize],
-        ["pcbScrewSocketHeight", pcbScrewSocketHeight],
-        ["pcbScrewSockets", pcbScrewSockets],
-
-        ["align", align],
-        ["alignChildren", alignChildren],
-
-        ["qualitySegBase", qualitySegBase],
-        ["qualityResolutionMax", qualityResolutionMax],
-        ["qualityFactor", qualityFactor],
-        ["qualityResolutionMin", qualityResolutionMin],
-        ["qualityResolutionMultiplier", qualityResolutionMultiplier],
-
-        ["previewQuality", previewQuality],
-        ["previewRender", previewRender],
-        ["previewRenderConvexity", previewRenderConvexity]
-    ];
-
-    mb_block(settings = settings){
-        children();
-    }
-}
 
 module mb_block(
     config,
     settings
-        /*
-        //Grid units
-        unitMbu = 1.6, // mm - The MachineBlocks base unit.
-        unitGrid = [5, 2], // vector2 x mbu ([xy, z]) - The MachineBlocks grid relative to the base unit.
-        
-        //Scale
-        scale = 1.0, // float - Scale of the block. Only affects parameters given in mbu and grid.
-
-        //Rotation
-        rotation = [0, 0, 0], // vector3 x int - Rotation of the brick around the x, y and z - axis.
-        rotationOffset = [0, 0, 0], // grid ([x, y, z]) - Origin of the rotation relative to the Bricks origin.
-        rotationOffsetRevert = true,
-        direction = "west",
-
-        //Size
-        size = [1, 1, 1], // vector3 x grid ([x, y, z]) - Size of the brick as multiple of the grid unit.
-        offset = [0, 0, 0], // grid ([x, y, z]) - Position of the brick relative to the origin.
-        crop = [0, 0, 0, 0],
-
-        cutout = false,
-        cutoutOffset = [0, 0],
-
-        //Base
-        base = true, // bool
-        baseColor = "#EAC645", // color - Color of the block.
-        baseHeight = "auto", // mm | "auto" - Fixed height in mm or auto to calculate height based on the size parameter.
-        
-        baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and recessDepth.
-        baseTopPlateHeightAdjustment = -0.6, // mm
-
-        baseCutoutType = "standard", // "standard" | "studs" | "groove" | "none"
-        baseCutoutMaxDepth = 5, // mbu
-        
-        baseClampOffset = 0.25, // mbu
-        baseClampHeight = 0.5, // mbu
-        baseClampThickness = 0.1, // mm
-        baseClampOuter = false, // bool
-        
-        
-        baseRoundingRadius = 0.0, // grid | vector3 x grid | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
-        baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
-        baseRoundingResolution = 64, // int TODO remove
-        
-        //Relief Cut
-        baseReliefCut = false, // bool
-        baseReliefCutHeight = 0.375, // mbu
-        baseReliefCutThickness = 0.375, // mbu
-        
-        //Base Adjustment
-        baseSideAdjustment = -0.1, // mm
-        baseHeightAdjustment = 0.0, // mm
-        
-        //Walls
-        baseWallThickness = "auto", // mbu | "auto"
-        baseWallThicknessAdjustment = -0.1, // mm
-        baseWallGapsX = [], // vector
-        baseWallGapsY = [], // vector
-        
-        //Top Plate Helpers
-        topPlateHelpers = true, // bool
-        topPlateHelperHeight = 0.2, // mm (min printable layer height, usually 0.2mm)
-        topPlateHelperThickness = 0.4, // mm (min printable wall thickness, usually 0.4mm)
-
-        //Stabilizers
-        stabilizerGrid = true, // bool
-        stabilizerGridOffset = 0.2, // mm (min printable layer height, usually 0.2mm)
-        stabilizerGridHeight = 0.5, // mbu
-        stabilizerGridThickness = 0.5, // mbu
-        stabilizerExpansion = 2, // int (create expansion after each [n] bricks)
-        stabilizerExpansionOffset = 1, // mbu
-        
-        //Pillars: Tubes and Pins
-        pillars = true, // bool | vector
-        pillarRoundingResolution = 64, // int TODO remove
-        pillarGapCornerLength = 2, // int
-        pillarGapMiddle = 10, // int
-        
-        //Pins (little tubes for blocks with 1 brick side length)
-        pinDiameter = "auto", // mbu | "auto"
-        pinDiameterAdjustment = 0.0, // mm
-        
-        //Tubes
-        tubeWallThickness = 0.53125, // mbu (constant, should not be changed normally)
-        tubeXDiameter = "auto", // mbu | "auto"
-        tubeXDiameterAdjustment = -0.1, // mm
-        tubeYDiameter = "auto", // mbu | "auto"
-        tubeYDiameterAdjustment = -0.1, // mm
-        tubeZDiameter = "auto", // mbu | "auto"
-        tubeZDiameterAdjustment = -0.1, // mm
-
-        tubeInnerClampThickness = 0.1, // mm
-        
-        // Slope
-        slope = false, // false | vector4
-        slopeBaseHeightLower = 1.333, // mbu
-        slopeBaseHeightLowerInner = 1.125, // mbu
-        slopeBaseHeightUpper = 1, // mbu
-
-        // Bevel
-        bevel = [[0, 0], [0, 0], [0, 0], [0, 0]], // vector4 x vector2
-
-        //Holes
-        holeX = false, // bool | vector
-        holeXType = "pin", // "pin" | "axle"
-        holeXShift = true, // bool
-        holeXDiameter = "auto", // mbu | "auto"
-        holeXDiameterAdjustment = 0.3, // mm
-        holeXInsetThickness = 0.375, // mbu
-        holeXInsetThicknessAdjustment = 0.0, // mm
-        holeXInsetDepth = 0.5, // mbu
-        holeXInsetDepthAdjustment = 0.0, // mm
-        holeXGridOffsetZ = 3.625, // mbu
-        holeXGridOffsetZAdjustment = 0.0, // mm
-        holeXGridSizeZ = 6, // mbu
-        holeXGridSizeZAdjustment = 0.0, // mm
-        holeXMinTopMargin = 0.5, // mbu
-        holeXPartial = "none", // "none", "start", "end", "all"
-
-        holeY = false, // bool or vector
-        holeYType = "pin", // "pin" | "axle"
-        holeYShift = true, // bool
-        holeYDiameter = "auto", // mbu | "auto"
-        holeYDiameterAdjustment = 0.3, // mm
-        holeYInsetThickness = 0.375, // mbu
-        holeYInsetThicknessAdjustment = 0.0, // mm
-        holeYInsetDepth = 0.5, // mbu
-        holeYInsetDepthAdjustment = 0.0, // mm
-        holeYGridOffsetZ = 3.625, // mbu
-        holeYGridOffsetZAdjustment = 0.0, //mm
-        holeYGridSizeZ = 6, // mbu
-        holeYGridSizeZAdjustment = 0.0, // mm
-        holeYMinTopMargin = 0.5, // mbu
-        holeYPartial = "none", // "none", "start", "end", "all"
-
-        holeZ = false, // bool or vector
-        holeZType = "pin", // "pin" | "axle"
-        holeZShift = true, // false | "none" | "x" | "y" | true | "xy"
-        holeZDiameter = "auto", // mbu | "auto"
-        holeZDiameterAdjustment = 0.3, // mm
-        holeRoundingResolution = 64, // int TODO remove
-        holeZPartialX = "none", // "none", "start", "end", "all"
-        holeZPartialY = "none", // "none", "start", "end", "all"
-
-        //Axle Holes
-        holeAxleThickness = 1, //mbu
-        
-        //Studs
-        studs = true, // bool or vector
-        studType = "solid", // "solid" | "hollow"
-        studShift = false, // false | "none" | "x" | "y" | true | "xy"
-        studMaxOverhang = 0.3, // mm
-        studPadding = 0, // grid
-        
-        studClampHeight = 0.5, // mbu
-        studClampThickness = 0.0, // mm
-        
-        studHoleDiameter = "auto", // mbu | "auto"
-        studHoleDiameterAdjustment = 0.3, // mm
-        studHoleClampThickness = 0.1, // mm
-        
-        studRounding = 0.0625, // mbu
-        studRoundingResolution = 64, // int TODO remove
-        
-        studDiameter = 3, // mbu (constant, should not be changed normally)
-        studDiameterAdjustment = 0.2, // mm
-        
-        studHeight = 1, // mbu (constant, should not be changed normally)
-        studHeightAdjustment = 0.0, // mm
-        
-        studCutoutAdjustment = [0.2, 0.4], // mm [diameter, height]
-
-        studIcon = "../pattern/bolt-solid-full.svg",
-        studIconDimensions = [169.333, 169.333],
-        studIconScale = 0.024,
-        studIconDepth = -0.2,
-        studIconColor = "inherit",
-        
-        //Tongue
-        tongue = false, // bool
-        tongueHeight = 1.25, // mbu
-        tongueGrooveDepth = 1.5, // mbu
-        tongueRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
-        tongueInnerRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
-        tongueThickness = 0.666, // mbu
-        tongueThicknessAdjustment = 0, // mm
-        tongueOffset = 1, // mbu
-        tongueClampHeight = 0.5, // mbu
-        tongueClampOffset = 0.25, // mbu
-        tongueClampThickness = 0.1, // mm
-        
-        //Grille
-        grille = "none", // "none" | "x" | "y"
-        grilleInverted = false, // bool
-        grilleDepth = 1, // mbu
-        grilleCount = 5, // int
-        
-        //Recess
-        recess = false, // bool
-        recessRoundingRadius = "auto", // grid | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
-        recessDepth = "auto", // mm | "auto"
-        recessWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
-        recessStuds = true, // bool
-        recessStudPadding = 0.2, // grid
-        recessStudType = "solid", // "solid" | "hollow"
-        recessStudShift = false, // false | "none" | "x" | "y" | true | "xy"
-        recessWallGaps = [], // vector
-        
-        //Text
-        text = "", // string
-        textSide = 0, // side
-        textDepth = -0.25, // mbu
-        textFont = "Liberation Sans", // font
-        textSize = 4, // pt
-        textSpacing = 1, // int
-        textVerticalAlign = "center",
-        textHorizontalAlign = "center",
-        textOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
-        textColor = "#2c3e50", // color - Color of text.
-
-        //Surface Pattern
-        surfacePattern = "none",
-        surfacePatternDimensions = [451.556, 451.556],
-        surfacePatternOffset = [0,0],
-        surfacePatternScale=0.25,
-        surfacePatternDepth=-0.2,
-        surfacePatternColor="inherit",
-
-        //SVG
-        svg = "", // string
-        svgSide = 5, // side
-        svgDepth = 0.4, // mm
-        svgDimensions = [100, 100], // vector2 x int
-        svgScale = 1.0, // float
-        svgOffset = [0, 0], // vector2 x grid (multipliers of gridSizeXY and gridSizeZ depending on side)
-        svgColor = "#2c3e50", // color - Color of svg
-
-        connectors = false, // bool
-        connectorPadding = [0, 0],
-        connectorHeight = "auto", // mbu
-        connectorDepth = 0.75, // mbu
-        connectorWidth = 2.5, // mbu
-        connectorDepthTolerance = 0.2, // mm
-        connectorSideTolerance = 0.1, // mm
-
-        //Screw Holes
-        screwHolesZ = [], // vector
-        screwHoleZSize = 2.3, // mm
-        screwHoleZHelperThickness = 0.8, // mm
-        screwHoleZHelperOffset = 0.2, // mm
-        screwHoleZHelperHeight = 0.2, // mm
-
-        screwHolesX = [], // vector
-        screwHoleXSize = 2.1, // mm
-        screwHoleXDepth = 4, // mm
-
-        screwHolesY = [], // vector
-        screwHoleYSize = 2.1, // mm
-        screwHoleYDepth = 4, // mm
-
-        //PCB
-        pcb = false, // bool
-        pcbMountingType = "clips",
-        pcbDimensions = [20, 30, 3], // vector3 x mm
-        pcbOffset = [0, 0], // vector2 x grid
-        pcbScrewSocketSize = 5, // mm
-        pcbScrewSocketHoleSize = 2.2, // mm
-        pcbScrewSocketHeight = 3, // mm
-        pcbScrewSockets = [], // vector
-
-        //Alignment
-        align = "start", // string | vector3 x string
-        alignChildren = "start", // string | vector3 x string
-        //alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
-        
-        //Quality
-        qualitySegBase = 1.2,
-        qualityResolutionMax = 220,
-
-        qualityFactor = [
-            0.6,  // FUNCTIONAL
-            1.0,  // VISUAL
-            1.6,  // OTHER
-            2.5   // DRAFT
-        ],
-
-        qualityResolutionMin = [
-            24, // FUNCTIONAL
-            18, // VISUAL
-            12, // OTHER
-            8  // DRAFT
-        ],
-
-        qualityResolutionMultiplier = 0.25,
-
-        //Preview
-        previewQuality = 0.5, // float (between 0.0 and 1.0)
-        previewRender = false, // bool (Whether the brick should always be rendered in preview mode)
-        previewRenderConvexity = 15 // int (Convexity for preview rendering)
-        */
-        ){
-
-        //START convert
-        assembly = mb_params_resolve(config, settings, "assembly", "assembled");
-
-        unitMbu = mb_params_resolve(config, settings, "unitMbu", 1.6);
-        unitGrid = mb_params_resolve(config, settings, "unitGrid", [5, 2]);
-
-        scale = mb_params_resolve(config, settings, "scale", 1.0);
-
-        rotation = mb_params_resolve(config, settings, "rotation", [0, 0, 0]);
-        rotationOffset = mb_params_resolve(config, settings, "rotationOffset", [0, 0, 0]);
-        rotationOffsetRevert = mb_params_resolve(config, settings, "rotationOffsetRevert", true);
-        direction = mb_direction_to_int(mb_params_resolve(config, settings, "direction", "west"));
-
-        size = mb_params_resolve(config, settings, "size", [1, 1, 1]);
-        offset = mb_params_resolve(config, settings, "offset", [0, 0, 0]);
-        crop = mb_params_resolve(config, settings, "crop", [0, 0, 0, 0]);
-
-        cutout = mb_params_resolve(config, settings, "cutout", false);
-        cutoutOffset = mb_params_resolve(config, settings, "cutoutOffset", [0, 0]);
-
-        base = mb_params_resolve(config, settings, "base", true);
-        baseColor = mb_params_resolve(config, settings, "baseColor", "#EAC645");
-        baseHeight = mb_params_resolve(config, settings, "baseHeight", "auto");
-
-        baseTopPlateHeight = mb_params_resolve(config, settings, "baseTopPlateHeight", 1);
-        baseTopPlateHeightAdjustment = mb_params_resolve(config, settings, "baseTopPlateHeightAdjustment", -0.6);
-
-        baseCutoutType = mb_params_resolve(config, settings, "baseCutoutType", "standard");
-        baseCutoutMaxDepth = mb_params_resolve(config, settings, "baseCutoutMaxDepth", 5);
-
-        baseClampOffset = mb_params_resolve(config, settings, "baseClampOffset", 0.25);
-        baseClampHeight = mb_params_resolve(config, settings, "baseClampHeight", 0.5);
-        baseClampThickness = mb_params_resolve(config, settings, "baseClampThickness", 0.1);
-        baseClampOuter = mb_params_resolve(config, settings, "baseClampOuter", false);
-
-        baseRoundingRadius = mb_params_resolve(config, settings, "baseRoundingRadius", 0.0);
-        baseCutoutRoundingRadius = mb_params_resolve(config, settings, "baseCutoutRoundingRadius", "auto");
-        baseRoundingResolution = mb_params_resolve(config, settings, "baseRoundingResolution", 64);
-
-        baseReliefCut = mb_params_resolve(config, settings, "baseReliefCut", false);
-        baseReliefCutHeight = mb_params_resolve(config, settings, "baseReliefCutHeight", 0.375);
-        baseReliefCutThickness = mb_params_resolve(config, settings, "baseReliefCutThickness", 0.375);
-
-        baseSideAdjustment = mb_params_resolve(config, settings, "baseSideAdjustment", -0.1);
-        baseHeightAdjustment = mb_params_resolve(config, settings, "baseHeightAdjustment", 0.0);
-
-        baseWallThickness = mb_params_resolve(config, settings, "baseWallThickness", "auto");
-        baseWallThicknessAdjustment = mb_params_resolve(config, settings, "baseWallThicknessAdjustment", -0.1);
-        baseWallGapsX = mb_params_resolve(config, settings, "baseWallGapsX", []);
-        baseWallGapsY = mb_params_resolve(config, settings, "baseWallGapsY", []);
-
-        topPlateHelpers = mb_params_resolve(config, settings, "topPlateHelpers", true);
-        topPlateHelperHeight = mb_params_resolve(config, settings, "topPlateHelperHeight", 0.2);
-        topPlateHelperThickness = mb_params_resolve(config, settings, "topPlateHelperThickness", 0.4);
-
-        stabilizerGrid = mb_params_resolve(config, settings, "stabilizerGrid", true);
-        stabilizerGridOffset = mb_params_resolve(config, settings, "stabilizerGridOffset", 0.2);
-        stabilizerGridHeight = mb_params_resolve(config, settings, "stabilizerGridHeight", 0.5);
-        stabilizerGridThickness = mb_params_resolve(config, settings, "stabilizerGridThickness", 0.5);
-        stabilizerExpansion = mb_params_resolve(config, settings, "stabilizerExpansion", 2);
-        stabilizerExpansionOffset = mb_params_resolve(config, settings, "stabilizerExpansionOffset", 1);
-
-        pillars = mb_params_resolve(config, settings, "pillars", true);
-        pillarRoundingResolution = mb_params_resolve(config, settings, "pillarRoundingResolution", 64);
-        pillarGapCornerLength = mb_params_resolve(config, settings, "pillarGapCornerLength", 2);
-        pillarGapMiddle = mb_params_resolve(config, settings, "pillarGapMiddle", 10);
-
-        pinDiameter = mb_params_resolve(config, settings, "pinDiameter", "auto");
-        pinDiameterAdjustment = mb_params_resolve(config, settings, "pinDiameterAdjustment", 0.0);
-
-        tubeWallThickness = mb_params_resolve(config, settings, "tubeWallThickness", 0.53125);
-        tubeXDiameter = mb_params_resolve(config, settings, "tubeXDiameter", "auto");
-        tubeXDiameterAdjustment = mb_params_resolve(config, settings, "tubeXDiameterAdjustment", -0.1);
-        tubeYDiameter = mb_params_resolve(config, settings, "tubeYDiameter", "auto");
-        tubeYDiameterAdjustment = mb_params_resolve(config, settings, "tubeYDiameterAdjustment", -0.1);
-        tubeZDiameter = mb_params_resolve(config, settings, "tubeZDiameter", "auto");
-        tubeZDiameterAdjustment = mb_params_resolve(config, settings, "tubeZDiameterAdjustment", -0.1);
-        tubeInnerClampThickness = mb_params_resolve(config, settings, "tubeInnerClampThickness", 0.1);
-
-        slope = mb_params_resolve(config, settings, "slope", false);
-        slopeBaseHeightLower = mb_params_resolve(config, settings, "slopeBaseHeightLower", 1.333);
-        slopeBaseHeightLowerInner = mb_params_resolve(config, settings, "slopeBaseHeightLowerInner", 1.125);
-        slopeBaseHeightUpper = mb_params_resolve(config, settings, "slopeBaseHeightUpper", 1);
-
-        bevel = mb_params_resolve(config, settings, "bevel", [[0, 0], [0, 0], [0, 0], [0, 0]]);
-
-        holeX = mb_params_resolve(config, settings, "holeX", false);
-        holeXType = mb_params_resolve(config, settings, "holeXType", "pin");
-        holeXShift = mb_params_resolve(config, settings, "holeXShift", true);
-        holeXDiameter = mb_params_resolve(config, settings, "holeXDiameter", "auto");
-        holeXDiameterAdjustment = mb_params_resolve(config, settings, "holeXDiameterAdjustment", 0.3);
-        holeXInsetThickness = mb_params_resolve(config, settings, "holeXInsetThickness", 0.375);
-        holeXInsetThicknessAdjustment = mb_params_resolve(config, settings, "holeXInsetThicknessAdjustment", 0.0);
-        holeXInsetDepth = mb_params_resolve(config, settings, "holeXInsetDepth", 0.5);
-        holeXInsetDepthAdjustment = mb_params_resolve(config, settings, "holeXInsetDepthAdjustment", 0.0);
-        holeXGridOffsetZ = mb_params_resolve(config, settings, "holeXGridOffsetZ", 3.625);
-        holeXGridOffsetZAdjustment = mb_params_resolve(config, settings, "holeXGridOffsetZAdjustment", 0.0);
-        holeXGridSizeZ = mb_params_resolve(config, settings, "holeXGridSizeZ", 6);
-        holeXGridSizeZAdjustment = mb_params_resolve(config, settings, "holeXGridSizeZAdjustment", 0.0);
-        holeXMinTopMargin = mb_params_resolve(config, settings, "holeXMinTopMargin", 0.5);
-        holeXPartial = mb_params_resolve(config, settings, "holeXPartial", "none");
-
-        holeY = mb_params_resolve(config, settings, "holeY", false);
-        holeYType = mb_params_resolve(config, settings, "holeYType", "pin");
-        holeYShift = mb_params_resolve(config, settings, "holeYShift", true);
-        holeYDiameter = mb_params_resolve(config, settings, "holeYDiameter", "auto");
-        holeYDiameterAdjustment = mb_params_resolve(config, settings, "holeYDiameterAdjustment", 0.3);
-        holeYInsetThickness = mb_params_resolve(config, settings, "holeYInsetThickness", 0.375);
-        holeYInsetThicknessAdjustment = mb_params_resolve(config, settings, "holeYInsetThicknessAdjustment", 0.0);
-        holeYInsetDepth = mb_params_resolve(config, settings, "holeYInsetDepth", 0.5);
-        holeYInsetDepthAdjustment = mb_params_resolve(config, settings, "holeYInsetDepthAdjustment", 0.0);
-        holeYGridOffsetZ = mb_params_resolve(config, settings, "holeYGridOffsetZ", 3.625);
-        holeYGridOffsetZAdjustment = mb_params_resolve(config, settings, "holeYGridOffsetZAdjustment", 0.0);
-        holeYGridSizeZ = mb_params_resolve(config, settings, "holeYGridSizeZ", 6);
-        holeYGridSizeZAdjustment = mb_params_resolve(config, settings, "holeYGridSizeZAdjustment", 0.0);
-        holeYMinTopMargin = mb_params_resolve(config, settings, "holeYMinTopMargin", 0.5);
-        holeYPartial = mb_params_resolve(config, settings, "holeYPartial", "none");
-
-        holeZ = mb_params_resolve(config, settings, "holeZ", false);
-        holeZType = mb_params_resolve(config, settings, "holeZType", "pin");
-        holeZShift = mb_params_resolve(config, settings, "holeZShift", true);
-        holeZDiameter = mb_params_resolve(config, settings, "holeZDiameter", "auto");
-        holeZDiameterAdjustment = mb_params_resolve(config, settings, "holeZDiameterAdjustment", 0.3);
-        holeRoundingResolution = mb_params_resolve(config, settings, "holeRoundingResolution", 64);
-        holeZPartialX = mb_params_resolve(config, settings, "holeZPartialX", "none");
-        holeZPartialY = mb_params_resolve(config, settings, "holeZPartialY", "none");
-
-        holeAxleThickness = mb_params_resolve(config, settings, "holeAxleThickness", 1);
-
-        studs = mb_params_resolve(config, settings, "studs", true);
-        studType = mb_params_resolve(config, settings, "studType", "solid");
-        studShift = mb_params_resolve(config, settings, "studShift", false);
-        studMaxOverhang = mb_params_resolve(config, settings, "studMaxOverhang", 0.3);
-        studPadding = mb_params_resolve(config, settings, "studPadding", 0);
-
-        studClampHeight = mb_params_resolve(config, settings, "studClampHeight", 0.5);
-        studClampThickness = mb_params_resolve(config, settings, "studClampThickness", 0.0);
-
-        studHoleDiameter = mb_params_resolve(config, settings, "studHoleDiameter", "auto");
-        studHoleDiameterAdjustment = mb_params_resolve(config, settings, "studHoleDiameterAdjustment", 0.3);
-        studHoleClampThickness = mb_params_resolve(config, settings, "studHoleClampThickness", 0.1);
-
-        studRounding = mb_params_resolve(config, settings, "studRounding", 0.0625);
-        studRoundingResolution = mb_params_resolve(config, settings, "studRoundingResolution", 64);
-
-        studDiameter = mb_params_resolve(config, settings, "studDiameter", 3);
-        studDiameterAdjustment = mb_params_resolve(config, settings, "studDiameterAdjustment", 0.2);
-
-        studHeight = mb_params_resolve(config, settings, "studHeight", 1);
-        studHeightAdjustment = mb_params_resolve(config, settings, "studHeightAdjustment", 0.0);
-
-        studCutoutAdjustment = mb_params_resolve(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
-
-        studIcon = mb_params_resolve(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
-        studIconDimensions = mb_params_resolve(config, settings, "studIconDimensions", [169.333, 169.333]);
-        studIconScale = mb_params_resolve(config, settings, "studIconScale", 0.024);
-        studIconDepth = mb_params_resolve(config, settings, "studIconDepth", -0.2);
-        studIconColor = mb_params_resolve(config, settings, "studIconColor", "inherit");
-
-        tongue = mb_params_resolve(config, settings, "tongue", false);
-        tongueHeight = mb_params_resolve(config, settings, "tongueHeight", 1.25);
-        tongueGrooveDepth = mb_params_resolve(config, settings, "tongueGrooveDepth", 1.5);
-        tongueRoundingRadius = mb_params_resolve(config, settings, "tongueRoundingRadius", "auto");
-        tongueInnerRoundingRadius = mb_params_resolve(config, settings, "tongueInnerRoundingRadius", "auto");
-        tongueThickness = mb_params_resolve(config, settings, "tongueThickness", 0.666);
-        tongueThicknessAdjustment = mb_params_resolve(config, settings, "tongueThicknessAdjustment", 0);
-        tongueOffset = mb_params_resolve(config, settings, "tongueOffset", 1);
-        tongueClampHeight = mb_params_resolve(config, settings, "tongueClampHeight", 0.5);
-        tongueClampOffset = mb_params_resolve(config, settings, "tongueClampOffset", 0.25);
-        tongueClampThickness = mb_params_resolve(config, settings, "tongueClampThickness", 0.1);
-
-        grille = mb_params_resolve(config, settings, "grille", "none");
-        grilleInverted = mb_params_resolve(config, settings, "grilleInverted", false);
-        grilleDepth = mb_params_resolve(config, settings, "grilleDepth", 1);
-        grilleCount = mb_params_resolve(config, settings, "grilleCount", 5);
-
-        recess = mb_params_resolve(config, settings, "recess", false);
-        recessRoundingRadius = mb_params_resolve(config, settings, "recessRoundingRadius", "auto");
-        recessDepth = mb_params_resolve(config, settings, "recessDepth", "auto");
-        recessWallThickness = mb_params_resolve(config, settings, "recessWallThickness", 0.333);
-        recessStuds = mb_params_resolve(config, settings, "recessStuds", true);
-        recessStudPadding = mb_params_resolve(config, settings, "recessStudPadding", 0.2);
-        recessStudType = mb_params_resolve(config, settings, "recessStudType", "solid");
-        recessStudShift = mb_params_resolve(config, settings, "recessStudShift", false);
-        recessWallGaps = mb_params_resolve(config, settings, "recessWallGaps", []);
-
-        text = mb_params_resolve(config, settings, "text", "");
-        textSide = mb_params_resolve(config, settings, "textSide", 0);
-        textDepth = mb_params_resolve(config, settings, "textDepth", -0.25);
-        textFont = mb_params_resolve(config, settings, "textFont", "Liberation Sans");
-        textSize = mb_params_resolve(config, settings, "textSize", 4);
-        textSpacing = mb_params_resolve(config, settings, "textSpacing", 1);
-        textVerticalAlign = mb_params_resolve(config, settings, "textVerticalAlign", "center");
-        textHorizontalAlign = mb_params_resolve(config, settings, "textHorizontalAlign", "center");
-        textOffset = mb_params_resolve(config, settings, "textOffset", [0, 0]);
-        textColor = mb_params_resolve(config, settings, "textColor", "#2c3e50");
-
-        surfacePattern = mb_params_resolve(config, settings, "surfacePattern", "none");
-        surfacePatternDimensions = mb_params_resolve(config, settings, "surfacePatternDimensions", [451.556, 451.556]);
-        surfacePatternOffset = mb_params_resolve(config, settings, "surfacePatternOffset", [0, 0]);
-        surfacePatternScale = mb_params_resolve(config, settings, "surfacePatternScale", 0.25);
-        surfacePatternDepth = mb_params_resolve(config, settings, "surfacePatternDepth", -0.2);
-        surfacePatternColor = mb_params_resolve(config, settings, "surfacePatternColor", "inherit");
-
-        svg = mb_params_resolve(config, settings, "svg", "");
-        svgSide = mb_params_resolve(config, settings, "svgSide", 5);
-        svgDepth = mb_params_resolve(config, settings, "svgDepth", 0.4);
-        svgDimensions = mb_params_resolve(config, settings, "svgDimensions", [100, 100]);
-        svgScale = mb_params_resolve(config, settings, "svgScale", 1.0);
-        svgOffset = mb_params_resolve(config, settings, "svgOffset", [0, 0]);
-        svgColor = mb_params_resolve(config, settings, "svgColor", "#2c3e50");
-
-        connectors = mb_params_resolve(config, settings, "connectors", false);
-        connectorPadding = mb_params_resolve(config, settings, "connectorPadding", [0, 0]);
-        connectorHeight = mb_params_resolve(config, settings, "connectorHeight", "auto");
-        connectorDepth = mb_params_resolve(config, settings, "connectorDepth", 0.75);
-        connectorWidth = mb_params_resolve(config, settings, "connectorWidth", 2.5);
-        connectorDepthTolerance = mb_params_resolve(config, settings, "connectorDepthTolerance", 0.2);
-        connectorSideTolerance = mb_params_resolve(config, settings, "connectorSideTolerance", 0.1);
-
-        screwHolesZ = mb_params_resolve(config, settings, "screwHolesZ", []);
-        screwHoleZSize = mb_params_resolve(config, settings, "screwHoleZSize", 2.3);
-        screwHoleZHelperThickness = mb_params_resolve(config, settings, "screwHoleZHelperThickness", 0.8);
-        screwHoleZHelperOffset = mb_params_resolve(config, settings, "screwHoleZHelperOffset", 0.2);
-        screwHoleZHelperHeight = mb_params_resolve(config, settings, "screwHoleZHelperHeight", 0.2);
-
-        screwHolesX = mb_params_resolve(config, settings, "screwHolesX", []);
-        screwHoleXSize = mb_params_resolve(config, settings, "screwHoleXSize", 2.1);
-        screwHoleXDepth = mb_params_resolve(config, settings, "screwHoleXDepth", 4);
-
-        screwHolesY = mb_params_resolve(config, settings, "screwHolesY", []);
-        screwHoleYSize = mb_params_resolve(config, settings, "screwHoleYSize", 2.1);
-        screwHoleYDepth = mb_params_resolve(config, settings, "screwHoleYDepth", 4);
-
-        pcb = mb_params_resolve(config, settings, "pcb", false);
-        pcbMountingType = mb_params_resolve(config, settings, "pcbMountingType", "clips");
-        pcbDimensions = mb_params_resolve(config, settings, "pcbDimensions", [20, 30, 3]);
-        pcbOffset = mb_params_resolve(config, settings, "pcbOffset", [0, 0]);
-        pcbScrewSocketSize = mb_params_resolve(config, settings, "pcbScrewSocketSize", 5);
-        pcbScrewSocketHoleSize = mb_params_resolve(config, settings, "pcbScrewSocketHoleSize", 2.2);
-        pcbScrewSocketHeight = mb_params_resolve(config, settings, "pcbScrewSocketHeight", 3);
-        pcbScrewSockets = mb_params_resolve(config, settings, "pcbScrewSockets", []);
-
-        align = mb_params_resolve(config, settings, "align", "start");
-        alignChildren = mb_params_resolve(config, settings, "alignChildren", "start");
-
-        qualitySegBase = mb_params_resolve(config, settings, "qualitySegBase", 1.2);
-        qualityResolutionMax = mb_params_resolve(config, settings, "qualityResolutionMax", 220);
-        qualityFactor = mb_params_resolve(config, settings, "qualityFactor", [0.6, 1.0, 1.6, 2.5]);
-        qualityResolutionMin = mb_params_resolve(config, settings, "qualityResolutionMin", [24, 18, 12, 8]);
-        qualityResolutionMultiplier = mb_params_resolve(config, settings, "qualityResolutionMultiplier", 0.25);
-
-        previewQuality = mb_params_resolve(config, settings, "previewQuality", 0.5);
-        previewRender = mb_params_resolve(config, settings, "previewRender", true);
-        previewRenderConvexity = mb_params_resolve(config, settings, "previewRenderConvexity", 25);
-
-        //END convert
+){
+
+    //START convert
+    assembly = mb_params_resolve(config, settings, "assembly", "assembled");
+
+    unitMbu = mb_params_resolve(config, settings, "unitMbu", 1.6);
+    unitGrid = mb_params_resolve(config, settings, "unitGrid", [5, 2]);
+
+    scale = mb_params_resolve(config, settings, "scale", 1.0);
+
+    rotation = mb_params_resolve(config, settings, "rotation", [0, 0, 0]);
+    rotationOffset = mb_params_resolve(config, settings, "rotationOffset", [0, 0, 0]);
+    rotationOffsetRevert = mb_params_resolve(config, settings, "rotationOffsetRevert", true);
+    direction = mb_direction_to_int(mb_params_resolve(config, settings, "direction", "west"));
+
+    size = mb_params_resolve(config, settings, "size", [1, 1, 1]);
+    offset = mb_params_resolve(config, settings, "offset", [0, 0, 0]);
+    crop = mb_params_resolve(config, settings, "crop", [0, 0, 0, 0]);
+
+    cutout = mb_params_resolve(config, settings, "cutout", false);
+    cutoutOffset = mb_params_resolve(config, settings, "cutoutOffset", [0, 0]);
+
+    base = mb_params_resolve(config, settings, "base", true);
+    baseColor = mb_params_resolve(config, settings, "baseColor", "#EAC645");
+    baseHeight = mb_params_resolve(config, settings, "baseHeight", "auto");
+
+    baseTopPlateHeight = mb_params_resolve(config, settings, "baseTopPlateHeight", 1);
+    baseTopPlateHeightAdjustment = mb_params_resolve(config, settings, "baseTopPlateHeightAdjustment", -0.6);
+
+    baseCutoutType = mb_params_resolve(config, settings, "baseCutoutType", "standard");
+    baseCutoutMaxDepth = mb_params_resolve(config, settings, "baseCutoutMaxDepth", 5);
+
+    baseClampOffset = mb_params_resolve(config, settings, "baseClampOffset", 0.25);
+    baseClampHeight = mb_params_resolve(config, settings, "baseClampHeight", 0.5);
+    baseClampThickness = mb_params_resolve(config, settings, "baseClampThickness", 0.1);
+    baseClampOuter = mb_params_resolve(config, settings, "baseClampOuter", false);
+
+    baseRoundingRadius = mb_params_resolve(config, settings, "baseRoundingRadius", 0.0);
+    baseCutoutRoundingRadius = mb_params_resolve(config, settings, "baseCutoutRoundingRadius", "auto");
+    baseRoundingResolution = mb_params_resolve(config, settings, "baseRoundingResolution", 64);
+
+    baseReliefCut = mb_params_resolve(config, settings, "baseReliefCut", false);
+    baseReliefCutHeight = mb_params_resolve(config, settings, "baseReliefCutHeight", 0.375);
+    baseReliefCutThickness = mb_params_resolve(config, settings, "baseReliefCutThickness", 0.375);
+
+    baseSideAdjustment = mb_params_resolve(config, settings, "baseSideAdjustment", -0.1);
+    baseHeightAdjustment = mb_params_resolve(config, settings, "baseHeightAdjustment", 0.0);
+
+    baseWallThickness = mb_params_resolve(config, settings, "baseWallThickness", "auto");
+    baseWallThicknessAdjustment = mb_params_resolve(config, settings, "baseWallThicknessAdjustment", -0.1);
+    baseWallGapsX = mb_params_resolve(config, settings, "baseWallGapsX", []);
+    baseWallGapsY = mb_params_resolve(config, settings, "baseWallGapsY", []);
+
+    topPlateHelpers = mb_params_resolve(config, settings, "topPlateHelpers", true);
+    topPlateHelperHeight = mb_params_resolve(config, settings, "topPlateHelperHeight", 0.2);
+    topPlateHelperThickness = mb_params_resolve(config, settings, "topPlateHelperThickness", 0.4);
+
+    stabilizerGrid = mb_params_resolve(config, settings, "stabilizerGrid", true);
+    stabilizerGridOffset = mb_params_resolve(config, settings, "stabilizerGridOffset", 0.2);
+    stabilizerGridHeight = mb_params_resolve(config, settings, "stabilizerGridHeight", 0.5);
+    stabilizerGridThickness = mb_params_resolve(config, settings, "stabilizerGridThickness", 0.5);
+    stabilizerExpansion = mb_params_resolve(config, settings, "stabilizerExpansion", 2);
+    stabilizerExpansionOffset = mb_params_resolve(config, settings, "stabilizerExpansionOffset", 1);
+
+    pillars = mb_params_resolve(config, settings, "pillars", true);
+    pillarRoundingResolution = mb_params_resolve(config, settings, "pillarRoundingResolution", 64);
+    pillarGapCornerLength = mb_params_resolve(config, settings, "pillarGapCornerLength", 2);
+    pillarGapMiddle = mb_params_resolve(config, settings, "pillarGapMiddle", 10);
+
+    pinDiameter = mb_params_resolve(config, settings, "pinDiameter", "auto");
+    pinDiameterAdjustment = mb_params_resolve(config, settings, "pinDiameterAdjustment", 0.0);
+
+    tubeWallThickness = mb_params_resolve(config, settings, "tubeWallThickness", 0.53125);
+    tubeXDiameter = mb_params_resolve(config, settings, "tubeXDiameter", "auto");
+    tubeXDiameterAdjustment = mb_params_resolve(config, settings, "tubeXDiameterAdjustment", -0.1);
+    tubeYDiameter = mb_params_resolve(config, settings, "tubeYDiameter", "auto");
+    tubeYDiameterAdjustment = mb_params_resolve(config, settings, "tubeYDiameterAdjustment", -0.1);
+    tubeZDiameter = mb_params_resolve(config, settings, "tubeZDiameter", "auto");
+    tubeZDiameterAdjustment = mb_params_resolve(config, settings, "tubeZDiameterAdjustment", -0.1);
+    tubeInnerClampThickness = mb_params_resolve(config, settings, "tubeInnerClampThickness", 0.1);
+
+    slope = mb_params_resolve(config, settings, "slope", false);
+    slopeBaseHeightLower = mb_params_resolve(config, settings, "slopeBaseHeightLower", 1.333);
+    slopeBaseHeightLowerInner = mb_params_resolve(config, settings, "slopeBaseHeightLowerInner", 1.125);
+    slopeBaseHeightUpper = mb_params_resolve(config, settings, "slopeBaseHeightUpper", 1);
+
+    bevel = mb_params_resolve(config, settings, "bevel", [[0, 0], [0, 0], [0, 0], [0, 0]]);
+
+    holeX = mb_params_resolve(config, settings, "holeX", false);
+    holeXType = mb_params_resolve(config, settings, "holeXType", "pin");
+    holeXShift = mb_params_resolve(config, settings, "holeXShift", true);
+    holeXDiameter = mb_params_resolve(config, settings, "holeXDiameter", "auto");
+    holeXDiameterAdjustment = mb_params_resolve(config, settings, "holeXDiameterAdjustment", 0.3);
+    holeXInsetThickness = mb_params_resolve(config, settings, "holeXInsetThickness", 0.375);
+    holeXInsetThicknessAdjustment = mb_params_resolve(config, settings, "holeXInsetThicknessAdjustment", 0.0);
+    holeXInsetDepth = mb_params_resolve(config, settings, "holeXInsetDepth", 0.5);
+    holeXInsetDepthAdjustment = mb_params_resolve(config, settings, "holeXInsetDepthAdjustment", 0.0);
+    holeXGridOffsetZ = mb_params_resolve(config, settings, "holeXGridOffsetZ", 3.625);
+    holeXGridOffsetZAdjustment = mb_params_resolve(config, settings, "holeXGridOffsetZAdjustment", 0.0);
+    holeXGridSizeZ = mb_params_resolve(config, settings, "holeXGridSizeZ", 6);
+    holeXGridSizeZAdjustment = mb_params_resolve(config, settings, "holeXGridSizeZAdjustment", 0.0);
+    holeXMinTopMargin = mb_params_resolve(config, settings, "holeXMinTopMargin", 0.5);
+    holeXPartial = mb_params_resolve(config, settings, "holeXPartial", "none");
+
+    holeY = mb_params_resolve(config, settings, "holeY", false);
+    holeYType = mb_params_resolve(config, settings, "holeYType", "pin");
+    holeYShift = mb_params_resolve(config, settings, "holeYShift", true);
+    holeYDiameter = mb_params_resolve(config, settings, "holeYDiameter", "auto");
+    holeYDiameterAdjustment = mb_params_resolve(config, settings, "holeYDiameterAdjustment", 0.3);
+    holeYInsetThickness = mb_params_resolve(config, settings, "holeYInsetThickness", 0.375);
+    holeYInsetThicknessAdjustment = mb_params_resolve(config, settings, "holeYInsetThicknessAdjustment", 0.0);
+    holeYInsetDepth = mb_params_resolve(config, settings, "holeYInsetDepth", 0.5);
+    holeYInsetDepthAdjustment = mb_params_resolve(config, settings, "holeYInsetDepthAdjustment", 0.0);
+    holeYGridOffsetZ = mb_params_resolve(config, settings, "holeYGridOffsetZ", 3.625);
+    holeYGridOffsetZAdjustment = mb_params_resolve(config, settings, "holeYGridOffsetZAdjustment", 0.0);
+    holeYGridSizeZ = mb_params_resolve(config, settings, "holeYGridSizeZ", 6);
+    holeYGridSizeZAdjustment = mb_params_resolve(config, settings, "holeYGridSizeZAdjustment", 0.0);
+    holeYMinTopMargin = mb_params_resolve(config, settings, "holeYMinTopMargin", 0.5);
+    holeYPartial = mb_params_resolve(config, settings, "holeYPartial", "none");
+
+    holeZ = mb_params_resolve(config, settings, "holeZ", false);
+    holeZType = mb_params_resolve(config, settings, "holeZType", "pin");
+    holeZShift = mb_params_resolve(config, settings, "holeZShift", true);
+    holeZDiameter = mb_params_resolve(config, settings, "holeZDiameter", "auto");
+    holeZDiameterAdjustment = mb_params_resolve(config, settings, "holeZDiameterAdjustment", 0.3);
+    holeRoundingResolution = mb_params_resolve(config, settings, "holeRoundingResolution", 64);
+    holeZPartialX = mb_params_resolve(config, settings, "holeZPartialX", "none");
+    holeZPartialY = mb_params_resolve(config, settings, "holeZPartialY", "none");
+
+    holeAxleThickness = mb_params_resolve(config, settings, "holeAxleThickness", 1);
+
+    studs = mb_params_resolve(config, settings, "studs", true);
+    studType = mb_params_resolve(config, settings, "studType", "solid");
+    studShift = mb_params_resolve(config, settings, "studShift", false);
+    studMaxOverhang = mb_params_resolve(config, settings, "studMaxOverhang", 0.3);
+    studPadding = mb_params_resolve(config, settings, "studPadding", 0);
+
+    studClampHeight = mb_params_resolve(config, settings, "studClampHeight", 0.5);
+    studClampThickness = mb_params_resolve(config, settings, "studClampThickness", 0.0);
+
+    studHoleDiameter = mb_params_resolve(config, settings, "studHoleDiameter", "auto");
+    studHoleDiameterAdjustment = mb_params_resolve(config, settings, "studHoleDiameterAdjustment", 0.3);
+    studHoleClampThickness = mb_params_resolve(config, settings, "studHoleClampThickness", 0.1);
+
+    studRounding = mb_params_resolve(config, settings, "studRounding", 0.0625);
+    studRoundingResolution = mb_params_resolve(config, settings, "studRoundingResolution", 64);
+
+    studDiameter = mb_params_resolve(config, settings, "studDiameter", 3);
+    studDiameterAdjustment = mb_params_resolve(config, settings, "studDiameterAdjustment", 0.2);
+
+    studHeight = mb_params_resolve(config, settings, "studHeight", 1);
+    studHeightAdjustment = mb_params_resolve(config, settings, "studHeightAdjustment", 0.0);
+
+    studCutoutAdjustment = mb_params_resolve(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
+
+    studIcon = mb_params_resolve(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
+    studIconDimensions = mb_params_resolve(config, settings, "studIconDimensions", [169.333, 169.333]);
+    studIconScale = mb_params_resolve(config, settings, "studIconScale", 0.024);
+    studIconDepth = mb_params_resolve(config, settings, "studIconDepth", -0.2);
+    studIconColor = mb_params_resolve(config, settings, "studIconColor", "inherit");
+
+    tongue = mb_params_resolve(config, settings, "tongue", false);
+    tongueHeight = mb_params_resolve(config, settings, "tongueHeight", 1.25);
+    tongueGrooveDepth = mb_params_resolve(config, settings, "tongueGrooveDepth", 1.5);
+    tongueRoundingRadius = mb_params_resolve(config, settings, "tongueRoundingRadius", "auto");
+    tongueInnerRoundingRadius = mb_params_resolve(config, settings, "tongueInnerRoundingRadius", "auto");
+    tongueThickness = mb_params_resolve(config, settings, "tongueThickness", 0.666);
+    tongueThicknessAdjustment = mb_params_resolve(config, settings, "tongueThicknessAdjustment", 0);
+    tongueOffset = mb_params_resolve(config, settings, "tongueOffset", 1);
+    tongueClampHeight = mb_params_resolve(config, settings, "tongueClampHeight", 0.5);
+    tongueClampOffset = mb_params_resolve(config, settings, "tongueClampOffset", 0.25);
+    tongueClampThickness = mb_params_resolve(config, settings, "tongueClampThickness", 0.1);
+
+    grille = mb_params_resolve(config, settings, "grille", "none");
+    grilleInverted = mb_params_resolve(config, settings, "grilleInverted", false);
+    grilleDepth = mb_params_resolve(config, settings, "grilleDepth", 1);
+    grilleCount = mb_params_resolve(config, settings, "grilleCount", 5);
+
+    recess = mb_params_resolve(config, settings, "recess", false);
+    recessRoundingRadius = mb_params_resolve(config, settings, "recessRoundingRadius", "auto");
+    recessDepth = mb_params_resolve(config, settings, "recessDepth", "auto");
+    recessWallThickness = mb_params_resolve(config, settings, "recessWallThickness", 0.333);
+    recessStuds = mb_params_resolve(config, settings, "recessStuds", true);
+    recessStudPadding = mb_params_resolve(config, settings, "recessStudPadding", 0.2);
+    recessStudType = mb_params_resolve(config, settings, "recessStudType", "solid");
+    recessStudShift = mb_params_resolve(config, settings, "recessStudShift", false);
+    recessWallGaps = mb_params_resolve(config, settings, "recessWallGaps", []);
+
+    text = mb_params_resolve(config, settings, "text", "");
+    textSide = mb_params_resolve(config, settings, "textSide", 0);
+    textDepth = mb_params_resolve(config, settings, "textDepth", -0.25);
+    textFont = mb_params_resolve(config, settings, "textFont", "Liberation Sans");
+    textSize = mb_params_resolve(config, settings, "textSize", 4);
+    textSpacing = mb_params_resolve(config, settings, "textSpacing", 1);
+    textVerticalAlign = mb_params_resolve(config, settings, "textVerticalAlign", "center");
+    textHorizontalAlign = mb_params_resolve(config, settings, "textHorizontalAlign", "center");
+    textOffset = mb_params_resolve(config, settings, "textOffset", [0, 0]);
+    textColor = mb_params_resolve(config, settings, "textColor", "#2c3e50");
+
+    surfacePattern = mb_params_resolve(config, settings, "surfacePattern", "none");
+    surfacePatternDimensions = mb_params_resolve(config, settings, "surfacePatternDimensions", [451.556, 451.556]);
+    surfacePatternOffset = mb_params_resolve(config, settings, "surfacePatternOffset", [0, 0]);
+    surfacePatternScale = mb_params_resolve(config, settings, "surfacePatternScale", 0.25);
+    surfacePatternDepth = mb_params_resolve(config, settings, "surfacePatternDepth", -0.2);
+    surfacePatternColor = mb_params_resolve(config, settings, "surfacePatternColor", "inherit");
+
+    svg = mb_params_resolve(config, settings, "svg", "");
+    svgSide = mb_params_resolve(config, settings, "svgSide", 5);
+    svgDepth = mb_params_resolve(config, settings, "svgDepth", 0.4);
+    svgDimensions = mb_params_resolve(config, settings, "svgDimensions", [100, 100]);
+    svgScale = mb_params_resolve(config, settings, "svgScale", 1.0);
+    svgOffset = mb_params_resolve(config, settings, "svgOffset", [0, 0]);
+    svgColor = mb_params_resolve(config, settings, "svgColor", "#2c3e50");
+
+    connectors = mb_params_resolve(config, settings, "connectors", false);
+    connectorPadding = mb_params_resolve(config, settings, "connectorPadding", [0, 0]);
+    connectorHeight = mb_params_resolve(config, settings, "connectorHeight", "auto");
+    connectorDepth = mb_params_resolve(config, settings, "connectorDepth", 0.75);
+    connectorWidth = mb_params_resolve(config, settings, "connectorWidth", 2.5);
+    connectorDepthTolerance = mb_params_resolve(config, settings, "connectorDepthTolerance", 0.2);
+    connectorSideTolerance = mb_params_resolve(config, settings, "connectorSideTolerance", 0.1);
+
+    screwHolesZ = mb_params_resolve(config, settings, "screwHolesZ", []);
+    screwHoleZSize = mb_params_resolve(config, settings, "screwHoleZSize", 2.3);
+    screwHoleZHelperThickness = mb_params_resolve(config, settings, "screwHoleZHelperThickness", 0.8);
+    screwHoleZHelperOffset = mb_params_resolve(config, settings, "screwHoleZHelperOffset", 0.2);
+    screwHoleZHelperHeight = mb_params_resolve(config, settings, "screwHoleZHelperHeight", 0.2);
+
+    screwHolesX = mb_params_resolve(config, settings, "screwHolesX", []);
+    screwHoleXSize = mb_params_resolve(config, settings, "screwHoleXSize", 2.1);
+    screwHoleXDepth = mb_params_resolve(config, settings, "screwHoleXDepth", 4);
+
+    screwHolesY = mb_params_resolve(config, settings, "screwHolesY", []);
+    screwHoleYSize = mb_params_resolve(config, settings, "screwHoleYSize", 2.1);
+    screwHoleYDepth = mb_params_resolve(config, settings, "screwHoleYDepth", 4);
+
+    pcb = mb_params_resolve(config, settings, "pcb", false);
+    pcbMountingType = mb_params_resolve(config, settings, "pcbMountingType", "clips");
+    pcbDimensions = mb_params_resolve(config, settings, "pcbDimensions", [20, 30, 3]);
+    pcbOffset = mb_params_resolve(config, settings, "pcbOffset", [0, 0]);
+    pcbScrewSocketSize = mb_params_resolve(config, settings, "pcbScrewSocketSize", 5);
+    pcbScrewSocketHoleSize = mb_params_resolve(config, settings, "pcbScrewSocketHoleSize", 2.2);
+    pcbScrewSocketHeight = mb_params_resolve(config, settings, "pcbScrewSocketHeight", 3);
+    pcbScrewSockets = mb_params_resolve(config, settings, "pcbScrewSockets", []);
+
+    align = mb_params_resolve(config, settings, "align", "start");
+    alignChildren = mb_params_resolve(config, settings, "alignChildren", "start");
+
+    qualitySegBase = mb_params_resolve(config, settings, "qualitySegBase", 1.2);
+    qualityResolutionMax = mb_params_resolve(config, settings, "qualityResolutionMax", 220);
+    qualityFactor = mb_params_resolve(config, settings, "qualityFactor", [0.6, 1.0, 1.6, 2.5]);
+    qualityResolutionMin = mb_params_resolve(config, settings, "qualityResolutionMin", [24, 18, 12, 8]);
+    qualityResolutionMultiplier = mb_params_resolve(config, settings, "qualityResolutionMultiplier", 0.25);
+
+    previewQuality = mb_params_resolve(config, settings, "previewQuality", 0.5);
+    previewRender = mb_params_resolve(config, settings, "previewRender", true);
+    previewRenderConvexity = mb_params_resolve(config, settings, "previewRenderConvexity", 25);
+
+    //END convert
 
     //Variables for cutouts        
     cutOffset = 0.2;
@@ -2992,4 +2153,856 @@ module mb_block(
 
     echo("Rendering of Block finished.");
     echo("Join our Discord! Visit machineblocks.com");
-} // End module block    
+} // End module block 
+
+/*
+* Legacy machineblock() module
+*/
+module machineblock(
+
+    // Grid units
+    unitMbu = undef,
+    unitGrid = undef,
+
+    // Scale
+    scale = undef,
+
+    // Rotation
+    rotation = undef,
+    rotationOffset = undef,
+    rotationOffsetRevert = undef,
+    direction = undef,
+
+    // Size
+    size = undef,
+    offset = undef,
+    crop = undef,
+
+    cutout = undef,
+    cutoutOffset = undef,
+
+    // Base
+    base = undef,
+    baseColor = undef,
+    baseHeight = undef,
+
+    baseTopPlateHeight = undef,
+    baseTopPlateHeightAdjustment = undef,
+
+    baseCutoutType = undef,
+    baseCutoutMaxDepth = undef,
+
+    baseClampOffset = undef,
+    baseClampHeight = undef,
+    baseClampThickness = undef,
+    baseClampOuter = undef,
+
+    baseRoundingRadius = undef,
+    baseCutoutRoundingRadius = undef,
+    baseRoundingResolution = undef,
+
+    // Relief Cut
+    baseReliefCut = undef,
+    baseReliefCutHeight = undef,
+    baseReliefCutThickness = undef,
+
+    // Base Adjustment
+    baseSideAdjustment = undef,
+    baseHeightAdjustment = undef,
+
+    // Walls
+    baseWallThickness = undef,
+    baseWallThicknessAdjustment = undef,
+    baseWallGapsX = undef,
+    baseWallGapsY = undef,
+
+    // Top Plate Helpers
+    topPlateHelpers = undef,
+    topPlateHelperHeight = undef,
+    topPlateHelperThickness = undef,
+
+    // Stabilizers
+    stabilizerGrid = undef,
+    stabilizerGridOffset = undef,
+    stabilizerGridHeight = undef,
+    stabilizerGridThickness = undef,
+    stabilizerExpansion = undef,
+    stabilizerExpansionOffset = undef,
+
+    // Pillars
+    pillars = undef,
+    pillarRoundingResolution = undef,
+    pillarGapCornerLength = undef,
+    pillarGapMiddle = undef,
+
+    // Pins
+    pinDiameter = undef,
+    pinDiameterAdjustment = undef,
+
+    // Tubes
+    tubeWallThickness = undef,
+    tubeXDiameter = undef,
+    tubeXDiameterAdjustment = undef,
+    tubeYDiameter = undef,
+    tubeYDiameterAdjustment = undef,
+    tubeZDiameter = undef,
+    tubeZDiameterAdjustment = undef,
+    tubeInnerClampThickness = undef,
+
+    // Slope
+    slope = undef,
+    slopeBaseHeightLower = undef,
+    slopeBaseHeightLowerInner = undef,
+    slopeBaseHeightUpper = undef,
+
+    // Bevel
+    bevel = undef,
+
+    // Holes X
+    holeX = undef,
+    holeXType = undef,
+    holeXShift = undef,
+    holeXDiameter = undef,
+    holeXDiameterAdjustment = undef,
+    holeXInsetThickness = undef,
+    holeXInsetThicknessAdjustment = undef,
+    holeXInsetDepth = undef,
+    holeXInsetDepthAdjustment = undef,
+    holeXGridOffsetZ = undef,
+    holeXGridOffsetZAdjustment = undef,
+    holeXGridSizeZ = undef,
+    holeXGridSizeZAdjustment = undef,
+    holeXMinTopMargin = undef,
+    holeXPartial = undef,
+
+    // Holes Y
+    holeY = undef,
+    holeYType = undef,
+    holeYShift = undef,
+    holeYDiameter = undef,
+    holeYDiameterAdjustment = undef,
+    holeYInsetThickness = undef,
+    holeYInsetThicknessAdjustment = undef,
+    holeYInsetDepth = undef,
+    holeYInsetDepthAdjustment = undef,
+    holeYGridOffsetZ = undef,
+    holeYGridOffsetZAdjustment = undef,
+    holeYGridSizeZ = undef,
+    holeYGridSizeZAdjustment = undef,
+    holeYMinTopMargin = undef,
+    holeYPartial = undef,
+
+    // Holes Z
+    holeZ = undef,
+    holeZType = undef,
+    holeZShift = undef,
+    holeZDiameter = undef,
+    holeZDiameterAdjustment = undef,
+    holeRoundingResolution = undef,
+    holeZPartialX = undef,
+    holeZPartialY = undef,
+
+    // Axle
+    holeAxleThickness = undef,
+
+    // Studs
+    studs = undef,
+    studType = undef,
+    studShift = undef,
+    studMaxOverhang = undef,
+    studPadding = undef,
+
+    studClampHeight = undef,
+    studClampThickness = undef,
+
+    studHoleDiameter = undef,
+    studHoleDiameterAdjustment = undef,
+    studHoleClampThickness = undef,
+
+    studRounding = undef,
+    studRoundingResolution = undef,
+
+    studDiameter = undef,
+    studDiameterAdjustment = undef,
+
+    studHeight = undef,
+    studHeightAdjustment = undef,
+
+    studCutoutAdjustment = undef,
+
+    studIcon = undef,
+    studIconDimensions = undef,
+    studIconScale = undef,
+    studIconDepth = undef,
+    studIconColor = undef,
+
+    // Tongue
+    tongue = undef,
+    tongueHeight = undef,
+    tongueGrooveDepth = undef,
+    tongueRoundingRadius = undef,
+    tongueInnerRoundingRadius = undef,
+    tongueThickness = undef,
+    tongueThicknessAdjustment = undef,
+    tongueOffset = undef,
+    tongueClampHeight = undef,
+    tongueClampOffset = undef,
+    tongueClampThickness = undef,
+
+    // Grille
+    grille = undef,
+    grilleInverted = undef,
+    grilleDepth = undef,
+    grilleCount = undef,
+
+    // Recess
+    recess = undef,
+    recessRoundingRadius = undef,
+    recessDepth = undef,
+    recessWallThickness = undef,
+    recessStuds = undef,
+    recessStudPadding = undef,
+    recessStudType = undef,
+    recessStudShift = undef,
+    recessWallGaps = undef,
+
+    // Text
+    text = undef,
+    textSide = undef,
+    textDepth = undef,
+    textFont = undef,
+    textSize = undef,
+    textSpacing = undef,
+    textVerticalAlign = undef,
+    textHorizontalAlign = undef,
+    textOffset = undef,
+    textColor = undef,
+
+    // Surface Pattern
+    surfacePattern = undef,
+    surfacePatternDimensions = undef,
+    surfacePatternOffset = undef,
+    surfacePatternScale = undef,
+    surfacePatternDepth = undef,
+    surfacePatternColor = undef,
+
+    // SVG
+    svg = undef,
+    svgSide = undef,
+    svgDepth = undef,
+    svgDimensions = undef,
+    svgScale = undef,
+    svgOffset = undef,
+    svgColor = undef,
+
+    // Connectors
+    connectors = undef,
+    connectorPadding = undef,
+    connectorHeight = undef,
+    connectorDepth = undef,
+    connectorWidth = undef,
+    connectorDepthTolerance = undef,
+    connectorSideTolerance = undef,
+
+    // Screws Z
+    screwHolesZ = undef,
+    screwHoleZSize = undef,
+    screwHoleZHelperThickness = undef,
+    screwHoleZHelperOffset = undef,
+    screwHoleZHelperHeight = undef,
+
+    // Screws X
+    screwHolesX = undef,
+    screwHoleXSize = undef,
+    screwHoleXDepth = undef,
+
+    // Screws Y
+    screwHolesY = undef,
+    screwHoleYSize = undef,
+    screwHoleYDepth = undef,
+
+    // PCB
+    pcb = undef,
+    pcbMountingType = undef,
+    pcbDimensions = undef,
+    pcbOffset = undef,
+    pcbScrewSocketSize = undef,
+    pcbScrewSocketHoleSize = undef,
+    pcbScrewSocketHeight = undef,
+    pcbScrewSockets = undef,
+
+    // Alignment
+    align = undef,
+    alignChildren = undef,
+
+    // Quality
+    qualitySegBase = undef,
+    qualityResolutionMax = undef,
+    qualityFactor = undef,
+    qualityResolutionMin = undef,
+    qualityResolutionMultiplier = undef,
+
+    // Preview
+    previewQuality = undef,
+    previewRender = undef,
+    previewRenderConvexity = undef
+
+){
+    settings = [
+        ["unitMbu", unitMbu],
+        ["unitGrid", unitGrid],
+        ["scale", scale],
+
+        ["rotation", rotation],
+        ["rotationOffset", rotationOffset],
+        ["rotationOffsetRevert", rotationOffsetRevert],
+        ["direction", direction],
+
+        ["size", size],
+        ["offset", offset],
+        ["crop", crop],
+
+        ["cutout", cutout],
+        ["cutoutOffset", cutoutOffset],
+
+        ["base", base],
+        ["baseColor", baseColor],
+        ["baseHeight", baseHeight],
+
+        ["baseTopPlateHeight", baseTopPlateHeight],
+        ["baseTopPlateHeightAdjustment", baseTopPlateHeightAdjustment],
+
+        ["baseCutoutType", baseCutoutType],
+        ["baseCutoutMaxDepth", baseCutoutMaxDepth],
+
+        ["baseClampOffset", baseClampOffset],
+        ["baseClampHeight", baseClampHeight],
+        ["baseClampThickness", baseClampThickness],
+        ["baseClampOuter", baseClampOuter],
+
+        ["baseRoundingRadius", baseRoundingRadius],
+        ["baseCutoutRoundingRadius", baseCutoutRoundingRadius],
+        ["baseRoundingResolution", baseRoundingResolution],
+
+        ["baseReliefCut", baseReliefCut],
+        ["baseReliefCutHeight", baseReliefCutHeight],
+        ["baseReliefCutThickness", baseReliefCutThickness],
+
+        ["baseSideAdjustment", baseSideAdjustment],
+        ["baseHeightAdjustment", baseHeightAdjustment],
+
+        ["baseWallThickness", baseWallThickness],
+        ["baseWallThicknessAdjustment", baseWallThicknessAdjustment],
+        ["baseWallGapsX", baseWallGapsX],
+        ["baseWallGapsY", baseWallGapsY],
+
+        ["topPlateHelpers", topPlateHelpers],
+        ["topPlateHelperHeight", topPlateHelperHeight],
+        ["topPlateHelperThickness", topPlateHelperThickness],
+
+        ["stabilizerGrid", stabilizerGrid],
+        ["stabilizerGridOffset", stabilizerGridOffset],
+        ["stabilizerGridHeight", stabilizerGridHeight],
+        ["stabilizerGridThickness", stabilizerGridThickness],
+        ["stabilizerExpansion", stabilizerExpansion],
+        ["stabilizerExpansionOffset", stabilizerExpansionOffset],
+
+        ["pillars", pillars],
+        ["pillarRoundingResolution", pillarRoundingResolution],
+        ["pillarGapCornerLength", pillarGapCornerLength],
+        ["pillarGapMiddle", pillarGapMiddle],
+
+        ["pinDiameter", pinDiameter],
+        ["pinDiameterAdjustment", pinDiameterAdjustment],
+
+        ["tubeWallThickness", tubeWallThickness],
+        ["tubeXDiameter", tubeXDiameter],
+        ["tubeXDiameterAdjustment", tubeXDiameterAdjustment],
+        ["tubeYDiameter", tubeYDiameter],
+        ["tubeYDiameterAdjustment", tubeYDiameterAdjustment],
+        ["tubeZDiameter", tubeZDiameter],
+        ["tubeZDiameterAdjustment", tubeZDiameterAdjustment],
+        ["tubeInnerClampThickness", tubeInnerClampThickness],
+
+        ["slope", slope],
+        ["slopeBaseHeightLower", slopeBaseHeightLower],
+        ["slopeBaseHeightLowerInner", slopeBaseHeightLowerInner],
+        ["slopeBaseHeightUpper", slopeBaseHeightUpper],
+
+        ["bevel", bevel],
+
+        ["holeX", holeX],
+        ["holeXType", holeXType],
+        ["holeXShift", holeXShift],
+        ["holeXDiameter", holeXDiameter],
+        ["holeXDiameterAdjustment", holeXDiameterAdjustment],
+        ["holeXInsetThickness", holeXInsetThickness],
+        ["holeXInsetThicknessAdjustment", holeXInsetThicknessAdjustment],
+        ["holeXInsetDepth", holeXInsetDepth],
+        ["holeXInsetDepthAdjustment", holeXInsetDepthAdjustment],
+        ["holeXGridOffsetZ", holeXGridOffsetZ],
+        ["holeXGridOffsetZAdjustment", holeXGridOffsetZAdjustment],
+        ["holeXGridSizeZ", holeXGridSizeZ],
+        ["holeXGridSizeZAdjustment", holeXGridSizeZAdjustment],
+        ["holeXMinTopMargin", holeXMinTopMargin],
+        ["holeXPartial", holeXPartial],
+
+        ["holeY", holeY],
+        ["holeYType", holeYType],
+        ["holeYShift", holeYShift],
+        ["holeYDiameter", holeYDiameter],
+        ["holeYDiameterAdjustment", holeYDiameterAdjustment],
+        ["holeYInsetThickness", holeYInsetThickness],
+        ["holeYInsetThicknessAdjustment", holeYInsetThicknessAdjustment],
+        ["holeYInsetDepth", holeYInsetDepth],
+        ["holeYInsetDepthAdjustment", holeYInsetDepthAdjustment],
+        ["holeYGridOffsetZ", holeYGridOffsetZ],
+        ["holeYGridOffsetZAdjustment", holeYGridOffsetZAdjustment],
+        ["holeYGridSizeZ", holeYGridSizeZ],
+        ["holeYGridSizeZAdjustment", holeYGridSizeZAdjustment],
+        ["holeYMinTopMargin", holeYMinTopMargin],
+        ["holeYPartial", holeYPartial],
+
+        ["holeZ", holeZ],
+        ["holeZType", holeZType],
+        ["holeZShift", holeZShift],
+        ["holeZDiameter", holeZDiameter],
+        ["holeZDiameterAdjustment", holeZDiameterAdjustment],
+        ["holeRoundingResolution", holeRoundingResolution],
+        ["holeZPartialX", holeZPartialX],
+        ["holeZPartialY", holeZPartialY],
+
+        ["holeAxleThickness", holeAxleThickness],
+
+        ["studs", studs],
+        ["studType", studType],
+        ["studShift", studShift],
+        ["studMaxOverhang", studMaxOverhang],
+        ["studPadding", studPadding],
+
+        ["studClampHeight", studClampHeight],
+        ["studClampThickness", studClampThickness],
+
+        ["studHoleDiameter", studHoleDiameter],
+        ["studHoleDiameterAdjustment", studHoleDiameterAdjustment],
+        ["studHoleClampThickness", studHoleClampThickness],
+
+        ["studRounding", studRounding],
+        ["studRoundingResolution", studRoundingResolution],
+
+        ["studDiameter", studDiameter],
+        ["studDiameterAdjustment", studDiameterAdjustment],
+
+        ["studHeight", studHeight],
+        ["studHeightAdjustment", studHeightAdjustment],
+
+        ["studCutoutAdjustment", studCutoutAdjustment],
+
+        ["studIcon", studIcon],
+        ["studIconDimensions", studIconDimensions],
+        ["studIconScale", studIconScale],
+        ["studIconDepth", studIconDepth],
+        ["studIconColor", studIconColor],
+
+        ["tongue", tongue],
+        ["tongueHeight", tongueHeight],
+        ["tongueGrooveDepth", tongueGrooveDepth],
+        ["tongueRoundingRadius", tongueRoundingRadius],
+        ["tongueInnerRoundingRadius", tongueInnerRoundingRadius],
+        ["tongueThickness", tongueThickness],
+        ["tongueThicknessAdjustment", tongueThicknessAdjustment],
+        ["tongueOffset", tongueOffset],
+        ["tongueClampHeight", tongueClampHeight],
+        ["tongueClampOffset", tongueClampOffset],
+        ["tongueClampThickness", tongueClampThickness],
+
+        ["grille", grille],
+        ["grilleInverted", grilleInverted],
+        ["grilleDepth", grilleDepth],
+        ["grilleCount", grilleCount],
+
+        ["recess", recess],
+        ["recessRoundingRadius", recessRoundingRadius],
+        ["recessDepth", recessDepth],
+        ["recessWallThickness", recessWallThickness],
+        ["recessStuds", recessStuds],
+        ["recessStudPadding", recessStudPadding],
+        ["recessStudType", recessStudType],
+        ["recessStudShift", recessStudShift],
+        ["recessWallGaps", recessWallGaps],
+
+        ["text", text],
+        ["textSide", textSide],
+        ["textDepth", textDepth],
+        ["textFont", textFont],
+        ["textSize", textSize],
+        ["textSpacing", textSpacing],
+        ["textVerticalAlign", textVerticalAlign],
+        ["textHorizontalAlign", textHorizontalAlign],
+        ["textOffset", textOffset],
+        ["textColor", textColor],
+
+        ["surfacePattern", surfacePattern],
+        ["surfacePatternDimensions", surfacePatternDimensions],
+        ["surfacePatternOffset", surfacePatternOffset],
+        ["surfacePatternScale", surfacePatternScale],
+        ["surfacePatternDepth", surfacePatternDepth],
+        ["surfacePatternColor", surfacePatternColor],
+
+        ["svg", svg],
+        ["svgSide", svgSide],
+        ["svgDepth", svgDepth],
+        ["svgDimensions", svgDimensions],
+        ["svgScale", svgScale],
+        ["svgOffset", svgOffset],
+        ["svgColor", svgColor],
+
+        ["connectors", connectors],
+        ["connectorPadding", connectorPadding],
+        ["connectorHeight", connectorHeight],
+        ["connectorDepth", connectorDepth],
+        ["connectorWidth", connectorWidth],
+        ["connectorDepthTolerance", connectorDepthTolerance],
+        ["connectorSideTolerance", connectorSideTolerance],
+
+        ["screwHolesZ", screwHolesZ],
+        ["screwHoleZSize", screwHoleZSize],
+        ["screwHoleZHelperThickness", screwHoleZHelperThickness],
+        ["screwHoleZHelperOffset", screwHoleZHelperOffset],
+        ["screwHoleZHelperHeight", screwHoleZHelperHeight],
+
+        ["screwHolesX", screwHolesX],
+        ["screwHoleXSize", screwHoleXSize],
+        ["screwHoleXDepth", screwHoleXDepth],
+
+        ["screwHolesY", screwHolesY],
+        ["screwHoleYSize", screwHoleYSize],
+        ["screwHoleYDepth", screwHoleYDepth],
+
+        ["pcb", pcb],
+        ["pcbMountingType", pcbMountingType],
+        ["pcbDimensions", pcbDimensions],
+        ["pcbOffset", pcbOffset],
+        ["pcbScrewSocketSize", pcbScrewSocketSize],
+        ["pcbScrewSocketHoleSize", pcbScrewSocketHoleSize],
+        ["pcbScrewSocketHeight", pcbScrewSocketHeight],
+        ["pcbScrewSockets", pcbScrewSockets],
+
+        ["align", align],
+        ["alignChildren", alignChildren],
+
+        ["qualitySegBase", qualitySegBase],
+        ["qualityResolutionMax", qualityResolutionMax],
+        ["qualityFactor", qualityFactor],
+        ["qualityResolutionMin", qualityResolutionMin],
+        ["qualityResolutionMultiplier", qualityResolutionMultiplier],
+
+        ["previewQuality", previewQuality],
+        ["previewRender", previewRender],
+        ["previewRenderConvexity", previewRenderConvexity]
+    ];
+
+    mb_block(settings = settings){
+        children();
+    }
+}
+
+/*
+//Grid units
+unitMbu = 1.6, // mm - The MachineBlocks base unit.
+unitGrid = [5, 2], // vector2 x mbu ([xy, z]) - The MachineBlocks grid relative to the base unit.
+
+//Scale
+scale = 1.0, // float - Scale of the block. Only affects parameters given in mbu and grid.
+
+//Rotation
+rotation = [0, 0, 0], // vector3 x int - Rotation of the brick around the x, y and z - axis.
+rotationOffset = [0, 0, 0], // grid ([x, y, z]) - Origin of the rotation relative to the Bricks origin.
+rotationOffsetRevert = true,
+direction = "west",
+
+//Size
+size = [1, 1, 1], // vector3 x grid ([x, y, z]) - Size of the brick as multiple of the grid unit.
+offset = [0, 0, 0], // grid ([x, y, z]) - Position of the brick relative to the origin.
+crop = [0, 0, 0, 0],
+
+cutout = false,
+cutoutOffset = [0, 0],
+
+//Base
+base = true, // bool
+baseColor = "#EAC645", // color - Color of the block.
+baseHeight = "auto", // mm | "auto" - Fixed height in mm or auto to calculate height based on the size parameter.
+
+baseTopPlateHeight = 1, // mbu - The minimum height of the top plate. Final height might differ and is affected by baseCutoutMaxDepth and recessDepth.
+baseTopPlateHeightAdjustment = -0.6, // mm
+
+baseCutoutType = "standard", // "standard" | "studs" | "groove" | "none"
+baseCutoutMaxDepth = 5, // mbu
+
+baseClampOffset = 0.25, // mbu
+baseClampHeight = 0.5, // mbu
+baseClampThickness = 0.1, // mm
+baseClampOuter = false, // bool
+
+
+baseRoundingRadius = 0.0, // grid | vector3 x grid | vector3 x vector4 (e.g. 4 or [1, 2, 3] or [1, [2, 3, 4, 5], [6, 7, 8, 9]])
+baseCutoutRoundingRadius = "auto", // mm (e.g 2.7 or [2.7, 2.7, 2.7, 2.7]) 
+baseRoundingResolution = 64, // int TODO remove
+
+//Relief Cut
+baseReliefCut = false, // bool
+baseReliefCutHeight = 0.375, // mbu
+baseReliefCutThickness = 0.375, // mbu
+
+//Base Adjustment
+baseSideAdjustment = -0.1, // mm
+baseHeightAdjustment = 0.0, // mm
+
+//Walls
+baseWallThickness = "auto", // mbu | "auto"
+baseWallThicknessAdjustment = -0.1, // mm
+baseWallGapsX = [], // vector
+baseWallGapsY = [], // vector
+
+//Top Plate Helpers
+topPlateHelpers = true, // bool
+topPlateHelperHeight = 0.2, // mm (min printable layer height, usually 0.2mm)
+topPlateHelperThickness = 0.4, // mm (min printable wall thickness, usually 0.4mm)
+
+//Stabilizers
+stabilizerGrid = true, // bool
+stabilizerGridOffset = 0.2, // mm (min printable layer height, usually 0.2mm)
+stabilizerGridHeight = 0.5, // mbu
+stabilizerGridThickness = 0.5, // mbu
+stabilizerExpansion = 2, // int (create expansion after each [n] bricks)
+stabilizerExpansionOffset = 1, // mbu
+
+//Pillars: Tubes and Pins
+pillars = true, // bool | vector
+pillarRoundingResolution = 64, // int TODO remove
+pillarGapCornerLength = 2, // int
+pillarGapMiddle = 10, // int
+
+//Pins (little tubes for blocks with 1 brick side length)
+pinDiameter = "auto", // mbu | "auto"
+pinDiameterAdjustment = 0.0, // mm
+
+//Tubes
+tubeWallThickness = 0.53125, // mbu (constant, should not be changed normally)
+tubeXDiameter = "auto", // mbu | "auto"
+tubeXDiameterAdjustment = -0.1, // mm
+tubeYDiameter = "auto", // mbu | "auto"
+tubeYDiameterAdjustment = -0.1, // mm
+tubeZDiameter = "auto", // mbu | "auto"
+tubeZDiameterAdjustment = -0.1, // mm
+
+tubeInnerClampThickness = 0.1, // mm
+
+// Slope
+slope = false, // false | vector4
+slopeBaseHeightLower = 1.333, // mbu
+slopeBaseHeightLowerInner = 1.125, // mbu
+slopeBaseHeightUpper = 1, // mbu
+
+// Bevel
+bevel = [[0, 0], [0, 0], [0, 0], [0, 0]], // vector4 x vector2
+
+//Holes
+holeX = false, // bool | vector
+holeXType = "pin", // "pin" | "axle"
+holeXShift = true, // bool
+holeXDiameter = "auto", // mbu | "auto"
+holeXDiameterAdjustment = 0.3, // mm
+holeXInsetThickness = 0.375, // mbu
+holeXInsetThicknessAdjustment = 0.0, // mm
+holeXInsetDepth = 0.5, // mbu
+holeXInsetDepthAdjustment = 0.0, // mm
+holeXGridOffsetZ = 3.625, // mbu
+holeXGridOffsetZAdjustment = 0.0, // mm
+holeXGridSizeZ = 6, // mbu
+holeXGridSizeZAdjustment = 0.0, // mm
+holeXMinTopMargin = 0.5, // mbu
+holeXPartial = "none", // "none", "start", "end", "all"
+
+holeY = false, // bool or vector
+holeYType = "pin", // "pin" | "axle"
+holeYShift = true, // bool
+holeYDiameter = "auto", // mbu | "auto"
+holeYDiameterAdjustment = 0.3, // mm
+holeYInsetThickness = 0.375, // mbu
+holeYInsetThicknessAdjustment = 0.0, // mm
+holeYInsetDepth = 0.5, // mbu
+holeYInsetDepthAdjustment = 0.0, // mm
+holeYGridOffsetZ = 3.625, // mbu
+holeYGridOffsetZAdjustment = 0.0, //mm
+holeYGridSizeZ = 6, // mbu
+holeYGridSizeZAdjustment = 0.0, // mm
+holeYMinTopMargin = 0.5, // mbu
+holeYPartial = "none", // "none", "start", "end", "all"
+
+holeZ = false, // bool or vector
+holeZType = "pin", // "pin" | "axle"
+holeZShift = true, // false | "none" | "x" | "y" | true | "xy"
+holeZDiameter = "auto", // mbu | "auto"
+holeZDiameterAdjustment = 0.3, // mm
+holeRoundingResolution = 64, // int TODO remove
+holeZPartialX = "none", // "none", "start", "end", "all"
+holeZPartialY = "none", // "none", "start", "end", "all"
+
+//Axle Holes
+holeAxleThickness = 1, //mbu
+
+//Studs
+studs = true, // bool or vector
+studType = "solid", // "solid" | "hollow"
+studShift = false, // false | "none" | "x" | "y" | true | "xy"
+studMaxOverhang = 0.3, // mm
+studPadding = 0, // grid
+
+studClampHeight = 0.5, // mbu
+studClampThickness = 0.0, // mm
+
+studHoleDiameter = "auto", // mbu | "auto"
+studHoleDiameterAdjustment = 0.3, // mm
+studHoleClampThickness = 0.1, // mm
+
+studRounding = 0.0625, // mbu
+studRoundingResolution = 64, // int TODO remove
+
+studDiameter = 3, // mbu (constant, should not be changed normally)
+studDiameterAdjustment = 0.2, // mm
+
+studHeight = 1, // mbu (constant, should not be changed normally)
+studHeightAdjustment = 0.0, // mm
+
+studCutoutAdjustment = [0.2, 0.4], // mm [diameter, height]
+
+studIcon = "../pattern/bolt-solid-full.svg",
+studIconDimensions = [169.333, 169.333],
+studIconScale = 0.024,
+studIconDepth = -0.2,
+studIconColor = "inherit",
+
+//Tongue
+tongue = false, // bool
+tongueHeight = 1.25, // mbu
+tongueGrooveDepth = 1.5, // mbu
+tongueRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+tongueInnerRoundingRadius = "auto", // grid | "auto" (e.g 1.0 or [1, 2, 3, 4]) 
+tongueThickness = 0.666, // mbu
+tongueThicknessAdjustment = 0, // mm
+tongueOffset = 1, // mbu
+tongueClampHeight = 0.5, // mbu
+tongueClampOffset = 0.25, // mbu
+tongueClampThickness = 0.1, // mm
+
+//Grille
+grille = "none", // "none" | "x" | "y"
+grilleInverted = false, // bool
+grilleDepth = 1, // mbu
+grilleCount = 5, // int
+
+//Recess
+recess = false, // bool
+recessRoundingRadius = "auto", // grid | "auto" (e.g 2.7 or [2.7, 2.7, 2.7, 2.7])
+recessDepth = "auto", // mm | "auto"
+recessWallThickness = 0.333, // grid (e.g. 0.333 or [0.333, 0.333, 0.333, 0.333])
+recessStuds = true, // bool
+recessStudPadding = 0.2, // grid
+recessStudType = "solid", // "solid" | "hollow"
+recessStudShift = false, // false | "none" | "x" | "y" | true | "xy"
+recessWallGaps = [], // vector
+
+//Text
+text = "", // string
+textSide = 0, // side
+textDepth = -0.25, // mbu
+textFont = "Liberation Sans", // font
+textSize = 4, // pt
+textSpacing = 1, // int
+textVerticalAlign = "center",
+textHorizontalAlign = "center",
+textOffset = [0, 0], // grid (multipliers of gridSizeXY and gridSizeZ depending on side)
+textColor = "#2c3e50", // color - Color of text.
+
+//Surface Pattern
+surfacePattern = "none",
+surfacePatternDimensions = [451.556, 451.556],
+surfacePatternOffset = [0,0],
+surfacePatternScale=0.25,
+surfacePatternDepth=-0.2,
+surfacePatternColor="inherit",
+
+//SVG
+svg = "", // string
+svgSide = 5, // side
+svgDepth = 0.4, // mm
+svgDimensions = [100, 100], // vector2 x int
+svgScale = 1.0, // float
+svgOffset = [0, 0], // vector2 x grid (multipliers of gridSizeXY and gridSizeZ depending on side)
+svgColor = "#2c3e50", // color - Color of svg
+
+connectors = false, // bool
+connectorPadding = [0, 0],
+connectorHeight = "auto", // mbu
+connectorDepth = 0.75, // mbu
+connectorWidth = 2.5, // mbu
+connectorDepthTolerance = 0.2, // mm
+connectorSideTolerance = 0.1, // mm
+
+//Screw Holes
+screwHolesZ = [], // vector
+screwHoleZSize = 2.3, // mm
+screwHoleZHelperThickness = 0.8, // mm
+screwHoleZHelperOffset = 0.2, // mm
+screwHoleZHelperHeight = 0.2, // mm
+
+screwHolesX = [], // vector
+screwHoleXSize = 2.1, // mm
+screwHoleXDepth = 4, // mm
+
+screwHolesY = [], // vector
+screwHoleYSize = 2.1, // mm
+screwHoleYDepth = 4, // mm
+
+//PCB
+pcb = false, // bool
+pcbMountingType = "clips",
+pcbDimensions = [20, 30, 3], // vector3 x mm
+pcbOffset = [0, 0], // vector2 x grid
+pcbScrewSocketSize = 5, // mm
+pcbScrewSocketHoleSize = 2.2, // mm
+pcbScrewSocketHeight = 3, // mm
+pcbScrewSockets = [], // vector
+
+//Alignment
+align = "start", // string | vector3 x string
+alignChildren = "start", // string | vector3 x string
+//alignMode = "grid", // "grid" | "object" (If set to object, brick is aligned like a normal scad object - TODO implement object mode)
+
+//Quality
+qualitySegBase = 1.2,
+qualityResolutionMax = 220,
+
+qualityFactor = [
+    0.6,  // FUNCTIONAL
+    1.0,  // VISUAL
+    1.6,  // OTHER
+    2.5   // DRAFT
+],
+
+qualityResolutionMin = [
+    24, // FUNCTIONAL
+    18, // VISUAL
+    12, // OTHER
+    8  // DRAFT
+],
+
+qualityResolutionMultiplier = 0.25,
+
+//Preview
+previewQuality = 0.5, // float (between 0.0 and 1.0)
+previewRender = false, // bool (Whether the brick should always be rendered in preview mode)
+previewRenderConvexity = 15 // int (Convexity for preview rendering)
+*/
