@@ -1,18 +1,44 @@
 # MachineBlocks — System
 
-version: 1.0.0
+version: 1.1.0
 
 ## Purpose
 
 MachineBlocks is an OpenSCAD-based system for generating parametric, LEGO-compatible 3D blocks. Its primary use case is 3D printing, but it can also be used for general 3D modeling (e.g. Unity or CAD workflows).
 
-The system is designed as a foundation for generating real-world machines composed of modular, printable blocks.
+The system is designed as a foundation for generating real-world machines composed of modular, printable blocks. The MachineBlocks Online Editor allows users to store, publish, share, remix blocks, generate sets, and build functional electronic devices composed of blocks containing electronic components.
 
 ---
 
 ## Core Principle
 
 MachineBlocks follows a single-module architecture. There is one core module — `mb_block()` — and all geometry is defined through parameters (>200). Complexity is not created through multiple modules, but through parameter combinations, composition (multiple blocks), and nesting (`children()`).
+
+---
+
+## Key Terminology
+
+### Block Module
+
+An OpenSCAD module that uses `mb_block()` directly or indirectly. Follows the naming convention `mb_block__<package>` where package segments are separated by double underscores.
+
+```text
+module mb_block__my__package__wall(config = undef, settings = undef){ ... }
+```
+
+The Block Module is the reusable code unit. It always has the signature `(config, settings)`.
+
+### Block File
+
+An OpenSCAD `.scad` file that contains a Block Module plus a customizer section with variable definitions and the module call. The file is named after the module it contains.
+
+```text
+mb_block__my__package__wall.scad
+```
+
+A Block File is always self-contained and executable — it works standalone in OpenSCAD Desktop and in the MachineBlocks Online Editor. When imported via `use <file.scad>`, only the module definition is loaded; the customizer section is ignored.
+
+> Block Module = the reusable SCAD module. Block File = the executable SCAD file containing the module.
 
 ---
 
@@ -70,7 +96,7 @@ This is implemented with:
 mb_params_resolve(config, settings, "key", default)
 ```
 
-The library does not restrict any parameter to config-only or settings-only at the resolution level. Individual block modules may assume certain parameters are always provided in settings, but this is a module-level decision, not a library-level restriction.
+The library does not restrict any parameter to config-only or settings-only at the resolution level. Individual block modules may assume certain parameters are always provided in settings, but this is a module-level decision, not a library-level restriction. Modules may deliberately use `mb_params_get(settings, ...)` to read only from settings and ignore config for specific parameters.
 
 ### Parameter Access Variants
 
@@ -102,6 +128,52 @@ mb_params_resolve_unitMbu(config, settings)
 ```
 
 These exist to centralize critical defaults. Important system parameters should use dedicated getter functions whenever available, because defaults for core geometric behavior must stay consistent and local duplication of those defaults would create inconsistencies.
+
+---
+
+## Development Flow
+
+### Offline Development
+
+Block Files are typically developed on a local PC using OpenSCAD Desktop for preview and rendering, combined with an AI-capable IDE (e.g. Cursor, VS Code + Claude Code) for code generation and editing. The developer creates the Block File, tests it in OpenSCAD, and uploads the finished file to the MachineBlocks Online Editor.
+
+### Online Editor
+
+The Online Editor stores blocks, manages config profiles, and provides rendering. Block Files uploaded to the Online Editor are functionally identical to local files with one exception: import paths are automatically converted during upload.
+
+### Path Conversion
+
+Local development uses relative paths that depend on the project structure. The Online Editor uses fixed virtual paths.
+
+```text
+Local:   use <../../../machineblocks/lib/block.scad>;
+Online:  use <machineblocks/lib/block.scad>;
+
+Local:   include <../../config/mb_config.scad>;
+Online:  include </mb_config.scad>;
+```
+
+The Online Editor converts paths automatically during upload. AI systems generating Block Files should use local paths by default and note that conversion happens on upload.
+
+### Config Profiles
+
+Locally, a `config/mb_config.scad` file includes the active printer/material profile:
+
+```scad
+// mb_config.scad
+include <./mb_config_PRUSA_printer.scad>;
+```
+
+The profile defines the `mb_config` variable:
+
+```scad
+// mb_config_PRUSA_printer.scad
+mb_config = [
+    ["baseHeightAdjustment", -0.1]
+];
+```
+
+In the Online Editor, config profiles are stored in the database. The editor generates a virtual `mb_config.scad` based on the active profile.
 
 ---
 
@@ -225,7 +297,7 @@ Block modules are wrappers around `mb_block()`:
 mb_block__<package>
 ```
 
-They share the same signature `(config, settings)`, map parameters to `mb_block`, and provide reusable abstractions.
+They share the same signature `(config, settings)`, map parameters to `mb_block`, and provide reusable abstractions. Sub-modules use extended package names: `mb_block__<package>__<sub>`. Global functions follow the same convention: `mb_block__<package>__<func_name>`.
 
 Example:
 
@@ -238,7 +310,7 @@ mb_block__mm__anyclosure__floor
 The most common higher-level usage of `mb_block()` is:
 
 ```text
-1. Read parameters
+1. Read parameters from settings (and optionally config)
 2. Assign defaults
 3. Map them into a new settings array
 4. Call mb_block(config, mapped_settings)
@@ -252,7 +324,7 @@ Simple wrappers may forward `settings` unchanged. Composite modules may create m
 
 ### Block
 
-The logical unit. A block represents a single functional or structural element.
+The logical unit. A block represents a single functional or structural element. In the editor context, a block can itself consist of multiple sub-blocks.
 
 ### BlockPart
 
@@ -264,7 +336,7 @@ Represent external objects such as PCBs, motors, etc. Defined by SCAD models. Us
 
 ### Sets
 
-Collections of blocks. Can represent assemblies or full devices.
+Collections of blocks. Can represent assemblies or full devices. A device is a specialized form of a set.
 
 ---
 
@@ -276,7 +348,9 @@ All entities (Blocks, Components, Sets) are versioned. Only finalized versions c
 
 ## Block Files
 
-Each block file is a reusable module, contains its own example, and is directly executable in OpenSCAD. Use `use <file.scad>` to ignore example code when importing.
+Each Block File is a self-contained `.scad` file that is directly executable in OpenSCAD. It contains a Block Module definition, customizer variables for interactive parameter control, and the module call with config propagation. When imported via `use <file.scad>`, only the module definition is loaded.
+
+For the complete Block File structure, customizer syntax, config handling, and module patterns, see `03_patterns_and_examples.md`.
 
 ---
 
@@ -295,9 +369,9 @@ This documentation is a formal, machine-readable specification of the system. It
 The documentation consists of:
 
 ```text
-01_system.md                     — this document (architecture, units, execution model)
+01_system.md                     — this document (architecture, units, execution model, terminology)
 02_geometry_and_transformation.md — concepts for geometry, positioning, and structure
-03_patterns_and_examples.md       — structural patterns with concrete examples
+03_patterns_and_examples.md       — block file structure, module patterns, and concrete examples
 04_decision_system.md             — AI decision framework and rules
 09_api_parameters_1_0_1.yml       — Single Source of Truth for all parameter definitions
 ```
