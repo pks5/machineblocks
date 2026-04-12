@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 1.1.0
+version: 1.2.0
 
 ## Purpose
 
@@ -351,6 +351,50 @@ All entities (Blocks, Components, Sets) are versioned. Only finalized versions c
 Each Block File is a self-contained `.scad` file that is directly executable in OpenSCAD. It contains a Block Module definition, customizer variables for interactive parameter control, and the module call with config propagation. When imported via `use <file.scad>`, only the module definition is loaded.
 
 For the complete Block File structure, customizer syntax, config handling, and module patterns, see `03_patterns_and_examples.md`.
+
+---
+
+## Legacy Module: machineblock()
+
+### Overview
+
+The legacy `machineblock()` module predates the `mb_block()` architecture. It uses direct OpenSCAD module parameters instead of the `config`/`settings` key-value pair system. It has no concept of config vs settings separation. Internally, `machineblock()` maps all its parameters into a settings array and calls `mb_block()`. It remains available for backward compatibility but is not recommended for new development because every call creates a settings array with all ~200 parameters, regardless of how many are actually used.
+
+### Legacy File Structure
+
+Legacy files are not standardized Block Files. They are regular OpenSCAD files with customizer variables that call `machineblock()` directly — typically without wrapping the call in a module. They often contain an `overrideConfig` boolean and `_ovr` suffixed variables that allowed users to override calibration values from the customizer. Deprecated parameters like `baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, and `studRoundingResolution` may also be present.
+
+### Converting Legacy Files to Block Files
+
+AI systems should be able to convert legacy files to the modern Block File format. The conversion does not need to be perfect — manual refinement is expected. The goal is to automate the bulk of the structural work.
+
+#### Step 1 — Create Block File Structure
+
+Add the standard Block File structure: header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<name>`.
+
+#### Step 2 — Replace machineblock() with mb_block()
+
+Convert `machineblock(param1=val1, param2=val2)` to `mb_block(config=config, settings=[["param1", val1], ["param2", val2]])`. Only include parameters that are actually set — do not create entries for parameters left at their defaults.
+
+#### Step 3 — Remove Legacy Calibration
+
+Remove all `_ovr` suffixed customizer variables and the `overrideConfig` boolean. Calibration parameters belong in config profiles, not in Block Files. Remove deprecated parameters (`baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, `studRoundingResolution`).
+
+#### Step 4 — Wrap in Block Module
+
+Encapsulate all `mb_block()` calls inside a Block Module with the standard `(config, settings)` signature.
+
+#### Step 5 — Handle Multiple Calls
+
+If the legacy file contains multiple `machineblock()` calls, insert a wrapper `mb_block()` with `base=false`, `studs=false` that contains the converted calls as children. If an `assembly` parameter exists, assign it to the wrapper. If a clear shared `size` exists, assign it to the wrapper and derive child sizes from it. If no clear shared size exists, keep sizes directly in the children.
+
+#### Step 6 — Handle Alignment
+
+If children used `align="ccs"`, set `alignChildren="ccs"` on the wrapper. Ideally remove `align="ccs"` from children and adjust their offsets accordingly, but this may require manual refinement to preserve the exact geometry.
+
+#### Step 7 — Consolidate Composed Values
+
+Legacy files often split complex parameter values across multiple customizer variables (e.g. `bevel0`, `bevel1`, `bevel2`, `bevel3` for the four corners, or `baseRoundingRadiusX`, `baseRoundingRadiusY`, `baseRoundingRadiusZ` for per-axis rounding). Keep the individual customizer variables for the UI, but combine them under `/* [Hidden] */` and pass the combined value to the module.
 
 ---
 
