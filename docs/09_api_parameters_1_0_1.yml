@@ -80,6 +80,51 @@ global_rules:
       size = [4, 2, 3], unitMbu = 1.6, unitGrid = [5, 2], scale = 1
       absolute = [4*5*1.6, 2*5*1.6, 3*2*1.6] = [32, 16, 9.6] mm
 
+  critical_proportion_rule:
+    description: |
+      CRITICAL: X/Y and Z axes are NOT equally scaled in the grid system.
+
+      1 unit in X or Y = unitGrid[0] * unitMbu = 5 * 1.6 = 8.0 mm
+      1 unit in Z      = unitGrid[1] * unitMbu = 2 * 1.6 = 3.2 mm
+
+      The ratio is unitGrid[0] / unitGrid[1] = 5 / 2 = 2.5
+      This means Z must be 2.5× larger than X/Y to produce equal physical
+      dimensions.
+
+      Examples:
+        size = [1, 1, 1]   → 8 × 8 × 3.2 mm  (NOT a cube — heavily squashed in Z)
+        size = [1, 1, 2.5] → 8 × 8 × 8.0 mm  (true cube, but Z is fractional)
+        size = [2, 2, 5]   → 16 × 16 × 16 mm  (true cube with integer values)
+        size = [4, 4, 4]   → 32 × 32 × 12.8 mm (NOT a cube — common AI mistake)
+        size = [4, 4, 10]  → 32 × 32 × 32 mm  (true cube)
+
+    ai_rule: |
+      When designing blocks that should have specific physical proportions,
+      ALWAYS calculate the absolute mm dimensions to verify proportions.
+      Never assume equal grid units produce equal physical dimensions.
+
+      IMPORTANT: Always use integer values for size to maintain LEGO grid
+      compatibility. Do NOT use fractional values like 2.5 — instead, choose
+      the nearest integer that best approximates the desired proportion.
+      Proportions will often be approximate, and that is acceptable.
+
+      Quick reference for proportional sizing:
+        For every 1 unit in X/Y, use 2 or 3 units in Z (exact would be 2.5).
+        For every 2 units in X/Y, use 5 units in Z.
+        For every 4 units in X/Y, use 10 units in Z.
+
+      Practical approach:
+        1. Think in mm first for the desired physical shape.
+        2. Convert to grid units: x = mm/8, y = mm/8, z = mm/3.2
+        3. Round all values to integers.
+        4. Verify the resulting mm dimensions are acceptable.
+
+      Example — designing a roughly cubic block:
+        Target: ~24mm cube
+        x = 24/8 = 3, y = 24/8 = 3, z = 24/3.2 = 7.5 → round to 7 or 8
+        size = [3, 3, 8] → 24 × 24 × 25.6 mm (close enough)
+        size = [3, 3, 7] → 24 × 24 × 22.4 mm (also acceptable)
+        
   side_index:
     description: |
       Side numbering convention used throughout MachineBlocks.

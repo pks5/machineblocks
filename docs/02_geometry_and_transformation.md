@@ -1,6 +1,6 @@
 # MachineBlocks — Geometry, Transformation & Structure Concepts
 
-version: 1.0.0
+version: 1.1.0
 
 ## Purpose of this Document
 
@@ -15,6 +15,14 @@ This document explains the concepts and relationships behind MachineBlocks geome
 The bounding box is defined exclusively by `size`. No other parameter modifies the bounding box — only the visible geometry inside it. For simple blocks, the bounding box matches the visible geometry. For complex blocks (slopes, wedges, recess structures), the bounding box defines the structural outer space while visible geometry may be smaller.
 
 > `size` defines the spatial contract of a block.
+
+## Grid Aspect Ratio
+
+The grid is asymmetric: X/Y use `unitGrid[0]` (default 5 mbu = 8 mm per unit) while Z uses `unitGrid[1]` (default 2 mbu = 3.2 mm per unit). This means the ratio of XY to Z is 2.5:1. A `size` of `[1,1,1]` does not produce a cube — it produces a flat plate (8×8×3.2 mm).
+
+To produce a cube, the Z value must be 2.5 times the XY value. Since `size` values should be whole numbers for grid compatibility, the AI must approximate. For example, a cube-like block could be `[1,1,3]` (8×8×9.6 mm) or `[2,2,5]` (16×16×16 mm) or `[4,4,10]` (32×32×32 mm).
+
+> AI must always account for the 1:2.5 XY-to-Z ratio when estimating sizes. Assuming 1:1 produces visually squashed models.
 
 ## Shape Modification
 
