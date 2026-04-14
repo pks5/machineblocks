@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 1.2.0
+version: 1.3.0
 
 ## Purpose
 
@@ -351,6 +351,32 @@ All entities (Blocks, Components, Sets) are versioned. Only finalized versions c
 Each Block File is a self-contained `.scad` file that is directly executable in OpenSCAD. It contains a Block Module definition, customizer variables for interactive parameter control, and the module call with config propagation. When imported via `use <file.scad>`, only the module definition is loaded.
 
 For the complete Block File structure, customizer syntax, config handling, and module patterns, see `03_patterns_and_examples.md`.
+
+### Block File Natures
+
+Block Files fall into two categories based on their purpose:
+
+**Content Block Files** produce 3D-printable blocks. They are the core product of MachineBlocks — bricks, panels, enclosures, lids, and all other physical blocks. Content Block Files are typically authored by humans (with or without AI assistance) and uploaded to the Online Editor.
+
+**Helper Block Files** serve editor and tooling functions. They are typically generated (not hand-authored) and use the same Block File structure and customizer system, but their purpose is not to produce printable blocks. Helper types include:
+
+Preview Helpers — combine multiple Block Parts into a single composite view. Used by the Online Editor to render a complete block that consists of several parts. The customizer exposes assembly mode (unassembled/assembled/merged).
+
+Placement Helpers — provide an interactive 3D interface for positioning a Block Part within a composite block. Customizer variables (offset, direction, align) are read back by the editor and stored. The active part is visually highlighted; other parts are shown semi-transparent.
+
+Set Instruction Helpers — render step-by-step assembly instructions for Sets. A STEPS array defines the build order. Three modes control rendering: `total` (all instances), `step` (cumulative up to current step with highlight), and `instance` (single block). The customizer slider controls the current step.
+
+> Content Block Files are authored. Helper Block Files are generated. Both follow the same Block File structure.
+
+### Block Module Classification
+
+Block Modules are classified along two independent axes:
+
+**Pattern** (how the module is technically built): Primitive Wrapper, Simple Block, or Composite Block. See `03_patterns_and_examples.md` for details.
+
+**Nature** (what the module's purpose is): Content or Helper.
+
+These axes are independent — a Helper Block File can use any pattern internally.
 
 ---
 
