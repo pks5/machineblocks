@@ -16,8 +16,8 @@
 /*
  * Imports
  */
-use <../lib/block.scad>;
-include <../config/mb_config.scad>;
+use <../../lib/block.scad>;
+include <../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -26,16 +26,16 @@ include <../config/mb_config.scad>;
 /* [Size] */
 
 // Brick size (grid)
-size = [4, 2, 3]; // [1:0.1:32]
+size = [4, 2, 3]; // [1:0.25:32]
 
 /* [Base] */
 
 // Rounding Radius X (grid)
-baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.1:128]
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.25:128]
 // Rounding Radius Y (grid)
-baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.1:128]
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.25:128]
 // Rounding Radius Z (grid)
-baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.1:128]
+baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.25:128]
 
 // Type of cut-out on the underside.
 baseCutoutType = "standard"; // [none, standard, studs, groove]
@@ -70,13 +70,13 @@ studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 /* [Bevel] */
 
 // Bevel X and Y for the corner [0,0] (grid)
-bevel0 = [0, 0]; // [0:0.1:128]
+bevel0 = [0, 0]; // [0:0.25:128]
 // Bevel X and Y for the corner [0,1] (grid)
-bevel1 = [0, 0]; // [0:0.1:128]
+bevel1 = [0, 0]; // [0:0.25:128]
 // Bevel X and Y for the corner [1,1] (grid)
-bevel2 = [0, 0]; // [0:0.1:128]
+bevel2 = [0, 0]; // [0:0.25:128]
 // Bevel X and Y for the corner [1,0] (grid)
-bevel3 = [0, 0]; // [0:0.1:128]
+bevel3 = [0, 0]; // [0:0.25:128]
 
 /* [Holes] */
 
