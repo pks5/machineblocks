@@ -263,6 +263,8 @@ module mb_block(
     studHeight = mb_param(config, settings, "studHeight", 1);
     studHeightAdjustment = mb_param(config, settings, "studHeightAdjustment", 0.0);
 
+    studSink = mb_param(config, settings, "studSink", 0.25);
+
     studCutoutAdjustment = mb_param(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
 
     studIcon = mb_param(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
@@ -521,7 +523,7 @@ module mb_block(
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
     knobRounding = studRounding * mbuToMm;
-    knobSink = 0.4;
+    knobSink = studSink * mbuToMm;
     knobPartsOverlap = 0.01;
 
     //Knob Padding
@@ -898,7 +900,6 @@ module mb_block(
                                                                 grilleHeight = grilleDepth * mbuToMm + cutOffset;
                                                                 color(baseColor){
                                                                     if(grille == "x"){
-                                                                        
                                                                         grilleWidthY = size[1] * unitGrid[0] * mbuToMm / grilleCount;
                                                                         for (g = [ 0 : 1 : grilleCount - 1 ]){
                                                                             if(g % 2 == (grilleInverted ? 0 : 1)){

@@ -1,0 +1,30 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "baseColor": "#EAC645",
+            "baseCutoutType": "standard",
+            "baseReliefCut": "false",
+            "baseReliefCutHeight": "0.40000000000000002",
+            "baseReliefCutThickness": "0.40000000000000002",
+            "brick1OffsetY": "1",
+            "brick1SizeY": "2",
+            "brick2OffsetX": "1",
+            "brick2SizeX": "2",
+            "grille": "x",
+            "grilleCount": "3.2000000000000002",
+            "grilleDepth": "1",
+            "grilleInverted": "false",
+            "pillars": "true",
+            "size": "[4, 4, 3]",
+            "studIcon": "..\/pattern\/bolt-solid-full.svg",
+            "studPadding": "[0.2, 0.2, 0.2, 0.2]",
+            "studShift": "false",
+            "studSink": "0.25",
+            "studType": "solid",
+            "studs": "true",
+            "surfacePattern": "none",
+            "surfacePatternScale": "0.20000000000000001"
+        }
+    }
+}
