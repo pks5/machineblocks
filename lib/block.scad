@@ -1999,7 +1999,7 @@ module mb_block(
 
                                                                 if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth > 0 && kType != "hollow"){
                                                                     color(studIconColor == "inherit" ? baseColor : studIconColor){
-                                                                        translate([0, 0, 0.5*knobHeight])
+                                                                        translate([0, 0, knobHeight + knobSink])
                                                                             rotate(decoratorRotations[surfacePatternSide])
                                                                                 mb_svg3d(
                                                                                     file = studIcon,
@@ -2018,7 +2018,7 @@ module mb_block(
 
                                                             if(!mb_is_empty_string(studIcon) && studIcon != "none" && studIconDepth < 0 && kType != "hollow"){
                                                                 color(studIconColor == "inherit" ? baseColor : studIconColor){
-                                                                    translate([0, 0, 0.5*knobHeight])
+                                                                    translate([0, 0, knobHeight + knobSink])
                                                                         rotate(decoratorRotations[surfacePatternSide])
                                                                             mb_svg3d(
                                                                                 file = studIcon,

@@ -1,11 +1,11 @@
 /**
  * MachineBlocks Block File
  *
- * Name: Brick 3x2
- * Filename: mb_block__examples__bricks__brick_3x2.scad
- * Package: examples.bricks.brick_3x2
+ * Name: Standard Brick
+ * Filename: mb_block__mb__blocks__standard_brick.scad
+ * Package: mb.blocks.standard_brick
  *
- * Original: Brick 3x2 (Legacy)
+ * Original: Brick 4x2 (Legacy)
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
@@ -26,7 +26,7 @@ include <../config/mb_config.scad>;
 /* [Size] */
 
 // Brick size (grid)
-size = [3, 2, 3]; // [1:0.1:32]
+size = [4, 2, 3]; // [1:0.1:32]
 
 /* [Base] */
 
@@ -156,7 +156,7 @@ textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)))
 /*
  * Main Module Call
  */
-mb_block__examples__bricks__brick_3x2(
+mb_block__mb__blocks__standard_brick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -207,7 +207,7 @@ mb_block__examples__bricks__brick_3x2(
 /*
  * Main Module Definition
  */
-module mb_block__examples__bricks__brick_3x2(config = undef, settings = undef){
+module mb_block__mb__blocks__standard_brick(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
