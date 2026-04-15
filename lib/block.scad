@@ -57,261 +57,261 @@ use <quality.scad>;
  * }
  */
 
-function mb_param_assembly(config, settings) = mb_param(config, settings, "assembly", "assembled");
+function mb_param_assembly(config, settings, default = undef) = mb_param(config, settings, "assembly", default != undef ? default : "assembled");
 
-function mb_param_unitMbu(config, settings) = mb_param(config, settings, "unitMbu", 1.6);
-function mb_param_unitGrid(config, settings) = mb_param(config, settings, "unitGrid", [5, 2]);
-function mb_param_scale(config, settings) = mb_param(config, settings, "scale", 1.0);
+function mb_param_unitMbu(config, settings, default = undef) = mb_param(config, settings, "unitMbu", default != undef ? default : 1.6);
+function mb_param_unitGrid(config, settings, default = undef) = mb_param(config, settings, "unitGrid", default != undef ? default : [5, 2]);
+function mb_param_scale(config, settings, default = undef) = mb_param(config, settings, "scale", default != undef ? default : 1.0);
 
-function mb_param_rotation(config, settings) = mb_param(config, settings, "rotation", [0, 0, 0]);
-function mb_param_rotationOffset(config, settings) = mb_param(config, settings, "rotationOffset", [0, 0, 0]);
-function mb_param_rotationOffsetRevert(config, settings) = mb_param(config, settings, "rotationOffsetRevert", true);
-function mb_param_direction(config, settings) = mb_param(config, settings, "direction", "west");
+function mb_param_rotation(config, settings, default = undef) = mb_param(config, settings, "rotation", default != undef ? default : [0, 0, 0]);
+function mb_param_rotationOffset(config, settings, default = undef) = mb_param(config, settings, "rotationOffset", default != undef ? default : [0, 0, 0]);
+function mb_param_rotationOffsetRevert(config, settings, default = undef) = mb_param(config, settings, "rotationOffsetRevert", default != undef ? default : true);
+function mb_param_direction(config, settings, default = undef) = mb_param(config, settings, "direction", default != undef ? default : "west");
 
-function mb_param_size(config, settings) = mb_param(config, settings, "size", [1, 1, 1]);
-function mb_param_offset(config, settings) = mb_param(config, settings, "offset", [0, 0, 0]);
-function mb_param_crop(config, settings) = mb_param(config, settings, "crop", [0, 0, 0, 0]);
+function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
+function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
+function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]);
 
-function mb_param_cutout(config, settings) = mb_param(config, settings, "cutout", false);
-function mb_param_cutoutOffset(config, settings) = mb_param(config, settings, "cutoutOffset", [0, 0]);
+function mb_param_cutout(config, settings, default = undef) = mb_param(config, settings, "cutout", default != undef ? default : false);
+function mb_param_cutoutOffset(config, settings, default = undef) = mb_param(config, settings, "cutoutOffset", default != undef ? default : [0, 0]);
 
-function mb_param_base(config, settings) = mb_param(config, settings, "base", true);
-function mb_param_baseColor(config, settings) = mb_param(config, settings, "baseColor", "#EAC645");
-function mb_param_baseHeight(config, settings) = mb_param(config, settings, "baseHeight", "auto");
+function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
+function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
+function mb_param_baseHeight(config, settings, default = undef) = mb_param(config, settings, "baseHeight", default != undef ? default : "auto");
 
-function mb_param_baseTopPlateHeight(config, settings) = mb_param(config, settings, "baseTopPlateHeight", 1);
-function mb_param_baseTopPlateHeightAdjustment(config, settings) = mb_param(config, settings, "baseTopPlateHeightAdjustment", -0.6);
+function mb_param_baseTopPlateHeight(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeight", default != undef ? default : 1);
+function mb_param_baseTopPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeightAdjustment", default != undef ? default : -0.6);
 
-function mb_param_baseCutoutType(config, settings) = mb_param(config, settings, "baseCutoutType", "standard");
-function mb_param_baseCutoutMaxDepth(config, settings) = mb_param(config, settings, "baseCutoutMaxDepth", 5);
+function mb_param_baseCutoutType(config, settings, default = undef) = mb_param(config, settings, "baseCutoutType", default != undef ? default : "standard");
+function mb_param_baseCutoutMaxDepth(config, settings, default = undef) = mb_param(config, settings, "baseCutoutMaxDepth", default != undef ? default : 5);
 
-function mb_param_baseClampOffset(config, settings) = mb_param(config, settings, "baseClampOffset", 0.25);
-function mb_param_baseClampHeight(config, settings) = mb_param(config, settings, "baseClampHeight", 0.5);
-function mb_param_baseClampThickness(config, settings) = mb_param(config, settings, "baseClampThickness", 0.1);
-function mb_param_baseClampOuter(config, settings) = mb_param(config, settings, "baseClampOuter", false);
+function mb_param_baseClampOffset(config, settings, default = undef) = mb_param(config, settings, "baseClampOffset", default != undef ? default : 0.25);
+function mb_param_baseClampHeight(config, settings, default = undef) = mb_param(config, settings, "baseClampHeight", default != undef ? default : 0.5);
+function mb_param_baseClampThickness(config, settings, default = undef) = mb_param(config, settings, "baseClampThickness", default != undef ? default : 0.1);
+function mb_param_baseClampOuter(config, settings, default = undef) = mb_param(config, settings, "baseClampOuter", default != undef ? default : false);
 
-function mb_param_baseRoundingRadius(config, settings) = mb_param(config, settings, "baseRoundingRadius", 0.0);
-function mb_param_baseCutoutRoundingRadius(config, settings) = mb_param(config, settings, "baseCutoutRoundingRadius", "auto");
-function mb_param_baseRoundingResolution(config, settings) = mb_param(config, settings, "baseRoundingResolution", 64);
+function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);
+function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseCutoutRoundingRadius", default != undef ? default : "auto");
+function mb_param_baseRoundingResolution(config, settings, default = undef) = mb_param(config, settings, "baseRoundingResolution", default != undef ? default : 64);
 
-function mb_param_baseReliefCut(config, settings) = mb_param(config, settings, "baseReliefCut", false);
-function mb_param_baseReliefCutHeight(config, settings) = mb_param(config, settings, "baseReliefCutHeight", 0.375);
-function mb_param_baseReliefCutThickness(config, settings) = mb_param(config, settings, "baseReliefCutThickness", 0.375);
+function mb_param_baseReliefCut(config, settings, default = undef) = mb_param(config, settings, "baseReliefCut", default != undef ? default : false);
+function mb_param_baseReliefCutHeight(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutHeight", default != undef ? default : 0.375);
+function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutThickness", default != undef ? default : 0.375);
 
-function mb_param_baseSideAdjustment(config, settings) = mb_param(config, settings, "baseSideAdjustment", -0.1);
-function mb_param_baseHeightAdjustment(config, settings) = mb_param(config, settings, "baseHeightAdjustment", 0.0);
+function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseSideAdjustment", default != undef ? default : -0.1);
+function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseHeightAdjustment", default != undef ? default : 0.0);
 
-function mb_param_baseWallThickness(config, settings) = mb_param(config, settings, "baseWallThickness", "auto");
-function mb_param_baseWallThicknessAdjustment(config, settings) = mb_param(config, settings, "baseWallThicknessAdjustment", -0.1);
-function mb_param_baseWallGapsX(config, settings) = mb_param(config, settings, "baseWallGapsX", []);
-function mb_param_baseWallGapsY(config, settings) = mb_param(config, settings, "baseWallGapsY", []);
+function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
+function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
+function mb_param_baseWallGapsX(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsX", default != undef ? default : []);
+function mb_param_baseWallGapsY(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsY", default != undef ? default : []);
 
-function mb_param_topPlateHelpers(config, settings) = mb_param(config, settings, "topPlateHelpers", true);
-function mb_param_topPlateHelperHeight(config, settings) = mb_param(config, settings, "topPlateHelperHeight", 0.2);
-function mb_param_topPlateHelperThickness(config, settings) = mb_param(config, settings, "topPlateHelperThickness", 0.4);
+function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(config, settings, "topPlateHelpers", default != undef ? default : true);
+function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
+function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : 0.4);
 
-function mb_param_stabilizerGrid(config, settings) = mb_param(config, settings, "stabilizerGrid", true);
-function mb_param_stabilizerGridOffset(config, settings) = mb_param(config, settings, "stabilizerGridOffset", 0.2);
-function mb_param_stabilizerGridHeight(config, settings) = mb_param(config, settings, "stabilizerGridHeight", 0.5);
-function mb_param_stabilizerGridThickness(config, settings) = mb_param(config, settings, "stabilizerGridThickness", 0.5);
-function mb_param_stabilizerExpansion(config, settings) = mb_param(config, settings, "stabilizerExpansion", 2);
-function mb_param_stabilizerExpansionOffset(config, settings) = mb_param(config, settings, "stabilizerExpansionOffset", 1);
+function mb_param_stabilizerGrid(config, settings, default = undef) = mb_param(config, settings, "stabilizerGrid", default != undef ? default : true);
+function mb_param_stabilizerGridOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridOffset", default != undef ? default : 0.2);
+function mb_param_stabilizerGridHeight(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridHeight", default != undef ? default : 0.5);
+function mb_param_stabilizerGridThickness(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridThickness", default != undef ? default : 0.5);
+function mb_param_stabilizerExpansion(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansion", default != undef ? default : 2);
+function mb_param_stabilizerExpansionOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansionOffset", default != undef ? default : 1);
 
-function mb_param_pillars(config, settings) = mb_param(config, settings, "pillars", true);
-function mb_param_pillarRoundingResolution(config, settings) = mb_param(config, settings, "pillarRoundingResolution", 64);
-function mb_param_pillarGapCornerLength(config, settings) = mb_param(config, settings, "pillarGapCornerLength", 2);
-function mb_param_pillarGapMiddle(config, settings) = mb_param(config, settings, "pillarGapMiddle", 10);
+function mb_param_pillars(config, settings, default = undef) = mb_param(config, settings, "pillars", default != undef ? default : true);
+function mb_param_pillarRoundingResolution(config, settings, default = undef) = mb_param(config, settings, "pillarRoundingResolution", default != undef ? default : 64);
+function mb_param_pillarGapCornerLength(config, settings, default = undef) = mb_param(config, settings, "pillarGapCornerLength", default != undef ? default : 2);
+function mb_param_pillarGapMiddle(config, settings, default = undef) = mb_param(config, settings, "pillarGapMiddle", default != undef ? default : 10);
 
-function mb_param_pinDiameter(config, settings) = mb_param(config, settings, "pinDiameter", "auto");
-function mb_param_pinDiameterAdjustment(config, settings) = mb_param(config, settings, "pinDiameterAdjustment", 0.0);
+function mb_param_pinDiameter(config, settings, default = undef) = mb_param(config, settings, "pinDiameter", default != undef ? default : "auto");
+function mb_param_pinDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "pinDiameterAdjustment", default != undef ? default : 0.0);
 
-function mb_param_tubeWallThickness(config, settings) = mb_param(config, settings, "tubeWallThickness", 0.53125);
-function mb_param_tubeXDiameter(config, settings) = mb_param(config, settings, "tubeXDiameter", "auto");
-function mb_param_tubeXDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeXDiameterAdjustment", -0.1);
-function mb_param_tubeYDiameter(config, settings) = mb_param(config, settings, "tubeYDiameter", "auto");
-function mb_param_tubeYDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeYDiameterAdjustment", -0.1);
-function mb_param_tubeZDiameter(config, settings) = mb_param(config, settings, "tubeZDiameter", "auto");
-function mb_param_tubeZDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeZDiameterAdjustment", -0.1);
-function mb_param_tubeInnerClampThickness(config, settings) = mb_param(config, settings, "tubeInnerClampThickness", 0.1);
+function mb_param_tubeWallThickness(config, settings, default = undef) = mb_param(config, settings, "tubeWallThickness", default != undef ? default : 0.53125);
+function mb_param_tubeXDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameter", default != undef ? default : "auto");
+function mb_param_tubeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameterAdjustment", default != undef ? default : -0.1);
+function mb_param_tubeYDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeYDiameter", default != undef ? default : "auto");
+function mb_param_tubeYDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeYDiameterAdjustment", default != undef ? default : -0.1);
+function mb_param_tubeZDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeZDiameter", default != undef ? default : "auto");
+function mb_param_tubeZDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeZDiameterAdjustment", default != undef ? default : -0.1);
+function mb_param_tubeInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "tubeInnerClampThickness", default != undef ? default : 0.1);
 
-function mb_param_slope(config, settings) = mb_param(config, settings, "slope", false);
-function mb_param_slopeBaseHeightLower(config, settings) = mb_param(config, settings, "slopeBaseHeightLower", 1.333);
-function mb_param_slopeBaseHeightLowerInner(config, settings) = mb_param(config, settings, "slopeBaseHeightLowerInner", 1.125);
-function mb_param_slopeBaseHeightUpper(config, settings) = mb_param(config, settings, "slopeBaseHeightUpper", 1);
+function mb_param_slope(config, settings, default = undef) = mb_param(config, settings, "slope", default != undef ? default : false);
+function mb_param_slopeBaseHeightLower(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLower", default != undef ? default : 1.333);
+function mb_param_slopeBaseHeightLowerInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLowerInner", default != undef ? default : 1.125);
+function mb_param_slopeBaseHeightUpper(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightUpper", default != undef ? default : 1);
 
-function mb_param_bevel(config, settings) = mb_param(config, settings, "bevel", [[0, 0], [0, 0], [0, 0], [0, 0]]);
+function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : [[0, 0], [0, 0], [0, 0], [0, 0]]);
 
-function mb_param_holeX(config, settings) = mb_param(config, settings, "holeX", false);
-function mb_param_holeXType(config, settings) = mb_param(config, settings, "holeXType", "pin");
-function mb_param_holeXShift(config, settings) = mb_param(config, settings, "holeXShift", true);
-function mb_param_holeXDiameter(config, settings) = mb_param(config, settings, "holeXDiameter", "auto");
-function mb_param_holeXDiameterAdjustment(config, settings) = mb_param(config, settings, "holeXDiameterAdjustment", 0.3);
-function mb_param_holeXInsetThickness(config, settings) = mb_param(config, settings, "holeXInsetThickness", 0.375);
-function mb_param_holeXInsetThicknessAdjustment(config, settings) = mb_param(config, settings, "holeXInsetThicknessAdjustment", 0.0);
-function mb_param_holeXInsetDepth(config, settings) = mb_param(config, settings, "holeXInsetDepth", 0.5);
-function mb_param_holeXInsetDepthAdjustment(config, settings) = mb_param(config, settings, "holeXInsetDepthAdjustment", 0.0);
-function mb_param_holeXGridOffsetZ(config, settings) = mb_param(config, settings, "holeXGridOffsetZ", 3.625);
-function mb_param_holeXGridOffsetZAdjustment(config, settings) = mb_param(config, settings, "holeXGridOffsetZAdjustment", 0.0);
-function mb_param_holeXGridSizeZ(config, settings) = mb_param(config, settings, "holeXGridSizeZ", 6);
-function mb_param_holeXGridSizeZAdjustment(config, settings) = mb_param(config, settings, "holeXGridSizeZAdjustment", 0.0);
-function mb_param_holeXMinTopMargin(config, settings) = mb_param(config, settings, "holeXMinTopMargin", 0.5);
-function mb_param_holeXPartial(config, settings) = mb_param(config, settings, "holeXPartial", "none");
+function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
+function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
+function mb_param_holeXShift(config, settings, default = undef) = mb_param(config, settings, "holeXShift", default != undef ? default : true);
+function mb_param_holeXDiameter(config, settings, default = undef) = mb_param(config, settings, "holeXDiameter", default != undef ? default : "auto");
+function mb_param_holeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXDiameterAdjustment", default != undef ? default : 0.3);
+function mb_param_holeXInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeXInsetThickness", default != undef ? default : 0.375);
+function mb_param_holeXInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXInsetThicknessAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeXInsetDepth", default != undef ? default : 0.5);
+function mb_param_holeXInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXInsetDepthAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeXGridOffsetZ", default != undef ? default : 3.625);
+function mb_param_holeXGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXGridOffsetZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeXGridSizeZ", default != undef ? default : 6);
+function mb_param_holeXGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXGridSizeZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeXMinTopMargin", default != undef ? default : 0.5);
+function mb_param_holeXPartial(config, settings, default = undef) = mb_param(config, settings, "holeXPartial", default != undef ? default : "none");
 
-function mb_param_holeY(config, settings) = mb_param(config, settings, "holeY", false);
-function mb_param_holeYType(config, settings) = mb_param(config, settings, "holeYType", "pin");
-function mb_param_holeYShift(config, settings) = mb_param(config, settings, "holeYShift", true);
-function mb_param_holeYDiameter(config, settings) = mb_param(config, settings, "holeYDiameter", "auto");
-function mb_param_holeYDiameterAdjustment(config, settings) = mb_param(config, settings, "holeYDiameterAdjustment", 0.3);
-function mb_param_holeYInsetThickness(config, settings) = mb_param(config, settings, "holeYInsetThickness", 0.375);
-function mb_param_holeYInsetThicknessAdjustment(config, settings) = mb_param(config, settings, "holeYInsetThicknessAdjustment", 0.0);
-function mb_param_holeYInsetDepth(config, settings) = mb_param(config, settings, "holeYInsetDepth", 0.5);
-function mb_param_holeYInsetDepthAdjustment(config, settings) = mb_param(config, settings, "holeYInsetDepthAdjustment", 0.0);
-function mb_param_holeYGridOffsetZ(config, settings) = mb_param(config, settings, "holeYGridOffsetZ", 3.625);
-function mb_param_holeYGridOffsetZAdjustment(config, settings) = mb_param(config, settings, "holeYGridOffsetZAdjustment", 0.0);
-function mb_param_holeYGridSizeZ(config, settings) = mb_param(config, settings, "holeYGridSizeZ", 6);
-function mb_param_holeYGridSizeZAdjustment(config, settings) = mb_param(config, settings, "holeYGridSizeZAdjustment", 0.0);
-function mb_param_holeYMinTopMargin(config, settings) = mb_param(config, settings, "holeYMinTopMargin", 0.5);
-function mb_param_holeYPartial(config, settings) = mb_param(config, settings, "holeYPartial", "none");
+function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
+function mb_param_holeYType(config, settings, default = undef) = mb_param(config, settings, "holeYType", default != undef ? default : "pin");
+function mb_param_holeYShift(config, settings, default = undef) = mb_param(config, settings, "holeYShift", default != undef ? default : true);
+function mb_param_holeYDiameter(config, settings, default = undef) = mb_param(config, settings, "holeYDiameter", default != undef ? default : "auto");
+function mb_param_holeYDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYDiameterAdjustment", default != undef ? default : 0.3);
+function mb_param_holeYInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeYInsetThickness", default != undef ? default : 0.375);
+function mb_param_holeYInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYInsetThicknessAdjustment", default != undef ? default : 0.0);
+function mb_param_holeYInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeYInsetDepth", default != undef ? default : 0.5);
+function mb_param_holeYInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYInsetDepthAdjustment", default != undef ? default : 0.0);
+function mb_param_holeYGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeYGridOffsetZ", default != undef ? default : 3.625);
+function mb_param_holeYGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYGridOffsetZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeYGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeYGridSizeZ", default != undef ? default : 6);
+function mb_param_holeYGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYGridSizeZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeYMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeYMinTopMargin", default != undef ? default : 0.5);
+function mb_param_holeYPartial(config, settings, default = undef) = mb_param(config, settings, "holeYPartial", default != undef ? default : "none");
 
-function mb_param_holeZ(config, settings) = mb_param(config, settings, "holeZ", false);
-function mb_param_holeZType(config, settings) = mb_param(config, settings, "holeZType", "pin");
-function mb_param_holeZShift(config, settings) = mb_param(config, settings, "holeZShift", true);
-function mb_param_holeZDiameter(config, settings) = mb_param(config, settings, "holeZDiameter", "auto");
-function mb_param_holeZDiameterAdjustment(config, settings) = mb_param(config, settings, "holeZDiameterAdjustment", 0.3);
-function mb_param_holeRoundingResolution(config, settings) = mb_param(config, settings, "holeRoundingResolution", 64);
-function mb_param_holeZPartialX(config, settings) = mb_param(config, settings, "holeZPartialX", "none");
-function mb_param_holeZPartialY(config, settings) = mb_param(config, settings, "holeZPartialY", "none");
+function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
+function mb_param_holeZType(config, settings, default = undef) = mb_param(config, settings, "holeZType", default != undef ? default : "pin");
+function mb_param_holeZShift(config, settings, default = undef) = mb_param(config, settings, "holeZShift", default != undef ? default : true);
+function mb_param_holeZDiameter(config, settings, default = undef) = mb_param(config, settings, "holeZDiameter", default != undef ? default : "auto");
+function mb_param_holeZDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeZDiameterAdjustment", default != undef ? default : 0.3);
+function mb_param_holeRoundingResolution(config, settings, default = undef) = mb_param(config, settings, "holeRoundingResolution", default != undef ? default : 64);
+function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");
+function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
 
-function mb_param_holeAxleThickness(config, settings) = mb_param(config, settings, "holeAxleThickness", 1);
+function mb_param_holeAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeAxleThickness", default != undef ? default : 1);
 
-function mb_param_studs(config, settings) = mb_param(config, settings, "studs", true);
-function mb_param_studType(config, settings) = mb_param(config, settings, "studType", "solid");
-function mb_param_studShift(config, settings) = mb_param(config, settings, "studShift", false);
-function mb_param_studMaxOverhang(config, settings) = mb_param(config, settings, "studMaxOverhang", 0.3);
-function mb_param_studPadding(config, settings) = mb_param(config, settings, "studPadding", 0);
+function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
+function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
+function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);
+function mb_param_studMaxOverhang(config, settings, default = undef) = mb_param(config, settings, "studMaxOverhang", default != undef ? default : 0.3);
+function mb_param_studPadding(config, settings, default = undef) = mb_param(config, settings, "studPadding", default != undef ? default : 0);
 
-function mb_param_studClampHeight(config, settings) = mb_param(config, settings, "studClampHeight", 0.5);
-function mb_param_studClampThickness(config, settings) = mb_param(config, settings, "studClampThickness", 0.0);
+function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
+function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0.0);
 
-function mb_param_studHoleDiameter(config, settings) = mb_param(config, settings, "studHoleDiameter", "auto");
-function mb_param_studHoleDiameterAdjustment(config, settings) = mb_param(config, settings, "studHoleDiameterAdjustment", 0.3);
-function mb_param_studHoleClampThickness(config, settings) = mb_param(config, settings, "studHoleClampThickness", 0.1);
+function mb_param_studHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameter", default != undef ? default : "auto");
+function mb_param_studHoleDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameterAdjustment", default != undef ? default : 0.3);
+function mb_param_studHoleClampThickness(config, settings, default = undef) = mb_param(config, settings, "studHoleClampThickness", default != undef ? default : 0.1);
 
-function mb_param_studRounding(config, settings) = mb_param(config, settings, "studRounding", 0.0625);
-function mb_param_studRoundingResolution(config, settings) = mb_param(config, settings, "studRoundingResolution", 64);
+function mb_param_studRounding(config, settings, default = undef) = mb_param(config, settings, "studRounding", default != undef ? default : 0.0625);
+function mb_param_studRoundingResolution(config, settings, default = undef) = mb_param(config, settings, "studRoundingResolution", default != undef ? default : 64);
 
-function mb_param_studDiameter(config, settings) = mb_param(config, settings, "studDiameter", 3);
-function mb_param_studDiameterAdjustment(config, settings) = mb_param(config, settings, "studDiameterAdjustment", 0.2);
+function mb_param_studDiameter(config, settings, default = undef) = mb_param(config, settings, "studDiameter", default != undef ? default : 3);
+function mb_param_studDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studDiameterAdjustment", default != undef ? default : 0.2);
 
-function mb_param_studHeight(config, settings) = mb_param(config, settings, "studHeight", 1);
-function mb_param_studHeightAdjustment(config, settings) = mb_param(config, settings, "studHeightAdjustment", 0.0);
+function mb_param_studHeight(config, settings, default = undef) = mb_param(config, settings, "studHeight", default != undef ? default : 1);
+function mb_param_studHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "studHeightAdjustment", default != undef ? default : 0.0);
 
-function mb_param_studSink(config, settings) = mb_param(config, settings, "studSink", 0.25);
+function mb_param_studSink(config, settings, default = undef) = mb_param(config, settings, "studSink", default != undef ? default : 0.25);
 
-function mb_param_studCutoutAdjustment(config, settings) = mb_param(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
+function mb_param_studCutoutAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutAdjustment", default != undef ? default : [0.2, 0.4]);
 
-function mb_param_studIcon(config, settings) = mb_param(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
-function mb_param_studIconDimensions(config, settings) = mb_param(config, settings, "studIconDimensions", [169.333, 169.333]);
-function mb_param_studIconScale(config, settings) = mb_param(config, settings, "studIconScale", 0.024);
-function mb_param_studIconDepth(config, settings) = mb_param(config, settings, "studIconDepth", -0.2);
-function mb_param_studIconColor(config, settings) = mb_param(config, settings, "studIconColor", "inherit");
+function mb_param_studIcon(config, settings, default = undef) = mb_param(config, settings, "studIcon", default != undef ? default : "../pattern/bolt-solid-full.svg");
+function mb_param_studIconDimensions(config, settings, default = undef) = mb_param(config, settings, "studIconDimensions", default != undef ? default : [169.333, 169.333]);
+function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.024);
+function mb_param_studIconDepth(config, settings, default = undef) = mb_param(config, settings, "studIconDepth", default != undef ? default : -0.2);
+function mb_param_studIconColor(config, settings, default = undef) = mb_param(config, settings, "studIconColor", default != undef ? default : "inherit");
 
-function mb_param_tongue(config, settings) = mb_param(config, settings, "tongue", false);
-function mb_param_tongueHeight(config, settings) = mb_param(config, settings, "tongueHeight", 1.25);
-function mb_param_tongueGrooveDepth(config, settings) = mb_param(config, settings, "tongueGrooveDepth", 1.5);
-function mb_param_tongueRoundingRadius(config, settings) = mb_param(config, settings, "tongueRoundingRadius", "auto");
-function mb_param_tongueInnerRoundingRadius(config, settings) = mb_param(config, settings, "tongueInnerRoundingRadius", "auto");
-function mb_param_tongueThickness(config, settings) = mb_param(config, settings, "tongueThickness", 0.666);
-function mb_param_tongueThicknessAdjustment(config, settings) = mb_param(config, settings, "tongueThicknessAdjustment", 0);
-function mb_param_tongueOffset(config, settings) = mb_param(config, settings, "tongueOffset", 1);
-function mb_param_tongueClampHeight(config, settings) = mb_param(config, settings, "tongueClampHeight", 0.5);
-function mb_param_tongueClampOffset(config, settings) = mb_param(config, settings, "tongueClampOffset", 0.25);
-function mb_param_tongueClampThickness(config, settings) = mb_param(config, settings, "tongueClampThickness", 0.1);
+function mb_param_tongue(config, settings, default = undef) = mb_param(config, settings, "tongue", default != undef ? default : false);
+function mb_param_tongueHeight(config, settings, default = undef) = mb_param(config, settings, "tongueHeight", default != undef ? default : 1.25);
+function mb_param_tongueGrooveDepth(config, settings, default = undef) = mb_param(config, settings, "tongueGrooveDepth", default != undef ? default : 1.5);
+function mb_param_tongueRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueRoundingRadius", default != undef ? default : "auto");
+function mb_param_tongueInnerRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueInnerRoundingRadius", default != undef ? default : "auto");
+function mb_param_tongueThickness(config, settings, default = undef) = mb_param(config, settings, "tongueThickness", default != undef ? default : 0.666);
+function mb_param_tongueThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "tongueThicknessAdjustment", default != undef ? default : 0);
+function mb_param_tongueOffset(config, settings, default = undef) = mb_param(config, settings, "tongueOffset", default != undef ? default : 1);
+function mb_param_tongueClampHeight(config, settings, default = undef) = mb_param(config, settings, "tongueClampHeight", default != undef ? default : 0.5);
+function mb_param_tongueClampOffset(config, settings, default = undef) = mb_param(config, settings, "tongueClampOffset", default != undef ? default : 0.25);
+function mb_param_tongueClampThickness(config, settings, default = undef) = mb_param(config, settings, "tongueClampThickness", default != undef ? default : 0.1);
 
-function mb_param_grille(config, settings) = mb_param(config, settings, "grille", "none");
-function mb_param_grilleInverted(config, settings) = mb_param(config, settings, "grilleInverted", false);
-function mb_param_grilleDepth(config, settings) = mb_param(config, settings, "grilleDepth", 1);
-function mb_param_grilleCount(config, settings) = mb_param(config, settings, "grilleCount", 5);
+function mb_param_grille(config, settings, default = undef) = mb_param(config, settings, "grille", default != undef ? default : "none");
+function mb_param_grilleInverted(config, settings, default = undef) = mb_param(config, settings, "grilleInverted", default != undef ? default : false);
+function mb_param_grilleDepth(config, settings, default = undef) = mb_param(config, settings, "grilleDepth", default != undef ? default : 1);
+function mb_param_grilleCount(config, settings, default = undef) = mb_param(config, settings, "grilleCount", default != undef ? default : 5);
 
-function mb_param_recess(config, settings) = mb_param(config, settings, "recess", false);
-function mb_param_recessRoundingRadius(config, settings) = mb_param(config, settings, "recessRoundingRadius", "auto");
-function mb_param_recessDepth(config, settings) = mb_param(config, settings, "recessDepth", "auto");
-function mb_param_recessWallThickness(config, settings) = mb_param(config, settings, "recessWallThickness", 0.333);
-function mb_param_recessStuds(config, settings) = mb_param(config, settings, "recessStuds", true);
-function mb_param_recessStudPadding(config, settings) = mb_param(config, settings, "recessStudPadding", 0.2);
-function mb_param_recessStudType(config, settings) = mb_param(config, settings, "recessStudType", "solid");
-function mb_param_recessStudShift(config, settings) = mb_param(config, settings, "recessStudShift", false);
-function mb_param_recessWallGaps(config, settings) = mb_param(config, settings, "recessWallGaps", []);
+function mb_param_recess(config, settings, default = undef) = mb_param(config, settings, "recess", default != undef ? default : false);
+function mb_param_recessRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "recessRoundingRadius", default != undef ? default : "auto");
+function mb_param_recessDepth(config, settings, default = undef) = mb_param(config, settings, "recessDepth", default != undef ? default : "auto");
+function mb_param_recessWallThickness(config, settings, default = undef) = mb_param(config, settings, "recessWallThickness", default != undef ? default : 0.333);
+function mb_param_recessStuds(config, settings, default = undef) = mb_param(config, settings, "recessStuds", default != undef ? default : true);
+function mb_param_recessStudPadding(config, settings, default = undef) = mb_param(config, settings, "recessStudPadding", default != undef ? default : 0.2);
+function mb_param_recessStudType(config, settings, default = undef) = mb_param(config, settings, "recessStudType", default != undef ? default : "solid");
+function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
+function mb_param_recessWallGaps(config, settings, default = undef) = mb_param(config, settings, "recessWallGaps", default != undef ? default : []);
 
-function mb_param_text(config, settings) = mb_param(config, settings, "text", "");
-function mb_param_textSide(config, settings) = mb_param(config, settings, "textSide", 0);
-function mb_param_textDepth(config, settings) = mb_param(config, settings, "textDepth", -0.25);
-function mb_param_textFont(config, settings) = mb_param(config, settings, "textFont", "Liberation Sans");
-function mb_param_textSize(config, settings) = mb_param(config, settings, "textSize", 4);
-function mb_param_textSpacing(config, settings) = mb_param(config, settings, "textSpacing", 1);
-function mb_param_textVerticalAlign(config, settings) = mb_param(config, settings, "textVerticalAlign", "center");
-function mb_param_textHorizontalAlign(config, settings) = mb_param(config, settings, "textHorizontalAlign", "center");
-function mb_param_textOffset(config, settings) = mb_param(config, settings, "textOffset", [0, 0]);
-function mb_param_textColor(config, settings) = mb_param(config, settings, "textColor", "#2c3e50");
+function mb_param_text(config, settings, default = undef) = mb_param(config, settings, "text", default != undef ? default : "");
+function mb_param_textSide(config, settings, default = undef) = mb_param(config, settings, "textSide", default != undef ? default : 0);
+function mb_param_textDepth(config, settings, default = undef) = mb_param(config, settings, "textDepth", default != undef ? default : -0.25);
+function mb_param_textFont(config, settings, default = undef) = mb_param(config, settings, "textFont", default != undef ? default : "Liberation Sans");
+function mb_param_textSize(config, settings, default = undef) = mb_param(config, settings, "textSize", default != undef ? default : 4);
+function mb_param_textSpacing(config, settings, default = undef) = mb_param(config, settings, "textSpacing", default != undef ? default : 1);
+function mb_param_textVerticalAlign(config, settings, default = undef) = mb_param(config, settings, "textVerticalAlign", default != undef ? default : "center");
+function mb_param_textHorizontalAlign(config, settings, default = undef) = mb_param(config, settings, "textHorizontalAlign", default != undef ? default : "center");
+function mb_param_textOffset(config, settings, default = undef) = mb_param(config, settings, "textOffset", default != undef ? default : [0, 0]);
+function mb_param_textColor(config, settings, default = undef) = mb_param(config, settings, "textColor", default != undef ? default : "#2c3e50");
 
-function mb_param_surfacePattern(config, settings) = mb_param(config, settings, "surfacePattern", "none");
-function mb_param_surfacePatternDimensions(config, settings) = mb_param(config, settings, "surfacePatternDimensions", [451.556, 451.556]);
-function mb_param_surfacePatternOffset(config, settings) = mb_param(config, settings, "surfacePatternOffset", [0, 0]);
-function mb_param_surfacePatternScale(config, settings) = mb_param(config, settings, "surfacePatternScale", 0.25);
-function mb_param_surfacePatternDepth(config, settings) = mb_param(config, settings, "surfacePatternDepth", -0.2);
-function mb_param_surfacePatternColor(config, settings) = mb_param(config, settings, "surfacePatternColor", "inherit");
+function mb_param_surfacePattern(config, settings, default = undef) = mb_param(config, settings, "surfacePattern", default != undef ? default : "none");
+function mb_param_surfacePatternDimensions(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDimensions", default != undef ? default : [451.556, 451.556]);
+function mb_param_surfacePatternOffset(config, settings, default = undef) = mb_param(config, settings, "surfacePatternOffset", default != undef ? default : [0, 0]);
+function mb_param_surfacePatternScale(config, settings, default = undef) = mb_param(config, settings, "surfacePatternScale", default != undef ? default : 0.25);
+function mb_param_surfacePatternDepth(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDepth", default != undef ? default : -0.2);
+function mb_param_surfacePatternColor(config, settings, default = undef) = mb_param(config, settings, "surfacePatternColor", default != undef ? default : "inherit");
 
-function mb_param_svg(config, settings) = mb_param(config, settings, "svg", "");
-function mb_param_svgSide(config, settings) = mb_param(config, settings, "svgSide", 5);
-function mb_param_svgDepth(config, settings) = mb_param(config, settings, "svgDepth", 0.4);
-function mb_param_svgDimensions(config, settings) = mb_param(config, settings, "svgDimensions", [100, 100]);
-function mb_param_svgScale(config, settings) = mb_param(config, settings, "svgScale", 1.0);
-function mb_param_svgOffset(config, settings) = mb_param(config, settings, "svgOffset", [0, 0]);
-function mb_param_svgColor(config, settings) = mb_param(config, settings, "svgColor", "#2c3e50");
+function mb_param_svg(config, settings, default = undef) = mb_param(config, settings, "svg", default != undef ? default : "");
+function mb_param_svgSide(config, settings, default = undef) = mb_param(config, settings, "svgSide", default != undef ? default : 5);
+function mb_param_svgDepth(config, settings, default = undef) = mb_param(config, settings, "svgDepth", default != undef ? default : 0.4);
+function mb_param_svgDimensions(config, settings, default = undef) = mb_param(config, settings, "svgDimensions", default != undef ? default : [100, 100]);
+function mb_param_svgScale(config, settings, default = undef) = mb_param(config, settings, "svgScale", default != undef ? default : 1.0);
+function mb_param_svgOffset(config, settings, default = undef) = mb_param(config, settings, "svgOffset", default != undef ? default : [0, 0]);
+function mb_param_svgColor(config, settings, default = undef) = mb_param(config, settings, "svgColor", default != undef ? default : "#2c3e50");
 
-function mb_param_connectors(config, settings) = mb_param(config, settings, "connectors", false);
-function mb_param_connectorPadding(config, settings) = mb_param(config, settings, "connectorPadding", [0, 0]);
-function mb_param_connectorHeight(config, settings) = mb_param(config, settings, "connectorHeight", "auto");
-function mb_param_connectorDepth(config, settings) = mb_param(config, settings, "connectorDepth", 0.75);
-function mb_param_connectorWidth(config, settings) = mb_param(config, settings, "connectorWidth", 2.5);
-function mb_param_connectorDepthTolerance(config, settings) = mb_param(config, settings, "connectorDepthTolerance", 0.2);
-function mb_param_connectorSideTolerance(config, settings) = mb_param(config, settings, "connectorSideTolerance", 0.1);
+function mb_param_connectors(config, settings, default = undef) = mb_param(config, settings, "connectors", default != undef ? default : false);
+function mb_param_connectorPadding(config, settings, default = undef) = mb_param(config, settings, "connectorPadding", default != undef ? default : [0, 0]);
+function mb_param_connectorHeight(config, settings, default = undef) = mb_param(config, settings, "connectorHeight", default != undef ? default : "auto");
+function mb_param_connectorDepth(config, settings, default = undef) = mb_param(config, settings, "connectorDepth", default != undef ? default : 0.75);
+function mb_param_connectorWidth(config, settings, default = undef) = mb_param(config, settings, "connectorWidth", default != undef ? default : 2.5);
+function mb_param_connectorDepthTolerance(config, settings, default = undef) = mb_param(config, settings, "connectorDepthTolerance", default != undef ? default : 0.2);
+function mb_param_connectorSideTolerance(config, settings, default = undef) = mb_param(config, settings, "connectorSideTolerance", default != undef ? default : 0.1);
 
-function mb_param_screwHolesZ(config, settings) = mb_param(config, settings, "screwHolesZ", []);
-function mb_param_screwHoleZSize(config, settings) = mb_param(config, settings, "screwHoleZSize", 2.3);
-function mb_param_screwHoleZHelperThickness(config, settings) = mb_param(config, settings, "screwHoleZHelperThickness", 0.8);
-function mb_param_screwHoleZHelperOffset(config, settings) = mb_param(config, settings, "screwHoleZHelperOffset", 0.2);
-function mb_param_screwHoleZHelperHeight(config, settings) = mb_param(config, settings, "screwHoleZHelperHeight", 0.2);
+function mb_param_screwHolesZ(config, settings, default = undef) = mb_param(config, settings, "screwHolesZ", default != undef ? default : []);
+function mb_param_screwHoleZSize(config, settings, default = undef) = mb_param(config, settings, "screwHoleZSize", default != undef ? default : 2.3);
+function mb_param_screwHoleZHelperThickness(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperThickness", default != undef ? default : 0.8);
+function mb_param_screwHoleZHelperOffset(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperOffset", default != undef ? default : 0.2);
+function mb_param_screwHoleZHelperHeight(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperHeight", default != undef ? default : 0.2);
 
-function mb_param_screwHolesX(config, settings) = mb_param(config, settings, "screwHolesX", []);
-function mb_param_screwHoleXSize(config, settings) = mb_param(config, settings, "screwHoleXSize", 2.1);
-function mb_param_screwHoleXDepth(config, settings) = mb_param(config, settings, "screwHoleXDepth", 4);
+function mb_param_screwHolesX(config, settings, default = undef) = mb_param(config, settings, "screwHolesX", default != undef ? default : []);
+function mb_param_screwHoleXSize(config, settings, default = undef) = mb_param(config, settings, "screwHoleXSize", default != undef ? default : 2.1);
+function mb_param_screwHoleXDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleXDepth", default != undef ? default : 4);
 
-function mb_param_screwHolesY(config, settings) = mb_param(config, settings, "screwHolesY", []);
-function mb_param_screwHoleYSize(config, settings) = mb_param(config, settings, "screwHoleYSize", 2.1);
-function mb_param_screwHoleYDepth(config, settings) = mb_param(config, settings, "screwHoleYDepth", 4);
+function mb_param_screwHolesY(config, settings, default = undef) = mb_param(config, settings, "screwHolesY", default != undef ? default : []);
+function mb_param_screwHoleYSize(config, settings, default = undef) = mb_param(config, settings, "screwHoleYSize", default != undef ? default : 2.1);
+function mb_param_screwHoleYDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleYDepth", default != undef ? default : 4);
 
-function mb_param_pcb(config, settings) = mb_param(config, settings, "pcb", false);
-function mb_param_pcbMountingType(config, settings) = mb_param(config, settings, "pcbMountingType", "clips");
-function mb_param_pcbDimensions(config, settings) = mb_param(config, settings, "pcbDimensions", [20, 30, 3]);
-function mb_param_pcbOffset(config, settings) = mb_param(config, settings, "pcbOffset", [0, 0]);
-function mb_param_pcbScrewSocketSize(config, settings) = mb_param(config, settings, "pcbScrewSocketSize", 5);
-function mb_param_pcbScrewSocketHoleSize(config, settings) = mb_param(config, settings, "pcbScrewSocketHoleSize", 2.2);
-function mb_param_pcbScrewSocketHeight(config, settings) = mb_param(config, settings, "pcbScrewSocketHeight", 3);
-function mb_param_pcbScrewSockets(config, settings) = mb_param(config, settings, "pcbScrewSockets", []);
+function mb_param_pcb(config, settings, default = undef) = mb_param(config, settings, "pcb", default != undef ? default : false);
+function mb_param_pcbMountingType(config, settings, default = undef) = mb_param(config, settings, "pcbMountingType", default != undef ? default : "clips");
+function mb_param_pcbDimensions(config, settings, default = undef) = mb_param(config, settings, "pcbDimensions", default != undef ? default : [20, 30, 3]);
+function mb_param_pcbOffset(config, settings, default = undef) = mb_param(config, settings, "pcbOffset", default != undef ? default : [0, 0]);
+function mb_param_pcbScrewSocketSize(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketSize", default != undef ? default : 5);
+function mb_param_pcbScrewSocketHoleSize(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketHoleSize", default != undef ? default : 2.2);
+function mb_param_pcbScrewSocketHeight(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketHeight", default != undef ? default : 3);
+function mb_param_pcbScrewSockets(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSockets", default != undef ? default : []);
 
-function mb_param_align(config, settings) = mb_param(config, settings, "align", "start");
-function mb_param_alignChildren(config, settings) = mb_param(config, settings, "alignChildren", "start");
+function mb_param_align(config, settings, default = undef) = mb_param(config, settings, "align", default != undef ? default : "start");
+function mb_param_alignChildren(config, settings, default = undef) = mb_param(config, settings, "alignChildren", default != undef ? default : "start");
 
-function mb_param_qualitySegBase(config, settings) = mb_param(config, settings, "qualitySegBase", 1.2);
-function mb_param_qualityResolutionMax(config, settings) = mb_param(config, settings, "qualityResolutionMax", 220);
-function mb_param_qualityFactor(config, settings) = mb_param(config, settings, "qualityFactor", [0.6, 1.0, 1.6, 2.5]);
-function mb_param_qualityResolutionMin(config, settings) = mb_param(config, settings, "qualityResolutionMin", [24, 18, 12, 8]);
-function mb_param_qualityResolutionMultiplier(config, settings) = mb_param(config, settings, "qualityResolutionMultiplier", 0.25);
+function mb_param_qualitySegBase(config, settings, default = undef) = mb_param(config, settings, "qualitySegBase", default != undef ? default : 1.2);
+function mb_param_qualityResolutionMax(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMax", default != undef ? default : 220);
+function mb_param_qualityFactor(config, settings, default = undef) = mb_param(config, settings, "qualityFactor", default != undef ? default : [0.6, 1.0, 1.6, 2.5]);
+function mb_param_qualityResolutionMin(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMin", default != undef ? default : [24, 18, 12, 8]);
+function mb_param_qualityResolutionMultiplier(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMultiplier", default != undef ? default : 0.25);
 
-function mb_param_previewQuality(config, settings) = mb_param(config, settings, "previewQuality", 0.5);
-function mb_param_previewRender(config, settings) = mb_param(config, settings, "previewRender", true);
-function mb_param_previewRenderConvexity(config, settings) = mb_param(config, settings, "previewRenderConvexity", 25);
+function mb_param_previewQuality(config, settings, default = undef) = mb_param(config, settings, "previewQuality", default != undef ? default : 0.5);
+function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
+function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
 function mb_param(config, settings, key, default=undef) =
     let(
