@@ -57,14 +57,261 @@ use <quality.scad>;
  * }
  */
 
+function mb_param_assembly(config, settings) = mb_param(config, settings, "assembly", "assembled");
+
 function mb_param_unitMbu(config, settings) = mb_param(config, settings, "unitMbu", 1.6);
 function mb_param_unitGrid(config, settings) = mb_param(config, settings, "unitGrid", [5, 2]);
 function mb_param_scale(config, settings) = mb_param(config, settings, "scale", 1.0);
+
+function mb_param_rotation(config, settings) = mb_param(config, settings, "rotation", [0, 0, 0]);
+function mb_param_rotationOffset(config, settings) = mb_param(config, settings, "rotationOffset", [0, 0, 0]);
+function mb_param_rotationOffsetRevert(config, settings) = mb_param(config, settings, "rotationOffsetRevert", true);
+function mb_param_direction(config, settings) = mb_param(config, settings, "direction", "west");
+
+function mb_param_size(config, settings) = mb_param(config, settings, "size", [1, 1, 1]);
+function mb_param_offset(config, settings) = mb_param(config, settings, "offset", [0, 0, 0]);
+function mb_param_crop(config, settings) = mb_param(config, settings, "crop", [0, 0, 0, 0]);
+
+function mb_param_cutout(config, settings) = mb_param(config, settings, "cutout", false);
+function mb_param_cutoutOffset(config, settings) = mb_param(config, settings, "cutoutOffset", [0, 0]);
+
+function mb_param_base(config, settings) = mb_param(config, settings, "base", true);
+function mb_param_baseColor(config, settings) = mb_param(config, settings, "baseColor", "#EAC645");
+function mb_param_baseHeight(config, settings) = mb_param(config, settings, "baseHeight", "auto");
+
+function mb_param_baseTopPlateHeight(config, settings) = mb_param(config, settings, "baseTopPlateHeight", 1);
+function mb_param_baseTopPlateHeightAdjustment(config, settings) = mb_param(config, settings, "baseTopPlateHeightAdjustment", -0.6);
+
+function mb_param_baseCutoutType(config, settings) = mb_param(config, settings, "baseCutoutType", "standard");
+function mb_param_baseCutoutMaxDepth(config, settings) = mb_param(config, settings, "baseCutoutMaxDepth", 5);
+
+function mb_param_baseClampOffset(config, settings) = mb_param(config, settings, "baseClampOffset", 0.25);
+function mb_param_baseClampHeight(config, settings) = mb_param(config, settings, "baseClampHeight", 0.5);
+function mb_param_baseClampThickness(config, settings) = mb_param(config, settings, "baseClampThickness", 0.1);
+function mb_param_baseClampOuter(config, settings) = mb_param(config, settings, "baseClampOuter", false);
+
+function mb_param_baseRoundingRadius(config, settings) = mb_param(config, settings, "baseRoundingRadius", 0.0);
+function mb_param_baseCutoutRoundingRadius(config, settings) = mb_param(config, settings, "baseCutoutRoundingRadius", "auto");
+function mb_param_baseRoundingResolution(config, settings) = mb_param(config, settings, "baseRoundingResolution", 64);
+
+function mb_param_baseReliefCut(config, settings) = mb_param(config, settings, "baseReliefCut", false);
+function mb_param_baseReliefCutHeight(config, settings) = mb_param(config, settings, "baseReliefCutHeight", 0.375);
+function mb_param_baseReliefCutThickness(config, settings) = mb_param(config, settings, "baseReliefCutThickness", 0.375);
+
 function mb_param_baseSideAdjustment(config, settings) = mb_param(config, settings, "baseSideAdjustment", -0.1);
 function mb_param_baseHeightAdjustment(config, settings) = mb_param(config, settings, "baseHeightAdjustment", 0.0);
 
-function mb_param_assembly(config, settings) = mb_param(config, settings, "assembly", "assembled");
+function mb_param_baseWallThickness(config, settings) = mb_param(config, settings, "baseWallThickness", "auto");
+function mb_param_baseWallThicknessAdjustment(config, settings) = mb_param(config, settings, "baseWallThicknessAdjustment", -0.1);
+function mb_param_baseWallGapsX(config, settings) = mb_param(config, settings, "baseWallGapsX", []);
+function mb_param_baseWallGapsY(config, settings) = mb_param(config, settings, "baseWallGapsY", []);
 
+function mb_param_topPlateHelpers(config, settings) = mb_param(config, settings, "topPlateHelpers", true);
+function mb_param_topPlateHelperHeight(config, settings) = mb_param(config, settings, "topPlateHelperHeight", 0.2);
+function mb_param_topPlateHelperThickness(config, settings) = mb_param(config, settings, "topPlateHelperThickness", 0.4);
+
+function mb_param_stabilizerGrid(config, settings) = mb_param(config, settings, "stabilizerGrid", true);
+function mb_param_stabilizerGridOffset(config, settings) = mb_param(config, settings, "stabilizerGridOffset", 0.2);
+function mb_param_stabilizerGridHeight(config, settings) = mb_param(config, settings, "stabilizerGridHeight", 0.5);
+function mb_param_stabilizerGridThickness(config, settings) = mb_param(config, settings, "stabilizerGridThickness", 0.5);
+function mb_param_stabilizerExpansion(config, settings) = mb_param(config, settings, "stabilizerExpansion", 2);
+function mb_param_stabilizerExpansionOffset(config, settings) = mb_param(config, settings, "stabilizerExpansionOffset", 1);
+
+function mb_param_pillars(config, settings) = mb_param(config, settings, "pillars", true);
+function mb_param_pillarRoundingResolution(config, settings) = mb_param(config, settings, "pillarRoundingResolution", 64);
+function mb_param_pillarGapCornerLength(config, settings) = mb_param(config, settings, "pillarGapCornerLength", 2);
+function mb_param_pillarGapMiddle(config, settings) = mb_param(config, settings, "pillarGapMiddle", 10);
+
+function mb_param_pinDiameter(config, settings) = mb_param(config, settings, "pinDiameter", "auto");
+function mb_param_pinDiameterAdjustment(config, settings) = mb_param(config, settings, "pinDiameterAdjustment", 0.0);
+
+function mb_param_tubeWallThickness(config, settings) = mb_param(config, settings, "tubeWallThickness", 0.53125);
+function mb_param_tubeXDiameter(config, settings) = mb_param(config, settings, "tubeXDiameter", "auto");
+function mb_param_tubeXDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeXDiameterAdjustment", -0.1);
+function mb_param_tubeYDiameter(config, settings) = mb_param(config, settings, "tubeYDiameter", "auto");
+function mb_param_tubeYDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeYDiameterAdjustment", -0.1);
+function mb_param_tubeZDiameter(config, settings) = mb_param(config, settings, "tubeZDiameter", "auto");
+function mb_param_tubeZDiameterAdjustment(config, settings) = mb_param(config, settings, "tubeZDiameterAdjustment", -0.1);
+function mb_param_tubeInnerClampThickness(config, settings) = mb_param(config, settings, "tubeInnerClampThickness", 0.1);
+
+function mb_param_slope(config, settings) = mb_param(config, settings, "slope", false);
+function mb_param_slopeBaseHeightLower(config, settings) = mb_param(config, settings, "slopeBaseHeightLower", 1.333);
+function mb_param_slopeBaseHeightLowerInner(config, settings) = mb_param(config, settings, "slopeBaseHeightLowerInner", 1.125);
+function mb_param_slopeBaseHeightUpper(config, settings) = mb_param(config, settings, "slopeBaseHeightUpper", 1);
+
+function mb_param_bevel(config, settings) = mb_param(config, settings, "bevel", [[0, 0], [0, 0], [0, 0], [0, 0]]);
+
+function mb_param_holeX(config, settings) = mb_param(config, settings, "holeX", false);
+function mb_param_holeXType(config, settings) = mb_param(config, settings, "holeXType", "pin");
+function mb_param_holeXShift(config, settings) = mb_param(config, settings, "holeXShift", true);
+function mb_param_holeXDiameter(config, settings) = mb_param(config, settings, "holeXDiameter", "auto");
+function mb_param_holeXDiameterAdjustment(config, settings) = mb_param(config, settings, "holeXDiameterAdjustment", 0.3);
+function mb_param_holeXInsetThickness(config, settings) = mb_param(config, settings, "holeXInsetThickness", 0.375);
+function mb_param_holeXInsetThicknessAdjustment(config, settings) = mb_param(config, settings, "holeXInsetThicknessAdjustment", 0.0);
+function mb_param_holeXInsetDepth(config, settings) = mb_param(config, settings, "holeXInsetDepth", 0.5);
+function mb_param_holeXInsetDepthAdjustment(config, settings) = mb_param(config, settings, "holeXInsetDepthAdjustment", 0.0);
+function mb_param_holeXGridOffsetZ(config, settings) = mb_param(config, settings, "holeXGridOffsetZ", 3.625);
+function mb_param_holeXGridOffsetZAdjustment(config, settings) = mb_param(config, settings, "holeXGridOffsetZAdjustment", 0.0);
+function mb_param_holeXGridSizeZ(config, settings) = mb_param(config, settings, "holeXGridSizeZ", 6);
+function mb_param_holeXGridSizeZAdjustment(config, settings) = mb_param(config, settings, "holeXGridSizeZAdjustment", 0.0);
+function mb_param_holeXMinTopMargin(config, settings) = mb_param(config, settings, "holeXMinTopMargin", 0.5);
+function mb_param_holeXPartial(config, settings) = mb_param(config, settings, "holeXPartial", "none");
+
+function mb_param_holeY(config, settings) = mb_param(config, settings, "holeY", false);
+function mb_param_holeYType(config, settings) = mb_param(config, settings, "holeYType", "pin");
+function mb_param_holeYShift(config, settings) = mb_param(config, settings, "holeYShift", true);
+function mb_param_holeYDiameter(config, settings) = mb_param(config, settings, "holeYDiameter", "auto");
+function mb_param_holeYDiameterAdjustment(config, settings) = mb_param(config, settings, "holeYDiameterAdjustment", 0.3);
+function mb_param_holeYInsetThickness(config, settings) = mb_param(config, settings, "holeYInsetThickness", 0.375);
+function mb_param_holeYInsetThicknessAdjustment(config, settings) = mb_param(config, settings, "holeYInsetThicknessAdjustment", 0.0);
+function mb_param_holeYInsetDepth(config, settings) = mb_param(config, settings, "holeYInsetDepth", 0.5);
+function mb_param_holeYInsetDepthAdjustment(config, settings) = mb_param(config, settings, "holeYInsetDepthAdjustment", 0.0);
+function mb_param_holeYGridOffsetZ(config, settings) = mb_param(config, settings, "holeYGridOffsetZ", 3.625);
+function mb_param_holeYGridOffsetZAdjustment(config, settings) = mb_param(config, settings, "holeYGridOffsetZAdjustment", 0.0);
+function mb_param_holeYGridSizeZ(config, settings) = mb_param(config, settings, "holeYGridSizeZ", 6);
+function mb_param_holeYGridSizeZAdjustment(config, settings) = mb_param(config, settings, "holeYGridSizeZAdjustment", 0.0);
+function mb_param_holeYMinTopMargin(config, settings) = mb_param(config, settings, "holeYMinTopMargin", 0.5);
+function mb_param_holeYPartial(config, settings) = mb_param(config, settings, "holeYPartial", "none");
+
+function mb_param_holeZ(config, settings) = mb_param(config, settings, "holeZ", false);
+function mb_param_holeZType(config, settings) = mb_param(config, settings, "holeZType", "pin");
+function mb_param_holeZShift(config, settings) = mb_param(config, settings, "holeZShift", true);
+function mb_param_holeZDiameter(config, settings) = mb_param(config, settings, "holeZDiameter", "auto");
+function mb_param_holeZDiameterAdjustment(config, settings) = mb_param(config, settings, "holeZDiameterAdjustment", 0.3);
+function mb_param_holeRoundingResolution(config, settings) = mb_param(config, settings, "holeRoundingResolution", 64);
+function mb_param_holeZPartialX(config, settings) = mb_param(config, settings, "holeZPartialX", "none");
+function mb_param_holeZPartialY(config, settings) = mb_param(config, settings, "holeZPartialY", "none");
+
+function mb_param_holeAxleThickness(config, settings) = mb_param(config, settings, "holeAxleThickness", 1);
+
+function mb_param_studs(config, settings) = mb_param(config, settings, "studs", true);
+function mb_param_studType(config, settings) = mb_param(config, settings, "studType", "solid");
+function mb_param_studShift(config, settings) = mb_param(config, settings, "studShift", false);
+function mb_param_studMaxOverhang(config, settings) = mb_param(config, settings, "studMaxOverhang", 0.3);
+function mb_param_studPadding(config, settings) = mb_param(config, settings, "studPadding", 0);
+
+function mb_param_studClampHeight(config, settings) = mb_param(config, settings, "studClampHeight", 0.5);
+function mb_param_studClampThickness(config, settings) = mb_param(config, settings, "studClampThickness", 0.0);
+
+function mb_param_studHoleDiameter(config, settings) = mb_param(config, settings, "studHoleDiameter", "auto");
+function mb_param_studHoleDiameterAdjustment(config, settings) = mb_param(config, settings, "studHoleDiameterAdjustment", 0.3);
+function mb_param_studHoleClampThickness(config, settings) = mb_param(config, settings, "studHoleClampThickness", 0.1);
+
+function mb_param_studRounding(config, settings) = mb_param(config, settings, "studRounding", 0.0625);
+function mb_param_studRoundingResolution(config, settings) = mb_param(config, settings, "studRoundingResolution", 64);
+
+function mb_param_studDiameter(config, settings) = mb_param(config, settings, "studDiameter", 3);
+function mb_param_studDiameterAdjustment(config, settings) = mb_param(config, settings, "studDiameterAdjustment", 0.2);
+
+function mb_param_studHeight(config, settings) = mb_param(config, settings, "studHeight", 1);
+function mb_param_studHeightAdjustment(config, settings) = mb_param(config, settings, "studHeightAdjustment", 0.0);
+
+function mb_param_studSink(config, settings) = mb_param(config, settings, "studSink", 0.25);
+
+function mb_param_studCutoutAdjustment(config, settings) = mb_param(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
+
+function mb_param_studIcon(config, settings) = mb_param(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
+function mb_param_studIconDimensions(config, settings) = mb_param(config, settings, "studIconDimensions", [169.333, 169.333]);
+function mb_param_studIconScale(config, settings) = mb_param(config, settings, "studIconScale", 0.024);
+function mb_param_studIconDepth(config, settings) = mb_param(config, settings, "studIconDepth", -0.2);
+function mb_param_studIconColor(config, settings) = mb_param(config, settings, "studIconColor", "inherit");
+
+function mb_param_tongue(config, settings) = mb_param(config, settings, "tongue", false);
+function mb_param_tongueHeight(config, settings) = mb_param(config, settings, "tongueHeight", 1.25);
+function mb_param_tongueGrooveDepth(config, settings) = mb_param(config, settings, "tongueGrooveDepth", 1.5);
+function mb_param_tongueRoundingRadius(config, settings) = mb_param(config, settings, "tongueRoundingRadius", "auto");
+function mb_param_tongueInnerRoundingRadius(config, settings) = mb_param(config, settings, "tongueInnerRoundingRadius", "auto");
+function mb_param_tongueThickness(config, settings) = mb_param(config, settings, "tongueThickness", 0.666);
+function mb_param_tongueThicknessAdjustment(config, settings) = mb_param(config, settings, "tongueThicknessAdjustment", 0);
+function mb_param_tongueOffset(config, settings) = mb_param(config, settings, "tongueOffset", 1);
+function mb_param_tongueClampHeight(config, settings) = mb_param(config, settings, "tongueClampHeight", 0.5);
+function mb_param_tongueClampOffset(config, settings) = mb_param(config, settings, "tongueClampOffset", 0.25);
+function mb_param_tongueClampThickness(config, settings) = mb_param(config, settings, "tongueClampThickness", 0.1);
+
+function mb_param_grille(config, settings) = mb_param(config, settings, "grille", "none");
+function mb_param_grilleInverted(config, settings) = mb_param(config, settings, "grilleInverted", false);
+function mb_param_grilleDepth(config, settings) = mb_param(config, settings, "grilleDepth", 1);
+function mb_param_grilleCount(config, settings) = mb_param(config, settings, "grilleCount", 5);
+
+function mb_param_recess(config, settings) = mb_param(config, settings, "recess", false);
+function mb_param_recessRoundingRadius(config, settings) = mb_param(config, settings, "recessRoundingRadius", "auto");
+function mb_param_recessDepth(config, settings) = mb_param(config, settings, "recessDepth", "auto");
+function mb_param_recessWallThickness(config, settings) = mb_param(config, settings, "recessWallThickness", 0.333);
+function mb_param_recessStuds(config, settings) = mb_param(config, settings, "recessStuds", true);
+function mb_param_recessStudPadding(config, settings) = mb_param(config, settings, "recessStudPadding", 0.2);
+function mb_param_recessStudType(config, settings) = mb_param(config, settings, "recessStudType", "solid");
+function mb_param_recessStudShift(config, settings) = mb_param(config, settings, "recessStudShift", false);
+function mb_param_recessWallGaps(config, settings) = mb_param(config, settings, "recessWallGaps", []);
+
+function mb_param_text(config, settings) = mb_param(config, settings, "text", "");
+function mb_param_textSide(config, settings) = mb_param(config, settings, "textSide", 0);
+function mb_param_textDepth(config, settings) = mb_param(config, settings, "textDepth", -0.25);
+function mb_param_textFont(config, settings) = mb_param(config, settings, "textFont", "Liberation Sans");
+function mb_param_textSize(config, settings) = mb_param(config, settings, "textSize", 4);
+function mb_param_textSpacing(config, settings) = mb_param(config, settings, "textSpacing", 1);
+function mb_param_textVerticalAlign(config, settings) = mb_param(config, settings, "textVerticalAlign", "center");
+function mb_param_textHorizontalAlign(config, settings) = mb_param(config, settings, "textHorizontalAlign", "center");
+function mb_param_textOffset(config, settings) = mb_param(config, settings, "textOffset", [0, 0]);
+function mb_param_textColor(config, settings) = mb_param(config, settings, "textColor", "#2c3e50");
+
+function mb_param_surfacePattern(config, settings) = mb_param(config, settings, "surfacePattern", "none");
+function mb_param_surfacePatternDimensions(config, settings) = mb_param(config, settings, "surfacePatternDimensions", [451.556, 451.556]);
+function mb_param_surfacePatternOffset(config, settings) = mb_param(config, settings, "surfacePatternOffset", [0, 0]);
+function mb_param_surfacePatternScale(config, settings) = mb_param(config, settings, "surfacePatternScale", 0.25);
+function mb_param_surfacePatternDepth(config, settings) = mb_param(config, settings, "surfacePatternDepth", -0.2);
+function mb_param_surfacePatternColor(config, settings) = mb_param(config, settings, "surfacePatternColor", "inherit");
+
+function mb_param_svg(config, settings) = mb_param(config, settings, "svg", "");
+function mb_param_svgSide(config, settings) = mb_param(config, settings, "svgSide", 5);
+function mb_param_svgDepth(config, settings) = mb_param(config, settings, "svgDepth", 0.4);
+function mb_param_svgDimensions(config, settings) = mb_param(config, settings, "svgDimensions", [100, 100]);
+function mb_param_svgScale(config, settings) = mb_param(config, settings, "svgScale", 1.0);
+function mb_param_svgOffset(config, settings) = mb_param(config, settings, "svgOffset", [0, 0]);
+function mb_param_svgColor(config, settings) = mb_param(config, settings, "svgColor", "#2c3e50");
+
+function mb_param_connectors(config, settings) = mb_param(config, settings, "connectors", false);
+function mb_param_connectorPadding(config, settings) = mb_param(config, settings, "connectorPadding", [0, 0]);
+function mb_param_connectorHeight(config, settings) = mb_param(config, settings, "connectorHeight", "auto");
+function mb_param_connectorDepth(config, settings) = mb_param(config, settings, "connectorDepth", 0.75);
+function mb_param_connectorWidth(config, settings) = mb_param(config, settings, "connectorWidth", 2.5);
+function mb_param_connectorDepthTolerance(config, settings) = mb_param(config, settings, "connectorDepthTolerance", 0.2);
+function mb_param_connectorSideTolerance(config, settings) = mb_param(config, settings, "connectorSideTolerance", 0.1);
+
+function mb_param_screwHolesZ(config, settings) = mb_param(config, settings, "screwHolesZ", []);
+function mb_param_screwHoleZSize(config, settings) = mb_param(config, settings, "screwHoleZSize", 2.3);
+function mb_param_screwHoleZHelperThickness(config, settings) = mb_param(config, settings, "screwHoleZHelperThickness", 0.8);
+function mb_param_screwHoleZHelperOffset(config, settings) = mb_param(config, settings, "screwHoleZHelperOffset", 0.2);
+function mb_param_screwHoleZHelperHeight(config, settings) = mb_param(config, settings, "screwHoleZHelperHeight", 0.2);
+
+function mb_param_screwHolesX(config, settings) = mb_param(config, settings, "screwHolesX", []);
+function mb_param_screwHoleXSize(config, settings) = mb_param(config, settings, "screwHoleXSize", 2.1);
+function mb_param_screwHoleXDepth(config, settings) = mb_param(config, settings, "screwHoleXDepth", 4);
+
+function mb_param_screwHolesY(config, settings) = mb_param(config, settings, "screwHolesY", []);
+function mb_param_screwHoleYSize(config, settings) = mb_param(config, settings, "screwHoleYSize", 2.1);
+function mb_param_screwHoleYDepth(config, settings) = mb_param(config, settings, "screwHoleYDepth", 4);
+
+function mb_param_pcb(config, settings) = mb_param(config, settings, "pcb", false);
+function mb_param_pcbMountingType(config, settings) = mb_param(config, settings, "pcbMountingType", "clips");
+function mb_param_pcbDimensions(config, settings) = mb_param(config, settings, "pcbDimensions", [20, 30, 3]);
+function mb_param_pcbOffset(config, settings) = mb_param(config, settings, "pcbOffset", [0, 0]);
+function mb_param_pcbScrewSocketSize(config, settings) = mb_param(config, settings, "pcbScrewSocketSize", 5);
+function mb_param_pcbScrewSocketHoleSize(config, settings) = mb_param(config, settings, "pcbScrewSocketHoleSize", 2.2);
+function mb_param_pcbScrewSocketHeight(config, settings) = mb_param(config, settings, "pcbScrewSocketHeight", 3);
+function mb_param_pcbScrewSockets(config, settings) = mb_param(config, settings, "pcbScrewSockets", []);
+
+function mb_param_align(config, settings) = mb_param(config, settings, "align", "start");
+function mb_param_alignChildren(config, settings) = mb_param(config, settings, "alignChildren", "start");
+
+function mb_param_qualitySegBase(config, settings) = mb_param(config, settings, "qualitySegBase", 1.2);
+function mb_param_qualityResolutionMax(config, settings) = mb_param(config, settings, "qualityResolutionMax", 220);
+function mb_param_qualityFactor(config, settings) = mb_param(config, settings, "qualityFactor", [0.6, 1.0, 1.6, 2.5]);
+function mb_param_qualityResolutionMin(config, settings) = mb_param(config, settings, "qualityResolutionMin", [24, 18, 12, 8]);
+function mb_param_qualityResolutionMultiplier(config, settings) = mb_param(config, settings, "qualityResolutionMultiplier", 0.25);
+
+function mb_param_previewQuality(config, settings) = mb_param(config, settings, "previewQuality", 0.5);
+function mb_param_previewRender(config, settings) = mb_param(config, settings, "previewRender", true);
+function mb_param_previewRenderConvexity(config, settings) = mb_param(config, settings, "previewRenderConvexity", 25);
 
 function mb_param(config, settings, key, default=undef) =
     let(
@@ -120,255 +367,255 @@ module mb_block(
 
     scale = mb_param_scale(config, settings);
 
-    rotation = mb_param(config, settings, "rotation", [0, 0, 0]);
-    rotationOffset = mb_param(config, settings, "rotationOffset", [0, 0, 0]);
-    rotationOffsetRevert = mb_param(config, settings, "rotationOffsetRevert", true);
-    direction = mb_direction_to_int(mb_param(config, settings, "direction", "west"));
+    rotation = mb_param_rotation(config, settings);
+    rotationOffset = mb_param_rotationOffset(config, settings);
+    rotationOffsetRevert = mb_param_rotationOffsetRevert(config, settings);
+    direction = mb_direction_to_int(mb_param_direction(config, settings));
 
-    size = mb_param(config, settings, "size", [1, 1, 1]);
-    offset = mb_param(config, settings, "offset", [0, 0, 0]);
-    crop = mb_param(config, settings, "crop", [0, 0, 0, 0]);
+    size = mb_param_size(config, settings);
+    offset = mb_param_offset(config, settings);
+    crop = mb_param_crop(config, settings);
 
-    cutout = mb_param(config, settings, "cutout", false);
-    cutoutOffset = mb_param(config, settings, "cutoutOffset", [0, 0]);
+    cutout = mb_param_cutout(config, settings);
+    cutoutOffset = mb_param_cutoutOffset(config, settings);
 
-    base = mb_param(config, settings, "base", true);
-    baseColor = mb_param(config, settings, "baseColor", "#EAC645");
-    baseHeight = mb_param(config, settings, "baseHeight", "auto");
+    base = mb_param_base(config, settings);
+    baseColor = mb_param_baseColor(config, settings);
+    baseHeight = mb_param_baseHeight(config, settings);
 
-    baseTopPlateHeight = mb_param(config, settings, "baseTopPlateHeight", 1);
-    baseTopPlateHeightAdjustment = mb_param(config, settings, "baseTopPlateHeightAdjustment", -0.6);
+    baseTopPlateHeight = mb_param_baseTopPlateHeight(config, settings);
+    baseTopPlateHeightAdjustment = mb_param_baseTopPlateHeightAdjustment(config, settings);
 
-    baseCutoutType = mb_param(config, settings, "baseCutoutType", "standard");
-    baseCutoutMaxDepth = mb_param(config, settings, "baseCutoutMaxDepth", 5);
+    baseCutoutType = mb_param_baseCutoutType(config, settings);
+    baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings);
 
-    baseClampOffset = mb_param(config, settings, "baseClampOffset", 0.25);
-    baseClampHeight = mb_param(config, settings, "baseClampHeight", 0.5);
-    baseClampThickness = mb_param(config, settings, "baseClampThickness", 0.1);
-    baseClampOuter = mb_param(config, settings, "baseClampOuter", false);
+    baseClampOffset = mb_param_baseClampOffset(config, settings);
+    baseClampHeight = mb_param_baseClampHeight(config, settings);
+    baseClampThickness = mb_param_baseClampThickness(config, settings);
+    baseClampOuter = mb_param_baseClampOuter(config, settings);
 
-    baseRoundingRadius = mb_param(config, settings, "baseRoundingRadius", 0.0);
-    baseCutoutRoundingRadius = mb_param(config, settings, "baseCutoutRoundingRadius", "auto");
-    baseRoundingResolution = mb_param(config, settings, "baseRoundingResolution", 64);
+    baseRoundingRadius = mb_param_baseRoundingRadius(config, settings);
+    baseCutoutRoundingRadius = mb_param_baseCutoutRoundingRadius(config, settings);
+    baseRoundingResolution = mb_param_baseRoundingResolution(config, settings);
 
-    baseReliefCut = mb_param(config, settings, "baseReliefCut", false);
-    baseReliefCutHeight = mb_param(config, settings, "baseReliefCutHeight", 0.375);
-    baseReliefCutThickness = mb_param(config, settings, "baseReliefCutThickness", 0.375);
+    baseReliefCut = mb_param_baseReliefCut(config, settings);
+    baseReliefCutHeight = mb_param_baseReliefCutHeight(config, settings);
+    baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
 
     baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
     baseHeightAdjustment = mb_param_baseHeightAdjustment(config, settings);
 
-    baseWallThickness = mb_param(config, settings, "baseWallThickness", "auto");
-    baseWallThicknessAdjustment = mb_param(config, settings, "baseWallThicknessAdjustment", -0.1);
-    baseWallGapsX = mb_param(config, settings, "baseWallGapsX", []);
-    baseWallGapsY = mb_param(config, settings, "baseWallGapsY", []);
+    baseWallThickness = mb_param_baseWallThickness(config, settings);
+    baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
+    baseWallGapsX = mb_param_baseWallGapsX(config, settings);
+    baseWallGapsY = mb_param_baseWallGapsY(config, settings);
 
-    topPlateHelpers = mb_param(config, settings, "topPlateHelpers", true);
-    topPlateHelperHeight = mb_param(config, settings, "topPlateHelperHeight", 0.2);
-    topPlateHelperThickness = mb_param(config, settings, "topPlateHelperThickness", 0.4);
+    topPlateHelpers = mb_param_topPlateHelpers(config, settings);
+    topPlateHelperHeight = mb_param_topPlateHelperHeight(config, settings);
+    topPlateHelperThickness = mb_param_topPlateHelperThickness(config, settings);
 
-    stabilizerGrid = mb_param(config, settings, "stabilizerGrid", true);
-    stabilizerGridOffset = mb_param(config, settings, "stabilizerGridOffset", 0.2);
-    stabilizerGridHeight = mb_param(config, settings, "stabilizerGridHeight", 0.5);
-    stabilizerGridThickness = mb_param(config, settings, "stabilizerGridThickness", 0.5);
-    stabilizerExpansion = mb_param(config, settings, "stabilizerExpansion", 2);
-    stabilizerExpansionOffset = mb_param(config, settings, "stabilizerExpansionOffset", 1);
+    stabilizerGrid = mb_param_stabilizerGrid(config, settings);
+    stabilizerGridOffset = mb_param_stabilizerGridOffset(config, settings);
+    stabilizerGridHeight = mb_param_stabilizerGridHeight(config, settings);
+    stabilizerGridThickness = mb_param_stabilizerGridThickness(config, settings);
+    stabilizerExpansion = mb_param_stabilizerExpansion(config, settings);
+    stabilizerExpansionOffset = mb_param_stabilizerExpansionOffset(config, settings);
 
-    pillars = mb_param(config, settings, "pillars", true);
-    pillarRoundingResolution = mb_param(config, settings, "pillarRoundingResolution", 64);
-    pillarGapCornerLength = mb_param(config, settings, "pillarGapCornerLength", 2);
-    pillarGapMiddle = mb_param(config, settings, "pillarGapMiddle", 10);
+    pillars = mb_param_pillars(config, settings);
+    pillarRoundingResolution = mb_param_pillarRoundingResolution(config, settings);
+    pillarGapCornerLength = mb_param_pillarGapCornerLength(config, settings);
+    pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
 
-    pinDiameter = mb_param(config, settings, "pinDiameter", "auto");
-    pinDiameterAdjustment = mb_param(config, settings, "pinDiameterAdjustment", 0.0);
+    pinDiameter = mb_param_pinDiameter(config, settings);
+    pinDiameterAdjustment = mb_param_pinDiameterAdjustment(config, settings);
 
-    tubeWallThickness = mb_param(config, settings, "tubeWallThickness", 0.53125);
-    tubeXDiameter = mb_param(config, settings, "tubeXDiameter", "auto");
-    tubeXDiameterAdjustment = mb_param(config, settings, "tubeXDiameterAdjustment", -0.1);
-    tubeYDiameter = mb_param(config, settings, "tubeYDiameter", "auto");
-    tubeYDiameterAdjustment = mb_param(config, settings, "tubeYDiameterAdjustment", -0.1);
-    tubeZDiameter = mb_param(config, settings, "tubeZDiameter", "auto");
-    tubeZDiameterAdjustment = mb_param(config, settings, "tubeZDiameterAdjustment", -0.1);
-    tubeInnerClampThickness = mb_param(config, settings, "tubeInnerClampThickness", 0.1);
+    tubeWallThickness = mb_param_tubeWallThickness(config, settings);
+    tubeXDiameter = mb_param_tubeXDiameter(config, settings);
+    tubeXDiameterAdjustment = mb_param_tubeXDiameterAdjustment(config, settings);
+    tubeYDiameter = mb_param_tubeYDiameter(config, settings);
+    tubeYDiameterAdjustment = mb_param_tubeYDiameterAdjustment(config, settings);
+    tubeZDiameter = mb_param_tubeZDiameter(config, settings);
+    tubeZDiameterAdjustment = mb_param_tubeZDiameterAdjustment(config, settings);
+    tubeInnerClampThickness = mb_param_tubeInnerClampThickness(config, settings);
 
-    slope = mb_param(config, settings, "slope", false);
-    slopeBaseHeightLower = mb_param(config, settings, "slopeBaseHeightLower", 1.333);
-    slopeBaseHeightLowerInner = mb_param(config, settings, "slopeBaseHeightLowerInner", 1.125);
-    slopeBaseHeightUpper = mb_param(config, settings, "slopeBaseHeightUpper", 1);
+    slope = mb_param_slope(config, settings);
+    slopeBaseHeightLower = mb_param_slopeBaseHeightLower(config, settings);
+    slopeBaseHeightLowerInner = mb_param_slopeBaseHeightLowerInner(config, settings);
+    slopeBaseHeightUpper = mb_param_slopeBaseHeightUpper(config, settings);
 
-    bevel = mb_param(config, settings, "bevel", [[0, 0], [0, 0], [0, 0], [0, 0]]);
+    bevel = mb_param_bevel(config, settings);
 
-    holeX = mb_param(config, settings, "holeX", false);
-    holeXType = mb_param(config, settings, "holeXType", "pin");
-    holeXShift = mb_param(config, settings, "holeXShift", true);
-    holeXDiameter = mb_param(config, settings, "holeXDiameter", "auto");
-    holeXDiameterAdjustment = mb_param(config, settings, "holeXDiameterAdjustment", 0.3);
-    holeXInsetThickness = mb_param(config, settings, "holeXInsetThickness", 0.375);
-    holeXInsetThicknessAdjustment = mb_param(config, settings, "holeXInsetThicknessAdjustment", 0.0);
-    holeXInsetDepth = mb_param(config, settings, "holeXInsetDepth", 0.5);
-    holeXInsetDepthAdjustment = mb_param(config, settings, "holeXInsetDepthAdjustment", 0.0);
-    holeXGridOffsetZ = mb_param(config, settings, "holeXGridOffsetZ", 3.625);
-    holeXGridOffsetZAdjustment = mb_param(config, settings, "holeXGridOffsetZAdjustment", 0.0);
-    holeXGridSizeZ = mb_param(config, settings, "holeXGridSizeZ", 6);
-    holeXGridSizeZAdjustment = mb_param(config, settings, "holeXGridSizeZAdjustment", 0.0);
-    holeXMinTopMargin = mb_param(config, settings, "holeXMinTopMargin", 0.5);
-    holeXPartial = mb_param(config, settings, "holeXPartial", "none");
+    holeX = mb_param_holeX(config, settings);
+    holeXType = mb_param_holeXType(config, settings);
+    holeXShift = mb_param_holeXShift(config, settings);
+    holeXDiameter = mb_param_holeXDiameter(config, settings);
+    holeXDiameterAdjustment = mb_param_holeXDiameterAdjustment(config, settings);
+    holeXInsetThickness = mb_param_holeXInsetThickness(config, settings);
+    holeXInsetThicknessAdjustment = mb_param_holeXInsetThicknessAdjustment(config, settings);
+    holeXInsetDepth = mb_param_holeXInsetDepth(config, settings);
+    holeXInsetDepthAdjustment = mb_param_holeXInsetDepthAdjustment(config, settings);
+    holeXGridOffsetZ = mb_param_holeXGridOffsetZ(config, settings);
+    holeXGridOffsetZAdjustment = mb_param_holeXGridOffsetZAdjustment(config, settings);
+    holeXGridSizeZ = mb_param_holeXGridSizeZ(config, settings);
+    holeXGridSizeZAdjustment = mb_param_holeXGridSizeZAdjustment(config, settings);
+    holeXMinTopMargin = mb_param_holeXMinTopMargin(config, settings);
+    holeXPartial = mb_param_holeXPartial(config, settings);
 
-    holeY = mb_param(config, settings, "holeY", false);
-    holeYType = mb_param(config, settings, "holeYType", "pin");
-    holeYShift = mb_param(config, settings, "holeYShift", true);
-    holeYDiameter = mb_param(config, settings, "holeYDiameter", "auto");
-    holeYDiameterAdjustment = mb_param(config, settings, "holeYDiameterAdjustment", 0.3);
-    holeYInsetThickness = mb_param(config, settings, "holeYInsetThickness", 0.375);
-    holeYInsetThicknessAdjustment = mb_param(config, settings, "holeYInsetThicknessAdjustment", 0.0);
-    holeYInsetDepth = mb_param(config, settings, "holeYInsetDepth", 0.5);
-    holeYInsetDepthAdjustment = mb_param(config, settings, "holeYInsetDepthAdjustment", 0.0);
-    holeYGridOffsetZ = mb_param(config, settings, "holeYGridOffsetZ", 3.625);
-    holeYGridOffsetZAdjustment = mb_param(config, settings, "holeYGridOffsetZAdjustment", 0.0);
-    holeYGridSizeZ = mb_param(config, settings, "holeYGridSizeZ", 6);
-    holeYGridSizeZAdjustment = mb_param(config, settings, "holeYGridSizeZAdjustment", 0.0);
-    holeYMinTopMargin = mb_param(config, settings, "holeYMinTopMargin", 0.5);
-    holeYPartial = mb_param(config, settings, "holeYPartial", "none");
+    holeY = mb_param_holeY(config, settings);
+    holeYType = mb_param_holeYType(config, settings);
+    holeYShift = mb_param_holeYShift(config, settings);
+    holeYDiameter = mb_param_holeYDiameter(config, settings);
+    holeYDiameterAdjustment = mb_param_holeYDiameterAdjustment(config, settings);
+    holeYInsetThickness = mb_param_holeYInsetThickness(config, settings);
+    holeYInsetThicknessAdjustment = mb_param_holeYInsetThicknessAdjustment(config, settings);
+    holeYInsetDepth = mb_param_holeYInsetDepth(config, settings);
+    holeYInsetDepthAdjustment = mb_param_holeYInsetDepthAdjustment(config, settings);
+    holeYGridOffsetZ = mb_param_holeYGridOffsetZ(config, settings);
+    holeYGridOffsetZAdjustment = mb_param_holeYGridOffsetZAdjustment(config, settings);
+    holeYGridSizeZ = mb_param_holeYGridSizeZ(config, settings);
+    holeYGridSizeZAdjustment = mb_param_holeYGridSizeZAdjustment(config, settings);
+    holeYMinTopMargin = mb_param_holeYMinTopMargin(config, settings);
+    holeYPartial = mb_param_holeYPartial(config, settings);
 
-    holeZ = mb_param(config, settings, "holeZ", false);
-    holeZType = mb_param(config, settings, "holeZType", "pin");
-    holeZShift = mb_param(config, settings, "holeZShift", true);
-    holeZDiameter = mb_param(config, settings, "holeZDiameter", "auto");
-    holeZDiameterAdjustment = mb_param(config, settings, "holeZDiameterAdjustment", 0.3);
-    holeRoundingResolution = mb_param(config, settings, "holeRoundingResolution", 64);
-    holeZPartialX = mb_param(config, settings, "holeZPartialX", "none");
-    holeZPartialY = mb_param(config, settings, "holeZPartialY", "none");
+    holeZ = mb_param_holeZ(config, settings);
+    holeZType = mb_param_holeZType(config, settings);
+    holeZShift = mb_param_holeZShift(config, settings);
+    holeZDiameter = mb_param_holeZDiameter(config, settings);
+    holeZDiameterAdjustment = mb_param_holeZDiameterAdjustment(config, settings);
+    holeRoundingResolution = mb_param_holeRoundingResolution(config, settings);
+    holeZPartialX = mb_param_holeZPartialX(config, settings);
+    holeZPartialY = mb_param_holeZPartialY(config, settings);
 
-    holeAxleThickness = mb_param(config, settings, "holeAxleThickness", 1);
+    holeAxleThickness = mb_param_holeAxleThickness(config, settings);
 
-    studs = mb_param(config, settings, "studs", true);
-    studType = mb_param(config, settings, "studType", "solid");
-    studShift = mb_param(config, settings, "studShift", false);
-    studMaxOverhang = mb_param(config, settings, "studMaxOverhang", 0.3);
-    studPadding = mb_param(config, settings, "studPadding", 0);
+    studs = mb_param_studs(config, settings);
+    studType = mb_param_studType(config, settings);
+    studShift = mb_param_studShift(config, settings);
+    studMaxOverhang = mb_param_studMaxOverhang(config, settings);
+    studPadding = mb_param_studPadding(config, settings);
 
-    studClampHeight = mb_param(config, settings, "studClampHeight", 0.5);
-    studClampThickness = mb_param(config, settings, "studClampThickness", 0.0);
+    studClampHeight = mb_param_studClampHeight(config, settings);
+    studClampThickness = mb_param_studClampThickness(config, settings);
 
-    studHoleDiameter = mb_param(config, settings, "studHoleDiameter", "auto");
-    studHoleDiameterAdjustment = mb_param(config, settings, "studHoleDiameterAdjustment", 0.3);
-    studHoleClampThickness = mb_param(config, settings, "studHoleClampThickness", 0.1);
+    studHoleDiameter = mb_param_studHoleDiameter(config, settings);
+    studHoleDiameterAdjustment = mb_param_studHoleDiameterAdjustment(config, settings);
+    studHoleClampThickness = mb_param_studHoleClampThickness(config, settings);
 
-    studRounding = mb_param(config, settings, "studRounding", 0.0625);
-    studRoundingResolution = mb_param(config, settings, "studRoundingResolution", 64);
+    studRounding = mb_param_studRounding(config, settings);
+    studRoundingResolution = mb_param_studRoundingResolution(config, settings);
 
-    studDiameter = mb_param(config, settings, "studDiameter", 3);
-    studDiameterAdjustment = mb_param(config, settings, "studDiameterAdjustment", 0.2);
+    studDiameter = mb_param_studDiameter(config, settings);
+    studDiameterAdjustment = mb_param_studDiameterAdjustment(config, settings);
 
-    studHeight = mb_param(config, settings, "studHeight", 1);
-    studHeightAdjustment = mb_param(config, settings, "studHeightAdjustment", 0.0);
+    studHeight = mb_param_studHeight(config, settings);
+    studHeightAdjustment = mb_param_studHeightAdjustment(config, settings);
 
-    studSink = mb_param(config, settings, "studSink", 0.25);
+    studSink = mb_param_studSink(config, settings);
 
-    studCutoutAdjustment = mb_param(config, settings, "studCutoutAdjustment", [0.2, 0.4]);
+    studCutoutAdjustment = mb_param_studCutoutAdjustment(config, settings);
 
-    studIcon = mb_param(config, settings, "studIcon", "../pattern/bolt-solid-full.svg");
-    studIconDimensions = mb_param(config, settings, "studIconDimensions", [169.333, 169.333]);
-    studIconScale = mb_param(config, settings, "studIconScale", 0.024);
-    studIconDepth = mb_param(config, settings, "studIconDepth", -0.2);
-    studIconColor = mb_param(config, settings, "studIconColor", "inherit");
+    studIcon = mb_param_studIcon(config, settings);
+    studIconDimensions = mb_param_studIconDimensions(config, settings);
+    studIconScale = mb_param_studIconScale(config, settings);
+    studIconDepth = mb_param_studIconDepth(config, settings);
+    studIconColor = mb_param_studIconColor(config, settings);
 
-    tongue = mb_param(config, settings, "tongue", false);
-    tongueHeight = mb_param(config, settings, "tongueHeight", 1.25);
-    tongueGrooveDepth = mb_param(config, settings, "tongueGrooveDepth", 1.5);
-    tongueRoundingRadius = mb_param(config, settings, "tongueRoundingRadius", "auto");
-    tongueInnerRoundingRadius = mb_param(config, settings, "tongueInnerRoundingRadius", "auto");
-    tongueThickness = mb_param(config, settings, "tongueThickness", 0.666);
-    tongueThicknessAdjustment = mb_param(config, settings, "tongueThicknessAdjustment", 0);
-    tongueOffset = mb_param(config, settings, "tongueOffset", 1);
-    tongueClampHeight = mb_param(config, settings, "tongueClampHeight", 0.5);
-    tongueClampOffset = mb_param(config, settings, "tongueClampOffset", 0.25);
-    tongueClampThickness = mb_param(config, settings, "tongueClampThickness", 0.1);
+    tongue = mb_param_tongue(config, settings);
+    tongueHeight = mb_param_tongueHeight(config, settings);
+    tongueGrooveDepth = mb_param_tongueGrooveDepth(config, settings);
+    tongueRoundingRadius = mb_param_tongueRoundingRadius(config, settings);
+    tongueInnerRoundingRadius = mb_param_tongueInnerRoundingRadius(config, settings);
+    tongueThickness = mb_param_tongueThickness(config, settings);
+    tongueThicknessAdjustment = mb_param_tongueThicknessAdjustment(config, settings);
+    tongueOffset = mb_param_tongueOffset(config, settings);
+    tongueClampHeight = mb_param_tongueClampHeight(config, settings);
+    tongueClampOffset = mb_param_tongueClampOffset(config, settings);
+    tongueClampThickness = mb_param_tongueClampThickness(config, settings);
 
-    grille = mb_param(config, settings, "grille", "none");
-    grilleInverted = mb_param(config, settings, "grilleInverted", false);
-    grilleDepth = mb_param(config, settings, "grilleDepth", 1);
-    grilleCount = mb_param(config, settings, "grilleCount", 5);
+    grille = mb_param_grille(config, settings);
+    grilleInverted = mb_param_grilleInverted(config, settings);
+    grilleDepth = mb_param_grilleDepth(config, settings);
+    grilleCount = mb_param_grilleCount(config, settings);
 
-    recess = mb_param(config, settings, "recess", false);
-    recessRoundingRadius = mb_param(config, settings, "recessRoundingRadius", "auto");
-    recessDepth = mb_param(config, settings, "recessDepth", "auto");
-    recessWallThickness = mb_param(config, settings, "recessWallThickness", 0.333);
-    recessStuds = mb_param(config, settings, "recessStuds", true);
-    recessStudPadding = mb_param(config, settings, "recessStudPadding", 0.2);
-    recessStudType = mb_param(config, settings, "recessStudType", "solid");
-    recessStudShift = mb_param(config, settings, "recessStudShift", false);
-    recessWallGaps = mb_param(config, settings, "recessWallGaps", []);
+    recess = mb_param_recess(config, settings);
+    recessRoundingRadius = mb_param_recessRoundingRadius(config, settings);
+    recessDepth = mb_param_recessDepth(config, settings);
+    recessWallThickness = mb_param_recessWallThickness(config, settings);
+    recessStuds = mb_param_recessStuds(config, settings);
+    recessStudPadding = mb_param_recessStudPadding(config, settings);
+    recessStudType = mb_param_recessStudType(config, settings);
+    recessStudShift = mb_param_recessStudShift(config, settings);
+    recessWallGaps = mb_param_recessWallGaps(config, settings);
 
-    text = mb_param(config, settings, "text", "");
-    textSide = mb_param(config, settings, "textSide", 0);
-    textDepth = mb_param(config, settings, "textDepth", -0.25);
-    textFont = mb_param(config, settings, "textFont", "Liberation Sans");
-    textSize = mb_param(config, settings, "textSize", 4);
-    textSpacing = mb_param(config, settings, "textSpacing", 1);
-    textVerticalAlign = mb_param(config, settings, "textVerticalAlign", "center");
-    textHorizontalAlign = mb_param(config, settings, "textHorizontalAlign", "center");
-    textOffset = mb_param(config, settings, "textOffset", [0, 0]);
-    textColor = mb_param(config, settings, "textColor", "#2c3e50");
+    text = mb_param_text(config, settings);
+    textSide = mb_param_textSide(config, settings);
+    textDepth = mb_param_textDepth(config, settings);
+    textFont = mb_param_textFont(config, settings);
+    textSize = mb_param_textSize(config, settings);
+    textSpacing = mb_param_textSpacing(config, settings);
+    textVerticalAlign = mb_param_textVerticalAlign(config, settings);
+    textHorizontalAlign = mb_param_textHorizontalAlign(config, settings);
+    textOffset = mb_param_textOffset(config, settings);
+    textColor = mb_param_textColor(config, settings);
 
-    surfacePattern = mb_param(config, settings, "surfacePattern", "none");
-    surfacePatternDimensions = mb_param(config, settings, "surfacePatternDimensions", [451.556, 451.556]);
-    surfacePatternOffset = mb_param(config, settings, "surfacePatternOffset", [0, 0]);
-    surfacePatternScale = mb_param(config, settings, "surfacePatternScale", 0.25);
-    surfacePatternDepth = mb_param(config, settings, "surfacePatternDepth", -0.2);
-    surfacePatternColor = mb_param(config, settings, "surfacePatternColor", "inherit");
+    surfacePattern = mb_param_surfacePattern(config, settings);
+    surfacePatternDimensions = mb_param_surfacePatternDimensions(config, settings);
+    surfacePatternOffset = mb_param_surfacePatternOffset(config, settings);
+    surfacePatternScale = mb_param_surfacePatternScale(config, settings);
+    surfacePatternDepth = mb_param_surfacePatternDepth(config, settings);
+    surfacePatternColor = mb_param_surfacePatternColor(config, settings);
 
-    svg = mb_param(config, settings, "svg", "");
-    svgSide = mb_param(config, settings, "svgSide", 5);
-    svgDepth = mb_param(config, settings, "svgDepth", 0.4);
-    svgDimensions = mb_param(config, settings, "svgDimensions", [100, 100]);
-    svgScale = mb_param(config, settings, "svgScale", 1.0);
-    svgOffset = mb_param(config, settings, "svgOffset", [0, 0]);
-    svgColor = mb_param(config, settings, "svgColor", "#2c3e50");
+    svg = mb_param_svg(config, settings);
+    svgSide = mb_param_svgSide(config, settings);
+    svgDepth = mb_param_svgDepth(config, settings);
+    svgDimensions = mb_param_svgDimensions(config, settings);
+    svgScale = mb_param_svgScale(config, settings);
+    svgOffset = mb_param_svgOffset(config, settings);
+    svgColor = mb_param_svgColor(config, settings);
 
-    connectors = mb_param(config, settings, "connectors", false);
-    connectorPadding = mb_param(config, settings, "connectorPadding", [0, 0]);
-    connectorHeight = mb_param(config, settings, "connectorHeight", "auto");
-    connectorDepth = mb_param(config, settings, "connectorDepth", 0.75);
-    connectorWidth = mb_param(config, settings, "connectorWidth", 2.5);
-    connectorDepthTolerance = mb_param(config, settings, "connectorDepthTolerance", 0.2);
-    connectorSideTolerance = mb_param(config, settings, "connectorSideTolerance", 0.1);
+    connectors = mb_param_connectors(config, settings);
+    connectorPadding = mb_param_connectorPadding(config, settings);
+    connectorHeight = mb_param_connectorHeight(config, settings);
+    connectorDepth = mb_param_connectorDepth(config, settings);
+    connectorWidth = mb_param_connectorWidth(config, settings);
+    connectorDepthTolerance = mb_param_connectorDepthTolerance(config, settings);
+    connectorSideTolerance = mb_param_connectorSideTolerance(config, settings);
 
-    screwHolesZ = mb_param(config, settings, "screwHolesZ", []);
-    screwHoleZSize = mb_param(config, settings, "screwHoleZSize", 2.3);
-    screwHoleZHelperThickness = mb_param(config, settings, "screwHoleZHelperThickness", 0.8);
-    screwHoleZHelperOffset = mb_param(config, settings, "screwHoleZHelperOffset", 0.2);
-    screwHoleZHelperHeight = mb_param(config, settings, "screwHoleZHelperHeight", 0.2);
+    screwHolesZ = mb_param_screwHolesZ(config, settings);
+    screwHoleZSize = mb_param_screwHoleZSize(config, settings);
+    screwHoleZHelperThickness = mb_param_screwHoleZHelperThickness(config, settings);
+    screwHoleZHelperOffset = mb_param_screwHoleZHelperOffset(config, settings);
+    screwHoleZHelperHeight = mb_param_screwHoleZHelperHeight(config, settings);
 
-    screwHolesX = mb_param(config, settings, "screwHolesX", []);
-    screwHoleXSize = mb_param(config, settings, "screwHoleXSize", 2.1);
-    screwHoleXDepth = mb_param(config, settings, "screwHoleXDepth", 4);
+    screwHolesX = mb_param_screwHolesX(config, settings);
+    screwHoleXSize = mb_param_screwHoleXSize(config, settings);
+    screwHoleXDepth = mb_param_screwHoleXDepth(config, settings);
 
-    screwHolesY = mb_param(config, settings, "screwHolesY", []);
-    screwHoleYSize = mb_param(config, settings, "screwHoleYSize", 2.1);
-    screwHoleYDepth = mb_param(config, settings, "screwHoleYDepth", 4);
+    screwHolesY = mb_param_screwHolesY(config, settings);
+    screwHoleYSize = mb_param_screwHoleYSize(config, settings);
+    screwHoleYDepth = mb_param_screwHoleYDepth(config, settings);
 
-    pcb = mb_param(config, settings, "pcb", false);
-    pcbMountingType = mb_param(config, settings, "pcbMountingType", "clips");
-    pcbDimensions = mb_param(config, settings, "pcbDimensions", [20, 30, 3]);
-    pcbOffset = mb_param(config, settings, "pcbOffset", [0, 0]);
-    pcbScrewSocketSize = mb_param(config, settings, "pcbScrewSocketSize", 5);
-    pcbScrewSocketHoleSize = mb_param(config, settings, "pcbScrewSocketHoleSize", 2.2);
-    pcbScrewSocketHeight = mb_param(config, settings, "pcbScrewSocketHeight", 3);
-    pcbScrewSockets = mb_param(config, settings, "pcbScrewSockets", []);
+    pcb = mb_param_pcb(config, settings);
+    pcbMountingType = mb_param_pcbMountingType(config, settings);
+    pcbDimensions = mb_param_pcbDimensions(config, settings);
+    pcbOffset = mb_param_pcbOffset(config, settings);
+    pcbScrewSocketSize = mb_param_pcbScrewSocketSize(config, settings);
+    pcbScrewSocketHoleSize = mb_param_pcbScrewSocketHoleSize(config, settings);
+    pcbScrewSocketHeight = mb_param_pcbScrewSocketHeight(config, settings);
+    pcbScrewSockets = mb_param_pcbScrewSockets(config, settings);
 
-    align = mb_param(config, settings, "align", "start");
-    alignChildren = mb_param(config, settings, "alignChildren", "start");
+    align = mb_param_align(config, settings);
+    alignChildren = mb_param_alignChildren(config, settings);
 
-    qualitySegBase = mb_param(config, settings, "qualitySegBase", 1.2);
-    qualityResolutionMax = mb_param(config, settings, "qualityResolutionMax", 220);
-    qualityFactor = mb_param(config, settings, "qualityFactor", [0.6, 1.0, 1.6, 2.5]);
-    qualityResolutionMin = mb_param(config, settings, "qualityResolutionMin", [24, 18, 12, 8]);
-    qualityResolutionMultiplier = mb_param(config, settings, "qualityResolutionMultiplier", 0.25);
+    qualitySegBase = mb_param_qualitySegBase(config, settings);
+    qualityResolutionMax = mb_param_qualityResolutionMax(config, settings);
+    qualityFactor = mb_param_qualityFactor(config, settings);
+    qualityResolutionMin = mb_param_qualityResolutionMin(config, settings);
+    qualityResolutionMultiplier = mb_param_qualityResolutionMultiplier(config, settings);
 
-    previewQuality = mb_param(config, settings, "previewQuality", 0.5);
-    previewRender = mb_param(config, settings, "previewRender", true);
-    previewRenderConvexity = mb_param(config, settings, "previewRenderConvexity", 25);
+    previewQuality = mb_param_previewQuality(config, settings);
+    previewRender = mb_param_previewRender(config, settings);
+    previewRenderConvexity = mb_param_previewRenderConvexity(config, settings);
 
     //END convert
 
