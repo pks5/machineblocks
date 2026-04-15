@@ -350,7 +350,10 @@ function mb_params_merge(a, b) =
 
 function mb_params_resolve(config, settings, key, default=undef) = mb_param(config, settings, key, default);
 
-function mb_assembly_offset(o, dir) = dir == "west" || dir == "east" ? o : [o[1], o[0], o[2]];
+function mb_assembly_offset(size, dir) = 
+    let(oX = size[1] >= size[0] ? (dir == "north" || dir == "east" ? -1 : 1) * (0.5 + size[0]) : 0,
+        oY = size[0] > size[1] ? (dir == "south" || dir == "east" ? -1 : 1) * (0.5 + size[1]) : 0)
+        [oX, oY, 0];
 
 
 
