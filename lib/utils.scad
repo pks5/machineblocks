@@ -63,8 +63,8 @@ function mb_is_empty_string(s) = (s == undef) || len(s) == 0;
 * get the grid size
 */
 
-function grid_size_x(grid, slope) = slope != false ? grid[0] + (slope[0] < 0 ? slope[0] : 0) + (slope[1] < 0 ? slope[1] : 0) : grid[0];
-function grid_size_y(grid, slope) = slope != false ? grid[1] + (slope[2] < 0 ? slope[2] : 0) + (slope[3] < 0 ? slope[3] : 0) : grid[1];
+function mb_grid_size_x(grid, slope) = slope != false ? grid[0] + (slope[0] < 0 ? slope[0] : 0) + (slope[1] < 0 ? slope[1] : 0) : grid[0];
+function mb_grid_size_y(grid, slope) = slope != false ? grid[1] + (slope[2] < 0 ? slope[2] : 0) + (slope[3] < 0 ? slope[3] : 0) : grid[1];
 
 
 /*
@@ -106,7 +106,7 @@ function mb_resolve_base_side_adjustment(baseSideAdjustment) =
 function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
     [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
-module pre_render(do_render, convexity){
+module mb_pre_render(do_render, convexity){
     if(do_render){
         render(convexity)
             children();

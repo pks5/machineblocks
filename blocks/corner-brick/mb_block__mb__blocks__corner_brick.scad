@@ -121,32 +121,32 @@ mb_block__mb__blocks__corner_brick(
  * Main Module Definition
  */
 module mb_block__mb__blocks__corner_brick(config = undef, settings = undef){
-    size = mb_params_get(settings, "size", default=[4, 4, 3]);
-    brick1SizeY = mb_params_get(settings, "brick1SizeY", default=2);
-    brick2SizeX = mb_params_get(settings, "brick2SizeX", default=2);
-    brick1OffsetY = mb_params_get(settings, "brick1OffsetY", default=0);
-    brick2OffsetX = mb_params_get(settings, "brick2OffsetX", default=0);
-    offset = mb_params_get(settings, "offset", default=[0, 0, 0]);
-    direction = mb_params_get(settings, "direction", default="west");
-    align = mb_params_get(settings, "align", default="start");
-    baseCutoutType = mb_params_get(settings, "baseCutoutType", default="standard");
-    pillars = mb_params_get(settings, "pillars", default=true);
-    baseReliefCut = mb_params_get(settings, "baseReliefCut", default=false);
-    baseReliefCutHeight = mb_params_get(settings, "baseReliefCutHeight", default=0.4);
-    baseReliefCutThickness = mb_params_get(settings, "baseReliefCutThickness", default=0.4);
-    grille = mb_params_get(settings, "grille", default="none");
-    grilleInverted = mb_params_get(settings, "grilleInverted", default=false);
-    grilleDepth = mb_params_get(settings, "grilleDepth", default=1);
-    grilleCount = mb_params_get(settings, "grilleCount", default=5);
-    studs = mb_params_get(settings, "studs", default=true);
-    studShift = mb_params_get(settings, "studShift", default=false);
-    studSink = mb_params_get(settings, "studSink", default=0.25);
-    studType = mb_params_get(settings, "studType", default="solid");
-    studPadding = mb_params_get(settings, "studPadding", default=[0.2, 0.2, 0.2, 0.2]);
-    baseColor = mb_params_get(settings, "baseColor", default="#EAC645");
-    surfacePattern = mb_params_get(settings, "surfacePattern", default="none");
-    surfacePatternScale = mb_params_get(settings, "surfacePatternScale", default=0.2);
-    studIcon = mb_params_get(settings, "studIcon", default="../pattern/bolt-solid-full.svg");
+    size = mb_param_size(config, settings);
+    brick1SizeY = mb_param(config, settings, "brick1SizeY", 2);
+    brick2SizeX = mb_param(config, settings, "brick2SizeX", 2);
+    brick1OffsetY = mb_param(config, settings, "brick1OffsetY", 0);
+    brick2OffsetX = mb_param(config, settings, "brick2OffsetX", 0);
+    offset = mb_param_offset(config, settings);
+    direction = mb_param_direction(config, settings);
+    align = mb_param_align(config, settings);
+    baseCutoutType = mb_param_baseCutoutType(config, settings);
+    pillars = mb_param_pillars(config, settings);
+    baseReliefCut = mb_param_baseReliefCut(config, settings);
+    baseReliefCutHeight = mb_param_baseReliefCutHeight(config, settings);
+    baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
+    grille = mb_param_grille(config, settings);
+    grilleInverted = mb_param_grilleInverted(config, settings);
+    grilleDepth = mb_param_grilleDepth(config, settings);
+    grilleCount = mb_param_grilleCount(config, settings);
+    studs = mb_param_studs(config, settings);
+    studShift = mb_param_studShift(config, settings);
+    studSink = mb_param_studSink(config, settings);
+    studType = mb_param_studType(config, settings);
+    studPadding = mb_param_studPadding(config, settings);
+    baseColor = mb_param_baseColor(config, settings);
+    surfacePattern = mb_param_surfacePattern(config, settings);
+    surfacePatternScale = mb_param_surfacePatternScale(config, settings);
+    studIcon = mb_param_studIcon(config, settings);
 
     // Shared settings for both sub-blocks
     sharedSettings = [

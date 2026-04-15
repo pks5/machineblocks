@@ -654,8 +654,8 @@ module mb_block(
 
     adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, resultingBaseHeight / baseHeightResolved];
 
-    gridSizeX = grid_size_x(grid, slope);
-    gridSizeY = grid_size_y(grid, slope);
+    gridSizeX = mb_grid_size_x(grid, slope);
+    gridSizeY = mb_grid_size_y(grid, slope);
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
@@ -1038,7 +1038,7 @@ module mb_block(
             translate(preRotationOffset){
                 rotate([0, 0, directionRotationZ]){
                     union(){ // Final union
-                        pre_render(previewRender, previewRenderConvexity){
+                        mb_pre_render(previewRender, previewRenderConvexity){
                             
                             if(base){
                                 difference(){
