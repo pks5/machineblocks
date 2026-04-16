@@ -358,6 +358,23 @@ function mb_assembly_offset(size, dir, parentSize = undef) =
 
 function mb_resolve_assembly_position(dir, p) = [dir == "north" || dir == "south" ? p[1] : p[0], dir == "north" || dir == "south" ? -p[0] : p[1], p[2]];
 
+function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) =
+    (overrides == undef) || (i >= len(overrides))
+        ? baseSideAdjustment
+        : let(
+            r = overrides[i],
+            index = r[0],
+            newValue = len(r) > 1 ? r[1] : 0,
+            nextValues =
+                !is_num(index) || index < 0 || index >= len(baseSideAdjustment)
+                    ? baseSideAdjustment
+                    : [
+                        for (j = [0 : len(baseSideAdjustment) - 1])
+                            j == index ? newValue : baseSideAdjustment[j]
+                    ]
+        )
+        mb_base_side_adjustment_override(nextValues, overrides, i + 1);
+
 module mb_block(
     config,
     settings
@@ -636,8 +653,8 @@ module mb_block(
     grid = [size[0], size[1]];
 
     //Side Adjustment
-    cropResolved = mb_resolve_crop(crop, gridSizeXY);
-    sAdj = mb_resolve_base_side_adjustment(baseSideAdjustment);
+    cropResolved = mb_resolve_side_quad(crop, gridSizeXY);
+    sAdj = mb_resolve_side_quad(baseSideAdjustment);
     sAdjustment = mb_calc_side_adjusmtent(sAdj, cropResolved);
 
     //Object Size     

@@ -49,7 +49,7 @@ function mb_base_rel_radius(cutoutRadius, baseRadiusZ, minSide, alwaysRel) =
 
 function mb_calc_rel_radius(radius, baseRadius, minSide) = max(0, baseRadius * ((minSide + 2*radius) / minSide));
 
-function mb_resolve_side_quad(quad, multiplier) = 
+function mb_resolve_side_quad(quad, multiplier = 1) = 
     is_list(quad) ? 
     (len(quad) == 2 ? [quad[0]*multiplier, quad[0]*multiplier, quad[1]*multiplier, quad[1]*multiplier] : [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]) 
     : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
@@ -93,16 +93,6 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 /*
 * Resolve base side adjustment
 */
-function mb_resolve_crop(crop, gridSizeXY) = 
-    is_list(crop)
-        ? (len(crop) == 2 ? [crop[0] * gridSizeXY, crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[1] * gridSizeXY] : [crop[0] * gridSizeXY, crop[1] * gridSizeXY, crop[2] * gridSizeXY, crop[3] * gridSizeXY])
-        : [crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY, crop * gridSizeXY];
-
-function mb_resolve_base_side_adjustment(baseSideAdjustment) = 
-    is_list(baseSideAdjustment) 
-        ? (len(baseSideAdjustment) == 2 ? [baseSideAdjustment[0], baseSideAdjustment[0], baseSideAdjustment[1], baseSideAdjustment[1]] : baseSideAdjustment) 
-        : [baseSideAdjustment, baseSideAdjustment, baseSideAdjustment, baseSideAdjustment];
-
 function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
     [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
