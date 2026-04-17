@@ -66,7 +66,7 @@ function mb_param_scale(config, settings, default = undef) = mb_param(config, se
 function mb_param_rotation(config, settings, default = undef) = mb_param(config, settings, "rotation", default != undef ? default : [0, 0, 0]);
 function mb_param_rotationOffset(config, settings, default = undef) = mb_param(config, settings, "rotationOffset", default != undef ? default : [0, 0, 0]);
 function mb_param_rotationOffsetRevert(config, settings, default = undef) = mb_param(config, settings, "rotationOffsetRevert", default != undef ? default : true);
-function mb_param_direction(config, settings, default = undef) = mb_param(config, settings, "direction", default != undef ? default : "west");
+function mb_param_direction(config, settings, default = undef) = mb_direction_to_int(mb_param(config, settings, "direction", default != undef ? default : "west"));
 
 function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
@@ -350,13 +350,27 @@ function mb_params_merge(a, b) =
 
 function mb_params_resolve(config, settings, key, default=undef) = mb_param(config, settings, key, default);
 
-function mb_assembly_offset(size, dir, parentSize = undef) = 
-    let(oX = size[1] > size[0] ? (dir == "north" || dir == "east" ? -1 : 1) * (0.5 + size[0]) : 0,
-        oY = size[0] >= size[1] ? (dir == "south" || dir == "east" ? -1 : 1) * (0.5 + size[1]) : 0,
-        p = parentSize != undef ? mb_assembly_offset(parentSize, dir) : undef)
-        p != undef ? mb_resolve_assembly_position(dir, p) : [oX, oY, 0];
+function mb_assembly_offset(size, globalDir) = 
+    let(oX = size[1] > size[0] ? 0.5 + size[0] : 0,
+        oY = size[0] >= size[1] ? 0.5 + size[1] : 0)
+        //[oX, oY, 0];
+       (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
 
-function mb_resolve_assembly_position(dir, p) = [dir == "north" || dir == "south" ? p[1] : p[0], dir == "north" || dir == "south" ? -p[0] : p[1], p[2]];
+function __mb_assembly_offset(size, dir, assSize = undef, assDir = undef) = 
+    _mb_assembly_offset(assSize != undef ? assSize : mb_size_resolve(size, dir), (dir + assDir)%4);
+
+function mb_assembly_size(config, settings, size, direction) = 
+    let(assemblySize = mb_param(config, settings, "assemblySize"))
+        assemblySize != undef ? assemblySize : mb_size_resolve(size, direction);
+
+function mb_assembly_direction(config, settings, direction) =
+    let(assemblyDirection = mb_param(config, settings, "assemblyDirection", 0))
+        mb_direction_resolve(assemblyDirection, direction);
+
+//function mb_resolve_assembly_position(dir, p) = [dir == 1 || dir == 3 ? p[1] : p[0], dir == 1 || dir == 3 ? -p[0] : p[1], p[2]];
+
+function mb_size_resolve(size, direction) = direction%2 == 1 ? [size[1], size[0], size[2]] : size;
+function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
 function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) =
     (overrides == undef) || (i >= len(overrides))
@@ -381,8 +395,6 @@ module mb_block(
 ){
 
     //START convert
-    assembly = mb_param_assembly(config, settings);
-
     unitMbu = mb_param_unitMbu(config, settings);
     unitGrid = mb_param_unitGrid(config, settings);
 
@@ -391,7 +403,7 @@ module mb_block(
     rotation = mb_param_rotation(config, settings);
     rotationOffset = mb_param_rotationOffset(config, settings);
     rotationOffsetRevert = mb_param_rotationOffsetRevert(config, settings);
-    direction = mb_direction_to_int(mb_param_direction(config, settings));
+    direction = mb_param_direction(config, settings);
 
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
@@ -2405,20 +2417,12 @@ module mb_block(
                             
                         } // End pre_render
 
-                        //Render children for assembly == merged
-                        if(assembly == "merged"){
-                            translate([translateXChildren, translateYChildren, translateZChildren]){
-                                children();
-                            }
-                        }
-                    } // End final union
-                    
-                    //Render children for assembly != merged
-                    if(assembly != "merged"){
                         translate([translateXChildren, translateYChildren, translateZChildren]){
                             children();
                         }
-                    }
+                        
+                    } // End final union
+                
                 } // End direction rotation
             } // End rotation offset and alignment
         } // End rotation
