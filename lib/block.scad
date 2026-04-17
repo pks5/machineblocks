@@ -357,7 +357,7 @@ function mb_assembly(config, settings, size, direction) =
         assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], direction) : direction)
         [assembly[0], assemblySize, assemblyDirection];
     
-function mb_assembly_offset_new(assembly, offset) = 
+function mb_assembly_offset(assembly, offset) = 
     let(size = assembly[1],
         globalDir = assembly[2],
         oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
@@ -365,7 +365,7 @@ function mb_assembly_offset_new(assembly, offset) =
         
        assembly == undef || assembly[0] != "unassembled" ? offset : (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
 
-
+/*
 function mb_assembly_offset(size, globalDir) = 
     let(oX = size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = size[0] >= size[1] ? 0.5 + size[1] : 0)
@@ -379,7 +379,7 @@ function mb_assembly_size(config, settings, size, direction) =
 function mb_assembly_direction(config, settings, direction) =
     let(assemblyDirection = mb_param(config, settings, "assemblyDirection", 0))
         mb_direction_resolve(assemblyDirection, direction);
-
+*/
 //function mb_resolve_assembly_position(dir, p) = [dir == 1 || dir == 3 ? p[1] : p[0], dir == 1 || dir == 3 ? -p[0] : p[1], p[2]];
 
 function mb_size_resolve(size, direction) = direction%2 == 1 ? [size[1], size[0], size[2]] : size;
