@@ -350,14 +350,27 @@ function mb_params_merge(a, b) =
 
 function mb_params_resolve(config, settings, key, default=undef) = mb_param(config, settings, key, default);
 
+function mb_assembly(config, settings, size, direction) = 
+    let(assemblyParam = mb_param(config, settings, "assembly", "merged"),
+        assembly = is_string(assemblyParam) ? [assemblyParam] : assemblyParam,
+        assemblySize = assembly[1] != undef ? assembly[1] : mb_size_resolve(size, direction),
+        assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], direction) : direction)
+        [assembly[0], assemblySize, assemblyDirection];
+    
+function mb_assembly_offset_new(assembly, offset) = 
+    let(size = assembly[1],
+        globalDir = assembly[2],
+        oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
+        oY = assembly != undef && size[0] >= size[1] ? 0.5 + size[1] : 0)
+        
+       assembly == undef || assembly[0] != "unassembled" ? offset : (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
+
+
 function mb_assembly_offset(size, globalDir) = 
     let(oX = size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = size[0] >= size[1] ? 0.5 + size[1] : 0)
         //[oX, oY, 0];
        (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
-
-function __mb_assembly_offset(size, dir, assSize = undef, assDir = undef) = 
-    _mb_assembly_offset(assSize != undef ? assSize : mb_size_resolve(size, dir), (dir + assDir)%4);
 
 function mb_assembly_size(config, settings, size, direction) = 
     let(assemblySize = mb_param(config, settings, "assemblySize"))
