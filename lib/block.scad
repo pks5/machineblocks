@@ -364,7 +364,10 @@ function mb_assembly_offset(assembly, offset) =
         oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = assembly != undef && size[0] >= size[1] ? 0.5 + size[1] : 0)
         
-       assembly == undef || assembly[0] != "unassembled" ? offset : (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
+       assembly == undef || assembly[0] != "unassembled" ? offset : mb_offset_global_to_local([oX, oY, 0], globalDir);
+
+function mb_offset_global_to_local(offset, direction) = 
+    (direction == 1 || direction == 3) ? [(direction == 1 ? -1 : 1) * offset[1], (direction == 3 ? -1 : 1) * offset[0], offset[2]] : [(direction == 2 ? -1 : 1) * offset[0], (direction == 2 ? -1 : 1) * offset[1], offset[2]];
 
 /*
 function mb_assembly_offset(size, globalDir) = 
@@ -383,7 +386,7 @@ function mb_assembly_direction(config, settings, direction) =
 */
 //function mb_resolve_assembly_position(dir, p) = [dir == 1 || dir == 3 ? p[1] : p[0], dir == 1 || dir == 3 ? -p[0] : p[1], p[2]];
 
-function mb_size_resolve(size, direction) = direction%2 == 1 ? [size[1], size[0], size[2]] : size;
+function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
 function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) =
@@ -402,6 +405,56 @@ function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) 
                     ]
         )
         mb_base_side_adjustment_override(nextValues, overrides, i + 1);
+
+// Hilfsfunktionen
+function mb_vec3_min(a, b) = [
+    min(a[0], b[0]),
+    min(a[1], b[1]),
+    min(a[2], b[2])
+];
+
+function mb_vec3_max(a, b) = [
+    max(a[0], b[0]),
+    max(a[1], b[1]),
+    max(a[2], b[2])
+];
+
+// entry = [size, direction, offset]
+function mb_part_min(entry) =
+    let(
+        offset = entry[2]
+    )
+    offset;
+
+function mb_part_max(entry) =
+    let(
+        size = entry[0],
+        direction = entry[1],
+        offset = entry[2],
+        size_resolved = mb_size_resolve(size, mb_direction_to_int(direction))
+    )
+    [
+        offset[0] + size_resolved[0],
+        offset[1] + size_resolved[1],
+        offset[2] + size_resolved[2]
+    ];
+
+// Hauptfunktion
+function mb_parts_total_size(parts, i = 0, min_v = undef, max_v = undef) =
+    i >= len(parts)
+        ? [
+            max_v[0] - min_v[0],
+            max_v[1] - min_v[1],
+            max_v[2] - min_v[2]
+          ]
+        : let(
+            part = parts[i],
+            part_min = mb_part_min(part),
+            part_max = mb_part_max(part),
+            next_min = (i == 0) ? part_min : mb_vec3_min(min_v, part_min),
+            next_max = (i == 0) ? part_max : mb_vec3_max(max_v, part_max)
+          )
+          mb_parts_total_size(parts, i + 1, next_min, next_max);
 
 module mb_block(
     config,
