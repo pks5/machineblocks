@@ -100,6 +100,7 @@ function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb
 
 function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "baseSideAdjustment", default != undef ? default : -0.1));
 function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseHeightAdjustment", default != undef ? default : 0.0);
+function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
@@ -395,13 +396,13 @@ function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) 
         : let(
             r = overrides[i],
             index = r[0],
-            newValue = len(r) > 1 ? r[1] : 0,
+            newValue = r[1],//len(r) > 1 ? r[1] : 0,
             nextValues =
                 !is_num(index) || index < 0 || index >= len(baseSideAdjustment)
                     ? baseSideAdjustment
                     : [
                         for (j = [0 : len(baseSideAdjustment) - 1])
-                            j == index ? newValue : baseSideAdjustment[j]
+                            j == index && newValue != undef ? newValue : baseSideAdjustment[j]
                     ]
         )
         mb_base_side_adjustment_override(nextValues, overrides, i + 1);
