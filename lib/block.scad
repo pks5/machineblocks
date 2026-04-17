@@ -70,8 +70,7 @@ function mb_param_size(config, settings, default = undef) = mb_param(config, set
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
 function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]);
 
-function mb_param_cutout(config, settings, default = undef) = mb_param(config, settings, "cutout", default != undef ? default : false);
-function mb_param_cutoutOffset(config, settings, default = undef) = mb_param(config, settings, "cutoutOffset", default != undef ? default : [0, 0]);
+function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
@@ -455,9 +454,8 @@ module mb_block(
     offset = mb_param_offset(config, settings);
     crop = mb_param_crop(config, settings);
 
-    cutout = mb_param_cutout(config, settings);
-    cutoutOffset = mb_param_cutoutOffset(config, settings);
-
+    cutouts = mb_param_cutouts(config, settings);
+    
     base = mb_param_base(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     baseHeight = mb_param_baseHeight(config, settings);
@@ -1683,10 +1681,10 @@ module mb_block(
                                                 );
                                             } //End baseCutoutType
                                             /*
-                                            if(cutout != false && cutout != [0, 0]){
+                                            if(cutouts != false && cutouts != [0, 0]){
                                                 translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
                                                     machineblock(
-                                                        size = [cutout[0], cutout[1], size[2]],
+                                                        size = [cutouts[0], cutouts[1], size[2]],
                                                         studs = false,
                                                         crop = -0.2,
                                                         baseClampOuter=true,
@@ -2191,10 +2189,10 @@ module mb_block(
                                     } // End if baseCutoutType
 
                                     /*
-                                    if(cutout != false && cutout != [0, 0]){
+                                    if(cutouts != false && cutouts != [0, 0]){
                                         translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
                                             machineblock(
-                                                size = [cutout[0], cutout[1], size[2]],
+                                                size = [cutouts[0], cutouts[1], size[2]],
                                                 studs = false,
                                                 baseCutoutType = "none"
                                             );
