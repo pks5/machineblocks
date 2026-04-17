@@ -348,7 +348,8 @@ function mb_params_merge(a, b) =
         b
     );
 
-function mb_params_resolve(config, settings, key, default=undef) = mb_param(config, settings, key, default);
+function mb_params_resolve(config, settings, key, default=undef) = 
+    mb_param(config, settings, key, default);
 
 function mb_assembly(config, settings, size, direction) = 
     let(assemblyParam = mb_param(config, settings, "assembly", "merged"),
