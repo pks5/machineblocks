@@ -57,8 +57,6 @@ use <quality.scad>;
  * }
  */
 
-function mb_param_assembly(config, settings, default = undef) = mb_param(config, settings, "assembly", default != undef ? default : "assembled");
-
 function mb_param_unitMbu(config, settings, default = undef) = mb_param(config, settings, "unitMbu", default != undef ? default : 1.6);
 function mb_param_unitGrid(config, settings, default = undef) = mb_param(config, settings, "unitGrid", default != undef ? default : [5, 2]);
 function mb_param_scale(config, settings, default = undef) = mb_param(config, settings, "scale", default != undef ? default : 1.0);
@@ -100,7 +98,6 @@ function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb
 
 function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "baseSideAdjustment", default != undef ? default : -0.1));
 function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseHeightAdjustment", default != undef ? default : 0.0);
-function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
@@ -314,6 +311,13 @@ function mb_param_previewQuality(config, settings, default = undef) = mb_param(c
 function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
 function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
+/*
+* Composite Blocks Only Parameters
+*/
+function mb_param_assembly(config, settings, default = undef) = mb_param(config, settings, "assembly", default != undef ? default : "assembled");
+function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
+
+
 function mb_param(config, settings, key, default=undef) =
     let(
         s = _mb_params_valid(settings) ? mb_params_get(settings, key, undef) : undef,
@@ -370,23 +374,6 @@ function mb_assembly_offset(assembly, offset) =
 function mb_offset_global_to_local(offset, direction) = 
     (direction == 1 || direction == 3) ? [(direction == 1 ? -1 : 1) * offset[1], (direction == 3 ? -1 : 1) * offset[0], offset[2]] : [(direction == 2 ? -1 : 1) * offset[0], (direction == 2 ? -1 : 1) * offset[1], offset[2]];
 
-/*
-function mb_assembly_offset(size, globalDir) = 
-    let(oX = size[1] > size[0] ? 0.5 + size[0] : 0,
-        oY = size[0] >= size[1] ? 0.5 + size[1] : 0)
-        //[oX, oY, 0];
-       (globalDir == 1 || globalDir == 3) ? [(globalDir == 1 ? -1 : 1) * oY, (globalDir == 3 ? -1 : 1) * oX, 0] : [(globalDir == 2 ? -1 : 1) * oX, (globalDir == 2 ? -1 : 1) * oY, 0];
-
-function mb_assembly_size(config, settings, size, direction) = 
-    let(assemblySize = mb_param(config, settings, "assemblySize"))
-        assemblySize != undef ? assemblySize : mb_size_resolve(size, direction);
-
-function mb_assembly_direction(config, settings, direction) =
-    let(assemblyDirection = mb_param(config, settings, "assemblyDirection", 0))
-        mb_direction_resolve(assemblyDirection, direction);
-*/
-//function mb_resolve_assembly_position(dir, p) = [dir == 1 || dir == 3 ? p[1] : p[0], dir == 1 || dir == 3 ? -p[0] : p[1], p[2]];
-
 function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
@@ -408,26 +395,26 @@ function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) 
         mb_base_side_adjustment_override(nextValues, overrides, i + 1);
 
 // Hilfsfunktionen
-function mb_vec3_min(a, b) = [
+function _mb_vec3_min(a, b) = [
     min(a[0], b[0]),
     min(a[1], b[1]),
     min(a[2], b[2])
 ];
 
-function mb_vec3_max(a, b) = [
+function _mb_vec3_max(a, b) = [
     max(a[0], b[0]),
     max(a[1], b[1]),
     max(a[2], b[2])
 ];
 
 // entry = [size, direction, offset]
-function mb_part_min(entry) =
+function _mb_part_min(entry) =
     let(
         offset = entry[2]
     )
     offset;
 
-function mb_part_max(entry) =
+function _mb_part_max(entry) =
     let(
         size = entry[0],
         direction = entry[1],
@@ -450,10 +437,10 @@ function mb_parts_total_size(parts, i = 0, min_v = undef, max_v = undef) =
           ]
         : let(
             part = parts[i],
-            part_min = mb_part_min(part),
-            part_max = mb_part_max(part),
-            next_min = (i == 0) ? part_min : mb_vec3_min(min_v, part_min),
-            next_max = (i == 0) ? part_max : mb_vec3_max(max_v, part_max)
+            part_min = _mb_part_min(part),
+            part_max = _mb_part_max(part),
+            next_min = (i == 0) ? part_min : _mb_vec3_min(min_v, part_min),
+            next_max = (i == 0) ? part_max : _mb_vec3_max(max_v, part_max)
           )
           mb_parts_total_size(parts, i + 1, next_min, next_max);
 
