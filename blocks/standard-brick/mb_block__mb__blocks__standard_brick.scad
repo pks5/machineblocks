@@ -1,16 +1,17 @@
 /**
- * MachineBlocks Block File
+ * MachineBlocks.com Block File
  *
  * Name: Standard Brick
  * Filename: mb_block__mb__blocks__standard_brick.scad
  * Package: mb.blocks.standard_brick
  *
- * Original: Brick 4x2 (Legacy)
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
  * Published under license:
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
  * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
  */
 
 /*
