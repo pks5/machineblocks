@@ -2,8 +2,8 @@
  * MachineBlocks.com Block File
  *
  * Name: Standard Brick
- * Filename: mb_block__mb__blocks__standard_brick.scad
- * Package: mb.blocks.standard_brick
+ * Filename: mb_block__mb__prim__standard_brick.scad
+ * Package: mb.prim.standard_brick
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -18,9 +18,9 @@
  * Imports
  */
 // MachineBlocks Library
-use <../../lib/block.scad>;
+use <../../../lib/block.scad>;
 // Global Config
-include <../../config/mb_config.scad>;
+include <../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -159,7 +159,7 @@ textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)))
 /*
  * Main Module Call
  */
-mb_block__mb__blocks__standard_brick(
+mb_block__mb__prim__standard_brick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -210,7 +210,7 @@ mb_block__mb__blocks__standard_brick(
 /*
  * Main Module Definition
  */
-module mb_block__mb__blocks__standard_brick(config = undef, settings = undef){
+module mb_block__mb__prim__standard_brick(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings

@@ -2,8 +2,8 @@
  * MachineBlocks.com Block File
  *
  * Name: Corner Brick
- * Filename: mb_block__mb__blocks__corner_brick.scad
- * Package: mb.blocks.corner_brick
+ * Filename: mb_block__mb__prim__corner_brick.scad
+ * Package: mb.prim.corner_brick
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -18,9 +18,9 @@
  * Imports
  */
 // MachineBlocks Library
-use <../../lib/block.scad>;
+use <../../../lib/block.scad>;
 // Global Config
-include <../../config/mb_config.scad>;
+include <../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -91,7 +91,7 @@ studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-so
 /*
  * Main Module Call
  */
-mb_block__mb__blocks__corner_brick(
+mb_block__mb__prim__corner_brick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -123,7 +123,7 @@ mb_block__mb__blocks__corner_brick(
 /*
  * Main Module Definition
  */
-module mb_block__mb__blocks__corner_brick(config = undef, settings = undef){
+module mb_block__mb__prim__corner_brick(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
