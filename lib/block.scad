@@ -367,6 +367,21 @@ function mb_offset_global_to_local(offset, direction) =
 function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
+function mb_base_side_adjustment(config, settings, mapping) =
+    let(baseSideAdjustment = mb_param_baseSideAdjustment(config, settings),
+        namedSideAdjustments = mb_param_namedSideAdjustments(config, settings))
+    mb_base_side_adjust(baseSideAdjustment, namedSideAdjustments, mapping);
+
+function mb_base_side_adjust(baseSideAdjustment, sideAdjustments, mapping) =
+    let(namedAdj = mb_named_side_adjustments(sideAdjustments, mapping))
+    mb_base_side_adjustment_override(baseSideAdjustment, namedAdj);
+
+function mb_named_side_adjustments(sideAdjustments, mapping) =
+[
+    for (entry = mapping)
+        [entry[0], mb_params_get(sideAdjustments, entry[1])]
+];
+
 function mb_base_side_adjustment_override(baseSideAdjustment, overrides, i = 0) =
     (overrides == undef) || (i >= len(overrides))
         ? baseSideAdjustment
