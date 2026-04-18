@@ -13,7 +13,7 @@
 #
 # ============================================================================
 
-version: "1.0.0"
+version: "2.0.0"
 
 # ============================================================================
 # GLOBAL RULES
@@ -47,6 +47,56 @@ global_rules:
       - "never": do not use at all, internal constant
 
       These are AI generation guidelines, not library enforcement rules.
+
+  parameter_access:
+    description: |
+      All parameters listed in this document are NATIVE parameters — they are
+      used directly by mb_block(). Every native parameter has a dedicated
+      getter function:
+
+        mb_param_{parameterName}(config, settings)
+        mb_param_{parameterName}(config, settings, defaultOverride)
+
+      Custom parameters defined by individual block modules use the generic
+      getter:
+
+        mb_param(config, settings, "parameterName", defaultValue)
+
+      Block modules MUST use the dedicated getter for native parameters.
+      Direct array access is not permitted.
+
+  getter_format_resolution:
+    description: |
+      Native parameter getters automatically resolve external input formats
+      to internal formats. Examples:
+
+      mb_param_direction() returns int:
+        "west" → 0, "north" → 1, "east" → 2, "south" → 3
+
+      mb_param_baseSideAdjustment() always returns 4-element array:
+        0.1              → [0.1, 0.1, 0.1, 0.1]
+        [0.1, 0.2]       → [0.1, 0.1, 0.2, 0.2]
+        [0.1,0.2,0.3,0.4]→ [0.1, 0.2, 0.3, 0.4]
+
+      All per-side parameters follow the same resolution pattern.
+
+  customizer_defaults:
+    description: |
+      Default slider ranges for the OpenSCAD customizer when no explicit
+      range is specified per parameter:
+
+      unitGrid parameters:
+        step: 0.25, min: 0, max: 32
+        Exception — size: min is 1 (not 0)
+
+      mbu parameters (XY context):
+        step: 0.125, min: 0, max: 160
+
+      mbu parameters (Z context):
+        step: 0.125, min: 0, max: 64
+
+      Individual parameters may override these defaults. The override is
+      noted in the customizer_range field of that parameter.
 
   unit_system:
     mbu:
@@ -255,6 +305,7 @@ parameters:
     format: "[x, y, z]"
     unit: unitGrid (multiples of a 1x1 plate)
     default: [1, 1, 1]
+    customizer_range: "[1:0.25:32]"
     ai_usage: yes
     description: |
       Size of the bounding box in grid units. Defines the brick body;
@@ -351,6 +402,7 @@ parameters:
       4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: unitGrid
     default: 0
+    customizer_range: "[-32:0.25:32]"
     ai_usage: yes
     description: |
       Hard cuts or extensions per side (0-3 only, no Z-axis crop).
@@ -359,6 +411,31 @@ parameters:
       Can break grid compatibility, especially with negative values.
       Intended for cross-sections, screenshots, or helper bricks — not
       for normal size adjustment.
+
+  - name: cutouts
+    group: core_geometry
+    type: array_or_false
+    format: |
+      false: no cutouts.
+      Array of settings arrays: each inner array is a list of key-value pairs
+      using native parameter names to define one cutout volume.
+      Supported parameters per cutout: size, offset, bevel, slope, crop,
+      baseSideAdjustment, baseHeightAdjustment, and any other parameters
+      that affect the shape or size of a volume.
+      Parameters that only affect surface features or rendering are ignored.
+    unit: mixed (follows individual parameter units)
+    default: false
+    ai_usage: yes
+    description: |
+      Defines one or more void volumes to subtract from the block body.
+      Each entry in the array is a settings array describing one cutout.
+      The subtraction is applied brutally — it ignores walls, recess,
+      tongue, and all structural features. The cutout cuts through everything.
+    example: |
+      cutouts = [
+        [["size", [1, 1, 1]], ["offset", [0, 1, 1]]],
+        [["size", [1, 2, 3]], ["offset", [2, 1, 4]]]
+      ]
 
   # --------------------------------------------------------------------------
   # GROUP: Positioning / Transformation
@@ -1705,6 +1782,7 @@ parameters:
     type: float
     unit: mbu
     default: 1
+    customizer_range: "[0:0.125:64]"
     ai_usage: rarely
     description: |
       Height of studs. Usually does not need adjustment.
@@ -1717,6 +1795,20 @@ parameters:
     ai_usage: config_only
     description: |
       Calibration adjustment for studHeight.
+
+  - name: studSink
+    group: studs
+    type: float
+    unit: mbu
+    default: 0.25
+    customizer_range: "[0:0.125:64]"
+    ai_usage: yes
+    description: |
+      How deeply the stud is sunk into the block body.
+      Ensures the stud is geometrically connected to the body (no floating geometry).
+      Also prevents gaps when grille or surfacePattern is active.
+      Can be set to 0 when a block has base=false but still renders studs
+      (e.g. stud-only decorative layers in composite blocks).
 
   - name: studCutoutAdjustment
     group: studs
@@ -2897,23 +2989,94 @@ parameters:
       Convexity parameter passed to OpenSCAD render() function.
 
 # ============================================================================
-# DEPRECATED / EXPERIMENTAL — DO NOT USE
+# COMPOSITE BLOCK PARAMETERS
+# ============================================================================
+# These parameters are native parameters recognized by the system, but are
+# intentionally IGNORED by mb_block(). They are only meaningful in composite
+# block modules, which must implement their behavior explicitly.
+# ============================================================================
+
+composite_block_parameters:
+
+  - name: assembly
+    group: composite
+    type: string_or_array
+    format: |
+      String format:
+        "unassembled" | "assembled" | "merged"
+
+      Array format (required when this block is itself a child of another
+      composite block):
+        [mode, [sX, sY, sZ], direction]
+        - mode: "unassembled" | "assembled" | "merged"
+        - [sX, sY, sZ]: direction-resolved size of the outer composite block
+        - direction: aggregated direction through the full block tree (int or string)
+    unit: dimensionless
+    default: "assembled"
+    ai_usage: yes
+    description: |
+      Controls the visualization mode of a composite block.
+      Must be actively implemented by composite block modules.
+      mb_block() ignores this parameter.
+
+      unassembled: parts are laid out individually for printing,
+        spaced 4mm apart along X-axis.
+      assembled: parts shown in connected position including internal geometry.
+      merged: parts fused into a single body; tongue/groove and internal
+        voids are suppressed.
+
+      Always resolve via mb_assembly(config, settings, size, direction).
+      Always check mode via assembly[0] after resolution.
+
+      The array format is required when this composite block is itself
+      used as a child inside another composite block. The size and direction
+      in the array are used to correctly position unassembled parts.
+      mb_assembly() handles this propagation automatically.
+
+  - name: namedSideAdjustments
+    group: composite
+    type: array
+    format: |
+      Array of [name, adjustment_mm] pairs:
+        [["start", 0.01], ["end", 0.01]]
+      Names are defined by the composite block module using
+      mb_base_side_adjustment().
+    unit: mm
+    default: []
+    ai_usage: yes
+    description: |
+      Allows the outer composite block to extend specific named sides of
+      a child block, creating a controlled minimal overlap between adjacent
+      parts. This is necessary when baseSideAdjustment is negative — without
+      overlap, the parts would have a visible gap or a zero-thickness shared
+      wall.
+
+      Named sides are defined inside the child composite block module via:
+        mb_base_side_adjustment(config, settings, [[sideIndex, "name"], ...])
+
+      The outer block passes the adjustments via:
+        ["namedSideAdjustments", [["name", 0.01], ...]]
+
+      mb_block() ignores this parameter.
+
+# ============================================================================
+# DEPRECATED / REMOVED — DO NOT USE
 # ============================================================================
 
 deprecated_parameters:
   - name: cutout
-    reason: "Experimental"
+    reason: "Removed. Use cutouts (array of settings arrays) instead."
   - name: cutoutOffset
-    reason: "Experimental"
+    reason: "Removed. Use cutouts (array of settings arrays) instead."
   - name: baseRoundingResolution
-    reason: "Deprecated, will be removed"
+    reason: "Removed."
   - name: pillarRoundingResolution
-    reason: "Deprecated, will be removed"
+    reason: "Removed."
   - name: pillarGapCornerLength
-    reason: "Experimental"
+    reason: "Experimental — do not use."
   - name: pillarGapMiddle
-    reason: "Experimental"
+    reason: "Experimental — do not use."
   - name: holeRoundingResolution
-    reason: "Deprecated, will be removed"
+    reason: "Removed."
   - name: studRoundingResolution
-    reason: "Deprecated, will be removed"
+    reason: "Removed."

@@ -1,6 +1,6 @@
 # MachineBlocks — Patterns and Examples
 
-version: 1.1.0
+version: 2.0.0
 
 ## Purpose of this Document
 
@@ -13,51 +13,85 @@ This document defines the Block File structure, customizer conventions, config h
 
 # Block File Structure
 
-Every Block File follows a mandatory structure. The sections must appear in this order. Comments and headers are optional but recommended as the standard for AI-generated code.
+Every Block File follows a mandatory structure. The sections must appear in this order and each section must be marked with a `/* Section Name */` comment.
 
 ```scad
 /**
- * Header (optional but recommended)
+ * Mandatory Header
  */
 
 /* Imports */
 
-/* Customizer Variables */
+/* Customization */
 
 /* Main Module Call */
 
 /* Main Module Definition */
 
-/* Optional Sub-Modules */
+/* Optional Sub Modules */
+
+/* Optional Helper Modules */
 
 /* Optional Global Functions */
+```
+
+## Mandatory Header
+
+The header comment is mandatory. The first line inside the header must be exactly `MachineBlocks.com Block File`. The following fields are required: `Name:`, `Filename:`, `Package:`. Copyright, license, and visit lines are optional.
+
+```scad
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: My Block
+ * Filename: mb_block__my__package__my_block.scad
+ * Package: my.package.my_block
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Published under license:
+ * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
+ */
 ```
 
 ## Complete Block File Template
 
 ```scad
 /**
-* MachineBlocks Block File
-*
-* Name: My Block
-* Filename: mb_block__my__package__my_block.scad
-* Package: my.package.my_block
-*/
+ * MachineBlocks.com Block File
+ *
+ * Name: My Block
+ * Filename: mb_block__my__package__my_block.scad
+ * Package: my.package.my_block
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Published under license:
+ * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
+ */
 
 /*
-* Imports
-*/
-use <../../../machineblocks/lib/block.scad>;
-include <../../config/mb_config.scad>;
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
 
 /*
-* Customization
-*/
+ * Customization
+ */
 
 /* [Geometry] */
 
-// Size
-size = [4, 2, 3]; // [1:1:16]
+// Brick size (grid)
+size = [4, 2, 3]; // [1:0.25:32]
 
 // Direction
 direction = "west"; // [west, north, east, south]
@@ -72,8 +106,8 @@ baseColor = "#EAC645";
 // (computed values go here)
 
 /*
-* Main Module Call
-*/
+ * Main Module Call
+ */
 mb_block__my__package__my_block(
     config = mb_config,
     settings = [
@@ -84,8 +118,8 @@ mb_block__my__package__my_block(
 );
 
 /*
-* Main Module Definition
-*/
+ * Main Module Definition
+ */
 module mb_block__my__package__my_block(config = undef, settings = undef){
     mb_block(
         config = config,
@@ -100,23 +134,25 @@ module mb_block__my__package__my_block(config = undef, settings = undef){
 
 Every Block File must have two imports.
 
-**Library import** using `use` (loads only module definitions, ignores customizer variables):
+**Library import** using `use` (loads only module definitions):
 
 ```scad
-use <../../../machineblocks/lib/block.scad>;
+use <../../../../machineblocks/lib/block.scad>;
 ```
 
-**Config import** using `include` (executes the file, making `mb_config` available as a variable):
+**Config import** using `include` (executes the file, making `mb_config` available):
 
 ```scad
-include <../../config/mb_config.scad>;
+include <../../../config/mb_config.scad>;
 ```
 
-Local paths vary by project structure. AI IDEs like Cursor can resolve them automatically. The Online Editor converts paths on upload:
+Paths are relative to the block file's location. The path depth depends on how many package segments the block has. The AI calculates paths based on the assumption that `machineblocks/` is a sibling library. See `01_system.md` for the library structure and path rules.
+
+The Online Editor converts paths on upload:
 
 ```text
-use <../../../machineblocks/lib/block.scad>  →  use <machineblocks/lib/block.scad>
-include <../../config/mb_config.scad>        →  include </mb_config.scad>
+use <../../../../machineblocks/lib/block.scad>  →  use <machineblocks/lib/block.scad>
+include <../../../config/mb_config.scad>        →  include </mb_config.scad>
 ```
 
 ---
@@ -141,7 +177,7 @@ Inside the module definition, the `config` parameter (not `mb_config`) is passed
 ```scad
 module mb_block__my__package__my_block(config = undef, settings = undef){
     mb_block(
-        config = config,  // config parameter, not mb_config
+        config = config,  // always the config parameter, never mb_config
         settings = [...]
     );
 }
@@ -153,95 +189,78 @@ module mb_block__my__package__my_block(config = undef, settings = undef){
 
 # OpenSCAD Customizer Syntax
 
-The customizer section defines variables that appear in the OpenSCAD Customizer UI. Only variables with direct value assignments are shown in the customizer. Computed or derived values are not displayed.
+The customizer section defines variables that appear in the OpenSCAD Customizer UI.
+
+## Customizer Slider Defaults
+
+When no explicit range is specified for a parameter, the following defaults apply:
+
+| Unit      | Step   | Min | Max       |
+|-----------|--------|-----|-----------|
+| unitGrid  | 0.25   | 0   | 32 (size: min 1) |
+| mbu (XY)  | 0.125  | 0   | 160       |
+| mbu (Z)   | 0.125  | 0   | 64        |
+
+These defaults can be overridden per parameter. Always use the range comment syntax:
+
+```scad
+// Brick size (grid)
+size = [4, 2, 3]; // [1:0.25:32]
+
+// Relief Cut Thickness (mbu)
+baseReliefCutThickness = 0.375; // [0:0.125:160]
+
+// HoleY Grid Offset Z (mbu)
+holeYGridOffsetZ = 3.5; // [0:0.125:64]
+```
 
 ## Tabs
 
-Variables are grouped into tabs using special comments:
-
 ```scad
 /* [Geometry] */
-size = [4, 2, 3]; // [1:1:16]
+size = [4, 2, 3]; // [1:0.25:32]
 
 /* [Appearance] */
 baseColor = "#ff0000";
 ```
 
-`/* [Hidden] */` hides all variables below it from the customizer. Use this for computed values and helper assignments.
-
-`/* [Global] */` shows variables in all tabs simultaneously.
-
-Without any tab comments, all variables appear in a single default tab.
+`/* [Hidden] */` hides all variables below it. Use for computed values.
 
 ## Input Types
 
-**String** — free text input:
-
+**String:**
 ```scad
-// Label Text
 myText = "Hello";
 ```
 
-**Number with range** — slider:
-
+**Number with range (slider):**
 ```scad
-// Speed
 speed = 50; // [0:1:160]
 ```
 
-Format: `// [min:step:max]`
-
-**Number with step** — spinbox:
-
+**Boolean (checkbox):**
 ```scad
-// Radius
-radius = 0.5; // .25
-```
-
-Format: `// .step`
-
-**Boolean** — checkbox:
-
-```scad
-// Enable Studs
 studs = true;
 ```
 
-**Enum** — combobox:
-
+**Enum (combobox):**
 ```scad
-// Direction
 direction = "west"; // [west, north, east, south]
 ```
 
-**Enum with labels** — combobox with display names:
-
+**Enum with labels:**
 ```scad
-// Assembly
 assembly = "unassembled"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
 ```
 
-**Enum with numbers** — combobox:
-
+**Array with range:**
 ```scad
-// Count
-count = 4; // [4, 5, 6]
+size = [4, 2, 3]; // [1:0.25:32]
 ```
-
-**Array with range** — multi-field input with sliders:
-
-```scad
-// Size
-size = [4, 2, 3]; // [1:1:16]
-```
-
-Arrays with up to 4 integer fields support range syntax for slider/input display.
 
 ## Important Rules
 
-Customizer variables do not need to map 1:1 to `mb_block` parameters. Complex parameter values often require multiple customizer variables that are combined in the module. The customizer only supports primitive types — numbers, strings, and booleans.
-
-Only direct value assignments appear in the customizer:
+Only direct value assignments appear in the customizer. Computed values must be placed under `/* [Hidden] */`.
 
 ```scad
 a = 5;     // shown in customizer
@@ -249,7 +268,31 @@ b = a;     // NOT shown in customizer
 c = a + 1; // NOT shown in customizer
 ```
 
-Computed values and helper assignments must be placed under `/* [Hidden] */` to avoid appearing as empty entries in the customizer.
+---
+
+# Parameter Access Rules
+
+All block modules must follow these rules for reading parameters:
+
+**Native parameters** (parameters used by `mb_block()`) — use the dedicated getter:
+```scad
+size = mb_param_size(config, settings);
+direction = mb_param_direction(config, settings);
+baseColor = mb_param_baseColor(config, settings);
+```
+
+An optional default can be passed as the third argument:
+```scad
+size = mb_param_size(config, settings, [4, 2, 3]);
+```
+
+**Custom parameters** (module-specific parameters) — use the generic getter:
+```scad
+myParam = mb_param(config, settings, "myParam", "myDefaultValue");
+cornerRounding = mb_param(config, settings, "cornerRounding", 0.5);
+```
+
+> Never access the settings or config arrays directly. Always use the getter functions.
 
 ---
 
@@ -259,16 +302,39 @@ Block Modules follow three patterns based on their internal complexity.
 
 ## Pattern 1 — Primitive Wrapper
 
-A pass-through wrapper around `mb_block()` or another block module. No own logic, no parameter mapping — `config` and `settings` are forwarded directly.
-
-Purpose: Expose a specific set of `mb_block` parameters through the customizer UI.
+A pass-through wrapper around `mb_block()`. No own logic, no parameter mapping — `config` and `settings` are forwarded directly.
 
 ```scad
-use <../../../machineblocks/lib/block.scad>;
-include <../../config/mb_config.scad>;
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: My Primitive Wrapper
+ * Filename: mb_block__mm__examples__primitive_wrapper.scad
+ * Package: mm.examples.primitive_wrapper
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Published under license:
+ * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
+ */
 
-// Size
-size = [3, 1, 1]; // [1:1:16]
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+
+/*
+ * Customization
+ */
+
+// Bounding Box
+size = [3, 1, 1]; // [1:0.25:32]
 
 // Color
 baseColor = "#ff0000";
@@ -279,7 +345,10 @@ direction = "west"; // [west, north, east, south]
 // Studs
 studs = true;
 
-mb_block__my__package__primitive_wrapper(
+/*
+ * Main Module Call
+ */
+mb_block__mm__examples__primitive_wrapper(
     config = mb_config,
     settings = [
         ["size", size],
@@ -289,74 +358,80 @@ mb_block__my__package__primitive_wrapper(
     ]
 );
 
-module mb_block__my__package__primitive_wrapper(config = undef, settings = undef){
+/*
+ * Main Module Definition
+ */
+module mb_block__mm__examples__primitive_wrapper(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
     );
 }
+
+/*
+ * Optional Sub Modules (not used in this example)
+ * Sub modules are independent mb_block modules with the same (config, settings) signature.
+ * Sub module names must NOT use 'func' or 'help'.
+ * Package: mm.examples.primitive_wrapper.sub_module
+ */
+
+/*
+ * Optional Helper Modules (not used in this example)
+ * Helper modules may have any signature.
+ * Package: mm.examples.primitive_wrapper.help.helper_name
+ */
+
+/*
+ * Optional Global Functions (not used in this example)
+ * Package: mm.examples.primitive_wrapper.func.func_name
+ */
 ```
 
 ## Pattern 2 — Simple Block
 
-Own customizer variables, own parameter mapping, optional logic inside the module. Translates semantic or simplified parameters into `mb_block` parameters.
+Own customizer variables, own parameter mapping, optional logic inside the module.
 
-Purpose: Create reusable semantic blocks with domain-specific interfaces. Useful for giving AI systems simpler, purpose-named modules to choose from.
-
-### Example — Text Plate with Unit Conversion
+### Example — Round Brick
 
 ```scad
-use <../../../machineblocks/lib/block.scad>;
-include <../../config/mb_config.scad>;
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: Simple Round Brick
+ * Filename: mb_block__mm__examples__simple_round_brick.scad
+ * Package: mm.examples.simple_round_brick
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Published under license:
+ * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
+ */
 
-// Size Mode
-sizeMode = "small"; // [small, large]
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
 
-// Speed MPH
-speedMph = 50; // [0:1:160]
-
-mb_block__my__package__simple_text_plate(
-    config = mb_config,
-    settings = [
-        ["sizeMode", sizeMode],
-        ["speedMph", speedMph]
-    ]
-);
-
-module mb_block__my__package__simple_text_plate(config = undef, settings = undef){
-    sizeMode = mb_params_resolve(config, settings, "sizeMode", "small");
-    speedMph = mb_params_resolve(config, settings, "speedMph", 0);
-
-    mb_block(
-        config = config,
-        settings = [
-            ["size", sizeMode == "small" ? [4, 2, 1] : [8, 4, 1]],
-            ["studs", false],
-            ["text", str(mb_block__my__package__simple_text_plate__mph_to_kmh(speedMph))],
-            ["textSide", 5],
-            ["textSize", 12]
-        ]
-    );
-}
-
-function mb_block__my__package__simple_text_plate__mph_to_kmh(mph) = 1.6 * mph;
-```
-
-### Example — Semantic Naming (Round Brick)
-
-Wraps a complex `mb_block` parameter (`baseRoundingRadius` with array format) behind a simple semantic interface (`roundingRadiusZ` as a single float).
-
-```scad
-use <../../../machineblocks/lib/block.scad>;
-include <../../config/mb_config.scad>;
+/*
+ * Customization
+ */
 
 // Size
-size = [4, 2, 3]; // [1:1:64]
+size = [4, 2, 3]; // [1:0.25:64]
 
 // Rounding Radius
 roundingRadiusZ = 0.5; // [0:0.25:2]
 
-mb_block__my__package__simple_round_brick(
+/*
+ * Main Module Call
+ */
+mb_block__mm__examples__simple_round_brick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -364,9 +439,14 @@ mb_block__my__package__simple_round_brick(
     ]
 );
 
-module mb_block__my__package__simple_round_brick(config = undef, settings = undef){
-    size = mb_params_resolve(config, settings, "size", [4, 2, 3]);
-    roundingRadiusZ = mb_params_resolve(config, settings, "roundingRadiusZ", 0.5);
+/*
+ * Main Module Definition
+ */
+module mb_block__mm__examples__simple_round_brick(config = undef, settings = undef){
+    // Native Parameters
+    size = mb_param_size(config, settings, [4, 2, 3]);
+    // Custom Parameters
+    roundingRadiusZ = mb_param(config, settings, "roundingRadiusZ", 0.5);
 
     mb_block(
         config = config,
@@ -376,94 +456,222 @@ module mb_block__my__package__simple_round_brick(config = undef, settings = unde
         ]
     );
 }
+
+/*
+ * Sub Module "alt"
+ * mm.examples.simple_round_brick.alt
+ */
+module mb_block__mm__examples__simple_round_brick__alt(config = undef, settings = undef){
+    // Native Parameters
+    size = mb_param_size(config, settings, [4, 2, 3]);
+    // Custom Parameters
+    roundingRadiusZ = mb_param(config, settings, "roundingRadiusZ", 0.5);
+
+    mb_block(
+        config = config,
+        settings = [
+            ["size", size],
+            ["baseRoundingRadius", [0.25, 0.25, roundingRadiusZ]]
+        ]
+    );
+}
+```
+
+### Example — Text Plate with Helper and Function
+
+```scad
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: Simple Text Plate
+ * Filename: mb_block__mm__examples__simple_text_plate.scad
+ * Package: mm.examples.simple_text_plate
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Published under license:
+ * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * Visit machineblocks.com for more information.
+ */
+
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+
+/*
+ * Customization
+ */
+
+// Size Mode
+sizeMode = "small"; // [small, large]
+
+// Speed MPH
+speedMph = 50; // [0:1:160]
+
+/*
+ * Main Module Call
+ */
+mb_block__mm__examples__simple_text_plate(
+    config = mb_config,
+    settings = [
+        ["sizeMode", sizeMode],
+        ["speedMph", speedMph]
+    ]
+);
+
+/*
+ * Main Module Definition
+ */
+module mb_block__mm__examples__simple_text_plate(config = undef, settings = undef){
+    // Custom Parameters
+    sizeMode = mb_param(config, settings, "sizeMode", "small");
+    speedMph = mb_param(config, settings, "speedMph", 0);
+
+    mb_block__mm__examples__simple_text_plate__help__doit(10);
+
+    mb_block(
+        config = config,
+        settings = [
+            ["size", sizeMode == "small" ? [4, 2, 1] : [8, 4, 1]],
+            ["studs", false],
+            ["text", str(mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(speedMph))],
+            ["textSide", 5],
+            ["textSize", 12]
+        ]
+    );
+}
+
+/*
+ * Helper Module "doit"
+ * mm.examples.simple_text_plate.help.doit
+ */
+module mb_block__mm__examples__simple_text_plate__help__doit(my_var = 5){
+    echo(concat("My var: ", my_var));
+}
+
+/**
+ * Global function "mph_to_kmh"
+ * mm.examples.simple_text_plate.func.mph_to_kmh
+ *
+ * Converts MPH to KMH
+ */
+function mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(mph) = 1.6 * mph;
 ```
 
 ## Pattern 3 — Composite Block
 
-Multiple `mb_block()` calls inside a wrapper block. Creates complex geometry from several sub-blocks. The wrapper block uses `base = false` and `studs = false` — it only defines the bounding box and contains children.
-
-Purpose: Build structures that cannot be expressed by a single `mb_block()` — panels, corners, enclosures, multi-part printable blocks.
-
-### Assembly System
-
-Composite blocks typically support three assembly states controlled by the `assembly` parameter:
-
-`unassembled` — parts are visually separated for printing. `assembled` — parts are shown in their connected position. `merged` — parts are fused into a single body (no tongue/groove).
-
-The `mb_assembly_offset()` library function calculates the visual separation offset respecting the current `direction`.
+Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = false` and `studs = false`. Composite blocks must implement `mb_assembly()` and `mb_base_side_adjustment()` when parts support assembly and when parts are adjacent without overlap.
 
 ### Example — Wall Panel (Tongue + Groove)
 
-A wall panel split into two printable parts: a lower block with recess and tongue, and an upper block with groove. The assembly parameter controls visualization.
-
 ```scad
-use <../../machineblocks/lib/block.scad>;
-include <../config/mb_config.scad>;
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: AnyClosure Wall
+ * Filename: mb_block__mm__anyclosure__wall.scad
+ * Package: mm.anyclosure.wall
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Visit martianmicro.com for more information.
+ */
+
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+
+/*
+ * Customization
+ */
 
 // Size (Bounding Box)
-size = [1, 8, 8]; // [1:1:16]
+size = [1, 8, 8]; // [1:0.25:32]
+
+// Direction
+direction = "west"; // [west:West, north:North, east:East, south:South]
 
 // Assembly
 assembly = "unassembled"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
 
 // Color
-baseColor = "#303D4E"; // [#58B99D:Turquoise, #303D4E:Midnight Blue, #EAC645:Sun Flower, #D65745:Alizarin, #EDF0F1:Clouds]
+baseColor = "#303D4E";
 
+/*
+ * Main Module Call
+ */
 mb_block__mm__anyclosure__wall(
     config = mb_config,
     settings = [
         ["size", size],
         ["assembly", assembly],
-        ["baseColor", baseColor]
+        ["baseColor", baseColor],
+        ["direction", direction]
     ]
 );
 
+/*
+ * Main Module Definition
+ */
 module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
-    size = mb_params_get(settings, "size", default=[1, 8, 8]);
-    offset = mb_params_get(settings, "offset", default=[0, 0, 0]);
-    direction = mb_params_get(settings, "direction", default="west");
-    assembly = mb_params_get(settings, "assembly", default="unassembled");
-    assemblyOffset = mb_params_get(settings, "assemblyOffset", default=[-1.5, 0, 0]);
-    align = mb_params_get(settings, "align", default="start");
-    baseColor = mb_params_get(settings, "baseColor", default="#EDF0F1");
+    // Native Parameters
+    size = mb_param_size(config, settings);
+    offset = mb_param_offset(config, settings);
+    direction = mb_param_direction(config, settings);
+    align = mb_param_align(config, settings);
+    baseColor = mb_param_baseColor(config, settings);
 
+    // Resolve Base Side Adjustments
+    panelSideAdjustment = mb_base_side_adjustment(config, settings, [[2, "start"], [3, "end"]]);
+
+    // Resolve assembly
+    assembly = mb_assembly(config, settings, size, direction);
+
+    // Wrapper Block
     mb_block(
         config = config,
         settings = [
             ["base", false],
             ["studs", false],
-            ["assembly", assembly],
             ["size", size],
             ["align", align],
             ["offset", offset],
             ["direction", direction]
         ]
     ){
-        // Lower part — recess + tongue
         mb_block(
             config = config,
             settings = [
                 ["size", [size[0], size[1], size[2] - 1]],
                 ["align", align],
                 ["recess", true],
-                ["tongue", assembly != "merged"],
-                ["recessWallGaps", [[1,0,0]]],
-                ["baseColor", baseColor]
+                ["tongue", assembly[0] != "merged"],
+                ["recessWallGaps", [[1, 0, 0]]],
+                ["baseColor", baseColor],
+                ["baseSideAdjustment", panelSideAdjustment]
             ]
         );
 
-        // Upper part — groove
         mb_block(
             config = config,
             settings = [
                 ["size", [size[0], size[1], 1]],
                 ["align", align],
-                ["offset", assembly == "unassembled"
-                    ? mb_assembly_offset(assemblyOffset, direction)
-                    : [0, 0, size[2] - 1]],
-                ["recessWallGaps", [[1,0,0]]],
-                ["baseCutoutType", assembly == "merged" ? "none" : "groove"],
-                ["baseColor", baseColor]
+                ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
+                ["recessWallGaps", [[1, 0, 0]]],
+                ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+                ["baseColor", baseColor],
+                ["baseSideAdjustment", panelSideAdjustment]
             ]
         );
     }
@@ -472,257 +680,278 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
 
 ### Example — Corner Panel
 
-Two panels intersecting in an L-shape. Each panel consists of 2 blocks (tongue + groove), totaling 4 blocks. Uses `baseWallGapsX`/`baseWallGapsY` at crossing points for grid compatibility.
-
 ```scad
-use <../../machineblocks/lib/block.scad>;
-include <../config/mb_config.scad>;
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: AnyClosure Corner
+ * Filename: mb_block__mm__anyclosure__corner.scad
+ * Package: mm.anyclosure.corner
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Visit martianmicro.com for more information.
+ */
+
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+
+/*
+ * Customization
+ */
 
 // Size (Bounding Box)
-size = [4, 4, 9]; // [1:1:16]
+size = [4, 4, 9]; // [1:0.25:32]
+
+// Direction
+direction = "west"; // [west:West, north:North, east:East, south:South]
 
 // Assembly
 assembly = "unassembled"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
 
 // Corner Rounding
-cornerRounding = 0.5; // .25
+cornerRounding = 0.5; // [0:0.25:2]
 
+// Color
+baseColor = "#303D4E";
+
+/*
+ * Main Module Call
+ */
 mb_block__mm__anyclosure__corner(
     config = mb_config,
     settings = [
         ["size", size],
         ["assembly", assembly],
-        ["cornerRounding", cornerRounding]
+        ["cornerRounding", cornerRounding],
+        ["baseColor", baseColor],
+        ["direction", direction]
     ]
 );
 
+/*
+ * Main Module Definition
+ */
 module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
-    size = mb_params_get(settings, "size", default=[4,4,9]);
-    offset = mb_params_get(settings, "offset", default=[0, 0, 0]);
-    direction = mb_params_get(settings, "direction", default="west");
-    align = mb_params_get(settings, "align", default="start");
-    assembly = mb_params_get(settings, "assembly", default="unassembled");
-    assemblyOffset = mb_params_get(settings, "assemblyOffset", default=[-1.5, -1.5, 0]);
-    baseColor = mb_params_get(settings, "baseColor", default="#EDF0F1");
-    cornerRounding = mb_params_get(settings, "cornerRounding", default=0.5);
-    wallThickness = mb_params_get(settings, "wallThickness", default=1);
+    // Native Parameters
+    size = mb_param_size(config, settings, [4, 4, 9]);
+    offset = mb_param_offset(config, settings);
+    direction = mb_param_direction(config, settings);
+    align = mb_param_align(config, settings);
+    baseColor = mb_param_baseColor(config, settings);
 
+    // Custom Parameters
+    cornerRounding = mb_param(config, settings, "cornerRounding", 0.5);
+    wallThickness = mb_param(config, settings, "wallThickness", 1);
+
+    // Resolve Base Side Adjustments
+    panelXSideAdjustment = mb_base_side_adjustment(config, settings, [[1, "start"]]);
+    panelYSideAdjustment = mb_base_side_adjustment(config, settings, [[3, "end"]]);
+
+    // Resolve assembly
+    assembly = mb_assembly(config, settings, size, direction);
+
+    // Wrapper Block
     mb_block(
         config = config,
         settings = [
             ["base", false],
             ["studs", false],
-            ["assembly", assembly],
             ["size", size],
             ["align", align],
             ["offset", offset],
             ["direction", direction]
         ]
     ){
-        // Panel 1 — along Y axis
-        mb_block(
-            config = config,
-            settings = [
-                ["size", [size[0], wallThickness, size[2] - 1]],
-                ["baseWallGapsX", [[0,1]]],
-                ["offset", [0,0,0]],
-                ["recess", true],
-                ["tongue", assembly != "merged"],
-                ["recessWallGaps", [[3,0,0]]],
-                ["tongueClampThickness", 0.1],
-                ["baseRoundingRadius", [0,0,[cornerRounding,0,0,0]]],
-                ["baseColor", baseColor]
-            ]
-        );
+        // Panel X — lower
+        mb_block(config = config, settings = [
+            ["size", [size[0], wallThickness, size[2] - 1]],
+            ["baseWallGapsX", [[0, 1]]],
+            ["offset", [0, 0, 0]],
+            ["recess", true],
+            ["tongue", assembly[0] != "merged"],
+            ["recessWallGaps", [[3, 0, 0]]],
+            ["tongueClampThickness", 0.1],
+            ["baseSideAdjustment", panelXSideAdjustment],
+            ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
+            ["baseColor", baseColor]
+        ]);
 
-        mb_block(
-            config = config,
-            settings = [
-                ["size", [size[0], wallThickness, 1]],
-                ["baseWallGapsX", [[0,1]]],
-                ["offset", assembly == "unassembled"
-                    ? mb_assembly_offset(assemblyOffset, direction)
-                    : [0, 0, size[2] - 1]],
-                ["recessWallGaps", [[3,0,0]]],
-                ["tongueClampThickness", 0.1],
-                ["baseCutoutType", assembly == "merged" ? "none" : "groove"],
-                ["baseRoundingRadius", [0,0,[cornerRounding,0,0,0]]],
-                ["baseColor", baseColor]
-            ]
-        );
+        // Panel X — groove
+        mb_block(config = config, settings = [
+            ["size", [size[0], wallThickness, 1]],
+            ["baseWallGapsX", [[0, 1]]],
+            ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
+            ["recessWallGaps", [[3, 0, 0]]],
+            ["tongueClampThickness", 0.1],
+            ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+            ["baseSideAdjustment", panelXSideAdjustment],
+            ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
+            ["baseColor", baseColor]
+        ]);
 
-        // Panel 2 — along X axis
-        mb_block(
-            config = config,
-            settings = [
-                ["size", [wallThickness, size[1], size[2] - 1]],
-                ["baseWallGapsY", [[0,1]]],
-                ["offset", [0, 0, 0]],
-                ["recess", true],
-                ["tongue", assembly != "merged"],
-                ["recessWallGaps", [[1,0,0]]],
-                ["tongueClampThickness", 0.1],
-                ["baseRoundingRadius", [0,0,[cornerRounding,0,0,0]]],
-                ["baseColor", baseColor]
-            ]
-        );
+        // Panel Y — lower
+        mb_block(config = config, settings = [
+            ["size", [wallThickness, size[1], size[2] - 1]],
+            ["baseWallGapsY", [[0, 1]]],
+            ["offset", [0, 0, 0]],
+            ["recess", true],
+            ["tongue", assembly[0] != "merged"],
+            ["recessWallGaps", [[1, 0, 0]]],
+            ["tongueClampThickness", 0.1],
+            ["baseSideAdjustment", panelYSideAdjustment],
+            ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
+            ["baseColor", baseColor]
+        ]);
 
-        mb_block(
-            config = config,
-            settings = [
-                ["size", [wallThickness, size[1], 1]],
-                ["baseWallGapsY", [[0,1]]],
-                ["offset", assembly == "unassembled"
-                    ? mb_assembly_offset(assemblyOffset, direction)
-                    : [0, 0, size[2] - 1]],
-                ["recessWallGaps", [[1,0,0]]],
-                ["tongueClampThickness", 0.1],
-                ["baseCutoutType", assembly == "merged" ? "none" : "groove"],
-                ["baseRoundingRadius", [0,0,[cornerRounding,0,0,0]]],
-                ["baseColor", baseColor]
-            ]
-        );
+        // Panel Y — groove
+        mb_block(config = config, settings = [
+            ["size", [wallThickness, size[1], 1]],
+            ["baseWallGapsY", [[0, 1]]],
+            ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
+            ["recessWallGaps", [[1, 0, 0]]],
+            ["tongueClampThickness", 0.1],
+            ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+            ["baseSideAdjustment", panelYSideAdjustment],
+            ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
+            ["baseColor", baseColor]
+        ]);
     }
 }
 ```
 
-### Example — Enclosure Lid
+### Example — Combined Wall (Composite of Composite Blocks)
 
-A complex composite block: 4 edge strips forming an outer ring with grid-compatible underside, a solid center plate with branding, and an optional opener mechanism. Demonstrates selective pillars, conditional geometry, and per-corner rounding.
+Demonstrates `mb_parts_total_size()` and passing `assembly` through a tree of composite blocks.
 
 ```scad
-use <../../machineblocks/lib/block.scad>;
-include <../config/mb_config.scad>;
+/**
+ * MachineBlocks.com Block File
+ *
+ * Name: AnyClosure Combined Wall
+ * Filename: mb_block__mm__anyclosure__combined_wall.scad
+ * Package: mm.anyclosure.combined_wall
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Visit martianmicro.com for more information.
+ */
 
-// Brand Name
-brandName = "MachineBlocks";
+/*
+ * Imports
+ */
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+// Block Parts
+use <../corner/mb_block__mm__anyclosure__corner.scad>;
+use <../wall/mb_block__mm__anyclosure__wall.scad>;
 
-// Lid Opener
-opener = true;
+/*
+ * Customization
+ */
 
-// Opener Aid
-openerAid = true;
+// Assembly
+assembly = "unassembled"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
 
-mb_block__mm__anyclosure__lid(
+// Direction
+direction = "west"; // [west:West, north:North, east:East, south:South]
+
+// Color
+baseColor = "#303D4E";
+
+/*
+ * Main Module Call
+ */
+mb_block__mm__anyclosure__combined_wall(
     config = mb_config,
     settings = [
-        ["brandName", brandName],
-        ["opener", opener],
-        ["openerAid", openerAid]
+        ["direction", direction],
+        ["align", "start"],
+        ["baseColor", baseColor],
+        ["assembly", assembly]
     ]
 );
 
-module mb_block__mm__anyclosure__lid(config = undef, settings = undef){
-    size = mb_params_get(settings, "size", default=[16, 16, 2]);
-    offset = mb_params_get(settings, "offset", default=[0, 0, 0]);
-    align = mb_params_get(settings, "align", default="start");
-    baseRoundingRadius = mb_params_get(settings, "baseRoundingRadius", default=0.5);
-    studs = mb_params_get(settings, "studs", default=false);
-    studType = mb_params_get(settings, "studType", default="classic");
-    cutoutWidth = mb_params_get(settings, "cutoutWidth", default=2);
-    opener = mb_params_get(settings, "opener", default=true);
-    openerAid = mb_params_get(settings, "openerAid", default=true);
-    baseColor = mb_params_get(settings, "baseColor", default="#EDF0F1");
-    brandName = mb_params_get(settings, "brandName", default="MachineBlocks");
-    brandFont = mb_params_get(settings, "brandFont", default="RBNo3.1");
-    brandTextOffset = mb_params_get(settings, "brandTextOffset", default=[0, -7]);
-    previewRender = mb_params_get(settings, "previewRender", default=true);
+/*
+ * Main Module Definition
+ */
+module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef){
+    // Native Parameters
+    direction = mb_param_direction(config, settings);
+    align = mb_param_align(config, settings);
+    offset = mb_param_offset(config, settings);
+    baseColor = mb_param_baseColor(config, settings);
 
+    // Block Parts (size, direction, offset)
+    parts = [
+        [[4, 4, 9], "west",  [0, 0,  0]],
+        [[1, 8, 9], "west",  [0, 4,  0]],
+        [[4, 4, 9], "north", [0, 12, 0]]
+    ];
+
+    // Calculate the size of the composite block based on the parts
+    size = mb_parts_total_size(parts);
+
+    // Resolve assembly
+    assembly = mb_assembly(config, settings, size, direction);
+
+    // Wrapper Block
     mb_block(
         config = config,
         settings = [
             ["size", size],
-            ["base", false],
-            ["studs", false],
+            ["direction", direction],
             ["align", align],
-            ["alignChildren", "ccs"],
-            ["offset", offset]
+            ["offset", offset],
+            ["base", false],
+            ["studs", false]
         ]
     ){
-        union(){
-            // 4 edge strips forming outer ring
-            // Each strip gets only the matching corners rounded
-            // baseWallGaps at corners for grid compatibility
-
-            mb_block(config = config, settings = [
-                ["size", [size[0], cutoutWidth, 1]],
-                ["align", "ccs"],
-                ["baseWallGapsX", [[0, 0, cutoutWidth], [size[0]-cutoutWidth, 0, cutoutWidth]]],
-                ["offset", [0, 0.5*(size[1] - cutoutWidth), 0]],
-                ["studs", studs], ["studType", studType],
-                ["pillars", openerAid
-                    ? [true, [0.5*(size[0]-4),0, 0.5*size[0],0, false]]
-                    : true],
-                ["baseRoundingRadius", [0, 0, [0,baseRoundingRadius,baseRoundingRadius,0]]],
+        // Part 1: Corner Front Left
+        mb_block__mm__anyclosure__corner(
+            config = config,
+            settings = [
+                ["size", parts[0][0]],
+                ["direction", parts[0][1]],
+                ["offset", parts[0][2]],
+                ["namedSideAdjustments", [["end", 0.01]]],
                 ["baseColor", baseColor],
-                ["previewRender", previewRender]
-            ]);
+                ["assembly", assembly]
+            ]
+        );
 
-            mb_block(config = config, settings = [
-                ["size", [cutoutWidth, size[1], 1]],
-                ["align", "ccs"],
-                ["baseWallGapsY", [[0, 0, cutoutWidth], [size[1]-cutoutWidth, 0, cutoutWidth]]],
-                ["offset", [0.5*(size[0] - cutoutWidth), 0, 0]],
-                ["studs", studs], ["studType", studType],
-                ["baseRoundingRadius", [0, 0, [0,0,baseRoundingRadius,baseRoundingRadius]]],
+        // Part 2: Wall Left
+        mb_block__mm__anyclosure__wall(
+            config = config,
+            settings = [
+                ["size", parts[1][0]],
+                ["direction", parts[1][1]],
+                ["offset", parts[1][2]],
+                ["namedSideAdjustments", [["start", 0.01], ["end", 0.01]]],
                 ["baseColor", baseColor],
-                ["previewRender", previewRender]
-            ]);
+                ["assembly", assembly]
+            ]
+        );
 
-            mb_block(config = config, settings = [
-                ["size", [cutoutWidth, size[1], 1]],
-                ["align", "ccs"],
-                ["baseWallGapsY", [[0, 1, cutoutWidth], [size[1]-cutoutWidth, 1, cutoutWidth]]],
-                ["offset", [-0.5*(size[0] - cutoutWidth), 0, 0]],
-                ["studs", studs], ["studType", studType],
-                ["baseRoundingRadius", [0, 0, [baseRoundingRadius,baseRoundingRadius,0,0]]],
+        // Part 3: Corner Rear Left
+        mb_block__mm__anyclosure__corner(
+            config = config,
+            settings = [
+                ["size", parts[2][0]],
+                ["direction", parts[2][1]],
+                ["offset", parts[2][2]],
+                ["namedSideAdjustments", [["start", 0.01]]],
                 ["baseColor", baseColor],
-                ["previewRender", previewRender]
-            ]);
-
-            mb_block(config = config, settings = [
-                ["size", [size[0], cutoutWidth, 1]],
-                ["align", "ccs"],
-                ["baseWallGapsX", [[0, 1, cutoutWidth], [size[0]-cutoutWidth, 1, cutoutWidth]]],
-                ["offset", [0, -0.5*(size[1] - cutoutWidth), 0]],
-                ["studs", studs], ["studType", studType],
-                ["baseRoundingRadius", [0, 0, [baseRoundingRadius,0,0,baseRoundingRadius]]],
-                ["baseColor", baseColor],
-                ["previewRender", previewRender]
-            ]);
-
-            // Center plate — solid underside, branding
-            mb_block(config = config, settings = [
-                ["size", [size[0]-2*cutoutWidth, size[1]-2*cutoutWidth, 1]],
-                ["align", "ccs"],
-                ["baseCutoutType", "none"],
-                ["baseSideAdjustment", 0.2],
-                ["studs", studs], ["studType", studType],
-                ["text", brandName],
-                ["textSide", 5], ["textSize", 4],
-                ["textFont", brandFont],
-                ["textDepth", 0.4], ["textSpacing", 1.1],
-                ["textOffset", brandTextOffset],
-                ["baseColor", baseColor],
-                ["previewRender", previewRender]
-            ]);
-
-            // Optional opener
-            if(opener){
-                mb_block(config = config, settings = [
-                    ["align", "ccs"],
-                    ["baseHeight", 1.6],
-                    ["baseSideAdjustment", [-0.1,-0.1,0.1,-6.4]],
-                    ["baseRoundingRadius", [0,0,[0,0.8,0.8,0]]],
-                    ["baseCutoutType", "none"],
-                    ["baseColor", baseColor],
-                    ["size", [2,1,1]],
-                    ["offset", [0, 0.5*(size[1]+1), 0]],
-                    ["studs", false],
-                    ["previewRender", previewRender]
-                ]);
-            }
-        }
+                ["assembly", assembly]
+            ]
+        );
     }
 }
 ```
@@ -743,15 +972,15 @@ Two panels intersecting in an L-shape. Requires `baseWallGapsX`/`baseWallGapsY` 
 
 ## Channel
 
-A panel with two opposing open walls, creating a continuous path for cables, airflow, or routing. Variants include straight channels, corner channels (90° bend), and T-channels (branching).
+A panel with two opposing open walls. Variants include straight, corner (90° bend), and T-channel (branching).
 
 ## Enclosure
 
-A complete housing structure: base plate, wall panels, corner panels, and lid. The lid is always a separate block. Inner parts should use `baseCutoutType = "none"` for optimization.
+A complete housing: base plate, wall panels, corner panels, and lid. The lid is always a separate block. Inner parts should use `baseCutoutType = "none"`.
 
 ## Connection Patterns
 
-**Tongue + Groove** — continuous connection, strong and precise. Can be used with or without recess.
+**Tongue + Groove** — continuous, strong connection. Works with or without recess.
 
 **Connectors** — segmented triangular connections for side-by-side and angled (90°) joints.
 
@@ -768,16 +997,28 @@ Enclosure     → panels + corners + base + lid
 
 ---
 
+# Set Files
+
+Set files are generated SCAD files that combine multiple block instances into a complete assembly with assembly instructions. They are not authored manually. See `10_set_example.scad` for the current reference implementation.
+
+A set file supports four rendering modes: `total` (fully assembled), `print` (individual parts for printing), `step` (step-by-step build instructions), and `instance` (single block). The `STEPS` array is the central data structure defining instance order, sizes, directions, and offsets. For each instance, a dedicated sub-module is generated. The generator must update both the `STEPS` array and all instance sub-modules when the set changes.
+
+---
+
 # Critical Implementation Rules
 
 **Wall Removal:** Always use `recessWallGaps`, never `recessWallThickness = 0`.
 
 **Connection Interaction:** `recessWallGaps` creates matching openings in tongue and groove automatically.
 
-**Underside Consistency:** Use `baseWallGapsX`/`baseWallGapsY` in composite blocks where blocks cross to maintain grid compatibility.
+**Underside Consistency:** Use `baseWallGapsX`/`baseWallGapsY` in composite blocks where blocks cross.
 
-**Printability:** Complex structures should be split into printable parts using tongue/groove or connectors.
+**Printability:** Complex structures should be split into parts using tongue/groove or connectors.
 
 **Config Propagation:** Every `mb_block()` call inside a module must receive the `config` parameter.
 
-**Assembly Toggling:** Use the `assembly` parameter to control tongue/groove generation (`assembly != "merged"`) and part offset (`assembly == "unassembled"`).
+**Assembly Toggling:** Use `assembly[0]` to check mode after resolving via `mb_assembly()`. Use `assembly[0] != "merged"` for tongue, `assembly[0] == "merged"` for baseCutoutType switching.
+
+**Parameter Access:** Always use `mb_param_*()` for native parameters and `mb_param()` for custom parameters. Never access arrays directly.
+
+**studSink:** Set to 0 only when a sub-block has `base = false` but still renders studs (e.g. stud-only decorative layers in composite blocks).

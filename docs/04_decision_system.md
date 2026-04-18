@@ -1,6 +1,6 @@
 # MachineBlocks — Decision System
 
-version: 1.0.0
+version: 2.0.0
 
 ## Purpose of this Document
 
@@ -38,8 +38,6 @@ Question: What should the block look like? LEGO-like, visual, aesthetic, surface
 
 ## Output Modes
 
-The AI also determines an output mode:
-
 **LEGO Mode** — playful, simplified, visual-first, less strict constraints.
 
 **Device Mode** — functional, real-world usable, printability critical, strict constraints.
@@ -62,15 +60,15 @@ The AI also determines an output mode:
 
 ## Decision Tree
 
-Step 1 — Is it a simple block? If the shape is a single-body geometry inside one bounding box → use `mb_block()` only.
+Step 1 — Is it a simple block? Single-body geometry inside one bounding box → use `mb_block()` only.
 
-Step 2 — Is it enclosure-related? If yes → use the enclosure system (see `03_patterns_and_examples.md`).
+Step 2 — Is it enclosure-related? → use the enclosure system (see `03_patterns_and_examples.md`).
 
 Step 3 — Is it a wall structure? One side open → Panel. Two opposite sides open → Channel. Corner → Corner Panel or Corner Channel.
 
-Step 4 — Is it multi-part? If the structure requires multiple distinct bodies → composite block.
+Step 4 — Is it multi-part? Multiple distinct bodies → composite block.
 
-Step 5 — Is printability an issue? If yes → split into parts using tongue/groove or connectors.
+Step 5 — Is printability an issue? → split into parts using tongue/groove or connectors.
 
 > Patterns define structure. Composite blocks implement patterns.
 
@@ -78,11 +76,12 @@ Step 5 — Is printability an issue? If yes → split into parts using tongue/gr
 
 # Decision Layer 3 — Parameter Realization
 
-After pattern selection, the AI assigns parameters from the appropriate groups:
+After pattern selection, parameters are assigned from the appropriate groups:
 
-Geometry: `size`, `slope`, `bevel`, `crop`.
+Geometry: `size`, `slope`, `bevel`, `crop`, `cutouts`.
 Structure: `base`, `recess`, `baseCutoutType`, `tongue`, `connectors`.
 Positioning: `direction`, `align`, `offset`.
+Composite: `assembly`, `namedSideAdjustments`.
 
 > Parameters realize patterns — they do not define them.
 
@@ -98,7 +97,7 @@ No logic, pass-through only. Calls `mb_block()` or another `mb_block__*` directl
 
 ## Pattern 2 — Semantic Block
 
-Reads parameters, defines defaults, maps to exactly one `mb_block()`.
+Reads parameters via `mb_param_*()` and `mb_param()`, defines defaults, maps to exactly one `mb_block()`.
 
 ## Pattern 3 — Composite Block
 
@@ -109,6 +108,8 @@ base = false
 studs = false
 size defines bounding box
 ```
+
+Must implement `mb_assembly()` if parts support assembly. Must implement `mb_base_side_adjustment()` if parts are adjacent without overlap.
 
 ## Pattern 4 — Helper / Form Module
 
@@ -133,9 +134,7 @@ else → Pattern 3
 
 A single `mb_block()` is well suited for:
 
-Classic geometry (bricks, plates, stud variations, Technic holes). Slopes and wedges (but not combined — slope + bevel is not supported). Round geometry (rounded bricks, circular shapes). Recess structures (box-like top cutout, up to 4 walls, walls removable via gaps, corners always remain). Stud configuration (fully parametric: full, none, or selective). Single-line text on all sides except bottom (-Z). PCB-compatible cavity geometries. Straight Technic liftarms (no bends).
-
-The common pattern: single-body geometry inside one structural bounding box.
+Classic geometry (bricks, plates, stud variations, Technic holes). Slopes and wedges (but not combined — slope + bevel is not supported). Round geometry (rounded bricks, circular shapes). Recess structures (box-like top cutout, up to 4 walls, walls removable via gaps, corners always remain). Stud configuration (fully parametric: full, none, or selective). Single-line text on all sides except bottom (-Z). PCB-compatible cavity geometries. Straight Technic liftarms (no bends). Cutouts (brutally applied void subtraction via `cutouts` parameter).
 
 ## Blacklist — Composite Required
 
@@ -144,10 +143,6 @@ A single `mb_block()` should not be used for:
 Multi-body shapes (L-shaped, T-shaped, cross-shaped). Brackets in Z-direction (vertical angle structures). Panels as side recess structures (require multi-part construction for printability). Cable channels (continuous side recess, enclosure structures). Bent liftarms (any directional change). Carrier structures (any multi-segment support geometry). Multi-line text (use plate with body + bricks with `base=false` for text only).
 
 > If geometry branches, changes structural direction, or requires multiple independent segments → Composite.
-
-## Evolution Principle
-
-New features should be implemented as composites first. They may later become native `mb_block()` capabilities. If not clearly supported → use Composite.
 
 ---
 
@@ -182,13 +177,17 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 8 — Connection selection.** LEGO connection → standard underside. Structural connection → tongue/groove. Flexible connection → connectors.
 
+**Rule 9 — Use mb_param_*() for native parameters.** Never access settings arrays directly. Always use the dedicated getter for native parameters and `mb_param()` for custom parameters.
+
+**Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{block_name}`. Always end the response with the output summary (Package, Module, Filename, Location).
+
 ---
 
 # Failure Prevention
 
 ## Do NOT
 
-Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGapsX`/`baseWallGapsY`).
+Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGapsX`/`baseWallGapsY`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed — use `cutouts`). Use any `*RoundingResolution` parameter (removed). Check `assembly` mode without first resolving via `mb_assembly()` (always use `assembly[0]` after resolution).
 
 > Most errors come from using parameters directly instead of patterns.
 

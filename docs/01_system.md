@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 1.3.0
+version: 2.0.0
 
 ## Purpose
 
@@ -52,6 +52,13 @@ It is not a semantic block definition, not a complete device model, not a helper
 
 `mb_block()` is responsible for generating the local geometry of a block, resolving parameter values, applying LEGO-compatible base logic, applying calibration-dependent behavior through `config`, building and transforming nested child blocks, and rendering supported structural and surface features.
 
+### Parameters Ignored by mb_block()
+
+The following native parameters exist in the system but are intentionally ignored by `mb_block()`. They are only meaningful in composite block modules:
+
+- `assembly` — controls assembly mode visualization in composite blocks
+- `namedSideAdjustments` — controls named side overlap adjustments in composite blocks
+
 ---
 
 ## Public Signature
@@ -74,6 +81,41 @@ Both arguments are optional arrays of key-value pairs:
 
 ## Parameter Model
 
+### Native Parameters vs Custom Parameters
+
+There are two kinds of parameters in MachineBlocks:
+
+**Native parameters** are parameters used directly by `mb_block()`. Every native parameter has a dedicated getter function:
+
+```scad
+size = mb_param_size(config, settings);
+baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+```
+
+**Custom parameters** are parameters defined by individual block modules. They are accessed via the generic getter:
+
+```scad
+myParam = mb_param(config, settings, "myParam", "myDefaultValue");
+```
+
+Both getter variants accept an optional default as the last argument.
+
+> All block modules MUST use `mb_param_{nativeParameterName}()` for native parameters and `mb_param()` for custom parameters. Direct array access is not permitted.
+
+### Format Resolution
+
+Native parameter getters automatically resolve external formats to internal formats:
+
+```text
+direction:            "west" → 0,  "north" → 1,  "east" → 2,  "south" → 3
+
+baseSideAdjustment:   0.1              → [0.1, 0.1, 0.1, 0.1]
+                      [0.1, 0.2]       → [0.1, 0.1, 0.2, 0.2]
+                      [0.1,0.2,0.3,0.4]→ [0.1, 0.2, 0.3, 0.4]
+```
+
+All other per-side parameters follow the same resolution pattern as `baseSideAdjustment`.
+
 ### config
 
 `config` is the environment-level parameter set. It defines printer profiles, filament calibration, scaling presets, tolerance-related values, and global rendering or manufacturing defaults. It is global — typically passed through all nested block calls and intended to stay stable across a whole structure.
@@ -90,44 +132,24 @@ The library always resolves every parameter in this order:
 settings → config → default
 ```
 
-This is implemented with:
+The library does not restrict any parameter to config-only or settings-only at the resolution level.
 
-```text
-mb_params_resolve(config, settings, "key", default)
+### Merging Settings
+
+To merge two settings arrays where the second overrides the first for duplicate keys:
+
+```scad
+mb_params_merge(a, b)
 ```
 
-The library does not restrict any parameter to config-only or settings-only at the resolution level. Individual block modules may assume certain parameters are always provided in settings, but this is a module-level decision, not a library-level restriction. Modules may deliberately use `mb_params_get(settings, ...)` to read only from settings and ignore config for specific parameters.
-
-### Parameter Access Variants
-
-Read only from settings (when a parameter is intentionally instance-local):
-
-```text
-mb_params_get(settings, "size", default=[1,1,1])
+Example:
+```scad
+mb_params_merge(
+    [["size", [1,2,3]], ["baseColor", "#f0f0f0"]],
+    [["baseColor", "#ffffff"]]
+)
+// → [["size", [1,2,3]], ["baseColor", "#ffffff"]]
 ```
-
-Read only from config (when a parameter is intentionally environment-driven):
-
-```text
-mb_params_get(config, "scale", default=1.0)
-```
-
-Read from both (standard resolution):
-
-```text
-mb_params_resolve(config, settings, "size", default=[1,1,1])
-```
-
-### Dedicated Getter Functions
-
-Some important parameters have dedicated helper functions:
-
-```text
-mb_params_get_unitMbu(settings)
-mb_params_resolve_unitMbu(config, settings)
-```
-
-These exist to centralize critical defaults. Important system parameters should use dedicated getter functions whenever available, because defaults for core geometric behavior must stay consistent and local duplication of those defaults would create inconsistencies.
 
 ---
 
@@ -146,10 +168,10 @@ The Online Editor stores blocks, manages config profiles, and provides rendering
 Local development uses relative paths that depend on the project structure. The Online Editor uses fixed virtual paths.
 
 ```text
-Local:   use <../../../machineblocks/lib/block.scad>;
+Local:   use <../../../../machineblocks/lib/block.scad>;
 Online:  use <machineblocks/lib/block.scad>;
 
-Local:   include <../../config/mb_config.scad>;
+Local:   include <../../../config/mb_config.scad>;
 Online:  include </mb_config.scad>;
 ```
 
@@ -160,16 +182,32 @@ The Online Editor converts paths automatically during upload. AI systems generat
 Locally, a `config/mb_config.scad` file includes the active printer/material profile:
 
 ```scad
-// mb_config.scad
-include <./mb_config_PRUSA_printer.scad>;
+/**
+* MachineBlocks Config File
+*/
+
+/*
+* Profile
+*
+* PRUSA MK3s
+*/
+include <mb_config__prusa_mk3s.scad>;
 ```
 
-The profile defines the `mb_config` variable:
+The included profile file defines the `mb_config` variable:
 
 ```scad
-// mb_config_PRUSA_printer.scad
+/**
+* MachineBlocks Config File Profile
+*
+* Profile: PRUSA MK3s
+*/
+
+/*
+* MB Config
+*/
 mb_config = [
-    ["baseHeightAdjustment", -0.1]
+    ["studHeightAdjustment", 0]
 ];
 ```
 
@@ -297,26 +335,113 @@ Block modules are wrappers around `mb_block()`:
 mb_block__<package>
 ```
 
-They share the same signature `(config, settings)`, map parameters to `mb_block`, and provide reusable abstractions. Sub-modules use extended package names: `mb_block__<package>__<sub>`. Global functions follow the same convention: `mb_block__<package>__<func_name>`.
+They share the same signature `(config, settings)`, map parameters to `mb_block`, and provide reusable abstractions.
 
-Example:
+### Naming Conventions
 
+Sub-modules (same signature as main module):
 ```text
-mb_block__mm__anyclosure__floor
+mb_block__<package>__<subname>
 ```
+
+Helper modules (own arbitrary signature, uses subpackage `help`):
+```text
+mb_block__<package>__help__<helpername>
+```
+
+Global functions (uses subpackage `func`):
+```text
+mb_block__<package>__func__<funcname>
+```
+
+The names `func` and `help` are reserved and cannot be used as regular sub-module names.
 
 ### Typical Usage Pattern
 
-The most common higher-level usage of `mb_block()` is:
-
 ```text
-1. Read parameters from settings (and optionally config)
-2. Assign defaults
+1. Read native parameters via mb_param_{name}()
+2. Read custom parameters via mb_param()
 3. Map them into a new settings array
 4. Call mb_block(config, mapped_settings)
 ```
 
 Simple wrappers may forward `settings` unchanged. Composite modules may create multiple internal `mb_block()` calls around a wrapper block.
+
+---
+
+## Library Structure
+
+A MachineBlocks library has the following directory structure:
+
+```text
+{lib}/
+    blocks/          ← required
+        user/        ← AI default target for generated blocks
+    config/          ← optional
+    lib/             ← optional
+```
+
+### Root Package
+
+Every library has a root package, which may consist of multiple segments. Examples: `mb` (MachineBlocks), `mm` (MartianMicro), `my.package.abc`.
+
+### Package to Path Mapping
+
+All package segments after the root package correspond to subdirectories under `/blocks/`:
+
+```text
+Package:  mm.examples.primitive_wrapper
+Root:     mm
+Path:     /blocks/examples/primitive_wrapper/
+File:     mb_block__mm__examples__primitive_wrapper.scad
+```
+
+### The /blocks/user/ Folder
+
+`/blocks/user/` is the default target folder for AI-generated blocks when the user does not specify an explicit package. The generated block's package is:
+
+```text
+{root_package}.user.{block_name}
+```
+
+This folder is in `.gitignore` and can be freely modified by the user.
+
+### AI Block Generation — Output Summary
+
+When generating a block in chat (without an explicit package), the AI must always end its response with a summary:
+
+```text
+Package:   mm.user.my_block
+Module:    mb_block__mm__user__my_block
+Filename:  mb_block__mm__user__my_block.scad
+Location:  mylib/blocks/user/my_block/mb_block__mm__user__my_block.scad
+```
+
+### Path Assumptions
+
+The AI assumes `machineblocks/` is always a sibling to other libraries:
+
+```text
+mylib/
+    config/
+    blocks/
+        user/
+            my_block/
+                mb_block__mylib__user__my_block.scad
+machineblocks/
+    config/
+    blocks/
+    lib/
+```
+
+Relative paths from a block file in `mylib/blocks/user/my_block/`:
+
+```text
+use <../../../../machineblocks/lib/block.scad>;
+include <../../../config/mb_config.scad>;
+```
+
+Paths adjust accordingly for deeper package nesting.
 
 ---
 
@@ -336,7 +461,7 @@ Represent external objects such as PCBs, motors, etc. Defined by SCAD models. Us
 
 ### Sets
 
-Collections of blocks. Can represent assemblies or full devices. A device is a specialized form of a set.
+Collections of blocks. Can represent assemblies or full devices. A device is a specialized form of a set. See `10_set_example.scad` for the current set file format.
 
 ---
 
@@ -364,7 +489,7 @@ Preview Helpers — combine multiple Block Parts into a single composite view. U
 
 Placement Helpers — provide an interactive 3D interface for positioning a Block Part within a composite block. Customizer variables (offset, direction, align) are read back by the editor and stored. The active part is visually highlighted; other parts are shown semi-transparent.
 
-Set Instruction Helpers — render step-by-step assembly instructions for Sets. A STEPS array defines the build order. Three modes control rendering: `total` (all instances), `step` (cumulative up to current step with highlight), and `instance` (single block). The customizer slider controls the current step.
+Set Instruction Helpers — render step-by-step assembly instructions for Sets. A STEPS array defines the build order. Four modes control rendering: `total` (fully assembled), `print` (individual parts laid out for printing), `step` (cumulative up to current step with highlight), and `instance` (single block). The customizer slider controls the current step.
 
 > Content Block Files are authored. Helper Block Files are generated. Both follow the same Block File structure.
 
@@ -380,55 +505,41 @@ These axes are independent — a Helper Block File can use any pattern internall
 
 ---
 
-## Legacy Module: machineblock()
+## Legacy Conversion: machineblock() → mb_block()
 
-### Overview
+The legacy `machineblock()` module has been removed. However, converting legacy files to the modern Block File format remains a relevant task for AI systems.
 
-The legacy `machineblock()` module predates the `mb_block()` architecture. It uses direct OpenSCAD module parameters instead of the `config`/`settings` key-value pair system. It has no concept of config vs settings separation. Internally, `machineblock()` maps all its parameters into a settings array and calls `mb_block()`. It remains available for backward compatibility but is not recommended for new development because every call creates a settings array with all ~200 parameters, regardless of how many are actually used.
+Legacy files use direct OpenSCAD module parameters instead of the `config`/`settings` key-value pair system. They often contain an `overrideConfig` boolean, `_ovr` suffixed variables, and deprecated parameters (`baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, `studRoundingResolution`).
 
-### Legacy File Structure
+### Conversion Steps
 
-Legacy files are not standardized Block Files. They are regular OpenSCAD files with customizer variables that call `machineblock()` directly — typically without wrapping the call in a module. They often contain an `overrideConfig` boolean and `_ovr` suffixed variables that allowed users to override calibration values from the customizer. Deprecated parameters like `baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, and `studRoundingResolution` may also be present.
+**Step 1 — Create Block File Structure**
 
-### Converting Legacy Files to Block Files
+Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<name>`.
 
-AI systems should be able to convert legacy files to the modern Block File format. The conversion does not need to be perfect — manual refinement is expected. The goal is to automate the bulk of the structural work.
+**Step 2 — Replace machineblock() with mb_block()**
 
-#### Step 1 — Create Block File Structure
+Convert `machineblock(param1=val1, param2=val2)` to `mb_block(config=config, settings=[["param1", val1], ["param2", val2]])`. Only include parameters that are actually set.
 
-Add the standard Block File structure: header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<name>`.
+**Step 3 — Remove Legacy Calibration**
 
-#### Step 2 — Replace machineblock() with mb_block()
+Remove all `_ovr` suffixed customizer variables, the `overrideConfig` boolean, and all deprecated `*RoundingResolution` parameters. Calibration parameters belong in config profiles.
 
-Convert `machineblock(param1=val1, param2=val2)` to `mb_block(config=config, settings=[["param1", val1], ["param2", val2]])`. Only include parameters that are actually set — do not create entries for parameters left at their defaults.
+**Step 4 — Wrap in Block Module**
 
-#### Step 3 — Remove Legacy Calibration
+Encapsulate all `mb_block()` calls inside a Block Module with the standard `(config, settings)` signature. Use `mb_param_*()` and `mb_param()` getters — no direct array access.
 
-Remove all `_ovr` suffixed customizer variables and the `overrideConfig` boolean. Calibration parameters belong in config profiles, not in Block Files. Remove deprecated parameters (`baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, `studRoundingResolution`).
+**Step 5 — Handle Multiple Calls**
 
-#### Step 4 — Wrap in Block Module
+If the legacy file contains multiple `machineblock()` calls, insert a wrapper `mb_block()` with `base=false`, `studs=false` that contains the converted calls as children. Use `mb_parts_total_size()` if no explicit shared size exists.
 
-Encapsulate all `mb_block()` calls inside a Block Module with the standard `(config, settings)` signature.
+**Step 6 — Handle Alignment**
 
-#### Step 5 — Handle Multiple Calls
+If children used `align="ccs"`, set `alignChildren="ccs"` on the wrapper. Adjust offsets as needed.
 
-If the legacy file contains multiple `machineblock()` calls, insert a wrapper `mb_block()` with `base=false`, `studs=false` that contains the converted calls as children. If an `assembly` parameter exists, assign it to the wrapper. If a clear shared `size` exists, assign it to the wrapper and derive child sizes from it. If no clear shared size exists, keep sizes directly in the children.
+**Step 7 — Consolidate Composed Values**
 
-#### Step 6 — Handle Alignment
-
-If children used `align="ccs"`, set `alignChildren="ccs"` on the wrapper. Ideally remove `align="ccs"` from children and adjust their offsets accordingly, but this may require manual refinement to preserve the exact geometry.
-
-#### Step 7 — Consolidate Composed Values
-
-Legacy files often split complex parameter values across multiple customizer variables (e.g. `bevel0`, `bevel1`, `bevel2`, `bevel3` for the four corners, or `baseRoundingRadiusX`, `baseRoundingRadiusY`, `baseRoundingRadiusZ` for per-axis rounding). Keep the individual customizer variables for the UI, but combine them under `/* [Hidden] */` and pass the combined value to the module.
-
----
-
-## System Role
-
-MachineBlocks is not just a library. It is a parametric geometry system, a generation system for block modules, and a foundation for automated hardware creation.
-
-The MachineBlocks editor acts as both human interface and AI interface. It generates block modules, uses them as executable artifacts, and functions as a 3D parameter interface.
+Legacy files often split complex parameter values (e.g. `bevel0..3`, `baseRoundingRadiusX/Y/Z`) across multiple customizer variables. Keep the individual customizer variables for the UI, combine them under `/* [Hidden] */`, and pass the combined value to the module.
 
 ---
 
@@ -439,11 +550,26 @@ This documentation is a formal, machine-readable specification of the system. It
 The documentation consists of:
 
 ```text
-01_system.md                     — this document (architecture, units, execution model, terminology)
-02_geometry_and_transformation.md — concepts for geometry, positioning, and structure
-03_patterns_and_examples.md       — block file structure, module patterns, and concrete examples
-04_decision_system.md             — AI decision framework and rules
-09_api_parameters_1_0_1.yml       — Single Source of Truth for all parameter definitions
+01_system.md                      — this document (architecture, units, execution model, terminology)
+02_geometry_and_transformation.md  — concepts for geometry, positioning, and structure
+03_patterns_and_examples.md        — block file structure, module patterns, and concrete examples
+04_decision_system.md              — AI decision framework and rules
+09_api_parameters_1_0_1.yml        — Single Source of Truth for all parameter definitions
+10_set_example.scad                — reference implementation of the Set file format
 ```
 
 The YAML file is authoritative for all parameter definitions (types, defaults, formats, constraints). The Markdown documents explain concepts, relationships, and decision logic — they do not duplicate parameter definitions.
+
+### Documentation Extensions
+
+This documentation describes the base MachineBlocks library. Additional libraries may define their own documentation files that extend this base. Extension documents are fully standalone but treat these base documents as their foundation. They may define additional patterns, decision rules, and block module conventions specific to their domain.
+
+Example: The MartianMicro library (`mm`) defines enclosure-specific patterns and decision rules in its own documents, building on MachineBlocks as the geometry foundation.
+
+---
+
+## System Role
+
+MachineBlocks is not just a library. It is a parametric geometry system, a generation system for block modules, and a foundation for automated hardware creation.
+
+The MachineBlocks editor acts as both human interface and AI interface. It generates block modules, uses them as executable artifacts, and functions as a 3D parameter interface.
