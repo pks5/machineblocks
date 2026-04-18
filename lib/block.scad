@@ -347,10 +347,11 @@ function mb_params_resolve(config, settings, key, default=undef) =
     mb_param(config, settings, key, default);
 
 function mb_assembly(config, settings, size, direction) = 
-    let(assemblyParam = mb_param(config, settings, "assembly", "merged"),
+    let(dirInt = mb_direction_to_int(direction),
+        assemblyParam = mb_param(config, settings, "assembly", "merged"),
         assembly = is_string(assemblyParam) ? [assemblyParam] : assemblyParam,
-        assemblySize = assembly[1] != undef ? assembly[1] : mb_size_resolve(size, direction),
-        assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], direction) : direction)
+        assemblySize = assembly[1] != undef ? assembly[1] : mb_size_resolve(size, dirInt),
+        assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], dirInt) : dirInt)
         [assembly[0], assemblySize, assemblyDirection];
     
 function mb_assembly_offset(assembly, offset) = 
