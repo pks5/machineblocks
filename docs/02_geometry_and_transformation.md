@@ -270,6 +270,33 @@ A composite block reads `baseSideAdjustment` once and then manually builds the p
 
 For primitives: set the calibration value (`baseSideAdjustment[0]`) on all outer sides, and `0.01` on all internal contact sides. Since `baseSideAdjustment` in config is always a single uniform value, `baseSideAdjustment[0]` is the canonical calibration value to use.
 
+The getter always returns a 4-element array. After calling it, always access `baseSideAdjustment[0]` — never use the array variable directly as if it were a scalar.
+
+```scad
+// Read once at the top of the module
+baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+
+// WRONG — baseSideAdjustment is an array, not a scalar
+totalSizeY = size[1] * unitGrid[0] * unitMbu + 2 * baseSideAdjustment;
+
+// CORRECT — always use [0] to extract the calibration value
+totalSizeY = size[1] * unitGrid[0] * unitMbu + 2 * baseSideAdjustment[0];
+
+// WRONG — passing the array directly to a primitive without building per-side values
+mb_block(config = config, settings = [
+    ["baseSideAdjustment", baseSideAdjustment]
+]);
+
+// CORRECT — build per-side array explicitly for each primitive
+// Side 0 = x- (west outer face)   → calibration value
+// Side 1 = x+ (east inner face)   → overlap (internal contact)
+// Side 2 = y- (south outer face)  → calibration value
+// Side 3 = y+ (north outer face)  → calibration value
+mb_block(config = config, settings = [
+    ["baseSideAdjustment", [baseSideAdjustment[0], 0.01, baseSideAdjustment[0], baseSideAdjustment[0]]]
+]);
+```
+
 ### namedSideAdjustments — For Composite-of-Composite Blocks
 
 When an outer composite block places multiple child composite blocks adjacent to each other, the same gap problem arises at their contact faces. However, a child composite block can have more than 4 logical sides, so a 4-element `baseSideAdjustment` array is insufficient to address individual contact faces.

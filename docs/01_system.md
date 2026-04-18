@@ -561,6 +561,20 @@ module mb_block__x__y__z(config = undef, settings = undef){
 }
 ```
 
+Native parameter getters (`mb_param_*()`) must NEVER be called in the Hidden Section. The `config` and `settings` parameters do not exist at file scope — they are only available inside the module body. Any attempt to call a getter outside a module will fail or produce incorrect results.
+
+```scad
+/* WRONG — getter called in Hidden Section, config/settings not available here */
+/* [Hidden] */
+bSideAdjustment = mb_param_baseSideAdjustment_default();
+
+/* CORRECT — getter called inside the module body */
+module mb_block__x__y__z(config = undef, settings = undef){
+    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    ...
+}
+```
+
 A block module is completely self-contained and must NEVER access global variables.
 
 **Native Parameters — Always Use Getters**
