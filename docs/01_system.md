@@ -541,6 +541,62 @@ If children used `align="ccs"`, set `alignChildren="ccs"` on the wrapper. Adjust
 
 Legacy files often split complex parameter values (e.g. `bevel0..3`, `baseRoundingRadiusX/Y/Z`) across multiple customizer variables. Keep the individual customizer variables for the UI, combine them under `/* [Hidden] */`, and pass the combined value to the module.
 
+### Additional Conversion Rules
+
+**Hidden Section — No Internal Module Computations**
+
+The `/* [Hidden] */` block serves exclusively as customizer convenience. Its only valid use is defining helper variables that bridge customizer variables to module parameters — for example, combining multiple individual customizer values into a single array before passing it to the module.
+
+Variables that are only computed and used internally by the module do NOT belong in the Hidden Section. They must be defined inside the module body only.
+
+```scad
+/* WRONG — internal computation in Hidden Section */
+/* [Hidden] */
+tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * mb_unit_grid()[0] * mb_unit_mbu();
+
+/* CORRECT — internal computation inside the module */
+module mb_block__x__y__z(config = undef, settings = undef){
+    tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * unitGrid[0] * unitMbu;
+    ...
+}
+```
+
+A block module is completely self-contained and must NEVER access global variables.
+
+**Native Parameters — Always Use Getters**
+
+For every parameter read inside a block module, first check whether it is a native parameter (defined in `09_api_parameters_1_0_1.yml`). If it is native, always use its dedicated getter:
+
+```scad
+// Native parameter → getter
+baseCutoutType = mb_param_baseCutoutType(config, settings);
+pillars        = mb_param_pillars(config, settings);
+```
+
+Do not set an explicit default in the getter call unless a block-specific default is intentionally required. Never copy a default from the legacy code if it matches the YML default. Exception: `size` almost always benefits from a block-specific default:
+
+```scad
+size = mb_param_size(config, settings, [4, 1, 3]);
+```
+
+Custom parameters (not in the YML) continue to use `mb_param()`:
+
+```scad
+myParam = mb_param(config, settings, "myParam", "defaultValue");
+```
+
+**Legacy Global Variables — `unitMbu`, `unitGrid`, `scale`**
+
+Legacy block files frequently use the variables `unitMbu`, `unitGrid`, and `scale` without defining them in the same file. These always originate from the old global config. In the converted module, they must be retrieved via their dedicated getters:
+
+```scad
+unitMbu  = mb_param_unitMbu(config, settings);
+unitGrid = mb_param_unitGrid(config, settings);
+scale    = mb_param_scale(config, settings);
+```
+
+This rule applies whenever these three variable names appear in a legacy file without a local definition.
+
 ---
 
 ## Documentation Architecture
