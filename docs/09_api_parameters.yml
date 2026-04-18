@@ -840,10 +840,44 @@ parameters:
       4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
     unit: mm
     default: -0.1
-    ai_usage: config_only
+    ai_usage: yes
     description: |
-      Removed from each side for calibration/fit adjustment.
-      Compensates for 3D printing inaccuracies. Never use for size design.
+      Extends or reduces each side (0–3 only, no Z) by the given amount in mm.
+      Never scales with the scale parameter.
+
+      PRIMARY PURPOSE — Calibration:
+      Consumer-grade 3D printers typically print slightly too wide or have layers
+      that protrude slightly. This causes adjacent blocks to not fit together.
+      baseSideAdjustment compensates for this: a negative value (e.g. -0.1mm)
+      slightly reduces all sides, ensuring blocks fit together correctly.
+
+      IN CONFIG — always use a single uniform value:
+      When set in mb_config, all 4 values must be equal. Composite blocks can
+      have more than 4 logical sides, so only the first value is ever used by
+      composite block implementations. Different values in config would be silently
+      ignored or misapplied. This is a best-practice rule, not a hard library
+      constraint.
+
+        Allowed in config:   -0.1  or  [-0.1, -0.1]  or  [-0.1, -0.1, -0.1, -0.1]
+        Not allowed in config: [-0.1, 0.1, 0, -0.1]
+
+      IN SETTINGS (mb_block primitives) — all 4 values may differ:
+      When passed directly to mb_block() calls inside a composite block module,
+      each side can have a different value. This is the correct and required pattern
+      for composite block implementations, which must manually build the
+      baseSideAdjustment array for each primitive to:
+        - Apply the calibration value (from baseSideAdjustment[0]) to outer sides
+        - Apply a small positive overlap (e.g. 0.01mm) to internal contact sides,
+          ensuring adjacent primitives actually touch and form a solid union in
+          OpenSCAD. Without this overlap, a negative baseSideAdjustment would
+          create a visible gap or zero-thickness wall between parts.
+
+      Side indices always refer to west orientation regardless of the primitive's
+      direction. When a primitive is rotated (e.g. direction = "east" = 180°),
+      the side indices must be remapped accordingly in the composite block.
+
+      baseSideAdjustment is applied to all geometry including rounded corners and
+      bevel shapes — those are automatically adjusted to match.
 
   - name: baseHeightAdjustment
     group: calibration
@@ -3039,23 +3073,54 @@ composite_block_parameters:
     format: |
       Array of [name, adjustment_mm] pairs:
         [["start", 0.01], ["end", 0.01]]
-      Names are defined by the composite block module using
-      mb_base_side_adjustment().
+      Names are freely chosen by the composite block module.
     unit: mm
     default: []
     ai_usage: yes
     description: |
-      Allows the outer composite block to extend specific named sides of
-      a child block, creating a controlled minimal overlap between adjacent
-      parts. This is necessary when baseSideAdjustment is negative — without
-      overlap, the parts would have a visible gap or a zero-thickness shared
-      wall.
+      Allows an outer composite block to extend specific named sides of a child
+      composite block, creating a controlled minimal overlap (typically 0.01mm)
+      between adjacent parts. This is necessary when baseSideAdjustment is
+      negative — without overlap, adjacent parts would have a visible gap or a
+      zero-thickness shared wall at their contact faces.
 
-      Named sides are defined inside the child composite block module via:
-        mb_base_side_adjustment(config, settings, [[sideIndex, "name"], ...])
+      WHY named sides instead of a 4-element baseSideAdjustment array:
+      A composite block can have more than 4 logical sides. A 4-element array
+      is therefore insufficient to address individual contact faces. Named sides
+      allow the outer block to target specific internal contact faces by name,
+      regardless of how many sides the child has internally.
 
-      The outer block passes the adjustments via:
-        ["namedSideAdjustments", [["name", 0.01], ...]]
+      USAGE — inside the child composite block module:
+      The child reads both parameters and calls mb_named_side_adjustments() to
+      build the final per-side adjustment array for each primitive:
+
+        baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+        namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
+        panelSideAdjustment = mb_named_side_adjustments(
+            baseSideAdjustment,
+            namedSideAdjustments,
+            [[2, "start"], [3, "end"]]
+        );
+
+      The third argument maps side indices (in west orientation) to named side
+      keys. Instead of a name, a fixed float value may also be specified for a
+      side, which is always applied regardless of namedSideAdjustments.
+
+      The fourth argument useFirst (default true) controls the base values:
+        useFirst = true  (default): baseSideAdjustment[0] is used for all sides
+          as the base value. Only named sides are overridden. This is the correct
+          pattern for composite blocks with more than 4 sides, since values [1–3]
+          of baseSideAdjustment are irrelevant and should be ignored.
+        useFirst = false: the full 4-element baseSideAdjustment array is used as
+          the base. Named sides override on top. Only appropriate for composite
+          blocks with exactly 4 sides that support full per-side calibration.
+
+      USAGE — in the outer composite block:
+      The outer block passes the adjustments to each child composite block:
+        ["namedSideAdjustments", [["start", 0.01], ["end", 0.01]]]
+
+      Composite blocks must NOT receive a baseSideAdjustment with differing
+      values to control contact faces — use namedSideAdjustments instead.
 
       mb_block() ignores this parameter.
 

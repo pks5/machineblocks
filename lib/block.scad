@@ -368,37 +368,39 @@ function mb_offset_global_to_local(offset, direction) =
 function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
+/*
 function mb_base_side_adjustment(config, settings, mapping) =
     let(baseSideAdjustment = mb_param_baseSideAdjustment(config, settings),
         namedSideAdjustments = mb_param_namedSideAdjustments(config, settings))
-    mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping);
+    mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping);*/
 
-function mb_named_side_adjustments(baseSideAdjustment, sideAdjustments, mapping) =
-    let(namedAdj = _mb_nsa_mapping(sideAdjustments, mapping))
-    _mb_bsa_override(baseSideAdjustment, namedAdj);
+function mb_named_side_adjustments(baseSideAdjustment, sideAdjustments, mapping, useFirst = true) =
+    let(namedAdj = _mb_nsa_mapping(sideAdjustments, mapping),
+        bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
+    _mb_bsa_override(bsa, namedAdj);
 
 function _mb_nsa_mapping(sideAdjustments, mapping) =
 [
     for (entry = mapping)
-        [entry[0], mb_params_get(sideAdjustments, entry[1])]
+        [entry[0], is_num(entry[1]) ? entry[1] : mb_params_get(sideAdjustments, entry[1])]
 ];
 
-function _mb_bsa_override(baseSideAdjustment, overrides, useFirst = true, i = 0) =
+function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
     (overrides == undef) || (i >= len(overrides))
         ? baseSideAdjustment
         : let(
             r = overrides[i],
             index = r[0],
-            newValue = r[1],//len(r) > 1 ? r[1] : 0,
+            newValue = r[1],
             nextValues =
                 !is_num(index) || index < 0 || index >= len(baseSideAdjustment)
                     ? baseSideAdjustment
                     : [
                         for (j = [0 : len(baseSideAdjustment) - 1])
-                            j == index && newValue != undef ? newValue : baseSideAdjustment[useFirst ? 0 : j]
+                            j == index && newValue != undef ? newValue : baseSideAdjustment[j]
                     ]
         )
-        _mb_bsa_override(nextValues, overrides, useFirst, i + 1);
+        _mb_bsa_override(nextValues, overrides, i + 1);
 
 // Hilfsfunktionen
 function _mb_vec3_min(a, b) = [

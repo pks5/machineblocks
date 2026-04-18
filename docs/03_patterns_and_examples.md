@@ -566,7 +566,7 @@ function mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(mph) = 1.6 
 
 ## Pattern 3 — Composite Block
 
-Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = false` and `studs = false`. Composite blocks must implement `mb_assembly()` and `mb_base_side_adjustment()` when parts support assembly and when parts are adjacent without overlap.
+Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = false` and `studs = false`. Composite blocks must implement `mb_assembly()` when parts support assembly modes. When parts are adjacent without overlap, the module must handle `baseSideAdjustment` and `namedSideAdjustments` to ensure correct contact face overlap. See the Named Side Adjustments section in `02_geometry_and_transformation.md` for the full pattern.
 
 ### Example — Wall Panel (Tongue + Groove)
 
@@ -632,7 +632,13 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
     baseColor = mb_param_baseColor(config, settings);
 
     // Resolve Base Side Adjustments
-    panelSideAdjustment = mb_base_side_adjustment(config, settings, [[2, "start"], [3, "end"]]);
+    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
+    panelSideAdjustment = mb_named_side_adjustments(
+        baseSideAdjustment,
+        namedSideAdjustments,
+        [[2, "start"], [3, "end"]]
+    );
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
@@ -750,8 +756,18 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
     wallThickness = mb_param(config, settings, "wallThickness", 1);
 
     // Resolve Base Side Adjustments
-    panelXSideAdjustment = mb_base_side_adjustment(config, settings, [[1, "start"]]);
-    panelYSideAdjustment = mb_base_side_adjustment(config, settings, [[3, "end"]]);
+    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
+    panelXSideAdjustment = mb_named_side_adjustments(
+        baseSideAdjustment,
+        namedSideAdjustments,
+        [[1, "start"]]
+    );
+    panelYSideAdjustment = mb_named_side_adjustments(
+        baseSideAdjustment,
+        namedSideAdjustments,
+        [[3, "end"]]
+    );
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
