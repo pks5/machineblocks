@@ -304,7 +304,7 @@ function mb_param_previewRenderConvexity(config, settings, default = undef) = mb
 /*
 * Composite Blocks Only Parameters
 */
-function mb_param_assembly(config, settings, default = undef) = mb_param(config, settings, "assembly", default != undef ? default : "assembled");
+function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_string(ass) ? [ass] : ass;
 function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
 
@@ -449,6 +449,12 @@ function mb_parts_total_size(parts, i = 0, min_v = undef, max_v = undef) =
             next_max = (i == 0) ? part_max : _mb_vec3_max(max_v, part_max)
           )
           mb_parts_total_size(parts, i + 1, next_min, next_max);
+
+
+function mb_set_step_print_position(assembly, steps, step) = 
+    let(size = steps[step - 1][1],
+        apply_assembly = steps[step - 1][2])
+    step == 0 ? [0, 0, 0] : [((assembly == "unassembled" || assembly[0] == "unassembled") && apply_assembly && (size[0] < size[1]) ? 2 : 1) * (size[0] + 0.5) + mb_set_step_print_position(assembly, steps, step - 1)[0], 0, 0];
 
 module mb_block(
     config,
