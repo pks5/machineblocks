@@ -1,0 +1,547 @@
+/**
+ * MachineBlocks.com Set File (extends Block File)
+ *
+ * Name: AnyClosure Default Enclosure Set
+ * Filename: mb_block__mm__anyclosure__default_enclosure.scad
+ * Package: mm.anyclosure.default_enclosure
+ *
+ * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+ *
+ * Visit martianmicro.com for more information.
+ */
+
+/*
+* Imports
+*/
+// MachineBlocks Library
+use <../../../../machineblocks/lib/block.scad>;
+// Global Config
+include <../../../config/mb_config.scad>;
+// Block Parts
+use <../floor/mb_block__mm__anyclosure__floor.scad>;
+use <../lid/mb_block__mm__anyclosure__lid.scad>;
+use <../corner/mb_block__mm__anyclosure__corner.scad>;
+use <../wall/mb_block__mm__anyclosure__wall.scad>;
+
+/*
+* Customization
+*/
+
+mode = "total"; // [total:Total, print:3D Print, step:Step, instance:Instance]
+
+step = 0; // [0:9]
+
+instanceId = "00001";
+
+baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
+highlightColor = "#55AB68"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
+
+//Assembly
+assembly = "merged"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
+
+/* [Hidden] */
+
+/**
+* List of instances used in this set, sorted by instruction step index. 
+* 
+* Array of Array[5]
+*
+* Example (STEPS[0]):
+*
+* [
+*     "00001", // Instance ID, can be any string
+*     [16, 16, 1]. // Instance Bounding Box
+*     false, // Whether Instance supports assembly
+*     "west", // Instance direction in the set
+*     [0, 0, 0], // Instance offset in the set
+* ]
+*/
+STEPS = [
+    ["00001", [16, 16, 1], false, "west", [0, 0, 0]],
+    ["00002", [4, 4, 9], true, "west", [0, 0, 1]],
+    ["00003", [1, 8, 9], true, "west", [0, 4, 1]],
+    ["00004", [4, 4, 9], true, "north", [0, 12, 1]],
+    ["00005", [1, 8, 9], true, "north", [4, 15, 1]],
+    ["00006", [4, 4, 9], true, "east", [12, 12, 1]],
+    ["00003", [1, 8, 9], true, "east", [15, 4, 1]],
+    ["00004", [4, 4, 9], true, "south", [12, 0, 1]],
+    ["00005", [1, 8, 9], true, "south", [4, 0, 1]],
+    ["0000A", [16, 16, 1], false, "west", [0, 0, 10]]
+];
+
+/*
+* Main Module Call
+*/
+mb_block__mm__anyclosure__default_enclosure(
+    config = mb_config,
+    settings = [
+        ["baseColor", baseColor],
+        ["highlightColor", highlightColor],
+        ["mode", mode],
+        ["step", step],
+        ["instanceId", instanceId],
+        ["combined", true],
+        ["assembly", assembly]
+    ]
+);
+
+/*
+* Main Module Definition
+*/
+module mb_block__mm__anyclosure__default_enclosure(config = undef, settings = undef){
+    mode = mb_param(config, settings, "mode", default="total");
+
+    if(mode == "total"){
+        mb_block__mm__anyclosure__default_enclosure__total(config = config, settings = settings);
+    }
+    else if(mode == "print"){
+        mb_block__mm__anyclosure__default_enclosure__print(config = config, settings = settings);
+    }
+    else if(mode == "step"){
+        mb_block__mm__anyclosure__default_enclosure__step(config = config, settings = settings);
+    }
+    else if(mode == "instance"){
+        mb_block__mm__anyclosure__default_enclosure__instance(config = config, settings = settings);
+    }
+}
+
+/*
+* Sub Module Definition: Assembled Enclosure
+*/
+module mb_block__mm__anyclosure__default_enclosure__total(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    align = mb_param_align(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+
+    mb_block(
+        config = config,
+        settings = [
+            ["base", false],
+            ["studs", false],
+            ["align", align],
+            ["offset", offset],
+            ["direction", direction],
+            ["size", [16,16,9]] // <- Border Box must be calculated
+        ]
+    ){
+        for(i = [0 : len(STEPS) - 1]){
+            blockSettings = [
+                ["step", i],
+
+                // View Options
+                ["baseColor", baseColor],
+                ["assembly", "merged"]
+            ];
+            mb_block__mm__anyclosure__default_enclosure__step(config = config, settings = blockSettings);
+        }
+    }
+}
+
+/*
+* Sub Module Definition: 3D Print View with single parts
+*/
+module mb_block__mm__anyclosure__default_enclosure__print(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    align = mb_param_align(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    assembly = mb_param_assembly(config, settings);
+
+    mb_block(
+        config = config,
+        settings = [
+            ["base", false],
+            ["studs", false],
+            ["align", align],
+            ["offset", offset],
+            ["direction", direction],
+            ["size", [16,16,9]] // <- Border Box must be calculated
+        ]
+    ){
+        for(i = [0 : len(STEPS) - 1]){
+            blockSettings = [
+                ["instanceId", STEPS[i][0]],
+
+                // View Options
+                ["offset", mb_set_step_print_position(assembly, STEPS, i)],
+                ["assembly", assembly],
+                ["baseColor", baseColor]
+            ];
+            mb_block__mm__anyclosure__default_enclosure__instance(config = config, settings = blockSettings);
+        }
+    }
+}
+
+/*
+* Sub Module Definition: Step by Step View
+*/
+module mb_block__mm__anyclosure__default_enclosure__step(config = undef, settings = undef){
+    step = mb_param(config, settings, "step");
+    combined = mb_param(config, settings, "combined", false);
+    highlightColor = mb_param(config, settings, "highlightColor", "#EAC645");
+
+    baseColor = mb_param_baseColor(config, settings);
+
+    align = mb_param_align(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    
+    instanceId = STEPS[step][0];
+
+    if(instanceId != undef){
+        mb_block(
+            config = config,
+            settings = [
+                ["base", false],
+                ["studs", false],
+                ["align", align],
+                ["offset", offset],
+                ["direction", direction],
+                ["size", [16,16,9]] // <- Border Box must be calculated
+            ]
+        ){
+            if(combined){
+                for(i = [0 : step - 1]){
+                    blockSettings = [
+                        ["step", i],
+
+                        // View Options
+                        ["baseColor", baseColor],
+                        ["assembly", "merged"]
+                    ];
+                    mb_block__mm__anyclosure__default_enclosure__step(config = config, settings = blockSettings);
+                }
+            }
+
+            //Instance
+            mb_block__mm__anyclosure__default_enclosure__instance(
+                config = config,
+                settings = [
+                    ["instanceId", instanceId],
+                    
+                    // Set Options
+                    ["direction", STEPS[step][3]],
+                    ["offset", STEPS[step][4]],
+
+                    // View Options
+                    ["baseColor", combined ? highlightColor : baseColor],
+                    ["assembly", "merged"]
+                ]
+            );
+        }
+    }
+}
+
+/*
+* Sub Module Definition: Instance
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance(config = undef, settings = undef){
+    instanceId = mb_param(config, settings, "instanceId");
+
+    if(instanceId != undef){
+        if(instanceId == "00001"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00001(config = config, settings = settings);
+        }
+        else if(instanceId == "00002"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00002(config = config, settings = settings);
+        }
+        else if(instanceId == "00003"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00003(config = config, settings = settings);
+        }
+        else if(instanceId == "00004"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00004(config = config, settings = settings);
+        }
+        else if(instanceId == "00005"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00005(config = config, settings = settings);
+        }
+        else if(instanceId == "00006"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00006(config = config, settings = settings);
+        }
+        else if(instanceId == "00007"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00007(config = config, settings = settings);
+        }
+        else if(instanceId == "00008"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00008(config = config, settings = settings);
+        }
+        else if(instanceId == "00009"){
+            mb_block__mm__anyclosure__default_enclosure__instance_00009(config = config, settings = settings);
+        }
+        else if(instanceId == "0000A"){
+            mb_block__mm__anyclosure__default_enclosure__instance_0000A(config = config, settings = settings);
+        }
+    }
+}
+
+/*
+* Sub Module Definition: Instance 00001
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00001(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Bottom Plate
+    mb_block__mm__anyclosure__floor(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [16, 16, 1]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00002
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00002(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Corner Front Left
+    mb_block__mm__anyclosure__corner(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [4, 4, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00003
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00003(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Wall Left
+    mb_block__mm__anyclosure__wall(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [1, 8, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00004
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00004(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Corner Rear Left
+    mb_block__mm__anyclosure__corner(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [4, 4, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00005
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00005(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Wall Rear
+    mb_block__mm__anyclosure__wall(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [1, 8, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00006
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00006(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Corner Rear Right
+    mb_block__mm__anyclosure__corner(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [4, 4, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00007
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00007(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Wall Right
+    mb_block__mm__anyclosure__wall(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [1, 8, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00008
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00008(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Corner Front Right
+    mb_block__mm__anyclosure__corner(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [4, 4, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 00009
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_00009(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+
+    //Wall Front
+    mb_block__mm__anyclosure__wall(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [1, 8, 9]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
+
+/*
+* Sub Module Definition: Instance 0000A
+*/
+module mb_block__mm__anyclosure__default_enclosure__instance_0000A(config = undef, settings = undef){
+    baseColor = mb_param_baseColor(config, settings);
+    assembly = mb_param_assembly(config, settings);
+    direction = mb_param_direction(config, settings);
+    offset = mb_param_offset(config, settings);
+    
+    //Lid
+    mb_block__mm__anyclosure__lid(
+        config = config,
+        settings = [
+            // Block Configuration
+            ["size", [16, 16, 1]],
+
+            // Set Configuration
+            ["direction", direction],
+            ["offset", offset],
+            
+            // View Options
+            ["baseColor", baseColor],
+            ["assembly", assembly]
+        ]
+    );
+}
