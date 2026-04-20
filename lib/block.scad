@@ -1722,32 +1722,23 @@ module mb_block(
                                                     debug = debug
                                                 );
                                             } //End baseCutoutType
-                                            /*
-                                            if(cutouts != false && cutouts != [0, 0]){
-                                                translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
-                                                    machineblock(
-                                                        size = [cutouts[0], cutouts[1], size[2]],
-                                                        studs = false,
-                                                        crop = -0.2,
-                                                        baseClampOuter=true,
-                                                        baseCutoutType = "none"
-                                                    );
-                                                }
-                                            }*/
-
+                                            
+                                            //Cutouts
                                             if(is_list(cutouts)){
                                                 translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
                                                     for(i = [0 : len(cutouts)]){
-                                                        intersection(){
-                                                            mb_block(
-                                                                config = config,
-                                                                settings = mb_params_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["crop", -0.2], ["studs", false]])
-                                                            );
+                                                        if(mb_params_get(cutouts[i], "cutoutWall", false)){
+                                                            intersection(){
+                                                                mb_block(
+                                                                    config = config,
+                                                                    settings = mb_params_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["crop", -0.2], ["studs", false]])
+                                                                );
 
-                                                            mb_block(
-                                                                config = config,
-                                                                settings = mb_params_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
-                                                            );
+                                                                mb_block(
+                                                                    config = config,
+                                                                    settings = mb_params_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
+                                                                );
+                                                            }
                                                         }
                                                     }
                                                 }
