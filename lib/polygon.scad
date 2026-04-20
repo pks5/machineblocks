@@ -25,7 +25,6 @@ module make_bevel(bevelInnerTol, resultingBaseHeight, tol=1e-6) {
         translate([0,0,-0.5 * resultingBaseHeight])
             linear_extrude(height = resultingBaseHeight)
                 polygon(points = pts);
-        echo (pts = pts);
     }
     else
         echo("Nicht genug eindeutige Punkte für ein Polygon: ", pts);

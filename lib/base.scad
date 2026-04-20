@@ -61,7 +61,10 @@ module mb_base_cutout(
     qualityResolutionMin,
     qualityResolutionMax,
     qualityResolutionMultiplier,
-    previewQuality
+    previewQuality,
+
+    blockName,
+    debug
 ){
     baseClampWallThickness = wallThickness + baseClampThickness;
 
@@ -77,15 +80,19 @@ module mb_base_cutout(
     offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY;
     offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY;
 
-    echo(
-        slope=slope, 
-        offsetX = offsetX, 
-        offsetY = offsetY, 
-        baseHeight=baseHeight, 
-        topPlateHeight = topPlateHeight, 
-        baseClampOffset=baseClampOffset,
-        baseRoundingRadiusZ = baseRoundingRadiusZ,
-        cutoutRoundingRadius = cutoutRoundingRadius);
+    if(debug){
+        echo(
+            blockName = blockName,
+            debugSource = "base.scad",
+            slope=slope, 
+            offsetX = offsetX, 
+            offsetY = offsetY, 
+            baseHeight=baseHeight, 
+            topPlateHeight = topPlateHeight, 
+            baseClampOffset=baseClampOffset,
+            baseRoundingRadiusZ = baseRoundingRadiusZ,
+            cutoutRoundingRadius = cutoutRoundingRadius);
+    }
 
     //Object Size Adjusted      
     objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -236,7 +243,10 @@ module mb_base(
     qualityResolutionMin,
     qualityResolutionMax,
     qualityResolutionMultiplier,
-    previewQuality
+    previewQuality,
+
+    blockName,
+    debug
 ){
     //Variables for cutouts        
     cutOffset = 0.2;

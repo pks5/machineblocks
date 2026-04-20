@@ -301,6 +301,9 @@ function mb_param_previewQuality(config, settings, default = undef) = mb_param(c
 function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
 function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
+function mb_param_blockName(config, settings, default = undef) = mb_param(config, settings, "blockName", default != undef ? default : "Block");
+function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
+
 /*
 * Composite Blocks Only Parameters
 */
@@ -716,6 +719,9 @@ module mb_block(
     previewRender = mb_param_previewRender(config, settings);
     previewRenderConvexity = mb_param_previewRenderConvexity(config, settings);
 
+    blockName = mb_param_blockName(config, settings);
+    debug = mb_param_debug(config, settings);
+
     //END convert
 
     //Variables for cutouts        
@@ -1093,41 +1099,44 @@ module mb_block(
     * END Functions
     */
 
-    echo(
-        preview= $preview,
-        previewQuality = previewQuality,
-        grid=grid,
-        baseHeight = resultingBaseHeight, 
-        heightWithKnobs = resultingBaseHeight + knobHeight,
-        size = [objectSizeX, objectSizeY],
-        sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-        topPlateHeight = topPlateHeight,
-        resultingTopPlateHeight = resultingTopPlateHeight, 
-        baseCutoutDepth = baseCutoutDepth,
-        baseCutoutMinDepth = baseCutoutMinDepth,
-        slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
-        recessDepth = resultingPitDepth, 
-        knobSize = knobSize,
-        knobHeight = knobHeight,
-        wallThickness = wallThickness,
-        baseClampWallThickness = baseClampWallThickness,
-        baseCutoutZ = baseCutoutZ, 
-        topPlateZ = topPlateZ, 
-        tubeDiameter = tubeDiameter,
-        tubeXSize = tubeXSize,
-        tubeYSize = tubeYSize,
-        tubeZSize = tubeZSize,
-        xyScrewHolesZ = xyScrewHolesZ,
-        pitFloorZ = pitFloorZ,
-        beveled = beveled,
-        bevel = bevel,
-        bevelOuterAdjusted = bevelOuterAdjusted,
-        baseRoundingRadiusZ = baseRoundingRadiusZ,
-        adjustedSizeRelation = adjustedSizeRelation,
-        direction = direction,
-        directionRotationZ = directionRotationZ
-    );
-
+    if(debug){
+        echo(
+            blockName = blockName,
+            debugSource = "block.scad",
+            preview= $preview,
+            previewQuality = previewQuality,
+            grid=grid,
+            baseHeight = resultingBaseHeight, 
+            heightWithKnobs = resultingBaseHeight + knobHeight,
+            size = [objectSizeX, objectSizeY],
+            sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+            topPlateHeight = topPlateHeight,
+            resultingTopPlateHeight = resultingTopPlateHeight, 
+            baseCutoutDepth = baseCutoutDepth,
+            baseCutoutMinDepth = baseCutoutMinDepth,
+            slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
+            recessDepth = resultingPitDepth, 
+            knobSize = knobSize,
+            knobHeight = knobHeight,
+            wallThickness = wallThickness,
+            baseClampWallThickness = baseClampWallThickness,
+            baseCutoutZ = baseCutoutZ, 
+            topPlateZ = topPlateZ, 
+            tubeDiameter = tubeDiameter,
+            tubeXSize = tubeXSize,
+            tubeYSize = tubeYSize,
+            tubeZSize = tubeZSize,
+            xyScrewHolesZ = xyScrewHolesZ,
+            pitFloorZ = pitFloorZ,
+            beveled = beveled,
+            bevel = bevel,
+            bevelOuterAdjusted = bevelOuterAdjusted,
+            baseRoundingRadiusZ = baseRoundingRadiusZ,
+            adjustedSizeRelation = adjustedSizeRelation,
+            direction = direction,
+            directionRotationZ = directionRotationZ
+        );
+    }
     /*
     * START BLOCK
     */
@@ -1190,7 +1199,10 @@ module mb_block(
                                                         qualityResolutionMin = qualityResolutionMin,
                                                         qualityResolutionMax = qualityResolutionMax,
                                                         qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                        previewQuality = previewQuality
+                                                        previewQuality = previewQuality,
+
+                                                        blockName = blockName,
+                                                        debug = debug
                                                     );
 
                                                     /*
@@ -1236,7 +1248,10 @@ module mb_block(
                                                                 qualityResolutionMin = qualityResolutionMin,
                                                                 qualityResolutionMax = qualityResolutionMax,
                                                                 qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                                previewQuality = previewQuality
+                                                                previewQuality = previewQuality,
+
+                                                                blockName = blockName,
+                                                                debug = debug
                                                             );
 
                                                             /*
@@ -1701,7 +1716,10 @@ module mb_block(
                                                     qualityResolutionMin = qualityResolutionMin,
                                                     qualityResolutionMax = qualityResolutionMax,
                                                     qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                    previewQuality = previewQuality
+                                                    previewQuality = previewQuality,
+
+                                                    blockName = blockName,
+                                                    debug = debug
                                                 );
                                             } //End baseCutoutType
                                             /*
@@ -2279,7 +2297,6 @@ module mb_block(
                                             knobOffsetX = knobShiftedX ? 0.5 : 0;
                                             knobOffsetY = knobShiftedY ? 0.5 : 0;
                                             ovStudType = drawStud(a + knobOffsetX, b + knobOffsetY);
-                                            echo(st = ovStudType);
                                             if(ovStudType != false){
                                                 pitKnobShiftedX = (recessStudShift == true || recessStudShift == "x" || recessStudShift == "xy");
                                                 pitKnobShiftedY = (recessStudShift == true || recessStudShift == "y" || recessStudShift == "xy");
@@ -2494,6 +2511,5 @@ module mb_block(
         } // End rotation
     } //End grid offset and rotation offset revert
 
-    echo("Rendering of Block finished.");
-    echo("Join our Discord! Visit machineblocks.com");
+    echo(str("Rendered '", blockName, "'. Join our Discord! Visit machineblocks.com"));
 } // End module block
