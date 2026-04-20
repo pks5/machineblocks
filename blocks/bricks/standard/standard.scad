@@ -1,9 +1,9 @@
 /**
  * MachineBlocks.com Block File
  *
- * Name: Corner Brick
- * Filename: mb_block__mb__prim__corner_brick.scad
- * Package: mb.prim.corner_brick
+ * Name: Standard Brick
+ * Filename: standard.scad
+ * Package: mb.bricks.standard
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -28,20 +28,17 @@ include <../../../config/mb_config.scad>;
 
 /* [Size] */
 
-// Brick size
-size = [4, 4, 3]; // [1:32]
-
-// Brick 1 Grid Size in Y-direction as multiple of an 1x1 brick.
-brick1SizeY = 2; // [1:32]
-// Brick 2 Grid Size in X-direction as multiple of an 1x1 brick.
-brick2SizeX = 2; // [1:32]
-
-// Brick 1 Offset in Y-direction as multiple of an 1x1 brick.
-brick1OffsetY = 0; // [0:31]
-// Brick 2 Offset in X-direction as multiple of an 1x1 brick.
-brick2OffsetX = 0; // [0:31]
+// Brick size (grid)
+size = [4, 2, 3]; // [1:0.25:32]
 
 /* [Base] */
+
+// Rounding Radius X (grid)
+baseRoundingRadiusX = [0, 0, 0, 0]; // [0:0.25:128]
+// Rounding Radius Y (grid)
+baseRoundingRadiusY = [0, 0, 0, 0]; // [0:0.25:128]
+// Rounding Radius Z (grid)
+baseRoundingRadiusZ = [0, 0, 0, 0]; // [0:0.25:128]
 
 // Type of cut-out on the underside.
 baseCutoutType = "standard"; // [none, standard, studs, groove]
@@ -50,9 +47,9 @@ pillars = true;
 // Whether to draw a relief cut
 baseReliefCut = false;
 // Relief Cut Height (mbu)
-baseReliefCutHeight = 0.4; // [0:0.1:128]
+baseReliefCutHeight = 0.375; // [0:0.125:128]
 // Relief Cut Thickness (mbu)
-baseReliefCutThickness = 0.4; // [0:0.1:128]
+baseReliefCutThickness = 0.375; // [0:0.125:128]
 // Grille
 grille = "none"; // [none, x, y]
 // Whether Grille is inverted
@@ -72,8 +69,75 @@ studShift = false;
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
-// Stud Sink (mbu)
-studSink = 0.25; // [0:0.125:1]
+
+/* [Bevel] */
+
+// Bevel X and Y for the corner [0,0] (grid)
+bevel0 = [0, 0]; // [0:0.25:128]
+// Bevel X and Y for the corner [0,1] (grid)
+bevel1 = [0, 0]; // [0:0.25:128]
+// Bevel X and Y for the corner [1,1] (grid)
+bevel2 = [0, 0]; // [0:0.25:128]
+// Bevel X and Y for the corner [1,0] (grid)
+bevel3 = [0, 0]; // [0:0.25:128]
+
+/* [Holes] */
+
+// Whether brick should have Technic holes along X-axis.
+holeX = false;
+// Type of X Holes.
+holeXType = "pin"; // [pin, axle]
+// Whether X Holes should be centered
+holeXShift = true;
+// Hole X Grid Offset Z (mbu)
+holeXGridOffsetZ = 3.5; // [0:0.1:128]
+// Whether brick should have Technic holes along Y-axis.
+holeY = false;
+// Type of Y Holes.
+holeYType = "pin"; // [pin, axle]
+// Whether Y Holes should be centered
+holeYShift = true;
+// Hole Y Grid Offset Z (mbu)
+holeYGridOffsetZ = 3.5; // [0:0.1:128]
+// Whether brick should have Technic holes along Z-axis.
+holeZ = false;
+// Type of Z Holes.
+holeZType = "pin"; // [pin, axle]
+// Whether Z Holes should be shifted by a half brick.
+holeZShift = true;
+
+/* [Recess] */
+
+// Whether brick should have a pit
+recess = false;
+// Whether knobs should be drawn inside pit
+recessStuds = false;
+// Pit wall thickness as multiple of one brick side length (grid)
+recessWallThickness = [0.333, 0.333, 0.333, 0.333]; // [0:0.001:128]
+
+/* [Slope] */
+
+// Slope per side (plates)
+slope = [0, 0, 0, 0]; // [-128:0.1:128]
+
+/* [Text] */
+
+// Text to write on the brick.
+text = "";
+// Side of the brick on which text is written.
+textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
+// Letter Depth (mbu)
+textDepth = 0.5; // [-3.2:0.05:3.2]
+// Text Size (pt)
+textSize = 9; // [1:32]
+// Font
+textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
+// Text Style
+textStyle = "Regular"; // [Black, Black Italic, Bold, Bold Italic, Book, Book Italic, ExtraBold, ExtraBold Italic, Light, Light Italic, Medium, Medium Italic, Regular, Regular Italic, Thin, Thin Italic, Ultra, Ultra Italic]
+// Spacing of the letters
+textSpacing = 1; // [0.1:0.1:4]
+// Color of the text
+textColor = "#303D4E"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
 /* [Style] */
 
@@ -88,17 +152,18 @@ studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-so
 
 /* [Hidden] */
 
+baseRoundingRadius = [baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ];
+bevel = [bevel0, bevel1, bevel2, bevel3];
+textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)));
+
 /*
  * Main Module Call
  */
-mb_block__mb__prim__corner_brick(
+mb_block__mb__bricks__standard(
     config = mb_config,
     settings = [
         ["size", size],
-        ["brick1SizeY", brick1SizeY],
-        ["brick2SizeX", brick2SizeX],
-        ["brick1OffsetY", brick1OffsetY],
-        ["brick2OffsetX", brick2OffsetX],
+        ["baseRoundingRadius", baseRoundingRadius],
         ["baseCutoutType", baseCutoutType],
         ["pillars", pillars],
         ["baseReliefCut", baseReliefCut],
@@ -108,11 +173,33 @@ mb_block__mb__prim__corner_brick(
         ["grilleInverted", grilleInverted],
         ["grilleDepth", grilleDepth],
         ["grilleCount", grilleCount],
+        ["bevel", bevel],
         ["studs", studs],
         ["studShift", studShift],
         ["studType", studType],
         ["studPadding", studPadding],
-        ["studSink", studSink],
+        ["holeX", holeX],
+        ["holeXType", holeXType],
+        ["holeXShift", holeXShift],
+        ["holeXGridOffsetZ", holeXGridOffsetZ],
+        ["holeY", holeY],
+        ["holeYType", holeYType],
+        ["holeYShift", holeYShift],
+        ["holeYGridOffsetZ", holeYGridOffsetZ],
+        ["holeZ", holeZ],
+        ["holeZType", holeZType],
+        ["holeZShift", holeZShift],
+        ["recess", recess],
+        ["recessStuds", recessStuds],
+        ["recessWallThickness", recessWallThickness],
+        ["slope", slope],
+        ["text", text],
+        ["textSide", textSide],
+        ["textDepth", textDepth],
+        ["textSize", textSize],
+        ["textFont", textFontFull],
+        ["textSpacing", textSpacing],
+        ["textColor", textColor],
         ["baseColor", baseColor],
         ["surfacePattern", surfacePattern],
         ["surfacePatternScale", surfacePatternScale],
@@ -123,92 +210,9 @@ mb_block__mb__prim__corner_brick(
 /*
  * Main Module Definition
  */
-module mb_block__mb__prim__corner_brick(config = undef, settings = undef){
-    // Native Parameters (provided by "mb_block()")
-    size = mb_param_size(config, settings);
-    offset = mb_param_offset(config, settings);
-    direction = mb_param_direction(config, settings);
-    align = mb_param_align(config, settings);
-    baseCutoutType = mb_param_baseCutoutType(config, settings);
-    pillars = mb_param_pillars(config, settings);
-    baseReliefCut = mb_param_baseReliefCut(config, settings);
-    baseReliefCutHeight = mb_param_baseReliefCutHeight(config, settings);
-    baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
-    grille = mb_param_grille(config, settings);
-    grilleInverted = mb_param_grilleInverted(config, settings);
-    grilleDepth = mb_param_grilleDepth(config, settings);
-    grilleCount = mb_param_grilleCount(config, settings);
-    studs = mb_param_studs(config, settings);
-    studShift = mb_param_studShift(config, settings);
-    studSink = mb_param_studSink(config, settings);
-    studType = mb_param_studType(config, settings);
-    studPadding = mb_param_studPadding(config, settings);
-    baseColor = mb_param_baseColor(config, settings);
-    surfacePattern = mb_param_surfacePattern(config, settings);
-    surfacePatternScale = mb_param_surfacePatternScale(config, settings);
-    studIcon = mb_param_studIcon(config, settings);
-
-    // Custom Parameters
-    brick1SizeY = mb_param(config, settings, "brick1SizeY", 2);
-    brick2SizeX = mb_param(config, settings, "brick2SizeX", 2);
-    brick1OffsetY = mb_param(config, settings, "brick1OffsetY", 0);
-    brick2OffsetX = mb_param(config, settings, "brick2OffsetX", 0);
-    
-    // Shared settings for both sub-blocks
-    sharedSettings = [
-        ["baseCutoutType", baseCutoutType],
-        ["pillars", pillars],
-        ["baseReliefCut", baseReliefCut],
-        ["baseReliefCutHeight", baseReliefCutHeight],
-        ["baseReliefCutThickness", baseReliefCutThickness],
-        ["grille", grille],
-        ["grilleInverted", grilleInverted],
-        ["grilleDepth", grilleDepth],
-        ["grilleCount", grilleCount],
-        ["studs", studs],
-        ["studShift", studShift],
-        ["studSink", studSink],
-        ["studType", studType],
-        ["studPadding", studPadding],
-        ["baseColor", baseColor],
-        ["surfacePattern", surfacePattern],
-        ["surfacePatternScale", surfacePatternScale],
-        ["studIcon", studIcon]
-    ];
-
-    // Wrapper block
+module mb_block__mb__bricks__standard(config = undef, settings = undef){
     mb_block(
         config = config,
-        settings = [
-            ["base", false],
-            ["studs", false],
-            ["size", size],
-            ["align", align],
-            ["alignChildren", "ccs"],
-            ["offset", offset],
-            ["direction", direction]
-        ]
-    ){
-        // Brick 1 — along X axis, narrow in Y
-        mb_block(
-            config = config,
-            settings = concat(sharedSettings, [
-                ["size", [size[0], brick1SizeY, size[2]]],
-                ["align", "ccs"],
-                ["offset", [0, brick1OffsetY - 0.5*(size[1] - brick1SizeY), 0]],
-                ["baseWallGapsX", [[brick2OffsetX, 2, brick2SizeX]]]
-            ])
-        );
-
-        // Brick 2 — along Y axis, narrow in X
-        mb_block(
-            config = config,
-            settings = concat(sharedSettings, [
-                ["size", [brick2SizeX, size[1], size[2]]],
-                ["align", "ccs"],
-                ["offset", [brick2OffsetX - 0.5*(size[0] - brick2SizeX), 0, 0]],
-                ["baseWallGapsY", [[brick1OffsetY, 2, brick1SizeY]]]
-            ])
-        );
-    }
+        settings = settings
+    );
 }

@@ -2,8 +2,8 @@
  * MachineBlocks.com Block File
  *
  * Name: Arch
- * Filename: mb_block__machineblocks__user__arch.scad
- * Package: machineblocks.user.arch
+ * Filename: mb_block__mb__bricks__arch.scad
+ * Package: mb.bricks.arch
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -94,10 +94,10 @@ studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 // Color of the brick
 baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald, #55AB68:Nephritis, #5296D5:Peter River, #437EB4:Belize Hole, #925CB1:Amethyst, #8548A8:Wisteria, #38485C:Wet Asphalt, #303D4E:Midnight Blue, #EAC645:Sun Flower, #E7A03C:Orange, #D4813A:Carrot, #C05A23:Pumpkin, #D65745:Alizarin, #B14434:Pomegranate, #EDF0F1:Clouds, #BEC3C6:Silver, #98A4A6:Concrete, #98A4A6:Asbestos]
 
-// Surface pattern scale
+// Surface Pattern Scale
 surfacePatternScale = 0.2; // [0:0.001:1]
 
-// Surface pattern
+// Surface Pattern
 surfacePattern = "none"; // [none:None, ../pattern/honeycombs.svg:Honeycombs, ../pattern/squares.svg:Squares, ../pattern/squares-diagonal.svg:Squares Diagonal, ../pattern/diamonds.svg:Diamonds, ../pattern/textile.svg:Textile, ../pattern/card-background.svg:Card Background, ../pattern/dots.svg:Dots, ../pattern/circuit-board.svg:Circuit Board]
 
 // Icons on studs
@@ -105,63 +105,71 @@ studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-so
 
 /* [Hidden] */
 
-bSideAdjustment = mb_param_baseSideAdjustment_default(); // WHY???
+_sharedSettings = [
+    ["baseCutoutType", baseCutoutType],
+    ["pillars", pillars],
+    ["baseReliefCut", baseReliefCut],
+    ["baseReliefCutHeight", baseReliefCutHeight],
+    ["baseReliefCutThickness", baseReliefCutThickness],
+    ["grille", grille],
+    ["grilleInverted", grilleInverted],
+    ["grilleDepth", grilleDepth],
+    ["grilleCount", grilleCount],
+    ["studs", studs],
+    ["studShift", studShift],
+    ["studType", studType],
+    ["studPadding", studPadding],
+    ["baseColor", baseColor],
+    ["surfacePattern", surfacePattern],
+    ["surfacePatternScale", surfacePatternScale],
+    ["studIcon", studIcon]
+];
 
 /*
  * Main Module Call
  */
-mb_block__machineblocks__user__arch(
+mb_block__mb__bricks__arch(
     config = mb_config,
-    settings = [
+    settings = mb_params_merge(_sharedSettings, [
         ["size", size],
         ["column1SizeX", column1SizeX],
         ["deckHeight", deckHeight],
         ["secondColumn", secondColumn],
         ["column2SizeX", column2SizeX],
-        ["inverted", inverted],
-        ["baseCutoutType", baseCutoutType],
-        ["pillars", pillars],
-        ["baseReliefCut", baseReliefCut],
-        ["baseReliefCutHeight", baseReliefCutHeight],
-        ["baseReliefCutThickness", baseReliefCutThickness],
-        ["grille", grille],
-        ["grilleInverted", grilleInverted],
-        ["grilleDepth", grilleDepth],
-        ["grilleCount", grilleCount],
-        ["studs", studs],
-        ["studShift", studShift],
-        ["studType", studType],
-        ["studPadding", studPadding],
-        ["baseColor", baseColor],
-        ["surfacePatternScale", surfacePatternScale],
-        ["surfacePattern", surfacePattern],
-        ["studIcon", studIcon]
-    ]
+        ["inverted", inverted]
+    ])
 );
 
 /*
  * Main Module Definition
  */
-module mb_block__machineblocks__user__arch(config = undef, settings = undef){
+module mb_block__mb__bricks__arch(config = undef, settings = undef){
+
     // Native Parameters
-    size            = mb_param_size(config, settings, [4, 1, 6]);
-    baseCutoutType  = mb_param_baseCutoutType(config, settings);
-    pillars         = mb_param_pillars(config, settings);
-    baseReliefCut   = mb_param_baseReliefCut(config, settings);
-    baseReliefCutHeight      = mb_param_baseReliefCutHeight(config, settings);
-    baseReliefCutThickness   = mb_param_baseReliefCutThickness(config, settings);
-    grille          = mb_param_grille(config, settings);
-    grilleInverted  = mb_param_grilleInverted(config, settings);
-    grilleDepth     = mb_param_grilleDepth(config, settings);
-    grilleCount     = mb_param_grilleCount(config, settings);
-    studs           = mb_param_studs(config, settings);
-    studShift       = mb_param_studShift(config, settings);
-    studType        = mb_param_studType(config, settings);
-    studPadding     = mb_param_studPadding(config, settings);
-    baseColor       = mb_param_baseColor(config, settings);
-    surfacePattern      = mb_param_surfacePattern(config, settings);
+    size             = mb_param_size(config, settings, [4, 1, 6]);
+    baseCutoutType   = mb_param_baseCutoutType(config, settings);
+    pillars          = mb_param_pillars(config, settings);
+    baseReliefCut    = mb_param_baseReliefCut(config, settings);
+    baseReliefCutHeight     = mb_param_baseReliefCutHeight(config, settings);
+    baseReliefCutThickness  = mb_param_baseReliefCutThickness(config, settings);
+    grille           = mb_param_grille(config, settings);
+    grilleInverted   = mb_param_grilleInverted(config, settings);
+    grilleDepth      = mb_param_grilleDepth(config, settings);
+    grilleCount      = mb_param_grilleCount(config, settings);
+    studs            = mb_param_studs(config, settings);
+    studShift        = mb_param_studShift(config, settings);
+    studType         = mb_param_studType(config, settings);
+    studPadding      = mb_param_studPadding(config, settings);
+    baseColor        = mb_param_baseColor(config, settings);
+    surfacePattern   = mb_param_surfacePattern(config, settings);
     surfacePatternScale = mb_param_surfacePatternScale(config, settings);
-    studIcon        = mb_param_studIcon(config, settings);
+    studIcon         = mb_param_studIcon(config, settings);
+    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+
+    // System Parameters
+    unitMbu  = mb_param_unitMbu(config, settings);
+    unitGrid = mb_param_unitGrid(config, settings);
+    scale    = mb_param_scale(config, settings);
 
     // Custom Parameters
     column1SizeX = mb_param(config, settings, "column1SizeX", 1);
@@ -170,16 +178,14 @@ module mb_block__machineblocks__user__arch(config = undef, settings = undef){
     column2SizeX = mb_param(config, settings, "column2SizeX", 1);
     inverted     = mb_param(config, settings, "inverted", false);
 
-    // Internal Computations
-    unitMbu  = mb_param_unitMbu(config, settings);
-    unitGrid = mb_param_unitGrid(config, settings);
-    bSideAdjustment = mb_param_baseSideAdjustment(config, settings); //MUST BE [0]
-    
-    tunnelWidth  = (secondColumn ? 1 : 2) * (size[0] - column1SizeX - (secondColumn ? column2SizeX : 0)) * unitGrid[0] * unitMbu;
-    tunnelHeight = (size[2] - deckHeight) * unitGrid[1] * unitMbu;
-    brickTotalSizeY = size[1] * unitGrid[0] * unitMbu + 2 * bSideAdjustment;
+    // Internal computations
+    bSideAdj = baseSideAdjustment[0];
+    tunnelSpanX = (secondColumn ? 1 : 2) * (size[0] - column1SizeX - (secondColumn ? column2SizeX : 0));
+    tunnelWidth  = tunnelSpanX * unitGrid[0] * unitMbu * scale;
+    tunnelHeight = (size[2] - deckHeight) * unitGrid[1] * unitMbu * scale;
+    brickTotalSizeY = size[1] * unitGrid[0] * unitMbu * scale + 2 * bSideAdj;
 
-    // Shared settings passed to all mb_block() calls
+    // Shared settings forwarded to all mb_block() calls
     sharedSettings = [
         ["baseCutoutType", baseCutoutType],
         ["pillars", pillars],
@@ -200,107 +206,72 @@ module mb_block__machineblocks__user__arch(config = undef, settings = undef){
         ["studIcon", studIcon]
     ];
 
-    // Wrapper Block
-    mb_block(
-        config = config,
-        settings = mb_params_merge(sharedSettings, [
-            ["base", false],
-            ["studs", false],
-            ["size", size]
-        ])
-    ){
-        if(!inverted){
-            // Column 1
-            difference(){
-                mb_block(
-                    config = config,
-                    settings = mb_params_merge(sharedSettings, [
-                        ["size", [column1SizeX, size[1], size[2]]],
-                        ["baseSideAdjustment", bSideAdjustment],
-                        ["baseCutoutMaxDepth", 5]
-                    ])
-                );
+    if(!inverted){
+        // Column 1
+        mb_block(
+            config = config,
+            settings = mb_params_merge(sharedSettings, [
+                ["size", [column1SizeX, size[1], size[2]]],
+                ["baseSideAdjustment", [bSideAdj, 0.01, bSideAdj, bSideAdj]]
+            ])
+        );
 
-                // Elliptic tunnel cutout (not representable via cutouts parameter)
-                translate([
-                    0.5 * tunnelWidth + column1SizeX * unitGrid[0] * unitMbu,
-                    0.5 * brickTotalSizeY - bSideAdjustment,
-                    0
+        // Column 2 (optional)
+        if(secondColumn){
+            mb_block(
+                config = config,
+                settings = mb_params_merge(sharedSettings, [
+                    ["size", [column2SizeX, size[1], size[2]]],
+                    ["offset", [size[0] - column2SizeX, 0, 0]],
+                    ["baseSideAdjustment", [0.01, bSideAdj, bSideAdj, bSideAdj]]
                 ])
-                rotate([90, 0, 0])
-                scale([1, 2 * tunnelHeight / tunnelWidth, 1])
-                cylinder(
-                    h = 1.1 * brickTotalSizeY,
-                    r = 0.5 * tunnelWidth,
-                    center = true,
-                    $fn = 64
-                );
-            }
-
-            // Column 2
-            if(secondColumn){
-                mb_block(
-                    config = config,
-                    settings = mb_params_merge(sharedSettings, [
-                        ["size", [column2SizeX, size[1], size[2]]],
-                        ["offset", [size[0] - column2SizeX, 0, 0]],
-                        ["baseSideAdjustment", bSideAdjustment]
-                    ])
-                );
-            }
-
-            // Tunnel deck
-            difference(){
-                mb_block(
-                    config = config,
-                    settings = mb_params_merge(sharedSettings, [
-                        ["size", [size[0] - column1SizeX - (secondColumn ? column2SizeX : 0), size[1], size[2]]],
-                        ["offset", [column1SizeX, 0, 0]],
-                        ["baseCutoutType", "none"],
-                        ["baseSideAdjustment", [-bSideAdjustment, secondColumn ? -bSideAdjustment : bSideAdjustment, bSideAdjustment, bSideAdjustment]]
-                    ])
-                );
-
-                translate([
-                    0.5 * tunnelWidth + column1SizeX * unitGrid[0] * unitMbu,
-                    0.5 * brickTotalSizeY - bSideAdjustment,
-                    0
-                ])
-                rotate([90, 0, 0])
-                scale([1, 2 * tunnelHeight / tunnelWidth, 1])
-                cylinder(
-                    h = 1.1 * brickTotalSizeY,
-                    r = 0.5 * tunnelWidth,
-                    center = true,
-                    $fn = 64
-                );
-            }
+            );
         }
 
-        if(inverted){
+        // Tunnel span — elliptical arch cut applied via raw difference()
+        difference(){
+            mb_block(
+                config = config,
+                settings = mb_params_merge(sharedSettings, [
+                    ["size", [size[0] - column1SizeX - (secondColumn ? column2SizeX : 0), size[1], size[2]]],
+                    ["offset", [column1SizeX, 0, 0]],
+                    ["baseCutoutType", "none"],
+                    ["baseSideAdjustment", [-bSideAdj, secondColumn ? -bSideAdj : bSideAdj, bSideAdj, bSideAdj]]
+                ])
+            );
+
+            // Elliptical arch void
+            translate([
+                0.5 * tunnelWidth + column1SizeX * unitGrid[0] * unitMbu * scale,
+                0.5 * brickTotalSizeY - bSideAdj,
+                0
+            ])
+                rotate([90, 0, 0])
+                    scale([1, 2 * tunnelHeight / tunnelWidth, 1])
+                        cylinder(h = 1.1 * brickTotalSizeY, r = 0.5 * tunnelWidth, center = true);
+        }
+
+    } else {
+        // Inverted arch — full brick with elliptical void cut from the top
+        difference(){
             mb_block(
                 config = config,
                 settings = mb_params_merge(sharedSettings, [
                     ["size", size],
-                    ["baseSideAdjustment", bSideAdjustment],
-                    ["baseCutoutMaxDepth", 2]
+                    ["baseCutoutMaxDepth", 2],
+                    ["baseSideAdjustment", [bSideAdj, bSideAdj, bSideAdj, bSideAdj]]
                 ])
             );
 
-            // Inverted elliptic tunnel cutout
+            // Elliptical arch void (inverted — from top)
             translate([
-                0.5 * tunnelWidth + column1SizeX * unitGrid[0] * unitMbu,
-                0.5 * brickTotalSizeY - bSideAdjustment,
-                size[2] * unitGrid[1] * unitMbu
+                0.5 * tunnelWidth + column1SizeX * unitGrid[0] * unitMbu * scale,
+                0.5 * brickTotalSizeY - bSideAdj,
+                size[2] * unitGrid[1] * unitMbu * scale
             ])
-            rotate([90, 0, 0])
-            scale([1, 2 * tunnelHeight / tunnelWidth, 1])
-            cylinder(
-                h = 1.1 * brickTotalSizeY,
-                r = 0.5 * tunnelWidth,
-                center = true,
-                $fn = 64
-            );
+                rotate([90, 0, 0])
+                    scale([1, 2 * tunnelHeight / tunnelWidth, 1])
+                        cylinder(h = 1.1 * brickTotalSizeY, r = 0.5 * tunnelWidth, center = true);
         }
     }
 }
