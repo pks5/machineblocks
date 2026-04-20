@@ -2511,5 +2511,5 @@ module mb_block(
         } // End rotation
     } //End grid offset and rotation offset revert
 
-    echo(str("Rendered '", blockName, "'. Join our Discord! Visit machineblocks.com"));
+    echo(str("Rendered '", blockName, "'. Join our Discord: MachineBlocks.com"));
 } // End module block
