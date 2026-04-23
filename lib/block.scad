@@ -865,12 +865,13 @@ module mb_block(
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, pBevelPad);
     cornersPitPadding = mb_inset_quad_lrfh(corners, pBevelPad);
     
-    pMinThickness = [
-        -min(recWallThickness[2], recWallThickness[0]), 
-        -min(recWallThickness[0], recWallThickness[3]), 
-        -min(recWallThickness[3], recWallThickness[1]), 
-        -min(recWallThickness[1], recWallThickness[2])
-    ];
+    //pMinThickness = [
+    //    -min(recWallThickness[2], recWallThickness[0]), 
+    //    -min(recWallThickness[0], recWallThickness[3]), 
+    //    -min(recWallThickness[3], recWallThickness[1]), 
+    //    -min(recWallThickness[1], recWallThickness[2])
+    //];
+    pMinThickness = mb_array_min_pair_cycle_neg(recWallThickness);
     pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
     // Studs
@@ -891,12 +892,13 @@ module mb_block(
     knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
     bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
     cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
-    knobPaddingRadiusInv = [
-        -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
-        -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
-        -min(knobPaddingResolved[3], knobPaddingResolved[1]),
-        -min(knobPaddingResolved[1], knobPaddingResolved[2])
-    ];
+    //knobPaddingRadiusInv = [
+    //    -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
+    //    -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
+    //    -min(knobPaddingResolved[3], knobPaddingResolved[1]),
+    //    -min(knobPaddingResolved[1], knobPaddingResolved[2])
+    //];
+    knobPaddingRadiusInv = mb_array_min_pair_cycle_neg(knobPaddingResolved);
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
     // Tubes XYZ

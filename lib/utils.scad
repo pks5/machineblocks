@@ -117,6 +117,14 @@ function mb_array_mul(a, b) =
                 ? [for (i = [0 : len(b)-1]) a * b[i]]
                 : a * b;
 
+function mb_array_min_pair_cycle_neg(a) =
+    [
+        -min(a[2], a[0]),
+        -min(a[0], a[3]),
+        -min(a[3], a[1]),
+        -min(a[1], a[2])
+    ];
+
 module mb_pre_render(do_render, convexity){
     if(do_render){
         render(convexity)
