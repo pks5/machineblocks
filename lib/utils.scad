@@ -93,8 +93,11 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 /*
 * Resolve base side adjustment
 */
-function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
-    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
+//function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
+//    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
+
+function mb_array_sub(a, b) =
+    [for (i = [0 : len(a)-1]) a[i] - b[i]];
 
 module mb_pre_render(do_render, convexity){
     if(do_render){

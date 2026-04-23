@@ -728,15 +728,13 @@ module mb_block(
     gridSizeXY = unitGrid[0] * mbuToMm;
     gridSizeZ = unitGrid[1] * mbuToMm;
 
-    grid = [size[0], size[1]];
-
     //Side Adjustment
     cropResolved = mb_resolve_side_quad(crop, gridSizeXY);
-    sAdjustment = mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved);
+    sAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
 
     //Object Size     
-    objectSizeX = gridSizeXY * grid[0];
-    objectSizeY = gridSizeXY * grid[1];
+    objectSizeX = gridSizeXY * size[0];
+    objectSizeY = gridSizeXY * size[1];
     
     //Object Size Adjusted      
     objectSizeXAdj = objectSizeX + baseSideAdjustment[0] + baseSideAdjustment[1];
@@ -752,8 +750,8 @@ module mb_block(
 
     adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, baseHeightAdjusted / baseHeightResolved];
 
-    gridSizeX = mb_grid_size_x(grid, slope);
-    gridSizeY = mb_grid_size_y(grid, slope);
+    gridSizeX = mb_grid_size_x(size, slope);
+    gridSizeY = mb_grid_size_y(size, slope);
 
     //Calculate Brick Align and Offset
     alignment = is_string(align) ? [align, align, align] : align;
@@ -789,7 +787,7 @@ module mb_block(
     
     resultingPitDepth = recess ? (recessDepth != "auto" ? recessDepth : (baseHeightResolved - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
     
-    pWallThickness = mb_resolve_side_quad(recessWallThickness, 1);
+    pWallThickness = mb_resolve_side_quad(recessWallThickness);
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
     recStudPaddingResolved = mb_resolve_side_quad(recessStudPadding, gridSizeXY);
 
@@ -830,18 +828,16 @@ module mb_block(
     
     //Bevel
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
-    bevelOuter = mb_resolve_bevel_horizontal(bevel, grid, gridSizeXY);
+    bevelOuter = mb_resolve_bevel_horizontal(bevel, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, cropResolved);
     bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
     
-    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], grid, gridSizeXY);
+    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
     cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
     cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
-
-    //cornersCutout = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], cutout, gridSizeXY);
 
     // Pit
     pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
@@ -947,17 +943,17 @@ module mb_block(
     
     //Grid
     startX = 0;
-    midX = floor(0.5 * grid[0] - 1);
-    endX = grid[0] - 1;
+    midX = floor(0.5 * size[0] - 1);
+    endX = size[0] - 1;
     
     startY = 0;
-    midY = floor(0.5 * grid[1] - 1);
-    endY = grid[1] - 1;
+    midY = floor(0.5 * size[1] - 1);
+    endY = size[1] - 1;
             
     mid = [midX, midY];
     
-    offsetX = 0.5 * (grid[0] - 1);
-    offsetY = 0.5 * (grid[1] - 1);
+    offsetX = 0.5 * (size[0] - 1);
+    offsetY = 0.5 * (size[1] - 1);
 
     holeXStart = holeXShift ? (holeXPartial == "start" || holeXPartial == "all" ? -1 : startX) : startX;
     holeXEnd = holeXShift ? (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) : round(endX) - 1) : (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) + 1 : floor(endX));
@@ -999,15 +995,15 @@ module mb_block(
     * Slope
     */
     function smx(s, inv=false) = max(inv ? -s : s, 0);
-    function onSlope(a, b, inv, qx, qy) = (slope != false) && (slope != [0, 0, 0, 0]) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), ceil(grid[0]) - smx(slope[1], inv) - (inv ? qx : 1), ceil(grid[1]) - smx(slope[3], inv) - (inv ? qy : 1)]);
+    function onSlope(a, b, inv, qx, qy) = (slope != false) && (slope != [0, 0, 0, 0]) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), ceil(size[0]) - smx(slope[1], inv) - (inv ? qx : 1), ceil(size[1]) - smx(slope[3], inv) - (inv ? qy : 1)]);
 
     
     /*
     * Pillars / Pins
     */
-    function isCornerZone(value, i) = (value < pillarGapCornerLength) || (value >= grid[i] - (pillarGapCornerLength + 1)); 
-    function isMiddleZone(value, i) = (grid[i] >= pillarGapMiddle) && (value>=mid[i]-1) && (value<=mid[i]+1);
-    function isMiddle(value, i) = (grid[i] >= pillarGapMiddle) && (value == mid[i]);
+    function isCornerZone(value, i) = (value < pillarGapCornerLength) || (value >= size[i] - (pillarGapCornerLength + 1)); 
+    function isMiddleZone(value, i) = (size[i] >= pillarGapMiddle) && (value>=mid[i]-1) && (value<=mid[i]+1);
+    function isMiddle(value, i) = (size[i] >= pillarGapMiddle) && (value == mid[i]);
     
     function drawCornerPillar(a, b) = isCornerZone(a, 0) && isCornerZone(b, 1);
     
@@ -1028,20 +1024,20 @@ module mb_block(
     /*
     * Pit
     */
-    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuter, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, touch=true, overhang=0);
+    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuter, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, touch=true, overhang=0);
     
-    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
+    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
     
     function inPitWallGaps(a, b, mx, i) = (i < len(recessWallGaps)) && (inPitWallGap(a, b, recessWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
     
     function mxRound(v, mx) = mx ? floor(v) : ceil(v);
     function inPitWallGap(a, b, gap, mx) = ((gap[0] == 0) && inPitWallGap0(a, b, gap, mx)) || ((gap[0] == 1) && inPitWallGap1(a, b, gap, mx)) || ((gap[0] == 2) && inPitWallGap2(a, b, gap, mx)) || ((gap[0] == 3) && inPitWallGap3(a, b, gap, mx));
-    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < grid[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
-    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= grid[0] - ceil(pWallThickness[1])) && (ceil(a) < grid[0]) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < grid[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
-    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
-    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= grid[1] - ceil(pWallThickness[3])) && (ceil(b) < grid[1]) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < grid[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
+    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
+    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= size[0] - ceil(pWallThickness[1])) && (ceil(a) < size[0]) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
+    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
+    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= size[1] - ceil(pWallThickness[3])) && (ceil(b) < size[1]) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
     
     /*
     * Knobs
@@ -1050,8 +1046,8 @@ module mb_block(
             let(sType = getGridItem(studs, studType, a, b, 0, false))
             (sType != false
             && !onSlope(a, b, false, 2)
-            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
+            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
             ? sType : false;
 
     function knobZ(a, b) = (recess && inPit(a, b) ? pitFloorZ : sideZ(1)) - knobSink;
@@ -1073,8 +1069,8 @@ module mb_block(
     /*
     * Stabilizer Grid
     */
-    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((grid[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((grid[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (grid[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight, 0) : 0);
+    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((size[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight - stabilizerGridOffset, 0) : 0);
+    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((size[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight, 0) : 0);
     
     /*
     * Screw Holes
@@ -1098,11 +1094,11 @@ module mb_block(
             debugSource = "block.scad",
             preview= $preview,
             previewQuality = previewQuality,
-            grid=grid,
-            baseHeight = baseHeightAdjusted, 
+            size = size,
+            baseHeightAdjusted = baseHeightAdjusted, 
             heightWithKnobs = baseHeightAdjusted + knobHeight,
-            size = [objectSizeX, objectSizeY],
-            sizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+            objectSizeXY = [objectSizeX, objectSizeY],
+            objectSizeXYAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
             topPlateHeight = topPlateHeight,
             resultingTopPlateHeight = resultingTopPlateHeight, 
             baseCutoutDepth = baseCutoutDepth,
@@ -1152,13 +1148,13 @@ module mb_block(
                                                     * Base Block
                                                     */
                                                     mb_base(
-                                                        grid = grid,
+                                                        grid = size,
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
                                                         objectSize = [objectSizeX, objectSizeY],
                                                         height = baseHeightAdjusted,
                                                         baseSideAdjustment = sAdjustment,
-                                                        baseHeightAdjustment=baseHeightAdjustment,
+                                                        baseHeightAdjustment = baseHeightAdjustment,
                                                         baseReliefCut = baseReliefCut,
                                                         baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
                                                         baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
@@ -1206,7 +1202,7 @@ module mb_block(
                                                     difference(){
                                                         union(){
                                                             mb_base_cutout(
-                                                                grid = grid,
+                                                                grid = size,
                                                                 gridSizeXY = gridSizeXY,
                                                                 
                                                                 baseHeight = baseHeightResolved,
@@ -1398,7 +1394,7 @@ module mb_block(
                                                                 union(){
                                                                     if(grille == "none" || grille == "x" || grilleSmall){
                                                                         //Helpers X
-                                                                        for (a = [ 0 : 1 : grid[0] - 2 ]){
+                                                                        for (a = [ 0 : 1 : size[0] - 2 ]){
                                                                             translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
                                                                                 cube([sGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
                                                                             }
@@ -1407,7 +1403,7 @@ module mb_block(
                                                                     
                                                                     if(grille == "none" || grille == "y" || grilleSmall){
                                                                         //Helpers Y
-                                                                        for (b = [ 0 : 1 : grid[1] - 2 ]){
+                                                                        for (b = [ 0 : 1 : size[1] - 2 ]){
                                                                         translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
                                                                                 cube([objectSizeX, sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                                                                             };
@@ -1668,7 +1664,7 @@ module mb_block(
                                                 */
                                                 
                                                 mb_base(
-                                                    grid = grid,
+                                                    grid = size,
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
                                                     objectSize = [objectSizeX, objectSizeY],
@@ -1766,8 +1762,8 @@ module mb_block(
                                                     union(){
                                                         for (a = [ startX : 1 : ceil(endX) ]){
                                                             for (b = [ startY : 1 : ceil(endY) ]){
-                                                                if(baseCutoutType == "studs" || !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                                                    || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, grid, gridSizeXY), mb_grid_pos_y(b, grid, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
+                                                                if(baseCutoutType == "studs" || !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                                                    || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
                                                                     translate([posX(a), posY(b), 0]){
                                                                         if(bClampOffset > 0){
                                                                             translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
@@ -2513,5 +2509,5 @@ module mb_block(
         } // End rotation
     } //End grid offset and rotation offset revert
 
-    echo(str("Rendered '", blockName, "'. Need Help? Join our Discord: MachineBlocks.com"));
+    echo(str("Rendered ", blockName, " - Need Help? Join our Discord: MachineBlocks.com"));
 } // End module block
