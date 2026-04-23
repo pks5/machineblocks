@@ -837,7 +837,13 @@ module mb_block(
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevel, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, cropResolved);
-    bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
+    //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
+    bevelOuterAdjusted =
+        mb_inset_quad_lrfh(
+            bevelOuter,
+            mb_array_mul(sideAdjustment, -1)
+        );
+    
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
@@ -847,8 +853,15 @@ module mb_block(
     cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
 
     // Pit
-    pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
-    pitBevel = mb_inset_quad_lrfh(bevelOuter, [recWallThickness[0]+studMaxOverhang, recWallThickness[1]+studMaxOverhang, recWallThickness[2]+studMaxOverhang, recWallThickness[3]+studMaxOverhang]);
+    //pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
+    //pitBevel = mb_inset_quad_lrfh(bevelOuter, [recWallThickness[0]+studMaxOverhang, recWallThickness[1]+studMaxOverhang, recWallThickness[2]+studMaxOverhang, recWallThickness[3]+studMaxOverhang]);
+    pBevelPad = mb_array_add(recWallThickness, recStudPaddingResolved);
+
+    pitBevel = mb_inset_quad_lrfh(
+        bevelOuter,
+        mb_array_add(recWallThickness, studMaxOverhang)
+    );
+    
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, pBevelPad);
     cornersPitPadding = mb_inset_quad_lrfh(corners, pBevelPad);
     

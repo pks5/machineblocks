@@ -99,6 +99,24 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 function mb_array_sub(a, b) =
     [for (i = [0 : len(a)-1]) a[i] - b[i]];
 
+function mb_array_add(a, b) =
+    is_list(a) && is_list(b)
+        ? [for (i = [0 : len(a)-1]) a[i] + b[i]]
+        : is_list(a)
+            ? [for (i = [0 : len(a)-1]) a[i] + b]
+            : is_list(b)
+                ? [for (i = [0 : len(b)-1]) a + b[i]]
+                : a + b;
+
+function mb_array_mul(a, b) =
+    is_list(a) && is_list(b)
+        ? [for (i = [0 : len(a)-1]) a[i] * b[i]]
+        : is_list(a)
+            ? [for (i = [0 : len(a)-1]) a[i] * b]
+            : is_list(b)
+                ? [for (i = [0 : len(b)-1]) a * b[i]]
+                : a * b;
+
 module mb_pre_render(do_render, convexity){
     if(do_render){
         render(convexity)
