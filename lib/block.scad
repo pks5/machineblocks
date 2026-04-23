@@ -288,8 +288,8 @@ function mb_param_pcbScrewSocketHoleSize(config, settings, default = undef) = mb
 function mb_param_pcbScrewSocketHeight(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketHeight", default != undef ? default : 3);
 function mb_param_pcbScrewSockets(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSockets", default != undef ? default : []);
 
-function mb_param_align(config, settings, default = undef) = mb_param(config, settings, "align", default != undef ? default : "start");
-function mb_param_alignChildren(config, settings, default = undef) = mb_param(config, settings, "alignChildren", default != undef ? default : "start");
+function mb_param_align(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "align", default != undef ? default : "start"));
+function mb_param_alignChildren(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "alignChildren", default != undef ? default : "start"));
 
 function mb_param_qualitySegBase(config, settings, default = undef) = mb_param(config, settings, "qualitySegBase", default != undef ? default : 1.2);
 function mb_param_qualityResolutionMax(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMax", default != undef ? default : 220);
@@ -754,11 +754,13 @@ module mb_block(
     gridSizeY = mb_grid_size_y(size, slope);
 
     //Calculate Brick Align and Offset
-    alignment = is_string(align) ? [align, align, align] : align;
-    alignX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
-    alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*baseHeightResolved : -0.5*baseHeightResolved);
-    
+    //alignment = align;
+    //alignX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
+    //alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
+    //alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*baseHeightResolved : -0.5*baseHeightResolved);
+    alignX = mb_align_offset(align[0], objectSizeX);
+    alignY = mb_align_offset(align[1], objectSizeY);
+    alignZ = mb_align_offset(align[2], baseHeightResolved); 
     
     directionRotationZ = direction * -90;
 
@@ -775,11 +777,15 @@ module mb_block(
     gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0); 
 
     //Children alignment
-    alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
-    translateXChildren = ((alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX));
-    translateYChildren = ((alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY));
-    translateZChildren = (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*baseHeightResolved : 0.5*baseHeightResolved));
+    //alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
+    //translateXChildren = ((alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX));
+    //translateYChildren = ((alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY));
+    //translateZChildren = (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*baseHeightResolved : 0.5*baseHeightResolved));
     
+    translateXChildren = mb_align_offset(alignChildren[0], objectSizeX, true);
+    translateYChildren = mb_align_offset(alignChildren[1], objectSizeY, true);
+    translateZChildren = mb_align_offset(alignChildren[2], baseHeightResolved, true); 
+
     //Base Cutout and Pit Depth
     topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
     baseCutoutMinDepth = unitGrid[1] * mbuToMm - topPlateHeight; // mm -- 1 plate minus topPlateHeight

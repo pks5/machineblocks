@@ -134,3 +134,43 @@ function mb_direction_to_int(d) =
          d == "south" ? 3 :
          undef)
     : d;
+
+
+/*
+* ALIGNMENT
+*/
+
+function mb_align_resolve(v) =
+    is_list(v) ?
+        [ for (e = v) _mb_align_word_resolve(e) ] :
+
+    is_string(v) ?
+        (
+            len(v) == 3 ?
+                [ for (i = [0:2]) _mb_align_char_to_word(v[i]) ] :
+                [ for (i = [0:2]) _mb_align_word_resolve(v) ]
+        ) :
+
+    ["start", "start", "start"];
+
+
+// --- helpers ---
+
+function _mb_align_char_to_word(c) =
+    c == "c" ? "center" :
+    c == "s" ? "start"  :
+    c == "e" ? "end"    :
+    "start"; // fallback
+
+
+function _mb_align_word_resolve(w) =
+    w == "center" ? "center" :
+    w == "start"  ? "start"  :
+    w == "end"    ? "end"    :
+    "start"; // fallback
+
+function mb_align_offset(axisAlign, size, invert = false) =
+    let(sign = invert ? -1 : 1)
+    axisAlign == "center" ? 0 :
+    axisAlign == "start"  ?  sign * 0.5 * size :
+                            -sign * 0.5 * size;
