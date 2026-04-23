@@ -371,15 +371,15 @@ function mb_offset_global_to_local(offset, direction) =
 function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
-function mb_named_side_adjustments(baseSideAdjustment, sideAdjustments, mapping, useFirst = true) =
-    let(namedAdj = _mb_nsa_mapping(sideAdjustments, mapping),
+function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping, useFirst = true) =
+    let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping),
         bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
     _mb_bsa_override(bsa, namedAdj);
 
-function _mb_nsa_mapping(sideAdjustments, mapping) =
+function _mb_nsa_mapping(namedSideAdjustments, mapping) =
 [
     for (entry = mapping)
-        [entry[0], is_num(entry[1]) ? entry[1] : mb_params_get(sideAdjustments, entry[1])]
+        [entry[0], is_num(entry[1]) ? entry[1] : mb_params_get(namedSideAdjustments, entry[1])]
 ];
 
 function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
@@ -460,7 +460,7 @@ module mb_block(
     settings
 ){
 
-    //START convert
+    //START get parameters
     unitMbu = mb_param_unitMbu(config, settings);
     unitGrid = mb_param_unitGrid(config, settings);
 
@@ -716,7 +716,7 @@ module mb_block(
     blockName = mb_param_blockName(config, settings);
     debug = mb_param_debug(config, settings);
 
-    //END convert
+    //END get parameters
 
     //Variables for cutouts        
     cutOffset = 0.2;
@@ -730,7 +730,7 @@ module mb_block(
 
     //Side Adjustment
     cropResolved = mb_resolve_side_quad(crop, gridSizeXY);
-    sAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
+    sideAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
 
     //Object Size     
     objectSizeX = gridSizeXY * size[0];
@@ -740,8 +740,8 @@ module mb_block(
     objectSizeXAdj = objectSizeX + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdj = objectSizeY + baseSideAdjustment[2] + baseSideAdjustment[3];
 
-    objectSizeXAdjusted = objectSizeX + sAdjustment[0] + sAdjustment[1];
-    objectSizeYAdjusted = objectSizeY + sAdjustment[2] + sAdjustment[3];
+    objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
+    objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     //Base Height
@@ -837,7 +837,7 @@ module mb_block(
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevel, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, cropResolved);
-    bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sAdjustment[0], -sAdjustment[1], -sAdjustment[2], -sAdjustment[3]]);
+    bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
     bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
     bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
@@ -988,8 +988,8 @@ module mb_block(
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
 
-    function sideX(side) = 0.5 * (sAdjustment[1] - sAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    function sideY(side) = 0.5 * (sAdjustment[3] - sAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
     function sideZ(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
 
     /*
@@ -1160,7 +1160,7 @@ module mb_block(
                                                         gridSizeZ = gridSizeZ,
                                                         objectSize = [objectSizeX, objectSizeY],
                                                         height = baseHeightAdjusted,
-                                                        baseSideAdjustment = sAdjustment,
+                                                        baseSideAdjustment = sideAdjustment,
                                                         baseHeightAdjustment = baseHeightAdjustment,
                                                         baseReliefCut = baseReliefCut,
                                                         baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
@@ -1213,7 +1213,7 @@ module mb_block(
                                                                 gridSizeXY = gridSizeXY,
                                                                 
                                                                 baseHeight = baseHeightResolved,
-                                                                baseSideAdjustment = sAdjustment,
+                                                                baseSideAdjustment = sideAdjustment,
                                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                                 baseCutoutDepth = baseCutoutDepth,
                                                                 baseClampHeight = bClampHeight,
@@ -1286,14 +1286,14 @@ module mb_block(
                                                                         translate([posX(a + 0.5*(gapLength-1)), sideY(side), baseCutoutZ]){
                                                                             difference(){
                                                                                 translate([0, 0, -0.5 * cutOffset])
-                                                                                    cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
+                                                                                    cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sideAdjustment[2 + side] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
                                                                                 
                                                                                 translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
-                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sideAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                             
                                                                             
                                                                                 translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
-                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sideAdjustment[2 + side]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                             }  
                                                                         }
                                                                     }
@@ -1311,13 +1311,13 @@ module mb_block(
                                                                         translate([sideX(side), posY(b + 0.5*(gapLength-1)), baseCutoutZ]){
                                                                             difference(){
                                                                                 translate([0, 0, -0.5 * cutOffset])
-                                                                                    cube([2 * (baseClampWallThickness + sAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
+                                                                                    cube([2 * (baseClampWallThickness + sideAdjustment[side] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
                                                                                 
                                                                                 translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
-                                                                                    cube([2*(baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                                    cube([2*(baseClampWallThickness + sideAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                             
                                                                                 translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
-                                                                                    cube([2 * (baseClampWallThickness + sAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                                    cube([2 * (baseClampWallThickness + sideAdjustment[side]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                             }
                                                                         }
                                                                     }
@@ -1676,7 +1676,7 @@ module mb_block(
                                                     gridSizeZ = gridSizeZ,
                                                     objectSize = [objectSizeX, objectSizeY],
                                                     height = baseHeightAdjusted,
-                                                    baseSideAdjustment = sAdjustment,
+                                                    baseSideAdjustment = sideAdjustment,
                                                     baseHeightAdjustment = baseHeightAdjustment,
                                                     baseReliefCut = baseReliefCut,
                                                     baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
@@ -2189,14 +2189,14 @@ module mb_block(
                                                             translate([posX(a + 0.5*(gapLength-1)), sideY(side), -0.5 * cutOffset]){
                                                                 cube([
                                                                     gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
-                                                                    objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                                                    objectSizeY - tongueSizeY + sideAdjustment[2 + side] + cutTolerance, 
                                                                     tonGrooveDepthCalc + cutOffset
                                                                 ], center=true); 
                                                                 
                                                                 translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
                                                                     cube([
                                                                         gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
-                                                                        objectSizeY - tongueSizeY + sAdjustment[2 + side] + cutTolerance, 
+                                                                        objectSizeY - tongueSizeY + sideAdjustment[2 + side] + cutTolerance, 
                                                                         tonClampHeightCalc
                                                                     ], center=true); 
                                                             }
@@ -2213,14 +2213,14 @@ module mb_block(
                                                         if(gapLength > 0){
                                                             translate([sideX(side), posY(b + 0.5*(gapLength-1)), -0.5 * cutOffset]){
                                                                 cube([
-                                                                    objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
+                                                                    objectSizeX - tongueSizeX + sideAdjustment[side] + cutTolerance, 
                                                                     gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
                                                                     tonGrooveDepthCalc + cutOffset
                                                                 ], center=true);   
 
                                                                 translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
                                                                     cube([
-                                                                        objectSizeX - tongueSizeX + sAdjustment[side] + cutTolerance, 
+                                                                        objectSizeX - tongueSizeX + sideAdjustment[side] + cutTolerance, 
                                                                         gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
                                                                         tonClampHeightCalc
                                                                     ], center=true);   
