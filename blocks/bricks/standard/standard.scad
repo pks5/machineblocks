@@ -69,6 +69,8 @@ studShift = false;
 studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
+// Stud Sink (mbu)
+studSink = 0.25; // [0:0.25:8]
 
 /* [Bevel] */
 
@@ -108,12 +110,18 @@ holeZShift = true;
 
 /* [Recess] */
 
-// Whether brick should have a pit
+// Whether brick should have a recess
 recess = false;
-// Whether knobs should be drawn inside pit
+// Whether knobs should be drawn inside recess
 recessStuds = false;
-// Pit wall thickness as multiple of one brick side length (grid)
+// Recess wall thickness as multiple of one brick side length (grid)
 recessWallThickness = [0.333, 0.333, 0.333, 0.333]; // [0:0.001:128]
+// Auto Recess Depth
+recessDepthAuto = true;
+// Recess Depth (grid)
+recessDepth = 0; //[0:0.25:32]
+// Recess Stud Padding
+recessStudPadding = [0.2, 0.2, 0.2, 0.2];
 
 /* [Slope] */
 
@@ -155,6 +163,7 @@ studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-so
 baseRoundingRadius = [baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ];
 bevel = [bevel0, bevel1, bevel2, bevel3];
 textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)));
+recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 
 /*
  * Main Module Call
@@ -192,6 +201,9 @@ mb_block__mb__bricks__standard(
         ["recess", recess],
         ["recessStuds", recessStuds],
         ["recessWallThickness", recessWallThickness],
+        ["recessDepth", recessDepthResolved],
+        ["recessStuds", recessStuds],
+        ["recessStudPadding", recessStudPadding],
         ["slope", slope],
         ["text", text],
         ["textSide", textSide],
@@ -203,7 +215,8 @@ mb_block__mb__bricks__standard(
         ["baseColor", baseColor],
         ["surfacePattern", surfacePattern],
         ["surfacePatternScale", surfacePatternScale],
-        ["studIcon", studIcon]
+        ["studIcon", studIcon],
+        ["studSink", studSink]
     ]
 );
 

@@ -788,10 +788,11 @@ module mb_block(
 
     //Base Cutout and Pit Depth
     topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
-    baseCutoutMinDepth = unitGrid[1] * mbuToMm - topPlateHeight; // mm -- 1 plate minus topPlateHeight
+    baseCutoutMinDepth = gridSizeZ - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
+    maxRecessDepth = baseHeightResolved - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
     
-    resultingPitDepth = recess ? (recessDepth != "auto" ? recessDepth : (baseHeightResolved - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth))) : 0;
+    resultingPitDepth = recess ? (recessDepth != "auto" ? min(recessDepth * gridSizeZ, maxRecessDepth) : maxRecessDepth) : 0;
     
     pWallThickness = mb_resolve_side_quad(recessWallThickness);
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
