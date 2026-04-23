@@ -39,9 +39,6 @@ module mb_base_cutout(
     //Top Plate
     topPlateZ,
     topPlateHeight,
-    topPlateHelpers,
-    topPlateHelperHeight,
-    topPlateHelperThickness,
 
     //Pit
     pit,
@@ -208,6 +205,7 @@ module mb_base(
     height, 
     
     baseSideAdjustment, 
+    baseHeightAdjustment,
     baseReliefCut,
     baseReliefCutHeight,
     baseReliefCutThickness,
@@ -283,7 +281,7 @@ module mb_base(
     union(){
         
         difference(){
-            translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0]){
+            translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0.5*(baseHeightAdjustment[1]-baseHeightAdjustment[0])]){
                 
                 difference(){ // Subtract relief cut and slope from base
                     union(){
