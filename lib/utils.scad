@@ -96,6 +96,10 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 //function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
 //    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
+/*
+* ARRAYS
+*/
+
 function mb_array_sub(a, b) =
     [for (i = [0 : len(a)-1]) a[i] - b[i]];
 
@@ -116,6 +120,35 @@ function mb_array_mul(a, b) =
             : is_list(b)
                 ? [for (i = [0 : len(b)-1]) a * b[i]]
                 : a * b;
+
+/*
+* MAPS
+*/
+
+function mb_map_has_key(params, key) =
+    len([
+        for (p = params)
+            if (p[0] == key)
+                1
+    ]) > 0;
+
+function mb_map_get(params, key, default=undef) =
+    let(found = [for (p = params) if (p[0] == key) p[1]])
+    len(found) > 0 ? found[0] : default;
+
+function mb_map_merge(a, b) =
+    concat(
+        [
+            for (pa = a)
+                if (!mb_map_has_key(b, pa[0]))
+                    pa
+        ],
+        b
+    );
+
+/*
+* MISC
+*/
 
 function mb_array_min_pair_cycle_neg(a) =
     [

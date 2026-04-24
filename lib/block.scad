@@ -68,7 +68,7 @@ function mb_param_direction(config, settings, default = undef) = mb_direction_to
 
 function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
-function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]);
+function mb_param_crop(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]));
 
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
 
@@ -307,14 +307,14 @@ function mb_param_debug(config, settings, default = undef) = mb_param(config, se
 /*
 * Composite Blocks Only Parameters
 */
-function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_string(ass) ? [ass] : ass;
+function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_list(ass) ? ass : [ass];
 function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
 
 function mb_param(config, settings, key, default=undef) =
     let(
-        s = _mb_params_valid(settings) ? mb_params_get(settings, key, undef) : undef,
-        c = _mb_params_valid(config)   ? mb_params_get(config, key, undef)   : undef
+        s = _mb_params_valid(settings) ? mb_map_get(settings, key, undef) : undef,
+        c = _mb_params_valid(config)   ? mb_map_get(config, key, undef)   : undef
     )
     s != undef ? s :
     c != undef ? c :
@@ -323,36 +323,13 @@ function mb_param(config, settings, key, default=undef) =
 function _mb_params_valid(p) =
     p != undef && is_list(p) && len(p) > 0;  
 
-function _mb_params_has_key(params, key) =
-    len([
-        for (p = params)
-            if (p[0] == key)
-                1
-    ]) > 0;
+function mb_params_get(params, key, default=undef) = mb_map_get(params, key, default);
 
-function mb_params_get(params, key, default=undef) =
-    let(found = [for (p = params) if (p[0] == key) p[1]])
-    len(found) > 0 ? found[0] : default;
-
-function mb_params_merge(a, b) =
-    concat(
-        // alle aus a, die NICHT in b überschrieben werden
-        [
-            for (pa = a)
-                if (!_mb_params_has_key(b, pa[0]))
-                    pa
-        ],
-        // alle aus b (haben Vorrang)
-        b
-    );
-
-function mb_params_resolve(config, settings, key, default=undef) = 
-    mb_param(config, settings, key, default);
+function mb_params_merge(a, b) = mb_map_merge(a, b);
 
 function mb_assembly(config, settings, size, direction) = 
     let(dirInt = mb_direction_to_int(direction),
-        assemblyParam = mb_param(config, settings, "assembly", "merged"),
-        assembly = is_string(assemblyParam) ? [assemblyParam] : assemblyParam,
+        assembly = mb_param_assembly(config, settings),
         assemblySize = assembly[1] != undef ? assembly[1] : mb_size_resolve(size, dirInt),
         assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], dirInt) : dirInt)
         [assembly[0], assemblySize, assemblyDirection];
@@ -379,7 +356,7 @@ function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, map
 function _mb_nsa_mapping(namedSideAdjustments, mapping) =
 [
     for (entry = mapping)
-        [entry[0], is_num(entry[1]) ? entry[1] : mb_params_get(namedSideAdjustments, entry[1])]
+        [entry[0], is_num(entry[1]) ? entry[1] : mb_map_get(namedSideAdjustments, entry[1])]
 ];
 
 function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
@@ -454,6 +431,11 @@ function mb_set_step_print_position(assembly, steps, step) =
     let(size = steps[step - 1][1],
         apply_assembly = steps[step - 1][2])
     step == 0 ? [0, 0, 0] : [((assembly == "unassembled" || assembly[0] == "unassembled") && apply_assembly && (size[0] < size[1]) ? 2 : 1) * (size[0] + 0.5) + mb_set_step_print_position(assembly, steps, step - 1)[0], 0, 0];
+
+function mb_side_x(side, adj = true) = adj ? 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
+function mb_side_y(side, adj = true) = adj ? 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
+function mb_side_z(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
+
 
 module mb_block(
     config,
@@ -723,31 +705,39 @@ module mb_block(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
+    /*
+    * Start measurements
+    */
+    
     mbuToMm = scale * unitMbu;
 
     gridSizeXY = unitGrid[0] * mbuToMm;
     gridSizeZ = unitGrid[1] * mbuToMm;
 
-    //Side Adjustment
-    cropResolved = mb_resolve_side_quad(crop, gridSizeXY);
-    sideAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
-
     //Object Size     
     objectSizeX = gridSizeXY * size[0];
     objectSizeY = gridSizeXY * size[1];
     
+    //Side Adjustment
+    cropResolved = mb_array_mul(crop, gridSizeXY);
+    sideAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
+
     //Object Size Adjusted      
     objectSizeXAdj = objectSizeX + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdj = objectSizeY + baseSideAdjustment[2] + baseSideAdjustment[3];
 
     objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
-    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
-
+    
     //Base Height
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     baseHeightAdjusted = baseHeightResolved + baseHeightAdjustment[0] + baseHeightAdjustment[1];
 
+    /*
+    * End measurements
+    */
+
+    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
     adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, baseHeightAdjusted / baseHeightResolved];
 
     gridSizeX = mb_grid_size_x(size, slope);
@@ -1736,16 +1726,16 @@ module mb_block(
                                             if(is_list(cutouts)){
                                                 translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
                                                     for(i = [0 : len(cutouts)]){
-                                                        if(mb_params_get(cutouts[i], "cutoutWall", false)){
+                                                        if(mb_map_get(cutouts[i], "cutoutWall", false)){
                                                             intersection(){
                                                                 mb_block(
                                                                     config = config,
-                                                                    settings = mb_params_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["crop", -0.2], ["studs", false]])
+                                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["crop", -0.2], ["studs", false]])
                                                                 );
 
                                                                 mb_block(
                                                                     config = config,
-                                                                    settings = mb_params_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
+                                                                    settings = mb_map_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
                                                                 );
                                                             }
                                                         }
@@ -2253,7 +2243,7 @@ module mb_block(
                                             for(i = [0 : len(cutouts)]){
                                                 mb_block(
                                                     config = config,
-                                                    settings = mb_params_merge(cutouts[i], [["baseCutoutType", "none"], ["studs", false]])
+                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["studs", false]])
                                                 );
                                             }
                                         }
