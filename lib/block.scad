@@ -1034,9 +1034,7 @@ module mb_block(
     
     function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
-    function drawPillar(a, b) = //(drawHoleZ(a, b) == false)
-                                //&& 
-                                !onSlope(a, b, true, 2, 2) 
+    function drawPillar(a, b) = !onSlope(a, b, true, 2, 2) 
                                 && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
 
     function drawPin(a, b, isX) = !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
