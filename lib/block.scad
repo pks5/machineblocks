@@ -71,6 +71,7 @@ function mb_param_offset(config, settings, default = undef) = mb_param(config, s
 function mb_param_crop(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]));
 
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
+function mb_param_ports(config, settings, default = undef) = mb_param(config, settings, "ports", default != undef ? default : false);
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
@@ -432,11 +433,6 @@ function mb_set_step_print_position(assembly, steps, step) =
         apply_assembly = steps[step - 1][2])
     step == 0 ? [0, 0, 0] : [((assembly == "unassembled" || assembly[0] == "unassembled") && apply_assembly && (size[0] < size[1]) ? 2 : 1) * (size[0] + 0.5) + mb_set_step_print_position(assembly, steps, step - 1)[0], 0, 0];
 
-function mb_side_x(side, adj = true) = adj ? 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
-function mb_side_y(side, adj = true) = adj ? 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
-function mb_side_z(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
-
-
 module mb_block(
     config,
     settings
@@ -458,6 +454,7 @@ module mb_block(
     crop = mb_param_crop(config, settings);
 
     cutouts = mb_param_cutouts(config, settings);
+    ports = mb_param_ports(config, settings);
     
     base = mb_param_base(config, settings);
     baseColor = mb_param_baseColor(config, settings);
@@ -708,7 +705,7 @@ module mb_block(
     /*
     * Start measurements
     */
-    
+
     mbuToMm = scale * unitMbu;
 
     gridSizeXY = unitGrid[0] * mbuToMm;
@@ -717,20 +714,21 @@ module mb_block(
     //Object Size     
     objectSizeX = gridSizeXY * size[0];
     objectSizeY = gridSizeXY * size[1];
+    baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
+
+    objectSize = [objectSizeX, objectSizeY, baseHeightResolved];
     
     //Side Adjustment
     cropResolved = mb_array_mul(crop, gridSizeXY);
     sideAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
 
-    //Object Size Adjusted      
+    // Object Size Side Adjusted      
     objectSizeXAdj = objectSizeX + baseSideAdjustment[0] + baseSideAdjustment[1];
     objectSizeYAdj = objectSizeY + baseSideAdjustment[2] + baseSideAdjustment[3];
 
+    // Object Size Fully Adjusted
     objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
-    
-    //Base Height
-    baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
     baseHeightAdjusted = baseHeightResolved + baseHeightAdjustment[0] + baseHeightAdjustment[1];
 
     /*
@@ -990,12 +988,33 @@ module mb_block(
     */
     
 
+    
+    function sideX(side, adj = true) = adj ? 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
+    function sideY(side, adj = true) = adj ? 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
+    function sideZ(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
+
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
+    
+    function sidePosX(c, offsetX = 0) = sideX(0, false) + offsetX + c * gridSizeXY;
+    function sidePosY(c, offsetY = 0) = sideY(0, false) + offsetY + c * gridSizeXY;
+    function sidePosZ(c, offsetZ = 0) = sideZ(0, false) + offsetZ + c * gridSizeZ;
 
-    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
-    function sideZ(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
+    function portSideOffset(axis, align, gridPos) = 
+            let(offsets = [[sideX(0.5, false), sidePosY(gridPos[0]), sidePosZ(gridPos[1])],
+                            [sidePosX(gridPos[0]), sideY(0.5, false), sidePosZ(gridPos[1])],
+                            [sidePosX(gridPos[0]), sidePosY(gridPos[1]), sideZ(0.5, false)]])
+                offsets[mb_axis_to_int(axis)];
+
+    function portOffset(axis, portOffset) = 
+            let(offsets = [[0, portOffset[0], portOffset[1]], 
+                            [portOffset[0], 0, portOffset[1]], 
+                            [portOffset[0], portOffset[1], 0]])
+                offsets[mb_axis_to_int(axis)];
+
+    function sideRotation(axis) = 
+            let(rots = [[0, -90, 0], [-90, 0, 0], [0, 0, 0]])
+                rots[mb_axis_to_int(axis)];
 
     /*
     * Grid
@@ -1161,7 +1180,7 @@ module mb_block(
                                                         grid = size,
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
-                                                        objectSize = [objectSizeX, objectSizeY],
+                                                        objectSize = objectSize,
                                                         height = baseHeightAdjusted,
                                                         baseSideAdjustment = sideAdjustment,
                                                         baseHeightAdjustment = baseHeightAdjustment,
@@ -1677,7 +1696,7 @@ module mb_block(
                                                     grid = size,
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
-                                                    objectSize = [objectSizeX, objectSizeY],
+                                                    objectSize = objectSize,
                                                     height = baseHeightAdjusted,
                                                     baseSideAdjustment = sideAdjustment,
                                                     baseHeightAdjustment = baseHeightAdjustment,
@@ -2148,7 +2167,7 @@ module mb_block(
                                                 translate([0, 0, -0.5 * cutOffset]){
                                                     mb_tongue(
                                                         gridSizeXY = gridSizeXY,
-                                                        objectSize = [objectSizeX, objectSizeY],
+                                                        objectSize = objectSize,
                                                         objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
                                                         baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                         beveled = beveled,
@@ -2245,6 +2264,31 @@ module mb_block(
                                                     config = config,
                                                     settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["studs", false]])
                                                 );
+                                            }
+                                        }
+                                    }
+
+                                    if(is_list(ports)){
+                                        
+                                        for(p = [0 : len(ports) - 1]){
+                                            port = ports[p];
+                                            shapes = port[3];
+                                            translate(portSideOffset(port[0], port[1], port[2])){
+                                                for(s = [0 : len(shapes) - 1]){
+                                                    shape = shapes[s];
+                                                    translate(portOffset(port[0], shape[1])){
+                                                        if(shape[0] == "circle"){
+                                                            rotate(sideRotation(port[0]))
+                                                                cylinder(h = cutMultiplier * objectSize[mb_axis_to_int(port[0])], r=0.5*shape[2][0], center=true, $fn=20);
+                                                        }
+                                                        else if(shape[0] == "rect"){
+                                                            rotate(sideRotation(port[0]))
+                                                                mb_roundedcube_custom(
+                                                                    size = [shape[2][0][1], shape[2][0][0],  cutMultiplier * objectSize[mb_axis_to_int(port[0])]], 
+                                                                    radius = shape[2][1], center=true, resolution=20);
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -2420,7 +2464,7 @@ module mb_block(
                                     translate([0, 0, sideZ(1) + 0.5 * tonHeightCalc]){ 
                                         mb_tongue(
                                             gridSizeXY = gridSizeXY,
-                                            objectSize = [objectSizeX, objectSizeY],
+                                            objectSize = objectSize,
                                             objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
                                             baseRoundingRadiusZ = baseRoundingRadiusZ,
                                             beveled = beveled,
