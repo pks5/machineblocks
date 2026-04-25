@@ -1012,8 +1012,12 @@ module mb_block(
                             [portOffset[0], portOffset[1], 0]])
                 offsets[mb_axis_to_int(axis)];
 
-    function sideRotation(axis) = 
+    function portShapeRotation(axis) = 
             let(rots = [[0, -90, 0], [-90, 0, 0], [0, 0, 0]])
+                rots[mb_axis_to_int(axis)];
+
+    function portRotation(axis, rot) = 
+            let(rots = [[rot, 0, 0], [0, rot, 0], [0, 0, rot]])
                 rots[mb_axis_to_int(axis)];
 
     /*
@@ -2272,20 +2276,25 @@ module mb_block(
                                         
                                         for(p = [0 : len(ports) - 1]){
                                             port = ports[p];
-                                            shapes = port[3];
+                                            portCutThickness = cutMultiplier * objectSize[mb_axis_to_int(port[0])];
+                                            shapes = port[4];
                                             translate(portSideOffset(port[0], port[1], port[2])){
-                                                for(s = [0 : len(shapes) - 1]){
-                                                    shape = shapes[s];
-                                                    translate(portOffset(port[0], shape[1])){
-                                                        if(shape[0] == "circle"){
-                                                            rotate(sideRotation(port[0]))
-                                                                cylinder(h = cutMultiplier * objectSize[mb_axis_to_int(port[0])], r=0.5*shape[2][0], center=true, $fn=20);
-                                                        }
-                                                        else if(shape[0] == "rect"){
-                                                            rotate(sideRotation(port[0]))
-                                                                mb_roundedcube_custom(
-                                                                    size = [shape[2][0][1], shape[2][0][0],  cutMultiplier * objectSize[mb_axis_to_int(port[0])]], 
-                                                                    radius = shape[2][1], center=true, resolution=20);
+                                                rotate(portRotation(port[0], port[3])){
+                                                    for(s = [0 : len(shapes) - 1]){
+                                                        shape = shapes[s];
+                                                        translate(portOffset(port[0], shape[1])){
+                                                            rotate(portShapeRotation(port[0])){
+                                                                rotate([0, 0, shape[2]]){
+                                                                    if(shape[0] == "circle"){
+                                                                        cylinder(h = portCutThickness, r=0.5*shape[3][0], center=true, $fn=20);
+                                                                    }
+                                                                    else if(shape[0] == "rect"){
+                                                                        mb_roundedcube_custom(
+                                                                            size = [shape[3][0][1], shape[3][0][0],  portCutThickness], 
+                                                                            radius = shape[3][1], center=true, resolution=20);
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
