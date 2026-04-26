@@ -107,8 +107,9 @@ module mb_tongue(
                 if(pit){
                     for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                         gap = pitWallGaps[gapIndex];
-                        if(gap[0] < 2){
-                            translate([(-0.5 + gap[0]) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                        side = mb_side_to_int(gap[0]);
+                        if(side < 2){
+                            translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
                                 cube([
                                     tongueThicknessAdjusted * cutMultiplier,
                                     pitSizeY - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeY - pitSizeY, 
@@ -116,7 +117,7 @@ module mb_tongue(
                                     ], center = true);
                         }  
                         else{
-                            translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
+                            translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                 cube([
                                     pitSizeX  - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeX - pitSizeX, 
                                     tongueThicknessAdjusted * cutMultiplier, 
@@ -156,8 +157,9 @@ module mb_tongue(
                         if(pit){
                             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                                 gap = pitWallGaps[gapIndex];
-                                if(gap[0] < 2){
-                                    translate([(-0.5 + gap[0]) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                side = mb_side_to_int(gap[0]);
+                                if(side < 2){
+                                    translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
                                         cube(
                                             [
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
@@ -166,7 +168,7 @@ module mb_tongue(
                                             ], center = true);
                                 }  
                                 else{
-                                    translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + gap[0] - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
+                                    translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                         cube([
                                             pitSizeX  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness + tongueInnerSizeX - pitSizeX, 
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
