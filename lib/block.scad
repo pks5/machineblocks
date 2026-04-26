@@ -314,6 +314,9 @@ function mb_param_assemblyParts(config, settings, default = undef) = let (parts 
 
 function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
+/*
+* Parameter Helpers
+*/
 
 function mb_param(config, settings, key, default=undef) =
     let(
@@ -331,6 +334,10 @@ function mb_params_get(params, key, default=undef) = mb_map_get(params, key, def
 
 function mb_params_merge(a, b) = mb_map_merge(a, b);
 
+/*
+* Assembly Helpers
+*/
+
 function mb_assembly(config, settings, size, direction) = 
     let(dirInt = mb_direction_to_int(direction),
         assembly = mb_param_assembly(config, settings),
@@ -345,13 +352,19 @@ function mb_assembly_tongue(assembly) = assembly[0] != "merged";
 
 function mb_assembly_groove(assembly) = assembly[0] == "merged" ? "none" : "groove"; 
 
-function mb_assembly_offset(assembly, offset) = 
+function mb_assembly_offset(offset, assembly, assemblyParts, part) = 
     let(size = assembly[1],
         globalDir = assembly[2],
         oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = assembly != undef && size[0] >= size[1] ? 0.5 + size[1] : 0)
         
-       assembly == undef || assembly[0] != "unassembled" ? offset : mb_offset_global_to_local([oX, oY, 0], globalDir);
+       assembly == undef || assembly[0] != "unassembled" ? 
+        (mb_in_array(assemblyParts, part) ? [0, 0, 0] : offset) : 
+        mb_offset_global_to_local([oX, oY, 0], globalDir);
+
+/*
+* General Helpers
+*/
 
 function mb_offset_global_to_local(offset, direction) = 
     (direction == 1 || direction == 3) ? [(direction == 1 ? -1 : 1) * offset[1], (direction == 3 ? -1 : 1) * offset[0], offset[2]] : [(direction == 2 ? -1 : 1) * offset[0], (direction == 2 ? -1 : 1) * offset[1], offset[2]];
