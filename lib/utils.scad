@@ -272,3 +272,9 @@ function mb_align_offset(axisAlign, size, invert = false) =
     axisAlign == "center" ? 0 :
     axisAlign == "start"  ?  sign * 0.5 * size :
                             -sign * 0.5 * size;
+
+function mb_align_to_axis_face(align) =
+    align == "start" ? 0 :
+    align == "center" ? 0.5 :
+    align == "end" ? 1 :
+    undef;

@@ -999,16 +999,17 @@ module mb_block(
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
     
-    function sidePosX(c, offsetX = 0) = sideX(0, false) + offsetX + c * gridSizeXY;
-    function sidePosY(c, offsetY = 0) = sideY(0, false) + offsetY + c * gridSizeXY;
-    function sidePosZ(c, offsetZ = 0) = sideZ(0, false) + offsetZ + c * gridSizeZ;
+    function sidePosX(c, axisFace = 0, offsetX = 0) = sideX(axisFace, false) + offsetX + c * gridSizeXY;
+    function sidePosY(c, axisFace = 0, offsetY = 0) = sideY(axisFace, false) + offsetY + c * gridSizeXY;
+    function sidePosZ(c, axisFace = 0, offsetZ = 0) = sideZ(axisFace, false) + offsetZ + c * gridSizeZ;
 
     function portSideOffset(side, align, gridPos) = 
-            let(axisFace = mb_side_to_axis_face(side),
+            let(align = mb_align_resolve(align),
+                axisFace = mb_side_to_axis_face(side),
                 offsets = [
-                            [sideX(axisFace, false), sidePosY(gridPos[0]), sidePosZ(gridPos[1])],
-                            [sidePosX(gridPos[0]), sideY(axisFace, false), sidePosZ(gridPos[1])],
-                            [sidePosX(gridPos[0]), sidePosY(gridPos[1]), sideZ(axisFace, false)]
+                            [sideX(axisFace, false), sidePosY(gridPos[0], mb_align_to_axis_face(align[0])), sidePosZ(gridPos[1],  mb_align_to_axis_face(align[1]))],
+                            [sidePosX(gridPos[0], mb_align_to_axis_face(align[0])), sideY(axisFace, false), sidePosZ(gridPos[1], mb_align_to_axis_face(align[1]))],
+                            [sidePosX(gridPos[0], mb_align_to_axis_face(align[0])), sidePosY(gridPos[1], mb_align_to_axis_face(align[1])), sideZ(axisFace, false)]
                           ])
                 offsets[mb_side_to_axis(side)];
 
@@ -1036,6 +1037,7 @@ module mb_block(
                 ])
                 rots[mb_side_to_axis(side)];
 
+    
     function portShapeRectSize(side, rectSize, portCutThickness) =
             let(axisInt = mb_side_to_axis(side))
             [rectSize[axisInt > 0 ? 0 : 1], rectSize[axisInt > 0 ? 1 : 0],  portCutThickness];
@@ -2297,6 +2299,7 @@ module mb_block(
                                         for(p = [0 : len(ports) - 1]){
                                             port = ports[p];
                                             sideInt = mb_side_to_int(port[0]);
+                                            
                                             
                                             portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : objectSize[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
                                             shapes = port[4];
