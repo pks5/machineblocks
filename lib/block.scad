@@ -304,12 +304,14 @@ function mb_param_previewRenderConvexity(config, settings, default = undef) = mb
 
 function mb_param_blockName(config, settings, default = undef) = mb_param(config, settings, "blockName", default != undef ? default : "Block");
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
-function mb_param_ignore(config, settings, default = undef) = mb_param(config, settings, "ignore", default != undef ? default : false);
+function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
 
 /*
 * Composite Blocks Only Parameters
 */
 function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_list(ass) ? ass : [ass];
+function mb_param_assemblyParts(config, settings, default = undef) = let (parts = mb_param(config, settings, "assemblyParts", default != undef ? default : "all")) is_list(parts) ? parts : [parts];
+
 function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
 
@@ -335,7 +337,10 @@ function mb_assembly(config, settings, size, direction) =
         assemblySize = assembly[1] != undef ? assembly[1] : mb_size_resolve(size, dirInt),
         assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], dirInt) : dirInt)
         [assembly[0], assemblySize, assemblyDirection];
-    
+
+function mb_assembly_parts_render(assemblyParts, part) =
+    mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part);    
+
 function mb_assembly_offset(assembly, offset) = 
     let(size = assembly[1],
         globalDir = assembly[2],
@@ -1139,7 +1144,7 @@ module mb_block(
     /*
     * END Functions
     */
-    if(false == mb_param_ignore(config, settings)){
+    if(mb_param_render(config, settings)){
     if(debug){
         echo(
             blockName = blockName,

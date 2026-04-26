@@ -100,6 +100,9 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 * ARRAYS
 */
 
+function mb_in_array(arr, val) =
+    len([for (a = arr) if (a == val) 1]) > 0;
+
 function mb_array_sub(a, b) =
     [for (i = [0 : len(a)-1]) a[i] - b[i]];
 
