@@ -304,6 +304,7 @@ function mb_param_previewRenderConvexity(config, settings, default = undef) = mb
 
 function mb_param_blockName(config, settings, default = undef) = mb_param(config, settings, "blockName", default != undef ? default : "Block");
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
+function mb_param_ignore(config, settings, default = undef) = mb_param(config, settings, "ignore", default != undef ? default : false);
 
 /*
 * Composite Blocks Only Parameters
@@ -437,6 +438,7 @@ module mb_block(
     config,
     settings
 ){
+    
 
     //START get parameters
     unitMbu = mb_param_unitMbu(config, settings);
@@ -1120,7 +1122,7 @@ module mb_block(
     /*
     * END Functions
     */
-
+    if(false == mb_param_ignore(config, settings)){
     if(debug){
         echo(
             blockName = blockName,
@@ -2573,4 +2575,8 @@ module mb_block(
     } //End grid offset and rotation offset revert
 
     echo(str("Rendered ", blockName, " - Need Help? Join our Discord: MachineBlocks.com"));
+    }
+    else{
+        echo(str("Ignored ", blockName));
+    }
 } // End module block
