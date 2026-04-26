@@ -106,20 +106,20 @@ module mb_tongue(
                 */
                 if(pit){
                     for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                        gap = pitWallGaps[gapIndex];
+                        gap = mb_to_array(pitWallGaps[gapIndex]);
                         side = mb_side_to_int(gap[0]);
                         if(side < 2){
-                            translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                            translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, 0])
                                 cube([
                                     tongueThicknessAdjusted * cutMultiplier,
-                                    pitSizeY - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeY - pitSizeY, 
+                                    pitSizeY - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY + tongueInnerSizeY - pitSizeY, 
                                     tongueHeight * cutMultiplier
                                     ], center = true);
                         }  
                         else{
-                            translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
+                            translate([-0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                 cube([
-                                    pitSizeX  - (gap[1] + gap[2]) * gridSizeXY + tongueInnerSizeX - pitSizeX, 
+                                    pitSizeX  - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY + tongueInnerSizeX - pitSizeX, 
                                     tongueThicknessAdjusted * cutMultiplier, 
                                     tongueHeight * cutMultiplier
                                     ], center = true);     
@@ -156,21 +156,21 @@ module mb_tongue(
                         */
                         if(pit){
                             for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                                gap = pitWallGaps[gapIndex];
+                                gap = mb_to_array(pitWallGaps[gapIndex]);
                                 side = mb_side_to_int(gap[0]);
                                 if(side < 2){
-                                    translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0])
+                                    translate([(-0.5 + side) * (tongueSizeX - tongueThicknessAdjusted), -0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, 0])
                                         cube(
                                             [
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
-                                            pitSizeY  - (gap[1] + gap[2]) * gridSizeXY - 2 * tongueClampThickness + tongueInnerSizeY - pitSizeY, 
+                                            pitSizeY  - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY - 2 * tongueClampThickness + tongueInnerSizeY - pitSizeY, 
                                             tongueClampHeight * cutMultiplier
                                             ], center = true);
                                 }  
                                 else{
-                                    translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
+                                    translate([-0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, (-0.5 + side - 2) * (tongueSizeY - tongueThicknessAdjusted), 0])
                                         cube([
-                                            pitSizeX  - (gap[1] + gap[2]) * gridSizeXY - 2*tongueClampThickness + tongueInnerSizeX - pitSizeX, 
+                                            pitSizeX  - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY - 2*tongueClampThickness + tongueInnerSizeX - pitSizeX, 
                                             (tongueThicknessAdjusted + 2 * tongueClampThickness) * cutMultiplier, 
                                             tongueClampHeight * cutMultiplier
                                             ], center = true);     

@@ -100,6 +100,8 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 * ARRAYS
 */
 
+function mb_to_array(v) = is_list(v) ? v : [v];
+
 function mb_in_array(arr, val) =
     len([for (a = arr) if (a == val) 1]) > 0;
 
@@ -152,6 +154,8 @@ function mb_map_merge(a, b) =
 /*
 * MISC
 */
+
+function mb_undef_to(v, to = 0) = v == undef ? to : v;
 
 function mb_side_to_int(side) =
     is_string(side) ? (
@@ -223,6 +227,11 @@ function mb_direction_to_int(d) =
          d == "south" ? 3 :
          undef)
     : d;
+
+/*
+* Recess
+*/
+
 
 
 /*

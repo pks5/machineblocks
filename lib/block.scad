@@ -26,35 +26,7 @@ use <stud.scad>;
 use <quality.scad>;
 
 /**
- * @module machineblock
- * @brief Generates 3D-printable models of LEGO® compatible building blocks.
- *
- * The machineblock() module can generate 3D models of various types of LEGO®-compatible building blocks, such as classic bricks, plates, round bricks, wedges, slopes, liftarms, and many more.
- * The different output forms can be controlled through a wide range of parameters. For more complex parts, multiple modules can be nested to create a new custom brick.
- * The module is pre-calibrated to ensure good fitting accuracy on most 3D printers. For optimal precision, calibration settings can be adjusted individually.*
- *
- * @requires OpenSCAD 2021.01 or newer
- *
- * @note Units: “mbu” and “grid” refer to the internal coordinate system, while mm represents real-world measurements. By default, 1 mbu = 1.6 mm. The “grid” unit is three-dimensional (x, y, z) and corresponds to 5 mbu in the x and y directions and 2 mbu in the z direction.
- * @note Most parameters are restricted to a single data type. However, certain parameters can accept multiple data types.
- * @note Some parameters support the keyword “auto”, which automatically derives appropriate default values.
- *
- * @example Minimal (1x1 Plate)
- * machineblock();
- *
- * @example 2x4 Brick
- * machineblock(size = [2, 4, 3]);
- *
- * @example 2x2 Plate
- * machineblock(size = [2, 2, 1]);
- *
- * @example 8x2 Plate with Pin Holes and Hollow Studs
- * machineblock(size = [8, 2, 1], holeZ = true, studType = "hollow");
- *
- * @examples Custom composite Brick
- * machineblock(size = [6, 2, 3]){
- *      machineblock(size = [2, 2, 3], offset = [2, 0, 3]);
- * }
+ * Native Gatters
  */
 
 function mb_param_unitMbu(config, settings, default = undef) = mb_param(config, settings, "unitMbu", default != undef ? default : 1.6);
@@ -456,6 +428,9 @@ function mb_set_step_print_position(assembly, steps, step) =
         apply_assembly = steps[step - 1][2])
     step == 0 ? [0, 0, 0] : [((assembly == "unassembled" || assembly[0] == "unassembled") && apply_assembly && (size[0] < size[1]) ? 2 : 1) * (size[0] + 0.5) + mb_set_step_print_position(assembly, steps, step - 1)[0], 0, 0];
 
+/*
+* Main Module
+*/
 module mb_block(
     config,
     settings
@@ -1104,14 +1079,14 @@ module mb_block(
     function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
                         && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
     
-    function inPitWallGaps(a, b, mx, i) = (i < len(recessWallGaps)) && (inPitWallGap(a, b, recessWallGaps[i], mx) || inPitWallGaps(a, b, mx, i+1));
+    function inPitWallGaps(a, b, mx, i) = (i < len(recessWallGaps)) && (inPitWallGap(a, b, mb_to_array(recessWallGaps[i]), mx) || inPitWallGaps(a, b, mx, i+1));
     
     function mxRound(v, mx) = mx ? floor(v) : ceil(v);
     function inPitWallGap(a, b, gap, mx) = ((gap[0] == 0) && inPitWallGap0(a, b, gap, mx)) || ((gap[0] == 1) && inPitWallGap1(a, b, gap, mx)) || ((gap[0] == 2) && inPitWallGap2(a, b, gap, mx)) || ((gap[0] == 3) && inPitWallGap3(a, b, gap, mx));
-    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
-    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= size[0] - ceil(pWallThickness[1])) && (ceil(a) < size[0]) && (floor(b) >= mxRound(pWallThickness[2] + gap[1], mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + gap[2], mx));                                
-    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
-    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= size[1] - ceil(pWallThickness[3])) && (ceil(b) < size[1]) && (floor(a) >= mxRound(pWallThickness[0] + gap[1], mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + gap[2], mx));                                
+    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + mb_undef_to(gap[1]), mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + mb_undef_to(gap[2]), mx));                                
+    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= size[0] - ceil(pWallThickness[1])) && (ceil(a) < size[0]) && (floor(b) >= mxRound(pWallThickness[2] + mb_undef_to(gap[1]), mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + mb_undef_to(gap[2]), mx));                                
+    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + mb_undef_to(gap[1]), mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + mb_undef_to(gap[2]), mx));                                
+    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= size[1] - ceil(pWallThickness[3])) && (ceil(b) < size[1]) && (floor(a) >= mxRound(pWallThickness[0] + mb_undef_to(gap[1]), mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + mb_undef_to(gap[2]), mx));                                
     
     /*
     * Knobs

@@ -411,15 +411,15 @@ module mb_base(
 
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                    gap = pitWallGaps[gapIndex];
+                    gap = mb_to_array(pitWallGaps[gapIndex]);
                     side = mb_side_to_int(gap[0]);
                     if(side < 2){
-                        translate([sideX(side), -0.5 * (gap[2] - gap[1]) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
-                            cube([2 * pitWallThickness[side] * cutMultiplier, pitSizeY - (gap[1] + gap[2]) * gridSizeXY, pitDepth + cutOffset], center = true);
+                        translate([sideX(side), -0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
+                            cube([2 * pitWallThickness[side] * cutMultiplier, pitSizeY - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY, pitDepth + cutOffset], center = true);
                     }  
                     else{
-                        translate([-0.5 * (gap[2] - gap[1]) * gridSizeXY, sideY(side - 2), 0.5*(height - pitDepth + cutOffset)])
-                            cube([pitSizeX - (gap[1] + gap[2]) * gridSizeXY , 2 * pitWallThickness[side] * cutMultiplier, pitDepth + cutOffset], center = true);     
+                        translate([-0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, sideY(side - 2), 0.5*(height - pitDepth + cutOffset)])
+                            cube([pitSizeX - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY , 2 * pitWallThickness[side] * cutMultiplier, pitDepth + cutOffset], center = true);     
                     } 
                 }
             } // End Pit
