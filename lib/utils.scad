@@ -150,6 +150,21 @@ function mb_map_merge(a, b) =
 * MISC
 */
 
+function mb_side_to_int(side) =
+    is_string(side) ? (
+    side == "x-" ? 0 :
+    side == "x+" ? 1 :
+    side == "y-" ? 2 :
+    side == "y+" ? 3 :
+    side == "z-" ? 4 :
+    side == "z+" ? 5 :
+    undef
+    ) : side;
+
+function mb_side_to_axis(side) = floor(mb_side_to_int(side) / 2);
+
+function mb_side_to_axis_face(side) = mb_side_to_int(side) % 2;
+
 function mb_axis_to_int(axis) = 
     is_string(axis) ? (
         axis == "x" ? 0 :
@@ -160,7 +175,7 @@ function mb_axis_to_int(axis) =
 
 function mb_decorator_rotation(side) =
     let(rots = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]])
-        rots[side];
+        rots[mb_side_to_int(side)];
 
 function mb_array_min_pair_cycle_neg(a) =
     [

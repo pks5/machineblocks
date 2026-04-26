@@ -1002,28 +1002,41 @@ module mb_block(
     function sidePosY(c, offsetY = 0) = sideY(0, false) + offsetY + c * gridSizeXY;
     function sidePosZ(c, offsetZ = 0) = sideZ(0, false) + offsetZ + c * gridSizeZ;
 
-    function portSideOffset(axis, align, gridPos) = 
-            let(offsets = [[sideX(0.5, false), sidePosY(gridPos[0]), sidePosZ(gridPos[1])],
-                            [sidePosX(gridPos[0]), sideY(0.5, false), sidePosZ(gridPos[1])],
-                            [sidePosX(gridPos[0]), sidePosY(gridPos[1]), sideZ(0.5, false)]])
-                offsets[mb_axis_to_int(axis)];
+    function portSideOffset(side, align, gridPos) = 
+            let(axisFace = mb_side_to_axis_face(side),
+                offsets = [
+                            [sideX(axisFace, false), sidePosY(gridPos[0]), sidePosZ(gridPos[1])],
+                            [sidePosX(gridPos[0]), sideY(axisFace, false), sidePosZ(gridPos[1])],
+                            [sidePosX(gridPos[0]), sidePosY(gridPos[1]), sideZ(axisFace, false)]
+                          ])
+                offsets[mb_side_to_axis(side)];
 
-    function portOffset(axis, portOffset) = 
-            let(offsets = [[0, portOffset[0], portOffset[1]], 
+    function portOffset(side, portOffset) = 
+            let(offsets = [
+                            [0, portOffset[0], portOffset[1]], 
                             [portOffset[0], 0, portOffset[1]], 
-                            [portOffset[0], portOffset[1], 0]])
-                offsets[mb_axis_to_int(axis)];
+                            [portOffset[0], portOffset[1], 0]
+                            ])
+                offsets[mb_side_to_axis(side)];
 
-    function portShapeRotation(axis) = 
-            let(rots = [[0, -90, 0], [-90, 0, 0], [0, 0, 0]])
-                rots[mb_axis_to_int(axis)];
+    function portShapeRotation(side) = 
+            let(rots = [
+                [0, -90, 0], 
+                [-90, 0, 0], 
+                [0, 0, 0]
+                ])
+                rots[mb_side_to_axis(side)];
 
-    function portRotation(axis, rot) = 
-            let(rots = [[rot, 0, 0], [0, rot, 0], [0, 0, rot]])
-                rots[mb_axis_to_int(axis)];
+    function portRotation(side, rot) = 
+            let(rots = [
+                [rot, 0, 0], 
+                [0, rot, 0], 
+                [0, 0, rot]
+                ])
+                rots[mb_side_to_axis(side)];
 
-    function portShapeRectSize(axis, rectSize, portCutThickness) =
-            let(axisInt = mb_axis_to_int(axis))
+    function portShapeRectSize(side, rectSize, portCutThickness) =
+            let(axisInt = mb_side_to_axis(side))
             [rectSize[axisInt > 0 ? 0 : 1], rectSize[axisInt > 0 ? 1 : 0],  portCutThickness];
 
     /*
@@ -2282,7 +2295,8 @@ module mb_block(
                                         
                                         for(p = [0 : len(ports) - 1]){
                                             port = ports[p];
-                                            portCutThickness = cutMultiplier * objectSize[mb_axis_to_int(port[0])];
+                                            sideInt = mb_side_to_int(port[0]);
+                                            portCutThickness = cutMultiplier * 2*(recess && sideInt < 4 ? recWallThickness[sideInt] + cutTolerance : objectSize[mb_side_to_axis(port[0])]);
                                             shapes = port[4];
                                             translate(portSideOffset(port[0], port[1], port[2])){
                                                 rotate(portRotation(port[0], port[3])){
