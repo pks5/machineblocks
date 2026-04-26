@@ -202,7 +202,7 @@ function mb_param_recessStuds(config, settings, default = undef) = mb_param(conf
 function mb_param_recessStudPadding(config, settings, default = undef) = mb_param(config, settings, "recessStudPadding", default != undef ? default : 0.2);
 function mb_param_recessStudType(config, settings, default = undef) = mb_param(config, settings, "recessStudType", default != undef ? default : "solid");
 function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
-function mb_param_recessWallGaps(config, settings, default = undef) = mb_param(config, settings, "recessWallGaps", default != undef ? default : []);
+function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_array(mb_param(config, settings, "recessWallGaps", default != undef ? default : []));
 
 function mb_param_text(config, settings, default = undef) = mb_param(config, settings, "text", default != undef ? default : "");
 function mb_param_textSide(config, settings, default = undef) = mb_param(config, settings, "textSide", default != undef ? default : 0);
