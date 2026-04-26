@@ -349,10 +349,14 @@ function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, map
         bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
     _mb_bsa_override(bsa, namedAdj);
 
-function _mb_nsa_mapping(namedSideAdjustments, mapping) =
+function mb_named_height_adjustments(baseHeightAdjustment, namedSideAdjustments, mapping) =
+    let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping, 4))
+    _mb_bsa_override(baseHeightAdjustment, namedAdj);    
+
+function _mb_nsa_mapping(namedSideAdjustments, mapping, startAt = 0) =
 [
     for (entry = mapping)
-        [entry[0], is_num(entry[1]) ? entry[1] : mb_map_get(namedSideAdjustments, entry[1])]
+        [mb_side_to_int(entry[0]) - startAt, is_num(entry[1]) ? entry[1] : mb_map_get(namedSideAdjustments, entry[1])]
 ];
 
 function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
