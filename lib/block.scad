@@ -2296,7 +2296,8 @@ module mb_block(
                                         for(p = [0 : len(ports) - 1]){
                                             port = ports[p];
                                             sideInt = mb_side_to_int(port[0]);
-                                            portCutThickness = cutMultiplier * 2*(recess && sideInt < 4 ? recWallThickness[sideInt] + cutTolerance : objectSize[mb_side_to_axis(port[0])]);
+                                            
+                                            portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : objectSize[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
                                             shapes = port[4];
                                             translate(portSideOffset(port[0], port[1], port[2])){
                                                 rotate(portRotation(port[0], port[3])){
