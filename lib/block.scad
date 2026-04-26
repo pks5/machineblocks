@@ -1022,6 +1022,10 @@ module mb_block(
             let(rots = [[rot, 0, 0], [0, rot, 0], [0, 0, rot]])
                 rots[mb_axis_to_int(axis)];
 
+    function portShapeRectSize(axis, rectSize, portCutThickness) =
+            let(axisInt = mb_axis_to_int(axis))
+            [rectSize[axisInt > 0 ? 0 : 1], rectSize[axisInt > 0 ? 1 : 0],  portCutThickness];
+
     /*
     * Grid
     */
@@ -2292,7 +2296,7 @@ module mb_block(
                                                                     }
                                                                     else if(shape[0] == "rect"){
                                                                         mb_roundedcube_custom(
-                                                                            size = [shape[3][0][1], shape[3][0][0],  portCutThickness], 
+                                                                            size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
                                                                             radius = shape[3][1], center=true, resolution=20);
                                                                     }
                                                                 }
