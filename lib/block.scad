@@ -339,7 +339,11 @@ function mb_assembly(config, settings, size, direction) =
         [assembly[0], assemblySize, assemblyDirection];
 
 function mb_assembly_parts_render(assemblyParts, part) =
-    mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part);    
+    mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part);
+
+function mb_assembly_tongue(assembly) = assembly[0] != "merged";
+
+function mb_assembly_groove(assembly) = assembly[0] == "merged" ? "none" : "groove"; 
 
 function mb_assembly_offset(assembly, offset) = 
     let(size = assembly[1],
