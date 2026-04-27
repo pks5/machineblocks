@@ -72,6 +72,7 @@ function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_p
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
+function mb_param_baseWallGaps(config, settings, default = undef) = mb_param(config, settings, "baseWallGaps", default != undef ? default : []);
 function mb_param_baseWallGapsX(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsX", default != undef ? default : []);
 function mb_param_baseWallGapsY(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsY", default != undef ? default : []);
 
@@ -495,6 +496,7 @@ module mb_block(
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
     baseWallGapsX = mb_param_baseWallGapsX(config, settings);
     baseWallGapsY = mb_param_baseWallGapsY(config, settings);
+    baseWallGaps = mb_param_baseWallGaps(config, settings);
 
     topPlateHelpers = mb_param_topPlateHelpers(config, settings);
     topPlateHelperHeight = mb_param_topPlateHelperHeight(config, settings);
@@ -1324,6 +1326,49 @@ module mb_block(
                                                                             if(g % 2 == (grilleInverted ? 0 : 1)){
                                                                                 translate([sideX(0) + (0.5 + g) * grilleWidthX, 0, sideZ(1, false) - 0.5 * (grilleHeight - cutOffset)])
                                                                                     cube(size=[grilleWidthX, objectSizeYAdjusted*cutMultiplier, grilleHeight+ cutOffset], center=true);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            /*
+                                                            * Wall Gaps New
+                                                            */
+                                                            for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
+                                                                gap = baseWallGaps[i];
+                                                                
+                                                                gapSide = mb_side_to_int(gap[0]);
+                                                                gapPos = gap[1] != undef ? gap[1]: 0;
+                                                                gapLength = gap[2] != undef ? gap[2] : 1;
+
+                                                                if(gapLength > 0){
+                                                                    if(gapSide < 2){
+                                                                        translate([posX(gapPos + 0.5*(gapLength-1)), sideY(gapSide), baseCutoutZ]){
+                                                                            difference(){
+                                                                                translate([0, 0, -0.5 * cutOffset])
+                                                                                    cube([gapLength*gridSizeXY - 2*wallThickness + cutTolerance, 2 * (baseClampWallThickness + sideAdjustment[gapSide + 2] + cutTolerance), baseCutoutDepth + cutOffset], center=true); 
+                                                                                
+                                                                                translate([-0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
+                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sideAdjustment[gapSide + 2]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                            
+                                                                            
+                                                                                translate([0.5 * (gapLength*gridSizeXY - 2*wallThickness), 0, (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight) ]) 
+                                                                                    cube([2*baseClampThickness, 2*(baseClampWallThickness + sideAdjustment[gapSide + 2]) * cutMultiplier, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                            }  
+                                                                        }
+                                                                    }
+                                                                    else if(gapSide < 4){
+                                                                        translate([sideX(gapSide - 2), posY(gapPos + 0.5*(gapLength-1)), baseCutoutZ]){
+                                                                            difference(){
+                                                                                translate([0, 0, -0.5 * cutOffset])
+                                                                                    cube([2 * (baseClampWallThickness + sideAdjustment[gapSide - 2] + cutTolerance), gapLength*gridSizeXY - 2 * wallThickness + cutTolerance, baseCutoutDepth + cutOffset], center=true);   
+                                                                                
+                                                                                translate([0, -0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
+                                                                                    cube([2*(baseClampWallThickness + sideAdjustment[gapSide - 2]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
+                                                                            
+                                                                                translate([0, 0.5 * (gapLength*gridSizeXY - 2 * wallThickness), (bClampOffset > 0 ? bClampOffset : - 0.5 * cutOffset) - 0.5 * (baseCutoutDepth - bClampHeight)]) 
+                                                                                    cube([2 * (baseClampWallThickness + sideAdjustment[gapSide - 2]) * cutMultiplier, 2 * baseClampThickness, bClampHeight + (bClampOffset > 0 ? 0 : cutOffset) + cutTolerance], center=true);
                                                                             }
                                                                         }
                                                                     }
@@ -2231,11 +2276,56 @@ module mb_block(
                                                 tongueThicknessAdjusted = tonThicknessCalc + tongueThicknessAdjustment;
                                                 tongueInnerSizeX = tongueSizeX - 2 * tongueThicknessAdjusted;
                                                 tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
+                                                
+                                                /*
+                                                * Groove Wall Gaps New
+                                                */
+                                                for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
+                                                    gap = baseWallGaps[i];
+                                                    
+                                                    gapSide = mb_side_to_int(gap[0]);
+                                                    gapPos = gap[1] != undef ? gap[1]: 0;
+                                                    gapLength = gap[2] != undef ? gap[2] : 1;
+
+                                                    if(gapLength > 0){
+                                                        if(gapSide < 2){
+                                                            translate([posX(gapPos + 0.5*(gapLength-1)), sideY(gapSide), -0.5 * cutOffset]){
+                                                                cube([
+                                                                    gapLength*gridSizeXY - objectSizeX + tongueSizeX + cutTolerance, 
+                                                                    objectSizeY - tongueSizeY + sideAdjustment[gapSide + 2] + cutTolerance, 
+                                                                    tonGrooveDepthCalc + cutOffset
+                                                                ], center=true); 
+                                                                
+                                                                translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
+                                                                    cube([
+                                                                        gapLength*gridSizeXY - objectSizeX + tongueSizeX + 2* tongueClampThickness + cutTolerance, 
+                                                                        objectSizeY - tongueSizeY + sideAdjustment[gapSide + 2] + cutTolerance, 
+                                                                        tonClampHeightCalc
+                                                                    ], center=true); 
+                                                            }
+                                                        }
+                                                        else if(gapSide < 4){
+                                                            translate([sideX(gapSide - 2), posY(gapPos + 0.5*(gapLength-1)), -0.5 * cutOffset]){
+                                                                cube([
+                                                                    objectSizeX - tongueSizeX + sideAdjustment[gapSide - 2] + cutTolerance, 
+                                                                    gapLength*gridSizeXY - objectSizeY + tongueSizeY + cutTolerance, 
+                                                                    tonGrooveDepthCalc + cutOffset
+                                                                ], center=true);   
+
+                                                                translate([0,0,+0.5*(tonGrooveDepthCalc+cutOffset)-0.5*tonClampHeightCalc - (tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc)])
+                                                                    cube([
+                                                                        objectSizeX - tongueSizeX + sideAdjustment[gapSide - 2] + cutTolerance, 
+                                                                        gapLength*gridSizeXY - objectSizeY + tongueSizeY + 2* tongueClampThickness + cutTolerance, 
+                                                                        tonClampHeightCalc
+                                                                    ], center=true);   
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
                                                 /*
                                                 * Groove Wall Gaps X
                                                 */
-                                                //color([0.608, 0.349, 0.714]) //9b59b6
                                                 for (a = [ startX : 1 : endX ]){
                                                     for (side = [ 0 : 1 : 1 ]){
                                                         gapLength = drawWallGapX(a, side, 0);
