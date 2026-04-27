@@ -317,12 +317,17 @@ function mb_assembly(config, settings, size, direction) =
         assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], dirInt) : dirInt)
         [assembly[0], assemblySize, assemblyDirection];
 
-function mb_assembly_parts_render(assemblyParts, part) =
-    mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part);
+function mb_assembly_parts_render(assemblyParts, part, solo = false) =
+    solo ? (len(assemblyParts) == 1 && assemblyParts[0] == part) :
+    (mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part));
 
-function mb_assembly_tongue(assembly) = assembly[0] != "merged";
+function mb_assembly_tongue(assembly, assemblyParts, part) = 
+    mb_assembly_parts_render(assemblyParts, part, true) ? true :
+    assembly[0] != "merged";
 
-function mb_assembly_groove(assembly) = assembly[0] == "merged" ? "none" : "groove"; 
+function mb_assembly_groove(assembly, assemblyParts, part) = 
+    mb_assembly_parts_render(assemblyParts, part, true) ? "groove" :
+    assembly[0] == "merged" ? "none" : "groove"; 
 
 function mb_assembly_offset(offset, assembly, assemblyParts, part) = 
     let(size = assembly[1],
@@ -330,9 +335,10 @@ function mb_assembly_offset(offset, assembly, assemblyParts, part) =
         oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = assembly != undef && size[0] >= size[1] ? 0.5 + size[1] : 0)
         
-       assembly == undef || assembly[0] != "unassembled" ? 
-        (mb_in_array(assemblyParts, part) ? [0, 0, 0] : offset) : 
-        mb_offset_global_to_local([oX, oY, 0], globalDir);
+        mb_assembly_parts_render(assemblyParts, part, true) ? [0, 0, 0] :
+       (assembly == undef || assembly[0] != "unassembled" ? 
+         offset : 
+        mb_offset_global_to_local([oX, oY, 0], globalDir));
 
 /*
 * General Helpers
