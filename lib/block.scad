@@ -73,8 +73,8 @@ function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_p
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
 function mb_param_baseWallGaps(config, settings, default = undef) = mb_param(config, settings, "baseWallGaps", default != undef ? default : []);
-function mb_param_baseWallGapsX(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsX", default != undef ? default : []);
-function mb_param_baseWallGapsY(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsY", default != undef ? default : []);
+//function mb_param_baseWallGapsX(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsX", default != undef ? default : []);
+//function mb_param_baseWallGapsY(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsY", default != undef ? default : []);
 
 function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(config, settings, "topPlateHelpers", default != undef ? default : true);
 function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
@@ -494,8 +494,8 @@ module mb_block(
 
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
-    baseWallGapsX = mb_param_baseWallGapsX(config, settings);
-    baseWallGapsY = mb_param_baseWallGapsY(config, settings);
+    //baseWallGapsX = mb_param_baseWallGapsX(config, settings);
+    //baseWallGapsY = mb_param_baseWallGapsY(config, settings);
     baseWallGaps = mb_param_baseWallGaps(config, settings);
 
     topPlateHelpers = mb_param_topPlateHelpers(config, settings);
@@ -1125,10 +1125,11 @@ module mb_block(
 
     /*
     * Wall Gaps
-    */
+    * /
     function drawWallGapX(a, side, i) = (i < len(baseWallGapsX)) ? ((baseWallGapsX[i][0] == a && (side == baseWallGapsX[i][1] || baseWallGapsX[i][1] == 2)) ? (baseWallGapsX[i][2] == undef ? 1 : baseWallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
     function drawWallGapY(a, side, i) = (i < len(baseWallGapsY)) ? ((baseWallGapsY[i][0] == a && (side == baseWallGapsY[i][1] || baseWallGapsY[i][1] == 2)) ? (baseWallGapsY[i][2] == undef ? 1 : baseWallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
-    
+    */
+
     /*
     * Stabilizer Grid
     */
@@ -1377,7 +1378,7 @@ module mb_block(
                                                             
                                                             /*
                                                             * Wall Gaps X
-                                                            */
+                                                            * /
                                                             for (a = [ startX : 1 : endX ]){
                                                                 for (side = [ 0 : 1 : 1 ]){
                                                                     gapLength = drawWallGapX(a, side, 0);
@@ -1402,7 +1403,7 @@ module mb_block(
                                                             
                                                             /*
                                                             * Wall Gaps Y
-                                                            */
+                                                            * /
                                                             for (b = [ startY : 1 : endY ]){
                                                                 for (side = [ 0 : 1 : 1 ]){
                                                                     gapLength = drawWallGapY(b, side, 0);
@@ -1421,7 +1422,7 @@ module mb_block(
                                                                         }
                                                                     }
                                                                 }
-                                                            }
+                                                            } */
                                                         } // End union cutout
 
                                                         /*
@@ -1458,6 +1459,39 @@ module mb_block(
                                                                         roundingResolution = topPlateHelperRoundingRadiusQuality
                                                                     );
 
+                                                                    /*
+                                                                    * Wall Gaps New
+                                                                    */
+                                                                    for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
+                                                                        gap = baseWallGaps[i];
+                                                                        
+                                                                        gapSide = mb_side_to_int(gap[0]);
+                                                                        gapPos = gap[1] != undef ? gap[1]: 0;
+                                                                        gapLength = gap[2] != undef ? gap[2] : 1;
+
+                                                                        if(gapLength > 0){
+                                                                            if(gapSide < 2){
+                                                                                translate([posX(gapPos + 0.5*(gapLength-1)), sideY(gapSide), 0]){
+                                                                                    cube([
+                                                                                        gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                                        2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                                        cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                                                    ], center=true); 
+                                                                                }
+                                                                            }
+                                                                            else if(gapSide < 4){
+                                                                                translate([sideX(gapSide - 2), posY(gapPos + 0.5*(gapLength-1)), 0]){
+                                                                                    cube([
+                                                                                        2*(wallThickness + topPlateHelperThickness) + cutTolerance, 
+                                                                                        gapLength*gridSizeXY - 2*wallThickness - 2*topPlateHelperThickness + cutTolerance, 
+                                                                                        cutMultiplier * (topPlateHelperHeight + cutOffset)
+                                                                                    ], center=true);   
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    
+                                                                    /*
                                                                     for (a = [ startX : 1 : endX ]){
                                                                         for (side = [ 0 : 1 : 1 ]){
                                                                             gapLength = drawWallGapX(a, side, 0);
@@ -1486,7 +1520,7 @@ module mb_block(
                                                                                 }
                                                                             }
                                                                         }
-                                                                    }
+                                                                    } */
                                                                 }
                                                             }
                                                         } // End if topPlateHelpers
@@ -1565,6 +1599,30 @@ module mb_block(
                                                                         }   
                                                                     }
 
+                                                                    /*
+                                                                    * Wall Gaps New
+                                                                    */
+                                                                    for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
+                                                                        gap = baseWallGaps[i];
+                                                                        
+                                                                        gapSide = mb_side_to_int(gap[0]);
+                                                                        gapPos = gap[1] != undef ? gap[1]: 0;
+                                                                        gapLength = gap[2] != undef ? gap[2] : 1;
+
+                                                                        if(gapLength > 0 && gapSide < 4){
+                                                                            for (p = [ 0 : 1 : gapLength - 2 ]){
+                                                                                t = gapSide < 2
+                                                                                ? [posX(gapPos + p + 0.5), posY(gapSide == 0 ? -0.5 : (endY + 0.5)), baseCutoutZ + cutTolerance]
+                                                                                : [posX(gapSide == 2 ? -0.5 : (endX + 0.5)), posY(gapPos + p + 0.5), baseCutoutZ + cutTolerance];
+                                                                                
+                                                                                translate(t){
+                                                                                    cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=cutoutHoleZRoundingRes);
+                                                                                };
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    /*
                                                                     for (a = [ startX : 1 : endX ]){
                                                                         for (side = [ 0 : 1 : 1 ]){
                                                                             gapLength = drawWallGapX(a, side, 0);
@@ -1605,7 +1663,7 @@ module mb_block(
                                                                                 }
                                                                             }
                                                                         }
-                                                                    }
+                                                                    } */
                                                                 } // End Pillars Cutouts from stabilizer grid
                                                             } // End difference stabilizer Grid
 
@@ -2325,7 +2383,7 @@ module mb_block(
 
                                                 /*
                                                 * Groove Wall Gaps X
-                                                */
+                                                * /
                                                 for (a = [ startX : 1 : endX ]){
                                                     for (side = [ 0 : 1 : 1 ]){
                                                         gapLength = drawWallGapX(a, side, 0);
@@ -2350,7 +2408,7 @@ module mb_block(
                                                 
                                                 /*
                                                 * Groove Wall Gaps Y
-                                                */
+                                                * /
                                                 for (b = [ startY : 1 : endY ]){
                                                     for (side = [ 0 : 1 : 1 ]){
                                                         gapLength = drawWallGapY(b, side, 0);
@@ -2372,7 +2430,7 @@ module mb_block(
                                                         }
                                                     }
                                                 }
-                                                
+                                                */
                                                 
                                             }   
                                         } // End color
