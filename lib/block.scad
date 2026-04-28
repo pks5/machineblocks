@@ -275,7 +275,7 @@ function mb_param_previewQuality(config, settings, default = undef) = mb_param(c
 function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
 function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
-function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : undef);
+function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
 function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
 
@@ -770,8 +770,6 @@ module mb_block(
     bsa = mb_side_adjustment_resolve(baseSideAdjustment, sizeAdjustment);
     cropResolved = mb_crop_resolve(crop, [gridSizeXY, gridSizeZ]);
     sideAdjustment = mb_array_sub(bsa, cropResolved);
-
-    echo(cropResolved = cropResolved);
 
     // Object Size Side Adjusted      
     objectSizeXAdj = objectSizeX + bsa[0] + bsa[1];
@@ -2791,9 +2789,9 @@ module mb_block(
         } // End rotation
     } //End grid offset and rotation offset revert
 
-    echo(str("Rendered ", blockId == undef ? "[Block]" : blockId, " - Need Help? Join our Discord: MachineBlocks.com"));
+    echo(str("Rendered ", blockId, " - Need Help? Join our Discord: MachineBlocks.com"));
     }
     else{
-        echo(str("Ignored ", blockId == undef ? "[Block]" : blockId));
+        echo(str("Ignored ", blockId));
     }
 } // End module block
