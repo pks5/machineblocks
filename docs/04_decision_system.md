@@ -1,6 +1,6 @@
 # MachineBlocks — Decision System
 
-version: 2.0.0
+version: 3.0.0
 
 ## Purpose of this Document
 
@@ -81,11 +81,11 @@ After pattern selection, parameters are assigned from the appropriate groups:
 Geometry: `size`, `slope`, `bevel`, `crop`, `cutouts`.
 Structure: `base`, `recess`, `baseCutoutType`, `tongue`, `connectors`.
 Positioning: `direction`, `align`, `offset`.
-Composite: `assembly`, `namedSideAdjustments`.
+Composite: `assembly`, `assemblyParts`, `namedSideAdjustments`, `render`.
 
 > Parameters realize patterns — they do not define them.
 
-> For all parameter definitions see `09_api_parameters_1_0_1.yml`.
+> For all parameter definitions see `09_api_parameters.yml`.
 
 ---
 
@@ -109,7 +109,7 @@ studs = false
 size defines bounding box
 ```
 
-Must implement `mb_assembly()` if parts support assembly. Must implement `mb_base_side_adjustment()` if parts are adjacent without overlap.
+Must implement `mb_assembly()` if parts support assembly. Must implement `mb_named_side_adjustments()` and `mb_named_height_adjustments()` if parts are adjacent without overlap. Must implement `assemblyParts` via `mb_param_assemblyParts()` and `mb_assembly_parts_render()`.
 
 ## Pattern 4 — Helper / Form Module
 
@@ -181,13 +181,21 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{block_name}`. Always end the response with the output summary (Package, Module, Filename, Location).
 
+**Rule 11 — Block file naming and location (V3).** The filename is only the last package segment:
+- Package `mb.bricks.standard` → filename `standard.scad`
+- Module name: `mb_block__mb__bricks__standard` (all segments, unchanged)
+- Location: `machineblocks/blocks/{segments after library prefix}/{last_segment}/{last_segment}.scad`
+- Example: `mb.bricks.standard` → `machineblocks/blocks/bricks/standard/standard.scad`
+
+**Rule 12 — Side references (V3).** Always use string side identifiers ("x-", "x+", "y-", "y+", "z-", "z+") in generated code. Integer indices (0-5) are valid but not preferred.
+
 ---
 
 # Failure Prevention
 
 ## Do NOT
 
-Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGapsX`/`baseWallGapsY`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed — use `cutouts`). Use any `*RoundingResolution` parameter (removed). Check `assembly` mode without first resolving via `mb_assembly()` (always use `assembly[0]` after resolution).
+Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGaps`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed in V3 — use `cutouts`). Use any `*RoundingResolution` parameter (removed in V3). Use `baseWallGapsX` or `baseWallGapsY` (removed in V3 — use `baseWallGaps`). Access `assembly[0]` without first resolving via `mb_assembly()`. Use `cutouts` for AI-generated blocks (experimental — do not use autonomously).
 
 > Most errors come from using parameters directly instead of patterns.
 

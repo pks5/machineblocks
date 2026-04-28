@@ -1,12 +1,12 @@
 # MachineBlocks — Patterns and Examples
 
-version: 2.0.0
+version: 3.0.0
 
 ## Purpose of this Document
 
 This document defines the Block File structure, customizer conventions, config handling, and Block Module patterns. Each pattern is accompanied by concrete, production-ready examples.
 
-> For all parameter definitions see `09_api_parameters_1_0_1.yml`.
+> For all parameter definitions see `09_api_parameters.yml`.
 > For terminology (Block Module, Block File) see `01_system.md`.
 
 ---
@@ -604,6 +604,9 @@ direction = "west"; // [west:West, north:North, east:East, south:South]
 // Assembly
 assembly = "unassembled"; // [unassembled:Unassembled, assembled:Assembled, merged:Merged]
 
+// Assembly Parts
+assemblyParts = "all"; // [all:All, bottom:Bottom, top:Top]
+
 // Color
 baseColor = "#303D4E";
 
@@ -615,6 +618,7 @@ mb_block__mm__anyclosure__wall(
     settings = [
         ["size", size],
         ["assembly", assembly],
+        ["assemblyParts", assemblyParts],
         ["baseColor", baseColor],
         ["direction", direction]
     ]
@@ -631,22 +635,32 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
     align = mb_param_align(config, settings);
     baseColor = mb_param_baseColor(config, settings);
 
-    // Resolve Base Side Adjustments
+    // Resolve Side / Height Adjustments
     baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseHeightAdjustment = mb_param_baseHeightAdjustment(config, settings);
     namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
+
     panelSideAdjustment = mb_named_side_adjustments(
         baseSideAdjustment,
         namedSideAdjustments,
-        [[2, "start"], [3, "end"]]
+        [["y-", "start"], ["y+", "end"]]
+    );
+
+    panelHeightAdjustment = mb_named_height_adjustments(
+        baseHeightAdjustment,
+        namedSideAdjustments,
+        [["z+", "height"]]
     );
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
+    assemblyParts = mb_param_assemblyParts(config, settings);
 
     // Wrapper Block
     mb_block(
         config = config,
         settings = [
+            ["blockName", "mm.anyclosure.wall#wrapper"],
             ["base", false],
             ["studs", false],
             ["size", size],
@@ -658,11 +672,12 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
         mb_block(
             config = config,
             settings = [
+                ["render", mb_assembly_parts_render(assemblyParts, "bottom")],
+                ["blockName", "mm.anyclosure.wall#panel_bottom"],
                 ["size", [size[0], size[1], size[2] - 1]],
-                ["align", align],
                 ["recess", true],
-                ["tongue", assembly[0] != "merged"],
-                ["recessWallGaps", [[1, 0, 0]]],
+                ["tongue", mb_assembly_tongue(assembly, assemblyParts, "bottom")],
+                ["recessWallGaps", "x+"],
                 ["baseColor", baseColor],
                 ["baseSideAdjustment", panelSideAdjustment]
             ]
@@ -671,13 +686,15 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
         mb_block(
             config = config,
             settings = [
+                ["render", mb_assembly_parts_render(assemblyParts, "top")],
+                ["blockName", "mm.anyclosure.wall#panel_top"],
                 ["size", [size[0], size[1], 1]],
-                ["align", align],
-                ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
-                ["recessWallGaps", [[1, 0, 0]]],
-                ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+                ["offset", mb_assembly_offset([0, 0, size[2] - 1], assembly, assemblyParts, "top")],
+                ["recessWallGaps", "x+"],
+                ["baseCutoutType", mb_assembly_groove(assembly, assemblyParts, "top")],
                 ["baseColor", baseColor],
-                ["baseSideAdjustment", panelSideAdjustment]
+                ["baseSideAdjustment", panelSideAdjustment],
+                ["baseHeightAdjustment", panelHeightAdjustment]
             ]
         );
     }
@@ -761,16 +778,17 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
     panelXSideAdjustment = mb_named_side_adjustments(
         baseSideAdjustment,
         namedSideAdjustments,
-        [[1, "start"]]
+        [["x+", "start"]]
     );
     panelYSideAdjustment = mb_named_side_adjustments(
         baseSideAdjustment,
         namedSideAdjustments,
-        [[3, "end"]]
+        [["y+", "end"]]
     );
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
+    assemblyParts = mb_param_assemblyParts(config, settings);
 
     // Wrapper Block
     mb_block(
@@ -787,11 +805,11 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
         // Panel X — lower
         mb_block(config = config, settings = [
             ["size", [size[0], wallThickness, size[2] - 1]],
-            ["baseWallGapsX", [[0, 1]]],
+            ["baseWallGaps", [["x-", 0], ["x+", 0]]],
             ["offset", [0, 0, 0]],
             ["recess", true],
-            ["tongue", assembly[0] != "merged"],
-            ["recessWallGaps", [[3, 0, 0]]],
+            ["tongue", mb_assembly_tongue(assembly, assemblyParts, "bottom")],
+            ["recessWallGaps", "y+"],
             ["tongueClampThickness", 0.1],
             ["baseSideAdjustment", panelXSideAdjustment],
             ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
@@ -801,11 +819,11 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
         // Panel X — groove
         mb_block(config = config, settings = [
             ["size", [size[0], wallThickness, 1]],
-            ["baseWallGapsX", [[0, 1]]],
-            ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
-            ["recessWallGaps", [[3, 0, 0]]],
+            ["baseWallGaps", [["x-", 0], ["x+", 0]]],
+            ["offset", mb_assembly_offset([0, 0, size[2] - 1], assembly, assemblyParts, "top")],
+            ["recessWallGaps", "y+"],
             ["tongueClampThickness", 0.1],
-            ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+            ["baseCutoutType", mb_assembly_groove(assembly, assemblyParts, "top")],
             ["baseSideAdjustment", panelXSideAdjustment],
             ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
             ["baseColor", baseColor]
@@ -814,11 +832,11 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
         // Panel Y — lower
         mb_block(config = config, settings = [
             ["size", [wallThickness, size[1], size[2] - 1]],
-            ["baseWallGapsY", [[0, 1]]],
+            ["baseWallGaps", [["y-", 0], ["y+", 0]]],
             ["offset", [0, 0, 0]],
             ["recess", true],
-            ["tongue", assembly[0] != "merged"],
-            ["recessWallGaps", [[1, 0, 0]]],
+            ["tongue", mb_assembly_tongue(assembly, assemblyParts, "bottom")],
+            ["recessWallGaps", "x+"],
             ["tongueClampThickness", 0.1],
             ["baseSideAdjustment", panelYSideAdjustment],
             ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
@@ -828,11 +846,11 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
         // Panel Y — groove
         mb_block(config = config, settings = [
             ["size", [wallThickness, size[1], 1]],
-            ["baseWallGapsY", [[0, 1]]],
-            ["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])],
-            ["recessWallGaps", [[1, 0, 0]]],
+            ["baseWallGaps", [["y-", 0], ["y+", 0]]],
+            ["offset", mb_assembly_offset([0, 0, size[2] - 1], assembly, assemblyParts, "top")],
+            ["recessWallGaps", "x+"],
             ["tongueClampThickness", 0.1],
-            ["baseCutoutType", assembly[0] == "merged" ? "none" : "groove"],
+            ["baseCutoutType", mb_assembly_groove(assembly, assemblyParts, "top")],
             ["baseSideAdjustment", panelYSideAdjustment],
             ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
             ["baseColor", baseColor]
@@ -917,6 +935,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
+    assemblyParts = mb_param_assemblyParts(config, settings);
 
     // Wrapper Block
     mb_block(
@@ -984,7 +1003,7 @@ A surface with one or more vertical walls. Created using `recess = true` with wa
 
 ## Corner Panel
 
-Two panels intersecting in an L-shape. Requires `baseWallGapsX`/`baseWallGapsY` at crossing points for grid compatibility.
+Two panels intersecting in an L-shape. Requires `baseWallGaps` at crossing points for grid compatibility.
 
 ## Channel
 
@@ -1027,13 +1046,13 @@ A set file supports four rendering modes: `total` (fully assembled), `print` (in
 
 **Connection Interaction:** `recessWallGaps` creates matching openings in tongue and groove automatically.
 
-**Underside Consistency:** Use `baseWallGapsX`/`baseWallGapsY` in composite blocks where blocks cross.
+**Underside Consistency:** Use `baseWallGaps` in composite blocks where blocks cross. Use string side identifiers ("x-", "x+", etc.).
 
 **Printability:** Complex structures should be split into parts using tongue/groove or connectors.
 
 **Config Propagation:** Every `mb_block()` call inside a module must receive the `config` parameter.
 
-**Assembly Toggling:** Use `assembly[0]` to check mode after resolving via `mb_assembly()`. Use `assembly[0] != "merged"` for tongue, `assembly[0] == "merged"` for baseCutoutType switching.
+**Assembly Toggling:** Resolve via `mb_assembly()`. Also resolve `assemblyParts = mb_param_assemblyParts(config, settings)`. Use `mb_assembly_tongue(assembly, assemblyParts, part)` for tongue, `mb_assembly_groove(assembly, assemblyParts, part)` for baseCutoutType, `mb_assembly_parts_render(assemblyParts, part)` for render, `mb_assembly_offset([...], assembly, assemblyParts, part)` for offset.
 
 **Parameter Access:** Always use `mb_param_*()` for native parameters and `mb_param()` for custom parameters. Never access arrays directly.
 

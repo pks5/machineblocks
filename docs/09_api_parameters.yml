@@ -13,7 +13,7 @@
 #
 # ============================================================================
 
-version: "2.0.0"
+version: "3.0.0"
 
 # ============================================================================
 # GLOBAL RULES
@@ -250,6 +250,30 @@ global_rules:
       - affects: this parameter influences the behavior of listed parameters
       - affected_by: this parameter's behavior is influenced by listed parameters
 
+  side_reference_format:
+    description: |
+      All parameters that reference sides support two equivalent formats:
+      integer indices (0-5) and string identifiers ("x-", "x+", "y-", "y+", "z-", "z+").
+    mapping:
+      0: "x-"
+      1: "x+"
+      2: "y-"
+      3: "y+"
+      4: "z-"
+      5: "z+"
+    ai_rule: |
+      The preferred format from V3 onwards is the string form ("x-", "x+", etc.).
+      When generating new blocks or converting legacy blocks, always use string
+      side identifiers. Integer indices remain valid and are accepted everywhere.
+    version_history:
+      - version: "2"
+        description: "Side references were integers only (0-5)."
+      - version: "3.0"
+        description: |
+          String side identifiers added as an equivalent alternative.
+          Strings are now the preferred format for readability.
+          All parameters that previously accepted only integers now also accept strings.
+
 # ============================================================================
 # PARAMETERS
 # ============================================================================
@@ -265,6 +289,8 @@ parameters:
     type: float
     unit: mm
     default: 1.6
+    since: "2"
+    status: stable
     ai_usage: rarely
     description: |
       Base unit of the MachineBlocks system in millimeters.
@@ -277,6 +303,8 @@ parameters:
     format: "[xy_mbu, z_mbu]"
     unit: mbu
     default: [5, 2]
+    since: "2"
+    status: stable
     ai_usage: rarely
     description: |
       Grid size in mbu, representing a 1x1 plate.
@@ -288,12 +316,54 @@ parameters:
     type: float
     unit: dimensionless
     default: 1.0
+    since: "2"
+    status: stable
     ai_usage: yes
     description: |
       Global scaling factor. Scales all mbu-based values.
       mbu values themselves remain unchanged; only the resulting
       physical dimensions change. Adjustments (mm) do NOT scale.
     example: "scale = 2 produces a brick twice the physical size"
+
+  - name: blockName
+    group: system
+    type: string
+    unit: dimensionless
+    default: ""
+    since: "3.0"
+    status: stable
+    ai_usage: yes
+    description: |
+      Name of the block for identification purposes. Used only for console
+      output and orientation during development and debugging.
+      Has no effect on geometry or rendering.
+
+  - name: debug
+    group: system
+    type: bool
+    unit: dimensionless
+    default: false
+    since: "3.0"
+    status: stable
+    ai_usage: yes
+    description: |
+      Enables debug output to the console. Has no effect on geometry.
+      Used for development and troubleshooting.
+
+  - name: render
+    group: system
+    type: bool
+    unit: dimensionless
+    default: true
+    since: "3.0"
+    status: stable
+    ai_usage: yes
+    description: |
+      Whether the block is rendered at all. When false, the block and all
+      its children produce no geometry. Used in composite blocks to
+      conditionally show or hide individual parts based on assemblyParts.
+    example: |
+      ["render", mb_assembly_parts_render(assemblyParts, "bottom")]
 
   # --------------------------------------------------------------------------
   # GROUP: Core Geometry
@@ -425,7 +495,9 @@ parameters:
       Parameters that only affect surface features or rendering are ignored.
     unit: mixed (follows individual parameter units)
     default: false
-    ai_usage: yes
+    since: "3.0"
+    status: experimental
+    ai_usage: never
     description: |
       Defines one or more void volumes to subtract from the block body.
       Each entry in the array is a settings array describing one cutout.
@@ -462,16 +534,31 @@ parameters:
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]
-      Shortcut: "ccs" → ["center","center","start"]
-      Full: ["start","center","end"]
+      Shortcut string "ccs" → ["center","center","start"]
+        Valid characters: c=center, s=start, e=end (any 3-char combination)
+      Full array: ["start","center","end"]
+      Invalid values are silently replaced with "start".
     unit: dimensionless
     default: "start"
+    since: "2"
+    status: stable
     ai_usage: yes
     description: |
       Alignment relative to the origin, per axis.
       "start" = toward x-/y-/z-, "end" = toward x+/y+/z+.
       Origin is [0,0,0] globally, or defined by parent's alignChildren.
       Alignment is based strictly on the bounding box.
+    version_history:
+      - version: "2"
+        description: "Basic string and array formats supported."
+      - version: "3.0"
+        description: |
+          mb_param_align() now always resolves to a 3-element array internally.
+          Shortcut strings (e.g. "ccs") are fully resolved by the getter.
+          Invalid characters in shortcut strings are replaced with "start".
+          Examples: "ccs" → ["center","center","start"],
+          "sdkds" → ["start","start","start"],
+          ["sdsf","center","end"] → ["start","center","end"]
 
   - name: alignChildren
     group: positioning
@@ -479,14 +566,23 @@ parameters:
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]
-      Shortcut: "ccs" → ["center","center","start"]
-      Full: ["start","center","end"]
+      Shortcut string "ccs" → ["center","center","start"]
+        Valid characters: c=center, s=start, e=end (any 3-char combination)
+      Full array: ["start","center","end"]
+      Invalid values are silently replaced with "start".
     unit: dimensionless
     default: "start"
+    since: "2"
+    status: stable
     ai_usage: yes
     description: |
       Defines the origin inside a parent brick for child positioning.
       Same convention as align. Children use this as their reference point.
+    version_history:
+      - version: "3.0"
+        description: |
+          mb_param_alignChildren() now always resolves to a 3-element array.
+          Same resolution rules as align.
 
   - name: offset
     group: positioning
@@ -669,43 +765,38 @@ parameters:
       Calibration adjustment for baseWallThickness.
       Only for calibration. Not for AI in settings.
 
-  - name: baseWallGapsX
+  - name: baseWallGaps
     group: underside
     type: array
-    format: "[[position, side, length], ...] — length defaults to 1 if omitted"
+    format: |
+      Array of [side, position, length] entries.
+      - side: side string ("x-", "x+", "y-", "y+") or int (0-3).
+        Only one side per entry. To open both sides at a position, add two entries.
+      - position: stud index along the axis
+      - length: gap length in 1x1 bricks (optional, defaults to 1)
     unit: "position in studs, length in 1x1 bricks"
     default: []
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
-      Gaps in the underside wall along the X-axis (baseCutoutType=standard).
+      Gaps in the underside wall (baseCutoutType=standard).
       Used to restore grid compatibility in composite blocks where blocks cross.
-      Each entry: [position, side, length].
-      - position: index on the axis in studs
-      - side: viewing from x- to x+: 0=front, 1=back, 2=both
-      - length: gap length in + direction (multiples of 1x1 bricks, default 1)
+      Replaces baseWallGapsX and baseWallGapsY from V2.
+      Each entry specifies one side, a position, and optionally a length.
+      To open both sides at a position, add two separate entries.
     constraints:
       requires:
         - parameter: baseCutoutType
           condition: "baseCutoutType = 'standard'"
-
-  - name: baseWallGapsY
-    group: underside
-    type: array
-    format: "[[position, side, length], ...] — length defaults to 1 if omitted"
-    unit: "position in studs, length in 1x1 bricks"
-    default: []
-    ai_usage: yes
-    description: |
-      Gaps in the underside wall along the Y-axis (baseCutoutType=standard).
-      Used to restore grid compatibility in composite blocks where blocks cross.
-      Each entry: [position, side, length].
-      - position: index on the axis in studs
-      - side: viewing from y- to y+: 0=front, 1=back, 2=both
-      - length: gap length in + direction (multiples of 1x1 bricks, default 1)
-    constraints:
-      requires:
-        - parameter: baseCutoutType
-          condition: "baseCutoutType = 'standard'"
+    example: |
+      [["x-", 0], ["x+", 0], ["x-", 3], ["x+", 3]]
+    version_history:
+      - version: "3.0"
+        description: |
+          Replaces baseWallGapsX and baseWallGapsY.
+          Side specified as string ("x-", "x+", "y-", "y+") or int.
+          Each entry opens only one side.
 
   # --------------------------------------------------------------------------
   # GROUP: Base Clamp
@@ -881,13 +972,45 @@ parameters:
 
   - name: baseHeightAdjustment
     group: calibration
-    type: float
+    type: array
+    format: "[z-, z+] — always a 2-element array in mm"
     unit: mm
-    default: 0.0
+    default: [0.0, 0.0]
+    since: "2"
+    status: stable
     ai_usage: config_only
     description: |
-      Calibration adjustment for block height.
-      Compensates height inaccuracies in 3D printing.
+      Calibration adjustment for block height, applied separately to bottom (z-)
+      and top (z+) faces. Compensates height inaccuracies in 3D printing.
+      The first value adjusts the bottom (z-, side 4), typically 0.
+      The second value adjusts the top (z+, side 5), e.g. -0.1 to reduce height.
+
+      Example: A brick that should be 3.2mm but prints at 3.3mm can be
+      corrected with [0, -0.1].
+
+      When used in composite blocks stacked vertically, the top block can set
+      baseHeightAdjustment to [-0.1, 0] (or [-0.105, 0] for slight overlap)
+      to compensate for a gap created by a negative adjustment on the lower block.
+
+      Usage in namedSideAdjustments: always pass useFirst=false so the full
+      2-element array is used as the base:
+        panelHeightAdjustment = mb_named_height_adjustments(
+            baseHeightAdjustment,
+            namedSideAdjustments,
+            [["z+", "height"]]
+        );
+
+      IMPORTANT: Unlike baseSideAdjustment, no float shorthand is accepted.
+      Always provide the full [z-, z+] array.
+    version_history:
+      - version: "2"
+        description: "Single float value applied uniformly to block height."
+      - version: "3.0"
+        description: |
+          Changed to mandatory 2-element array [z-, z+].
+          Float input is no longer accepted.
+          Use mb_named_height_adjustments() instead of mb_named_side_adjustments()
+          for height adjustments in composite blocks.
 
   # --------------------------------------------------------------------------
   # GROUP: Top Plate Helpers
@@ -2146,11 +2269,14 @@ parameters:
   - name: recessDepth
     group: recess
     type: float_or_auto
-    unit: mbu
+    unit: unitGrid[1] (plates)
     default: "auto"
+    since: "2"
+    status: stable
     ai_usage: yes
     description: |
-      Depth of the recess cavity. At "auto" depth is maximized.
+      Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
+      At "auto" depth is maximized.
       When set to an absolute value, the baseCutout (standard) goes up to
       baseCutoutMaxDepth and the remainder is filled with the top plate
       wall between baseCutout and recess.
@@ -2158,6 +2284,9 @@ parameters:
       requires:
         - parameter: recess
           condition: "recess = true"
+    version_history:
+      - version: "3.0"
+        description: "Unit clarified: recessDepth is in unitGrid[1] (plates), not raw mbu."
 
   - name: recessWallThickness
     group: recess
@@ -2243,13 +2372,24 @@ parameters:
   - name: recessWallGaps
     group: recess
     type: array
-    format: "[[side, offset_left, offset_right], ...]"
-    unit: "side: side index (0-3), offsets: unitGrid"
+    format: |
+      Short form — single side, full opening:
+        Integer:      recessWallGaps = 0  (side 0 fully open)
+        String:       recessWallGaps = "x-"  (same, using string side)
+        1-element:    recessWallGaps = [0]  or  ["x-"]
+        Multi-side:   recessWallGaps = ["x+", "y-"]
+      Full form — with left/right offsets (internal format):
+        [[side, offset_left, offset_right], ...]
+        offsets are in unitGrid; 0 = full opening on that side.
+      Short forms are internally expanded to the full format.
+    unit: "side: side index (0-3) or string ("x-" etc.), offsets: unitGrid"
     default: []
+    since: "2"
+    status: stable
     ai_usage: yes
     description: |
-      Openings in recess walls. Each entry specifies a side and left/right
-      offsets to create partial or full wall openings.
+      Openings in recess walls. Each entry specifies a side and optional
+      left/right offsets to create partial or full wall openings.
       Also creates matching openings in tongue and groove.
     constraints:
       requires:
@@ -2259,8 +2399,17 @@ parameters:
         - tongue
         - baseCutoutType (groove)
     example: |
-      [[2,1,2], [3,0,1]] — opening on side 2 with 1 stud left offset
-      and 2 studs right offset; opening on side 3 with 0 left and 1 right.
+      Short:  recessWallGaps = "x+"          — side x+ fully open
+      Short:  recessWallGaps = ["x+", "y-"]  — two sides fully open
+      Full:   [["x-", 1, 2], ["y+", 0, 1]]  — partial openings with offsets
+    version_history:
+      - version: "2"
+        description: "Full format only: [[side, offset_left, offset_right], ...]"
+      - version: "3.0"
+        description: |
+          Short forms added: integer, string, or flat array of sides for fully open walls.
+          Sides can now be specified as strings ("x-", "x+", "y-", "y+").
+          Short forms are expanded to the internal full format automatically.
 
   # --------------------------------------------------------------------------
   # GROUP: Text
@@ -3047,6 +3196,8 @@ composite_block_parameters:
         - direction: aggregated direction through the full block tree (int or string)
     unit: dimensionless
     default: "assembled"
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
       Controls the visualization mode of a composite block.
@@ -3066,6 +3217,37 @@ composite_block_parameters:
       used as a child inside another composite block. The size and direction
       in the array are used to correctly position unassembled parts.
       mb_assembly() handles this propagation automatically.
+
+  - name: assemblyParts
+    group: composite
+    type: string_or_array
+    format: |
+      String: "all" — all parts are rendered.
+      String: part ID — only that specific part is rendered.
+      Array of strings: ["bottom", "top"] — only listed parts are rendered.
+      "all" is a reserved value that always renders every part.
+    unit: dimensionless
+    default: "all"
+    since: "3.0"
+    status: stable
+    ai_usage: yes
+    description: |
+      Controls which named parts of a composite block are rendered.
+      Used together with the render parameter and mb_assembly_parts_render().
+      mb_block() ignores this parameter; it must be implemented in composite modules.
+
+      Part IDs are freely defined by the composite block module.
+      "all" always renders all parts regardless of IDs.
+
+      Usage:
+        assemblyParts = mb_param_assemblyParts(config, settings);
+        // Then per part:
+        ["render", mb_assembly_parts_render(assemblyParts, "bottom")]
+        ["render", mb_assembly_parts_render(assemblyParts, "top")]
+
+      mb_assembly_parts_render(assemblyParts, part, solo=false):
+        Returns true if the part should be rendered.
+        solo=true: returns true only if assemblyParts contains ONLY this part.
 
   - name: namedSideAdjustments
     group: composite
@@ -3091,29 +3273,40 @@ composite_block_parameters:
       regardless of how many sides the child has internally.
 
       USAGE — inside the child composite block module:
-      The child reads both parameters and calls mb_named_side_adjustments() to
-      build the final per-side adjustment array for each primitive:
+      The child reads both parameters and calls mb_named_side_adjustments() for
+      XY sides, or mb_named_height_adjustments() for Z-axis height adjustments.
+      These are two separate functions in V3:
 
         baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+        baseHeightAdjustment = mb_param_baseHeightAdjustment(config, settings);
         namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
+
+        // XY side adjustments:
         panelSideAdjustment = mb_named_side_adjustments(
             baseSideAdjustment,
             namedSideAdjustments,
-            [[2, "start"], [3, "end"]]
+            [["y-", "start"], ["y+", "end"]]
         );
 
-      The third argument maps side indices (in west orientation) to named side
-      keys. Instead of a name, a fixed float value may also be specified for a
-      side, which is always applied regardless of namedSideAdjustments.
+        // Z height adjustments:
+        panelHeightAdjustment = mb_named_height_adjustments(
+            baseHeightAdjustment,
+            namedSideAdjustments,
+            [["z+", "height"]]
+        );
 
-      The fourth argument useFirst (default true) controls the base values:
+      mb_named_side_adjustments() third argument maps side strings or indices
+      (in west orientation) to named side keys. Preferred format is strings
+      ("x-", "x+", "y-", "y+"). Integer indices (0-3) also remain valid.
+
+      mb_named_side_adjustments() useFirst (default true):
         useFirst = true  (default): baseSideAdjustment[0] is used for all sides
-          as the base value. Only named sides are overridden. This is the correct
-          pattern for composite blocks with more than 4 sides, since values [1–3]
-          of baseSideAdjustment are irrelevant and should be ignored.
-        useFirst = false: the full 4-element baseSideAdjustment array is used as
-          the base. Named sides override on top. Only appropriate for composite
-          blocks with exactly 4 sides that support full per-side calibration.
+          as the base value. Only named sides are overridden.
+        useFirst = false: the full 4-element baseSideAdjustment array is used.
+          Rarely needed.
+
+      mb_named_height_adjustments() has no useFirst parameter.
+      It always uses the full baseHeightAdjustment [z-, z+] array as the base.
 
       USAGE — in the outer composite block:
       The outer block passes the adjustments to each child composite block:
@@ -3124,24 +3317,146 @@ composite_block_parameters:
 
       mb_block() ignores this parameter.
 
+
 # ============================================================================
-# DEPRECATED / REMOVED — DO NOT USE
+# CHANGELOG — PARAMETERS REMOVED IN V3
+# ============================================================================
+# Parameters that existed in V2 but have been removed in V3.
+# Do NOT use these. The library will ignore or error on them.
 # ============================================================================
 
-deprecated_parameters:
+removed_in_v3:
+
   - name: cutout
-    reason: "Removed. Use cutouts (array of settings arrays) instead."
+    removed_in: "3.0"
+    use_instead: "cutouts (array of settings arrays)"
+    reason: "Replaced by the more flexible cutouts parameter."
+
   - name: cutoutOffset
-    reason: "Removed. Use cutouts (array of settings arrays) instead."
+    removed_in: "3.0"
+    use_instead: "cutouts (array of settings arrays)"
+    reason: "Replaced by the more flexible cutouts parameter."
+
   - name: baseRoundingResolution
-    reason: "Removed."
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+
   - name: pillarRoundingResolution
-    reason: "Removed."
-  - name: pillarGapCornerLength
-    reason: "Experimental — do not use."
-  - name: pillarGapMiddle
-    reason: "Experimental — do not use."
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+
   - name: holeRoundingResolution
-    reason: "Removed."
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+
   - name: studRoundingResolution
-    reason: "Removed."
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+
+  - name: baseWallGapsX
+    removed_in: "3.0"
+    use_instead: "baseWallGaps"
+    reason: "Replaced by the unified baseWallGaps parameter."
+
+  - name: baseWallGapsY
+    removed_in: "3.0"
+    use_instead: "baseWallGaps"
+    reason: "Replaced by the unified baseWallGaps parameter."
+
+# ============================================================================
+# CHANGELOG — PARAMETERS CHANGED IN V3
+# ============================================================================
+# Parameters changed in format or behavior from V2 to V3.
+# Full details in the parameter's version_history field.
+# ============================================================================
+
+changed_in_v3:
+
+  - name: baseHeightAdjustment
+    changed_in: "3.0"
+    summary: "Changed from single float to mandatory 2-element array [z-, z+]."
+
+  - name: recessDepth
+    changed_in: "3.0"
+    summary: "Unit clarified: unitGrid[1] (plates), not raw mbu."
+
+  - name: recessWallGaps
+    changed_in: "3.0"
+    summary: "Short form input added; sides can now be specified as strings."
+
+  - name: align
+    changed_in: "3.0"
+    summary: "mb_param_align() now always resolves to a 3-element array."
+
+  - name: alignChildren
+    changed_in: "3.0"
+    summary: "mb_param_alignChildren() now always resolves to a 3-element array."
+
+# ============================================================================
+# CHANGELOG — PARAMETERS ADDED IN V3
+# ============================================================================
+
+added_in_v3:
+
+  - name: blockName
+    added_in: "3.0"
+    summary: "Block name for console output and orientation."
+
+  - name: debug
+    added_in: "3.0"
+    summary: "Boolean flag to enable debug console output."
+
+  - name: render
+    added_in: "3.0"
+    summary: "Controls whether a block is rendered. Used with assemblyParts."
+
+  - name: assembly
+    added_in: "3.0"
+    summary: "Assembly mode for composite blocks (unassembled/assembled/merged)."
+
+  - name: assemblyParts
+    added_in: "3.0"
+    summary: "Controls which named parts of a composite block are visible."
+
+  - name: namedSideAdjustments
+    added_in: "3.0"
+    summary: "Named side overlap adjustments for composite blocks."
+
+  - name: baseWallGaps
+    added_in: "3.0"
+    summary: "Unified replacement for baseWallGapsX and baseWallGapsY."
+
+  - name: cutouts
+    added_in: "3.0"
+    summary: "Defines void volumes subtracted from the block body (experimental)."
+
+  - name: studSink
+    added_in: "3.0"
+    summary: "Controls how deeply studs are sunk into the block body."
+
+# ============================================================================
+# EXPERIMENTAL PARAMETERS
+# ============================================================================
+# These parameters are not yet stable. AI must NOT use them unless
+# explicitly instructed.
+# ============================================================================
+
+experimental_parameters:
+
+  - name: cutouts
+    since: "3.0"
+    reason: |
+      Cutout geometry is non-trivial to define correctly.
+      AI must not use cutouts autonomously.
+
+  - name: pillarGapCornerLength
+    since: "2"
+    reason: "Experimental since V2 — do not use."
+
+  - name: pillarGapMiddle
+    since: "2"
+    reason: "Experimental since V2 — do not use."

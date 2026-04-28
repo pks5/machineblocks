@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 2.0.0
+version: 3.0.0
 
 ## Purpose
 
@@ -57,7 +57,10 @@ It is not a semantic block definition, not a complete device model, not a helper
 The following native parameters exist in the system but are intentionally ignored by `mb_block()`. They are only meaningful in composite block modules:
 
 - `assembly` — controls assembly mode visualization in composite blocks
+- `assemblyParts` — controls which named parts of a composite block are rendered
 - `namedSideAdjustments` — controls named side overlap adjustments in composite blocks
+
+Note: `render` and `blockName` are processed by `mb_block()` directly.
 
 ---
 
@@ -112,6 +115,13 @@ direction:            "west" → 0,  "north" → 1,  "east" → 2,  "south" → 
 baseSideAdjustment:   0.1              → [0.1, 0.1, 0.1, 0.1]
                       [0.1, 0.2]       → [0.1, 0.1, 0.2, 0.2]
                       [0.1,0.2,0.3,0.4]→ [0.1, 0.2, 0.3, 0.4]
+
+align / alignChildren:
+  "start"             → ["start", "start", "start"]
+  "ccs"               → ["center", "center", "start"]
+  "eee"               → ["end", "end", "end"]
+  ["start","center"]  → ["start", "center", "start"]  (invalid entries → "start")
+  (Since V3: getters always return a resolved 3-element array)
 ```
 
 All other per-side parameters follow the same resolution pattern as `baseSideAdjustment`.
@@ -142,6 +152,8 @@ To merge two settings arrays where the second overrides the first for duplicate 
 mb_params_merge(a, b)
 ```
 
+`mb_params_merge` is a semantic alias for `mb_map_merge` (from `utils.scad`). It is available directly from `block.scad` without a separate import. Use it in composite blocks to merge parameter maps.
+
 Example:
 ```scad
 mb_params_merge(
@@ -150,6 +162,14 @@ mb_params_merge(
 )
 // → [["size", [1,2,3]], ["baseColor", "#ffffff"]]
 ```
+
+To read a raw value from a single parameter array without resolution, use `mb_params_get`:
+
+```scad
+function mb_params_get(params, key, default=undef) = mb_map_get(params, key, default);
+```
+
+`mb_params_get` reads the raw value from ONE parameter array without format resolution. It is a semantic alias for `mb_map_get`. It does NOT resolve shortcut formats (e.g. "ccs" stays "ccs", not ["center","center","start"]). Use this only in special cases in composite blocks. For native parameters always use the dedicated getters. For custom parameters use `mb_param()`.
 
 ---
 
@@ -237,7 +257,7 @@ absolute_mm = size[i] * unitGrid[0 or 1] * unitMbu * scale
 
 X/Y use unitGrid[0], Z uses unitGrid[1].
 
-> For all parameter details, defaults, and units see `09_api_parameters_1_0_1.yml`.
+> For all parameter details, defaults, and units see `09_api_parameters.yml`.
 
 ---
 
@@ -257,12 +277,12 @@ The calibration layer consists of all parameters containing `Adjustment` in thei
 
 ### Side Indexing
 
-Block sides are always indexed as:
+Block sides are always indexed as integers (0–5) or string identifiers (V3+):
 
 ```text
-0 → -X (left)
-1 → +X (right)
-2 → -Y (front)
+0 / "x-" → -X (left)
+1 / "x+" → +X (right)
+2 / "y-" → -Y (front)
 3 → +Y (back)
 4 → -Z (bottom)
 5 → +Z (top)
@@ -521,9 +541,13 @@ Add the standard Block File structure: mandatory header, imports (with correct l
 
 Convert `machineblock(param1=val1, param2=val2)` to `mb_block(config=config, settings=[["param1", val1], ["param2", val2]])`. Only include parameters that are actually set.
 
+When referencing sides in converted code, always use string identifiers ("x-", "x+", "y-", "y+", "z-", "z+") instead of integers. This is the V3 standard.
+
 **Step 3 — Remove Legacy Calibration**
 
 Remove all `_ovr` suffixed customizer variables, the `overrideConfig` boolean, and all deprecated `*RoundingResolution` parameters. Calibration parameters belong in config profiles.
+
+Replace `baseWallGapsX`/`baseWallGapsY` with `baseWallGaps`. Entries using "both sides" (old value 2) must be split into two separate entries. Replace integer side references with string identifiers.
 
 **Step 4 — Wrap in Block Module**
 
@@ -579,7 +603,7 @@ A block module is completely self-contained and must NEVER access global variabl
 
 **Native Parameters — Always Use Getters**
 
-For every parameter read inside a block module, first check whether it is a native parameter (defined in `09_api_parameters_1_0_1.yml`). If it is native, always use its dedicated getter:
+For every parameter read inside a block module, first check whether it is a native parameter (defined in `09_api_parameters.yml`). If it is native, always use its dedicated getter:
 
 ```scad
 // Native parameter → getter
@@ -624,7 +648,7 @@ The documentation consists of:
 02_geometry_and_transformation.md  — concepts for geometry, positioning, and structure
 03_patterns_and_examples.md        — block file structure, module patterns, and concrete examples
 04_decision_system.md              — AI decision framework and rules
-09_api_parameters_1_0_1.yml        — Single Source of Truth for all parameter definitions
+09_api_parameters.yml        — Single Source of Truth for all parameter definitions
 10_set_example.scad                — reference implementation of the Set file format
 ```
 
