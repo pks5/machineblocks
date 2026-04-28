@@ -383,6 +383,7 @@ function mb_crop_resolve(bsa, gridSize) =
         mb_map_get(bsa, "z+", 0) * gridSize[1]
     ];
 
+/*
 function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping, useFirst = true) =
     let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping),
         bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
@@ -414,6 +415,7 @@ function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
                     ]
         )
         _mb_bsa_override(nextValues, overrides, i + 1);
+*/
 
 // Hilfsfunktionen
 function _mb_vec3_min(a, b) = [
