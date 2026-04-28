@@ -283,7 +283,7 @@ function mb_param_render(config, settings, default = undef) = mb_param(config, s
 * Composite Blocks Only Parameters
 */
 function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_list(ass) ? ass : [ass];
-function mb_param_assemblyParts(config, settings, default = undef) = let (parts = mb_param(config, settings, "assemblyParts", default != undef ? default : "all")) is_list(parts) ? parts : [parts];
+function mb_param_renderGroups(config, settings, default = undef) = let (parts = mb_param(config, settings, "renderGroups", default != undef ? default : "all")) is_list(parts) ? parts : [parts];
 
 function mb_param_namedSideAdjustments(config, settings, default = undef) = mb_param(config, settings, "namedSideAdjustments", default != undef ? default : []);
 
@@ -307,6 +307,18 @@ function mb_params_get(params, key, default=undef) = mb_map_get(params, key, def
 
 function mb_params_merge(a, b) = mb_map_merge(a, b);
 
+function mb_params_filter(a, ns, b = undef) =
+    let(r = mb_array_filter_ns(a, ns))
+        b == undef ? r : array_merge(r, b);
+
+/*
+* Render Helpers
+*/
+
+function mb_group_render(renderGroups, g, solo = false) =
+    solo ? (len(renderGroups) == 1 && renderGroups[0] == g) :
+    (mb_in_array(renderGroups, "all") || mb_in_array(renderGroups, g));
+
 /*
 * Assembly Helpers
 */
@@ -318,25 +330,21 @@ function mb_assembly(config, settings, size, direction) =
         assemblyDirection = assembly[2] != undef ? mb_direction_resolve(assembly[2], dirInt) : dirInt)
         [assembly[0], assemblySize, assemblyDirection];
 
-function mb_assembly_parts_render(assemblyParts, part, solo = false) =
-    solo ? (len(assemblyParts) == 1 && assemblyParts[0] == part) :
-    (mb_in_array(assemblyParts, "all") || mb_in_array(assemblyParts, part));
-
-function mb_assembly_tongue(assembly, assemblyParts, part) = 
-    mb_assembly_parts_render(assemblyParts, part, true) ? true :
+function mb_assembly_tongue(assembly, renderGroups, g) = 
+    mb_group_render(renderGroups, g, true) ? true :
     assembly[0] != "merged";
 
-function mb_assembly_groove(assembly, assemblyParts, part) = 
-    mb_assembly_parts_render(assemblyParts, part, true) ? "groove" :
+function mb_assembly_groove(assembly, renderGroups, g) = 
+    mb_group_render(renderGroups, g, true) ? "groove" :
     assembly[0] == "merged" ? "none" : "groove"; 
 
-function mb_assembly_offset(offset, assembly, assemblyParts, part) = 
+function mb_assembly_offset(offset, assembly, renderGroups, g) = 
     let(size = assembly[1],
         globalDir = assembly[2],
         oX = assembly != undef && size[1] > size[0] ? 0.5 + size[0] : 0,
         oY = assembly != undef && size[0] >= size[1] ? 0.5 + size[1] : 0)
         
-        mb_assembly_parts_render(assemblyParts, part, true) ? [0, 0, 0] :
+        mb_group_render(renderGroups, g, true) ? [0, 0, 0] :
        (assembly == undef || assembly[0] != "unassembled" ? 
          offset : 
         mb_offset_global_to_local([oX, oY, 0], globalDir));
@@ -357,13 +365,7 @@ function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 * Base Side Adjustment
 */
 
-function mb_filter_namespace(arr, ns) =
-    [
-        for (item = arr)
-            if (mb_str_starts_with(item[0], str(ns, ".")))
-                let(newKey = mb_substr_from(item[0], len(ns) + 1))
-                    concat([newKey], mb_array_slice(item, 1))
-    ];
+
 
 function mb_side_adjustment_resolve(bsa, sa) =
     [

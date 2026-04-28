@@ -118,6 +118,14 @@ function mb_substr_from(s, start, i=0) =
 * ARRAYS
 */
 
+function mb_array_filter_ns(arr, ns) =
+    [
+        for (item = arr)
+            if (mb_str_starts_with(item[0], str(ns, ".")))
+                let(newKey = mb_substr_from(item[0], len(ns) + 1))
+                    concat([newKey], mb_array_slice(item, 1))
+    ];
+
 function mb_to_array(v) = is_list(v) ? v : [v];
 
 function mb_in_array(arr, val) =
