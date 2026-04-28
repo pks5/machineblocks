@@ -39,8 +39,9 @@ function mb_param_rotationOffsetRevert(config, settings, default = undef) = mb_p
 function mb_param_direction(config, settings, default = undef) = mb_direction_to_int(mb_param(config, settings, "direction", default != undef ? default : "west"));
 
 function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
+function mb_param_sizeAdjustment(config, settings, default = undef) = mb_param(config, settings, "sizeAdjustment", default != undef ? default : [-0.1, 0]);
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
-function mb_param_crop(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "crop", default != undef ? default : [0, 0, 0, 0]));
+function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : []);
 
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
 function mb_param_ports(config, settings, default = undef) = mb_param(config, settings, "ports", default != undef ? default : false);
@@ -67,8 +68,7 @@ function mb_param_baseReliefCut(config, settings, default = undef) = mb_param(co
 function mb_param_baseReliefCutHeight(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutHeight", default != undef ? default : 0.375);
 function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutThickness", default != undef ? default : 0.375);
 
-function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_resolve_side_quad(mb_param(config, settings, "baseSideAdjustment", default != undef ? default : -0.1));
-function mb_param_baseHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseHeightAdjustment", default != undef ? default : [0, 0]);
+function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseSideAdjustment", default != undef ? default : []);
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
@@ -351,6 +351,38 @@ function mb_offset_global_to_local(offset, direction) =
 function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[0], size[2]] : size;
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
+/*
+* Base Side Adjustment
+*/
+
+function mb_filter_namespace(arr, ns) =
+    [
+        for (item = arr)
+            if (mb_str_starts_with(item[0], str(ns, ".")))
+                let(newKey = mb_substr_from(item[0], len(ns) + 1))
+                    concat([newKey], mb_array_slice(item, 1))
+    ];
+
+function mb_side_adjustment_resolve(bsa, sa) =
+    [
+        mb_map_get(bsa, "x-", sa[0]),
+        mb_map_get(bsa, "x+", sa[0]),
+        mb_map_get(bsa, "y-", sa[0]),
+        mb_map_get(bsa, "y+", sa[0]),
+        mb_map_get(bsa, "z-", 0),
+        mb_map_get(bsa, "z+", sa[1])
+    ];
+
+function mb_crop_resolve(bsa, gridSize) =
+    [
+        mb_map_get(bsa, "x-", 0) * gridSize[0],
+        mb_map_get(bsa, "x+", 0) * gridSize[0],
+        mb_map_get(bsa, "y-", 0) * gridSize[0],
+        mb_map_get(bsa, "y+", 0) * gridSize[0],
+        mb_map_get(bsa, "z-", 0) * gridSize[1],
+        mb_map_get(bsa, "z+", 0) * gridSize[1]
+    ];
+
 function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping, useFirst = true) =
     let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping),
         bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
@@ -460,6 +492,8 @@ module mb_block(
     direction = mb_param_direction(config, settings);
 
     size = mb_param_size(config, settings);
+    sizeAdjustment = mb_param_sizeAdjustment(config, settings);
+
     offset = mb_param_offset(config, settings);
     crop = mb_param_crop(config, settings);
 
@@ -490,8 +524,7 @@ module mb_block(
     baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
 
     baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
-    baseHeightAdjustment = mb_param_baseHeightAdjustment(config, settings);
-
+    
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
     //baseWallGapsX = mb_param_baseWallGapsX(config, settings);
@@ -728,19 +761,22 @@ module mb_block(
     baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
 
     objectSize = [objectSizeX, objectSizeY, baseHeightResolved];
-    
+
     //Side Adjustment
-    cropResolved = mb_array_mul(crop, gridSizeXY);
-    sideAdjustment = mb_array_sub(baseSideAdjustment, cropResolved);
+    bsa = mb_side_adjustment_resolve(baseSideAdjustment, sizeAdjustment);
+    cropResolved = mb_crop_resolve(crop, [gridSizeXY, gridSizeZ]);
+    sideAdjustment = mb_array_sub(bsa, cropResolved);
+
+    echo(cropResolved = cropResolved);
 
     // Object Size Side Adjusted      
-    objectSizeXAdj = objectSizeX + baseSideAdjustment[0] + baseSideAdjustment[1];
-    objectSizeYAdj = objectSizeY + baseSideAdjustment[2] + baseSideAdjustment[3];
+    objectSizeXAdj = objectSizeX + bsa[0] + bsa[1];
+    objectSizeYAdj = objectSizeY + bsa[2] + bsa[3];
 
     // Object Size Fully Adjusted
     objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
-    baseHeightAdjusted = baseHeightResolved + baseHeightAdjustment[0] + baseHeightAdjustment[1];
+    baseHeightAdjusted = baseHeightResolved + sideAdjustment[4] + sideAdjustment[5];
 
     /*
     * End measurements
@@ -1002,7 +1038,7 @@ module mb_block(
     
     function sideX(side, adj = true) = adj ? 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
     function sideY(side, adj = true) = adj ? 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
-    function sideZ(side, adj = true) = adj ? 0.5 * (baseHeightAdjustment[1] - baseHeightAdjustment[0]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
+    function sideZ(side, adj = true) = adj ? 0.5 * (bsa[5] - bsa[4]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
 
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
@@ -1217,8 +1253,8 @@ module mb_block(
                                                         gridSizeZ = gridSizeZ,
                                                         objectSize = objectSize,
                                                         height = baseHeightAdjusted,
-                                                        baseSideAdjustment = sideAdjustment,
-                                                        baseHeightAdjustment = baseHeightAdjustment,
+                                                        sideAdjustment = sideAdjustment,
+                                                        baseSideAdjustment = bsa,
                                                         baseReliefCut = baseReliefCut,
                                                         baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
                                                         baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
@@ -1270,7 +1306,7 @@ module mb_block(
                                                                 gridSizeXY = gridSizeXY,
                                                                 
                                                                 baseHeight = baseHeightResolved,
-                                                                baseSideAdjustment = sideAdjustment,
+                                                                
                                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                                 baseCutoutDepth = baseCutoutDepth,
                                                                 baseClampHeight = bClampHeight,
@@ -1833,8 +1869,8 @@ module mb_block(
                                                     gridSizeZ = gridSizeZ,
                                                     objectSize = objectSize,
                                                     height = baseHeightAdjusted,
-                                                    baseSideAdjustment = sideAdjustment,
-                                                    baseHeightAdjustment = baseHeightAdjustment,
+                                                    sideAdjustment = sideAdjustment,
+                                                    baseSideAdjustment = bsa,
                                                     baseReliefCut = baseReliefCut,
                                                     baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
                                                     baseReliefCutThickness = baseReliefCutThickness * mbuToMm,

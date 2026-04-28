@@ -97,6 +97,24 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
 //    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
 /*
+* Strings
+*/
+
+function mb_str_starts_with(s, prefix, i=0) =
+    (i >= mb_str_len(prefix)) ? true :
+    (mb_char_at(s, i) != mb_char_at(prefix, i)) ? false :
+    mb_str_starts_with(s, prefix, i+1);
+
+function mb_str_len(s, i=0) =
+    (str(s[i]) == "undef") ? i : mb_str_len(s, i+1);
+
+function mb_char_at(s, i) = str(s[i]);
+
+function mb_substr_from(s, start, i=0) =
+    (start + i >= mb_str_len(s)) ? "" :
+    str(mb_char_at(s, start + i), mb_substr_from(s, start, i+1));
+
+/*
 * ARRAYS
 */
 
@@ -104,6 +122,12 @@ function mb_to_array(v) = is_list(v) ? v : [v];
 
 function mb_in_array(arr, val) =
     len([for (a = arr) if (a == val) 1]) > 0;
+
+function mb_array_slice(a, from, to=undef) =
+    [
+        for (i = [from : 1 : (is_undef(to) ? len(a) - 1 : to - 1)])
+            a[i]
+    ];
 
 function mb_array_sub(a, b) =
     [for (i = [0 : len(a)-1]) a[i] - b[i]];

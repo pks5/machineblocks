@@ -25,7 +25,6 @@ module mb_base_cutout(
     gridSizeXY,
     
     baseHeight,
-    baseSideAdjustment, 
     baseCutoutDepth,
     baseRoundingRadiusZ,
     baseClampHeight,
@@ -92,13 +91,10 @@ module mb_base_cutout(
     }
 
     //Object Size Adjusted      
-    objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
-    objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
-
     bevelClamp = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness);
     
     
-    function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * slope[side] + baseSideAdjustment[side])) + cutTolerance;
+    function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
     translate([offsetX, offsetY, 0]){ 
         difference(){
@@ -205,7 +201,7 @@ module mb_base(
     height, 
     
     baseSideAdjustment, 
-    baseHeightAdjustment,
+    sideAdjustment,
     baseReliefCut,
     baseReliefCutHeight,
     baseReliefCutThickness,
@@ -257,8 +253,8 @@ module mb_base(
     
 
     //Object Size Adjusted      
-    objectSizeXAdjusted = objectSize[0] + baseSideAdjustment[0] + baseSideAdjustment[1];
-    objectSizeYAdjusted = objectSize[1] + baseSideAdjustment[2] + baseSideAdjustment[3];
+    objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
+    objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
@@ -272,16 +268,16 @@ module mb_base(
     baseClampOuterRoundingRadius = mb_base_rel_radius(baseClampThicknessOuter, baseRoundingRadiusZ, minObjectSide, true);
 
     //TODO create functions in utils and remove this functions here
-    function sideX(side) = 0.5 * (baseSideAdjustment[1] - baseSideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    function sideY(side) = 0.5 * (baseSideAdjustment[3] - baseSideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
+    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
+    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
-    function slopeSize(side) = (abs(slope[side]) >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * abs(slope[side]) + baseSideAdjustment[side])) + cutTolerance;
+    function slopeSize(side) = (abs(slope[side]) >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * abs(slope[side]) + sideAdjustment[side])) + cutTolerance;
     function slopeBaseHeight(side) = slope[side] < 0 ? slopeBaseHeightUpper : slopeBaseHeightLower;
 
     union(){
         
         difference(){
-            translate([0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), 0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]), 0.5*(baseHeightAdjustment[1]-baseHeightAdjustment[0])]){
+            translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(baseSideAdjustment[5]-baseSideAdjustment[4])]){
                 
                 difference(){ // Subtract relief cut and slope from base
                     union(){
@@ -332,7 +328,7 @@ module mb_base(
                     }
 
                     if(baseReliefCut){
-                        translate([-0.5*(baseSideAdjustment[1] - baseSideAdjustment[0]), -0.5*(baseSideAdjustment[3] - baseSideAdjustment[2]),-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
+                        translate([-0.5*(sideAdjustment[1] - sideAdjustment[0]), -0.5*(sideAdjustment[3] - sideAdjustment[2]),-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
                             difference(){
                                 cube(
                                     size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, baseReliefCutHeight + cutOffset], 
