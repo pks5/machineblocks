@@ -275,7 +275,7 @@ function mb_param_previewQuality(config, settings, default = undef) = mb_param(c
 function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
 function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
-function mb_param_blockName(config, settings, default = undef) = mb_param(config, settings, "blockName", default != undef ? default : "Block");
+function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : undef);
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
 function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
 
@@ -344,6 +344,8 @@ function mb_assembly_offset(offset, assembly, assemblyParts, part) =
 /*
 * General Helpers
 */
+
+function mb_block_id(blockId, part) = str(blockId, "/", part);
 
 function mb_offset_global_to_local(offset, direction) = 
     (direction == 1 || direction == 3) ? [(direction == 1 ? -1 : 1) * offset[1], (direction == 3 ? -1 : 1) * offset[0], offset[2]] : [(direction == 2 ? -1 : 1) * offset[0], (direction == 2 ? -1 : 1) * offset[1], offset[2]];
@@ -738,7 +740,7 @@ module mb_block(
     previewRender = mb_param_previewRender(config, settings);
     previewRenderConvexity = mb_param_previewRenderConvexity(config, settings);
 
-    blockName = mb_param_blockName(config, settings);
+    blockId = mb_param_id(config, settings);
     debug = mb_param_debug(config, settings);
 
     //END get parameters
@@ -1192,7 +1194,7 @@ module mb_block(
     if(mb_param_render(config, settings)){
     if(debug){
         echo(
-            blockName = blockName,
+            id = blockId,
             debugSource = "block.scad",
             preview= $preview,
             previewQuality = previewQuality,
@@ -1294,7 +1296,7 @@ module mb_block(
                                                         qualityResolutionMultiplier = qualityResolutionMultiplier,
                                                         previewQuality = previewQuality,
 
-                                                        blockName = blockName,
+                                                        blockId = blockId,
                                                         debug = debug
                                                     );
 
@@ -1340,7 +1342,7 @@ module mb_block(
                                                                 qualityResolutionMultiplier = qualityResolutionMultiplier,
                                                                 previewQuality = previewQuality,
 
-                                                                blockName = blockName,
+                                                                blockId = blockId,
                                                                 debug = debug
                                                             );
 
@@ -1909,7 +1911,7 @@ module mb_block(
                                                     qualityResolutionMultiplier = qualityResolutionMultiplier,
                                                     previewQuality = previewQuality,
 
-                                                    blockName = blockName,
+                                                    blockId = blockId,
                                                     debug = debug
                                                 );
                                             } //End baseCutoutType
@@ -2789,9 +2791,9 @@ module mb_block(
         } // End rotation
     } //End grid offset and rotation offset revert
 
-    echo(str("Rendered ", blockName, " - Need Help? Join our Discord: MachineBlocks.com"));
+    echo(str("Rendered ", blockId == undef ? "[Block]" : blockId, " - Need Help? Join our Discord: MachineBlocks.com"));
     }
     else{
-        echo(str("Ignored ", blockName));
+        echo(str("Ignored ", blockId == undef ? "[Block]" : blockId));
     }
 } // End module block

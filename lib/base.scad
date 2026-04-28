@@ -59,7 +59,7 @@ module mb_base_cutout(
     qualityResolutionMultiplier,
     previewQuality,
 
-    blockName,
+    blockId,
     debug
 ){
     baseClampWallThickness = wallThickness + baseClampThickness;
@@ -78,7 +78,7 @@ module mb_base_cutout(
 
     if(debug){
         echo(
-            blockName = blockName,
+            id = blockId,
             debugSource = "base.scad",
             slope=slope, 
             offsetX = offsetX, 
@@ -239,7 +239,7 @@ module mb_base(
     qualityResolutionMultiplier,
     previewQuality,
 
-    blockName,
+    blockId,
     debug
 ){
     //Variables for cutouts        
