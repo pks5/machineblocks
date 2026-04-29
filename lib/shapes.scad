@@ -90,11 +90,14 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 			cube(size=size); //Kein center hier - wird nachträglich gesetzt!
 		}
 		else{
-			rots=[180,90,0,-90];
+			maxRad = min(size[0], size[1]);
+			rots=[180, 90, 0, -90];
 			radius = (radius[0] == undef) ? [radius, radius, radius, radius] : radius;
 			hull() {
 				for (i = [ 0 : 1 : 3 ]){
-					cornerRadius = radius[i] == 0 ? 0.1 : radius[i];
+					prefRad = i == 0 ? min(maxRad, radius[i]) : radius[i-1] + radius[i] <= maxRad ? radius[i] : maxRad - radius[i-1];
+					cornerRadius = max(0.001, prefRad);
+					
 					translateX = i < 2 ? cornerRadius : size[0] - cornerRadius;
 					translateY = (i == 0) || (i == 3) ? cornerRadius : size[1] - cornerRadius;
 				
