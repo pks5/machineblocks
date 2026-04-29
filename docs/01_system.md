@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 3.0.0
+version: 3.0.1
 
 ## Purpose
 
@@ -57,10 +57,9 @@ It is not a semantic block definition, not a complete device model, not a helper
 The following native parameters exist in the system but are intentionally ignored by `mb_block()`. They are only meaningful in composite block modules:
 
 - `assembly` — controls assembly mode visualization in composite blocks
-- `assemblyParts` — controls which named parts of a composite block are rendered
-- `namedSideAdjustments` — controls named side overlap adjustments in composite blocks
+- `renderGroups` — controls which named render groups of a composite block are rendered
 
-Note: `render` and `blockName` are processed by `mb_block()` directly.
+Note: `render` and `id` are processed by `mb_block()` directly.
 
 ---
 
@@ -112,9 +111,8 @@ Native parameter getters automatically resolve external formats to internal form
 ```text
 direction:            "west" → 0,  "north" → 1,  "east" → 2,  "south" → 3
 
-baseSideAdjustment:   0.1              → [0.1, 0.1, 0.1, 0.1]
-                      [0.1, 0.2]       → [0.1, 0.1, 0.2, 0.2]
-                      [0.1,0.2,0.3,0.4]→ [0.1, 0.2, 0.3, 0.4]
+baseSideAdjustment:   pseudo-map format: [["x-", 0.1], ["z+", 0.1]]
+                      mb_block() interprets only the standard sides x-, x+, y-, y+, z-, z+
 
 align / alignChildren:
   "start"             → ["start", "start", "start"]
@@ -124,7 +122,7 @@ align / alignChildren:
   (Since V3: getters always return a resolved 3-element array)
 ```
 
-All other per-side parameters follow the same resolution pattern as `baseSideAdjustment`.
+All other per-side parameters follow the same resolution pattern as `crop`.
 
 ### config
 
@@ -162,6 +160,33 @@ mb_params_merge(
 )
 // → [["size", [1,2,3]], ["baseColor", "#ffffff"]]
 ```
+
+### Filtering Parameters
+
+To filter a pseudo-map parameter by namespace prefix:
+
+```scad
+mb_params_filter(param, namespace, overrides?)
+```
+
+`mb_params_filter` accepts any parameter in the format `[[key, value], ...]` where each key is a string. It returns only entries whose key starts with `namespace.`, removing the namespace prefix from the key. Entries without a namespace prefix and entries with numeric keys are silently ignored.
+
+An optional third argument `overrides` applies fixed key-value pairs to the result after filtering, unconditionally overriding any matching values.
+
+```scad
+// Filter baseSideAdjustment for namespace "pbx"
+mb_params_filter(baseSideAdjustment, "pbx")
+// [["pbx.x+", 0.01]] → [["x+", 0.01]]
+
+// With fixed override: x+ is always 0.1 regardless of input
+mb_params_filter(baseSideAdjustment, "pbx", [["x+", 0.1]])
+
+// Numeric keys and entries without namespace are ignored:
+mb_params_filter([["x+", 0.1], [1, -0.1], ["pbx.z+", 0.1]], "pbx")
+// → [["pbx.z+", 0.1]]
+```
+
+`mb_params_filter` is universal and can be applied to any parameter that uses the `[[string, value]]` pseudo-map format, such as `baseSideAdjustment` or `baseWallGaps`.
 
 To read a raw value from a single parameter array without resolution, use `mb_params_get`:
 
@@ -525,9 +550,23 @@ These axes are independent — a Helper Block File can use any pattern internall
 
 ---
 
-## Legacy Conversion: machineblock() → mb_block()
+## Legacy Conversion: block() / machineblock() → mb_block()
 
 The legacy `machineblock()` module has been removed. However, converting legacy files to the modern Block File format remains a relevant task for AI systems.
+
+### Version Identification
+
+MachineBlocks has had three major module naming generations:
+
+```text
+v1:  block()        — earliest version, no nesting support
+v2:  machineblock() — second generation, direct parameter style
+v3:  mb_block() / mb_block__x__y__z() — current version, config/settings style
+```
+
+The legacy converter can reliably convert `machineblock()` (V2) to `mb_block()` or composite blocks (V3). This is the primary supported conversion path.
+
+For `block()` (V1) files: structural conversion is possible and often helpful, since many V1 parameters are identical to V2. However, V1 does not support nesting, and behavioral differences may exist. The converter should attempt V1 conversion but always output a warning that manual testing is required after conversion.
 
 Legacy files use direct OpenSCAD module parameters instead of the `config`/`settings` key-value pair system. They often contain an `overrideConfig` boolean, `_ovr` suffixed variables, and deprecated parameters (`baseRoundingResolution`, `pillarRoundingResolution`, `holeRoundingResolution`, `studRoundingResolution`).
 

@@ -1,6 +1,6 @@
 # MachineBlocks — Geometry, Transformation & Structure Concepts
 
-version: 3.0.0
+version: 3.0.1
 
 ## Purpose of this Document
 
@@ -245,7 +245,7 @@ Always use `assembly[0]` to check the mode string.
 Pass the assembly result and the normal assembled offset to child parts:
 
 ```scad
-["offset", mb_assembly_offset(assembly, [0, 0, size[2] - 1])]
+["offset", mb_assembly_offset([0, 0, size[2] - 1], assembly, renderGroups, group_top)]
 ```
 
 Returns the unassembled layout offset when `assembly[0] == "unassembled"`, otherwise returns the normal offset.
@@ -256,88 +256,74 @@ The direction in the assembly parameter represents the **aggregated direction th
 
 The size in the assembly parameter must already be direction-resolved (X and Y swapped for north/south). `mb_assembly()` handles this automatically via `mb_size_resolve()`.
 
-## Named Side Adjustments
+## Side and Size Adjustments
 
 ### The Problem
 
-Consumer-grade 3D printers typically print slightly too wide, causing adjacent blocks not to fit together. `baseSideAdjustment` compensates by reducing each side by a small amount (e.g. -0.1mm). In a simple primitive this works directly. In a composite block whose parts do not overlap at their contact faces, a negative `baseSideAdjustment` creates a visible gap or zero-thickness wall between adjacent parts. OpenSCAD's `union()` only fuses geometry that actually overlaps — touching faces alone are not sufficient.
+Consumer-grade 3D printers typically print slightly too wide, causing adjacent blocks not to fit together. `sizeAdjustment` and `baseSideAdjustment` compensate for this. In a simple primitive this works directly. In a composite block whose parts do not overlap at their contact faces, a negative side adjustment creates a visible gap or zero-thickness wall between adjacent parts. OpenSCAD's `union()` only fuses geometry that actually overlaps — touching faces alone are not sufficient.
 
-The fix is to ensure a small positive overlap (typically 0.01mm) at every internal contact face, while all outer faces still use the calibration value from `baseSideAdjustment`.
+The fix is to ensure a small positive overlap (typically 0.01mm) at every internal contact face, while all outer faces still use the calibration value.
 
-### baseSideAdjustment in Composite Blocks
+### sizeAdjustment — Global Calibration (Since: V3)
 
-A composite block reads `baseSideAdjustment` once and then manually builds the per-side array for each primitive. Side indices always refer to west orientation regardless of the primitive's `direction`. When a primitive is rotated, side indices must be remapped accordingly.
-
-For primitives: set the calibration value (`baseSideAdjustment[0]`) on all outer sides, and `0.01` on all internal contact sides. Since `baseSideAdjustment` in config is always a single uniform value, `baseSideAdjustment[0]` is the canonical calibration value to use.
-
-The getter always returns a 4-element array. After calling it, always access `baseSideAdjustment[0]` — never use the array variable directly as if it were a scalar.
+`sizeAdjustment` is a 2-element array `[sideXYAdj, heightAdj]` in mm, typically set once in the global config.
 
 ```scad
-// Read once at the top of the module
-baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
-
-// WRONG — baseSideAdjustment is an array, not a scalar
-totalSizeY = size[1] * unitGrid[0] * unitMbu + 2 * baseSideAdjustment;
-
-// CORRECT — always use [0] to extract the calibration value
-totalSizeY = size[1] * unitGrid[0] * unitMbu + 2 * baseSideAdjustment[0];
-
-// WRONG — passing the array directly to a primitive without building per-side values
-mb_block(config = config, settings = [
-    ["baseSideAdjustment", baseSideAdjustment]
-]);
-
-// CORRECT — build per-side array explicitly for each primitive
-// Side 0 = x- (west outer face)   → calibration value
-// Side 1 = x+ (east inner face)   → overlap (internal contact)
-// Side 2 = y- (south outer face)  → calibration value
-// Side 3 = y+ (north outer face)  → calibration value
-mb_block(config = config, settings = [
-    ["baseSideAdjustment", [baseSideAdjustment[0], 0.01, baseSideAdjustment[0], baseSideAdjustment[0]]]
-]);
+// In mb_config:
+["sizeAdjustment", [-0.1, 0]]
 ```
 
-### namedSideAdjustments — For Composite-of-Composite Blocks
+`mb_block()` applies `sideXYAdj` to all four horizontal sides (x-, x+, y-, y+) and `heightAdj` to the top face (z+) only. Default: `[-0.1, 0]`.
 
-When an outer composite block places multiple child composite blocks adjacent to each other, the same gap problem arises at their contact faces. However, a child composite block can have more than 4 logical sides, so a 4-element `baseSideAdjustment` array is insufficient to address individual contact faces.
+### baseSideAdjustment — Per-Block Fine-Tuning
 
-The solution: the child composite block defines **named sides** for its contact faces. The outer block then passes a `namedSideAdjustments` array to push those specific faces into overlap.
-
-Inside the child composite block module, named sides are resolved using `mb_named_side_adjustments()`:
+`baseSideAdjustment` is a pseudo-map in the format `[["side", value], ...]`. It is always empty by default. `mb_block()` interprets only the standard sides: `"x-"`, `"x+"`, `"y-"`, `"y+"`, `"z-"`, `"z+"`. Sides may also be referenced by integer index (0–5), but string identifiers are preferred.
 
 ```scad
-baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
-namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
-panelSideAdjustment = mb_named_side_adjustments(
-    baseSideAdjustment,
-    namedSideAdjustments,
-    [[2, "start"], [3, "end"]]
-);
+["baseSideAdjustment", [["x-", 0], ["z+", 0.1]]]
 ```
 
-The third argument maps side indices (always in west orientation) to named side keys. A fixed float value may also be used instead of a name, applying that value unconditionally for that side.
+Unlike `sizeAdjustment`, `baseSideAdjustment` allows individual control over all six sides including `z-` and `z+`. This replaces the V2 `baseHeightAdjustment` parameter, which only controlled `z+`.
 
-The fourth argument `useFirst` (default `true`) controls the base:
-- `useFirst = true` (default): `baseSideAdjustment[0]` is used as the base value for all sides. Values `[1–3]` of `baseSideAdjustment` are ignored. This is correct for composite blocks with more than 4 sides.
-- `useFirst = false`: the full 4-element `baseSideAdjustment` array is used as base. Only appropriate for composite blocks with exactly 4 sides that support full per-side calibration.
+### Namespace Support in baseSideAdjustment
 
-The outer block passes the adjustments to the child:
+`baseSideAdjustment` supports namespaced keys for passing adjustments into child composite blocks. Namespace and side are separated by a dot:
 
 ```scad
-["namedSideAdjustments", [["start", 0.01], ["end", 0.01]]]
+["baseSideAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```
 
-Composite blocks must never receive a `baseSideAdjustment` with differing values to control contact faces — use `namedSideAdjustments` instead.
+Inside the child composite block, `mb_params_filter()` extracts the values for a specific namespace, removing the prefix:
+
+```scad
+["baseSideAdjustment", mb_params_filter(baseSideAdjustment, "pbx")]
+// [["pbx.x+", 0.01]] → [["x+", 0.01]]
+```
+
+Namespaces typically correspond to part names, but can be freely chosen.
+
+### mb_params_filter()
+
+```scad
+mb_params_filter(param, namespace, overrides?)
+```
+
+Filters any `[[string, value]]` pseudo-map by namespace prefix. Entries without a namespace and entries with numeric keys are ignored. An optional third argument applies fixed overrides after filtering:
+
+```scad
+mb_params_filter(baseSideAdjustment, "pbx", [["x+", 0.1]])
+// x+ is always 0.1 in the result, regardless of input
+```
+
+`mb_params_filter` is universal — it can be applied to any parameter using the pseudo-map format, such as `baseWallGaps`.
 
 ### Pattern Summary
 
-**Primitive:** Always use `baseSideAdjustment` directly. All 4 sides may differ. `bevel`, `crop`, and rounding are adjusted automatically.
+**Simple primitive:** Use `sizeAdjustment` in config for global calibration. Use `baseSideAdjustment` for per-side fine-tuning where needed.
 
-**Composite with exactly 4 sides:** Two options:
-1. Manual mapping — the module builds the per-primitive `baseSideAdjustment` arrays directly. All 4 values may differ (passed from outside).
-2. Define 4 named sides — then the same rules as the next case apply.
+**Composite block:** Read `baseSideAdjustment` once at the top of the module. For each part, use `mb_params_filter(baseSideAdjustment, namespace)` to extract the relevant values. For internal contact faces, ensure a small positive overlap (0.01mm) by using fixed overrides in `mb_params_filter` or by including the contact-side explicitly.
 
-**Composite with more than 4 sides:** Must use named sides + `mb_named_side_adjustments()` with `useFirst = true`. Only `baseSideAdjustment[0]` is ever used as the base value. `baseSideAdjustment` passed to this block from outside must be a single uniform value.
+**Composite-of-composite:** The outer block passes namespaced `baseSideAdjustment` entries to each child composite block. The child uses `mb_params_filter` to extract its values per namespace.
 
 ## Parts and Total Size
 
@@ -358,13 +344,13 @@ Each entry in `parts` is `[size, direction, offset]`. The function computes the 
 
 # Common Pitfalls
 
-**`mb_base_side_adjustment()` no longer exists.** Use `mb_param_baseSideAdjustment()` + `mb_param_namedSideAdjustments()` + `mb_named_side_adjustments()` instead.
+**`sizeAdjustment` is the global calibration entry point.** Set it once in config. Use `baseSideAdjustment` only for per-block or per-side overrides.
 
-**`baseSideAdjustment` in config must always be a single uniform value.** Composite blocks use only `baseSideAdjustment[0]` as their calibration base. Differing values in config would be silently misapplied.
+**`baseSideAdjustment` is a pseudo-map, not a scalar or 4-element array.** Always use the `[[side, value]]` format. `mb_block()` interprets only standard sides (x-, x+, y-, y+, z-, z+).
 
-**Never pass differing `baseSideAdjustment` values to a composite block.** To control contact faces of a child composite block, use `namedSideAdjustments` instead.
+**Never pass differing namespaced `baseSideAdjustment` values to a composite block without using `mb_params_filter`.** The child composite block uses `mb_params_filter` to extract its namespace.
 
-
+**`mb_params_filter` ignores entries without a namespace and entries with numeric keys.** Only `["namespace.side", value]` entries are accepted.
 
 **Offset is not a rotation tool.** Use `rotationOffset` for pivot control.
 

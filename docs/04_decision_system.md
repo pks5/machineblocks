@@ -1,6 +1,6 @@
 # MachineBlocks — Decision System
 
-version: 3.0.0
+version: 3.0.1
 
 ## Purpose of this Document
 
@@ -81,7 +81,7 @@ After pattern selection, parameters are assigned from the appropriate groups:
 Geometry: `size`, `slope`, `bevel`, `crop`, `cutouts`.
 Structure: `base`, `recess`, `baseCutoutType`, `tongue`, `connectors`.
 Positioning: `direction`, `align`, `offset`.
-Composite: `assembly`, `assemblyParts`, `namedSideAdjustments`, `render`.
+Composite: `assembly`, `renderGroups`, `render`, `id`.
 
 > Parameters realize patterns — they do not define them.
 
@@ -109,7 +109,7 @@ studs = false
 size defines bounding box
 ```
 
-Must implement `mb_assembly()` if parts support assembly. Must implement `mb_named_side_adjustments()` and `mb_named_height_adjustments()` if parts are adjacent without overlap. Must implement `assemblyParts` via `mb_param_assemblyParts()` and `mb_assembly_parts_render()`.
+Must implement `mb_assembly()` if parts support assembly. Must implement `baseSideAdjustment` namespace filtering via `mb_params_filter()` if parts are adjacent without overlap. Must implement `renderGroups` via `mb_param_renderGroups()` and `mb_group_render()`.
 
 ## Pattern 4 — Helper / Form Module
 
@@ -195,7 +195,7 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 ## Do NOT
 
-Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGaps`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed in V3 — use `cutouts`). Use any `*RoundingResolution` parameter (removed in V3). Use `baseWallGapsX` or `baseWallGapsY` (removed in V3 — use `baseWallGaps`). Access `assembly[0]` without first resolving via `mb_assembly()`. Use `cutouts` for AI-generated blocks (experimental — do not use autonomously).
+Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGaps`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed in V3 — use `cutouts`). Use any `*RoundingResolution` parameter (removed in V3). Use `baseWallGapsX` or `baseWallGapsY` (removed in V3 — use `baseWallGaps`). Access `assembly[0]` without first resolving via `mb_assembly()`. Use `cutouts` for AI-generated blocks (experimental — do not use autonomously). Use `assemblyParts`, `namedSideAdjustments`, `mb_named_side_adjustments`, `mb_named_height_adjustments`, or `blockName` (removed/replaced in V3).
 
 > Most errors come from using parameters directly instead of patterns.
 

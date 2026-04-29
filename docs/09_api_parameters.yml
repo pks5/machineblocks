@@ -13,7 +13,7 @@
 #
 # ============================================================================
 
-version: "3.0.0"
+version: "3.0.1"
 
 # ============================================================================
 # GLOBAL RULES
@@ -73,10 +73,9 @@ global_rules:
       mb_param_direction() returns int:
         "west" → 0, "north" → 1, "east" → 2, "south" → 3
 
-      mb_param_baseSideAdjustment() always returns 4-element array:
-        0.1              → [0.1, 0.1, 0.1, 0.1]
-        [0.1, 0.2]       → [0.1, 0.1, 0.2, 0.2]
-        [0.1,0.2,0.3,0.4]→ [0.1, 0.2, 0.3, 0.4]
+      mb_param_baseSideAdjustment() returns the pseudo-map as-is:
+        [["x-", -0.1], ["z+", 0.1]] → [["x-", -0.1], ["z+", 0.1]]
+        mb_block() interprets only standard sides x-, x+, y-, y+, z-, z+
 
       All per-side parameters follow the same resolution pattern.
 
@@ -220,6 +219,7 @@ global_rules:
     ai_rule: |
       AI must NOT use adjustment parameters in settings to modify individual bricks.
       AI MAY use them in config to assist the user with printer/material calibration.
+      The primary calibration entry point is sizeAdjustment in config.
 
   selective_array_format:
     description: |
@@ -234,12 +234,14 @@ global_rules:
 
   per_side_format:
     description: |
-      Several parameters (crop, baseSideAdjustment, studPadding,
-      recessWallThickness, recessStudPadding) support a per-side format:
+      Several parameters (crop, studPadding, recessWallThickness, recessStudPadding)
+      support a per-side format:
       - Float: applies to all 4 sides equally
       - 2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3)
       - 4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually
       Side indices follow the standard side_index convention (0-3 only).
+
+      Note: baseSideAdjustment uses the pseudo-map format instead (see its definition).
 
   constraint_format:
     description: |
@@ -325,7 +327,7 @@ parameters:
       physical dimensions change. Adjustments (mm) do NOT scale.
     example: "scale = 2 produces a brick twice the physical size"
 
-  - name: blockName
+  - name: id
     group: system
     type: string
     unit: dimensionless
@@ -334,9 +336,26 @@ parameters:
     status: stable
     ai_usage: yes
     description: |
-      Name of the block for identification purposes. Used only for console
-      output and orientation during development and debugging.
-      Has no effect on geometry or rendering.
+      Unique identifier of the block or part within a block tree. Used primarily
+      for debug output in mb_block() so that console messages can be clearly
+      attributed to a specific block or part. May gain additional functions in
+      the future.
+
+      In composite blocks, blockId is resolved via mb_param_id() and then
+      assigned to the wrapper block and all parts:
+
+        blockId = mb_param_id(config, settings, "mm.my.package");
+        // Wrapper block:
+        ["id", blockId]
+        // Part:
+        ["id", mb_block_id(blockId, part_bottom)]
+
+      mb_block_id(blockId, partName) produces a combined ID in the form
+      "blockId/partName". Since blockId can be overridden from outside, this
+      creates traceable, hierarchical ID chains across composite block trees.
+
+      Example: if blockId = "mm.anyclosure.wall" and partName = "bottom",
+      the resulting part ID is "mm.anyclosure.wall/bottom".
 
   - name: debug
     group: system
@@ -363,7 +382,7 @@ parameters:
       its children produce no geometry. Used in composite blocks to
       conditionally show or hide individual parts based on assemblyParts.
     example: |
-      ["render", mb_assembly_parts_render(assemblyParts, "bottom")]
+      ["render", mb_group_render(renderGroups, "bottom")]
 
   # --------------------------------------------------------------------------
   # GROUP: Core Geometry
@@ -924,93 +943,68 @@ parameters:
 
   - name: baseSideAdjustment
     group: calibration
-    type: float_or_array
+    type: array
     format: |
-      Float: all 4 sides equal.
-      2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
-      4-element array [x-(0), x+(1), y-(2), y+(3)]: each side individually.
+      Pseudo-map: array of [side, value_mm] pairs.
+        [["x-", 0], ["z+", 0.1]]
+      Sides may be specified as strings ("x-", "x+", "y-", "y+", "z-", "z+")
+      or integers (0-5). String format is preferred.
+      mb_block() interprets only the standard sides: x-, x+, y-, y+, z-, z+.
+      Default: [] (empty — no per-side override).
+
+      Namespace support: keys may include a namespace prefix separated by a dot.
+        [["pbx.x+", 0.01], ["pty.z+", 0.1]]
+      mb_block() ignores namespaced entries. They are intended for child
+      composite blocks, which extract them via mb_params_filter().
     unit: mm
-    default: -0.1
-    ai_usage: yes
+    default: []
+    ai_usage: config_only
     description: |
-      Extends or reduces each side (0–3 only, no Z) by the given amount in mm.
-      Never scales with the scale parameter.
+      Per-side calibration adjustment in mm. Extends or reduces specific sides
+      of a block. Never scales with the scale parameter.
 
-      PRIMARY PURPOSE — Calibration:
-      Consumer-grade 3D printers typically print slightly too wide or have layers
-      that protrude slightly. This causes adjacent blocks to not fit together.
-      baseSideAdjustment compensates for this: a negative value (e.g. -0.1mm)
-      slightly reduces all sides, ensuring blocks fit together correctly.
+      PRIMARY PURPOSE — Per-side fine-tuning:
+      While sizeAdjustment provides global calibration, baseSideAdjustment
+      allows per-side overrides including z- and z+ (which sizeAdjustment
+      cannot address individually).
 
-      IN CONFIG — always use a single uniform value:
-      When set in mb_config, all 4 values must be equal. Composite blocks can
-      have more than 4 logical sides, so only the first value is ever used by
-      composite block implementations. Different values in config would be silently
-      ignored or misapplied. This is a best-practice rule, not a hard library
-      constraint.
+      IN CONFIG — typically empty or used for global z+/z- adjustments.
 
-        Allowed in config:   -0.1  or  [-0.1, -0.1]  or  [-0.1, -0.1, -0.1, -0.1]
-        Not allowed in config: [-0.1, 0.1, 0, -0.1]
+      IN COMPOSITE BLOCKS — use namespaced entries to pass side-specific
+      adjustments to child composite blocks. The child uses mb_params_filter()
+      to extract its namespace:
+        // In outer block:
+        ["baseSideAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
+        // In inner composite block (pbx part):
+        ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, "pbx")]
+        // Result: [["x+", 0.01]]
 
-      IN SETTINGS (mb_block primitives) — all 4 values may differ:
-      When passed directly to mb_block() calls inside a composite block module,
-      each side can have a different value. This is the correct and required pattern
-      for composite block implementations, which must manually build the
-      baseSideAdjustment array for each primitive to:
-        - Apply the calibration value (from baseSideAdjustment[0]) to outer sides
-        - Apply a small positive overlap (e.g. 0.01mm) to internal contact sides,
-          ensuring adjacent primitives actually touch and form a solid union in
-          OpenSCAD. Without this overlap, a negative baseSideAdjustment would
-          create a visible gap or zero-thickness wall between parts.
+      mb_params_filter(param, namespace, overrides?):
+        Filters a pseudo-map by namespace prefix, removes the prefix from keys.
+        Ignores entries without a namespace and entries with numeric keys.
+        Optional third argument applies fixed overrides after filtering.
+        Universal — can be applied to any [[string, value]] pseudo-map parameter.
 
-      Side indices always refer to west orientation regardless of the primitive's
-      direction. When a primitive is rotated (e.g. direction = "east" = 180°),
-      the side indices must be remapped accordingly in the composite block.
-
-      baseSideAdjustment is applied to all geometry including rounded corners and
-      bevel shapes — those are automatically adjusted to match.
-
-  - name: baseHeightAdjustment
+  - name: sizeAdjustment
     group: calibration
     type: array
-    format: "[z-, z+] — always a 2-element array in mm"
+    format: "[sideXYAdj, heightAdj] — always a 2-element array in mm"
     unit: mm
-    default: [0.0, 0.0]
-    since: "2"
+    default: [-0.1, 0]
+    since: "3.0"
     status: stable
     ai_usage: config_only
     description: |
-      Calibration adjustment for block height, applied separately to bottom (z-)
-      and top (z+) faces. Compensates height inaccuracies in 3D printing.
-      The first value adjusts the bottom (z-, side 4), typically 0.
-      The second value adjusts the top (z+, side 5), e.g. -0.1 to reduce height.
+      Global calibration adjustment for block size, applied uniformly.
+      sideXYAdj is applied to all four horizontal sides (x-, x+, y-, y+).
+      heightAdj is applied to the top face (z+) only.
 
-      Example: A brick that should be 3.2mm but prints at 3.3mm can be
-      corrected with [0, -0.1].
+      Typically set once in the global config and applies to all blocks.
+      For per-block or per-side overrides, use baseSideAdjustment.
 
-      When used in composite blocks stacked vertically, the top block can set
-      baseHeightAdjustment to [-0.1, 0] (or [-0.105, 0] for slight overlap)
-      to compensate for a gap created by a negative adjustment on the lower block.
+      Example: [-0.1, 0] reduces x-, x+, y-, y+ by 0.1mm each, no height change.
 
-      Usage in namedSideAdjustments: always pass useFirst=false so the full
-      2-element array is used as the base:
-        panelHeightAdjustment = mb_named_height_adjustments(
-            baseHeightAdjustment,
-            namedSideAdjustments,
-            [["z+", "height"]]
-        );
-
-      IMPORTANT: Unlike baseSideAdjustment, no float shorthand is accepted.
-      Always provide the full [z-, z+] array.
-    version_history:
-      - version: "2"
-        description: "Single float value applied uniformly to block height."
-      - version: "3.0"
-        description: |
-          Changed to mandatory 2-element array [z-, z+].
-          Float input is no longer accepted.
-          Use mb_named_height_adjustments() instead of mb_named_side_adjustments()
-          for height adjustments in composite blocks.
+      Never scales with the scale parameter.
 
   # --------------------------------------------------------------------------
   # GROUP: Top Plate Helpers
@@ -3218,104 +3212,55 @@ composite_block_parameters:
       in the array are used to correctly position unassembled parts.
       mb_assembly() handles this propagation automatically.
 
-  - name: assemblyParts
+  - name: renderGroups
     group: composite
     type: string_or_array
     format: |
-      String: "all" — all parts are rendered.
-      String: part ID — only that specific part is rendered.
-      Array of strings: ["bottom", "top"] — only listed parts are rendered.
-      "all" is a reserved value that always renders every part.
+      String: "all" — all render groups are rendered.
+      String: group name — only that specific group is rendered.
+      Array of strings: ["bottom", "top"] — only listed groups are rendered.
+      "all" is a reserved value that always renders every group.
     unit: dimensionless
     default: "all"
     since: "3.0"
     status: stable
     ai_usage: yes
     description: |
-      Controls which named parts of a composite block are rendered.
-      Used together with the render parameter and mb_assembly_parts_render().
+      Controls which named render groups of a composite block are rendered.
+      A render group is a named set of semantically related parts within a
+      composite block. Group names may be identical to part names (common in
+      simple composite blocks) but do not have to be.
+
+      Part Name: the unique name of a block within the wrapper block.
+      Group Name: the unique name of a render group within the wrapper block.
+      The wrapper block itself is neither a part nor belongs to any render group.
+
+      Used together with the render parameter and mb_group_render().
       mb_block() ignores this parameter; it must be implemented in composite modules.
 
-      Part IDs are freely defined by the composite block module.
-      "all" always renders all parts regardless of IDs.
-
       Usage:
-        assemblyParts = mb_param_assemblyParts(config, settings);
-        // Then per part:
-        ["render", mb_assembly_parts_render(assemblyParts, "bottom")]
-        ["render", mb_assembly_parts_render(assemblyParts, "top")]
+        renderGroups = mb_param_renderGroups(config, settings);
+        // Then per part, passing the group name:
+        ["render", mb_group_render(renderGroups, group_bottom)]
+        ["render", mb_group_render(renderGroups, group_top)]
 
-      mb_assembly_parts_render(assemblyParts, part, solo=false):
-        Returns true if the part should be rendered.
-        solo=true: returns true only if assemblyParts contains ONLY this part.
+      mb_group_render(renderGroups, g, solo=false):
+        Returns true if group g should be rendered.
+        solo=true: returns true only if renderGroups contains ONLY this group.
 
-  - name: namedSideAdjustments
-    group: composite
-    type: array
-    format: |
-      Array of [name, adjustment_mm] pairs:
-        [["start", 0.01], ["end", 0.01]]
-      Names are freely chosen by the composite block module.
-    unit: mm
-    default: []
-    ai_usage: yes
-    description: |
-      Allows an outer composite block to extend specific named sides of a child
-      composite block, creating a controlled minimal overlap (typically 0.01mm)
-      between adjacent parts. This is necessary when baseSideAdjustment is
-      negative — without overlap, adjacent parts would have a visible gap or a
-      zero-thickness shared wall at their contact faces.
+      Assembly helpers use group names, not part names:
+        mb_assembly_tongue(assembly, renderGroups, g)
+        mb_assembly_groove(assembly, renderGroups, g)
+        mb_assembly_offset(offset, assembly, renderGroups, g)
 
-      WHY named sides instead of a 4-element baseSideAdjustment array:
-      A composite block can have more than 4 logical sides. A 4-element array
-      is therefore insufficient to address individual contact faces. Named sides
-      allow the outer block to target specific internal contact faces by name,
-      regardless of how many sides the child has internally.
+      Convention in composite block modules:
+        group_bottom = "bottom";
+        group_top = "top";
+        part_bottom = "bottom";  // may be identical to group name
+        ns_bottom = part_bottom; // namespace for mb_params_filter
 
-      USAGE — inside the child composite block module:
-      The child reads both parameters and calls mb_named_side_adjustments() for
-      XY sides, or mb_named_height_adjustments() for Z-axis height adjustments.
-      These are two separate functions in V3:
-
-        baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
-        baseHeightAdjustment = mb_param_baseHeightAdjustment(config, settings);
-        namedSideAdjustments = mb_param_namedSideAdjustments(config, settings);
-
-        // XY side adjustments:
-        panelSideAdjustment = mb_named_side_adjustments(
-            baseSideAdjustment,
-            namedSideAdjustments,
-            [["y-", "start"], ["y+", "end"]]
-        );
-
-        // Z height adjustments:
-        panelHeightAdjustment = mb_named_height_adjustments(
-            baseHeightAdjustment,
-            namedSideAdjustments,
-            [["z+", "height"]]
-        );
-
-      mb_named_side_adjustments() third argument maps side strings or indices
-      (in west orientation) to named side keys. Preferred format is strings
-      ("x-", "x+", "y-", "y+"). Integer indices (0-3) also remain valid.
-
-      mb_named_side_adjustments() useFirst (default true):
-        useFirst = true  (default): baseSideAdjustment[0] is used for all sides
-          as the base value. Only named sides are overridden.
-        useFirst = false: the full 4-element baseSideAdjustment array is used.
-          Rarely needed.
-
-      mb_named_height_adjustments() has no useFirst parameter.
-      It always uses the full baseHeightAdjustment [z-, z+] array as the base.
-
-      USAGE — in the outer composite block:
-      The outer block passes the adjustments to each child composite block:
-        ["namedSideAdjustments", [["start", 0.01], ["end", 0.01]]]
-
-      Composite blocks must NOT receive a baseSideAdjustment with differing
-      values to control contact faces — use namedSideAdjustments instead.
-
-      mb_block() ignores this parameter.
+      Group variables should be defined before part variables when groups
+      differ from parts.
 
 
 # ============================================================================
@@ -3367,6 +3312,15 @@ removed_in_v3:
     use_instead: "baseWallGaps"
     reason: "Replaced by the unified baseWallGaps parameter."
 
+  - name: baseHeightAdjustment
+    removed_in: "3.0"
+    use_instead: "baseSideAdjustment with z+ and/or z-"
+    reason: |
+      In V2, baseHeightAdjustment was a single float that adjusted only z+ (block height).
+      In V3, baseSideAdjustment supports all six sides including z- and z+,
+      making baseHeightAdjustment redundant. Use baseSideAdjustment with
+      ["z+", value] or ["z-", value] entries instead.
+
 # ============================================================================
 # CHANGELOG — PARAMETERS CHANGED IN V3
 # ============================================================================
@@ -3376,9 +3330,13 @@ removed_in_v3:
 
 changed_in_v3:
 
-  - name: baseHeightAdjustment
+  - name: baseSideAdjustment
     changed_in: "3.0"
-    summary: "Changed from single float to mandatory 2-element array [z-, z+]."
+    summary: |
+      Format changed from float/2-element/4-element array to pseudo-map
+      [[side, value]] format. Now supports all 6 sides (including z-, z+)
+      and namespace-prefixed keys for composite-of-composite block patterns.
+      Default changed from -0.1 to [] (empty).
 
   - name: recessDepth
     changed_in: "3.0"
@@ -3402,9 +3360,9 @@ changed_in_v3:
 
 added_in_v3:
 
-  - name: blockName
+  - name: id
     added_in: "3.0"
-    summary: "Block name for console output and orientation."
+    summary: "Unique block/part identifier for debug output and future use."
 
   - name: debug
     added_in: "3.0"
@@ -3412,19 +3370,19 @@ added_in_v3:
 
   - name: render
     added_in: "3.0"
-    summary: "Controls whether a block is rendered. Used with assemblyParts."
+    summary: "Controls whether a block is rendered. Used with renderGroups."
 
   - name: assembly
     added_in: "3.0"
     summary: "Assembly mode for composite blocks (unassembled/assembled/merged)."
 
-  - name: assemblyParts
+  - name: renderGroups
     added_in: "3.0"
-    summary: "Controls which named parts of a composite block are visible."
+    summary: "Controls which named render groups of a composite block are visible."
 
-  - name: namedSideAdjustments
+  - name: sizeAdjustment
     added_in: "3.0"
-    summary: "Named side overlap adjustments for composite blocks."
+    summary: "Global calibration adjustment [sideXYAdj, heightAdj] applied uniformly to all blocks."
 
   - name: baseWallGaps
     added_in: "3.0"
