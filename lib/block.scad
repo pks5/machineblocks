@@ -307,7 +307,7 @@ function mb_params_merge(a, b) = mb_map_merge(a, b);
 
 function mb_params_filter(a, ns, b = undef) =
     let(r = mb_array_filter_ns(a, ns))
-        b == undef ? r : array_merge(r, b);
+        b == undef ? r : mb_map_merge(r, b);
 
 /*
 * Render Helpers
