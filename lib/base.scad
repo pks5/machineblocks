@@ -75,7 +75,7 @@ module mb_base_cutout(
 
     objectSizeX = gridSizeXY * (grid[0] + (slope != false ? min(slope[0], 0) + min(slope[1], 0) : 0));
     objectSizeY = gridSizeXY * (grid[1] + (slope != false ? min(slope[2], 0) + min(slope[3], 0) : 0));
-    objectSize=[objectSizeX, objectSizeY];
+    objectSize = [objectSizeX, objectSizeY];
 
     offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY + 0.5*(baseMod[1] - baseMod[0]);
     offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY + 0.5*(baseMod[3] - baseMod[2]);
