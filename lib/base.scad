@@ -23,6 +23,9 @@ module mb_slant_prism(side, l, w, h, inv){
 module mb_base_cutout(
     grid,
     gridSizeXY,
+
+    objectSizeMod,
+    baseMod,
     
     baseHeight,
     baseCutoutDepth,
@@ -73,8 +76,8 @@ module mb_base_cutout(
     objectSizeY = gridSizeXY * (grid[1] + (slope != false ? min(slope[2], 0) + min(slope[3], 0) : 0));
     objectSize=[objectSizeX, objectSizeY];
 
-    offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY;
-    offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY;
+    offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY + 0.5*(baseMod[1] - baseMod[0]);
+    offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY + 0.5*(baseMod[3] - baseMod[2]);
 
     if(debug){
         echo(
@@ -96,7 +99,7 @@ module mb_base_cutout(
     
     function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
-    translate([offsetX, offsetY, 0]){ 
+    translate([offsetX, offsetY, 0]){  //0.5*(baseMod[5] - baseMod[4])
         difference(){
             
                 
@@ -121,8 +124,8 @@ module mb_base_cutout(
                         translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
                             mb_beveled_rounded_block(
                                 bevel = beveled ? bevelInner : false,
-                                sizeX = objectSize[0] - 2*wallThickness,
-                                sizeY = objectSize[1] - 2*wallThickness,
+                                sizeX = objectSizeMod[0] - 2*wallThickness,
+                                sizeY = objectSizeMod[1] - 2*wallThickness,
                                 height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
                                 roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                 roundingResolution = cutoutRoundingRadiusQuality
@@ -135,8 +138,8 @@ module mb_base_cutout(
                             translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelInner : false,
-                                    sizeX = objectSize[0] - 2 * wallThickness,
-                                    sizeY = objectSize[1] - 2 * wallThickness,
+                                    sizeX = objectSizeMod[0] - 2 * wallThickness,
+                                    sizeY = objectSizeMod[1] - 2 * wallThickness,
                                     height = baseClampOffset + cutOffset,
                                     roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                     roundingResolution = cutoutRoundingRadiusQuality
@@ -163,8 +166,8 @@ module mb_base_cutout(
 
                     mb_beveled_rounded_block(
                         bevel = beveled ? bevelClamp : false,
-                        sizeX = objectSize[0] - 2 * baseClampWallThickness,
-                        sizeY = objectSize[1] - 2 * baseClampWallThickness,
+                        sizeX = objectSizeMod[0] - 2 * baseClampWallThickness,
+                        sizeY = objectSizeMod[1] - 2 * baseClampWallThickness,
                         height = baseClampHeight * cutMultiplier,
                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                         roundingResolution = cutoutClampRoundingRadiusQuality
@@ -277,7 +280,7 @@ module mb_base(
     union(){
         
         difference(){
-            translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(baseSideAdjustment[5]-baseSideAdjustment[4])]){
+            translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(sideAdjustment[5]-sideAdjustment[4])]){
                 
                 difference(){ // Subtract relief cut and slope from base
                     union(){

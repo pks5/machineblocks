@@ -137,7 +137,7 @@ function mb_array_slice(a, from, to=undef) =
             a[i]
     ];
 
-function mb_array_sub(a, b) =
+function mb_array_sub_simple(a, b) =
     [for (i = [0 : len(a)-1]) a[i] - b[i]];
 
 function mb_array_add(a, b) =

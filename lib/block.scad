@@ -41,7 +41,6 @@ function mb_param_direction(config, settings, default = undef) = mb_direction_to
 function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
 function mb_param_sizeAdjustment(config, settings, default = undef) = mb_param(config, settings, "sizeAdjustment", default != undef ? default : [-0.1, 0]);
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
-function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : []);
 
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
 function mb_param_ports(config, settings, default = undef) = mb_param(config, settings, "ports", default != undef ? default : false);
@@ -49,6 +48,7 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
 function mb_param_baseHeight(config, settings, default = undef) = mb_param(config, settings, "baseHeight", default != undef ? default : "auto");
+function mb_param_baseMod(config, settings, default = undef) = mb_param(config, settings, "baseMod", default != undef ? default : []);
 
 function mb_param_baseTopPlateHeight(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeight", default != undef ? default : 1);
 function mb_param_baseTopPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeightAdjustment", default != undef ? default : -0.6);
@@ -375,14 +375,14 @@ function mb_side_adjustment_resolve(bsa, sa) =
         mb_map_get(bsa, "z+", sa[1])
     ];
 
-function mb_crop_resolve(bsa, gridSize) =
+function mb_base_mod_resolve(baseMod, gridSize) =
     [
-        mb_map_get(bsa, "x-", 0) * gridSize[0],
-        mb_map_get(bsa, "x+", 0) * gridSize[0],
-        mb_map_get(bsa, "y-", 0) * gridSize[0],
-        mb_map_get(bsa, "y+", 0) * gridSize[0],
-        mb_map_get(bsa, "z-", 0) * gridSize[1],
-        mb_map_get(bsa, "z+", 0) * gridSize[1]
+        mb_map_get(baseMod, "x-", 0) * gridSize[0],
+        mb_map_get(baseMod, "x+", 0) * gridSize[0],
+        mb_map_get(baseMod, "y-", 0) * gridSize[0],
+        mb_map_get(baseMod, "y+", 0) * gridSize[0],
+        0,
+        mb_map_get(baseMod, "z+", 0) * gridSize[1]
     ];
 
 /*
@@ -499,7 +499,7 @@ module mb_block(
     sizeAdjustment = mb_param_sizeAdjustment(config, settings);
 
     offset = mb_param_offset(config, settings);
-    crop = mb_param_crop(config, settings);
+    
 
     cutouts = mb_param_cutouts(config, settings);
     ports = mb_param_ports(config, settings);
@@ -507,6 +507,7 @@ module mb_block(
     base = mb_param_base(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     baseHeight = mb_param_baseHeight(config, settings);
+    baseMod = mb_param_baseMod(config, settings);
 
     baseTopPlateHeight = mb_param_baseTopPlateHeight(config, settings);
     baseTopPlateHeightAdjustment = mb_param_baseTopPlateHeightAdjustment(config, settings);
@@ -762,30 +763,39 @@ module mb_block(
     //Object Size     
     objectSizeX = gridSizeXY * size[0];
     objectSizeY = gridSizeXY * size[1];
-    baseHeightResolved = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
+    objectSizeZ = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
 
-    objectSize = [objectSizeX, objectSizeY, baseHeightResolved];
+    objectSize = [objectSizeX, objectSizeY, objectSizeZ];
 
     //Side Adjustment
+    baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
+    baseModRes = mb_base_mod_resolve(baseMod, [gridSizeXY, gridSizeZ]);
+
+    objectSizeMod = [
+        objectSizeX + baseModRes[0] + baseModRes[1],
+        objectSizeY + baseModRes[2] + baseModRes[3],
+        objectSizeZ + baseModRes[4] + baseModRes[5]
+    ];
+    
     bsa = mb_side_adjustment_resolve(baseSideAdjustment, sizeAdjustment);
-    cropResolved = mb_crop_resolve(crop, [gridSizeXY, gridSizeZ]);
-    sideAdjustment = mb_array_sub(bsa, cropResolved);
+    sideAdjustment = mb_array_add(bsa, baseModRes);
 
     // Object Size Side Adjusted      
     objectSizeXAdj = objectSizeX + bsa[0] + bsa[1];
     objectSizeYAdj = objectSizeY + bsa[2] + bsa[3];
+    objectSizeZAdj = objectSizeZ + bsa[4] + bsa[5];
 
     // Object Size Fully Adjusted
     objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
-    baseHeightAdjusted = baseHeightResolved + sideAdjustment[4] + sideAdjustment[5];
+    objectSizeZAdjusted = objectSizeZ + sideAdjustment[4] + sideAdjustment[5];
 
     /*
     * End measurements
     */
 
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
-    adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, baseHeightAdjusted / baseHeightResolved];
+    adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, objectSizeZAdj / objectSizeZ];
 
     gridSizeX = mb_grid_size_x(size, slope);
     gridSizeY = mb_grid_size_y(size, slope);
@@ -794,10 +804,10 @@ module mb_block(
     //alignment = align;
     //alignX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
     //alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    //alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*baseHeightResolved : -0.5*baseHeightResolved);
+    //alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*objectSizeZ : -0.5*objectSizeZ);
     alignX = mb_align_offset(align[0], objectSizeX);
     alignY = mb_align_offset(align[1], objectSizeY);
-    alignZ = mb_align_offset(align[2], baseHeightResolved); 
+    alignZ = mb_align_offset(align[2], objectSizeZ); 
     
     directionRotationZ = direction * -90;
 
@@ -817,17 +827,17 @@ module mb_block(
     //alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
     //translateXChildren = ((alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX));
     //translateYChildren = ((alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY));
-    //translateZChildren = (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*baseHeightResolved : 0.5*baseHeightResolved));
+    //translateZChildren = (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*objectSizeZ : 0.5*objectSizeZ));
     
     translateXChildren = mb_align_offset(alignChildren[0], objectSizeX, true);
     translateYChildren = mb_align_offset(alignChildren[1], objectSizeY, true);
-    translateZChildren = mb_align_offset(alignChildren[2], baseHeightResolved, true); 
+    translateZChildren = mb_align_offset(alignChildren[2], objectSizeZ, true); 
 
     //Base Cutout and Pit Depth
     topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
     baseCutoutMinDepth = gridSizeZ - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
-    maxRecessDepth = baseHeightResolved - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
+    maxRecessDepth = objectSizeZ - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
     
     resultingPitDepth = recess ? (recessDepth != "auto" ? min(recessDepth * gridSizeZ, maxRecessDepth) : maxRecessDepth) : 0;
     
@@ -838,9 +848,9 @@ module mb_block(
     pitSizeX = objectSizeX - (recWallThickness[0] + recWallThickness[1]);
     pitSizeY = objectSizeY - (recWallThickness[2] + recWallThickness[3]);
 
-    calculatedBaseCutoutDepth = baseHeightResolved - topPlateHeight - resultingPitDepth;  
-    resultingTopPlateHeight = topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
-    baseCutoutDepth = baseCutoutType == "none" ? 0 : ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
+    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeZ - topPlateHeight - resultingPitDepth));  
+    resultingTopPlateHeight = objectSizeZ - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
+    baseCutoutDepth = baseCutoutType == "none" ? 0 : calculatedBaseCutoutDepth; //((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
     
     //Default diameter of pins and stud holes
     //Default thickness of a base wall multiplied by 2
@@ -865,7 +875,7 @@ module mb_block(
                                     
     //Calculate Z Positions
     baseCutoutZ = sideZ(0, false) + 0.5 * baseCutoutDepth;        
-    topPlateZ = baseCutoutZ + 0.5 * (baseHeightAdjusted - resultingPitDepth);
+    topPlateZ = baseCutoutZ + 0.5 * (objectSizeZ - resultingPitDepth);
     xyScrewHolesZ = sideZ(0, false) + 0.5 * gridSizeZ;
     pitFloorZ = sideZ(1, false) - resultingPitDepth;
 
@@ -873,7 +883,7 @@ module mb_block(
     //Bevel
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
     bevelOuter = mb_resolve_bevel_horizontal(bevel, size, gridSizeXY);
-    bevelCrop = mb_inset_quad_lrfh(bevelOuter, cropResolved);
+    bevelCrop = mb_inset_quad_lrfh(bevelOuter, mb_array_mul(baseModRes, -1));
     //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
     bevelOuterAdjusted =
         mb_inset_quad_lrfh(
@@ -886,8 +896,10 @@ module mb_block(
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
     
     corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
-    cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
-    cornersInnerOrg = mb_inset_quad_lrfh(corners, wallThicknessOrg);
+    cornersMod = mb_resolve_bevel_horizontal([[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]], size, gridSizeXY);
+    echo (cornersMod = cornersMod, baseMod = baseModR, objectSizeMod = objectSizeMod);
+    //cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
+    cornersInnerOrg = mb_inset_quad_lrfh(cornersMod, wallThicknessOrg);
 
     // Pit
     //pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
@@ -953,7 +965,7 @@ module mb_block(
 
     holeXInsetThicknessFinal = holeXInsetThickness * mbuToMm + holeXInsetThicknessAdjustment;
     holeXMaxRows = mb_vertical_hole_count(
-        rect_height = baseHeightResolved,
+        rect_height = objectSizeZ,
         first_hole_center_from_bottom = holeXGridOffsetZ * mbuToMm,
         hole_diameter = holeXDiameterResolved + holeXInsetThickness * mbuToMm,
         hole_center_spacing = holeXGridSizeZ * mbuToMm,
@@ -965,7 +977,7 @@ module mb_block(
 
     holeYInsetThicknessFinal = holeYInsetThickness * mbuToMm + holeYInsetThicknessAdjustment;
     holeYMaxRows = mb_vertical_hole_count(
-        rect_height = baseHeightResolved,
+        rect_height = objectSizeZ,
         first_hole_center_from_bottom = holeYGridOffsetZ * mbuToMm,
         hole_diameter = holeYDiameterResolved + holeYInsetThickness * mbuToMm,
         hole_center_spacing = holeYGridSizeZ * mbuToMm,
@@ -1040,7 +1052,7 @@ module mb_block(
     
     function sideX(side, adj = true) = adj ? 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
     function sideY(side, adj = true) = adj ? 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
-    function sideZ(side, adj = true) = adj ? 0.5 * (bsa[5] - bsa[4]) + (side - 0.5) * baseHeightAdjusted : (side - 0.5) * baseHeightResolved;
+    function sideZ(side, adj = true) = adj ? 0.5 * (sideAdjustment[5] - sideAdjustment[4]) + (side - 0.5) * objectSizeZAdjusted : (side - 0.5) * objectSizeZ;
 
     function posX(a) = (a - offsetX) * gridSizeXY;
     function posY(b) = (b - offsetY) * gridSizeXY;
@@ -1197,9 +1209,10 @@ module mb_block(
             preview= $preview,
             previewQuality = previewQuality,
             size = size,
-            baseHeightAdjusted = baseHeightAdjusted, 
-            heightWithKnobs = baseHeightAdjusted + knobHeight,
+            objectSizeZAdjusted = objectSizeZAdjusted, 
+            heightWithKnobs = objectSizeZAdjusted + knobHeight,
             objectSizeXY = [objectSizeX, objectSizeY],
+            objectSizeMod = objectSizeMod,
             objectSizeXYAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
             topPlateHeight = topPlateHeight,
             resultingTopPlateHeight = resultingTopPlateHeight, 
@@ -1254,7 +1267,7 @@ module mb_block(
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
                                                         objectSize = objectSize,
-                                                        height = baseHeightAdjusted,
+                                                        height = objectSizeZAdjusted,
                                                         sideAdjustment = sideAdjustment,
                                                         baseSideAdjustment = bsa,
                                                         baseReliefCut = baseReliefCut,
@@ -1306,8 +1319,11 @@ module mb_block(
                                                             mb_base_cutout(
                                                                 grid = size,
                                                                 gridSizeXY = gridSizeXY,
+
+                                                                objectSizeMod = objectSizeMod,
+                                                                baseMod = baseModRes,
                                                                 
-                                                                baseHeight = baseHeightResolved,
+                                                                baseHeight = objectSizeZ,
                                                                 
                                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                                 baseCutoutDepth = baseCutoutDepth,
@@ -1870,7 +1886,7 @@ module mb_block(
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
                                                     objectSize = objectSize,
-                                                    height = baseHeightAdjusted,
+                                                    height = objectSizeZAdjusted,
                                                     sideAdjustment = sideAdjustment,
                                                     baseSideAdjustment = bsa,
                                                     baseReliefCut = baseReliefCut,
@@ -1922,7 +1938,7 @@ module mb_block(
                                                             intersection(){
                                                                 mb_block(
                                                                     config = config,
-                                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["crop", -0.2], ["studs", false]])
+                                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["baseMod", 0.2], ["studs", false]])
                                                                 );
 
                                                                 mb_block(
@@ -1984,26 +2000,28 @@ module mb_block(
                                                     } // End union
 
                                                     if(baseCutoutType != "studs"){
-                                                        union(){
-                                                            cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
-                                                                cutoutClampRoundingRadius, 
-                                                                1, 
-                                                                qualitySegBase,
-                                                                qualityFactor,
-                                                                qualityResolutionMin,
-                                                                qualityResolutionMax,
-                                                                qualityResolutionMultiplier,
-                                                                previewQuality
-                                                            );
+                                                        translate([0.5*(baseModRes[1]-baseModRes[0]), 0.5*(baseModRes[3]-baseModRes[2]), 0]){
+                                                            union(){
+                                                                cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
+                                                                    cutoutClampRoundingRadius, 
+                                                                    1, 
+                                                                    qualitySegBase,
+                                                                    qualityFactor,
+                                                                    qualityResolutionMin,
+                                                                    qualityResolutionMax,
+                                                                    qualityResolutionMultiplier,
+                                                                    previewQuality
+                                                                );
 
-                                                            mb_beveled_rounded_block(
-                                                                bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
-                                                                sizeX = objectSizeX - 2 * (baseClampWallThickness+cutTolerance),
-                                                                sizeY = objectSizeY - 2 * (baseClampWallThickness+cutTolerance),
-                                                                height = cutMultiplier * (knobCutHeight + cutOffset),
-                                                                roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                                                                roundingResolution = cutoutClampRoundingRadiusQuality
-                                                            );
+                                                                mb_beveled_rounded_block(
+                                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                                                    sizeX = objectSizeMod[0] - 2 * (baseClampWallThickness+cutTolerance),
+                                                                    sizeY = objectSizeMod[1] - 2 * (baseClampWallThickness+cutTolerance),
+                                                                    height = cutMultiplier * (knobCutHeight + cutOffset),
+                                                                    roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
+                                                                    roundingResolution = cutoutClampRoundingRadiusQuality
+                                                                );
+                                                            }
                                                         }
                                                     }
                                                 } //End difference final cutout elements
@@ -2042,7 +2060,7 @@ module mb_block(
                                                                 }
                                                                 else if(xHole == "axle"){
                                                                     mb_axis(
-                                                                        height = baseHeightAdjusted * cutMultiplier, 
+                                                                        height = objectSizeZAdjusted * cutMultiplier, 
                                                                         capHeight=0, 
                                                                         size = holeXSize, 
                                                                         thickness = holeAxleThickness * mbuToMm,
@@ -2089,7 +2107,7 @@ module mb_block(
                                                                 }
                                                                 else if(yHole == "axle"){
                                                                     mb_axis(
-                                                                        height = baseHeightAdjusted * cutMultiplier, 
+                                                                        height = objectSizeZAdjusted * cutMultiplier, 
                                                                         capHeight=0, 
                                                                         size = holeYSize, 
                                                                         thickness = holeAxleThickness * mbuToMm,
@@ -2126,11 +2144,11 @@ module mb_block(
                                                     if(zHole != false){
                                                         translate([posX(a + (holeZCenteredX ? 0.5 : 0)), posY(b+(holeZCenteredY ? 0.5 : 0)), 0]){
                                                             if(zHole == true || zHole == "pin"){
-                                                                cylinder(h=baseHeightAdjusted*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=holeZRoundingRes);
+                                                                cylinder(h=objectSizeZAdjusted*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=holeZRoundingRes);
                                                             }
                                                             else if(zHole == "axle"){
                                                                 mb_axis(
-                                                                    height = baseHeightAdjusted * cutMultiplier, 
+                                                                    height = objectSizeZAdjusted * cutMultiplier, 
                                                                     capHeight=0, 
                                                                     size = holeZSize, 
                                                                     thickness = holeAxleThickness * mbuToMm,
@@ -2270,7 +2288,7 @@ module mb_block(
                                                 for (b = [ startY : 1 : endY ]){
                                                     if(drawScrewHoleZ(a, b, 0)){
                                                         translate([posX(a), posY(b), 0.5*knobHeight])
-                                                            cylinder(h = (baseHeightAdjusted + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=screwHoleZRoundingRadius);
+                                                            cylinder(h = (objectSizeZAdjusted + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=screwHoleZRoundingRadius);
                                                     } 
                                                 }
                                             }
