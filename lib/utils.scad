@@ -171,7 +171,7 @@ function mb_map_has_key(params, key) =
 
 function mb_map_get(params, key, default=undef) =
     let(found = [for (p = params) if (p[0] == key) p[1]])
-    len(found) > 0 ? found[0] : default;
+    len(found) > 0 ? found[len(found)-1] : default;
 
 function mb_map_merge(a, b) =
     concat(
@@ -183,6 +183,75 @@ function mb_map_merge(a, b) =
         b
     );
 
+/*
+* BEVEL
+*/    
+
+function mb_xy_corner_side_resolve(items, i = 0, result = [[0,0], [0,0], [0,0], [0,0]]) =
+    i >= len(items)
+        ? result
+        : mb_xy_corner_side_resolve(
+            items,
+            i + 1,
+            mb_xy_corner_side_apply(result, items[i])
+        );
+
+function mb_xy_corner_side_apply(result, item) =
+    len(item) == 3
+        ? mb_xy_corner_set(
+            result,
+            mb_corner_to_int("z", item[0]),
+            [item[1], item[2]]
+        )
+        : mb_xy_side_apply(
+            result,
+            mb_side_to_int(item[0]),
+            item[1]
+        );
+
+function mb_xy_corner_set(result, c, value) =
+    [
+        c == 0 ? value : result[0],
+        c == 1 ? value : result[1],
+        c == 2 ? value : result[2],
+        c == 3 ? value : result[3]
+    ];
+
+function mb_xy_side_apply(result, side, s) =
+    side == 0 ? [ // x-
+        [-s, result[0][1]],
+        [-s, result[1][1]],
+        result[2],
+        result[3]
+    ] :
+    side == 1 ? [ // x+
+        result[0],
+        result[1],
+        [s, result[2][1]],
+        [s, result[3][1]]
+    ] :
+    side == 2 ? [ // y-
+        [result[0][0], -s],
+        result[1],
+        result[2],
+        [result[3][0], -s]
+    ] :
+    side == 3 ? [ // y+
+        result[0],
+        [result[1][0], s],
+        [result[2][0], s],
+        result[3]
+    ] :
+    result;
+
+function mb_xy_add_generic(a, b, i = 0) =
+    i >= len(a)
+        ? []
+        : concat(
+            [[a[i][0] + b[i][0], a[i][1] + b[i][1]]],
+            mb_xy_add_generic(a, b, i + 1)
+        );
+        
 /*
 * MISC
 */
@@ -199,6 +268,16 @@ function mb_side_to_int(side) =
     side == "z+" ? 5 :
     undef
     ) : side;
+
+function mb_corner_to_int(axis, corner) =
+    let(axis = mb_axis_to_int(axis))
+    is_string(corner) ? (
+    corner == "sw" ? (axis == 0 ? 1 : 0) : 
+    corner == "nw" ? (axis == 0 ? 2 : 1) :
+    corner == "ne" ? (axis == 0 ? 3 : 2) :
+    corner == "se" ? (axis == 0 ? 0 : 3) :
+    undef
+    ) : corner;    
 
 function mb_side_to_axis(side) = floor(mb_side_to_int(side) / 2);
 

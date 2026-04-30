@@ -391,6 +391,7 @@ module mb_base(
             if(pit){
                 pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
                 pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
+                echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY);
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, pitWallThickness);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
@@ -406,7 +407,7 @@ module mb_base(
                     previewQuality
                 );
 
-                translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5] + + cutOffset)]){
+                translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5]+ cutOffset)]){
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])

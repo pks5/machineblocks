@@ -108,7 +108,7 @@ function mb_param_slopeBaseHeightLower(config, settings, default = undef) = mb_p
 function mb_param_slopeBaseHeightLowerInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLowerInner", default != undef ? default : 1.125);
 function mb_param_slopeBaseHeightUpper(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightUpper", default != undef ? default : 1);
 
-function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : [[0, 0], [0, 0], [0, 0], [0, 0]]);
+function mb_param_bevel(config, settings, default = undef) = mb_xy_corner_side_resolve(mb_param(config, settings, "bevel", default != undef ? default : []));
 
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
@@ -770,6 +770,8 @@ module mb_block(
     //Side Adjustment
     baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
     baseModRes = mb_base_mod_resolve(baseMod, [gridSizeXY, gridSizeZ]);
+    bevelMod = [[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]];
+    bevelRes = bevel;//mb_xy_add_generic(bevel, bevelMod);
 
     objectSizeMod = [
         objectSizeX + baseModRes[0] + baseModRes[1],
@@ -845,8 +847,8 @@ module mb_block(
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
     recStudPaddingResolved = mb_resolve_side_quad(recessStudPadding, gridSizeXY);
 
-    pitSizeX = objectSizeX - (recWallThickness[0] + recWallThickness[1]);
-    pitSizeY = objectSizeY - (recWallThickness[2] + recWallThickness[3]);
+    pitSizeX = objectSizeMod[0] - (recWallThickness[0] + recWallThickness[1]);
+    pitSizeY = objectSizeMod[1] - (recWallThickness[2] + recWallThickness[3]);
 
     calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeMod[2] - topPlateHeight - resultingPitDepth));  
     resultingTopPlateHeight = objectSizeMod[2] - resultingPitDepth - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
@@ -866,7 +868,7 @@ module mb_block(
     textureRoundingRadius = mb_base_cutout_radius(-0.5 * wallThickness, baseRoundingRadiusZ, minObjectSide);
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
-    minCutoutSide = min(objectSizeX - 2*wallThickness, objectSizeY - 2*wallThickness);
+    minCutoutSide = min(objectSizeMod[0] - 2*wallThickness, objectSizeMod[0] - 2*wallThickness);
     cutoutClampRoundingRadius = baseClampThickness > 0 ? mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide) : cutoutRoundingRadius;
 
     baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
@@ -883,7 +885,7 @@ module mb_block(
     
     //Bevel
     beveled = bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
-    bevelOuter = mb_resolve_bevel_horizontal(bevel, size, gridSizeXY);
+    bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, mb_array_mul(baseModRes, -1));
     //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
     bevelOuterAdjusted =
@@ -896,8 +898,8 @@ module mb_block(
     bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
     
-    corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
-    cornersMod = mb_resolve_bevel_horizontal([[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]], size, gridSizeXY);
+    //corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
+    cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
     echo (cornersMod = cornersMod, baseMod = baseModR, objectSizeMod = objectSizeMod);
     //cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
     cornersInnerOrg = mb_inset_quad_lrfh(cornersMod, wallThicknessOrg);
@@ -913,7 +915,7 @@ module mb_block(
     );
     
     pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, pBevelPad);
-    cornersPitPadding = mb_inset_quad_lrfh(corners, pBevelPad);
+    cornersPitPadding = mb_inset_quad_lrfh(cornersMod, pBevelPad);
     
     //pMinThickness = [
     //    -min(recWallThickness[2], recWallThickness[0]), 
@@ -941,7 +943,7 @@ module mb_block(
     //Knob Padding
     knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
     bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
-    cornersKnobPadding = mb_inset_quad_lrfh(corners, knobPaddingResolved);
+    cornersKnobPadding = mb_inset_quad_lrfh(cornersMod, knobPaddingResolved);
     //knobPaddingRadiusInv = [
     //    -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
     //    -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
@@ -1014,13 +1016,13 @@ module mb_block(
     surfacePatternSide = 5;
     
     //Grid
-    startX = - baseModR[0];
+    startX = floor(- baseModR[0]);
     midX = floor(0.5 * size[0] - 1);
-    endX = size[0] - 1 + baseModR[1];
+    endX = ceil(size[0] - 1 + baseModR[1]);
     
-    startY = - baseModR[2];
+    startY = floor(- baseModR[2]);
     midY = floor(0.5 * size[1] - 1);
-    endY = size[1] - 1 + baseModR[3];
+    endY = ceil(size[1] - 1 + baseModR[3]);
             
     mid = [midX, midY];
     
@@ -1244,7 +1246,7 @@ module mb_block(
             xyScrewHolesZ = xyScrewHolesZ,
             pitFloorZ = pitFloorZ,
             beveled = beveled,
-            bevel = bevel,
+            bevel = bevelRes,
             bevelOuterAdjusted = bevelOuterAdjusted,
             baseRoundingRadiusZ = baseRoundingRadiusZ,
             adjustedSizeRelation = adjustedSizeRelation,
@@ -1601,7 +1603,7 @@ module mb_block(
                                                                     if(grille == "none" || grille == "x" || grilleSmall){
                                                                         //Helpers X
                                                                         for (a = [ startX : 1 : endX -1 ]){
-                                                                            translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
+                                                                            translate([posX(a + 0.5), 0.5*(baseModRes[3] - baseModRes[2]), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
                                                                                 cube([sGridThickness, objectSizeMod[1], stabilizersXHeight(a) + cutOffset], center = true);
                                                                             }
                                                                         }
@@ -1610,7 +1612,7 @@ module mb_block(
                                                                     if(grille == "none" || grille == "y" || grilleSmall){
                                                                         //Helpers Y
                                                                         for (b = [ startY : 1 : endY - 1 ]){
-                                                                        translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
+                                                                        translate([0.5*(baseModRes[1] - baseModRes[0]), posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
                                                                                 cube([objectSizeMod[0], sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                                                                             };
                                                                         }
