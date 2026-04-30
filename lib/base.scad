@@ -54,6 +54,7 @@ module mb_base_cutout(
     beveled,
     bevelOuter,
     bevelInner,
+    bevelMod,
 
     qualitySegBase,
     qualityFactor,
@@ -94,7 +95,7 @@ module mb_base_cutout(
     }
 
     //Object Size Adjusted      
-    bevelClamp = mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness);
+    bevelClamp = mb_inset_quad_lrfh(bevelMod, baseClampWallThickness);
     
     
     function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
@@ -228,6 +229,8 @@ module mb_base(
     beveled,
     bevelOuter,
     bevelOuterAdjusted,
+    bevelMod,
+    bevelRecess,
 
     connectors = [],
     connectorPadding,
@@ -392,7 +395,7 @@ module mb_base(
                 pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
                 pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
                 echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY);
-                pitBevelInner = mb_inset_quad_lrfh(bevelOuter, pitWallThickness);
+                pitBevelInner = mb_inset_quad_lrfh(bevelMod, pitWallThickness);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
 

@@ -894,9 +894,9 @@ module mb_block(
             mb_array_mul(sideAdjustment, -1)
         );
     
-    bevelInner = mb_inset_quad_lrfh(bevelOuter, wallThickness);
-    bevelInnerOrg = mb_inset_quad_lrfh(bevelOuter, wallThicknessOrg);
-    bevelTexture = mb_inset_quad_lrfh(bevelOuter, 0.5*wallThickness);
+    bevelInner = mb_inset_quad_lrfh(bevelCrop, wallThickness);
+    bevelInnerOrg = mb_inset_quad_lrfh(bevelCrop, wallThicknessOrg);
+    bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);
     
     //corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
     cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
@@ -910,11 +910,11 @@ module mb_block(
     pBevelPad = mb_array_add(recWallThickness, recStudPaddingResolved);
 
     pitBevel = mb_inset_quad_lrfh(
-        bevelOuter,
+        bevelCrop,
         mb_array_add(recWallThickness, studMaxOverhang)
     );
     
-    pitBevelPadding = mb_inset_quad_lrfh(bevelOuter, pBevelPad);
+    pitBevelPadding = mb_inset_quad_lrfh(bevelCrop, pBevelPad);
     cornersPitPadding = mb_inset_quad_lrfh(cornersMod, pBevelPad);
     
     //pMinThickness = [
@@ -1305,6 +1305,8 @@ module mb_block(
                                                         beveled = beveled,
                                                         bevelOuter = bevelOuter,
                                                         bevelOuterAdjusted = bevelOuterAdjusted,
+                                                        bevelMod = bevelCrop,
+                                                        bevelRecess = pitBevel,
                                                         
                                                         connectors = connectors,
                                                         connectorPadding = connectorPadding,
@@ -1362,6 +1364,7 @@ module mb_block(
                                                                 beveled = beveled,
                                                                 bevelOuter = bevelOuter,
                                                                 bevelInner = bevelInner,
+                                                                bevelMod = bevelCrop,
 
                                                                 qualitySegBase = qualitySegBase,
                                                                 qualityFactor = qualityFactor,
@@ -1497,7 +1500,7 @@ module mb_block(
                                                         * Plate Helpers
                                                         */
                                                         if(topPlateHelpers && (grille == "none" || grilleSmall)){
-                                                            bevelTopPlateHelper = mb_inset_quad_lrfh(bevelOuter, wallThickness + topPlateHelperThickness);
+                                                            bevelTopPlateHelper = mb_inset_quad_lrfh(bevelCrop, wallThickness + topPlateHelperThickness);
                                                             topPlateHelperRoundingRadius = mb_base_cutout_radius(- wallThickness - topPlateHelperThickness, baseRoundingRadiusZ, minObjectSide);
                                                             
                                                             topPlateHelperRoundingRadiusQuality = mb_fn_even_for_radius(
@@ -1926,6 +1929,9 @@ module mb_block(
                                                     beveled = beveled,
                                                     bevelOuter = bevelOuter,
                                                     bevelOuterAdjusted = bevelOuterAdjusted,
+                                                    bevelMod = bevelCrop,
+                                                    bevelRecess = pitBevel,
+
                                                     connectors = connectors,
                                                     connectorPadding = connectorPadding,
                                                     connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
@@ -2030,7 +2036,7 @@ module mb_block(
                                                                 );
 
                                                                 mb_beveled_rounded_block(
-                                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelOuter, baseClampWallThickness+cutTolerance) : false,
+                                                                    bevel = beveled ? mb_inset_quad_lrfh(bevelCrop, baseClampWallThickness+cutTolerance) : false,
                                                                     sizeX = objectSizeMod[0] - 2 * (baseClampWallThickness+cutTolerance),
                                                                     sizeY = objectSizeMod[1] - 2 * (baseClampWallThickness+cutTolerance),
                                                                     height = cutMultiplier * (knobCutHeight + cutOffset),
