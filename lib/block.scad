@@ -792,6 +792,8 @@ module mb_block(
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
     objectSizeZAdjusted = objectSizeZ + sideAdjustment[4] + sideAdjustment[5];
 
+    objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted, objectSizeZAdjusted];
+
     /*
     * End measurements
     */
@@ -1278,10 +1280,14 @@ module mb_block(
                                                         grid = size,
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
+                                                        
                                                         objectSize = objectSize,
                                                         objectSizeMod = objectSizeMod,
+                                                        objectSizeAdjusted = objectSizeAdjusted, 
+                                                        
                                                         height = objectSizeZAdjusted,
                                                         sideAdjustment = sideAdjustment,
+                                                        
                                                         baseSideAdjustment = bsa,
                                                         baseMod = baseModRes,
                                                         baseReliefCut = baseReliefCut,
@@ -1902,10 +1908,14 @@ module mb_block(
                                                     grid = size,
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
+                                                    
                                                     objectSize = objectSize,
                                                     objectSizeMod = objectSizeMod,
+                                                    objectSizeAdjusted = objectSizeAdjusted, 
+
                                                     height = objectSizeZAdjusted,
                                                     sideAdjustment = sideAdjustment,
+                                                    
                                                     baseSideAdjustment = bsa,
                                                     baseMod = baseModRes,
                                                     baseReliefCut = baseReliefCut,
@@ -2380,11 +2390,15 @@ module mb_block(
                                                 translate([0, 0, -0.5 * cutOffset]){
                                                     mb_tongue(
                                                         gridSizeXY = gridSizeXY,
+                                                        
                                                         objectSize = objectSize,
-                                                        objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+                                                        objectSizeAdjusted = objectSizeAdjusted,
+                                                        
                                                         baseRoundingRadiusZ = baseRoundingRadiusZ,
+                                                        
                                                         beveled = beveled,
                                                         bevelOuter = bevelOuter,
+                                                        
                                                         tongueOffset = tonOffsetCalc,
                                                         tongueThickness = tonThicknessCalc,
                                                         tongueThicknessAdjustment = tongueThicknessAdjustment,
@@ -2394,10 +2408,12 @@ module mb_block(
                                                         tongueClampOffset = tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc,
                                                         tongueRoundingRadius = tongueRoundingRadius,
                                                         tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                                                        
                                                         pit = true,
                                                         pitWallGaps = recessWallGaps,
                                                         pitSizeX = pitSizeX,
                                                         pitSizeY = pitSizeY,
+                                                        
                                                         qualitySegBase = qualitySegBase,
                                                         qualityFactor = qualityFactor,
                                                         qualityResolutionMin = qualityResolutionMin,
@@ -2731,10 +2747,13 @@ module mb_block(
                                         mb_tongue(
                                             gridSizeXY = gridSizeXY,
                                             objectSize = objectSize,
-                                            objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
+                                            objectSizeAdjusted = objectSizeAdjusted,
+                                            
                                             baseRoundingRadiusZ = baseRoundingRadiusZ,
+                                            
                                             beveled = beveled,
                                             bevelOuter = bevelOuter,
+                                            
                                             tongueOffset = tonOffsetCalc,
                                             tongueThickness = tonThicknessCalc,
                                             tongueThicknessAdjustment = tongueThicknessAdjustment,
@@ -2744,10 +2763,12 @@ module mb_block(
                                             tongueClampOffset = tonClampOffsetCalc,
                                             tongueRoundingRadius = tongueRoundingRadius,
                                             tongueInnerRoundingRadius = tongueInnerRoundingRadius,
+                                            
                                             pit = recess,
                                             pitWallGaps = recessWallGaps,
                                             pitSizeX = pitSizeX,
                                             pitSizeY = pitSizeY,
+                                            
                                             qualitySegBase = qualitySegBase,
                                             qualityFactor = qualityFactor,
                                             qualityResolutionMin = qualityResolutionMin,

@@ -100,7 +100,7 @@ module mb_base_cutout(
     
     function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
-    translate([offsetX, offsetY, 0.5*baseMod[5]]){  //0.5*(baseMod[5] - baseMod[4])
+    translate([offsetX, offsetY, 0.5*baseMod[5]]){
         difference(){
             
                 
@@ -201,12 +201,16 @@ module mb_base(
     grid,
     gridSizeXY,
     gridSizeZ,
+    
     objectSize, 
     objectSizeMod,
+    objectSizeAdjusted,
+
     height, 
     
     baseSideAdjustment, 
     sideAdjustment,
+    
     baseMod,
     baseReliefCut,
     baseReliefCutHeight,
@@ -255,17 +259,12 @@ module mb_base(
     cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
-    //Object Size     
-    objectSizeX = gridSizeXY * grid[0];
-    objectSizeY = gridSizeXY * grid[1];
-    
-
     //Object Size Adjusted      
-    objectSizeXAdjusted = objectSize[0] + sideAdjustment[0] + sideAdjustment[1];
-    objectSizeYAdjusted = objectSize[1] + sideAdjustment[2] + sideAdjustment[3];
-    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
+    objectSizeXAdjusted = objectSizeAdjusted[0];
+    objectSizeYAdjusted = objectSizeAdjusted[1];
+    objectSizeZAdjusted = objectSizeAdjusted[2];
 
-    size = [objectSizeXAdjusted, objectSizeYAdjusted, height];
+    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
 
     baseRoundingRadiusZ = baseRoundingRadius[2];
     
