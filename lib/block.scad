@@ -1014,29 +1014,29 @@ module mb_block(
     surfacePatternSide = 5;
     
     //Grid
-    startX = 0;
+    startX = - baseModR[0];
     midX = floor(0.5 * size[0] - 1);
-    endX = size[0] - 1;
+    endX = size[0] - 1 + baseModR[1];
     
-    startY = 0;
+    startY = - baseModR[2];
     midY = floor(0.5 * size[1] - 1);
-    endY = size[1] - 1;
+    endY = size[1] - 1 + baseModR[3];
             
     mid = [midX, midY];
     
     offsetX = 0.5 * (size[0] - 1);
     offsetY = 0.5 * (size[1] - 1);
 
-    holeXStart = holeXShift ? (holeXPartial == "start" || holeXPartial == "all" ? -1 : startX) : startX;
+    holeXStart = holeXShift ? (holeXPartial == "start" || holeXPartial == "all" ? startX - 1 : startX) : startX;
     holeXEnd = holeXShift ? (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) : round(endX) - 1) : (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) + 1 : floor(endX));
 
-    holeYStart = holeYShift ? (holeYPartial == "start" || holeYPartial == "all" ? -1 : startY) : startY;
+    holeYStart = holeYShift ? (holeYPartial == "start" || holeYPartial == "all" ? startY - 1 : startY) : startY;
     holeYEnd = holeYShift ? (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) : round(endY) - 1) : (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) + 1 : floor(endY));
 
-    holeZStartX = holeZCenteredX ? (holeZPartialX == "start" || holeZPartialX == "all" ? -1 : startX) : startX;
+    holeZStartX = holeZCenteredX ? (holeZPartialX == "start" || holeZPartialX == "all" ? startX - 1 : startX) : startX;
     holeZEndX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) : round(endX) - 1) : (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) + 1 : floor(endX));
 
-    holeZStartY = holeZCenteredY ? (holeZPartialY == "start" || holeZPartialY == "all" ? -1 : startY) : startY;
+    holeZStartY = holeZCenteredY ? (holeZPartialY == "start" || holeZPartialY == "all" ? startY - 1 : startY) : startY;
     holeZEndY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) : round(endY) - 1) : (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) + 1 : floor(endY));
 
     pillarStartX = min(holeZStartX, startX);
@@ -1044,6 +1044,15 @@ module mb_block(
 
     pillarStartY = min(holeZStartY, startY);
     pillarEndY = max(holeZEndY, ceil(endY) - 1);
+
+    echo(startX = startX, 
+        endX = endX, 
+        startY = startY, 
+        endY = endY, 
+        pillarStartX = pillarStartX, 
+        pillarEndX = pillarEndX, 
+        pillarStartY =  pillarStartY, 
+        pillarEndY = pillarEndY);
 
     /*
     * START Functions
@@ -1591,18 +1600,18 @@ module mb_block(
                                                                 union(){
                                                                     if(grille == "none" || grille == "x" || grilleSmall){
                                                                         //Helpers X
-                                                                        for (a = [ 0 : 1 : size[0] - 2 ]){
+                                                                        for (a = [ startX : 1 : endX -1 ]){
                                                                             translate([posX(a + 0.5), 0, topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
-                                                                                cube([sGridThickness, objectSizeY, stabilizersXHeight(a) + cutOffset], center = true);
+                                                                                cube([sGridThickness, objectSizeMod[1], stabilizersXHeight(a) + cutOffset], center = true);
                                                                             }
                                                                         }
                                                                     }
                                                                     
                                                                     if(grille == "none" || grille == "y" || grilleSmall){
                                                                         //Helpers Y
-                                                                        for (b = [ 0 : 1 : size[1] - 2 ]){
+                                                                        for (b = [ startY : 1 : endY - 1 ]){
                                                                         translate([0, posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
-                                                                                cube([objectSizeX, sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
+                                                                                cube([objectSizeMod[0], sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
                                                                             };
                                                                         }
                                                                     }
