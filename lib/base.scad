@@ -99,7 +99,7 @@ module mb_base_cutout(
     
     function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
-    translate([offsetX, offsetY, 0]){  //0.5*(baseMod[5] - baseMod[4])
+    translate([offsetX, offsetY, 0.5*baseMod[5]]){  //0.5*(baseMod[5] - baseMod[4])
         difference(){
             
                 
@@ -201,10 +201,12 @@ module mb_base(
     gridSizeXY,
     gridSizeZ,
     objectSize, 
+    objectSizeMod,
     height, 
     
     baseSideAdjustment, 
     sideAdjustment,
+    baseMod,
     baseReliefCut,
     baseReliefCutHeight,
     baseReliefCutThickness,
@@ -331,7 +333,11 @@ module mb_base(
                     }
 
                     if(baseReliefCut){
-                        translate([-0.5*(sideAdjustment[1] - sideAdjustment[0]), -0.5*(sideAdjustment[3] - sideAdjustment[2]),-0.5*(height-baseReliefCutHeight)-0.5*cutOffset]){
+                        translate([
+                            -0.5*(sideAdjustment[1] - sideAdjustment[0]) + 0.5*(baseMod[1] - baseMod[0]), 
+                            -0.5*(sideAdjustment[3] - sideAdjustment[2]) + 0.5*(baseMod[3] - baseMod[2]),
+                            -0.5*(height-baseReliefCutHeight)-0.5*cutOffset
+                        ]){
                             difference(){
                                 cube(
                                     size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, baseReliefCutHeight + cutOffset], 
@@ -351,8 +357,8 @@ module mb_base(
 
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
-                                    sizeX = objectSize[0] - 2*baseReliefCutThickness,
-                                    sizeY = objectSize[1] - 2*baseReliefCutThickness,
+                                    sizeX = objectSizeMod[0] - 2*baseReliefCutThickness,
+                                    sizeY = objectSizeMod[1] - 2*baseReliefCutThickness,
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
                                     roundingResolution = reliefRadiusQuality
@@ -383,8 +389,8 @@ module mb_base(
             * Pit
             */
             if(pit){
-                pitSizeX = objectSize[0] - (pitWallThickness[0] + pitWallThickness[1]);
-                pitSizeY = objectSize[1] - (pitWallThickness[2] + pitWallThickness[3]);
+                pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
+                pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
                 pitBevelInner = mb_inset_quad_lrfh(bevelOuter, pitWallThickness);
                 pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
                 pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
@@ -400,7 +406,7 @@ module mb_base(
                     previewQuality
                 );
 
-                translate([0, 0, 0.5 * (height - pitDepth) + 0.5 * cutOffset]){
+                translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5] + + cutOffset)]){
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])

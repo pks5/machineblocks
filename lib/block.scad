@@ -837,7 +837,7 @@ module mb_block(
     topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
     baseCutoutMinDepth = gridSizeZ - topPlateHeight; // mm -- 1 plate minus topPlateHeight
     maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
-    maxRecessDepth = objectSizeZ - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
+    maxRecessDepth = objectSizeMod[2] - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
     
     resultingPitDepth = recess ? (recessDepth != "auto" ? min(recessDepth * gridSizeZ, maxRecessDepth) : maxRecessDepth) : 0;
     
@@ -848,8 +848,8 @@ module mb_block(
     pitSizeX = objectSizeX - (recWallThickness[0] + recWallThickness[1]);
     pitSizeY = objectSizeY - (recWallThickness[2] + recWallThickness[3]);
 
-    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeZ - topPlateHeight - resultingPitDepth));  
-    resultingTopPlateHeight = objectSizeZ - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
+    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeMod[2] - topPlateHeight - resultingPitDepth));  
+    resultingTopPlateHeight = objectSizeMod[2] - resultingPitDepth - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
     baseCutoutDepth = baseCutoutType == "none" ? 0 : calculatedBaseCutoutDepth; //((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
     
     //Default diameter of pins and stud holes
@@ -874,10 +874,11 @@ module mb_block(
     bClampHeight = baseClampHeight * mbuToMm;
                                     
     //Calculate Z Positions
-    baseCutoutZ = sideZ(0, false) + 0.5 * baseCutoutDepth;        
-    topPlateZ = baseCutoutZ + 0.5 * (objectSizeZ - resultingPitDepth);
-    xyScrewHolesZ = sideZ(0, false) + 0.5 * gridSizeZ;
-    pitFloorZ = sideZ(1, false) - resultingPitDepth;
+    floorZ = sideZ(0, false);
+    baseCutoutZ = floorZ + 0.5 * baseCutoutDepth;        
+    topPlateZ = floorZ + baseCutoutDepth + 0.5 * resultingTopPlateHeight;
+    xyScrewHolesZ = floorZ + 0.5 * gridSizeZ;
+    pitFloorZ = floorZ  + baseCutoutDepth + resultingTopPlateHeight;
 
     
     //Bevel
@@ -1267,9 +1268,11 @@ module mb_block(
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
                                                         objectSize = objectSize,
+                                                        objectSizeMod = objectSizeMod,
                                                         height = objectSizeZAdjusted,
                                                         sideAdjustment = sideAdjustment,
                                                         baseSideAdjustment = bsa,
+                                                        baseMod = baseModRes,
                                                         baseReliefCut = baseReliefCut,
                                                         baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
                                                         baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
@@ -1323,7 +1326,7 @@ module mb_block(
                                                                 objectSizeMod = objectSizeMod,
                                                                 baseMod = baseModRes,
                                                                 
-                                                                baseHeight = objectSizeZ,
+                                                                baseHeight = objectSizeMod[2],
                                                                 
                                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                                 baseCutoutDepth = baseCutoutDepth,
@@ -1497,17 +1500,17 @@ module mb_block(
                                                                 previewQuality
                                                             );
 
-                                                            translate([0, 0, topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
+                                                            translate([0.5*(baseModRes[1] - baseModRes[0]), 0.5*(baseModRes[3] - baseModRes[2]), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                                                 difference(){
                                                                     cube(
-                                                                        size = [objectSizeX, objectSizeY, topPlateHelperHeight + cutOffset], 
+                                                                        size = [objectSizeXAdjusted, objectSizeYAdjusted, topPlateHelperHeight + cutOffset], 
                                                                         center=true
                                                                     );
 
                                                                     mb_beveled_rounded_block(
                                                                         bevel = beveled ? bevelTopPlateHelper : false,
-                                                                        sizeX = objectSizeX - 2*wallThickness - 2*topPlateHelperThickness,
-                                                                        sizeY = objectSizeY - 2*wallThickness - 2*topPlateHelperThickness,
+                                                                        sizeX = objectSizeMod[0] - 2*wallThickness - 2*topPlateHelperThickness,
+                                                                        sizeY = objectSizeMod[1] - 2*wallThickness - 2*topPlateHelperThickness,
                                                                         height = cutMultiplier * (topPlateHelperHeight + cutOffset),
                                                                         roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
                                                                         roundingResolution = topPlateHelperRoundingRadiusQuality
@@ -1886,9 +1889,11 @@ module mb_block(
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
                                                     objectSize = objectSize,
+                                                    objectSizeMod = objectSizeMod,
                                                     height = objectSizeZAdjusted,
                                                     sideAdjustment = sideAdjustment,
                                                     baseSideAdjustment = bsa,
+                                                    baseMod = baseModRes,
                                                     baseReliefCut = baseReliefCut,
                                                     baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
                                                     baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
