@@ -8,5 +8,6 @@
 * MB Config
 */
 mb_config = [
-    ["studHeightAdjustment", 0]
+    ["studHeightAdjustment", 0],
+    ["debug", true]
 ];

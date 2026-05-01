@@ -75,7 +75,7 @@ module mb_base_cutout(
 
     objectSizeX = gridSizeXY * (grid[0] + (slope != false ? min(slope[0], 0) + min(slope[1], 0) : 0));
     objectSizeY = gridSizeXY * (grid[1] + (slope != false ? min(slope[2], 0) + min(slope[3], 0) : 0));
-    objectSize = [objectSizeX, objectSizeY];
+    objectSize = [objectSizeX + baseMod[0] + baseMod[1], objectSizeY + baseMod[2] + baseMod[3]];
 
     offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY + 0.5*(baseMod[1] - baseMod[0]);
     offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY + 0.5*(baseMod[3] - baseMod[2]);
@@ -84,6 +84,7 @@ module mb_base_cutout(
         echo(
             id = blockId,
             debugSource = "base.scad",
+            baseMod=baseMod,
             slope=slope, 
             offsetX = offsetX, 
             offsetY = offsetY, 
@@ -125,8 +126,8 @@ module mb_base_cutout(
                         translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
                             mb_beveled_rounded_block(
                                 bevel = beveled ? bevelInner : false,
-                                sizeX = objectSizeMod[0] - 2*wallThickness,
-                                sizeY = objectSizeMod[1] - 2*wallThickness,
+                                sizeX = objectSize[0] - 2*wallThickness,
+                                sizeY = objectSize[1] - 2*wallThickness,
                                 height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
                                 roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                 roundingResolution = cutoutRoundingRadiusQuality
@@ -139,8 +140,8 @@ module mb_base_cutout(
                             translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelInner : false,
-                                    sizeX = objectSizeMod[0] - 2 * wallThickness,
-                                    sizeY = objectSizeMod[1] - 2 * wallThickness,
+                                    sizeX = objectSize[0] - 2 * wallThickness,
+                                    sizeY = objectSize[1] - 2 * wallThickness,
                                     height = baseClampOffset + cutOffset,
                                     roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                     roundingResolution = cutoutRoundingRadiusQuality
@@ -167,8 +168,8 @@ module mb_base_cutout(
 
                     mb_beveled_rounded_block(
                         bevel = beveled ? bevelClamp : false,
-                        sizeX = objectSizeMod[0] - 2 * baseClampWallThickness,
-                        sizeY = objectSizeMod[1] - 2 * baseClampWallThickness,
+                        sizeX = objectSize[0] - 2 * baseClampWallThickness,
+                        sizeY = objectSize[1] - 2 * baseClampWallThickness,
                         height = baseClampHeight * cutMultiplier,
                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                         roundingResolution = cutoutClampRoundingRadiusQuality
@@ -378,7 +379,7 @@ module mb_base(
                                 slopeSide0 = slopeSize(side);
                                 slopeBaseHeight0 = slopeBaseHeight(side);
                                 tx = ((side % 2 == 0) ? -0.5 : 0.5) * ((side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) - slopeSide0 + cutTolerance);
-                                translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slope[0])*0.5*(slopeBaseHeight0 + cutTolerance)])
+                                translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slope[0]) * 0.5 * (slopeBaseHeight0 + cutTolerance)])
                                     mb_slant_prism(side, slopeSide0, (side < 2 ? objectSizeYAdjusted : objectSizeXAdjusted) * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slope[side] < 0);
                             }
                         }
