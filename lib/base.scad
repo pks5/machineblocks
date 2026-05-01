@@ -379,7 +379,9 @@ module mb_base(
                                 slopeSide0 = slopeSize(side);
                                 slopeBaseHeight0 = slopeBaseHeight(side);
                                 tx = ((side % 2 == 0) ? -0.5 : 0.5) * ((side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) - slopeSide0 + cutTolerance);
-                                translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slope[0]) * 0.5 * (slopeBaseHeight0 + cutTolerance)])
+                                t = [side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slope[side]) * 0.5 * (slopeBaseHeight0 + cutTolerance)];
+                                echo (t = t, s= sign(slope[0]));
+                                translate(t)
                                     mb_slant_prism(side, slopeSide0, (side < 2 ? objectSizeYAdjusted : objectSizeXAdjusted) * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slope[side] < 0);
                             }
                         }
