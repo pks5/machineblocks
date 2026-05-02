@@ -165,6 +165,8 @@ function mb_point_radius(shape, i, j, radius) =
                 (
                     is_list(radius) && is_list(radius[0]) && len(radius[0]) == len(shape[0]) ? 
                     radius[len(radius) == 1 ? 0 : i][j] :
+                    is_list(radius) && len(radius) <= 2 && (is_num(radius[0]) || (is_list(radius[0]) && len(radius[0]) == 3 && is_num(radius[0][0]) && is_num(radius[0][1]) && is_num(radius[0][2]))) ?
+                    radius[len(radius) == 1 ? 0 : i] : 
                     radius
                 )
             ) :
@@ -179,6 +181,30 @@ function mb_point_corner(shape, i, j) =
 function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [[0, 0], [0, 0]]) =
     let ( p = mb_point(shape, height, i, j))
     i < len(shape) ? (j < len(shape[i]) ? mb_min_max_points(shape, height, i, j + 1, p == undef ? min_max : [[min(min_max[0][0], p[0]), min(min_max[0][1], p[1])], [max(min_max[1][0], p[0]), max(min_max[1][1], p[1])]]) : mb_min_max_points(shape, height, i + 1, 0, min_max)) : min_max;
+
+function mb_xyz_rad_convert(xyz_rad) =
+    is_num(xyz_rad) ? xyz_rad :
+    (is_list(xyz_rad) && len(xyz_rad) == 3 && is_num(xyz_rad[0]) && is_num(xyz_rad[1]) && is_num(xyz_rad[2])) ? 
+    [xyz_rad[2], xyz_rad[2], max(xyz_rad[0], xyz_rad[1])] : 
+     (is_list(xyz_rad) && len(xyz_rad) == 3 
+     && (is_num(xyz_rad[0]) || (is_list(xyz_rad[0]) && len(xyz_rad[0]) == 4)) 
+     && (is_num(xyz_rad[1]) || (is_list(xyz_rad[1]) && len(xyz_rad[1]) == 4)) 
+     && (is_num(xyz_rad[2]) || (is_list(xyz_rad[2]) && len(xyz_rad[2]) == 4))) ? 
+     [[
+        [is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1])]
+      ],
+      [
+        [is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1])],
+        [is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1])]
+      ]]
+     :
+    undef;
+
 
 module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, resolution = 80){
     min_max = mb_min_max_points(shape, height);
@@ -231,13 +257,16 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
 
 module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
+    rad = mb_xyz_rad_convert(radius);
+
+    echo (rad = rad);
     hw = 0.5 * size[0];
     hh = 0.5 * size[1];
 
     shape = [
         [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
     ];
-    mb_prismoid(shape = shape, height = size[2], radius = radius, center = center, resolution = resolution);
+    mb_prismoid(shape = shape, height = size[2], radius = rad, center = center, resolution = resolution);
 }
 
 
@@ -254,7 +283,7 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[[60, 40, 0], [60, 40, 0], [60, 40, 0], [60, 40, 0]], [[60, 40, 50], [60, 40, 50], [60, 40, 50], [60, 40, 50]]]);
+mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [0, 0, [20, 0, 30, 0]]);
 
 
 
