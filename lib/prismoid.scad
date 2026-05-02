@@ -170,12 +170,19 @@ function mb_point_radius(shape, i, j, radius) =
             ) :
               undef;
 
+function mb_point_corner(shape, i, j) = 
+    let(sl = len(shape[len(shape) == 1 ? 0 : i]))
+    sl <= 4 ? 
+    [i, 2 * j] : 
+    ((sl <= 8 || j < 8) ? [i, j] : [i, 0]);
+
 module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, resolution = 80){
     hull(){
         for(i = [0 : 1 : 1]){
-            for(j = [0 : 1 : 7]){
+            for(j = [0 : 1 : len(shape[shape[i] != undef ? i : 0]) - 1]){
                 point = mb_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][j], z_value = z_val);
                 if(point != undef){
+                    corner = mb_point_corner(shape, i, j);
                     rad = mb_point_radius(shape, i, j, radius);
                     socket_point = mb_socket_point(point, socket, i);
                     //z_val = (i == 0 ? -1 : 1) * 0.5 * height;
@@ -187,17 +194,17 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
                     //z_val_top = (i == 0 ? 1 : -1) * 0.5 * height;
                     inv_point = socket_point != undef ? socket_point : mb_inv_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i + (i == 0 ? 1 : -1)][j], z_value = z_val_top);
                     
-                    angle = mb_corner_angle([i, j], prev_point, point, next_point, inv_point);
+                    angle = mb_corner_angle(corner, prev_point, point, next_point, inv_point);
 
                     echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
                     
                     //if(j % 2 == 0){
                         translate(point) 
-                            mb_rounding_corner(corner = [i, j], radius = rad, angle = angle, resolution = resolution);
+                            mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution);
 
                         if(socket_point != undef){
                             translate(socket_point) 
-                                mb_rounding_corner(corner = [i, j], radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution);
+                                mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution);
                         }
                     //}
                 }
@@ -212,7 +219,7 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     hh = 0.5 * size[1];
 
     shape = [
-        [[-hw, -hh], undef, [-hw, hh], undef, [hw, hh], undef, [hw, -hh], undef]
+        [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
     ];
     mb_prismoid(shape = shape, height = size[2], radius = radius, center = center, resolution = resolution);
 }
@@ -231,14 +238,14 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef], [[60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef]]);
+*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], [60, 40, 0], [60, 40, 0], [60, 40, 0]], [[60, 40, 50], [60, 40, 50], [60, 40, 50], [60, 40, 50]]]);
 
 
 
 *mb_rounding_corner(corner = [0, 0], radius = [50,100,50], angle = [-45, 45, 0, 0], resolution = 80);
 
 mb_prismoid(shape = [
-    [[-40, -30, [10,10,0]], undef, [-40, 30, [10,10,0]], undef, [40, 30, [10,10,0]], undef, [40, -30, [10,10,0]], undef],
-    [[-20, -30, [10,10,0]], undef, [-20, 30, [10,10,0]], undef, [20, 30, [10,10,0]], undef, [20, -30, [10,10,0]], undef]
+    [[-40, -30, [10,10,0]], [-40, 30, [10,10,0]], [40, 30, [10,10,0]], [40, -30, [10,10,0]]],
+    [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
     
 ], height = 120, socket = 20, radius = 0, resolution = 160);
