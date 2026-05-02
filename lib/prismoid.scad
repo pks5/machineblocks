@@ -254,7 +254,7 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], [60, 40, 0], [60, 40, 0], [60, 40, 0]], [[60, 40, 50], [60, 40, 50], [60, 40, 50], [60, 40, 50]]]);
+mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[[60, 40, 0], [60, 40, 0], [60, 40, 0], [60, 40, 0]], [[60, 40, 50], [60, 40, 50], [60, 40, 50], [60, 40, 50]]]);
 
 
 
