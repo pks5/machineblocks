@@ -182,26 +182,28 @@ function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [[0, 0], [0, 0
     let ( p = mb_point(shape, height, i, j))
     i < len(shape) ? (j < len(shape[i]) ? mb_min_max_points(shape, height, i, j + 1, p == undef ? min_max : [[min(min_max[0][0], p[0]), min(min_max[0][1], p[1])], [max(min_max[1][0], p[0]), max(min_max[1][1], p[1])]]) : mb_min_max_points(shape, height, i + 1, 0, min_max)) : min_max;
 
+function mb_xyz_rad(xyz_rad) = [xyz_rad[2] > 0 ? xyz_rad[2] : xyz_rad[1], xyz_rad[2] > 0 ? xyz_rad[2] : xyz_rad[0], max(xyz_rad[0], xyz_rad[1])];
+
 function mb_xyz_rad_convert(xyz_rad) =
     is_num(xyz_rad) ? xyz_rad :
     (is_list(xyz_rad) && len(xyz_rad) == 3 && is_num(xyz_rad[0]) && is_num(xyz_rad[1]) && is_num(xyz_rad[2])) ? 
-    [xyz_rad[2], xyz_rad[2], max(xyz_rad[0], xyz_rad[1])] : 
+    mb_xyz_rad(xyz_rad) : 
      (is_list(xyz_rad) && len(xyz_rad) == 3 
      && (is_num(xyz_rad[0]) || (is_list(xyz_rad[0]) && len(xyz_rad[0]) == 4)) 
      && (is_num(xyz_rad[1]) || (is_list(xyz_rad[1]) && len(xyz_rad[1]) == 4)) 
      && (is_num(xyz_rad[2]) || (is_list(xyz_rad[2]) && len(xyz_rad[2]) == 4))) ? 
      [[
-        [is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1])]
-      ],
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][0] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][1] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][0] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][3] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2]])
+     ],
       [
-        [is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1])],
-        [is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2], max(is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1])]
-      ]]
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][0] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][1] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][1] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][2] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1],is_list(xyz_rad[2]) ? xyz_rad[2][2] : xyz_rad[2]]),
+        mb_xyz_rad([is_list(xyz_rad[0]) ? xyz_rad[0][3] : xyz_rad[0], is_list(xyz_rad[1]) ? xyz_rad[1][2] : xyz_rad[1], is_list(xyz_rad[2]) ? xyz_rad[2][3] : xyz_rad[2]])
+        ]]
      :
     undef;
 
@@ -283,13 +285,13 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [0, 0, [20, 0, 30, 0]]);
+mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0]);
 
 
 
 *mb_rounding_corner(corner = [0, 0], radius = [50,100,50], angle = [-45, 45, 0, 0], resolution = 80);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [50, 30, [10,10,0]], [50, -30, [10,10,0]]],
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
     
