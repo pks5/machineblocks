@@ -160,7 +160,15 @@ function mb_socket_point(point, socket, i = 0) =
 
 function mb_point_radius(shape, i, j, radius) =
     let(l = len(shape) == 1 ? 0 : i)
-        shape[l][j] != undef ? (shape[l][j][2] != undef ? shape[l][j][2] : radius) : undef;
+        shape[l][j] != undef ? 
+            (shape[l][j][2] != undef ? shape[l][j][2] : 
+                (
+                    is_list(radius) && is_list(radius[0]) && len(radius[0]) == len(shape[0]) ? 
+                    radius[len(radius) == 1 ? 0 : i][j] :
+                    radius
+                )
+            ) :
+              undef;
 
 module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, resolution = 80){
     hull(){
@@ -198,13 +206,12 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
     }
 }
 
-module mb_rounded_rect(size, radius = 0, center = true, resolution = 80){
+module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
     hw = 0.5 * size[0];
     hh = 0.5 * size[1];
 
     shape = [
-        [[-hw, -hh], undef, [-hw, hh], undef, [hw, hh], undef, [hw, -hh], undef],
         [[-hw, -hh], undef, [-hw, hh], undef, [hw, hh], undef, [hw, -hh], undef]
     ];
     mb_prismoid(shape = shape, height = size[2], radius = radius, center = center, resolution = resolution);
@@ -224,12 +231,12 @@ module mb_rounded_rect(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-*mb_rounded_rect(size = [120, 80, 50], radius = 25);
+mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef], [[60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef]]);
 
 
 
 *mb_rounding_corner(corner = [0, 0], radius = [50,100,50], angle = [-45, 45, 0, 0], resolution = 80);
 
-mb_prismoid(shape = [
-    [[-20, -30, 2], undef, [-20, 30, 2], undef, [20, 40, 2], undef, [50, -40, 2], undef]
+*mb_prismoid(shape = [
+    [[-20, -30, [2, 14, 20]], undef, [-20, 30, 2], undef, [20, 40, 2], undef, [50, -40, 2], undef]
 ], height = 120, socket = 0, radius = 10, resolution = 160);
