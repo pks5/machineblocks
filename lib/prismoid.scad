@@ -197,7 +197,7 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
 
                         if(socket_point != undef){
                             translate(socket_point) 
-                                mb_rounding_corner(corner = [i, j], rad = 0, angle = angle, resolution = resolution);
+                                mb_rounding_corner(corner = [i, j], radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution);
                         }
                     //}
                 }
@@ -231,12 +231,14 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef], [[60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef]]);
+*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef, [60, 40, 0], undef], [[60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef, [60, 40, 50], undef]]);
 
 
 
 *mb_rounding_corner(corner = [0, 0], radius = [50,100,50], angle = [-45, 45, 0, 0], resolution = 80);
 
-*mb_prismoid(shape = [
-    [[-20, -30, [2, 14, 20]], undef, [-20, 30, 2], undef, [20, 40, 2], undef, [50, -40, 2], undef]
-], height = 120, socket = 0, radius = 10, resolution = 160);
+mb_prismoid(shape = [
+    [[-40, -30, [10,10,0]], undef, [-40, 30, [10,10,0]], undef, [40, 30, [10,10,0]], undef, [40, -30, [10,10,0]], undef],
+    [[-20, -30, [10,10,0]], undef, [-20, 30, [10,10,0]], undef, [20, 30, [10,10,0]], undef, [20, -30, [10,10,0]], undef]
+    
+], height = 120, socket = 20, radius = 0, resolution = 160);
