@@ -159,7 +159,9 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
             for(j = [0 : 1 : 7]){
                 point = mb_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][j], z_value = z_val);
                 if(point != undef){
-                    echo(p = point);
+                    
+                    socket_point = socket != undef && ((i == 0 && socket > 0) || (i == 1 && socket < 0)) ?
+                        [point[0], point[1], point[2] + (socket > 0 ? 1 : -1) * socket] : undef;
                     //z_val = (i == 0 ? -1 : 1) * 0.5 * height;
                     
                     prev_point = mb_prev_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][(j + 8 - 2) % 8], z_value = z_val);
@@ -167,19 +169,19 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
                     next_point = mb_next_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][(j+2) % 8], z_value = z_val);
                     
                     //z_val_top = (i == 0 ? 1 : -1) * 0.5 * height;
-                    top_point = mb_inv_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i + (i == 0 ? 1 : -1)][j], z_value = z_val_top);
+                    inv_point = socket_point != undef ? socket_point : mb_inv_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i + (i == 0 ? 1 : -1)][j], z_value = z_val_top);
                     
-                    angle = mb_corner_angle([i, j], prev_point, point, next_point, top_point);
+                    angle = mb_corner_angle([i, j], prev_point, point, next_point, inv_point);
 
-                    echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, tp = top_point);
+                    echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
                     
                     //if(j % 2 == 0){
                         translate(point) 
                             mb_rounding_corner(corner = [i, j], radius = radius, angle = angle, resolution = resolution);
 
-                        if(socket != undef && ((i == 0 && socket > 0) || (i == 1 && socket < 0))){
-                            translate([point[0], point[1], point[2] + (socket > 0 ? 1 : -1) * socket]) 
-                            mb_rounding_corner(corner = [i, j], radius = 0, angle = angle, resolution = resolution);
+                        if(socket_point != undef){
+                            translate(socket_point) 
+                                mb_rounding_corner(corner = [i, j], radius = 0, angle = angle, resolution = resolution);
                         }
                     //}
                 }
@@ -208,13 +210,13 @@ module mb_rounded_rect(size, radius = 0, center = true, resolution = 80){
 ], height = 120, socket = 0, radius = 10, resolution = 160);
 
 
-*mb_prismoid(shape = [
+mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = 0, radius = 10, resolution = 160);
+], height = 120, socket = 30, radius = 10, resolution = 160);
 
-mb_rounded_rect(size = [120, 80, 50], radius = 25);
+*mb_rounded_rect(size = [120, 80, 50], radius = 25);
 
 
 
