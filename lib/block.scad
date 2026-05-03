@@ -888,7 +888,7 @@ module mb_block(
     //Bevel
     beveled = true;
     cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
-    bevelOuter = cornersMod; //mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
+    bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, mb_array_mul(baseModRes, -1));
     
     //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
