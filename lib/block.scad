@@ -2584,7 +2584,7 @@ module mb_block(
                                                                         cylinder(h = portCutThickness, r=0.5*shape[3][0], center=true, $fn=20);
                                                                     }
                                                                     else if(shape[0] == "rect"){
-                                                                        mb_rounded_rect_ext(
+                                                                        mb_cube(
                                                                             size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
                                                                             radius = shape[3][1], center=true, resolution=20);
                                                                     }

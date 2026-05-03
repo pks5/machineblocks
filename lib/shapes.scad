@@ -77,7 +77,7 @@ module mb_roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, res
 
 module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, resolution = 20) {
 	size = (size[0] == undef) ? [size, size, size] : size;
-	mb_rounded_rect_ext(size = size, radius = [0, 0, radius], center = center, xyz_rad = true, resolution = resolution);
+	mb_cube(size = size, radius = [0, 0, radius], center = center, xyz_rad = true, resolution = resolution);
 	/*
 	obj_translate = (center == false) ?
 		[0, 0, 0] : [
@@ -124,7 +124,7 @@ module mb_rounded_block(size, resolution, center=true, radius = 0){
 		cube(size = size, center = center);
 	}
 	else{
-		mb_rounded_rect_ext(size = size, radius = radius, center = center, xyz_rad = true, resolution = resolution);
+		mb_cube(size = size, radius = radius, center = center, xyz_rad = true, resolution = resolution);
 	}
 	/*
 	else if((radius[0] == 0 || radius[0] == [0,0,0,0]) && (radius[1] == 0 || radius[1] == [0,0,0,0]) && (radius[2] != 0 && radius[2] != [0,0,0,0])){

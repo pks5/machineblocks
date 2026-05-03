@@ -20,7 +20,7 @@ module mb_dupont_plug(
     function is_blind(a, b, i) = (i < len(blinds)) && (((a == blinds[i][0]) && (b == blinds[i][1])) || is_blind(a, b, i + 1)); 
 
     difference(){
-        mb_rounded_rect_ext(
+        mb_cube(
             size = [totalWidth, totalHeight, totalDepth], 
             center = true, 
             radius = borderRadius, 

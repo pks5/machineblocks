@@ -1,5 +1,12 @@
 use <utils.scad>;
 
+/*
+* START ROUNDING CORNER
+*/
+
+/**
+* CORNER CUT
+*/
 module mb_corner_cut(size, c = [0, 0]){
     sx = size[0];
     sy = size[1];
@@ -72,19 +79,9 @@ module mb_corner_cut(size, c = [0, 0]){
     polyhedron(points = pts, faces = faces, convexity = 4);
 }
 
-function mb_resolve_xyz(xyz, min_value = undef, z_value = undef) = 
-    let(r = is_list(xyz) ? 
-        ([is_num(xyz[0]) ? xyz[0] : 0, is_num(xyz[1]) ? xyz[1] : 0, z_value != undef ? z_value : (is_num(xyz[2]) ? xyz[2] : 0)]) : 
-        is_num(xyz) ? [xyz, xyz, xyz] : [0, 0, 0])
-    min_value == undef ? r : [max(min_value, r[0]), max(min_value, r[1]), max(min_value, r[2])];
-    
-
-function mb_corner_offset(c, r, f = 0.5) = [
-        (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? -1 : 1) * f * r[0],
-        (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? -1 : 1) * f * r[1],
-        (c[0] == 0 ? -1 : 1) * f * r[2]
-    ];
-
+/**
+* ROUNDING CORNER
+*/
 module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], resolution = 80, debug = false){
     radius = mb_resolve_xyz(xyz = radius, min_value = 0.001);
     max_rad = max(radius[0], radius[1], radius[2]);
@@ -113,7 +110,7 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
                     h = 0.001
                 );*/
 
-                mb_pseudo_ellipse_ring_x(
+                mb_pseudo_ellipse_ring(
                     s=radius,
                     resolution=resolution,
                     h=0.001,
@@ -137,9 +134,23 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
         }
 }
 
-module mb_rect_corner(corner = [0, 0]){
+/*
+* END ROUNDING CORNER
+*/
 
-}
+/*
+* START UTILS
+*/
+
+/*
+* CORNER UTILS
+*/
+
+function mb_corner_offset(c, r, f = 0.5) = [
+    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? -1 : 1) * f * r[0],
+    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? -1 : 1) * f * r[1],
+    (c[0] == 0 ? -1 : 1) * f * r[2]
+];
 
 function mb_angle_from_x(p0, p1) =
     atan2(p1[1] - p0[1], p1[0] - p0[0]);
@@ -170,6 +181,16 @@ function mb_corner_angle(corner, prev, point, next, top) =
                 corner[0] == 1 ? ang_z[1] - sign(ang_z[1]) * 180 : ang_z[1]
             ];
 
+/*
+* POINT UTILS
+*/
+
+function mb_resolve_xyz(xyz, min_value = undef, z_value = undef) = 
+    let(r = is_list(xyz) ? 
+        ([is_num(xyz[0]) ? xyz[0] : 0, is_num(xyz[1]) ? xyz[1] : 0, z_value != undef ? z_value : (is_num(xyz[2]) ? xyz[2] : 0)]) : 
+        is_num(xyz) ? [xyz, xyz, xyz] : [0, 0, 0])
+    min_value == undef ? r : [max(min_value, r[0]), max(min_value, r[1]), max(min_value, r[2])];
+    
 function mb_point(shape, height, i = 0, j = 0) = 
     let(l = len(shape) == 1 ? 0 : i)
     shape[l][j] != undef ? mb_resolve_xyz(xyz = shape[l][j], z_value = (i == 0 ? -1 : 1) * 0.5 * height) : undef;
@@ -213,13 +234,17 @@ function mb_point_radius(shape, i, j, radius) =
 
 function mb_point_corner(shape, i, j) = 
     let(sl = len(shape[len(shape) == 1 ? 0 : i]))
-    sl <= 4 ? 
+    sl == 4 ? 
     [i, 2 * j] : 
-    ((sl <= 8 || j < 8) ? [i, j] : [i, 0]);
+    (sl == 8 ? [i, j] : undef);
 
 function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [[0, 0], [0, 0]]) =
     let ( p = mb_point(shape, height, i, j))
     i < len(shape) ? (j < len(shape[i]) ? mb_min_max_points(shape, height, i, j + 1, p == undef ? min_max : [[min(min_max[0][0], p[0]), min(min_max[0][1], p[1])], [max(min_max[1][0], p[0]), max(min_max[1][1], p[1])]]) : mb_min_max_points(shape, height, i + 1, 0, min_max)) : min_max;
+
+/*
+* XYZ RAD CONVERT
+*/
 
 function mb_xyz_rad(xyz_rad) = [xyz_rad[2] > 0 ? xyz_rad[2] : xyz_rad[1], xyz_rad[2] > 0 ? xyz_rad[2] : xyz_rad[0], max(xyz_rad[0], xyz_rad[1])];
 
@@ -246,7 +271,17 @@ function mb_xyz_rad_convert(xyz_rad) =
      :
     undef;
 
+/*
+* END UTILS
+*/
 
+/*
+* START SHAPES
+*/
+
+/**
+* PRISMOID
+*/
 module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
     min_max = mb_min_max_points(shape, height);
     align = align == "sticky" ? "sticky" : mb_align_resolve(align);
@@ -267,33 +302,22 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
         hull(){
             for(i = [0 : 1 : 1]){
                 for(j = [0 : 1 : len(shape[shape[i] != undef ? i : 0]) - 1]){
-                    point = mb_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][j], z_value = z_val);
+                    point = mb_point(shape, height, i, j);
                     if(point != undef){
                         corner = mb_point_corner(shape, i, j);
-                        rad = mb_point_radius(shape, i, j, radius);
-                        
-                        
-                        
-                        //z_val = (i == 0 ? -1 : 1) * 0.5 * height;
-                        
-                        prev_point = mb_prev_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][(j + 8 - 2) % 8], z_value = z_val);
-                        
-                        next_point = mb_next_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i][(j+2) % 8], z_value = z_val);
-                        
-                        
 
-                        //z_val_top = (i == 0 ? 1 : -1) * 0.5 * height;
-                        inv_point = mb_inv_point(shape, height, i, j); //mb_resolve_xyz(xyz = shape[i + (i == 0 ? 1 : -1)][j], z_value = z_val_top);
-                        
-                        socket_point = mb_socket_point(point, inv_point, socket_top, socket_bottom, i);
+                        if(corner != undef){
+                            rad = mb_point_radius(shape, i, j, radius);
+                            prev_point = mb_prev_point(shape, height, i, j);
+                            next_point = mb_next_point(shape, height, i, j);
+                            inv_point = mb_inv_point(shape, height, i, j);
+                            socket_point = mb_socket_point(point, inv_point, socket_top, socket_bottom, i);
+                            angle = mb_corner_angle(corner, prev_point, point, next_point, socket_point);
 
-                        angle = mb_corner_angle(corner, prev_point, point, next_point, socket_point);
+                            if(debug){
+                                echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
+                            }
 
-                        if(debug){
-                            echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
-                        }
-
-                        //if(j % 2 == 0){
                             translate(point) 
                                 mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
 
@@ -301,7 +325,10 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
                                 translate(socket_point) 
                                     mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
                             }
-                        //}
+                        }
+                        else{
+                            echo(str("Could not resolve point: [", i, ", ", j, "]"));
+                        }
                     }
                 }
             }
@@ -309,7 +336,10 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
     }
 }
 
-module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, resolution = 80){
+/**
+* CUBE
+*/
+module mb_cube(size, radius = 0, xyz_rad = false, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
     rad0 = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
 
@@ -330,8 +360,14 @@ module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, res
     }
 }
 
+/*
+* END SHAPES
+*/
 
-module mb_pseudo_ellipse_ring_x(
+/**
+* PSEUDO ELLIPSE RING
+*/
+module mb_pseudo_ellipse_ring(
     s=[40, 25, 3],
     resolution=32,
     h=3,
@@ -428,10 +464,18 @@ function mb_pe_in_angle_range(a, a0, a1) =
 function mb_pe_filter_angles(angles, a0, a1) =
     [for (a = angles) if (mb_pe_in_angle_range(a, a0, a1)) a];
 
+/*
+* END PSEUDO ELLIPSE
+*/
 
 
 
-*mb_pseudo_ellipse_ring_x(
+/*
+* START TESTING (REMOVE)
+*/
+
+
+*mb_pseudo_ellipse_ring(
     s=[5, 10, 10],
     resolution=100,
     h=0.2,
@@ -466,14 +510,14 @@ mb_prismoid(shape = [
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket_bottom = 20, radius = [10, 4, 6], resolution = 160);
 
-//mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
+//mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+*mb_cube(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
 //color("#ffffffaa")
 //cube(size = [120, 80, 50], center = true);
 
 
-//mb_rounded_rect_ext(center = false, size = [120, 80, 50]);
+//mb_cube(center = false, size = [120, 80, 50]);
 *mb_prismoid(shape = [
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [50, 30, [10,10,0]], [50, -30, [10,10,0]]],
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
