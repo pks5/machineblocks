@@ -10,7 +10,6 @@
 *
 */
 
-use <shapes.scad>;
 use <prismoid.scad>;
 use <base.scad>;
 use <text3d.scad>;

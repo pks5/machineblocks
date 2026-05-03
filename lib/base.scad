@@ -1,4 +1,3 @@
-use <shapes.scad>;
 use <prismoid.scad>;
 use <connectors.scad>;
 use <utils.scad>;
