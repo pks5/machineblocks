@@ -84,7 +84,7 @@ function mb_corner_offset(c, r, f = 0.5) = [
     ];
 
 module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], resolution = 80){
-    radius = mb_resolve_xyz(xyz = radius, min_value = 0.000001);
+    radius = mb_resolve_xyz(xyz = radius, min_value = 0.001);
     max_rad = max(radius[0], radius[1], radius[2]);
     rad_rel = [radius[0] / max_rad, radius[1] / max_rad, radius[2] / max_rad];
     
@@ -101,16 +101,29 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
                 mb_corner_cut(radius, corner);
                 //cube(size = radius, center = true);
 
-            if((radius[0] != 0 && radius[1] != 0 && radius[2] != 0) && (true || radius[0] != radius[1] || radius[1] != radius[2])){
+            if((radius[0] > 0.001 && radius[1] > 0.001 && radius[2] > 0.001) && (true || radius[0] != radius[1] || radius[1] != radius[2])){
                 //hull()
+                /*
                 mb_pseudo_ellipse_ring(
                     corner = corner,
                     s = radius,
                     resolution = resolution,
                     h = 0.001
+                );*/
+
+                mb_pseudo_ellipse_ring_x(
+                    s=radius,
+                    resolution=resolution,
+                    h=0.001,
+                    capWidth=0.1,
+                    //capStep=0.001,
+                    capThreshold=0.15
                 );
+
+                echo (m = "ellipse", radius = radius);
             }
             else{
+                echo (m = "spehere", radius = radius);
                 scale(rad_rel)
                     sphere(r = max_rad, $fn = resolution);
             }
@@ -227,7 +240,7 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
     sy = min_max[1][1] - min_max[0][1];
     tx = - 0.5 * (min_max[1][0] + min_max[0][0]);
     ty = - 0.5 * (min_max[1][1] + min_max[0][1]);
-    echo(min_max = min_max, sx = sx, sy = sy, tx = tx, ty = ty);
+    //echo(min_max = min_max, sx = sx, sy = sy, tx = tx, ty = ty);
 
     t = center ? [tx, ty, 0] : [tx + 0.5 * sx, ty + 0.5 * sy, 0.5 * height];
 
@@ -251,7 +264,7 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
                         
                         angle = mb_corner_angle(corner, prev_point, point, next_point, inv_point);
 
-                        echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
+                        //echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
                         
                         //if(j % 2 == 0){
                             translate(point) 
@@ -271,198 +284,144 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
 
 module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
-    rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
+    rad0 = xyz_rad && (radius == 0 || radius == [0, 0, 0] || radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
 
-    hw = 0.5 * size[0];
-    hh = 0.5 * size[1];
+    if(rad0){
+        cube(size, center = center);
+    }
+    else{
+        rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
 
-    shape = [
-        [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
-    ];
-    
-    mb_prismoid(shape = shape, height = size[2], radius = rad, center = center, resolution = resolution);
-}
+        hw = 0.5 * size[0];
+        hh = 0.5 * size[1];
 
-
-
-
-function mb_pe_curvature(rx, ry, a) =
-    abs(rx * ry) /
-    pow(
-        pow(ry * cos(a), 2) + pow(rx * sin(a), 2),
-        1.5
-    );
-
-function mb_pe_adaptive_angles(
-    rx, ry,
-    a0, a1,
-    baseStep,
-    minStep,
-    maxStep,
-    kMax,
-    angles=[]
-) =
-    a0 >= a1
-        ? concat(angles, [a1])
-        : let(
-            k = mb_pe_curvature(rx, ry, a0),
-
-            // 0..1, hohe Krümmung => nahe 1
-            t = min(1, k / kMax),
-
-            // hohe Krümmung => minStep
-            // geringe Krümmung => maxStep
-            step = max(
-                minStep,
-                min(
-                    maxStep,
-                    maxStep - (maxStep - minStep) * sqrt(t)
-                )
-            ),
-
-            nextA = min(a0 + step, a1)
-        )
-        mb_pe_adaptive_angles(
-            rx, ry,
-            nextA, a1,
-            baseStep,
-            minStep,
-            maxStep,
-            kMax,
-            concat(angles, [a0])
-        );
-
-module mb_pseudo_ellipse_ring(
-    s=[40, 25, 3],
-    resolution=32,
-    h=3,
-    center=true,
-    corner = [0,0],
-    full = true
-) {
-
-    // 3 => 6, 2 => 0, 1 ==> 2, 0 => 4
-
-    x_smallest = s[0] < s[1] && s[0] < s[2];
-    y_smallest = s[1] < s[0] && s[1] < s[2];
-
-    cn = corner[1] == 4 ? 0 :
-        corner[1] == 2 ? 1 :
-        corner[1] == 0 ? 2 :
-        corner[1] == 6 ? 3 : 0;
-
-   cxs = corner[0] == 0 && (corner[1] == 2 || corner[1] == 4) ? 0 :
-        corner[0] == 1 && (corner[1] == 2 || corner[1] == 4) ? 1 :
-        corner[0] == 1 && (corner[1] == 0 || corner[1] == 6) ? 2 :
-        corner[0] == 0 && (corner[1] == 0 || corner[1] == 6) ? 3 : 0;
-      //  cxs = 1; // c06, c04 => 0, c16, c14 => 1, c10, c12 => 2, c00, c02 => 3
-
-    cys = corner[0] == 1 && (corner[1] == 4 || corner[1] == 6) ? 0 :
-        corner[0] == 1 && (corner[1] == 0 || corner[1] == 2) ? 1 :
-        corner[0] == 0 && (corner[1] == 0 || corner[1] == 2) ? 2 :
-        corner[0] == 0 && (corner[1] == 4 || corner[1] == 6) ? 3 : 0;
-
-       // cys = 3; // c14, c16 => 0, c10, c12 => 1, c00, c02 => 2, c04, c06 => 3
-
-    c = x_smallest ? cxs : (y_smallest ? cys :cn);
-
-    startAngle = 0;
-    endAngle = 360;
-
-    from = c * 90;
-    to = 90 + c *90;
-
-    radius = x_smallest ? 
-        [max(0.0001, s[2]), max(0.0001, s[1]), max(0.0001, s[0])] :
-        y_smallest ?
-        [max(0.0001, s[0]), max(0.0001, s[2]), max(0.0001, s[1])] :
-        s;
-
-    rot = x_smallest ? [0, 90, 0] : y_smallest ? [90, 0, 0] : [0, 0, 0];
-
-    
-
-    rx = radius[0] - radius[2];
-    ry = radius[1] - radius[2];
-
-    max_r = max(abs(rx), abs(ry));
-    min_r = max(0.001, min(abs(rx), abs(ry)));
-
-    // Grundauflösung für normalen Kreis
-    baseStep = 360 / resolution;
-
-    // adaptive Grenzen
-    minStep = baseStep / sqrt(max_r / min_r);
-    maxStep = baseStep * 1.5;
-
-    // maximale Krümmung liegt ungefähr am kleinen Radius-Ende
-    kMax = max(
-        mb_pe_curvature(rx, ry, 0),
-        mb_pe_curvature(rx, ry, 90),
-        mb_pe_curvature(rx, ry, 180),
-        mb_pe_curvature(rx, ry, 270)
-    );
-
-    angles = mb_pe_adaptive_angles(
-        rx, ry,
-        startAngle, endAngle,
-        baseStep,
-        minStep,
-        maxStep,
-        kMax
-    );
-    la = len(angles);
-
-    rotate(rot){
-        for (a = angles) {
-        //for (i = [0 : 1 : la - 1]) {
-            //a = angles[i];
-            
-            /*
-            prev_a = angles[(i - 90 + la) % la];
-            next_a = angles[(i + 90) % la];
-            draw = (a >= from && a <= to) || (prev_a >= from && prev_a <= to) || (next_a >= from && next_a <= to);
-            echo(draw = draw, a = a, prev_a = prev_a, next_a = next_a, from = from, to = to);
-            
-            if(true || draw){*/
-            
-            p = [
-                rx * cos(a),
-                ry * sin(a),
-                0
-            ];
-
-            tangent_angle = atan2(ry * cos(a), -rx * sin(a));
-
-            translate(p)
-                rotate([0, 0, tangent_angle])
-                    rotate([0, 90, 0])
-                        cylinder(
-                            h = h,
-                            r = radius[2],
-                            center = center,
-                            $fn = resolution // max(8, ceil(radius[2] / max_r * resolution))
-                        );
-            //}
-        }
+        shape = [
+            [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
+        ];
+        
+        mb_prismoid(shape = shape, height = size[2], radius = rad, center = center, resolution = resolution);
     }
 }
 
 
+module mb_pseudo_ellipse_ring_x(
+    s=[40, 25, 3],
+    resolution=32,
+    h=3,
+    center=true,
+    startAngle=0,
+    endAngle=360,
+    capWidth=18,
+    capStepT=0.5,
+    capThreshold=0.15
+) {
+    x_smallest = s[0] < s[1] && s[0] < s[2];
+    y_smallest = s[1] < s[0] && s[1] < s[2];
 
-sr = [5, 12, 20];
-corner = [1,0];
+    radius = x_smallest ? 
+        [max(0.001, s[2]), max(0.001, s[1]), max(0.001, s[0])] :
+        y_smallest ?
+        [max(0.001, s[0]), max(0.001, s[2]), max(0.001, s[1])] :
+        s;
 
-color("red")
-mb_pseudo_ellipse_ring(
-    corner = corner,
-    s = sr,
-    resolution = 100,
-    h = 0.001,
-    full = false
+    rot = x_smallest ? [0, 90, 0] : y_smallest ? [90, 0, 0] : [0, 0, 0];
+
+    rx = max(0.001, radius[0] - radius[2]);
+    ry = max(0.001, radius[1] - radius[2]);
+
+    angleSpan = endAngle - startAngle;
+
+    max_r = max(abs(rx), abs(ry));
+    min_r = max(0.001, min(abs(rx), abs(ry)));
+
+    count = max(1, ceil(resolution * abs(angleSpan) / 360));
+    steps = (count > 1) ? (count - 1) : 1;
+
+    capStep = min_r / max_r * 25;
+
+    baseAngles = [
+        for (i = [0 : count - 1])
+            startAngle + angleSpan * i / steps
+    ];
+
+    // Wenn rx sehr klein ist: runde Endkappen oben/unten extra sampeln
+    xCaps =
+        abs(rx) / max_r < capThreshold
+            ? concat(
+                mb_pe_cap_angles(90, capWidth, capStep),
+                mb_pe_cap_angles(270, capWidth, capStep)
+              )
+            : [];
+
+    // Wenn ry sehr klein ist: runde Endkappen links/rechts extra sampeln
+    yCaps =
+        abs(ry) / max_r < capThreshold
+            ? concat(
+                mb_pe_cap_angles(0, capWidth, capStep),
+                mb_pe_cap_angles(180, capWidth, capStep),
+                mb_pe_cap_angles(360, capWidth, capStep)
+              )
+            : [];
+
+    angles = concat(
+        baseAngles,
+        mb_pe_filter_angles(xCaps, startAngle, endAngle),
+        mb_pe_filter_angles(yCaps, startAngle, endAngle)
+    );
+
+    rotate(rot){
+    for (a = angles) {
+        p = [
+            rx * cos(a),
+            ry * sin(a),
+            0
+        ];
+
+        tangent_angle = atan2(ry * cos(a), -rx * sin(a));
+
+        translate(p)
+            rotate([0, 0, tangent_angle])
+                rotate([0, 90, 0])
+                    cylinder(
+                        h = h,
+                        r = radius[2],
+                        center = center,
+                        $fn = resolution //max(8, ceil(radius[2] / max_r * resolution))
+                    );
+    }
+    }
+}
+
+function mb_pe_cap_angles(center, width, step) =
+    [for (a = [center - width : step : center + width]) a];
+
+function mb_pe_in_angle_range(a, a0, a1) =
+    a >= min(a0, a1) && a <= max(a0, a1);
+
+function mb_pe_filter_angles(angles, a0, a1) =
+    [for (a = angles) if (mb_pe_in_angle_range(a, a0, a1)) a];
+
+
+
+
+*mb_pseudo_ellipse_ring_x(
+    s=[5, 10, 10],
+    resolution=100,
+    h=0.2,
+    capWidth=0.1,
+    //capStep=0.001,
+    capThreshold=0.15
 );
 
-color("#ffffff55")
+
+
+
+
+sr = [80, 10.1, 10];
+corner = [1,0];
+
+
+*color("#ffffff55")
 mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolution = 80);
 
 
@@ -482,15 +441,17 @@ mb_prismoid(shape = [
 
 //mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-//mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
 //color("#ffffffaa")
 //cube(size = [120, 80, 50], center = true);
 
 
-
+//mb_rounded_rect_ext(center = false, size = [120, 80, 50]);
 *mb_prismoid(shape = [
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [50, 30, [10,10,0]], [50, -30, [10,10,0]]],
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
     
 ], height = 120, socket = 20, radius = 0, resolution = 160, center = true);
+
+
 
