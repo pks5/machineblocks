@@ -83,7 +83,7 @@ function mb_corner_offset(c, r, f = 0.5) = [
         (c[0] == 0 ? -1 : 1) * f * r[2]
     ];
 
-module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], resolution = 80){
+module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], resolution = 80, debug = false){
     radius = mb_resolve_xyz(xyz = radius, min_value = 0.001);
     max_rad = max(radius[0], radius[1], radius[2]);
     rad_rel = [radius[0] / max_rad, radius[1] / max_rad, radius[2] / max_rad];
@@ -120,12 +120,17 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
                     capThreshold=0.15
                 );
 
-                echo (m = "ellipse", radius = radius);
+                if(debug){
+                    echo (m = "ellipse", radius = radius);
+                }
+                
             }
             else{
-                echo (m = "spehere", radius = radius);
                 scale(rad_rel)
                     sphere(r = max_rad, $fn = resolution);
+                if(debug){
+                    echo (m = "spehere", radius = radius);
+                }
             }
         }
 }
@@ -240,7 +245,7 @@ function mb_xyz_rad_convert(xyz_rad) =
     undef;
 
 
-module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, center = true, resolution = 80){
+module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, center = true, resolution = 80, debug = false){
     min_max = mb_min_max_points(shape, height);
 
     sx = min_max[1][0] - min_max[0][0];
@@ -277,15 +282,17 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
 
                         angle = mb_corner_angle(corner, prev_point, point, next_point, socket_point);
 
-                        //echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
-                        
+                        if(debug){
+                            echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
+                        }
+
                         //if(j % 2 == 0){
                             translate(point) 
-                                mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution);
+                                mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
 
                             if((socket_bottom != undef && (i == 0)) || (socket_top != undef && (i == 1))){
                                 translate(socket_point) 
-                                    mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution);
+                                    mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
                             }
                         //}
                     }
