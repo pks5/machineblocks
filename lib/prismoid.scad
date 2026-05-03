@@ -331,11 +331,13 @@ function mb_point_radius(shape, radius, i, j) =
               undef;
 
 function mb_point_corner(shape, i, j) = 
+    [i, j];
+    /*
     let(plane = mb_prismoid_plane(shape, i),
         sl = len(plane))
     sl == 4 ? 
     [i, 2 * j] : 
-    (sl == 8 ? [i, j] : undef);
+    (sl == 8 ? [i, j] : undef);*/
 
 function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [[0, 0], [0, 0]]) =
     let ( p = mb_point(shape, height, i, j))
@@ -409,6 +411,35 @@ function mb_prismoid_shape_resolve(shape) =
         mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
     ];
 
+function mb_prismoid_rplane_resolve(v) =
+    is_undef(v) ? 
+        [for (i = [0:7]) undef] :
+
+    is_num(v) ?
+        [for (i = [0:7]) [v, v, v]] :
+
+    len(v) == 3 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) ?
+        [for (i = [0:7]) v] :
+
+    [
+        for (i = [0:7])
+            i < len(v)
+                ? (
+                    is_undef(v[i]) ? undef :
+                    is_num(v[i]) ? [v[i], v[i], v[i]] :
+                    v[i]
+                  )
+                : undef
+    ];
+
+function mb_prismoid_radius_resolve(radius) =
+    let(full_radius = is_list(radius) && is_list(radius[0]),
+        rplane = full_radius ? radius[0] : mb_prismoid_rplane_resolve(radius))
+    [
+        mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 0) : rplane),
+        mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 1) : rplane)
+    ];
+
 function mb_combine_shape(shape0, shape1) = 
     [];
 
@@ -431,7 +462,7 @@ function mb_combine_shape(shape0, shape1) =
 */
 module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
     shape = mb_prismoid_shape_resolve(shape);
-    radius = mb_prismoid_shape_resolve(radius);
+    radius = mb_prismoid_radius_resolve(radius);
     min_max = mb_min_max_points(shape, height);
     align = align == "sticky" ? "sticky" : mb_align_resolve(align);
 
@@ -555,7 +586,7 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = undef, radius = 0, resolution = 160);
 
-*mb_prismoid(shape = [
+mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
@@ -563,7 +594,7 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-mb_cube(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+*mb_cube(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
 //color("#ffffffaa")
 //cube(size = [120, 80, 50], center = true);
 
@@ -573,7 +604,7 @@ mb_cube(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], 
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [50, 30, [10,10,0]], [50, -30, [10,10,0]]],
     [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
     
-], height = 120, socket = 20, radius = 0, resolution = 160, center = true);
+], height = 120, socket_top = 20, radius = 0, resolution = 160);
 
 
 
