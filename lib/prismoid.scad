@@ -257,17 +257,17 @@ module mb_prismoid(shape, height, socket = undef, radius = 0, center = true, res
     }
 }
 
-module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
+module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
-    rad = mb_xyz_rad_convert(radius);
+    rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
 
-    echo (rad = rad);
     hw = 0.5 * size[0];
     hh = 0.5 * size[1];
 
     shape = [
         [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
     ];
+    
     mb_prismoid(shape = shape, height = size[2], radius = rad, center = center, resolution = resolution);
 }
 
@@ -285,9 +285,11 @@ module mb_rounded_rect_ext(size, radius = 0, center = true, resolution = 80){
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = 30, radius = 10, resolution = 160);
 
-mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0]);
+*mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-
+mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 25, 15], [25, 25, 15], [25, 25, 15], [25, 25, 15]]]);
+//color("#ffffffaa")
+//cube(size = [120, 80, 50], center = true);
 
 *mb_rounding_corner(corner = [0, 0], radius = [50,100,50], angle = [-45, 45, 0, 0], resolution = 80);
 

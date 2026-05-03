@@ -1,5 +1,6 @@
-use <polygon.scad>;
-
+//use <polygon.scad>;
+use <prismoid.scad>;
+/*
 module mb_roundedcube(size = [1, 1, 1], center = false, radius = 0.5, apply_to = "all", resolution = 20) {
 	// If single value, convert to [x, y, z] vector
 	size = (size[0] == undef) ? [size, size, size] : size;
@@ -72,11 +73,12 @@ module mb_roundedcube_simple(size = [1, 1, 1], center = false, radius = 0.5, res
 		]);
 		sphere(r = radius, $fn = resolution);
 	}
-}
+}*/
 
 module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, resolution = 20) {
 	size = (size[0] == undef) ? [size, size, size] : size;
-
+	mb_rounded_rect_ext(size = size, radius = [0, 0, radius], center = center, xyz_rad = true, resolution = resolution);
+	/*
 	obj_translate = (center == false) ?
 		[0, 0, 0] : [
 			-(size[0] / 2),
@@ -114,12 +116,17 @@ module mb_roundedcube_custom(size = [1, 1, 1], center = false, radius = 0.1, res
 			}
 		}
 	}
+	*/
 }
 
 module mb_rounded_block(size, resolution, center=true, radius = 0){
 	if((radius == 0) || (radius == [0, 0, 0]) || (radius == [[0,0,0,0], [0,0,0,0], [0,0,0,0]])){
 		cube(size = size, center = center);
 	}
+	else{
+		mb_rounded_rect_ext(size = size, radius = radius, center = center, xyz_rad = true, resolution = resolution);
+	}
+	/*
 	else if((radius[0] == 0 || radius[0] == [0,0,0,0]) && (radius[1] == 0 || radius[1] == [0,0,0,0]) && (radius[2] != 0 && radius[2] != [0,0,0,0])){
 		mb_roundedcube_custom(
 			size = size, 
@@ -160,13 +167,15 @@ module mb_rounded_block(size, resolution, center=true, radius = 0){
 			);
 		}
 	}
+	*/
 }
 
+/*
 module mb_torus(circleRadius, torusRadius, circleResolution = 30, torusResolution = 30){
     rotate_extrude(convexity = 10, $fn = torusResolution)
         translate([torusRadius - circleRadius, 0, 0])
             circle(r = circleRadius, $fn = circleResolution);
-}
+}*/
 
 module mb_beveled_rounded_block(
 	bevel,
@@ -175,7 +184,10 @@ module mb_beveled_rounded_block(
 	height,
 	roundingRadius,
 	roundingResolution
-){
+){ echo(shape = [bevel], height = height);
+	
+	mb_prismoid(shape = [bevel], height = height, radius = mb_xyz_rad_convert(roundingRadius), resolution = roundingResolution, center = true);
+	/*
 	if(bevel == false){
 		mb_rounded_block(
 			size=[sizeX, sizeY, height], 
@@ -194,5 +206,5 @@ module mb_beveled_rounded_block(
 				resolution = roundingResolution
 			);
 		}
-	}
+	}*/
 }
