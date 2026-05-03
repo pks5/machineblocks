@@ -38,10 +38,6 @@ module mb_base_cutout(
     cutoutClampRoundingRadius,
     wallThickness,
     
-    //Top Plate
-    topPlateZ,
-    topPlateHeight,
-
     //Pit
     pit,
     pitDepth,
@@ -89,7 +85,6 @@ module mb_base_cutout(
             offsetX = offsetX, 
             offsetY = offsetY, 
             baseHeight=baseHeight, 
-            topPlateHeight = topPlateHeight, 
             baseClampOffset=baseClampOffset,
             baseRoundingRadiusZ = baseRoundingRadiusZ,
             cutoutRoundingRadius = cutoutRoundingRadius);
@@ -123,7 +118,8 @@ module mb_base_cutout(
                         /*
                         * Bottom Hole
                         */
-                        translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
+                        baseCutoutTopHeight = baseCutoutDepth - (baseClampOffset + baseClampHeight);
+                        translate([0, 0,-0.5*baseHeight + baseClampOffset + baseClampHeight + 0.5*baseCutoutTopHeight ]){
                             /*
                             mb_beveled_rounded_block(
                                 bevel = beveled ? bevelInner : false,
@@ -136,7 +132,7 @@ module mb_base_cutout(
 
                             mb_prismoid(
                                 shape = [bevelInner], 
-                                height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
+                                height = baseCutoutTopHeight,
                                 radius = mb_xyz_rad_convert(cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius]), 
                                 resolution = cutoutRoundingRadiusQuality
                             );
@@ -145,7 +141,7 @@ module mb_base_cutout(
                         * Clamp Offset
                         */
                         if(baseClampOffset > 0){
-                            translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
+                            translate([0, 0, 0.5 * (-baseHeight + baseClampOffset - cutOffset)]){
                                 /*
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelInner : false,

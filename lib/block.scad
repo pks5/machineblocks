@@ -1358,9 +1358,6 @@ module mb_block(
                                                                 
                                                                 wallThickness = wallThickness,
                                                                 
-                                                                topPlateZ = topPlateZ,
-                                                                topPlateHeight = resultingTopPlateHeight,
-                                                        
                                                                 pit = recess,
                                                                 pitDepth = resultingPitDepth,
                                                                 
