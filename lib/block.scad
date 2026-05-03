@@ -108,7 +108,7 @@ function mb_param_slopeBaseHeightLower(config, settings, default = undef) = mb_p
 function mb_param_slopeBaseHeightLowerInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLowerInner", default != undef ? default : 1.125);
 function mb_param_slopeBaseHeightUpper(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightUpper", default != undef ? default : 1);
 
-function mb_param_bevel(config, settings, default = undef) = mb_xy_corner_side_resolve(mb_param(config, settings, "bevel", default != undef ? default : []));
+function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : []);
 
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
@@ -886,14 +886,16 @@ module mb_block(
 
     
     //Bevel
-    beveled = true; //bevel != [[0, 0], [0, 0], [0, 0], [0, 0]];
-    bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
+    beveled = true;
+    cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
+    bevelOuter = cornersMod; //mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
     bevelCrop = mb_inset_quad_lrfh(bevelOuter, mb_array_mul(baseModRes, -1));
+    
     //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
     bevelOuterAdjusted =
         mb_inset_quad_lrfh(
             bevelOuter,
-            mb_array_mul(sideAdjustment, -1)
+            mb_array_mul(bsa, -1)
         );
     
     bevelInner = mb_inset_quad_lrfh(bevelCrop, wallThickness);
@@ -901,7 +903,7 @@ module mb_block(
     bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);
     
     //corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
-    cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
+    
     echo (cornersMod = cornersMod, baseMod = baseModR, objectSizeMod = objectSizeMod);
     //cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
     cornersInnerOrg = mb_inset_quad_lrfh(cornersMod, wallThicknessOrg);
@@ -1247,7 +1249,6 @@ module mb_block(
             tubeZSize = tubeZSize,
             xyScrewHolesZ = xyScrewHolesZ,
             pitFloorZ = pitFloorZ,
-            beveled = beveled,
             bevel = bevelRes,
             bevelOuterAdjusted = bevelOuterAdjusted,
             baseRoundingRadiusZ = baseRoundingRadiusZ,

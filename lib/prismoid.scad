@@ -1,3 +1,5 @@
+use <utils.scad>;
+
 module mb_corner_cut(size, c = [0, 0]){
     sx = size[0];
     sy = size[1];
@@ -245,8 +247,9 @@ function mb_xyz_rad_convert(xyz_rad) =
     undef;
 
 
-module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, center = true, resolution = 80, debug = false){
+module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
     min_max = mb_min_max_points(shape, height);
+    align = align == "sticky" ? "sticky" : mb_align_resolve(align);
 
     sx = min_max[1][0] - min_max[0][0];
     sy = min_max[1][1] - min_max[0][1];
@@ -254,7 +257,11 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
     ty = - 0.5 * (min_max[1][1] + min_max[0][1]);
     //echo(min_max = min_max, sx = sx, sy = sy, tx = tx, ty = ty);
 
-    t = center ? [tx, ty, 0] : [tx + 0.5 * sx, ty + 0.5 * sy, 0.5 * height];
+    center = align[0] == "center" && align[1] == "center" && align[2] == "center";
+
+    t = align == "sticky" ? 
+        [0, 0, 0] :
+        center ? [tx, ty, 0] : [tx + 0.5 * sx, ty + 0.5 * sy, 0.5 * height];
 
     translate(t){
         hull(){
@@ -319,7 +326,7 @@ module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, res
             [[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]
         ];
         
-        mb_prismoid(shape = shape, height = size[2], radius = rad, center = center, resolution = resolution);
+        mb_prismoid(shape = shape, height = size[2], radius = rad, align = center ? "center" : "start", resolution = resolution);
     }
 }
 

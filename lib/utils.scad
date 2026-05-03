@@ -251,7 +251,7 @@ function mb_xy_add_generic(a, b, i = 0) =
             [[a[i][0] + b[i][0], a[i][1] + b[i][1]]],
             mb_xy_add_generic(a, b, i + 1)
         );
-        
+
 /*
 * MISC
 */
