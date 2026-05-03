@@ -104,7 +104,7 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
             if((radius[0] != 0 && radius[1] != 0 && radius[2] != 0) && (true || radius[0] != radius[1] || radius[1] != radius[2])){
                 //hull()
                 mb_pseudo_ellipse_ring(
-    
+                    corner = corner,
                     s = radius,
                     resolution = resolution,
                     h = 0.001
@@ -336,14 +336,40 @@ module mb_pseudo_ellipse_ring(
     s=[40, 25, 3],
     resolution=32,
     h=3,
-    center=true
+    center=true,
+    corner = [0,0],
+    full = true
 ) {
 
-    startAngle = 0;
-    endAngle = 360;
+    // 3 => 6, 2 => 0, 1 ==> 2, 0 => 4
 
     x_smallest = s[0] < s[1] && s[0] < s[2];
     y_smallest = s[1] < s[0] && s[1] < s[2];
+
+    cn = corner[1] == 4 ? 0 :
+        corner[1] == 2 ? 1 :
+        corner[1] == 0 ? 2 :
+        corner[1] == 6 ? 3 : 0;
+
+   cxs = corner[0] == 0 && (corner[1] == 2 || corner[1] == 4) ? 0 :
+        corner[0] == 1 && (corner[1] == 2 || corner[1] == 4) ? 1 :
+        corner[0] == 1 && (corner[1] == 0 || corner[1] == 6) ? 2 :
+        corner[0] == 0 && (corner[1] == 0 || corner[1] == 6) ? 3 : 0;
+      //  cxs = 1; // c06, c04 => 0, c16, c14 => 1, c10, c12 => 2, c00, c02 => 3
+
+    cys = corner[0] == 1 && (corner[1] == 4 || corner[1] == 6) ? 0 :
+        corner[0] == 1 && (corner[1] == 0 || corner[1] == 2) ? 1 :
+        corner[0] == 0 && (corner[1] == 0 || corner[1] == 2) ? 2 :
+        corner[0] == 0 && (corner[1] == 4 || corner[1] == 6) ? 3 : 0;
+
+       // cys = 3; // c14, c16 => 0, c10, c12 => 1, c00, c02 => 2, c04, c06 => 3
+
+    c = x_smallest ? cxs : (y_smallest ? cys :cn);
+
+    startAngle =full ? 0 : c * 90;
+    endAngle = full ? 360 : 90 + c *90;
+
+    
 
     radius = x_smallest ? 
         [max(0.0001, s[2]), max(0.0001, s[1]), max(0.0001, s[0])] :
@@ -352,6 +378,8 @@ module mb_pseudo_ellipse_ring(
         s;
 
     rot = x_smallest ? [0, 90, 0] : y_smallest ? [90, 0, 0] : [0, 0, 0];
+
+    
 
     rx = radius[0] - radius[2];
     ry = radius[1] - radius[2];
@@ -408,27 +436,22 @@ module mb_pseudo_ellipse_ring(
 
 
 
-sr = [20, 12, 0];
-//hull()
+sr = [5, 12, 20];
+corner = [1,0];
 
-//rotate([90,0,0]) // y => z, z => x, x => y 
-//rotate([0,90,0]) // x => z, y => x, z => y 
 color("red")
-hull()
 mb_pseudo_ellipse_ring(
-    
+    corner = corner,
     s = sr,
     resolution = 100,
-    h = 0.001
+    h = 0.001,
+    full = false
 );
 
-*color("#ffffff55")
-mb_rounding_corner(corner = [0, 4], radius = sr, angle = [0, 0, 0, 0], resolution = 80);
-
-//cube([64, 20, 10], center = true);
+color("#ffffff55")
+mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolution = 80);
 
 
-//sphere(r = 20, $fn = 100);
 
 *mb_prismoid(shape = [
     [[-70, -50], undef, [-200, 50], undef, [50, 40], undef, [50, -90], undef],
@@ -441,11 +464,11 @@ mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = 30, radius = [10, 3, 6], resolution = 160);
+], height = 120, socket = 30, radius = [10, 4, 6], resolution = 160);
 
-*mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
+//mb_rounded_rect_ext(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-*mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+//mb_rounded_rect_ext(size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
 //color("#ffffffaa")
 //cube(size = [120, 80, 50], center = true);
 
