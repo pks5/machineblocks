@@ -366,10 +366,11 @@ module mb_pseudo_ellipse_ring(
 
     c = x_smallest ? cxs : (y_smallest ? cys :cn);
 
-    startAngle =full ? 0 : c * 90;
-    endAngle = full ? 360 : 90 + c *90;
+    startAngle = 0;
+    endAngle = 360;
 
-    
+    from = c * 90;
+    to = 90 + c *90;
 
     radius = x_smallest ? 
         [max(0.0001, s[2]), max(0.0001, s[1]), max(0.0001, s[0])] :
@@ -410,9 +411,21 @@ module mb_pseudo_ellipse_ring(
         maxStep,
         kMax
     );
+    la = len(angles);
 
     rotate(rot){
         for (a = angles) {
+        //for (i = [0 : 1 : la - 1]) {
+            //a = angles[i];
+            
+            /*
+            prev_a = angles[(i - 90 + la) % la];
+            next_a = angles[(i + 90) % la];
+            draw = (a >= from && a <= to) || (prev_a >= from && prev_a <= to) || (next_a >= from && next_a <= to);
+            echo(draw = draw, a = a, prev_a = prev_a, next_a = next_a, from = from, to = to);
+            
+            if(true || draw){*/
+            
             p = [
                 rx * cos(a),
                 ry * sin(a),
@@ -430,6 +443,7 @@ module mb_pseudo_ellipse_ring(
                             center = center,
                             $fn = resolution // max(8, ceil(radius[2] / max_r * resolution))
                         );
+            //}
         }
     }
 }
