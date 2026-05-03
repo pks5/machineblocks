@@ -11,6 +11,7 @@
 */
 
 use <shapes.scad>;
+use <prismoid.scad>;
 use <base.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;
@@ -1527,6 +1528,7 @@ module mb_block(
                                                                         center=true
                                                                     );
 
+                                                                    /*
                                                                     mb_beveled_rounded_block(
                                                                         bevel = beveled ? bevelTopPlateHelper : false,
                                                                         sizeX = objectSizeMod[0] - 2*wallThickness - 2*topPlateHelperThickness,
@@ -1534,6 +1536,13 @@ module mb_block(
                                                                         height = cutMultiplier * (topPlateHelperHeight + cutOffset),
                                                                         roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
                                                                         roundingResolution = topPlateHelperRoundingRadiusQuality
+                                                                    );*/
+
+                                                                    mb_prismoid(
+                                                                        shape = [bevelTopPlateHelper], 
+                                                                        height = cutMultiplier * (topPlateHelperHeight + cutOffset), 
+                                                                        radius = mb_xyz_rad_convert(topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]), 
+                                                                        resolution = topPlateHelperRoundingRadiusQuality
                                                                     );
 
                                                                     /*
@@ -2045,6 +2054,14 @@ module mb_block(
                                                                     previewQuality
                                                                 );
 
+                                                                mb_prismoid(
+                                                                    shape = [mb_inset_quad_lrfh(bevelCrop, baseClampWallThickness+cutTolerance)], 
+                                                                    height = cutMultiplier * (knobCutHeight + cutOffset), 
+                                                                    radius = mb_xyz_rad_convert(cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius]), 
+                                                                    resolution = cutoutClampRoundingRadiusQuality
+                                                                );
+
+                                                                /*
                                                                 mb_beveled_rounded_block(
                                                                     bevel = beveled ? mb_inset_quad_lrfh(bevelCrop, baseClampWallThickness+cutTolerance) : false,
                                                                     sizeX = objectSizeMod[0] - 2 * (baseClampWallThickness+cutTolerance),
@@ -2052,7 +2069,7 @@ module mb_block(
                                                                     height = cutMultiplier * (knobCutHeight + cutOffset),
                                                                     roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                                                     roundingResolution = cutoutClampRoundingRadiusQuality
-                                                                );
+                                                                );*/
                                                             }
                                                         }
                                                     }
@@ -2261,6 +2278,14 @@ module mb_block(
                                                             size = scale * surfacePatternScale,
                                                             center = true
                                                         );
+                                                        mb_prismoid(
+                                                            shape = [bevelTexture], 
+                                                            height = (2 + 0.1) * abs(surfacePatternDepth), 
+                                                            radius = mb_xyz_rad_convert(textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius]), 
+                                                            resolution = textureRoundingRadiusQuality
+                                                        );
+
+                                                        /*
                                                         mb_beveled_rounded_block(
                                                             bevel = beveled ? bevelTexture : false,
                                                             sizeX = objectSizeX - wallThickness,
@@ -2268,7 +2293,7 @@ module mb_block(
                                                             height = (2 + 0.1) * abs(surfacePatternDepth),
                                                             roundingRadius = textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius],
                                                             roundingResolution = textureRoundingRadiusQuality
-                                                        );
+                                                        );*/
                                                     }
                                         } // End color
                                     } // End if surface pattern
@@ -2562,7 +2587,7 @@ module mb_block(
                                                                         cylinder(h = portCutThickness, r=0.5*shape[3][0], center=true, $fn=20);
                                                                     }
                                                                     else if(shape[0] == "rect"){
-                                                                        mb_roundedcube_custom(
+                                                                        mb_rounded_rect_ext(
                                                                             size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
                                                                             radius = shape[3][1], center=true, resolution=20);
                                                                     }

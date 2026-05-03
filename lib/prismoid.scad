@@ -297,7 +297,7 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
 
 module mb_rounded_rect_ext(size, radius = 0, xyz_rad = false, center = true, resolution = 80){
     size = mb_resolve_xyz(xyz = size);
-    rad0 = xyz_rad && (radius == 0 || radius == [0, 0, 0] || radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
+    rad0 = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
 
     if(rad0){
         cube(size, center = center);

@@ -1,7 +1,7 @@
 use <utils.scad>;
 use <quad.scad>;
 use <polygon.scad>;
-use <shapes.scad>;
+use <prismoid.scad>;
 use <quality.scad>;
 
 module mb_tongue(
@@ -83,6 +83,20 @@ module mb_tongue(
     difference(){
         union(){
             difference(){
+                mb_prismoid(
+                    shape = [bevelTongueOuter], 
+                    height = height, 
+                    radius = mb_xyz_rad_convert(tongueRadius == 0 ? 0 : [0, 0, tongueRadius]), 
+                    resolution = tongueRadiusQuality
+                );
+                mb_prismoid(
+                    shape = [bevelTongueInner], 
+                    height = tongueHeight * cutMultiplier, 
+                    radius = mb_xyz_rad_convert(tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner]), 
+                    resolution = tongueRadiusInnerQuality
+                );
+
+                /*
                 mb_beveled_rounded_block(
                     bevel = beveled ? bevelTongueOuter : false,
                     sizeX = tongueSizeX,
@@ -98,7 +112,7 @@ module mb_tongue(
                     height = tongueHeight * cutMultiplier,
                     roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
                     roundingResolution = tongueRadiusInnerQuality
-                );
+                );*/
 
                 /*
                 * Cut knobGrooveGaps
@@ -133,6 +147,20 @@ module mb_tongue(
             if(tongueClampThickness > 0){
                 translate([0, 0, 0.5 * (tongueHeight - tongueClampHeight) - tongueClampOffset]){    
                     difference(){ 
+                        mb_prismoid(
+                            shape = [bevelTongueClampOuter], 
+                            height = tongueClampHeight, 
+                            radius = mb_xyz_rad_convert(tongueRadius == 0 ? 0 : [0, 0, tongueRadius]), 
+                            resolution = tongueRadiusQuality
+                        );
+                        mb_prismoid(
+                            shape = [bevelTongueClampInner], 
+                            height = tongueClampHeight * cutMultiplier, 
+                            radius = mb_xyz_rad_convert(tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner]), 
+                            resolution = tongueRadiusInnerQuality
+                        );
+                        
+                        /*
                         mb_beveled_rounded_block(
                             bevel = beveled ? bevelTongueClampOuter : false,
                             sizeX = tongueSizeX + 2 * tongueClampThickness,
@@ -148,7 +176,7 @@ module mb_tongue(
                             height = tongueClampHeight * cutMultiplier,
                             roundingRadius = tongueRadiusInner == 0 ? 0 : [0, 0, tongueRadiusInner],
                             roundingResolution = tongueRadiusInnerQuality
-                        );
+                        );*/
                     
                         /*
                         * Cut knobGrooveGaps

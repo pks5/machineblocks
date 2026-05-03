@@ -1,4 +1,5 @@
 use <shapes.scad>;
+use <prismoid.scad>;
 use <connectors.scad>;
 use <utils.scad>;
 use <quad.scad>;
@@ -124,6 +125,7 @@ module mb_base_cutout(
                         * Bottom Hole
                         */
                         translate([0, 0, 0.5*(baseClampOffset + baseClampHeight - (pit ? pitDepth : 0) - topPlateHeight) ]){
+                            /*
                             mb_beveled_rounded_block(
                                 bevel = beveled ? bevelInner : false,
                                 sizeX = objectSize[0] - 2*wallThickness,
@@ -131,6 +133,13 @@ module mb_base_cutout(
                                 height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
                                 roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                 roundingResolution = cutoutRoundingRadiusQuality
+                            );*/
+
+                            mb_prismoid(
+                                shape = [bevelInner], 
+                                height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
+                                radius = mb_xyz_rad_convert(cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius]), 
+                                resolution = cutoutRoundingRadiusQuality
                             );
                         }
                         /*
@@ -138,6 +147,7 @@ module mb_base_cutout(
                         */
                         if(baseClampOffset > 0){
                             translate([0, 0, 0.5*(baseClampOffset - baseHeight - cutOffset)]){
+                                /*
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelInner : false,
                                     sizeX = objectSize[0] - 2 * wallThickness,
@@ -145,6 +155,13 @@ module mb_base_cutout(
                                     height = baseClampOffset + cutOffset,
                                     roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
                                     roundingResolution = cutoutRoundingRadiusQuality
+                                );*/
+
+                                mb_prismoid(
+                                    shape = [bevelInner], 
+                                    height = baseClampOffset + cutOffset,
+                                    radius = mb_xyz_rad_convert(cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius]), 
+                                    resolution = cutoutRoundingRadiusQuality
                                 );
                             }
                         }
@@ -166,6 +183,7 @@ module mb_base_cutout(
                                     previewQuality
                                 );
 
+                    /*
                     mb_beveled_rounded_block(
                         bevel = beveled ? bevelClamp : false,
                         sizeX = objectSize[0] - 2 * baseClampWallThickness,
@@ -173,6 +191,13 @@ module mb_base_cutout(
                         height = baseClampHeight * cutMultiplier,
                         roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                         roundingResolution = cutoutClampRoundingRadiusQuality
+                    );*/
+
+                    mb_prismoid(
+                        shape = [bevelClamp], 
+                        height = baseClampHeight * cutMultiplier, 
+                        radius = mb_xyz_rad_convert(cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius]), 
+                        resolution = cutoutClampRoundingRadiusQuality
                     );
                 }
             }
@@ -300,6 +325,7 @@ module mb_base(
                             previewQuality
                         );
 
+                        /*
                         mb_beveled_rounded_block(
                             bevel = beveled ? bevelOuterAdjusted : false,
                             sizeX = objectSizeXAdjusted,
@@ -307,6 +333,13 @@ module mb_base(
                             height = height,
                             roundingRadius = baseRoundingRadius,
                             roundingResolution = baseRoundingRadiusQuality
+                        );*/
+
+                        mb_prismoid(
+                            shape = [bevelOuterAdjusted], 
+                            height = height, 
+                            radius = mb_xyz_rad_convert(baseRoundingRadius), 
+                            resolution = baseRoundingRadiusQuality
                         );
 
                         if(baseClampThicknessOuter > 0){
@@ -323,7 +356,8 @@ module mb_base(
 
                             //Outer clamp
                             //Only used to produce cutouts
-                            translate([0,0,-0.5*(height-baseClampHeight) + baseClampOffset])
+                            translate([0,0,-0.5*(height-baseClampHeight) + baseClampOffset]){
+                                /*
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelBaseClampOuter : false,
                                     sizeX = objectSizeXAdjusted + 2*baseClampThicknessOuter,
@@ -331,7 +365,15 @@ module mb_base(
                                     height = baseClampHeight,
                                     roundingRadius = baseClampOuterRoundingRadius,
                                     roundingResolution = baseClampOuterRoundingRadiusQuality
+                                );*/
+                            
+                                mb_prismoid(
+                                    shape = [bevelBaseClampOuter], 
+                                    height = baseClampHeight, 
+                                    radius = mb_xyz_rad_convert(baseClampOuterRoundingRadius), 
+                                    resolution = baseClampOuterRoundingRadiusQuality
                                 );
+                            }
                         }
                     }
 
@@ -358,6 +400,14 @@ module mb_base(
                                     previewQuality
                                 );
 
+                                mb_prismoid(
+                                    shape = [bevelReliefCut], 
+                                    height = cutMultiplier * (baseReliefCutHeight + cutOffset), 
+                                    radius = mb_xyz_rad_convert(reliefRadius == 0 ? 0 : [0, 0, reliefRadius]), 
+                                    resolution = reliefRadiusQuality
+                                );
+
+                                /*
                                 mb_beveled_rounded_block(
                                     bevel = beveled ? bevelReliefCut : false,
                                     sizeX = objectSizeMod[0] - 2*baseReliefCutThickness,
@@ -365,7 +415,7 @@ module mb_base(
                                     height = cutMultiplier * (baseReliefCutHeight + cutOffset),
                                     roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
                                     roundingResolution = reliefRadiusQuality
-                                );
+                                );*/
                             }
                         }
                     }
@@ -416,7 +466,7 @@ module mb_base(
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
-                            mb_rounded_block(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
+                            mb_rounded_rect_ext(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
                     }
                 }
 

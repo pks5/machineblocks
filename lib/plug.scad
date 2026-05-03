@@ -1,4 +1,4 @@
-use <shapes.scad>;
+use <prismoid.scad>;
 
 //Dupont plug grid size is 2.54 mm
 module mb_dupont_plug(
@@ -20,7 +20,7 @@ module mb_dupont_plug(
     function is_blind(a, b, i) = (i < len(blinds)) && (((a == blinds[i][0]) && (b == blinds[i][1])) || is_blind(a, b, i + 1)); 
 
     difference(){
-        mb_roundedcube_custom(
+        mb_rounded_rect_ext(
             size = [totalWidth, totalHeight, totalDepth], 
             center = true, 
             radius = borderRadius, 
