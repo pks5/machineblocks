@@ -113,6 +113,7 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
                 );*/
 
                 mb_pseudo_ellipse_ring(
+                    corner = corner,
                     s=radius,
                     resolution=resolution,
                     h=0.001,
@@ -191,14 +192,41 @@ module mb_pseudo_ellipse_ring(
     resolution=32,
     h=3,
     center=true,
-    startAngle=0,
-    endAngle=360,
+    corner = [0, 0],
+    
     capWidth=18,
     capStepT=0.5,
     capThreshold=0.15
 ) {
     x_smallest = s[0] < s[1] && s[0] < s[2];
     y_smallest = s[1] < s[0] && s[1] < s[2];
+
+    /*
+    cn = corner[1] == 4 ? 0 :
+        corner[1] == 2 ? 1 :
+        corner[1] == 0 ? 2 :
+        corner[1] == 6 ? 3 : 0;
+
+   cxs = corner[0] == 0 && (corner[1] == 2 || corner[1] == 4) ? 0 :
+        corner[0] == 1 && (corner[1] == 2 || corner[1] == 4) ? 1 :
+        corner[0] == 1 && (corner[1] == 0 || corner[1] == 6) ? 2 :
+        corner[0] == 0 && (corner[1] == 0 || corner[1] == 6) ? 3 : 0;
+      //  cxs = 1; // c06, c04 => 0, c16, c14 => 1, c10, c12 => 2, c00, c02 => 3
+
+    cys = corner[0] == 1 && (corner[1] == 4 || corner[1] == 6) ? 0 :
+        corner[0] == 1 && (corner[1] == 0 || corner[1] == 2) ? 1 :
+        corner[0] == 0 && (corner[1] == 0 || corner[1] == 2) ? 2 :
+        corner[0] == 0 && (corner[1] == 4 || corner[1] == 6) ? 3 : 0;
+
+       // cys = 3; // c14, c16 => 0, c10, c12 => 1, c00, c02 => 2, c04, c06 => 3
+
+    c = x_smallest ? cxs : (y_smallest ? cys :cn);
+
+    from = c * 90;
+    to = 90 + c *90; */
+
+    startAngle = 0; //from;
+    endAngle = 360; //to;
 
     radius = x_smallest ? 
         [max(0.001, s[2]), max(0.001, s[1]), max(0.001, s[0])] :
@@ -408,14 +436,14 @@ function mb_point_corner(shape, i, j) =
     [i, 2 * j] : 
     (sl == 8 ? [i, j] : undef);*/
 
-function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [[0, 0], [0, 0]]) =
+function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [0, 0, 0, 0]) =
     let ( p = mb_point(shape, height, i, j))
     i < len(shape) ? 
     (
         j < len(shape[i]) ? 
         mb_min_max_points(shape, height, i, j + 1, p == undef ? 
         min_max : 
-        [[min(min_max[0][0], p[0]), min(min_max[0][1], p[1])], [max(min_max[1][0], p[0]), max(min_max[1][1], p[1])]]) : 
+        [min(min_max[0], p[0]), min(min_max[1], p[1]), max(min_max[2], p[0]), max(min_max[3], p[1])]) : 
         mb_min_max_points(shape, height, i + 1, 0, min_max)
     ) : 
     min_max;
@@ -474,7 +502,15 @@ function mb_prismoid_plane_resolve(a) =
         la > 3 ? a[3] : undef, undef
     ];
 
-function mb_prismoid_shape_resolve(shape, radius) =
+function mb_prismoid_calc_dims(shape, height) = 
+    let(min_max = mb_min_max_points(shape, height),
+        sx = min_max[2] - min_max[0],
+        sy = min_max[3] - min_max[1],
+        tx = - 0.5 * (min_max[2] + min_max[0]),
+        ty = - 0.5 * (min_max[3] + min_max[1]))
+    [min_max, [sx, sy], [tx, ty]];
+
+function mb_prismoid_shape_resolve(shape, radius, height) =
     let(s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
@@ -483,7 +519,8 @@ function mb_prismoid_shape_resolve(shape, radius) =
     )
     [
         mb_prismoid_plane_add_radius(s[0], r[0]),
-        mb_prismoid_plane_add_radius(s[1], r[1])
+        mb_prismoid_plane_add_radius(s[1], r[1]),
+        mb_prismoid_calc_dims(shape, height)
     ];
 
 function mb_prismoid_rplane_resolve(v) =
@@ -550,19 +587,18 @@ function mb_combine_shape(shape0, shape1) =
 * PRISMOID
 */
 module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
-    shape = mb_prismoid_shape_resolve(shape, radius);
+    shape = mb_prismoid_shape_resolve(shape, radius, height);
+    
     if(debug){
         echo (shape = shape);
     }
-    min_max = mb_min_max_points(shape, height);
+    
+    sx = shape[2][1][0];
+    sy = shape[2][1][1];
+    tx = shape[2][2][0];
+    ty = shape[2][2][1];
+    
     align = align == "sticky" ? "sticky" : mb_align_resolve(align);
-
-    sx = min_max[1][0] - min_max[0][0];
-    sy = min_max[1][1] - min_max[0][1];
-    tx = - 0.5 * (min_max[1][0] + min_max[0][0]);
-    ty = - 0.5 * (min_max[1][1] + min_max[0][1]);
-    //echo(min_max = min_max, sx = sx, sy = sy, tx = tx, ty = ty);
-
     center = align[0] == "center" && align[1] == "center" && align[2] == "center";
 
     t = align == "sticky" ? 
@@ -655,7 +691,8 @@ module mb_cube(size, radius = 0, xyz_rad = false, center = true, resolution = 80
     h=0.2,
     capWidth=0.1,
     //capStep=0.001,
-    capThreshold=0.15
+    capThreshold=0.15,
+    corner = [0,6]
 );
 
 
@@ -681,7 +718,7 @@ mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket_bottom = 20, radius = [10, 4, 6], resolution = 160);
+], height = 120, socket_bottom = 20, radius = [10, 4, 6], resolution = 160, debug=true, align="sticky");
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
