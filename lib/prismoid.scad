@@ -139,6 +139,53 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
 /**
 * PSEUDO ELLIPSE RING
 */
+
+function mb_pe_curvature(rx, ry, a) =
+    abs(rx * ry) /
+    pow(
+        pow(ry * cos(a), 2) + pow(rx * sin(a), 2),
+        1.5
+    );
+
+function mb_pe_adaptive_angles(
+    rx, ry,
+    a0, a1,
+    baseStep,
+    minStep,
+    maxStep,
+    kMax,
+    angles=[]
+) =
+    a0 >= a1
+        ? concat(angles, [a1])
+        : let(
+            k = mb_pe_curvature(rx, ry, a0),
+
+            // 0..1, hohe Krümmung => nahe 1
+            t = min(1, k / kMax),
+
+            // hohe Krümmung => minStep
+            // geringe Krümmung => maxStep
+            step = max(
+                minStep,
+                min(
+                    maxStep,
+                    maxStep - (maxStep - minStep) * sqrt(t)
+                )
+            ),
+
+            nextA = min(a0 + step, a1)
+        )
+        mb_pe_adaptive_angles(
+            rx, ry,
+            nextA, a1,
+            baseStep,
+            minStep,
+            maxStep,
+            kMax,
+            concat(angles, [a0])
+        );
+
 module mb_pseudo_ellipse_ring(
     s=[40, 25, 3],
     resolution=32,
@@ -174,14 +221,35 @@ module mb_pseudo_ellipse_ring(
 
     capStep = min_r / max_r * 25;
 
-    baseAngles = [
+    // adaptive Grenzen
+    baseStep = 360 / resolution;
+    minStep = baseStep / sqrt(max_r / min_r);
+    maxStep = baseStep * 1.5;
+
+    // maximale Krümmung liegt ungefähr am kleinen Radius-Ende
+    use_xcaps = abs(rx) / max_r < capThreshold;
+    use_ycaps = abs(ry) / max_r < capThreshold;
+
+    baseAngles = use_xcaps || use_ycaps ? [
         for (i = [0 : count - 1])
             startAngle + angleSpan * i / steps
-    ];
+    ] : mb_pe_adaptive_angles(
+        rx, ry,
+        startAngle, endAngle,
+        baseStep,
+        minStep,
+        maxStep,
+        max(
+            mb_pe_curvature(rx, ry, 0),
+            mb_pe_curvature(rx, ry, 90),
+            mb_pe_curvature(rx, ry, 180),
+            mb_pe_curvature(rx, ry, 270)
+        )
+    );
 
     // Wenn rx sehr klein ist: runde Endkappen oben/unten extra sampeln
     xCaps =
-        abs(rx) / max_r < capThreshold
+        use_xcaps
             ? concat(
                 mb_pe_cap_angles(90, capWidth, capStep),
                 mb_pe_cap_angles(270, capWidth, capStep)
@@ -190,7 +258,7 @@ module mb_pseudo_ellipse_ring(
 
     // Wenn ry sehr klein ist: runde Endkappen links/rechts extra sampeln
     yCaps =
-        abs(ry) / max_r < capThreshold
+        use_ycaps
             ? concat(
                 mb_pe_cap_angles(0, capWidth, capStep),
                 mb_pe_cap_angles(180, capWidth, capStep),
@@ -204,6 +272,7 @@ module mb_pseudo_ellipse_ring(
         mb_pe_filter_angles(yCaps, startAngle, endAngle)
     );
 
+    //hull()
     rotate(rot){
     for (a = angles) {
         p = [
@@ -581,7 +650,7 @@ module mb_cube(size, radius = 0, xyz_rad = false, center = true, resolution = 80
 
 
 *mb_pseudo_ellipse_ring(
-    s=[5, 10, 10],
+    s=[20, 10, 10],
     resolution=100,
     h=0.2,
     capWidth=0.1,
