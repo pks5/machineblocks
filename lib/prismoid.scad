@@ -488,27 +488,39 @@ function mb_prismoid_plane(shape, i) =
 function mb_prismoid_plane_resolve(a) =
     let(la = len(a))
     is_undef(a) || is_num(a) || is_string(a) || la == 0 ? 
-        // leer -> 8x [0,0]
         [undef, undef, undef, undef, undef, undef, undef, undef] :
 
-    la == 8 ?
-        // direkt durchreichen
-        a :
-
+    la <= 4 ?
     [
         a[0]                 , undef, 
         la > 1 ? a[1] : undef, undef, 
         la > 2 ? a[2] : undef, undef, 
         la > 3 ? a[3] : undef, undef
-    ];
+    ] : a;
 
-function mb_prismoid_calc_dims(shape, height) = 
+function mb_prismoid_plane_checksum(a, i = 0) =
+    (!is_list(a) || len(a) == 0)
+        ? 0
+        : (i >= len(a)
+            ? 0
+            : (a[i] != undef ? pow(2, i) : 0)
+              + mb_prismoid_plane_checksum(a, i + 1)
+        );
+
+function mb_prismoid_validate(shape, height) = 
+    len(shape) != 2 ? ["invalid_shape", len(shape)] :
+    len(shape[0]) != 8 ? ["invalid_plane", 0, len(shape[0])] :
+    len(shape[1]) != 8 ? ["invalid_plane", 1, len(shape[1])] :
+    mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
+    ["ok"];
+
+function mb_prismoid_process(shape, height) = 
     let(min_max = mb_min_max_points(shape, height),
         sx = min_max[2] - min_max[0],
         sy = min_max[3] - min_max[1],
         tx = - 0.5 * (min_max[2] + min_max[0]),
         ty = - 0.5 * (min_max[3] + min_max[1]))
-    [min_max, [sx, sy], [tx, ty]];
+    [min_max, [sx, sy], [tx, ty], mb_prismoid_validate(shape, height)];
 
 function mb_prismoid_shape_resolve(shape, radius, height) =
     let(s = [
@@ -520,7 +532,7 @@ function mb_prismoid_shape_resolve(shape, radius, height) =
     [
         mb_prismoid_plane_add_radius(s[0], r[0]),
         mb_prismoid_plane_add_radius(s[1], r[1]),
-        mb_prismoid_calc_dims(shape, height)
+        mb_prismoid_process(s, height)
     ];
 
 function mb_prismoid_rplane_resolve(v) =
