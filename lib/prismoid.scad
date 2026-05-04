@@ -507,10 +507,18 @@ function mb_prismoid_plane_checksum(a, i = 0) =
               + mb_prismoid_plane_checksum(a, i + 1)
         );
 
+function mb_prismoid_min_points(a) =
+    (a[0] != undef && a[2] != undef && a[4] != undef)
+    || (a[0] != undef && a[2] != undef && a[6] != undef)
+    || (a[0] != undef && a[4] != undef && a[6] != undef)
+    || (a[2] != undef && a[4] != undef && a[6] != undef);
+
 function mb_prismoid_validate(shape, height) = 
     len(shape) != 2 ? ["invalid_shape", len(shape)] :
-    len(shape[0]) != 8 ? ["invalid_plane", 0, len(shape[0])] :
-    len(shape[1]) != 8 ? ["invalid_plane", 1, len(shape[1])] :
+    len(shape[0]) != 8 ? ["invalid_plane_length", 0, len(shape[0])] :
+    len(shape[1]) != 8 ? ["invalid_plane_length", 1, len(shape[1])] :
+    !mb_prismoid_min_points(shape[0])  ? ["point_missing", 0] :
+    !mb_prismoid_min_points(shape[1])  ? ["point_missing", 1] :
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
     ["ok"];
 
@@ -604,50 +612,56 @@ module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, rad
     if(debug){
         echo (shape = shape);
     }
+
+    if(shape[2][3][0] != "ok"){
+        echo(str("ERROR: ", shape[2][3][0], " / ", shape[2][3][1], " / ", shape[2][3][2]));
+    }
+    else{
     
-    sx = shape[2][1][0];
-    sy = shape[2][1][1];
-    tx = shape[2][2][0];
-    ty = shape[2][2][1];
-    
-    align = align == "sticky" ? "sticky" : mb_align_resolve(align);
-    center = align[0] == "center" && align[1] == "center" && align[2] == "center";
+        sx = shape[2][1][0];
+        sy = shape[2][1][1];
+        tx = shape[2][2][0];
+        ty = shape[2][2][1];
+        
+        align = align == "sticky" ? "sticky" : mb_align_resolve(align);
+        center = align[0] == "center" && align[1] == "center" && align[2] == "center";
 
-    t = align == "sticky" ? 
-        [0, 0, 0] :
-        center ? [tx, ty, 0] : [tx + 0.5 * sx, ty + 0.5 * sy, 0.5 * height];
+        t = align == "sticky" ? 
+            [0, 0, 0] :
+            center ? [tx, ty, 0] : [tx + 0.5 * sx, ty + 0.5 * sy, 0.5 * height];
 
-    translate(t){
-        hull(){
-            for(i = [0 : 1 : 1]){
-                plane = mb_prismoid_plane(shape, i);
-                for(j = [0 : 1 : len(plane) - 1]){
-                    point = mb_point(shape, height, i, j);
-                    if(point != undef){
-                        corner = mb_point_corner(shape, i, j);
+        translate(t){
+            hull(){
+                for(i = [0 : 1 : 1]){
+                    plane = mb_prismoid_plane(shape, i);
+                    for(j = [0 : 1 : len(plane) - 1]){
+                        point = mb_point(shape, height, i, j);
+                        if(point != undef){
+                            corner = mb_point_corner(shape, i, j);
 
-                        if(corner != undef){
-                            rad = mb_point_radius(shape, i, j);
-                            prev_point = mb_prev_point(shape, height, i, j);
-                            next_point = mb_next_point(shape, height, i, j);
-                            inv_point = mb_inv_point(shape, height, i, j);
-                            socket_point = mb_socket_point(point, inv_point, socket_top, socket_bottom, i);
-                            angle = mb_corner_angle(corner, prev_point, point, next_point, socket_point);
+                            if(corner != undef){
+                                rad = mb_point_radius(shape, i, j);
+                                prev_point = mb_prev_point(shape, height, i, j);
+                                next_point = mb_next_point(shape, height, i, j);
+                                inv_point = mb_inv_point(shape, height, i, j);
+                                socket_point = mb_socket_point(point, inv_point, socket_top, socket_bottom, i);
+                                angle = mb_corner_angle(corner, prev_point, point, next_point, socket_point);
 
-                            if(debug){
-                                echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
+                                if(debug){
+                                    echo(level = i, corner = j, ang = angle, pp = prev_point, p = point, np = next_point, ip = inv_point);
+                                }
+
+                                translate(point) 
+                                    mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
+
+                                if((socket_bottom != undef && (i == 0)) || (socket_top != undef && (i == 1))){
+                                    translate(socket_point) 
+                                        mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                }
                             }
-
-                            translate(point) 
-                                mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
-
-                            if((socket_bottom != undef && (i == 0)) || (socket_top != undef && (i == 1))){
-                                translate(socket_point) 
-                                    mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                            else{
+                                echo(str("Could not resolve point: [", i, ", ", j, "]"));
                             }
-                        }
-                        else{
-                            echo(str("Could not resolve point: [", i, ", ", j, "]"));
                         }
                     }
                 }
@@ -726,7 +740,7 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = undef, radius = 0, resolution = 160);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
@@ -750,3 +764,8 @@ mb_prismoid(shape = [
 
 
 
+mb_prismoid(shape = [
+    [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
+    
+    [[-0, -50], undef, [-20, 50], undef, [40, 50], undef, [20, -50], undef]
+], height = 120, socket_bottom = 20, socket_top = undef, radius = 0, resolution = 160, debug=true);
