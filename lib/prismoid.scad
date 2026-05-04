@@ -522,15 +522,17 @@ function mb_prismoid_validate(shape, height) =
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
     ["ok"];
 
-function mb_prismoid_process(shape, height) = 
+function mb_prismoid_process(shape, height, skip_validation = false) = 
     let(min_max = mb_min_max_points(shape, height),
         sx = min_max[2] - min_max[0],
         sy = min_max[3] - min_max[1],
         tx = - 0.5 * (min_max[2] + min_max[0]),
         ty = - 0.5 * (min_max[3] + min_max[1]))
-    [min_max, [sx, sy], [tx, ty], mb_prismoid_validate(shape, height)];
+    [min_max, [sx, sy], [tx, ty], skip_validation ? ["ok"] : mb_prismoid_validate(shape, height)];
 
-function mb_prismoid_shape_resolve(shape, radius, height) =
+function mb_prismoid_shape_resolve(shape, radius, height, skip_validation = false) =
+    skip_validation ? [shape[0], shape[1], mb_prismoid_process(shape, height, skip_validation)] :
+
     let(s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
@@ -606,8 +608,8 @@ function mb_combine_shape(shape0, shape1) =
 /**
 * PRISMOID
 */
-module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
-    shape = mb_prismoid_shape_resolve(shape, radius, height);
+module mb_prismoid(shape, height, skip_validation = false, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
+    shape = mb_prismoid_shape_resolve(shape, radius, height, skip_validation);
     
     if(debug){
         echo (shape = shape);
