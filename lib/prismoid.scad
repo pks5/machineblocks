@@ -392,25 +392,23 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, z_value = u
     let(r = is_list(xyz) ? 
         ([is_num(xyz[0]) ? xyz[0] : default[0], is_num(xyz[1]) ? xyz[1] : default[1], is_num(xyz[2]) ? xyz[2] : default[2]]) : 
         is_num(xyz) ? [xyz, xyz, xyz] : default)
-    min_value == undef ? 
-        [r[0], r[1], z_value != undef ? z_value : r[2]] : 
-        [max(min_value, r[0]), max(min_value, r[1]), max(min_value, z_value != undef ? z_value : r[2])];
+    is_undef(r) ? undef : (is_undef(min_value) ? r : [max(min_value, r[0]), max(min_value, r[1]), max(min_value, r[2])]);
     
-function mb_point(shape, height, i = 0, j = 0) = 
+function mb_point(shape, i = 0, j = 0) = 
     let(plane = mb_prismoid_plane(shape, i))
-    plane[j] != undef ? mb_resolve_xyz(xyz = plane[j], z_value = (i == 0 ? -1 : 1) * 0.5 * height) : undef;
+    mb_resolve_xyz(xyz = plane[j], default = undef);
 
-function mb_prev_point(shape, height, i = 0, j = 0) = 
+function mb_prev_point(shape, i = 0, j = 0) = 
     let(prev_index = (j - 1 + 8) % 8,
-        p = mb_point(shape = shape, height, i, prev_index))
-    p != undef ? p : mb_prev_point(shape, height, i, prev_index); 
+        p = mb_point(shape = shape, i, prev_index))
+    p != undef ? p : mb_prev_point(shape, i, prev_index); 
 
-function mb_next_point(shape, height, i = 0, j = 0) = 
-    let(p = mb_point(shape = shape, height, i, (j + 1) % 8))
-    p != undef ? p : mb_next_point(shape, height, i, (j + 1) % 8); 
+function mb_next_point(shape, i = 0, j = 0) = 
+    let(p = mb_point(shape = shape, i, (j + 1) % 8))
+    p != undef ? p : mb_next_point(shape, i, (j + 1) % 8); 
 
-function mb_inv_point(shape, height, i = 0, j = 0) = 
-    mb_point(shape, height, i == 0 ? 1 : 0, j);
+function mb_inv_point(shape, i = 0, j = 0) = 
+    mb_point(shape, i == 0 ? 1 : 0, j);
 
 function mb_point_distance(p1, p2) = 
     is_undef(p1) || is_undef(p2) ? undef : [p2.x - p1.x, p2.y - p1.y, p2.z - p1.z];
@@ -428,7 +426,7 @@ function mb_socket_point(point, inv_point, socket_top = undef, socket_bottom = u
 
 function mb_point_radius(shape, i, j) =
     let(plane = mb_prismoid_plane(shape, i))
-        plane[j] != undef ? plane[j][2] : undef;
+        plane[j] != undef ? (len(plane[j]) > 3 ? plane[j][3] : undef) : undef;
 
 function mb_point_corner(shape, i, j) = 
     [i, j];
@@ -439,15 +437,22 @@ function mb_point_corner(shape, i, j) =
     [i, 2 * j] : 
     (sl == 8 ? [i, j] : undef);*/
 
-function mb_min_max_points(shape, height, i = 0, j = 0, min_max = [0, 0, 0, 0]) =
-    let ( p = mb_point(shape, height, i, j))
+function mb_min_max_points(shape, i = 0, j = 0, min_max = [0, 0, 0, 0, 0, 0]) =
+    let ( p = mb_point(shape, i, j))
     i < len(shape) ? 
     (
         j < len(shape[i]) ? 
-        mb_min_max_points(shape, height, i, j + 1, p == undef ? 
+        mb_min_max_points(shape, i, j + 1, p == undef ? 
         min_max : 
-        [min(min_max[0], p[0]), min(min_max[1], p[1]), max(min_max[2], p[0]), max(min_max[3], p[1])]) : 
-        mb_min_max_points(shape, height, i + 1, 0, min_max)
+        [
+            min(min_max[0], p[0]), //min X
+            min(min_max[1], p[1]), //min Y
+            min(min_max[2], p[2]), //min Z
+            max(min_max[3], p[0]), //max X
+            max(min_max[4], p[1]), //max Y
+            max(min_max[5], p[2])  //max Z
+        ]) : 
+        mb_min_max_points(shape, i + 1, 0, min_max)
     ) : 
     min_max;
 
@@ -516,7 +521,7 @@ function mb_prismoid_min_points(a) =
     || (a[0] != undef && a[4] != undef && a[6] != undef)
     || (a[2] != undef && a[4] != undef && a[6] != undef);
 
-function mb_prismoid_validate(shape, height) = 
+function mb_prismoid_validate(shape) = 
     len(shape) != 2 ? ["invalid_shape", len(shape)] :
     len(shape[0]) != 8 ? ["invalid_plane_length", 0, len(shape[0])] :
     len(shape[1]) != 8 ? ["invalid_plane_length", 1, len(shape[1])] :
@@ -525,27 +530,37 @@ function mb_prismoid_validate(shape, height) =
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
     ["ok"];
 
-function mb_prismoid_process(shape, height, skip_validation = false) = 
-    let(min_max = mb_min_max_points(shape, height),
-        sx = min_max[2] - min_max[0],
-        sy = min_max[3] - min_max[1],
-        cx = 0.5 * (min_max[2] + min_max[0]),
-        cy = 0.5 * (min_max[3] + min_max[1]))
-    [min_max, [sx, sy], [cx, cy], skip_validation ? ["ok"] : mb_prismoid_validate(shape, height)];
+function mb_prismoid_process(shape) = 
+    let(min_max = mb_min_max_points(shape),
+        sx = min_max[3] - min_max[0],
+        sy = min_max[4] - min_max[1],
+        sz = min_max[5] - min_max[2],
+        cx = 0.5 * (min_max[3] + min_max[0]),
+        cy = 0.5 * (min_max[4] + min_max[1]),
+        cz = 0.5 * (min_max[5] + min_max[2]))
+    [
+        [min_max[0], min_max[1], min_max[2]], //min
+        [min_max[3], min_max[4], min_max[5]], //max
+        [sx, sy, sz],                             //size
+        [cx, cy, cz],                             //center
+        mb_prismoid_validate(shape) //validation
+    ];
 
-function mb_prismoid_shape_resolve(shape, radius, height, skip_validation = false) =
-    skip_validation ? [shape[0], shape[1], mb_prismoid_process(shape, height, skip_validation)] :
-
+function mb_prismoid_shape_resolve(shape, radius, height) =
     let(s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
         ],
-        r = mb_prismoid_radius_resolve(radius)
+        r = mb_prismoid_radius_resolve(radius),
+        ar = [
+            mb_prismoid_plane_add_radius(s[0], r[0], 0, height),
+            mb_prismoid_plane_add_radius(s[1], r[1], 1, height)
+        ]
     )
     [
-        mb_prismoid_plane_add_radius(s[0], r[0]),
-        mb_prismoid_plane_add_radius(s[1], r[1]),
-        mb_prismoid_process(s, height)
+        ar[0],
+        ar[1],
+        mb_prismoid_process(ar)
     ];
 
 function mb_prismoid_rplane_resolve(v) =
@@ -573,7 +588,7 @@ function mb_prismoid_radius_resolve(radius) =
         mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
-function mb_prismoid_plane_add_radius(a, b) =
+function mb_prismoid_plane_add_radius(a, b, p, height) =
     [
         for (i = [0:7])
             let(
@@ -585,7 +600,7 @@ function mb_prismoid_plane_add_radius(a, b) =
 
             // Spezialfall: z fehlt in a, aber b vorhanden
             (!is_undef(ai[2]) ? false : !is_undef(bi)) ?
-                [ai[0], ai[1], bi] :
+                [ai[0], ai[1], is_list(height) ? height[p] : (p == 0 ? -1 : 1) * 0.5 * height, bi] :
 
             // sonst a unverändert
             ai
@@ -611,44 +626,47 @@ function mb_combine_shape(shape0, shape1) =
 /**
 * PRISMOID
 */
-module mb_prismoid(shape, height, skip_validation = false, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
-    shape = mb_prismoid_shape_resolve(shape, radius, height, skip_validation);
+module mb_prismoid(shape, height, socket_top = undef, socket_bottom = undef, radius = 0, align = "sticky", resolution = 80, debug = false){
+    shape = mb_prismoid_shape_resolve(shape, radius, height);
     
     if(debug){
         echo (shape = shape);
     }
 
-    if(shape[2][3][0] != "ok"){
-        echo(str("ERROR: ", shape[2][3][0], " / ", shape[2][3][1], " / ", shape[2][3][2]));
+    if(shape[2][4][0] != "ok"){
+        echo(str("ERROR: ", shape[2][4][0], " / ", shape[2][4][1], " / ", shape[2][4][2]));
     }
     else{
     
-        sx = shape[2][1][0];
-        sy = shape[2][1][1];
-        cx = shape[2][2][0];
-        cy = shape[2][2][1];
+        sx = shape[2][2][0];
+        sy = shape[2][2][1];
+        sz = shape[2][2][2];
+        
+        cx = shape[2][3][0];
+        cy = shape[2][3][1];
+        cz = shape[2][3][2];
         
         align = align == "sticky" ? "sticky" : mb_align_resolve(align);
         center = align[0] == "center" && align[1] == "center" && align[2] == "center";
 
         t = align == "sticky" ? 
             [0, 0, 0] :
-            center ? [-cx, -cy, 0] : [-cx + 0.5 * sx, -cy + 0.5 * sy, 0.5 * height];
+            center ? [-cx, -cy, -cz] : [-cx + 0.5 * sx, -cy + 0.5 * sy, -cz + 0.5 * sz];
 
         translate(t){
             hull(){
                 for(i = [0 : 1 : 1]){
                     plane = mb_prismoid_plane(shape, i);
                     for(j = [0 : 1 : len(plane) - 1]){
-                        point = mb_point(shape, height, i, j);
+                        point = mb_point(shape, i, j);
                         if(point != undef){
                             corner = mb_point_corner(shape, i, j);
 
                             if(corner != undef){
                                 rad = mb_point_radius(shape, i, j);
-                                prev_point = mb_prev_point(shape, height, i, j);
-                                next_point = mb_next_point(shape, height, i, j);
-                                inv_point = mb_inv_point(shape, height, i, j);
+                                prev_point = mb_prev_point(shape, i, j);
+                                next_point = mb_next_point(shape, i, j);
+                                inv_point = mb_inv_point(shape, i, j);
                                 inv_dis = mb_point_distance(point, inv_point);
                                 
                                 socket_point = mb_socket_point(point, inv_point, socket_top, socket_bottom, i);
@@ -747,7 +765,7 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = undef, radius = 0, resolution = 160);
 
-*mb_prismoid(shape = [
+mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
@@ -764,14 +782,14 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
 
 //mb_cube(center = false, size = [120, 80, 50]);
 *mb_prismoid(shape = [
-    [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [50, 30, [10,10,0]], [50, -30, [10,10,0]]],
-    [[-20, -30, [10,10,0]], [-20, 30, [10,10,0]], [20, 30, [10,10,0]], [20, -30, [10,10,0]]]
+    [[-20, -30, undef, [10,10,0]], [-20, 30, undef,[10,10,0]], [50, 30,undef, [10,10,0]], [50, -30,undef, [10,10,0]]],
+    [[-20, -30, undef,[10,10,0]], [-20, 30,undef, [10,10,0]], [20, 30, undef,[10,10,0]], [20, -30, undef,[10,10,0]]]
     
 ], height = 120, socket_top = 20, radius = 0, resolution = 160);
 
 
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
