@@ -491,8 +491,76 @@ function mb_xyz_rad_convert(xyz_rad) =
     undef;
 
 /*
+* FACES
+*/
+
+function mb_resolve_face_sext(sext, mul = undef) = 
+    let(mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
+    is_undef(sext) || is_string(sext) ? undef : 
+    is_list(sext) ? 
+    (len(sext) == 3 ? 
+        [
+            sext[0]*mul[0], 
+            sext[0]*mul[0], 
+            sext[1]*mul[1], 
+            sext[1]*mul[1], 
+            sext[2]*mul[2], 
+            sext[2]*mul[2]
+        ] : 
+        [
+            sext[0]*mul[0], 
+            sext[1]*mul[0], 
+            sext[2]*mul[1], 
+            sext[3]*mul[1], 
+            sext[4]*mul[2], 
+            sext[5]*mul[2]
+        ]) : 
+        [
+            sext * mul[0], 
+            sext * mul[0], 
+            sext * mul[1], 
+            sext * mul[1], 
+            sext * mul[2], 
+            sext * mul[2]
+        ];
+
+/*
 * PRISMOID SHAPE
 */
+
+function mb_prismoid_plane_expand(punkte, p, raender, mul = undef) =
+    let(
+        sext = mb_resolve_face_sext(raender, mul),
+        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
+        d_edge8 = [
+            -sext[0], -sext[0],
+            -sext[3], -sext[3],
+            -sext[1], -sext[1],
+            -sext[2], -sext[2]
+        ],
+
+        // nur vorhandene Punkte behalten
+        idx = [ for(i=[0:7]) if(punkte[i] != undef) i ],
+        Pc  = [ for(i=idx) punkte[i] ],
+
+        // Kante idx[j] -> idx[j+1]
+        // bekommt den Border der Originalkante direkt vor idx[j+1]
+        dc = [
+            for(j=[0:len(idx)-1])
+                d_edge8[(idx[(j+1) % len(idx)] + 7) % 8]
+        ],
+
+        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges(Pc, dc) : [],
+
+        Q8 = [
+            for(i=[0:7])
+                let(qqx = Qc[mb_array_index_of(idx, i)])
+                punkte[i] == undef
+                    ? undef
+                    : [qqx[0], qqx[1], punkte[i][2] + (p == 0 ? -1 : 1) * sext[4+p], punkte[i][3]]
+        ]
+    )
+    Q8;
 
 function mb_prismoid_plane(shape, i) =
     let(l = len(shape))
@@ -562,7 +630,18 @@ function mb_prismoid_rplane_resolve(v) =
         [for (i = [0:7]) v] :
 
     let(l = len(v),
-        ls = l < 8)
+        ls = l <= 4)
+    [
+        for (i = [0:7])
+            mb_resolve_xyz(ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i], default = undef) //TODO check length v
+    ];
+
+function mb_prismoid_aplane_resolve(v) =
+    is_undef(v) || is_string(v) ? 
+        [for (i = [0:7]) undef] :
+
+    let(l = len(v),
+        ls = l <= 4)
     [
         for (i = [0:7])
             mb_resolve_xyz(ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i], default = undef) //TODO check length v
@@ -576,21 +655,22 @@ function mb_prismoid_radius_resolve(radius) =
         mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
-function mb_prismoid_plane_resolve_points(a, mul, p, height = undef, b = undef) =
+function mb_prismoid_plane_resolve_points(a, mul, p, add = undef, height = undef, radius = undef) =
     let(h = is_undef(height) ? 1 : height,
         az = is_list(h) ? h[p] : (p == 0 ? -1 : 1) * 0.5 * h,
-        mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
+        mul = mb_resolve_xyz(mul, default = [1, 1, 1]),
+        add = mb_resolve_xyz(add))
     [
         for (j = [0:7])
             let(
                 ai = j < len(a) ? a[j] : undef,
-                bi = is_list(b) && (j < len(b)) ? b[j] : undef
+                bi = is_list(radius) && (j < len(radius)) ? radius[j] : undef
             )
             is_undef(ai) ? 
                 undef :
             [
-                ai[0] * mul[0], 
-                ai[1] * mul[1], 
+                (ai[0] + add[0]) * mul[0], 
+                (ai[1] + add[1]) * mul[1], 
                 ((len(ai) < 3 || is_undef(ai[2])) ? az : ai[2]) * mul[2], 
                 (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? bi : (len(ai) > 3 ? ai[3] : undef)
             ]
@@ -607,8 +687,8 @@ function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = 
         ],
         r = mb_prismoid_radius_resolve(radius),
         ar = [
-            mb_prismoid_plane_resolve_points(s[0], mul, 0, height, r[0]),
-            mb_prismoid_plane_resolve_points(s[1], mul, 1, height, r[1])
+            mb_prismoid_plane_resolve_points(s[0], mul, 0, height = height, radius = r[0]),
+            mb_prismoid_plane_resolve_points(s[1], mul, 1, height = height, radius = r[1])
         ]
     )
     [
@@ -617,7 +697,7 @@ function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = 
         mb_prismoid_process(ar)
     ];
 
-function mb_prismoid_shape_expand(shape, expand, skip_resolve = false, height = undef, radius = undef, mul = undef) = 
+function mb_prismoid_shape_expand(shape, expand = undef, skip_resolve = false, height = undef, radius = undef, mul = undef) = 
     let(
         s = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius, mul),
         ar = [
@@ -625,8 +705,8 @@ function mb_prismoid_shape_expand(shape, expand, skip_resolve = false, height = 
             skip_resolve && !is_undef(mul) ? mb_prismoid_plane_resolve_points(s[1], mul, 1) : s[1]
         ],
         ex = [
-            mb_prismoid_plane_expand(ar[0], 0, expand),
-            mb_prismoid_plane_expand(ar[1], 1, expand)
+           is_undef(expand) ? ar[0] : mb_prismoid_plane_expand(ar[0], 0, expand, mul),
+           is_undef(expand) ? ar[1] : mb_prismoid_plane_expand(ar[1], 1, expand, mul)
         ]
     )
     [
@@ -644,7 +724,7 @@ function mb_cube_to_prismoid(size, radius, mul = undef) =
         radius = radius, 
         mul = mul
     );
-    
+
 /*
 * ---------
 * END UTILS
@@ -843,11 +923,12 @@ mb_cube(debug = true, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0],
 ], height = 120, socket_bottom = 20, socket_top = 20, radius = 0, resolution = 160, debug=true);
 
  
-okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], height = 20, radius = undef, mul = 2);
+okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], height = 20, radius = undef);
 
 
-okt2 = mb_prismoid_shape_expand(okt, [10, 10, 20, 20, 10, 20], mul = 1, skip_resolve = true);
+okt2 = mb_prismoid_shape_expand(shape = okt, expand = [-10,-10,10], mul = undef, skip_resolve = true);
 echo (okt = okt, okt2 = okt2);
 mb_prismoid(shape = okt, skip_resolve = true, resolution = 160);
+
 
 mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);

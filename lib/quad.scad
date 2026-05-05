@@ -99,35 +99,3 @@ function mb_array_index_of(a, v, i=0) =
     a[i] == v ? i :
     mb_array_index_of(a, v, i + 1);
 
-function mb_prismoid_plane_expand(punkte, p, raender) =
-    let(
-        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
-        d_edge8 = [
-            raender[0], raender[0],
-            raender[3], raender[3],
-            raender[1], raender[1],
-            raender[2], raender[2]
-        ],
-
-        // nur vorhandene Punkte behalten
-        idx = [ for(i=[0:7]) if(punkte[i] != undef) i ],
-        Pc  = [ for(i=idx) punkte[i] ],
-
-        // Kante idx[j] -> idx[j+1]
-        // bekommt den Border der Originalkante direkt vor idx[j+1]
-        dc = [
-            for(j=[0:len(idx)-1])
-                d_edge8[(idx[(j+1) % len(idx)] + 7) % 8]
-        ],
-
-        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges(Pc, dc) : [],
-
-        Q8 = [
-            for(i=[0:7])
-                let(qqx = Qc[mb_array_index_of(idx, i)])
-                punkte[i] == undef
-                    ? undef
-                    : [qqx[0], qqx[1], punkte[i][2] + (p == 0 ? -1 : 1) * raender[4+p], punkte[i][3]]
-        ]
-    )
-    Q8;

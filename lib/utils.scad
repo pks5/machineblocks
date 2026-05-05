@@ -54,6 +54,8 @@ function mb_resolve_side_quad(quad, multiplier = 1) =
     (len(quad) == 2 ? [quad[0]*multiplier, quad[0]*multiplier, quad[1]*multiplier, quad[1]*multiplier] : [quad[0]*multiplier, quad[1]*multiplier, quad[2]*multiplier, quad[3]*multiplier]) 
     : [quad * multiplier, quad * multiplier, quad * multiplier, quad * multiplier];
 
+
+
 /*
 * Whether a given string is empty
 */
