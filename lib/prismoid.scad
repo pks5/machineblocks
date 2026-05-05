@@ -103,7 +103,9 @@ module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], res
                 mb_corner_cut(radius, corner);
                 //cube(size = radius, center = true);
 
-            if((radius[0] > 0.001 && radius[1] > 0.001 && radius[2] > 0.001) && (true || radius[0] != radius[1] || radius[1] != radius[2])){
+            if((radius[0] > 0.001 && radius[1] > 0.001 && radius[2] > 0.001) 
+            //&& (radius[0] != radius[1] && radius[1] != radius[2] && radius[0] != radius[2])
+            ){
                 //hull()
                 /*
                 mb_pseudo_ellipse_ring(
@@ -876,11 +878,11 @@ module mb_cube(
 * ----------------------
 */
 
-
-*mb_pseudo_ellipse_ring(
-    s=[20, 10, 10],
+translate([0, 0, 100])
+mb_pseudo_ellipse_ring(
+    s=[8, 3.2, 1.6],
     resolution=100,
-    h=0.2,
+    h=0.1,
     capWidth=0.1,
     //capStep=0.001,
     capThreshold=0.15,
@@ -916,7 +918,11 @@ mb_prismoid(shape = [
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
 translate([200, 0, 0])
-mb_cube(debug = true, mul=2, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+mb_cube(
+    debug = true, 
+    mul=[8, 8, 3.2], 
+    size = [4, 2, 3], 
+    radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[1, 0.2, 0.5], [1, 0.2, 0.5], [1, 0.4, 0.5], [1, 0.4, 0.5]]]);
 
 //mb_cube(size = [120, 80, 50]);
 //color("#ffffffaa")
@@ -948,3 +954,5 @@ echo (okt = okt, okt2 = okt2);
 
 
 mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
+
+translate([0,50, 0]) circle(r =100);
