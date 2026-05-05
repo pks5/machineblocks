@@ -4,6 +4,7 @@
 function mb_vadd(a,b)   = [a[0]+b[0], a[1]+b[1]];
 function mb_vsub(a,b)   = [a[0]-b[0], a[1]-b[1]];
 function mb_vmul(a,s)   = [a[0]*s,   a[1]*s   ];
+
 function mb_vlen(a)     = sqrt(a[0]*a[0] + a[1]*a[1]);
 function mb_vunit(a)    = let(L=mb_vlen(a)) (L==0 ? [0,0] : mb_vmul(a, 1/L));
 function mb_cross2(a,b) = a[0]*b[1] - a[1]*b[0];
@@ -98,10 +99,8 @@ function mb_array_index_of(a, v, i=0) =
     a[i] == v ? i :
     mb_array_index_of(a, v, i + 1);
 
-function mb_prismoid_expand(punkte, borders) =
+function mb_prismoid_plane_expand(punkte, p, raender) =
     let(
-        raender = borders[0] == undef ? [borders, borders, borders, borders] : borders,
-
         // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
         d_edge8 = [
             raender[0], raender[0],
@@ -125,9 +124,10 @@ function mb_prismoid_expand(punkte, borders) =
 
         Q8 = [
             for(i=[0:7])
+                let(qqx = Qc[mb_array_index_of(idx, i)])
                 punkte[i] == undef
                     ? undef
-                    : Qc[mb_array_index_of(idx, i)]
+                    : [qqx[0], qqx[1], punkte[i][2] + (p == 0 ? -1 : 1) * raender[4+p], punkte[i][3]]
         ]
     )
     Q8;
