@@ -390,7 +390,11 @@ function mb_corner_angle(corner, prev, point, next, top) =
 
 function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, z_value = undef) = 
     let(r = is_list(xyz) ? 
-        ([is_num(xyz[0]) ? xyz[0] : default[0], is_num(xyz[1]) ? xyz[1] : default[1], is_num(xyz[2]) ? xyz[2] : default[2]]) : 
+        ([
+            is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
+            is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
+            is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2])
+        ]) : 
         is_num(xyz) ? [xyz, xyz, xyz] : default)
     is_undef(r) ? undef : (is_undef(min_value) ? r : [max(min_value, r[0]), max(min_value, r[1]), max(min_value, r[2])]);
     
