@@ -389,7 +389,7 @@ function mb_corner_angle(corner, prev, point, next, top) =
 * POINT UTILS
 */
 
-function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, z_value = undef) = 
+function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef) = 
     let(r = is_list(xyz) ? 
         ([
             is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
@@ -576,8 +576,10 @@ function mb_prismoid_radius_resolve(radius) =
         mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
-function mb_prismoid_plane_resolve_points(a, b, p, height) =
-    let(az = is_list(height) ? height[p] : (p == 0 ? -1 : 1) * 0.5 * height)
+function mb_prismoid_plane_resolve_points(a, b, p, height, mul) =
+    let(h = is_undef(height) ? 1 : height,
+        az = is_list(h) ? h[p] : (p == 0 ? -1 : 1) * 0.5 * h,
+        mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
     [
         for (j = [0:7])
             let(
@@ -587,9 +589,9 @@ function mb_prismoid_plane_resolve_points(a, b, p, height) =
             is_undef(ai) ? 
                 undef :
             [
-                ai[0], 
-                ai[1], 
-                az, 
+                ai[0] * mul[0], 
+                ai[1] * mul[1], 
+                az * mul[2], 
                 (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? bi : (len(ai) > 3 ? ai[3] : undef)
             ]
     ];
@@ -597,15 +599,15 @@ function mb_prismoid_plane_resolve_points(a, b, p, height) =
 function mb_combine_shape(shape0, shape1) = 
     [];
 
-function mb_prismoid_shape_resolve(shape, height, radius) =
+function mb_prismoid_shape_resolve(shape, height, radius, mul = undef) =
     let(s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
         ],
         r = mb_prismoid_radius_resolve(radius),
         ar = [
-            mb_prismoid_plane_resolve_points(s[0], r[0], 0, height),
-            mb_prismoid_plane_resolve_points(s[1], r[1], 1, height)
+            mb_prismoid_plane_resolve_points(s[0], r[0], 0, height, mul),
+            mb_prismoid_plane_resolve_points(s[1], r[1], 1, height, mul)
         ]
     )
     [
@@ -614,13 +616,13 @@ function mb_prismoid_shape_resolve(shape, height, radius) =
         mb_prismoid_process(ar)
     ];
 
-function mb_cube_to_prismoid(size, radius) =
+function mb_cube_to_prismoid(size, radius, mul = undef) =
     let(hw = 0.5 * size[0],
         hh = 0.5 * size[1])
-    mb_prismoid_shape_resolve([[[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]], size[2], radius);
+    mb_prismoid_shape_resolve([[[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]], size[2], radius, mul);
         
-function mb_prismoid_shape_expand(shape, expand, skip_resolve = false, height = undef, radius = undef) = 
-    let(s = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius),
+function mb_prismoid_shape_expand(shape, expand, skip_resolve = false, height = undef, radius = undef, mul = undef) = 
+    let(s = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius, mul),
         ar = [
             mb_prismoid_plane_expand(s[0], 0, expand),
             mb_prismoid_plane_expand(s[1], 1, expand)
@@ -646,8 +648,8 @@ function mb_prismoid_shape_expand(shape, expand, skip_resolve = false, height = 
 /**
 * PRISMOID
 */
-module mb_prismoid(shape, height = undef, radius = 0, socket_top = undef, socket_bottom = undef, align = "sticky", resolution = 80, skip_resolve = false, debug = false){
-    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius);
+module mb_prismoid(shape, height = undef, radius = undef, mul = undef, socket_top = undef, socket_bottom = undef, align = "sticky", resolution = 80, skip_resolve = false, debug = false){
+    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius, mul);
     
     if(debug){
         echo (shape = shape);
@@ -811,7 +813,7 @@ mb_cube(debug = true, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0],
 ], height = 120, socket_bottom = 20, socket_top = 20, radius = 0, resolution = 160, debug=true);
 
  
-okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], 20, 0);
+okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], height = 20, radius = undef, mul = 1);
 
 
 okt2 = mb_prismoid_shape_expand(okt, [10, 10, 20, 20, 10, 20], skip_resolve = true);
