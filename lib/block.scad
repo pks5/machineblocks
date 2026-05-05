@@ -20,7 +20,6 @@ use <utils.scad>;
 use <bevel.scad>;
 use <rounded.scad>;
 use <quad.scad>;
-use <polygon.scad>;
 use <tongue.scad>;
 use <stud.scad>;
 use <quality.scad>;

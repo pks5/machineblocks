@@ -1,4 +1,5 @@
 use <utils.scad>;
+use <quad.scad>;
 
 /*
 * --------------------
@@ -774,7 +775,7 @@ mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolutio
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-mb_cube(debug = true, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
+*mb_cube(debug = true, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0], [25, 25, 0], [25, 25, 0]], [[25, 5, 15], [25, 5, 15], [25, 5, 15], [25, 5, 15]]]);
 
 //mb_cube(size = [120, 80, 50]);
 //color("#ffffffaa")
@@ -795,3 +796,14 @@ mb_cube(debug = true, size = [120, 80, 50], radius = [[[25, 25, 0], [25, 25, 0],
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = 20, radius = 0, resolution = 160, debug=true);
+
+okt = [[-20, -50],[-60, 0], [-30, 40], undef, [40, 50], undef, [20, -50], undef];
+okt2 = mb_prismoid_expand(okt, [10, 10, 20, 20]);
+
+mb_prismoid(shape = [
+    okt
+], height = 20, radius = 0, resolution = 160);
+
+mb_prismoid(shape = [
+    okt2
+], height = 40, radius = 0, resolution = 160);

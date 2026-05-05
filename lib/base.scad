@@ -2,7 +2,6 @@ use <prismoid.scad>;
 use <connectors.scad>;
 use <utils.scad>;
 use <quad.scad>;
-use <polygon.scad>;
 use <quality.scad>;
 
 module mb_slant_prism(side, l, w, h, inv){
@@ -458,11 +457,18 @@ module mb_base(
                 );
 
                 translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5]+ cutOffset)]){
+                    mb_prismoid(
+                                    shape = [pitBevelInner], 
+                                    height = pitDepth + cutOffset, 
+                                    radius = pitRadius == 0 ? 0 : [0, 0, pitRadius], 
+                                    resolution = pitRadiusQuality
+                                );
+                    /*
                     intersection(){
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
                             mb_cube(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
-                    }
+                    }*/
                 }
 
                 //Pit Wall Gaps
