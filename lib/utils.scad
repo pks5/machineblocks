@@ -69,46 +69,66 @@ function mb_block_dim(size, unitMbu, unitGrid, base_mod = undef) =
         [unitMbu, unitGrid]
     ];
 
+function mb_slope_matrix(slope) =
+    let(
+        sl = [
+            [abs(min(0, slope[0])), abs(min(0, slope[1])), abs(min(0, slope[2])), abs(min(0, slope[3]))],
+            [abs(max(0, slope[0])), abs(max(0, slope[1])), abs(max(0, slope[2])), abs(max(0, slope[3]))]
+        ]
+    )
+    [
+        for(i=[0:1])
+            [   
+                [sl[i][0], sl[i][2]], [sl[i][0], sl[i][2]],
+                [sl[i][0], -sl[i][3]], [sl[i][0], -sl[i][3]],
+                [-sl[i][1], -sl[i][3]], [-sl[i][1], -sl[i][3]],
+                [-sl[i][1], sl[i][2]], [-sl[i][1], sl[i][2]]
+            ]
+    ];
+
 function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope = [0,0,0,0]) =
-    let(sl = [
-        [abs(min(0, slope[0])), abs(min(0, slope[1])), abs(min(0, slope[2])), abs(min(0, slope[3]))],
-        [abs(max(0, slope[0])), abs(max(0, slope[1])), abs(max(0, slope[2])), abs(max(0, slope[3]))]
-    ],
-    bc = [
+    let(
+        sl = mb_slope_matrix(slope),
+        bc = [
             [dim[9][0], dim[9][1]], [dim[9][0], dim[9][1]],
             [dim[9][0], dim[10][1]], [dim[9][0], dim[10][1]], 
             [dim[10][0], dim[10][1]], [dim[10][0], dim[10][1]], 
             [dim[10][0], dim[9][1]], [dim[10][0], dim[9][1]]
         ],
-    bs = [
-        [bevel[0][0], 0], [0, bevel[0][1]],
-        [0, -bevel[1][0]], [bevel[1][1], 0],
-        [-bevel[2][0], 0], [0, -bevel[2][1]],
-        [0, bevel[3][0]], [-bevel[3][1], 0]
-    ],
-    bb = [
-        [bs[0][0] + bc[0][0], bs[0][1] + bc[0][1]], [bs[1][0] + bc[1][0], bs[1][1] + bc[1][1]],
-        [bs[2][0] + bc[2][0], bs[2][1] + bc[2][1]], [bs[3][0] + bc[3][0], bs[3][1] + bc[3][1]],
-        [bs[4][0] + bc[4][0], bs[4][1] + bc[4][1]], [bs[5][0] + bc[5][0], bs[5][1] + bc[5][1]],
-        [bs[6][0] + bc[6][0], bs[6][1] + bc[6][1]], [bs[7][0] + bc[7][0], bs[7][1] + bc[7][1]]
-    ]
-    
+        bs = [
+            bevel[0][0] == 0 && bevel[0][1] > 0 ? undef : [bevel[0][0], 0], 
+            bevel[0][1] == 0 && bevel[0][0] >= 0 ? undef : [0, bevel[0][1]],
+            
+            bevel[1][0] == 0 && bevel[1][1] > 0 ? undef : [0, -bevel[1][0]], 
+            bevel[1][1] == 0 && bevel[1][0] >= 0 ? undef : [bevel[1][1], 0],
+            
+            bevel[2][0] == 0 && bevel[2][1] > 0 ? undef : [-bevel[2][0], 0], 
+            bevel[2][1] == 0 && bevel[2][0] >= 0 ? undef : [0, -bevel[2][1]],
+            
+            bevel[3][0] == 0 && bevel[3][1] > 0 ? undef : [0, bevel[3][0]], 
+            bevel[3][1] == 0 && bevel[3][0] >= 0 ? undef : [-bevel[3][1], 0]
+        ],
+        bb = [
+            for(i=[0:7])
+                is_undef(bs[i]) ? undef : [bc[i][0] + bs[i][0], bc[i][1] + bs[i][1]]
+        ],
+        bu = [
+            for(i=[0:7])
+                bb[i] == bb[(i + 7 - 2) % 7] || bb[i] == bb[(i + 1) % 7] ? undef : bb[i]
+        ]
     )
     [
         bc,
         [dim[9][2], dim[10][2]],
-        [
-            [bb[0][0] + sl[0][0], bb[0][1] + sl[0][2]], [bb[1][0] + sl[0][0], bb[1][1] + sl[0][2]],
-            [bb[2][0] + sl[0][0], bb[2][1] - sl[0][3]], [bb[3][0] + sl[0][0], bb[3][1] - sl[0][3]],
-            [bb[4][0] - sl[0][1], bb[4][1] - sl[0][3]], [bb[5][0] - sl[0][1], bb[5][1] - sl[0][3]],
-            [bb[6][0] - sl[0][1], bb[6][1] + sl[0][2]], [bb[7][0] - sl[0][1], bb[7][1] + sl[0][2]]
+        [   
+            for(i=[0:7])
+                is_undef(bu[i]) ? undef : [bu[i][0] + sl[0][i][0], bu[i][1] + sl[0][i][1]]
         ],
         [
-            [bb[0][0] + sl[1][0], bb[0][1] + sl[1][2]], [bb[1][0] + sl[1][0], bb[1][1] + sl[1][2]],
-            [bb[2][0] + sl[1][0], bb[2][1] - sl[1][3]], [bb[3][0] + sl[1][0], bb[3][1] - sl[1][3]],
-            [bb[4][0] - sl[1][1], bb[4][1] - sl[1][3]], [bb[5][0] - sl[1][1], bb[5][1] - sl[1][3]],
-            [bb[6][0] - sl[1][1], bb[6][1] + sl[1][2]], [bb[7][0] - sl[1][1], bb[7][1] + sl[1][2]]
-        ]
+            for(i=[0:7])
+                is_undef(bu[i]) ? undef : [bu[i][0] + sl[1][i][0], bu[i][1] + sl[1][i][1]]
+        ],
+        bu
     ];
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
