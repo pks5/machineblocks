@@ -1,6 +1,6 @@
 use <utils.scad>;
 use <quad.scad>;
-use <polygon.scad>;
+//use <polygon.scad>;
 use <prismoid.scad>;
 use <quality.scad>;
 

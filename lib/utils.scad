@@ -157,7 +157,8 @@ function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope =
             for(i=[0:7])
                 is_undef(bu[i]) ? undef : [bu[i][0] + sl[1][i][0], bu[i][1] + sl[1][i][1]]
         ]],
-        [mn[2], mx[2]]
+        [mn[2], mx[2]],
+        [0.2, 0.2]
     ];
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
