@@ -69,11 +69,25 @@ function mb_block_dim(size, unitMbu, unitGrid, base_mod = undef) =
         [unitMbu, unitGrid]
     ];
 
-function mb_slope_matrix(slope) =
+function mb_slope_matrix(slope, bv, si) =
     let(
+        mx_bvx = si[0] - max((bv[0][0] + bv[3][1]), (bv[1][1] + bv[2][0])),
+        mx_bvy = si[1] - max((bv[0][1] + bv[3][0]), (bv[1][0] + bv[2][1])),
+        slo = [
+            min(abs(slope[0]), mx_bvx),
+            min(abs(slope[1]), mx_bvx),
+            min(abs(slope[2]), mx_bvy),
+            min(abs(slope[3]), mx_bvy),
+        ],
+        slo2 = [
+            sign(slope[0]) * slo[0],
+            sign(slope[1]) * min(slo[1], mx_bvx - slo[0]),
+            sign(slope[2]) * slo[2],
+            sign(slope[3]) * min(slo[3], mx_bvy - slo[2]),
+        ],
         sl = [
-            [abs(min(0, slope[0])), abs(min(0, slope[1])), abs(min(0, slope[2])), abs(min(0, slope[3]))],
-            [abs(max(0, slope[0])), abs(max(0, slope[1])), abs(max(0, slope[2])), abs(max(0, slope[3]))]
+            [abs(min(0, slo2[0])), abs(min(0, slo2[1])), abs(min(0, slo2[2])), abs(min(0, slo2[3]))],
+            [abs(max(0, slo2[0])), abs(max(0, slo2[1])), abs(max(0, slo2[2])), abs(max(0, slo2[3]))]
         ]
     )
     [
@@ -88,25 +102,40 @@ function mb_slope_matrix(slope) =
 
 function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope = [0,0,0,0]) =
     let(
-        sl = mb_slope_matrix(slope),
+        
+        s = dim[2],
+        mn = dim[9],
+        mx = dim[10],
+        bev = [
+            [min(s[0], bevel[0][0]), min(s[1], bevel[0][1])],
+            [min(s[1], bevel[1][0]), min(s[0], bevel[1][1])],
+            [min(s[0], bevel[2][0]), min(s[1], bevel[2][1])],
+            [min(s[1], bevel[3][0]), min(s[0], bevel[3][1])]
+        ],
+        bv = [
+            [min(s[0] - bev[3][1], bev[0][0]), bev[0][1]],
+            [min(s[1] - bev[0][1], bev[1][0]), bev[1][1]],
+            [min(s[0] - bev[1][1], bev[2][0]), bev[2][1]],
+            [min(s[1] - bev[2][1], bev[3][0]), bev[3][1]]
+        ],
         bc = [
-            [dim[9][0], dim[9][1]], [dim[9][0], dim[9][1]],
-            [dim[9][0], dim[10][1]], [dim[9][0], dim[10][1]], 
-            [dim[10][0], dim[10][1]], [dim[10][0], dim[10][1]], 
-            [dim[10][0], dim[9][1]], [dim[10][0], dim[9][1]]
+            [mn[0], mn[1]], [mn[0], mn[1]],
+            [mn[0], mx[1]], [mn[0], mx[1]], 
+            [mx[0], mx[1]], [mx[0], mx[1]], 
+            [mx[0], mn[1]], [mx[0], mn[1]]
         ],
         bs = [
-            bevel[0][0] == 0 && bevel[0][1] > 0 ? undef : [bevel[0][0], 0], 
-            bevel[0][1] == 0 && bevel[0][0] >= 0 ? undef : [0, bevel[0][1]],
+            bv[0][0] == 0 && bv[0][1] > 0 ? undef : [bv[0][0], 0], 
+            bv[0][1] == 0 && bv[0][0] >= 0 ? undef : [0, bv[0][1]],
             
-            bevel[1][0] == 0 && bevel[1][1] > 0 ? undef : [0, -bevel[1][0]], 
-            bevel[1][1] == 0 && bevel[1][0] >= 0 ? undef : [bevel[1][1], 0],
+            bv[1][0] == 0 && bv[1][1] > 0 ? undef : [0, -bv[1][0]], 
+            bv[1][1] == 0 && bv[1][0] >= 0 ? undef : [bv[1][1], 0],
             
-            bevel[2][0] == 0 && bevel[2][1] > 0 ? undef : [-bevel[2][0], 0], 
-            bevel[2][1] == 0 && bevel[2][0] >= 0 ? undef : [0, -bevel[2][1]],
+            bv[2][0] == 0 && bv[2][1] > 0 ? undef : [-bv[2][0], 0], 
+            bv[2][1] == 0 && bv[2][0] >= 0 ? undef : [0, -bv[2][1]],
             
-            bevel[3][0] == 0 && bevel[3][1] > 0 ? undef : [0, bevel[3][0]], 
-            bevel[3][1] == 0 && bevel[3][0] >= 0 ? undef : [-bevel[3][1], 0]
+            bv[3][0] == 0 && bv[3][1] > 0 ? undef : [0, bv[3][0]], 
+            bv[3][1] == 0 && bv[3][0] >= 0 ? undef : [-bv[3][1], 0]
         ],
         bb = [
             for(i=[0:7])
@@ -115,7 +144,8 @@ function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope =
         bu = [
             for(i=[0:7])
                 bb[i] == bb[(i + 7 - 2) % 7] || bb[i] == bb[(i + 1) % 7] ? undef : bb[i]
-        ]
+        ],
+        sl = mb_slope_matrix(slope, bv, s)
     )
     [
         bc,
