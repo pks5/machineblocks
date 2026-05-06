@@ -925,5 +925,5 @@ echo (okt = okt, okt2 = okt2);
 dim = mb_block_dim([4, 3, 3], 1.6, [5, 2], undef);
 
 pr = mb_block_to_prismoid(dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1,1,0,0]); //
-echo (dim = dim, pr = pr, bu = pr[4]);
-mb_prismoid(shape = [pr[2], pr[3]], height=pr[1], mul=[8, 8, 3.2], resolution = 160, debug = false);
+
+mb_prismoid(shape = pr[0], height=pr[1], mul=[8, 8, 3.2], resolution = 160, debug = false);
