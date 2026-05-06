@@ -955,4 +955,4 @@ dim = mb_block_dim([4, 3, 3], 1.6, [5, 2], undef);
 
 pr = mb_block_to_prismoid(dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1,-1,-1,0]); //
 
-mb_prismoid(shape = pr[0], height=pr[1], socket=pr[2], mul=[8, 8, 3.2], resolution = 160, debug = true, align="start");
+mb_prismoid(shape = pr[0], height=pr[1], socket=pr[2], mul=[8, 8, 3.2], radius=0, resolution = 160, debug = true, align="start");
