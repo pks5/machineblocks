@@ -85,47 +85,42 @@ module mb_corner_cut(size, c = [0, 0]){
 /**
 * ROUNDING CORNER
 */
-module mb_rounding_corner(corner = [0, 0], radius = 0, angle = [0, 0, 0, 0], resolution = 80, debug = false){
-    radius = mb_resolve_xyz(xyz = radius, min_value = 0.001);
-    
+module mb_rounding_corner(
+        corner = [0, 0], 
+        radius = 0, 
+        angle = [0, 0, 0, 0], 
+        zero = 0.001, 
+        precision = 0.01, 
+        resolution = 80, 
+        debug = false
+){
+    radius = mb_resolve_xyz(xyz = radius, min_value = zero);
     
     off_corner = mb_corner_offset(corner, radius);
     off = mb_corner_offset(corner, radius, -1);
     
-    multmatrix(m = [ [1, angle[1] / 45, angle[2] / 45, 0],
-                 [angle[0] / 45, 1, angle[3] / 45, 0],
-                 [0, 0, 1, 0]
-              ]) 
+    multmatrix(m = [ 
+                    [1,             angle[1] / 45, angle[2] / 45, 0],
+                    [angle[0] / 45, 1,             angle[3] / 45, 0],
+                    [0,             0,             1,             0]
+                   ]) 
     translate(off)
         intersection(){
             translate(off_corner)
                 mb_corner_cut(radius, corner);
-                //cube(size = radius, center = true);
-
-            //if((radius[0] > 0.001 && radius[1] > 0.001 && radius[2] > 0.001) 
-            //&& (radius[0] != radius[1] && radius[1] != radius[2] && radius[0] != radius[2])
-            //){
-                mb_pseudo_ellipse_ring(
-                    //corner = corner,
-                    radius=radius,
-                    resolution=resolution
-                );
                 
-            /*}
-            else{
-                max_rad = max(radius[0], radius[1], radius[2]);
-                rad_rel = [radius[0] / max_rad, radius[1] / max_rad, radius[2] / max_rad];
-                scale(rad_rel)
-                    sphere(r = max_rad, $fn = resolution);
-                if(debug){
-                    echo (m = "spehere", radius = radius);
-                }
-            }*/
+            mb_pseudo_ellipse_ring(
+                //corner = corner,
+                radius=radius,
+                resolution=resolution,
+                zero = zero,
+                precision = precision
+            );
         }
 }
 
-/**
-* PSEUDO ELLIPSE RING
+/*
+* PSEUDO ELLIPSE RING HELPERS
 */
 
 function mb_pe_curvature(rx, ry, a) =
@@ -174,28 +169,45 @@ function mb_pe_adaptive_angles(
             concat(angles, [a0])
         );
 
+function mb_pe_cap_angles(center, width, step) =
+    [for (a = [center - width : step : center + width]) a];
+
+function mb_pe_in_angle_range(a, a0, a1) =
+    a >= min(a0, a1) && a <= max(a0, a1);
+
+function mb_pe_filter_angles(angles, a0, a1) =
+    [for (a = angles) if (mb_pe_in_angle_range(a, a0, a1)) a];
+
+/**
+* PSEUDO ELLIPSE RING
+*/
 module mb_pseudo_ellipse_ring(
     radius=[40, 25, 3],
-    rad_t = 0.01,
-    resolution=32,
-    
-    
+    zero = 0.001,
+    precision = 0.01,
+    resolution = 32,
     //corner = [0, 0],
-    
     h=0.001,
     capWidth=0.1,
     capThreshold=0.15
 ) {
-    s = mb_resolve_xyz(xyz = radius, min_value = 0.001);
+    s = mb_resolve_xyz(xyz = radius, min_value = zero, precision = precision);
 
-    if((s[0] < rad_t || s[1] < rad_t || s[2] < rad_t)
-        || (s[0] == s[1] && s[1] == s[2] && s[0] == s[2])){
+    if((s[0] <= zero && s[1] <= zero) 
+        || (s[0] <= zero && s[2] <= zero) 
+        || (s[1] <= zero && s[2] <= zero)){
+        // At least 2 rad are zero
+        cube(size=[zero, zero, zero], center = true);
+    }
+    else if((s[0] <= zero || s[1] <= zero || s[2] <= zero)
+        || (s[0] == s[1]) && (s[0] == s[2]) && (s[1] == s[2])){
+        // One rad zero or all rad are same
         max_rad = max(s[0], s[1], s[2]);
         rad_rel = [s[0] / max_rad, s[1] / max_rad, s[2] / max_rad];
         scale(rad_rel)
             sphere(r = max_rad, $fn = resolution);    
     }
-    else if(min(abs(s[0] - s[1]), abs(s[0] - s[2]), abs(s[1] - s[2])) < rad_t){
+    else if((s[0] == s[1]) || (s[0] == s[2]) || (s[1] == s[2])){
         rs = min(s[0], s[1], s[2]);
         rm = max(s[0], s[1], s[2]);
         ch = 2 * (rm - rs);
@@ -247,14 +259,14 @@ module mb_pseudo_ellipse_ring(
 
         rot = x_smallest ? [0, 90, 0] : y_smallest ? [90, 0, 0] : [0, 0, 0];
 
-        rx = max(0.001, radius[0] - radius[2]);
-        ry = max(0.001, radius[1] - radius[2]);
-        z_rad = max(0.001, radius[2]);
+        rx = max(zero, radius[0] - radius[2]);
+        ry = max(zero, radius[1] - radius[2]);
+        z_rad = max(zero, radius[2]);
 
         angleSpan = endAngle - startAngle;
 
         max_r = max(abs(rx), abs(ry));
-        min_r = max(0.001, min(abs(rx), abs(ry)));
+        min_r = max(zero, min(abs(rx), abs(ry)));
 
         count = max(1, ceil(resolution * abs(angleSpan) / 360));
         steps = (count > 1) ? (count - 1) : 1;
@@ -337,15 +349,6 @@ module mb_pseudo_ellipse_ring(
     }
 }
 
-function mb_pe_cap_angles(center, width, step) =
-    [for (a = [center - width : step : center + width]) a];
-
-function mb_pe_in_angle_range(a, a0, a1) =
-    a >= min(a0, a1) && a <= max(a0, a1);
-
-function mb_pe_filter_angles(angles, a0, a1) =
-    [for (a = angles) if (mb_pe_in_angle_range(a, a0, a1)) a];
-
 /*
 * ------------------
 * END HELPER MODULES
@@ -401,15 +404,16 @@ function mb_corner_angle(corner, prev, point, next, top) =
 * POINT UTILS
 */
 
-function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef) = 
+function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, precision = undef) = 
     let(r = is_list(xyz) ? 
         ([
             is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
             is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
             is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2])
         ]) : 
-        is_num(xyz) ? [xyz, xyz, xyz] : default)
-    is_undef(r) ? undef : (is_undef(min_value) ? r : [max(min_value, r[0]), max(min_value, r[1]), max(min_value, r[2])]);
+        is_num(xyz) ? [xyz, xyz, xyz] : default,
+        p = is_undef(r) ? undef : (is_undef(precision) ? r : [round_prec(r[0], precision), round_prec(r[1], precision), round_prec(r[2], precision)]))
+    is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
     
 function mb_point(shape, i = 0, j = 0) = 
     let(plane = mb_prismoid_plane(shape, i))

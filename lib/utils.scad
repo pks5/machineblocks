@@ -258,6 +258,8 @@ function mb_xy_add_generic(a, b, i = 0) =
 * MISC
 */
 
+function round_prec(x, p) = round(x / p) * p;
+
 function mb_undef_to(v, to = 0) = v == undef ? to : v;
 
 function mb_side_to_int(side) =
