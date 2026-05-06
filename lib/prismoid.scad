@@ -404,17 +404,7 @@ function mb_corner_angle(corner, prev, point, next, top) =
 * POINT UTILS
 */
 
-function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, precision = undef) = 
-    let(r = is_list(xyz) ? 
-        ([
-            is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
-            is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
-            is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2])
-        ]) : 
-        is_num(xyz) ? [xyz, xyz, xyz] : default,
-        p = is_undef(r) ? undef : (is_undef(precision) ? r : [round_prec(r[0], precision), round_prec(r[1], precision), round_prec(r[2], precision)]))
-    is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
-    
+   
 function mb_point(shape, i = 0, j = 0) = 
     let(plane = mb_prismoid_plane(shape, i))
     mb_resolve_xyz(xyz = plane[j], default = undef);
@@ -510,35 +500,7 @@ function mb_xyz_rad_convert(xyz_rad) =
 * FACES
 */
 
-function mb_resolve_face_sext(sext, mul = undef) = 
-    let(mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
-    is_undef(sext) || is_string(sext) ? undef : 
-    is_list(sext) ? 
-    (len(sext) == 3 ? 
-        [
-            sext[0]*mul[0], 
-            sext[0]*mul[0], 
-            sext[1]*mul[1], 
-            sext[1]*mul[1], 
-            sext[2]*mul[2], 
-            sext[2]*mul[2]
-        ] : 
-        [
-            sext[0]*mul[0], 
-            sext[1]*mul[0], 
-            sext[2]*mul[1], 
-            sext[3]*mul[1], 
-            sext[4]*mul[2], 
-            sext[5]*mul[2]
-        ]) : 
-        [
-            sext * mul[0], 
-            sext * mul[0], 
-            sext * mul[1], 
-            sext * mul[1], 
-            sext * mul[2], 
-            sext * mul[2]
-        ];
+
 
 /*
 * PRISMOID SHAPE
@@ -742,7 +704,17 @@ function mb_prismoid_shape_expand(shape, expand = undef, skip_resolve = false, h
         mb_prismoid_process(ex)
     ];
 
-function mb_cube_to_prismoid(size, radius = undef, expand = undef, mul = undef, add = undef) =
+function mb_dim_to_prismoid(dim, radius = undef, expand = undef, mul = undef, add = undef) =
+    mb_prismoid_shape_expand(
+        shape = [[[dim[9][0], dim[9][1]], [dim[9][0], dim[10][1]], [dim[10][0], dim[10][1]], [dim[10][0], dim[9][1]]]], 
+        height = [dim[9][2], dim[10][2]], 
+        radius = radius, 
+        mul = mul,
+        add = add,
+        expand = expand
+    );
+
+function mb_cube_to_prismoid(size, mod = undef, radius = undef, expand = undef, mul = undef, add = undef) =
     let(hw = 0.5 * size[0],
         hh = 0.5 * size[1])
     mb_prismoid_shape_expand(

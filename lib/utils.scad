@@ -1,3 +1,73 @@
+function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, precision = undef) = 
+    let(r = is_list(xyz) ? 
+        ([
+            is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
+            is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
+            is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2])
+        ]) : 
+        is_num(xyz) ? [xyz, xyz, xyz] : default,
+        p = is_undef(r) ? undef : (is_undef(precision) ? r : [round_prec(r[0], precision), round_prec(r[1], precision), round_prec(r[2], precision)]))
+    is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
+ 
+
+function mb_resolve_face_sext(sext, mul = undef) = 
+    let(mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
+    is_undef(sext) || is_string(sext) ? [0, 0, 0, 0, 0, 0] : 
+    is_list(sext) ? 
+    (len(sext) == 3 ? 
+        [
+            sext[0]*mul[0], 
+            sext[0]*mul[0], 
+            sext[1]*mul[1], 
+            sext[1]*mul[1], 
+            sext[2]*mul[2], 
+            sext[2]*mul[2]
+        ] : 
+        [
+            sext[0]*mul[0], 
+            sext[1]*mul[0], 
+            sext[2]*mul[1], 
+            sext[3]*mul[1], 
+            sext[4]*mul[2], 
+            sext[5]*mul[2]
+        ]) : 
+        [
+            sext * mul[0], 
+            sext * mul[0], 
+            sext * mul[1], 
+            sext * mul[1], 
+            sext * mul[2], 
+            sext * mul[2]
+        ];
+
+function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
+
+function mb_block_dim(size, base_mod = undef) =
+    let(mod = mb_resolve_face_sext(base_mod),
+        bb = mb_bounding_box(size),
+        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
+        mi = [-mod[0], -mod[2], 0],
+        ma = [size[0] + mod[1], size[1] + mod[3], size[2] + mod[5]],
+        mod_size = [
+            size[0] + mod[0] + mod[1],
+            size[1] + mod[2] + mod[3],
+            size[2] + mod[4] + mod[5]
+        ])
+    [
+        size, // Original Size 
+        bb, // Original Bounding Box Size
+        mod_size, // Modified Size
+        mb_bounding_box(mod_size), // Modified Bounding Box Size
+        mi, // Min
+        ma, // Max
+        [floor(-mod[0]), floor(-mod[2]), 0], // Min Index
+        [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)], // Max Index
+        c, // org center (without mod)
+        [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
+        [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+    ];
+
+
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
         [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] 
         : [radius[0] * gridSize, radius[1] * gridSize, radius[2] * gridSize, radius[3] * gridSize]); 

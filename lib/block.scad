@@ -753,6 +753,11 @@ module mb_block(
     /*
     * Start measurements
     */
+    baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
+    dim = mb_block_dim(size, baseModR);
+    pr = mb_dim_to_prismoid(dim);
+
+    echo(dim = dim, pr = pr);
 
     mbuToMm = scale * unitMbu;
 
@@ -767,7 +772,7 @@ module mb_block(
     objectSize = [objectSizeX, objectSizeY, objectSizeZ];
 
     //Side Adjustment
-    baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
+   
     baseModRes = mb_base_mod_resolve(baseMod, [gridSizeXY, gridSizeZ]);
     bevelMod = [[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]];
     bevelRes = bevel;//mb_xy_add_generic(bevel, bevelMod);
