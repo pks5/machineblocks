@@ -686,15 +686,7 @@ function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = 
 
 
 
-function mb_dim_to_prismoid(dim, radius = undef, mul = undef) =
-    let(p = mb_block_to_prismoid(dim))
-    mb_prismoid_shape_resolve(
-        shape = [p[0]], 
-        height = p[1], 
-        radius = radius, 
-        mul = mul,
-        add = undef
-    );
+
 
 function mb_cube_to_prismoid(size, mod = undef, radius = undef, expand = undef, mul = undef, add = undef) =
     let(hw = 0.5 * size[0],
