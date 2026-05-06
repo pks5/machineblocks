@@ -642,7 +642,7 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
         for (j = [0:7])
             let(
                 ai = j < len(a) ? a[j] : undef,
-                bi = mb_resolve_xyz(is_list(radius) && (j < len(radius)) ? radius[j] : undef, default = undef),
+                bi = mb_resolve_xyz(is_list(radius) && (j < len(radius)) ? radius[j] : undef, mul = mul, default = undef),
                 ad = mb_resolve_xyz(is_undef(add) ? undef : add[j])
             )
             is_undef(ai) ? 
@@ -651,7 +651,9 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
                 (ai[0] + ad[0]) * mul[0], 
                 (ai[1] + ad[1]) * mul[1], 
                 ((len(ai) < 3 || is_undef(ai[2])) ? az : ai[2]) * mul[2], 
-                (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? [bi[0] * mul[0], bi[1] * mul[1], bi[2] * mul[2]] : (len(ai) > 3 ? ai[3] : undef)
+                (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? 
+                    bi : 
+                    (len(ai) > 3 ? mb_resolve_xyz(ai[3], mul = mul) : undef)
             ]
     ];
 
@@ -704,14 +706,14 @@ function mb_prismoid_shape_expand(shape, expand = undef, skip_resolve = false, h
         mb_prismoid_process(ex)
     ];
 
-function mb_dim_to_prismoid(dim, radius = undef, expand = undef, mul = undef, add = undef) =
+function mb_dim_to_prismoid(dim, radius = undef, mul = undef) =
+    let(p = mb_block_to_prismoid(dim))
     mb_prismoid_shape_expand(
-        shape = [[[dim[9][0], dim[9][1]], [dim[9][0], dim[10][1]], [dim[10][0], dim[10][1]], [dim[10][0], dim[9][1]]]], 
-        height = [dim[9][2], dim[10][2]], 
+        shape = [p[0]], 
+        height = p[1], 
         radius = radius, 
         mul = mul,
-        add = add,
-        expand = expand
+        add = undef
     );
 
 function mb_cube_to_prismoid(size, mod = undef, radius = undef, expand = undef, mul = undef, add = undef) =
@@ -745,6 +747,7 @@ module mb_prismoid(
     shape, 
     height = undef, 
     radius = undef, 
+    add = undef,
     mul = undef, 
     socket_top = undef, 
     socket_bottom = undef, 
@@ -753,7 +756,7 @@ module mb_prismoid(
     skip_resolve = false, 
     debug = false
 ){
-    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape, height, radius, mul);
+    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, height = height, radius = radius, mul = mul, add = add);
     
     if(debug){
         echo (shape = shape);
@@ -888,14 +891,14 @@ corner = [1,0];
 mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolution = 80);
 
 
-translate([0, -300, 0])
+*translate([0, -300, 0])
 mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = undef, radius = 0, resolution = 160);
 
-translate([0, 300, 0])
+*translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
@@ -904,7 +907,7 @@ mb_prismoid(shape = [
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-translate([200, 0, 0])
+*translate([200, 0, 0])
 mb_cube(
     debug = true, 
     mul=[8, 8, 3.2], 
@@ -931,15 +934,16 @@ mb_cube(
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket_bottom = 20, socket_top = 20, radius = 0, resolution = 160, debug=true);
 
- 
+/* 
 okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], height = 20, radius = undef);
-
-
 okt2 = mb_prismoid_shape_expand(shape = okt, add=[[ [-100,1] ]], mul = undef, skip_resolve = true);
 echo (okt = okt, okt2 = okt2);
 *mb_prismoid(shape = okt, skip_resolve = true, resolution = 160);
+*mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
+*/
 
+dim = mb_block_dim([4, 2, 3], 1.6, [5, 2], undef);
 
-mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
-
-*translate([0,50, 0]) circle(r =100);
+pr = mb_block_to_prismoid(dim, bevel = [[1, 1], [1, 1], [1, 1], [1, 1]]); //
+echo (dim = dim, pr = pr);
+mb_prismoid(shape = [pr[0]], height=pr[1], add=[pr[2], pr[3]], mul=[8, 8, 3.2], resolution = 160);

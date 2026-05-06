@@ -754,7 +754,7 @@ module mb_block(
     * Start measurements
     */
     baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
-    dim = mb_block_dim(size, baseModR);
+    dim = mb_block_dim(size, unitMbu, unitGrid, baseModR);
     pr = mb_dim_to_prismoid(dim);
 
     echo(dim = dim, pr = pr);

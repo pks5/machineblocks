@@ -1,11 +1,12 @@
-function mb_resolve_xyz(xyz, default = [0, 0, 0], min_value = undef, precision = undef) = 
-    let(r = is_list(xyz) ? 
+function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef, precision = undef) = 
+    let(m = is_undef(mul) ? [1, 1, 1] : mb_resolve_xyz(mul, default = [1, 1, 1]),
+        r = is_list(xyz) ? 
         ([
-            is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
-            is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
-            is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2])
+            m[0] * (is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0])), 
+            m[1] * (is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1])), 
+            m[2] * (is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2]))
         ]) : 
-        is_num(xyz) ? [xyz, xyz, xyz] : default,
+        is_num(xyz) ? [m[0] * xyz, m[1] * xyz, m[2] * xyz] : default,
         p = is_undef(r) ? undef : (is_undef(precision) ? r : [round_prec(r[0], precision), round_prec(r[1], precision), round_prec(r[2], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
  
@@ -42,7 +43,7 @@ function mb_resolve_face_sext(sext, mul = undef) =
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function mb_block_dim(size, base_mod = undef) =
+function mb_block_dim(size, unitMbu, unitGrid, base_mod = undef) =
     let(mod = mb_resolve_face_sext(base_mod),
         bb = mb_bounding_box(size),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
@@ -64,9 +65,32 @@ function mb_block_dim(size, base_mod = undef) =
         [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)], // Max Index
         c, // org center (without mod)
         [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-        [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+        [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]], // max from org center
+        [unitMbu, unitGrid]
     ];
 
+function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope = [0,0,0,0]) =
+    [
+        [
+            [dim[9][0], dim[9][1]], [dim[9][0], dim[9][1]],
+            [dim[9][0], dim[10][1]], [dim[9][0], dim[10][1]], 
+            [dim[10][0], dim[10][1]], [dim[10][0], dim[10][1]], 
+            [dim[10][0], dim[9][1]], [dim[10][0], dim[9][1]]
+        ],
+        [dim[9][2], dim[10][2]],
+        [
+            [bevel[0][0], 0], [0, bevel[0][1]],
+            [0, -bevel[1][0]], [bevel[1][1], 0],
+            [-bevel[2][0], 0], [0, -bevel[2][1]],
+            [0, bevel[3][0]], [-bevel[3][1], 0]
+        ],
+        [
+            [bevel[0][0], 0], [0, bevel[0][1]],
+            [0, -bevel[1][0]], [bevel[1][1], 0],
+            [-bevel[2][0], 0], [0, -bevel[2][1]],
+            [0, bevel[3][0]], [-bevel[3][1], 0]
+        ]
+    ];
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
         [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] 
