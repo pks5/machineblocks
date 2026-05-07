@@ -107,7 +107,7 @@ function mb_param_slopeBaseHeightLower(config, settings, default = undef) = mb_p
 function mb_param_slopeBaseHeightLowerInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLowerInner", default != undef ? default : 1.125);
 function mb_param_slopeBaseHeightUpper(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightUpper", default != undef ? default : 1);
 
-function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : []);
+function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : [[0,0], [0,0], [0,0], [0,0]]);
 
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
@@ -754,10 +754,10 @@ module mb_block(
     * Start measurements
     */
     baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
-    dim = mb_block_dim(size, unitMbu, unitGrid, baseModR);
-    pr = mb_block_to_prismoid(dim);
+    //dim = mb_block_dim(size, unitMbu, unitGrid, baseModR);
+    //pr = mb_block_to_prismoid(dim);
 
-    echo(dim = dim, pr = pr);
+    //echo(dim = dim, pr = pr);
 
     mbuToMm = scale * unitMbu;
 

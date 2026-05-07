@@ -978,7 +978,6 @@ echo (okt = okt, okt2 = okt2);
 */
 
 block_dim = mb_block_dim([4, 3, 3]);
-echo(dim = block_dim);
-pr = mb_block_to_prismoid(block_dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1, -1, -1, 0], mul=[8, 8, 3.2]); //
+pr = mb_block_to_prismoid(block_dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1, -1, -1, 0]);
 
-mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = false, align="start");
+mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false, align="start");

@@ -149,6 +149,9 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
     )
     [bv, bu];
 
+function mb_bevel_resolve(bevel) = 
+    [];
+
 function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
     let(
         mod_size = block_dim[1][0],
@@ -448,6 +451,24 @@ function mb_side_to_int(side) =
     side == "z+" ? 5 :
     undef
     ) : side;
+
+function mb_face_to_int(face) =
+    is_string(face) ? (
+    side == "x-" ? 0 :
+    side == "x+" ? 1 :
+    side == "y-" ? 2 :
+    side == "y+" ? 3 :
+    side == "z-" ? 4 :
+    side == "z+" ? 5 :
+    side == "x" ? 6 :
+    side == "y" ? 7 :
+    side == "z" ? 8 :
+    side == "xy" ? 9 :
+    side == "xz" ? 10 :
+    side == "yz" ? 11 :
+    side == "xyz" ? 12 :
+    undef
+    ) : (face >= 0 && face <= 12 ? face : undef);
 
 function mb_corner_to_int(axis, corner) =
     let(axis = mb_axis_to_int(axis))

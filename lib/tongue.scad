@@ -85,7 +85,7 @@ module mb_tongue(
             difference(){
                 mb_prismoid(
                     shape = [bevelTongueOuter], 
-                    height = height, 
+                    height = tongueHeight, 
                     radius = mb_xyz_rad_convert(tongueRadius == 0 ? 0 : [0, 0, tongueRadius]), 
                     resolution = tongueRadiusQuality
                 );
