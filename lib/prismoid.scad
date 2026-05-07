@@ -671,7 +671,7 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
             ]
     ];
 
-function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = undef, add = undef, expand = undef) =
+function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius = undef, mul = undef, add = undef, expand = undef) =
     let(
         s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
@@ -694,15 +694,25 @@ function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = 
     [
         ex[0],
         ex[1],
+        mb_resolve_xyz(is_undef(socket) ? (len(shape) > 2 && !is_undef(shape[2]) ? shape[2] : undef) : socket, mul = mul),
         mb_prismoid_process(ex)
     ];
 
 
-function mb_block_to_prismoid(block_dim, bevel = undef, slope = undef, radius = undef, mul = undef, add = undef, expand = undef) =
+function mb_block_to_prismoid(
+    block_dim, 
+    bevel = undef, 
+    slope = undef, 
+    radius = undef, 
+    mul = undef, 
+    add = undef, 
+    expand = undef
+) =
     let(shape = mb_block_to_shape(block_dim, bevel = bevel, slope = slope))
     mb_prismoid_shape_resolve(
         shape = shape[0], 
         height = shape[1], 
+        socket = shape[2],
         radius = radius, 
         mul = mul,
         add = add,
@@ -710,9 +720,18 @@ function mb_block_to_prismoid(block_dim, bevel = undef, slope = undef, radius = 
     );
 
 
-function mb_cube_to_prismoid(size, size_mod = undef, bevel = undef, slope = undef, radius = undef, expand = undef, mul = undef, add = undef) =
+function mb_cube_to_prismoid(
+    size, 
+    size_mod = undef, 
+    bevel = undef, 
+    slope = undef, 
+    radius = undef, 
+    expand = undef, 
+    mul = undef, 
+    add = undef
+) =
     mb_block_to_prismoid(
-            mb_block_dim(size, base_mod = size_mod), 
+            mb_block_dim(size, base_mod = size_mod),  //TODO all optional params
             bevel = bevel, 
             slope = slope, 
             radius = radius,
@@ -747,27 +766,27 @@ module mb_prismoid(
     skip_resolve = false, 
     debug = false
 ){
-    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, height = height, radius = radius, mul = mul, add = add);
+    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add);
     
     if(debug){
         echo (shape = shape);
     }
 
-    if(shape[2][4][0] != "ok"){
-        echo(str("ERROR: ", shape[2][4][0], " / ", shape[2][4][1], " / ", shape[2][4][2]));
+    if(shape[3][4][0] != "ok"){
+        echo(str("ERROR: ", shape[2][5][0], " / ", shape[2][5][1], " / ", shape[2][5][2]));
     }
     else{
-        sck = mb_resolve_xyz(socket, mul = mul);
+        sck = shape[2];
 
-        sx = shape[2][2][0];
-        sy = shape[2][2][1];
-        sz = shape[2][2][2];
+        sx = shape[3][2][0];
+        sy = shape[3][2][1];
+        sz = shape[3][2][2];
         
-        cx = shape[2][3][0];
-        cy = shape[2][3][1];
-        cz = shape[2][3][2];
+        cx = shape[3][3][0];
+        cy = shape[3][3][1];
+        cz = shape[3][3][2];
 
-        center_point = shape[2][3];
+        center_point = shape[3][3];
         off = [-cx + 0.5 * sx, -cy + 0.5 * sy, -cz + 0.5 * sz];
         
         align = align == "sticky" ? "sticky" : mb_align_resolve(align);
