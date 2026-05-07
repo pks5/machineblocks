@@ -43,7 +43,7 @@ function mb_resolve_face_sext(sext, mul = undef) =
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function mb_block_dim(size, unitMbu, unitGrid, base_mod = undef) =
+function mb_block_dim(size, base_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) =
     let(mod = mb_resolve_face_sext(base_mod),
         bb = mb_bounding_box(size),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
@@ -55,24 +55,26 @@ function mb_block_dim(size, unitMbu, unitGrid, base_mod = undef) =
             size[2] + mod[4] + mod[5]
         ])
     [
-        size, // Original Size 
-        bb, // Original Bounding Box Size
-        mod_size, // Modified Size
-        mb_bounding_box(mod_size), // Modified Bounding Box Size
-        mi, // Min
-        ma, // Max
-        [floor(-mod[0]), floor(-mod[2]), 0], // Min Index
-        [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)], // Max Index
-        c, // org center (without mod)
-        [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-        [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]], // max from org center
+        [size, bb], // Original Size 
+        [mod_size, mb_bounding_box(mod_size)], // Modified Size
+        [mi, ma], // Max
+        [
+            [floor(-mod[0]), floor(-mod[2]), 0], // Min Index
+            [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)] // Max Index
+        ],
+        [c], // org center (without mod)
+        [
+            [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
+            [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+        ],
         [unitMbu, unitGrid]
     ];
 
-function mb_slope_matrix(slope, bv, si) =
+function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
-        mx_bvx = si[0] - max((bv[0][0] + bv[3][1]), (bv[1][1] + bv[2][0])),
-        mx_bvy = si[1] - max((bv[0][1] + bv[3][0]), (bv[1][0] + bv[2][1])),
+        slope = is_undef(slope) ? [0, 0, 0, 0] : slope,
+        mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
+        mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
         slo = [
             min(abs(slope[0]), mx_bvx),
             min(abs(slope[1]), mx_bvx),
@@ -100,23 +102,22 @@ function mb_slope_matrix(slope, bv, si) =
             ]
     ];
 
-function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope = [0,0,0,0]) =
+function mb_bevel_matrix(bevel, mod_size, min_max) =
     let(
-        
-        s = dim[2],
-        mn = dim[9],
-        mx = dim[10],
+        bevel = is_undef(bevel) ? [[0, 0], [0, 0], [0, 0], [0, 0]] : bevel,
+        mn = min_max[0],
+        mx = min_max[1],
         bev = [
-            [min(s[0], bevel[0][0]), min(s[1], bevel[0][1])],
-            [min(s[1], bevel[1][0]), min(s[0], bevel[1][1])],
-            [min(s[0], bevel[2][0]), min(s[1], bevel[2][1])],
-            [min(s[1], bevel[3][0]), min(s[0], bevel[3][1])]
+            [min(mod_size[0], bevel[0][0]), min(mod_size[1], bevel[0][1])],
+            [min(mod_size[1], bevel[1][0]), min(mod_size[0], bevel[1][1])],
+            [min(mod_size[0], bevel[2][0]), min(mod_size[1], bevel[2][1])],
+            [min(mod_size[1], bevel[3][0]), min(mod_size[0], bevel[3][1])]
         ],
         bv = [
-            [min(s[0] - bev[3][1], bev[0][0]), bev[0][1]],
-            [min(s[1] - bev[0][1], bev[1][0]), bev[1][1]],
-            [min(s[0] - bev[1][1], bev[2][0]), bev[2][1]],
-            [min(s[1] - bev[2][1], bev[3][0]), bev[3][1]]
+            [min(mod_size[0] - bev[3][1], bev[0][0]), bev[0][1]],
+            [min(mod_size[1] - bev[0][1], bev[1][0]), bev[1][1]],
+            [min(mod_size[0] - bev[1][1], bev[2][0]), bev[2][1]],
+            [min(mod_size[1] - bev[2][1], bev[3][0]), bev[3][1]]
         ],
         bc = [
             [mn[0], mn[1]], [mn[0], mn[1]],
@@ -144,20 +145,32 @@ function mb_block_to_prismoid(dim, bevel = [[0,0], [0,0], [0,0], [0,0]], slope =
         bu = [
             for(i=[0:7])
                 bb[i] == bb[(i + 7 - 2) % 7] || bb[i] == bb[(i + 1) % 7] ? undef : bb[i]
-        ],
-        sl = mb_slope_matrix(slope, bv, s)
+        ]
+    )
+    [bv, bu];
+
+function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
+    let(
+        mod_size = block_dim[1][0],
+        min_max = block_dim[5],
+        
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1],
+        sl = mb_slope_matrix(slope, bevel_res, mod_size)
     )
     [
         [
-        [   
-            for(i=[0:7])
-                is_undef(bu[i]) ? undef : [bu[i][0] + sl[0][i][0], bu[i][1] + sl[0][i][1]]
+            [   
+                for(i=[0:7])
+                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[0][i][0], bevel_fil[i][1] + sl[0][i][1]]
+            ],
+            [
+                for(i=[0:7])
+                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
+            ]
         ],
-        [
-            for(i=[0:7])
-                is_undef(bu[i]) ? undef : [bu[i][0] + sl[1][i][0], bu[i][1] + sl[1][i][1]]
-        ]],
-        [mn[2], mx[2]],
+        [min_max[0][2], min_max[1][2]],
         [0.2, 0.2]
     ];
 

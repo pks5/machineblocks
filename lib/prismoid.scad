@@ -698,20 +698,27 @@ function mb_prismoid_shape_resolve(shape, height = undef, radius = undef, mul = 
     ];
 
 
-
-
-
-function mb_cube_to_prismoid(size, mod = undef, radius = undef, expand = undef, mul = undef, add = undef) =
-    let(hw = 0.5 * size[0],
-        hh = 0.5 * size[1])
+function mb_block_to_prismoid(block_dim, bevel = undef, slope = undef, radius = undef, mul = undef, add = undef, expand = undef) =
+    let(shape = mb_block_to_shape(block_dim, bevel = bevel, slope = slope))
     mb_prismoid_shape_resolve(
-        shape = [[[-hw, -hh], [-hw, hh], [hw, hh], [hw, -hh]]], 
-        height = size[2], 
+        shape = shape[0], 
+        height = shape[1], 
         radius = radius, 
         mul = mul,
         add = add,
         expand = expand
     );
+
+
+function mb_cube_to_prismoid(size, size_mod = undef, bevel = undef, slope = undef, radius = undef, expand = undef, mul = undef, add = undef) =
+    mb_block_to_prismoid(
+            mb_block_dim(size, base_mod = size_mod), 
+            bevel = bevel, 
+            slope = slope, 
+            radius = radius,
+            mul = mul,
+            add = add,
+            expand = expand);
 
 /*
 * ---------
@@ -916,7 +923,7 @@ mb_prismoid(shape = [
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-*translate([200, 0, 0])
+translate([200, 0, 0])
 mb_cube(
     debug = true, 
     mul=[8, 8, 3.2], 
@@ -951,8 +958,8 @@ echo (okt = okt, okt2 = okt2);
 *mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
 */
 
-dim = mb_block_dim([4, 3, 3], 1.6, [5, 2], undef);
+block_dim = mb_block_dim([4, 3, 3]);
+echo(dim = block_dim);
+pr = mb_block_to_prismoid(block_dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1, -1, -1, 0], mul=[8, 8, 3.2]); //
 
-pr = mb_block_to_prismoid(dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1,-1,-1,0]); //
-
-mb_prismoid(shape = pr[0], height=pr[1], socket=pr[2], mul=[8, 8, 3.2], radius=0, resolution = 160, debug = true, align="start");
+mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = false, align="start");
