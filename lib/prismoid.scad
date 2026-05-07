@@ -519,9 +519,9 @@ function mb_xyz_rad_convert(xyz_rad) =
 * PRISMOID SHAPE
 */
 
-function mb_prismoid_plane_expand(pts, p, raender, mul = undef) =
+function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
     let(
-        sext = mb_resolve_face_sext(raender, mul),
+        sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
         // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
         d_edge8 = [
             -sext[0], -sext[0],
@@ -735,7 +735,7 @@ function mb_cube_to_prismoid(
     add = undef
 ) =
     mb_block_to_prismoid(
-            mb_block_dim(size, base_mod = size_mod),  //TODO all optional params
+            mb_block_dim(size, size_mod = size_mod),  //TODO all optional params
             bevel = bevel, 
             slope = slope, 
             radius = radius,
@@ -982,13 +982,11 @@ echo (okt = okt, okt2 = okt2);
 *mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
 */
 
-block_dim = mb_block_dim([4, 3, 3]);
+block_dim = mb_block_dim([4, 3, 3], size_mod=[2,0,0,0,0,0]);
 pr = mb_block_to_prismoid(block_dim, bevel = [["sw", 1, 2]], slope=[["x", 0], ["x+", 0.5]]);
 
-mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
+mb_prismoid(shape = pr, mul=[8, 8, 3.2], expand=[1,1,1,1,1,1], resolution = 160, debug = false);
 //mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
 
 //q = mb_block_to_shape(block_dim, bevel = [[0, 1], [3, 3], [0, 0], [0, 0]]);
 //echo(q = q);
-
-echo(mb_slope_is_num_array([1, 1, 0, 0], 4));

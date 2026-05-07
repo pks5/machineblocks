@@ -10,7 +10,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
         p = is_undef(r) ? undef : (is_undef(precision) ? r : [mb_round_prec(r[0], precision), mb_round_prec(r[1], precision), mb_round_prec(r[2], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
  
-
+/*
 function mb_resolve_face_sext(sext, mul = undef) = 
     let(mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
     is_undef(sext) || is_string(sext) ? [0, 0, 0, 0, 0, 0] : 
@@ -40,11 +40,11 @@ function mb_resolve_face_sext(sext, mul = undef) =
             sext * mul[2], 
             sext * mul[2]
         ];
-
+*/
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function mb_block_dim(size, base_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) =
-    let(mod = mb_resolve_face_sext(base_mod),
+function mb_block_dim(size, size_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) =
+    let(mod = mb_qc_resolve(qc = size_mod, cube = true),
         bb = mb_bounding_box(size),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mi = [-mod[0], -mod[2], 0],
@@ -373,6 +373,16 @@ function mb_map_merge(a, b) =
 */    
 
 /*
+function mb_corner_to_int(axis, corner) =
+    let(axis = mb_axis_to_int(axis))
+    is_string(corner) ? (
+    corner == "sw" ? (axis == 0 ? 1 : 0) : 
+    corner == "nw" ? (axis == 0 ? 2 : 1) :
+    corner == "ne" ? (axis == 0 ? 3 : 2) :
+    corner == "se" ? (axis == 0 ? 0 : 3) :
+    undef
+    ) : corner;    
+
 function mb_xy_corner_side_resolve(items, i = 0, result = [[0,0], [0,0], [0,0], [0,0]]) =
     i >= len(items)
         ? result
@@ -602,6 +612,7 @@ function mb_bevel_resolve(bevel) =
 * START mb_slope_resolve()
 * ------------------------
 */
+/*
 function mb_slope_is_num_array(a, n, i = 0) =
     is_list(a) && len(a) == n &&
     (i >= n || (is_num(a[i]) && mb_slope_is_num_array(a, n, i + 1)));
@@ -656,6 +667,7 @@ function mb_slope_resolve(slope) =
             : is_list(slope)
                 ? mb_slope_complex(slope)
                 : [0, 0, 0, 0];
+*/
 /*
 * ----------------------
 * END mb_slope_resolve()
@@ -779,7 +791,7 @@ function mb_qc_resolve(qc, cube = false, mul = undef) =
                     ? [0, 0, 0, 0, 0, 0]
                     : [0, 0, 0, 0],
         m = mb_resolve_xyz(xyz = mul, default = [1, 1, 1]))
-    mul == undef ? r : [ for(i = [0 : 1 : len(r)]) r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
+    is_undef(mul) ? r : [ for(i = [0 : 1 : len(r)-1]) r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
 
 
 /*
@@ -819,15 +831,7 @@ function mb_dir_to_int(dir, m = false) =
     undef
     ) : (dir >= 0 && dir <= 23 ? dir : undef)) m ? d % 8 : d;
 
-function mb_corner_to_int(axis, corner) =
-    let(axis = mb_axis_to_int(axis))
-    is_string(corner) ? (
-    corner == "sw" ? (axis == 0 ? 1 : 0) : 
-    corner == "nw" ? (axis == 0 ? 2 : 1) :
-    corner == "ne" ? (axis == 0 ? 3 : 2) :
-    corner == "se" ? (axis == 0 ? 0 : 3) :
-    undef
-    ) : corner;    
+
 
 function mb_side_to_axis(side) = floor(mb_side_to_int(side) / 2);
 
