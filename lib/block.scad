@@ -39,6 +39,8 @@ function mb_param_direction(config, settings, default = undef) = mb_direction_to
 
 function mb_param_size(config, settings, default = undef) = mb_param(config, settings, "size", default != undef ? default : [1, 1, 1]);
 function mb_param_sizeAdjustment(config, settings, default = undef) = mb_param(config, settings, "sizeAdjustment", default != undef ? default : [-0.1, 0]);
+function mb_param_sizeMod(config, settings, default = undef) = mb_param(config, settings, "sizeMod", default != undef ? default : []);
+
 function mb_param_offset(config, settings, default = undef) = mb_param(config, settings, "offset", default != undef ? default : [0, 0, 0]);
 
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
@@ -46,8 +48,6 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
-function mb_param_baseHeight(config, settings, default = undef) = mb_param(config, settings, "baseHeight", default != undef ? default : "auto");
-function mb_param_baseMod(config, settings, default = undef) = mb_param(config, settings, "baseMod", default != undef ? default : []);
 
 function mb_param_baseTopPlateHeight(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeight", default != undef ? default : 1);
 function mb_param_baseTopPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeightAdjustment", default != undef ? default : -0.6);
@@ -359,66 +359,9 @@ function mb_size_resolve(size, direction) = direction % 2 == 1 ? [size[1], size[
 function mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4;
 
 /*
-* Base Side Adjustment
+* Composite Block Helpers
 */
 
-
-
-function mb_side_adjustment_resolve(bsa, sa) =
-    [
-        mb_map_get(bsa, "x-", sa[0]),
-        mb_map_get(bsa, "x+", sa[0]),
-        mb_map_get(bsa, "y-", sa[0]),
-        mb_map_get(bsa, "y+", sa[0]),
-        mb_map_get(bsa, "z-", 0),
-        mb_map_get(bsa, "z+", sa[1])
-    ];
-
-function mb_base_mod_resolve(baseMod, gridSize) =
-    [
-        mb_map_get(baseMod, "x-", 0) * gridSize[0],
-        mb_map_get(baseMod, "x+", 0) * gridSize[0],
-        mb_map_get(baseMod, "y-", 0) * gridSize[0],
-        mb_map_get(baseMod, "y+", 0) * gridSize[0],
-        0,
-        mb_map_get(baseMod, "z+", 0) * gridSize[1]
-    ];
-
-/*
-function mb_named_side_adjustments(baseSideAdjustment, namedSideAdjustments, mapping, useFirst = true) =
-    let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping),
-        bsa = useFirst ? mb_resolve_side_quad(baseSideAdjustment[0]) : baseSideAdjustment)
-    _mb_bsa_override(bsa, namedAdj);
-
-function mb_named_height_adjustments(baseHeightAdjustment, namedSideAdjustments, mapping) =
-    let(namedAdj = _mb_nsa_mapping(namedSideAdjustments, mapping, 4))
-    _mb_bsa_override(baseHeightAdjustment, namedAdj);    
-
-function _mb_nsa_mapping(namedSideAdjustments, mapping, startAt = 0) =
-[
-    for (entry = mapping)
-        [mb_side_to_int(entry[0]) - startAt, is_num(entry[1]) ? entry[1] : mb_map_get(namedSideAdjustments, entry[1])]
-];
-
-function _mb_bsa_override(baseSideAdjustment, overrides, i = 0) =
-    (overrides == undef) || (i >= len(overrides))
-        ? baseSideAdjustment
-        : let(
-            r = overrides[i],
-            index = r[0],
-            newValue = r[1],
-            nextValues =
-                !is_num(index) || index < 0 || index >= len(baseSideAdjustment)
-                    ? baseSideAdjustment
-                    : [
-                        for (j = [0 : len(baseSideAdjustment) - 1])
-                            j == index && newValue != undef ? newValue : baseSideAdjustment[j]
-                    ]
-        )
-        _mb_bsa_override(nextValues, overrides, i + 1);
-*/
-
-// Hilfsfunktionen
 function _mb_vec3_min(a, b) = [
     min(a[0], b[0]),
     min(a[1], b[1]),
@@ -451,7 +394,6 @@ function _mb_part_max(entry) =
         offset[2] + size_resolved[2]
     ];
 
-// Hauptfunktion
 function mb_parts_total_size(parts, i = 0, min_v = undef, max_v = undef) =
     i >= len(parts)
         ? [
@@ -505,8 +447,8 @@ module mb_block(
     
     base = mb_param_base(config, settings);
     baseColor = mb_param_baseColor(config, settings);
-    baseHeight = mb_param_baseHeight(config, settings);
-    baseMod = mb_param_baseMod(config, settings);
+    
+    baseMod = mb_param_sizeMod(config, settings);
 
     baseTopPlateHeight = mb_param_baseTopPlateHeight(config, settings);
     baseTopPlateHeightAdjustment = mb_param_baseTopPlateHeightAdjustment(config, settings);
@@ -753,9 +695,10 @@ module mb_block(
     /*
     * Start measurements
     */
-    baseModR = mb_base_mod_resolve(baseMod, [1, 1]);
-    //dim = mb_block_dim(size, unitMbu, unitGrid, baseModR);
-    //pr = mb_block_to_prismoid(dim);
+    
+    
+    block_dim = mb_block_dim(size, size_mod = baseMod, unitMbu, unitGrid);
+    block_prismoid = mb_block_to_prismoid(block_dim, bevel = bevel, slope = slope);
 
     //echo(dim = dim, pr = pr);
 
@@ -767,15 +710,16 @@ module mb_block(
     //Object Size     
     objectSizeX = gridSizeXY * size[0];
     objectSizeY = gridSizeXY * size[1];
-    objectSizeZ = baseHeight == "auto" ? size[2] * gridSizeZ : baseHeight;
+    objectSizeZ = size[2] * gridSizeZ;
 
     objectSize = [objectSizeX, objectSizeY, objectSizeZ];
 
     //Side Adjustment
    
-    baseModRes = mb_base_mod_resolve(baseMod, [gridSizeXY, gridSizeZ]);
+    baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
+    baseModR = mb_qc_resolve(qc = baseMod, cube = true);
     bevelMod = [[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]];
-    bevelRes = bevel;//mb_xy_add_generic(bevel, bevelMod);
+    bevelRes = mb_bevel_resolve(bevel);
 
     objectSizeMod = [
         objectSizeX + baseModRes[0] + baseModRes[1],
@@ -783,7 +727,7 @@ module mb_block(
         objectSizeZ + baseModRes[4] + baseModRes[5]
     ];
     
-    bsa = mb_side_adjustment_resolve(baseSideAdjustment, sizeAdjustment);
+    bsa =  mb_qc_resolve(qc = baseSideAdjustment, cube = true, default = [sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], 0, sizeAdjustment[1]]); 
     sideAdjustment = mb_array_add(bsa, baseModRes);
 
     // Object Size Side Adjusted      

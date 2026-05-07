@@ -44,23 +44,24 @@ function mb_resolve_face_sext(sext, mul = undef) =
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
 function mb_block_dim(size, size_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) =
-    let(mod = mb_qc_resolve(qc = size_mod, cube = true),
-        bb = mb_bounding_box(size),
+    let(si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
+        mod = mb_qc_resolve(qc = size_mod, cube = true),
+        bb = mb_bounding_box(si),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mi = [-mod[0], -mod[2], 0],
-        ma = [size[0] + mod[1], size[1] + mod[3], size[2] + mod[5]],
+        ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
         mod_size = [
-            size[0] + mod[0] + mod[1],
-            size[1] + mod[2] + mod[3],
-            size[2] + mod[4] + mod[5]
+            si[0] + mod[0] + mod[1],
+            si[1] + mod[2] + mod[3],
+            si[2] + mod[4] + mod[5]
         ])
     [
-        [size, bb], // Original Size 
+        [si, bb], // Original Size 
         [mod_size, mb_bounding_box(mod_size)], // Modified Size
-        [mi, ma], // Max
+        [mi, ma], // Min / Max (modified)
         [
-            [floor(-mod[0]), floor(-mod[2]), 0], // Min Index
-            [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)] // Max Index
+            [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
+            [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
         ],
         [c], // org center (without mod)
         [
@@ -145,10 +146,10 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
         bu = [
             for(i=[0:7])
                 is_undef(bb[i]) || (
-                    (bb[i] == bb[(i + 2) % 8] && false) || 
+                    //(bb[i] == bb[(i + 2) % 8] && false) || 
                     (bb[i] == bb[(i + 8 - 2) % 8] && true) || 
                 
-                    (bb[i] == bb[(i + 8 - 1) % 8] && false) ||
+                    //(bb[i] == bb[(i + 8 - 1) % 8] && false) ||
                     (bb[i] == bb[(i + 1) % 8] && true)
                 ) ? undef : bb[i]
         ]
@@ -304,12 +305,15 @@ function mb_substr_from(s, start, i=0) =
 */
 
 function mb_array_filter_ns(arr, ns) =
-    [
+    is_list(arr) ? [
         for (item = arr)
-            if (mb_str_starts_with(item[0], str(ns, ".")))
+            if (is_list(item) && 
+                len(item) > 0 && 
+                is_string(item[0]) &&
+                mb_str_starts_with(item[0], str(ns, ".")))
                 let(newKey = mb_substr_from(item[0], len(ns) + 1))
                     concat([newKey], mb_array_slice(item, 1))
-    ];
+    ] : [];
 
 function mb_to_array(v) = is_list(v) ? v : [v];
 
@@ -781,15 +785,15 @@ function mb_qc_complex(items, cube = false, i = 0, acc = undef) =
                 b == undef ? acc0 : mb_qc_overwrite(acc0, b, cube)
             );
 
-function mb_qc_resolve(qc, cube = false, mul = undef) =
+function mb_qc_resolve(qc, cube = false, mul = undef, default = [0, 0, 0, 0, 0, 0]) =
     let(normal = mb_qc_normal(qc, cube),
         r = normal != undef
             ? normal
             : is_list(qc)
                 ? mb_qc_complex(qc, cube)
                 : cube
-                    ? [0, 0, 0, 0, 0, 0]
-                    : [0, 0, 0, 0],
+                    ? default
+                    : [default[0], default[1], default[2], default[3]],
         m = mb_resolve_xyz(xyz = mul, default = [1, 1, 1]))
     is_undef(mul) ? r : [ for(i = [0 : 1 : len(r)-1]) r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
 
