@@ -72,7 +72,7 @@ function mb_block_dim(size, base_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) 
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
-        slope = is_undef(slope) ? [0, 0, 0, 0] : slope,
+        slope = mb_slope_resolve(slope),
         mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
         mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
         slo = [
@@ -482,18 +482,25 @@ function mb_face_to_int(face) =
 
 function mb_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
 
+function mb_is_pair(v) =
+    is_list(v) && len(v) == 2 && is_num(v[0]) && is_num(v[1]);
+
 function mb_pair(v) =
-    is_list(v) && len(v) >= 2
+    mb_is_pair(v)
         ? [mb_clamp0(v[0]), mb_clamp0(v[1])]
         : is_num(v)
             ? [mb_clamp0(v), mb_clamp0(v)]
             : [0,0];
 
-// overwrite helper: b overwrites a if b != [0,0]
-function mb_pair_overwrite(a, b) =
-    (b[0] != 0 || b[1] != 0) ? b : a;
+function mb_pair_or_undef(v) =
+    mb_is_pair(v)
+        ? [mb_clamp0(v[0]), mb_clamp0(v[1])]
+        : undef;
 
-// merge 4 pairs
+// b overwrites a if b != undef
+function mb_pair_overwrite(a, b) =
+    b == undef ? a : b;
+
 function mb_bevel_merge(a, b) = [
     mb_pair_overwrite(a[0], b[0]),
     mb_pair_overwrite(a[1], b[1]),
@@ -501,36 +508,46 @@ function mb_bevel_merge(a, b) = [
     mb_pair_overwrite(a[3], b[3])
 ];
 
-// direction mapping → 4 slots
+function mb_bevel_normalize(a) = [
+    a[0] == undef ? [0,0] : a[0],
+    a[1] == undef ? [0,0] : a[1],
+    a[2] == undef ? [0,0] : a[2],
+    a[3] == undef ? [0,0] : a[3]
+];
+
+// direction mapping → 4 slots, undef = no overwrite
 function mb_bevel_dir_map(d, x, y) =
     let(p = [mb_clamp0(x), mb_clamp0(y)])
-    d == 0 ? [p,[0,0],[0,0],[0,0]] :       // sw
-    d == 1 ? [p,p,[0,0],[0,0]] :           // w
-    d == 2 ? [[0,0],p,[0,0],[0,0]] :       // nw
-    d == 3 ? [[0,0],p,p,[0,0]] :           // n
-    d == 4 ? [[0,0],[0,0],p,[0,0]] :       // ne
-    d == 5 ? [[0,0],[0,0],p,p] :           // e
-    d == 6 ? [[0,0],[0,0],[0,0],p] :       // se
-    d == 7 ? [p,[0,0],[0,0],p] :           // s
-    [[0,0],[0,0],[0,0],[0,0]];
+    d == 0 ? [p, undef, undef, undef] :       // sw
+    d == 1 ? [p, p, undef, undef] :           // w
+    d == 2 ? [undef, p, undef, undef] :       // nw
+    d == 3 ? [undef, p, p, undef] :           // n
+    d == 4 ? [undef, undef, p, undef] :       // ne
+    d == 5 ? [undef, undef, p, p] :           // e
+    d == 6 ? [undef, undef, undef, p] :       // se
+    d == 7 ? [p, undef, undef, p] :           // s
+    [undef, undef, undef, undef];
 
-// recursive reduce for complex mode
-function mb_bevel_reduce(arr, i=0, acc=[[0,0],[0,0],[0,0],[0,0]]) =
-    i >= len(arr) ? acc :
-    let(v = arr[i])
-    let(next =
-        (is_list(v) && len(v) == 3)
-            ? mb_bevel_merge(
-                acc,
-                mb_bevel_dir_map(
-                    mb_dir_to_int(v[0], true),
-                    v[1],
-                    v[2]
-                )
-              )
-            : acc
-    )
-    mb_bevel_reduce(arr, i+1, next);
+function mb_bevel_reduce(arr, i=0, acc=[undef, undef, undef, undef]) =
+    i >= len(arr)
+        ? mb_bevel_normalize(acc)
+        : let(v = arr[i])
+          mb_bevel_reduce(
+              arr,
+              i + 1,
+              (is_list(v) && len(v) == 3)
+                  ? mb_bevel_merge(
+                        acc,
+                        mb_bevel_dir_map(
+                            mb_dir_to_int(v[0], true),
+                            v[1],
+                            v[2]
+                        )
+                    )
+                  : acc
+          );
+
+function mb_bevel_all(p) = [p,p,p,p];
 
 // --- main ---
 function mb_bevel_resolve(bevel) =
@@ -540,16 +557,29 @@ function mb_bevel_resolve(bevel) =
 
     // number or [x]
     : is_num(bevel) || (len(bevel) == 1 && is_num(bevel[0]))
-        ? let(v = is_num(bevel) ? bevel : bevel[0])
-          [[v,v],[v,v],[v,v],[v,v]]
+        ? let(v = mb_clamp0(is_num(bevel) ? bevel : bevel[0]))
+          mb_bevel_all([v,v])
 
     // [x,y]
-    : (len(bevel) == 2 && is_num(bevel[0]) && is_num(bevel[1]))
-        ? let(p = [mb_clamp0(bevel[0]), mb_clamp0(bevel[1])])
-          [p,p,p,p]
+    : mb_is_pair(bevel)
+        ? mb_bevel_all(mb_pair(bevel))
 
-    // [[x1,y1]...]
-    : (len(bevel) == 4 && is_list(bevel[0]))
+    // [[x,y]]
+    : len(bevel) == 1 && mb_is_pair(bevel[0])
+        ? mb_bevel_all(mb_pair(bevel[0]))
+
+    // [[x1,y1],[x2,y2]]
+    : len(bevel) == 2 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1])
+        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]))
+          [a,a,b,b]
+
+    // [[x1,y1],[x2,y2],[x3,y3]]
+    : len(bevel) == 3 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1]) && mb_is_pair(bevel[2])
+        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]), c = mb_pair(bevel[2]))
+          [a,b,c,[0,0]]
+
+    // [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
+    : len(bevel) == 4 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1]) && mb_is_pair(bevel[2]) && mb_is_pair(bevel[3])
         ? [
             mb_pair(bevel[0]),
             mb_pair(bevel[1]),
@@ -557,31 +587,87 @@ function mb_bevel_resolve(bevel) =
             mb_pair(bevel[3])
           ]
 
-    // [[x,y]]
-    : (len(bevel) == 1 && is_list(bevel[0]) && len(bevel[0]) == 2 && is_num(bevel[0][0]) && is_num(bevel[0][1]))
-        ? let(a = bevel[0])
-          [a,a,a,a]
-
-    // [[x1,y1],[x2,y2]]
-    : (len(bevel) == 2 
-        && is_list(bevel[0]) && len(bevel[0]) == 2  && is_num(bevel[0][0]) && is_num(bevel[0][1])
-         && is_list(bevel[1]) && len(bevel[1]) == 2  && is_num(bevel[1][0]) && is_num(bevel[1][1]))
-        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]))
-          [a,a,b,b]
-
-    // [[x1,y1],[x2,y2],[x3,y3]]
-    : (len(bevel) == 3 && is_list(bevel[0]) && len(bevel[0]) == 2  && is_num(bevel[0][0]) && is_num(bevel[0][1])
-        && is_list(bevel[1]) && len(bevel[1]) == 2  && is_num(bevel[1][0]) && is_num(bevel[1][1])
-        && is_list(bevel[2]) && len(bevel[2]) == 2  && is_num(bevel[2][0]) && is_num(bevel[2][1]))
-        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]), c = mb_pair(bevel[2]))
-          [a,b,c,[0,0]]
-
     // complex mode
     : mb_bevel_reduce(bevel);
 
 /*
 * ----------------------
 * END mb_bevel_resolve()
+* ----------------------
+*/
+
+/*
+* ------------------------
+* START mb_slope_resolve()
+* ------------------------
+*/
+function mb_slope_is_num_array(a, n, i = 0) =
+    is_list(a) && len(a) == n &&
+    (i >= n || (is_num(a[i]) && mb_slope_is_num_array(a, n, i + 1)));
+
+function mb_slope_normal(slope) =
+    is_num(slope)
+        ? [slope, slope, slope, slope]
+        : mb_slope_is_num_array(slope, 1)
+            ? [slope[0], slope[0], slope[0], slope[0]]
+        : mb_slope_is_num_array(slope, 2)
+            ? [slope[0], slope[0], slope[1], slope[1]]
+        : mb_slope_is_num_array(slope, 3)
+            ? [slope[0], slope[1], slope[2], 0]
+        : mb_slope_is_num_array(slope, 4)
+            ? [slope[0], slope[1], slope[2], slope[3]]
+        : undef;
+
+function mb_slope_key(k) =
+    k == "x-" || k == 0 ? 0 :
+    k == "x+" || k == 1 ? 1 :
+    k == "y-" || k == 2 ? 2 :
+    k == "y+" || k == 3 ? 3 :
+    k == "x"  || k == 6 ? 6 :
+    k == "y"  || k == 7 ? 7 :
+    k == "xy" || k == 9 ? 9 :
+    undef;
+
+function mb_slope_complex_item(item) =
+    is_list(item) && len(item) == 2 && is_num(item[1])
+        ? let(k = mb_slope_key(item[0]), v = item[1])
+            k == 0 ? [v, undef, undef, undef] :
+            k == 1 ? [undef, v, undef, undef] :
+            k == 2 ? [undef, undef, v, undef] :
+            k == 3 ? [undef, undef, undef, v] :
+            k == 6 ? [v, v, undef, undef] :
+            k == 7 ? [undef, undef, v, v] :
+            k == 9 ? [v, v, v, v] :
+            undef
+        : undef;
+
+function mb_slope_overwrite(a, b) = [
+    b[0] == undef ? a[0] : b[0],
+    b[1] == undef ? a[1] : b[1],
+    b[2] == undef ? a[2] : b[2],
+    b[3] == undef ? a[3] : b[3]
+];
+
+function mb_slope_complex(items, i = 0, acc = [0, 0, 0, 0]) =
+    !is_list(items) || i >= len(items)
+        ? acc
+        : let(b = mb_slope_complex_item(items[i]))
+            mb_slope_complex(
+                items,
+                i + 1,
+                b == undef ? acc : mb_slope_overwrite(acc, b)
+            );
+
+function mb_slope_resolve(slope) =
+    let(normal = mb_slope_normal(slope))
+        normal != undef
+            ? normal
+            : is_list(slope)
+                ? mb_slope_complex(slope)
+                : [0, 0, 0, 0];
+/*
+* ----------------------
+* END mb_slope_resolve()
 * ----------------------
 */
 
