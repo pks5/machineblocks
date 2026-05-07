@@ -519,7 +519,7 @@ function mb_xyz_rad_convert(xyz_rad) =
 * PRISMOID SHAPE
 */
 
-function mb_prismoid_plane_expand(punkte, p, raender, mul = undef) =
+function mb_prismoid_plane_expand(pts, p, raender, mul = undef) =
     let(
         sext = mb_resolve_face_sext(raender, mul),
         // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
@@ -530,25 +530,29 @@ function mb_prismoid_plane_expand(punkte, p, raender, mul = undef) =
             -sext[2], -sext[2]
         ],
 
+        //pts = [ for(i=[0:7]) is_undef(punkte[i]) ? ((i % 2 == 0) ? punkte[(i + 2) % 8] : undef) : punkte[i]],
+
         // nur vorhandene Punkte behalten
-        idx = [ for(i=[0:7]) if(punkte[i] != undef) i ],
-        Pc  = [ for(i=idx) punkte[i] ],
+        idx = [ for(i=[0:7]) if(pts[i] != undef) i ],
+        Pc  = [ for(i=idx) pts[i] ],
 
         // Kante idx[j] -> idx[j+1]
         // bekommt den Border der Originalkante direkt vor idx[j+1]
+        /*
         dc = [
             for(j=[0:len(idx)-1])
                 d_edge8[(idx[(j+1) % len(idx)] + 7) % 8]
-        ],
+        ],*/
+        dc = [ for(i=idx) d_edge8[i] ],
 
         Qc = len(Pc) >= 3 ? mb_inset_ngon_edges(Pc, dc) : [],
 
         Q8 = [
             for(i=[0:7])
                 let(qqx = Qc[mb_array_index_of(idx, i)])
-                punkte[i] == undef
+                pts[i] == undef
                     ? undef
-                    : [qqx[0], qqx[1], punkte[i][2] + (p == 0 ? -1 : 1) * sext[4+p], punkte[i][3]]
+                    : [qqx[0], qqx[1], pts[i][2] + (p == 0 ? -1 : 1) * sext[4+p], pts[i][3]]
         ]
     )
     Q8;
@@ -760,13 +764,14 @@ module mb_prismoid(
     radius = undef, 
     add = undef,
     mul = undef, 
+    expand = undef,
     socket = undef, 
     align = "sticky", 
     resolution = 80, 
     skip_resolve = false, 
     debug = false
 ){
-    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add);
+    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand);
     
     if(debug){
         echo (shape = shape);
@@ -942,7 +947,7 @@ mb_prismoid(shape = [
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-translate([200, 0, 0])
+*translate([200, 0, 0])
 mb_cube(
     debug = true, 
     mul=[8, 8, 3.2], 
@@ -978,6 +983,12 @@ echo (okt = okt, okt2 = okt2);
 */
 
 block_dim = mb_block_dim([4, 3, 3]);
-pr = mb_block_to_prismoid(block_dim, bevel = [[1, 0], [0, 0], [0, 0], [0, 0]], slope=[1, -1, -1, 0]);
+pr = mb_block_to_prismoid(block_dim, bevel = [[1,2], ["e", 0.25,1], ["n", 0.5,0.75]], slope=[0, 0, 0, 0]);
 
-mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false, align="start");
+mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
+//mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
+
+//q = mb_block_to_shape(block_dim, bevel = [[0, 1], [3, 3], [0, 0], [0, 0]]);
+//echo(q = q);
+
+//echo(mb_bevel_resolve([["sw", 1, 2]]));

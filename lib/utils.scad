@@ -104,20 +104,20 @@ function mb_slope_matrix(slope, bevel_res, mod_size) =
 
 function mb_bevel_matrix(bevel, mod_size, min_max) =
     let(
-        bevel = is_undef(bevel) ? [[0, 0], [0, 0], [0, 0], [0, 0]] : bevel,
+        bevel = mb_bevel_resolve(bevel),
         mn = min_max[0],
         mx = min_max[1],
         bev = [
             [min(mod_size[0], bevel[0][0]), min(mod_size[1], bevel[0][1])],
-            [min(mod_size[1], bevel[1][0]), min(mod_size[0], bevel[1][1])],
+            [min(mod_size[0], bevel[1][0]), min(mod_size[1], bevel[1][1])],
             [min(mod_size[0], bevel[2][0]), min(mod_size[1], bevel[2][1])],
-            [min(mod_size[1], bevel[3][0]), min(mod_size[0], bevel[3][1])]
+            [min(mod_size[0], bevel[3][0]), min(mod_size[1], bevel[3][1])]
         ],
         bv = [
-            [min(mod_size[0] - bev[3][1], bev[0][0]), bev[0][1]],
-            [min(mod_size[1] - bev[0][1], bev[1][0]), bev[1][1]],
-            [min(mod_size[0] - bev[1][1], bev[2][0]), bev[2][1]],
-            [min(mod_size[1] - bev[2][1], bev[3][0]), bev[3][1]]
+            [min(mod_size[0] - bev[3][0], bev[0][0]), bev[0][1]],
+            [bev[1][0], min(mod_size[1] - bev[0][1], bev[1][1])],
+            [min(mod_size[0] - bev[1][0], bev[2][0]), bev[2][1]],
+            [bev[3][0], min(mod_size[1] - bev[2][1], bev[3][1])]
         ],
         bc = [
             [mn[0], mn[1]], [mn[0], mn[1]],
@@ -129,14 +129,14 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
             bv[0][0] == 0 && bv[0][1] > 0 ? undef : [bv[0][0], 0], 
             bv[0][1] == 0 && bv[0][0] >= 0 ? undef : [0, bv[0][1]],
             
-            bv[1][0] == 0 && bv[1][1] > 0 ? undef : [0, -bv[1][0]], 
-            bv[1][1] == 0 && bv[1][0] >= 0 ? undef : [bv[1][1], 0],
+            bv[1][1] == 0 && bv[1][0] > 0 ? undef :  [0, -bv[1][1]], 
+            bv[1][0] == 0 && bv[1][1] >= 0 ? undef : [bv[1][0], 0],
             
             bv[2][0] == 0 && bv[2][1] > 0 ? undef : [-bv[2][0], 0], 
             bv[2][1] == 0 && bv[2][0] >= 0 ? undef : [0, -bv[2][1]],
             
-            bv[3][0] == 0 && bv[3][1] > 0 ? undef : [0, bv[3][0]], 
-            bv[3][1] == 0 && bv[3][0] >= 0 ? undef : [-bv[3][1], 0]
+            bv[3][1] == 0 && bv[3][0] > 0 ? undef : [0, bv[3][1]], 
+            bv[3][0] == 0 && bv[3][1] >= 0 ? undef : [-bv[3][0], 0]
         ],
         bb = [
             for(i=[0:7])
@@ -144,13 +144,16 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
         ],
         bu = [
             for(i=[0:7])
-                bb[i] == bb[(i + 7 - 2) % 7] || bb[i] == bb[(i + 1) % 7] ? undef : bb[i]
+                is_undef(bb[i]) || (
+                    (bb[i] == bb[(i + 2) % 8] && false) || 
+                    (bb[i] == bb[(i + 8 - 2) % 8] && true) || 
+                
+                    (bb[i] == bb[(i + 8 - 1) % 8] && false) ||
+                    (bb[i] == bb[(i + 1) % 8] && true)
+                ) ? undef : bb[i]
         ]
     )
     [bv, bu];
-
-function mb_bevel_resolve(bevel) = 
-    [];
 
 function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
     let(
@@ -175,6 +178,7 @@ function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
         ],
         [min_max[0][2], min_max[1][2]],
         [0.2, 0.2]
+        //,bevel_matrix
     ];
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
@@ -454,21 +458,163 @@ function mb_side_to_int(side) =
 
 function mb_face_to_int(face) =
     is_string(face) ? (
-    side == "x-" ? 0 :
-    side == "x+" ? 1 :
-    side == "y-" ? 2 :
-    side == "y+" ? 3 :
-    side == "z-" ? 4 :
-    side == "z+" ? 5 :
-    side == "x" ? 6 :
-    side == "y" ? 7 :
-    side == "z" ? 8 :
-    side == "xy" ? 9 :
-    side == "xz" ? 10 :
-    side == "yz" ? 11 :
-    side == "xyz" ? 12 :
+    face == "x-" ? 0 :
+    face == "x+" ? 1 :
+    face == "y-" ? 2 :
+    face == "y+" ? 3 :
+    face == "z-" ? 4 :
+    face == "z+" ? 5 :
+    face == "x" ? 6 :
+    face == "y" ? 7 :
+    face == "z" ? 8 :
+    face == "xy" ? 9 :
+    face == "xz" ? 10 :
+    face == "yz" ? 11 :
+    face == "xyz" ? 12 :
     undef
     ) : (face >= 0 && face <= 12 ? face : undef);
+
+/*
+* ------------------------
+* START mb_bevel_resolve()
+* ------------------------
+*/
+
+function mb_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
+
+function mb_pair(v) =
+    is_list(v) && len(v) >= 2
+        ? [mb_clamp0(v[0]), mb_clamp0(v[1])]
+        : is_num(v)
+            ? [mb_clamp0(v), mb_clamp0(v)]
+            : [0,0];
+
+// overwrite helper: b overwrites a if b != [0,0]
+function mb_pair_overwrite(a, b) =
+    (b[0] != 0 || b[1] != 0) ? b : a;
+
+// merge 4 pairs
+function mb_bevel_merge(a, b) = [
+    mb_pair_overwrite(a[0], b[0]),
+    mb_pair_overwrite(a[1], b[1]),
+    mb_pair_overwrite(a[2], b[2]),
+    mb_pair_overwrite(a[3], b[3])
+];
+
+// direction mapping → 4 slots
+function mb_bevel_dir_map(d, x, y) =
+    let(p = [mb_clamp0(x), mb_clamp0(y)])
+    d == 0 ? [p,[0,0],[0,0],[0,0]] :       // sw
+    d == 1 ? [p,p,[0,0],[0,0]] :           // w
+    d == 2 ? [[0,0],p,[0,0],[0,0]] :       // nw
+    d == 3 ? [[0,0],p,p,[0,0]] :           // n
+    d == 4 ? [[0,0],[0,0],p,[0,0]] :       // ne
+    d == 5 ? [[0,0],[0,0],p,p] :           // e
+    d == 6 ? [[0,0],[0,0],[0,0],p] :       // se
+    d == 7 ? [p,[0,0],[0,0],p] :           // s
+    [[0,0],[0,0],[0,0],[0,0]];
+
+// recursive reduce for complex mode
+function mb_bevel_reduce(arr, i=0, acc=[[0,0],[0,0],[0,0],[0,0]]) =
+    i >= len(arr) ? acc :
+    let(v = arr[i])
+    let(next =
+        (is_list(v) && len(v) == 3)
+            ? mb_bevel_merge(
+                acc,
+                mb_bevel_dir_map(
+                    mb_dir_to_int(v[0], true),
+                    v[1],
+                    v[2]
+                )
+              )
+            : acc
+    )
+    mb_bevel_reduce(arr, i+1, next);
+
+// --- main ---
+function mb_bevel_resolve(bevel) =
+    // undef / [] / string
+    (!is_list(bevel) || len(bevel) == 0)
+        ? [[0,0],[0,0],[0,0],[0,0]]
+
+    // number or [x]
+    : is_num(bevel) || (len(bevel) == 1 && is_num(bevel[0]))
+        ? let(v = is_num(bevel) ? bevel : bevel[0])
+          [[v,v],[v,v],[v,v],[v,v]]
+
+    // [x,y]
+    : (len(bevel) == 2 && is_num(bevel[0]) && is_num(bevel[1]))
+        ? let(p = [mb_clamp0(bevel[0]), mb_clamp0(bevel[1])])
+          [p,p,p,p]
+
+    // [[x1,y1]...]
+    : (len(bevel) == 4 && is_list(bevel[0]))
+        ? [
+            mb_pair(bevel[0]),
+            mb_pair(bevel[1]),
+            mb_pair(bevel[2]),
+            mb_pair(bevel[3])
+          ]
+
+    // [[x,y]]
+    : (len(bevel) == 1 && is_list(bevel[0]) && len(bevel[0]) == 2 && is_num(bevel[0][0]) && is_num(bevel[0][1]))
+        ? let(a = bevel[0])
+          [a,a,a,a]
+
+    // [[x1,y1],[x2,y2]]
+    : (len(bevel) == 2 
+        && is_list(bevel[0]) && len(bevel[0]) == 2  && is_num(bevel[0][0]) && is_num(bevel[0][1])
+         && is_list(bevel[1]) && len(bevel[1]) == 2  && is_num(bevel[1][0]) && is_num(bevel[1][1]))
+        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]))
+          [a,a,b,b]
+
+    // [[x1,y1],[x2,y2],[x3,y3]]
+    : (len(bevel) == 3 && is_list(bevel[0]) && len(bevel[0]) == 2  && is_num(bevel[0][0]) && is_num(bevel[0][1])
+        && is_list(bevel[1]) && len(bevel[1]) == 2  && is_num(bevel[1][0]) && is_num(bevel[1][1])
+        && is_list(bevel[2]) && len(bevel[2]) == 2  && is_num(bevel[2][0]) && is_num(bevel[2][1]))
+        ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]), c = mb_pair(bevel[2]))
+          [a,b,c,[0,0]]
+
+    // complex mode
+    : mb_bevel_reduce(bevel);
+
+/*
+* ----------------------
+* END mb_bevel_resolve()
+* ----------------------
+*/
+
+function mb_dir_to_int(dir, m = false) =
+    let( d = is_string(dir) ? (
+    dir == "sw" ? 0 :
+    dir == "w" ? 1 :
+    dir == "nw" ? 2 :
+    dir == "n" ? 3 :
+    dir == "ne" ? 4 :
+    dir == "e" ? 5 :
+    dir == "se" ? 6 :
+    dir == "s" ? 7 :
+    
+    dir == "sw-" ? 8 :
+    dir == "w-" ? 9 :
+    dir == "nw-" ? 10 :
+    dir == "n-" ? 11 :
+    dir == "ne-" ? 12 :
+    dir == "e-" ? 13 :
+    dir == "se-" ? 14 :
+    dir == "s-" ? 15 :
+
+    dir == "sw+" ? 16 :
+    dir == "w+" ? 17 :
+    dir == "nw+" ? 18 :
+    dir == "n+" ? 19 :
+    dir == "ne+" ? 20 :
+    dir == "e+" ? 21 :
+    dir == "se+" ? 22 :
+    dir == "s+" ? 23 :
+    undef
+    ) : (dir >= 0 && dir <= 23 ? dir : undef)) m ? d % 8 : d;
 
 function mb_corner_to_int(axis, corner) =
     let(axis = mb_axis_to_int(axis))
