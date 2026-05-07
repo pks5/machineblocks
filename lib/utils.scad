@@ -7,7 +7,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
             m[2] * (is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2]))
         ]) : 
         is_num(xyz) ? [m[0] * xyz, m[1] * xyz, m[2] * xyz] : default,
-        p = is_undef(r) ? undef : (is_undef(precision) ? r : [round_prec(r[0], precision), round_prec(r[1], precision), round_prec(r[2], precision)]))
+        p = is_undef(r) ? undef : (is_undef(precision) ? r : [mb_round_prec(r[0], precision), mb_round_prec(r[1], precision), mb_round_prec(r[2], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
  
 
@@ -72,7 +72,7 @@ function mb_block_dim(size, base_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) 
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
-        slope = mb_slope_resolve(slope),
+        slope = mb_qc_resolve(slope, false),
         mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
         mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
         slo = [
@@ -372,6 +372,7 @@ function mb_map_merge(a, b) =
 * BEVEL
 */    
 
+/*
 function mb_xy_corner_side_resolve(items, i = 0, result = [[0,0], [0,0], [0,0], [0,0]]) =
     i >= len(items)
         ? result
@@ -436,14 +437,14 @@ function mb_xy_add_generic(a, b, i = 0) =
             [[a[i][0] + b[i][0], a[i][1] + b[i][1]]],
             mb_xy_add_generic(a, b, i + 1)
         );
-
+*/
 /*
 * MISC
 */
 
-function round_prec(x, p) = round(x / p) * p;
+function mb_round_prec(x, p) = round(x / p) * p;
 
-function mb_undef_to(v, to = 0) = v == undef ? to : v;
+function mb_undef_to(v, to = 0) = is_undef(v) ? to : v;
 
 function mb_side_to_int(side) =
     is_string(side) ? (
@@ -618,19 +619,9 @@ function mb_slope_normal(slope) =
             ? [slope[0], slope[1], slope[2], slope[3]]
         : undef;
 
-function mb_slope_key(k) =
-    k == "x-" || k == 0 ? 0 :
-    k == "x+" || k == 1 ? 1 :
-    k == "y-" || k == 2 ? 2 :
-    k == "y+" || k == 3 ? 3 :
-    k == "x"  || k == 6 ? 6 :
-    k == "y"  || k == 7 ? 7 :
-    k == "xy" || k == 9 ? 9 :
-    undef;
-
 function mb_slope_complex_item(item) =
     is_list(item) && len(item) == 2 && is_num(item[1])
-        ? let(k = mb_slope_key(item[0]), v = item[1])
+        ? let(k = mb_face_to_int(item[0]), v = item[1])
             k == 0 ? [v, undef, undef, undef] :
             k == 1 ? [undef, v, undef, undef] :
             k == 2 ? [undef, undef, v, undef] :
@@ -668,6 +659,132 @@ function mb_slope_resolve(slope) =
 /*
 * ----------------------
 * END mb_slope_resolve()
+* ----------------------
+*/
+
+/*
+* ------------------------
+* START mb_qc_resolve()
+* ------------------------
+*/
+
+function mb_qc_is_num_array(a, n, i = 0) =
+    is_list(a) && len(a) == n &&
+    (i >= n || (is_num(a[i]) && mb_qc_is_num_array(a, n, i + 1)));
+
+function mb_qc_normal_2d(qc) =
+    is_num(qc)
+        ? [qc, qc, qc, qc]
+        : mb_qc_is_num_array(qc, 1)
+            ? [qc[0], qc[0], qc[0], qc[0]]
+        : mb_qc_is_num_array(qc, 2)
+            ? [qc[0], qc[0], qc[1], qc[1]]
+        : mb_qc_is_num_array(qc, 3)
+            ? [qc[0], qc[1], qc[2], 0]
+        : mb_qc_is_num_array(qc, 4)
+            ? [qc[0], qc[1], qc[2], qc[3]]
+        : undef;
+
+function mb_qc_normal_3d(qc) =
+    is_num(qc)
+        ? [qc, qc, qc, qc, qc, qc]
+        : mb_qc_is_num_array(qc, 1)
+            ? [qc[0], qc[0], qc[0], qc[0], qc[0], qc[0]]
+        : mb_qc_is_num_array(qc, 2)
+            ? [qc[0], qc[0], qc[1], qc[1], 0, 0]
+        : mb_qc_is_num_array(qc, 3)
+            ? [qc[0], qc[0], qc[1], qc[1], qc[2], qc[2]]
+        : mb_qc_is_num_array(qc, 4)
+            ? [qc[0], qc[1], qc[2], qc[3], 0, 0]
+        : mb_qc_is_num_array(qc, 5)
+            ? [qc[0], qc[1], qc[2], qc[3], qc[4], 0]
+        : mb_qc_is_num_array(qc, 6)
+            ? [qc[0], qc[1], qc[2], qc[3], qc[4], qc[5]]
+        : undef;
+
+function mb_qc_normal(qc, cube = false) =
+    cube ? mb_qc_normal_3d(qc) : mb_qc_normal_2d(qc);
+
+function mb_qc_complex_item_2d(item) =
+    is_list(item) && len(item) == 2 && is_num(item[1])
+        ? let(k = mb_face_to_int(item[0]), v = item[1])
+            k == 0 ? [v, undef, undef, undef] :
+            k == 1 ? [undef, v, undef, undef] :
+            k == 2 ? [undef, undef, v, undef] :
+            k == 3 ? [undef, undef, undef, v] :
+            k == 6 ? [v, v, undef, undef] :
+            k == 7 ? [undef, undef, v, v] :
+            k == 9 ? [v, v, v, v] :
+            undef
+        : undef;
+
+function mb_qc_complex_item_3d(item) =
+    is_list(item) && len(item) == 2 && is_num(item[1])
+        ? let(k = mb_face_to_int(item[0]), v = item[1])
+            k == 0  ? [v, undef, undef, undef, undef, undef] :
+            k == 1  ? [undef, v, undef, undef, undef, undef] :
+            k == 2  ? [undef, undef, v, undef, undef, undef] :
+            k == 3  ? [undef, undef, undef, v, undef, undef] :
+            k == 4  ? [undef, undef, undef, undef, v, undef] :
+            k == 5  ? [undef, undef, undef, undef, undef, v] :
+            k == 6  ? [v, v, undef, undef, undef, undef] :
+            k == 7  ? [undef, undef, v, v, undef, undef] :
+            k == 8  ? [undef, undef, undef, undef, v, v] :
+            k == 9  ? [v, v, v, v, undef, undef] :
+            k == 10 ? [v, v, undef, undef, v, v] :
+            k == 11 ? [undef, undef, v, v, v, v] :
+            k == 12 ? [v, v, v, v, v, v] :
+            undef
+        : undef;
+
+function mb_qc_complex_item(item, cube = false) =
+    cube ? mb_qc_complex_item_3d(item) : mb_qc_complex_item_2d(item);
+
+function mb_qc_overwrite(a, b, cube = false) =
+    cube
+        ? [
+            b[0] == undef ? a[0] : b[0],
+            b[1] == undef ? a[1] : b[1],
+            b[2] == undef ? a[2] : b[2],
+            b[3] == undef ? a[3] : b[3],
+            b[4] == undef ? a[4] : b[4],
+            b[5] == undef ? a[5] : b[5]
+        ]
+        : [
+            b[0] == undef ? a[0] : b[0],
+            b[1] == undef ? a[1] : b[1],
+            b[2] == undef ? a[2] : b[2],
+            b[3] == undef ? a[3] : b[3]
+        ];
+
+function mb_qc_complex(items, cube = false, i = 0, acc = undef) =
+    let(acc0 = acc == undef ? (cube ? [0, 0, 0, 0, 0, 0] : [0, 0, 0, 0]) : acc)
+    !is_list(items) || i >= len(items)
+        ? acc0
+        : let(b = mb_qc_complex_item(items[i], cube))
+            mb_qc_complex(
+                items,
+                cube,
+                i + 1,
+                b == undef ? acc0 : mb_qc_overwrite(acc0, b, cube)
+            );
+
+function mb_qc_resolve(qc, cube = false, mul = undef) =
+    let(normal = mb_qc_normal(qc, cube),
+        r = normal != undef
+            ? normal
+            : is_list(qc)
+                ? mb_qc_complex(qc, cube)
+                : cube
+                    ? [0, 0, 0, 0, 0, 0]
+                    : [0, 0, 0, 0],
+        m = mb_resolve_xyz(xyz = mul, default = [1, 1, 1]))
+    mul == undef ? r : [ for(i = [0 : 1 : len(r)]) r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
+
+
+/*
+* ----------------------
+* END mb_qc_resolve()
 * ----------------------
 */
 
