@@ -67,7 +67,7 @@ function mb_param_baseReliefCut(config, settings, default = undef) = mb_param(co
 function mb_param_baseReliefCutHeight(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutHeight", default != undef ? default : 0.375);
 function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutThickness", default != undef ? default : 0.375);
 
-function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseSideAdjustment", default != undef ? default : []);
+function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseSideAdjustment", default != undef ? default : undef);
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
@@ -697,10 +697,18 @@ module mb_block(
     */
     
     
-    block_dim = mb_block_dim(size, size_mod = baseMod, unitMbu, unitGrid);
+    block_dim = mb_block_dim(
+        size = size, 
+        size_adj = sizeAdjustment,
+        size_mod = baseMod, 
+        base_adj = baseSideAdjustment,
+        grid_config = [unitMbu, unitGrid[0], unitGrid[1]],
+        scale = scale
+    );
+    
     block_prismoid = mb_block_to_prismoid(block_dim, bevel = bevel, slope = slope);
 
-    //echo(dim = dim, pr = pr);
+    echo(block_dim);
 
     mbuToMm = scale * unitMbu;
 

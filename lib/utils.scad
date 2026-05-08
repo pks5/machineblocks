@@ -43,13 +43,21 @@ function mb_resolve_face_sext(sext, mul = undef) =
 */
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function mb_block_dim(size, size_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) =
+function mb_block_dim(
+    size, 
+    size_mod = undef, 
+    size_adj = undef,
+    base_adj = undef,
+    grid_config = [1.6, 5, 2], 
+    scale = 1
+) =
     let(si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
         mod = mb_qc_resolve(qc = size_mod, cube = true),
         bb = mb_bounding_box(si),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mi = [-mod[0], -mod[2], 0],
         ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
+        bsa_mm = mb_qc_resolve(qc = base_adj, cube = true, default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]]),
         mod_size = [
             si[0] + mod[0] + mod[1],
             si[1] + mod[2] + mod[3],
@@ -68,7 +76,8 @@ function mb_block_dim(size, size_mod = undef, unitMbu = 1.6, unitGrid = [5, 2]) 
             [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
             [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
         ],
-        [unitMbu, unitGrid]
+        [size_adj, base_adj, bsa_mm],
+        [grid_config, scale]
     ];
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =

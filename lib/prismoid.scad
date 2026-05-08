@@ -983,7 +983,7 @@ echo (okt = okt, okt2 = okt2);
 */
 
 block_dim = mb_block_dim([4, 3, 3], size_mod=[2,0,0,0,0,0]);
-pr = mb_block_to_prismoid(block_dim, bevel = [["sw", 1, 2]], slope=[["x", 0], ["x+", 0.5]]);
+pr = mb_block_to_prismoid(block_dim, bevel = [["sw", 1, 1]], slope=[["y-", 1], ["x+", 1]]);
 
 mb_prismoid(shape = pr, mul=[8, 8, 3.2], expand=[1,1,1,1,1,1], resolution = 160, debug = false);
 //mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
