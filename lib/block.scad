@@ -699,7 +699,7 @@ module mb_block(
     
     block_obj = mb_block_obj(
         size = size, 
-        //size_adj = sizeAdjustment,
+        size_adj = sizeAdjustment,
         size_mod = baseMod, 
         base_adj = baseSideAdjustment,
         bevel = bevel,
@@ -709,8 +709,6 @@ module mb_block(
     );
     
     block_prismoid = mb_block_to_prismoid(block_obj);
-
-    echo(block_obj);
 
     mbuToMm = scale * unitMbu;
 
@@ -728,7 +726,7 @@ module mb_block(
     osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
     osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
     
-    echo(objectSize = objectSize, os_mm = os_mm, osm_mm = osm_mm, osa_mm = osa_mm, size_mod = mb_block_size_mod(block_obj, unit="mm"), bsa = mb_block_base_adj(block_obj, unit="mm"));
+    
 
     //Side Adjustment
    
@@ -746,11 +744,6 @@ module mb_block(
     bsa =  mb_qc_resolve(qc = baseSideAdjustment, cube = true, default = [sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], 0, sizeAdjustment[1]]); 
     sideAdjustment = mb_array_add(bsa, baseModRes);
 
-    // Object Size Side Adjusted      
-    objectSizeXAdj = objectSizeX + bsa[0] + bsa[1];
-    objectSizeYAdj = objectSizeY + bsa[2] + bsa[3];
-    objectSizeZAdj = objectSizeZ + bsa[4] + bsa[5];
-
     // Object Size Fully Adjusted
     objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
     objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
@@ -758,12 +751,25 @@ module mb_block(
 
     objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted, objectSizeZAdjusted];
 
+
+    echo(
+        objectSize = objectSize, 
+        os_mm = os_mm, 
+        objectSizeMod = objectSizeMod,
+        osm_mm = osm_mm, 
+        objectSizeAdjusted = objectSizeAdjusted,
+        osa_mm = osa_mm, 
+        baseModRes = baseModRes,
+        size_mod = mb_block_size_mod(block_obj, unit="mm"), 
+        bsa = bsa,
+        base_adj = mb_block_base_adj(block_obj, unit="mm"));
+
     /*
     * End measurements
     */
 
     minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
-    adjustedSizeRelation = [objectSizeXAdj / objectSizeX, objectSizeYAdj / objectSizeY, objectSizeZAdj / objectSizeZ];
+    adjustedSizeRelation = [objectSizeXAdjusted / objectSizeMod[0], objectSizeYAdjusted / objectSizeMod[1], objectSizeZAdjusted / objectSizeMod[2]];
 
     gridSizeX = mb_grid_size_x(size, slope);
     gridSizeY = mb_grid_size_y(size, slope);

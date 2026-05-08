@@ -41,7 +41,7 @@ function _mb_block_to_shape_parts(mod_size, min_max, bevel = undef, slope = unde
         [0.2, 0.2] // Socket - TODO
     ];
 
-function mb_unit_convert(grid_cfg, from = "grd", to="mm") =
+function mb_unit_mul(grid_cfg, from = "grd", to="mm") =
     let(
         mul = (from == "grd" && to == "mm") ? [grid_cfg[1]*grid_cfg[0], grid_cfg[1]*grid_cfg[0], grid_cfg[2]*grid_cfg[0]] :
               (from == "grd" && to == "mbu") ?  [grid_cfg[1], grid_cfg[1], grid_cfg[2]] :
@@ -72,7 +72,7 @@ function mb_block_obj(
             qc = base_adj, 
             cube = true, 
             default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
-            mul = mb_unit_convert(grid_cfg, from="mm", to="grd")
+            mul = mb_unit_mul(grid_cfg, from="mm", to="grd")
         ),
         mod_size = [
             si[0] + mod[0] + mod[1],
@@ -133,11 +133,11 @@ function mb_block_base_adj(block_obj, unit = "grd") = mb_block_unit_convert(bloc
 */
 
 function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") = 
-    let(mul = mb_unit_convert(mb_block_grid_cfg(block_obj), from = from, to = to))
+    let(mul = mb_unit_mul(mb_block_grid_cfg(block_obj), from = from, to = to))
     is_num(v) || (is_list(v) && len(v) <= 3) ? 
         mb_resolve_xyz(xyz = v, mul = mul) :
         (is_list(v) && len(v) == 4) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1]] :
-        (is_list(v) && len(v) == 6) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1], v[4] * mul[2], v[5] * mul[2]] :
+        (is_list(v) && len(v) <= 6) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1], v[4] * mul[2], len(v) > 5 ? v[5] * mul[2] : undef] :
         undef;
 
 
