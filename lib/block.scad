@@ -1315,36 +1315,12 @@ module mb_block(
                                                             mb_base_cutout(
                                                                 block_obj = block_obj,
 
-                                                                grid = size,
-                                                                gridSizeXY = gridSizeXY,
-
-                                                                objectSizeMod = objectSizeMod,
-                                                                baseMod = baseModRes,
-                                                                
-                                                                baseHeight = objectSizeMod[2],
-                                                                
                                                                 baseRoundingRadiusZ = baseRoundingRadiusZ,
                                                                 baseCutoutDepth = baseCutoutDepth,
-                                                                baseClampHeight = bClampHeight,
-                                                                baseClampThickness = baseClampThickness,
-                                                                baseClampOffset = bClampOffset,
-                                                                
+                                                               
                                                                 cutoutRoundingRadius = cutoutRoundingRadius,
                                                                 cutoutClampRoundingRadius = cutoutClampRoundingRadius,
                                                                 
-                                                                wallThickness = wallThickness,
-                                                                
-                                                                pit = recess,
-                                                                pitDepth = resultingPitDepth,
-                                                                
-                                                                slope = slope,
-                                                                slopeBaseHeightLowerInner = slopeBaseHeightLowerInner * mbuToMm,
-                                                                
-                                                                beveled = beveled,
-                                                                bevelOuter = bevelOuter,
-                                                                bevelInner = bevelInner,
-                                                                bevelMod = bevelCrop,
-
                                                                 qualitySegBase = qualitySegBase,
                                                                 qualityFactor = qualityFactor,
                                                                 qualityResolutionMin = qualityResolutionMin,

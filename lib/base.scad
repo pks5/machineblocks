@@ -22,37 +22,12 @@ module mb_slant_prism(side, l, w, h, inv){
 module mb_base_cutout(
     block_obj,
 
-    grid,
-    gridSizeXY,
-
-    objectSizeMod,
-    baseMod,
-    
-    baseHeight,
     baseCutoutDepth,
     baseRoundingRadiusZ,
-    baseClampHeight,
-    baseClampThickness,
-    baseClampOffset,
     
     cutoutRoundingRadius,
     cutoutClampRoundingRadius,
-    wallThickness,
     
-    //Pit
-    pit,
-    pitDepth,
-    
-    //Slope
-    slope,
-    slopeBaseHeightLowerInner,
-
-    //Bevel
-    beveled,
-    bevelOuter,
-    bevelInner,
-    bevelMod,
-
     qualitySegBase,
     qualityFactor,
     qualityResolutionMin,
