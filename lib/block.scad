@@ -705,7 +705,8 @@ module mb_block(
         bevel = bevel,
         slope = slope,
         grid_cfg = [unitMbu, unitGrid[0], unitGrid[1]],
-        scale = scale
+        scale = scale,
+        recess = recess
     );
     
     block_prismoid = mb_block_to_prismoid(block_obj);
@@ -2746,7 +2747,7 @@ module mb_block(
                                     translate([0, 0, sideZ(1) + 0.5 * tonHeightCalc]){ 
                                         mb_tongue(
                                             block_obj = block_obj,
-                                            
+
                                             gridSizeXY = gridSizeXY,
                                             objectSize = objectSize,
                                             objectSizeAdjusted = objectSizeAdjusted,

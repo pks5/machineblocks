@@ -677,6 +677,8 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
 
 function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius = undef, mul = undef, add = undef, expand = undef) =
     let(
+        sck = is_undef(socket) ? (len(shape) > 2 && !is_undef(shape[2]) ? shape[2] : undef) : socket,
+        mul = mb_resolve_xyz(mul, default=[1,1,1]),
         s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
@@ -698,19 +700,20 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
     [
         ex[0],
         ex[1],
-        mb_resolve_xyz(is_undef(socket) ? (len(shape) > 2 && !is_undef(shape[2]) ? shape[2] : undef) : socket, mul = mul),
+        is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]],
         mb_prismoid_process(ex)
     ];
 
 
 function mb_block_to_prismoid(
     block_obj,
+    mode = "normal",
     radius = undef, 
     mul = undef, 
     add = undef, 
     expand = undef
 ) =
-    let(shape_parts = mb_block_shape_parts(block_obj))
+    let(shape_parts = mb_block_shape_parts(block_obj, mode = mode))
     mb_prismoid_shape_resolve(
         shape = shape_parts[0], 
         height = shape_parts[1], 
@@ -978,8 +981,8 @@ echo (okt = okt, okt2 = okt2);
 *mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
 */
 
-block_obj = mb_block_obj([4, 2, 3], size_mod=[0,0,0,0,0,0], bevel = undef);
+block_obj = mb_block_obj([4, 2, 3], slope = [1,0,0,0], bevel = undef);
 pr = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2], expand=undef);
 echo(pr = pr);
-mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = false);
+mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = true);
 //mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);

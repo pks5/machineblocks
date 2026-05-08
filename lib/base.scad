@@ -94,7 +94,8 @@ module mb_base_cutout(
     //Object Size Adjusted      
     bevelClamp = mb_inset_quad_lrfh(bevelMod, baseClampWallThickness);
     
-    baseCutout = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2]);
+    baseCutout = mb_block_to_prismoid(block_obj, mode="inner", mul=[8, 8, 3.2]);
+    echo (baseCutout = baseCutout);
     mb_prismoid(shape = baseCutout, skip_resolve = true, resolution = 100, debug = false);
     //function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
