@@ -181,17 +181,7 @@ echo(block_obj = block_obj);
                             previewQuality
                         );
 
-                        /*
-                        mb_beveled_rounded_block(
-                            bevel = beveled ? bevelOuterAdjusted : false,
-                            sizeX = objectSizeXAdjusted,
-                            sizeY = objectSizeYAdjusted,
-                            height = height,
-                            roundingRadius = baseRoundingRadius,
-                            roundingResolution = baseRoundingRadiusQuality
-                        );*/
-
-                         mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
+                        mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
 
                         *mb_prismoid(
                             shape = [bevelOuterAdjusted], 
@@ -306,21 +296,6 @@ echo(block_obj = block_obj);
                 );
 
                 mb_prismoid(shape = base_recess, skip_resolve = true, debug = false);
-
-                /*translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5]+ cutOffset)]){
-                    mb_prismoid(
-                                    shape = [pitBevelInner], 
-                                    height = pitDepth + cutOffset, 
-                                    radius = pitRadius == 0 ? 0 : [0, 0, pitRadius], 
-                                    resolution = pitRadiusQuality
-                                );
-                    /*
-                    intersection(){
-                        make_bevel(pitBevelInner, pitDepth + cutOffset);
-                        translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
-                            mb_cube(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
-                    }* /
-                }*/
 
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){

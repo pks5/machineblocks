@@ -205,7 +205,8 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         bevel = block_obj[1][0], 
         slope = block_obj[1][1],
         mod = block_obj[6][0],
-        mod_size = block_obj[0][1][0]
+        mod_size = block_obj[0][1][0],
+        cut_tol = 0.01
         )
     mode == "base_adjusted" ?    
     _mb_block_to_shape_parts(
@@ -227,7 +228,7 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
             -rwt[2],
             -rwt[3],
             -block_obj[4][0],
-            +0.1
+            cut_tol
         ],
         socket = socket,
         bevel = bevel,
@@ -242,7 +243,7 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
             -block_obj[4][3],
             -block_obj[4][3],
             -block_obj[4][3],
-            0.25,
+            cut_tol,
             -(block_obj[4][1] + block_obj[4][2])],
         socket = socket,
         bevel = bevel,
@@ -280,8 +281,8 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
                 wall_thickness_clamp,
                 wall_thickness_clamp,
                 wall_thickness_clamp,
-                -block_obj[4][4][1]+0.01,
-                -(mod_size[2] - block_obj[4][4][1] - block_obj[4][4][2]) + 0.01
+                -block_obj[4][4][1] + cut_tol,
+                -(mod_size[2] - block_obj[4][4][1] - block_obj[4][4][2]) + cut_tol
             ]
         ,
         socket = socket,
