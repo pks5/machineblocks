@@ -23,7 +23,17 @@ mb_connector_prism(side, height, size)
 }
 
 module
-mb_connectors(side, grid, padding, baseHeight, height, size, depth, gs, inverse)
+mb_connectors(
+  side, 
+  grid, 
+  padding, 
+  baseHeight, 
+  height, 
+  size, 
+  depth, 
+  gs, 
+  inverse
+)
 {
   sigs = [ -1, 1, -1, 1 ];
   gX = [ 0, 0, 1, 1 ];

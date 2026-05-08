@@ -19,7 +19,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function _mb_block_to_shape_parts(mod_size, min_max, bevel = undef, slope = undef) =
+function _mb_block_to_shape_parts(mod_size, min_max, bevel, slope, socket, bsa_grd) =
     let(
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
@@ -38,17 +38,18 @@ function _mb_block_to_shape_parts(mod_size, min_max, bevel = undef, slope = unde
             ]
         ],
         [min_max[0][2], min_max[1][2]], // Height
-        [0.2, 0.2] // Socket - TODO
+        socket,
+        bsa_grd
     ];
 
-function mb_unit_mul(grid_cfg, from = "grd", to="mm") =
+function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
     let(
-        mul = (from == "grd" && to == "mm") ? [grid_cfg[1]*grid_cfg[0], grid_cfg[1]*grid_cfg[0], grid_cfg[2]*grid_cfg[0]] :
+        mul = (from == "grd" && to == "mm") ? [grid_cfg[1] * grid_cfg[0] * scale, grid_cfg[1] * grid_cfg[0] * scale, grid_cfg[2] * grid_cfg[0] * scale] :
               (from == "grd" && to == "mbu") ?  [grid_cfg[1], grid_cfg[1], grid_cfg[2]] :
               (from == "mbu" && to == "grd") ? [1 / grid_cfg[1], 1 / grid_cfg[1], 1 / grid_cfg[2]] :
-              (from == "mbu" && to == "mm") ? grid_cfg[0] :
-              (from == "mm" && to == "mbu") ? 1 / grid_config[0] :
-              (from == "mm" && to == "grd") ? [1 / (grid_cfg[1]*grid_cfg[0]), 1 / (grid_cfg[1]*grid_cfg[0]), 1 / (grid_cfg[2]*grid_cfg[0])] : undef
+              (from == "mbu" && to == "mm") ? grid_cfg[0] * scale :
+              (from == "mm" && to == "mbu") ? 1 / (grid_config[0] * scale) :
+              (from == "mm" && to == "grd") ? [1 / (grid_cfg[1] * grid_cfg[0] * scale), 1 / (grid_cfg[1] * grid_cfg[0] * scale), 1 / (grid_cfg[2] * grid_cfg[0] * scale)] : undef
     )
     mul;
 
@@ -63,49 +64,60 @@ function mb_block_obj(
     scale = 1
 ) =
     let(si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
-        mod = mb_qc_resolve(qc = size_mod, cube = true),
         bb = mb_bounding_box(si),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
-        mi = [-mod[0], -mod[2], 0],
-        ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
-        bsa_grd = mb_qc_resolve(
-            qc = base_adj, 
-            cube = true, 
-            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
-            mul = mb_unit_mul(grid_cfg, from="mm", to="grd")
-        ),
+
+        mod = mb_qc_resolve(qc = size_mod, cube = true),
         mod_size = [
             si[0] + mod[0] + mod[1],
             si[1] + mod[2] + mod[3],
             si[2] + mod[4] + mod[5]
         ],
+        
+        mi = [-mod[0], -mod[2], 0],
+        ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
+        min_max = [ // 5 - Min / Max from org center
+            [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
+            [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+        ],
+        
+        bsa_grd = mb_qc_resolve(
+            qc = base_adj, 
+            cube = true, 
+            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
+            mul = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd")
+        ),
         adj_size = [
             mod_size[0] + bsa_grd[0] + bsa_grd[1],
             mod_size[1] + bsa_grd[2] + bsa_grd[3],
             mod_size[2] + bsa_grd[4] + bsa_grd[5],
-        ],
-        min_max = [ // 5 - Min / Max from org center
-            [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-            [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
         ]
+        
     )
         [
             [
-                [si, bb], 
-                [mod_size, mb_bounding_box(mod_size)], 
+                [si, bb, c], 
+                [mod_size, mb_bounding_box(mod_size), min_max], 
                 [adj_size]
             ], // 0 - Original Size / Mod Size
-            [], // 1 - 
+            [bevel, slope], // 1 - Bevel / Slope
             [mi, ma], // 2 - Min / Max (modified)
             [ // 3 - Min / Max Index
                 [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
                 [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
             ],
-            [c], // 4 - org center (without mod)
-            min_max, // 5 - Min Max from org center
+            [], // 4 - 
+            [], // 5 - 
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            _mb_block_to_shape_parts(mod_size, min_max, bevel = bevel, slope = slope) // 8 - Shape Parts
+            _mb_block_to_shape_parts(
+                mod_size = mod_size, 
+                min_max = min_max, 
+                bsa_grd = bsa_grd, 
+                socket = [0.2, 0.2], //TODO
+                bevel = bevel, 
+                slope = slope
+            ) // 8 - shape parts
         ];
 
 /*
@@ -121,19 +133,21 @@ function mb_block_obj_size_mod(block_obj, bb = false, unit = "grd") =
 function mb_block_obj_size_adj(block_obj, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][2][0], from = "grd", to = unit);
 
-function mb_block_shape_parts(block_obj) = block_obj[8];
+function mb_block_size_mod(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][0], from = "grd", to = unit);
+
+function mb_block_base_adj(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][1], from = "grd", to = unit);
 
 function mb_block_grid_cfg(block_obj) = block_obj[7][0];
 
-function mb_block_size_mod(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][0], from = "grd", to = unit);;
+function mb_block_scale(block_obj) = block_obj[7][1];
 
-function mb_block_base_adj(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][1], from = "grd", to = unit);;
+function mb_block_shape_parts(block_obj) = block_obj[8];
 /*
 * Methods
 */
 
 function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") = 
-    let(mul = mb_unit_mul(mb_block_grid_cfg(block_obj), from = from, to = to))
+    let(mul = mb_unit_mul(mb_block_grid_cfg(block_obj), scale = mb_block_scale(block_obj), from = from, to = to))
     is_num(v) || (is_list(v) && len(v) <= 3) ? 
         mb_resolve_xyz(xyz = v, mul = mul) :
         (is_list(v) && len(v) == 4) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1]] :

@@ -20,6 +20,8 @@ module mb_slant_prism(side, l, w, h, inv){
 * Base Cutout
 */
 module mb_base_cutout(
+    block_obj,
+    
     grid,
     gridSizeXY,
 
@@ -218,6 +220,8 @@ module mb_base_cutout(
 * Base Block
 */
 module mb_base(
+    block_obj,
+
     grid,
     gridSizeXY,
     gridSizeZ,

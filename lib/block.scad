@@ -815,6 +815,10 @@ module mb_block(
     
     resultingPitDepth = recess ? (recessDepth != "auto" ? min(recessDepth * gridSizeZ, maxRecessDepth) : maxRecessDepth) : 0;
     
+    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeMod[2] - topPlateHeight - resultingPitDepth));  
+    resultingTopPlateHeight = objectSizeMod[2] - resultingPitDepth - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
+    baseCutoutDepth = baseCutoutType == "none" ? 0 : calculatedBaseCutoutDepth; //((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
+    
     pWallThickness = mb_resolve_side_quad(recessWallThickness);
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
     recStudPaddingResolved = mb_resolve_side_quad(recessStudPadding, gridSizeXY);
@@ -822,10 +826,6 @@ module mb_block(
     pitSizeX = objectSizeMod[0] - (recWallThickness[0] + recWallThickness[1]);
     pitSizeY = objectSizeMod[1] - (recWallThickness[2] + recWallThickness[3]);
 
-    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeMod[2] - topPlateHeight - resultingPitDepth));  
-    resultingTopPlateHeight = objectSizeMod[2] - resultingPitDepth - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
-    baseCutoutDepth = baseCutoutType == "none" ? 0 : calculatedBaseCutoutDepth; //((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
-    
     //Default diameter of pins and stud holes
     //Default thickness of a base wall multiplied by 2
     pDiameter = unitGrid[0] - studDiameter;
@@ -874,7 +874,6 @@ module mb_block(
     
     //corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
     
-    echo (cornersMod = cornersMod, baseMod = baseModR, objectSizeMod = objectSizeMod);
     //cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
     cornersInnerOrg = mb_inset_quad_lrfh(cornersMod, wallThicknessOrg);
 
@@ -1021,6 +1020,7 @@ module mb_block(
     pillarStartY = min(holeZStartY, startY);
     pillarEndY = max(holeZEndY, ceil(endY) - 1);
 
+    /*
     echo(startX = startX, 
         endX = endX, 
         startY = startY, 
@@ -1028,7 +1028,7 @@ module mb_block(
         pillarStartX = pillarStartX, 
         pillarEndX = pillarEndX, 
         pillarStartY =  pillarStartY, 
-        pillarEndY = pillarEndY);
+        pillarEndY = pillarEndY);*/
 
     /*
     * START Functions
@@ -1248,6 +1248,8 @@ module mb_block(
                                                     * Base Block
                                                     */
                                                     mb_base(
+                                                        block_obj = block_obj,
+
                                                         grid = size,
                                                         gridSizeXY = gridSizeXY,
                                                         gridSizeZ = gridSizeZ,
@@ -1310,6 +1312,8 @@ module mb_block(
                                                     difference(){
                                                         union(){
                                                             mb_base_cutout(
+                                                                block_obj = block_obj,
+
                                                                 grid = size,
                                                                 gridSizeXY = gridSizeXY,
 
@@ -1881,6 +1885,8 @@ module mb_block(
                                                 */
                                                 
                                                 mb_base(
+                                                    block_obj = block_obj,
+
                                                     grid = size,
                                                     gridSizeXY = gridSizeXY,
                                                     gridSizeZ = gridSizeZ,
@@ -2381,6 +2387,8 @@ module mb_block(
                                             translate([0, 0, sideZ(0, false) + 0.5*tonGrooveDepthCalc]){ 
                                                 translate([0, 0, -0.5 * cutOffset]){
                                                     mb_tongue(
+                                                        block_obj = block_obj,
+
                                                         gridSizeXY = gridSizeXY,
                                                         
                                                         objectSize = objectSize,
@@ -2737,6 +2745,8 @@ module mb_block(
                                 color(baseColor){
                                     translate([0, 0, sideZ(1) + 0.5 * tonHeightCalc]){ 
                                         mb_tongue(
+                                            block_obj = block_obj,
+                                            
                                             gridSizeXY = gridSizeXY,
                                             objectSize = objectSize,
                                             objectSizeAdjusted = objectSizeAdjusted,

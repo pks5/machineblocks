@@ -5,6 +5,8 @@ use <prismoid.scad>;
 use <quality.scad>;
 
 module mb_tongue(
+    block_obj,
+    
     gridSizeXY,
     objectSize,
     objectSizeAdjusted,
