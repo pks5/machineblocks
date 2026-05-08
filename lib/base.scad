@@ -63,6 +63,17 @@ module mb_base_cutout(
     blockId,
     debug
 ){
+    cutoutRoundingRadiusQuality = mb_fn_even_for_radius(
+        cutoutRoundingRadius, 
+        1, 
+        qualitySegBase,
+        qualityFactor,
+        qualityResolutionMin,
+        qualityResolutionMax,
+        qualityResolutionMultiplier,
+        previewQuality
+    );
+
     baseClampWallThickness = wallThickness + baseClampThickness;
 
     //Variables for cutouts        
@@ -94,129 +105,31 @@ module mb_base_cutout(
     //Object Size Adjusted      
     bevelClamp = mb_inset_quad_lrfh(bevelMod, baseClampWallThickness);
     
-    baseCutout = mb_block_to_prismoid(block_obj, mode="inner", mul=[8, 8, 3.2]);
-    echo (baseCutout = baseCutout);
-    mb_prismoid(shape = baseCutout, skip_resolve = true, resolution = 100, debug = false);
-    //function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
-    
-    *translate([offsetX, offsetY, 0.5*baseMod[5]]){
-        //difference(){
-            
-                
-            union(){
-                
-                    
-                    union(){
-                        cutoutRoundingRadiusQuality = mb_fn_even_for_radius(
-                                    cutoutRoundingRadius, 
-                                    1, 
-                                    qualitySegBase,
-                                    qualityFactor,
-                                    qualityResolutionMin,
-                                    qualityResolutionMax,
-                                    qualityResolutionMultiplier,
-                                    previewQuality
-                                );
+    base_cutout = mb_block_to_prismoid(block_obj, mode="inner", mul=[8, 8, 3.2]);
+    size_mod = mb_block_obj_size_mod(block_obj, unit = "mm");
 
-                        /*
-                        * Bottom Hole
-                        */
-                        baseCutoutTopHeight = baseCutoutDepth - (baseClampOffset + baseClampHeight);
-                        translate([0, 0,-0.5*baseHeight + baseClampOffset + baseClampHeight + 0.5*baseCutoutTopHeight ]){
-                            /*
-                            mb_beveled_rounded_block(
-                                bevel = beveled ? bevelInner : false,
-                                sizeX = objectSize[0] - 2*wallThickness,
-                                sizeY = objectSize[1] - 2*wallThickness,
-                                height = baseHeight - (pit ? pitDepth : 0) - topPlateHeight - baseClampHeight - baseClampOffset,
-                                roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                roundingResolution = cutoutRoundingRadiusQuality
-                            );*/
+    difference(){
+        mb_prismoid(shape = base_cutout, skip_resolve = true, resolution = 100, debug = false);
+        
+        /*
+        * Clamp Skirt
+        */
+        translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
+            difference(){
+                mb_prismoid(
+                    shape = [bevelOuter], 
+                    height = baseClampHeight
+                );
 
-                            mb_prismoid(
-                                shape = [bevelInner], 
-                                height = baseCutoutTopHeight,
-                                radius = mb_xyz_rad_convert(cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius]), 
-                                resolution = cutoutRoundingRadiusQuality
-                            );
-                        }
-                        /*
-                        * Clamp Offset
-                        */
-                        if(baseClampOffset > 0){
-                            translate([0, 0, 0.5 * (-baseHeight + baseClampOffset - cutOffset)]){
-                                /*
-                                mb_beveled_rounded_block(
-                                    bevel = beveled ? bevelInner : false,
-                                    sizeX = objectSize[0] - 2 * wallThickness,
-                                    sizeY = objectSize[1] - 2 * wallThickness,
-                                    height = baseClampOffset + cutOffset,
-                                    roundingRadius = cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius],
-                                    roundingResolution = cutoutRoundingRadiusQuality
-                                );*/
-
-                                mb_prismoid(
-                                    shape = [bevelInner], 
-                                    height = baseClampOffset + cutOffset,
-                                    radius = mb_xyz_rad_convert(cutoutRoundingRadius == 0 ? 0 : [0, 0, cutoutRoundingRadius]), 
-                                    resolution = cutoutRoundingRadiusQuality
-                                );
-                            }
-                        }
-                    }    
-                
-
-                /*
-                * Clamp Skirt
-                */
-                translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
-                    cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
-                                    cutoutClampRoundingRadius, 
-                                    1, 
-                                    qualitySegBase,
-                                    qualityFactor,
-                                    qualityResolutionMin,
-                                    qualityResolutionMax,
-                                    qualityResolutionMultiplier,
-                                    previewQuality
-                                );
-
-                    /*
-                    mb_beveled_rounded_block(
-                        bevel = beveled ? bevelClamp : false,
-                        sizeX = objectSize[0] - 2 * baseClampWallThickness,
-                        sizeY = objectSize[1] - 2 * baseClampWallThickness,
-                        height = baseClampHeight * cutMultiplier,
-                        roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
-                        roundingResolution = cutoutClampRoundingRadiusQuality
-                    );*/
-
-                    mb_prismoid(
-                        shape = [bevelClamp], 
-                        height = baseClampHeight * cutMultiplier, 
-                        radius = mb_xyz_rad_convert(cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius]), 
-                        resolution = cutoutClampRoundingRadiusQuality
-                    );
-                }
+                mb_prismoid(
+                    shape = [bevelClamp], 
+                    height = baseClampHeight * cutMultiplier, 
+                    radius = mb_xyz_rad_convert(cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius]), 
+                    resolution = cutoutRoundingRadiusQuality
+                );
             }
-            
-            /*
-            * Slope
-            */
-            /*
-            if(slope != false && slope != [0, 0, 0, 0]){
-                for(side = [0 : 1 : 3]){
-                    if(slope[side] > 0){
-                        slopeSide0 = slopeSize(side);
-                        tx = ((side % 2 == 0) ? -0.5 : 0.5) * (objectSize[side < 2 ? 0 : 1] - 2*wallThickness - slopeSide0 + cutTolerance);
-                        translate([side < 2 ? tx : 0, side < 2 ? 0 : tx, 0.5*(slopeBaseHeightLowerInner + cutTolerance)])
-                            mb_slant_prism(side, slopeSide0, objectSize[side < 2 ? 1 : 0] * cutMultiplier, baseHeight - slopeBaseHeightLowerInner + cutTolerance, false);
-                    }
-                }
-            }*/
-       //}
-    } 
-
+        }
+    }
 }
 
 /*

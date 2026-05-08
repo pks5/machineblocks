@@ -100,7 +100,9 @@ function mb_block_obj(
     cutout_max_depth = 5,
     cutout_type = "standard",
     recess = false,
-    recess_depth = "auto"
+    recess_depth = "auto",
+    clamp_thickness = 0.1,
+    stud_diameter = 3
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -125,6 +127,9 @@ function mb_block_obj(
             mod_size[2] + bsa_grd[4] + bsa_grd[5],
         ],
 
+        /*
+        * Top Plate, Recess Depth, Base Cutout
+        */
         top_plate_height_pref = top_plate_height[0] * mul_mbu_to_grid[2] + top_plate_height[1] * mul_mm_to_grid[2],
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : 1 - top_plate_height_pref),
@@ -133,7 +138,15 @@ function mb_block_obj(
         cutout_depth_calc = max(0, min(cutout_max_depth * mul_mbu_to_grid[2], mod_size[2] - top_plate_height_pref - recess_depth_final)),
         
         top_plate_height_final = mod_size[2] - recess_depth_final - cutout_depth_calc,
-        cutout_depth = cutout_type == "none" ? 0 : cutout_depth_calc
+        cutout_depth = cutout_type == "none" ? 0 : cutout_depth_calc,
+
+        /*
+        * Base Wall Thickness
+        */
+        p_diameter = grid_cfg[1] - stud_diameter,
+        wall_thickness_pref = (wall_thickness[0] == "auto" ? 0.5 * p_diameter : wall_thickness[0]) * mul_mbu_to_grid[0],
+        wall_thickness_final = wall_thickness_pref + wall_thickness[1] * mul_mm_to_grid[0],
+        wall_thickness_clamp = wall_thickness_final + clamp_thickness
     
         
     )
@@ -149,10 +162,11 @@ function mb_block_obj(
                 [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
                 [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
             ], // 3 - Min / Max Index
-            [top_plate_height_final, recess_depth_final], // 4 - Top Plate Height
+            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, wall_thickness_clamp], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
-            [grid_cfg, scale] // 7 - Units
+            [grid_cfg, scale], // 7 - Units
+            []
         ];
 
 /*
@@ -179,7 +193,7 @@ function mb_block_scale(block_obj) = block_obj[7][1];
 function mb_block_shape_parts(block_obj, mode = "normal") = 
     _mb_block_to_shape_parts(
         size = block_obj[0][0][0], 
-        mod = mode == "inner" ? mb_array_add(block_obj[6][0], [-0.2,-0.2,-0.2,-0.2,2,-(block_obj[4][0] + block_obj[4][1])]) : block_obj[6][0],
+        mod = mode == "inner" ? mb_array_add(block_obj[6][0], [-block_obj[4][3],-block_obj[4][3],-block_obj[4][3],-block_obj[4][3],0.25,-(block_obj[4][1] + block_obj[4][2])]) : block_obj[6][0],
         socket = block_obj[5], //TODO
         bevel = block_obj[1][0], 
         slope = block_obj[1][1]
