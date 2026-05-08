@@ -74,60 +74,27 @@ module mb_base_cutout(
         previewQuality
     );
 
-    baseClampWallThickness = wallThickness + baseClampThickness;
-
-    //Variables for cutouts        
-    cutOffset = 0.2;
-    cutMultiplier = 1.1;
-    cutTolerance = 0.01;
-
-    objectSizeX = gridSizeXY * (grid[0] + (slope != false ? min(slope[0], 0) + min(slope[1], 0) : 0));
-    objectSizeY = gridSizeXY * (grid[1] + (slope != false ? min(slope[2], 0) + min(slope[3], 0) : 0));
-    objectSize = [objectSizeX + baseMod[0] + baseMod[1], objectSizeY + baseMod[2] + baseMod[3]];
-
-    offsetX =  0.5*(slope != false ? -min(slope[0], 0) + min(slope[1], 0) : 0) * gridSizeXY + 0.5*(baseMod[1] - baseMod[0]);
-    offsetY =  0.5*(slope != false ? -min(slope[2], 0) + min(slope[3], 0) : 0) * gridSizeXY + 0.5*(baseMod[3] - baseMod[2]);
-
     if(debug){
         echo(
             id = blockId,
             debugSource = "base.scad",
             baseMod=baseMod,
-            slope=slope, 
-            offsetX = offsetX, 
-            offsetY = offsetY, 
             baseHeight=baseHeight, 
             baseClampOffset=baseClampOffset,
             baseRoundingRadiusZ = baseRoundingRadiusZ,
             cutoutRoundingRadius = cutoutRoundingRadius);
     }
 
-    //Object Size Adjusted      
-    bevelClamp = mb_inset_quad_lrfh(bevelMod, baseClampWallThickness);
-    
-    base_cutout = mb_block_to_prismoid(block_obj, mode="inner", mul=[8, 8, 3.2]);
-    size_mod = mb_block_obj_size_mod(block_obj, unit = "mm");
+    base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
+    base_cutout_clamp_mask = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask", mul=[8, 8, 3.2]);
+    base_cutout_clamp_mask_inner = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask_inner", mul=[8, 8, 3.2]);
 
     difference(){
-        mb_prismoid(shape = base_cutout, skip_resolve = true, resolution = 100, debug = false);
+        mb_prismoid(shape = base_cutout, skip_resolve = true, resolution = cutoutRoundingRadiusQuality, debug = false);
         
-        /*
-        * Clamp Skirt
-        */
-        translate([0, 0, baseClampOffset + 0.5 * (baseClampHeight - baseHeight)]){
-            difference(){
-                mb_prismoid(
-                    shape = [bevelOuter], 
-                    height = baseClampHeight
-                );
-
-                mb_prismoid(
-                    shape = [bevelClamp], 
-                    height = baseClampHeight * cutMultiplier, 
-                    radius = mb_xyz_rad_convert(cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius]), 
-                    resolution = cutoutRoundingRadiusQuality
-                );
-            }
+        difference(){
+            mb_prismoid(shape = base_cutout_clamp_mask, skip_resolve = true);
+            mb_prismoid(shape = base_cutout_clamp_mask_inner, skip_resolve = true);
         }
     }
 }
