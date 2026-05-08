@@ -706,7 +706,9 @@ module mb_block(
         slope = slope,
         grid_cfg = [unitMbu, unitGrid[0], unitGrid[1]],
         scale = scale,
-        recess = recess
+        recess = recess,
+        recess_wall_thickness = recessWallThickness,
+        relief_cut = baseReliefCut
     );
     
     block_prismoid = mb_block_to_prismoid(block_obj);
@@ -1314,19 +1316,6 @@ module mb_block(
                                                         union(){
                                                             mb_base_cutout(
                                                                 block_obj = block_obj,
-
-                                                                baseRoundingRadiusZ = baseRoundingRadiusZ,
-                                                                baseCutoutDepth = baseCutoutDepth,
-                                                               
-                                                                cutoutRoundingRadius = cutoutRoundingRadius,
-                                                                cutoutClampRoundingRadius = cutoutClampRoundingRadius,
-                                                                
-                                                                qualitySegBase = qualitySegBase,
-                                                                qualityFactor = qualityFactor,
-                                                                qualityResolutionMin = qualityResolutionMin,
-                                                                qualityResolutionMax = qualityResolutionMax,
-                                                                qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                                previewQuality = previewQuality,
 
                                                                 blockId = blockId,
                                                                 debug = debug

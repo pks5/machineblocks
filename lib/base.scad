@@ -4,60 +4,20 @@ use <utils.scad>;
 use <quad.scad>;
 use <quality.scad>;
 
-module mb_slant_prism(side, l, w, h, inv){
-    invRot = inv ? 180 : 0;
-    rotations = [[invRot, 0, 0], [invRot, 0, 180], [invRot, 0, 90], [invRot, 0, 270]];
-
-    rotate(rotations[side])
-        translate([-0.5*l, -0.5*w, -0.5 * h])
-            polyhedron(
-                    points=[[0,0,h], [l,0,h], [l,w,h], [0,w,h], [0,w,0], [0,0,0]],
-                    faces=[[1,2,4,5],[3,2,1,0],[5,4,3,0],[0,1,5],[2,3,4]]
-                    );
-}
-
 /*
 * Base Cutout
 */
 module mb_base_cutout(
     block_obj,
 
-    baseCutoutDepth,
-    baseRoundingRadiusZ,
-    
-    cutoutRoundingRadius,
-    cutoutClampRoundingRadius,
-    
-    qualitySegBase,
-    qualityFactor,
-    qualityResolutionMin,
-    qualityResolutionMax,
-    qualityResolutionMultiplier,
-    previewQuality,
-
     blockId,
     debug
 ){
-    cutoutRoundingRadiusQuality = mb_fn_even_for_radius(
-        cutoutRoundingRadius, 
-        1, 
-        qualitySegBase,
-        qualityFactor,
-        qualityResolutionMin,
-        qualityResolutionMax,
-        qualityResolutionMultiplier,
-        previewQuality
-    );
-
     if(debug){
         echo(
             id = blockId,
-            debugSource = "base.scad",
-            baseMod=baseMod,
-            baseHeight=baseHeight, 
-            baseClampOffset=baseClampOffset,
-            baseRoundingRadiusZ = baseRoundingRadiusZ,
-            cutoutRoundingRadius = cutoutRoundingRadius);
+            debugSource = "base.scad"
+        );
     }
 
     base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
@@ -65,11 +25,11 @@ module mb_base_cutout(
     base_cutout_clamp_mask_inner = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask_inner", mul=[8, 8, 3.2]);
 
     difference(){
-        mb_prismoid(shape = base_cutout, skip_resolve = true, resolution = cutoutRoundingRadiusQuality, debug = false);
+        mb_prismoid(shape = base_cutout, skip_resolve = true, debug = debug);
         
         difference(){
-            mb_prismoid(shape = base_cutout_clamp_mask, skip_resolve = true);
-            mb_prismoid(shape = base_cutout_clamp_mask_inner, skip_resolve = true);
+            mb_prismoid(shape = base_cutout_clamp_mask, skip_resolve = true, debug = debug);
+            mb_prismoid(shape = base_cutout_clamp_mask_inner, skip_resolve = true, debug = debug);
         }
     }
 }
@@ -162,116 +122,32 @@ module mb_base(
 
     base_adjusted = mb_block_to_prismoid(block_obj, mode="base_adjusted", mul=[8, 8, 3.2]);
     base_recess = mb_block_to_prismoid(block_obj, mode="recess", mul=[8, 8, 3.2]);
+    relief_cut_mask = mb_block_to_prismoid(block_obj, mode="relief_cut_mask", mul=[8, 8, 3.2]);
+    relief_cut = mb_block_to_prismoid(block_obj, mode="relief_cut", mul=[8, 8, 3.2]);
+    base_clamp_outer = mb_block_to_prismoid(block_obj, mode="base_clamp_outer", mul=[8, 8, 3.2]);
+
 echo(block_obj = block_obj);
     union(){
         
         difference(){
-            //translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(sideAdjustment[5]-sideAdjustment[4])]){
-                
-                difference(){ // Subtract relief cut and slope from base
-                    union(){
-                        baseRoundingRadiusQuality = mb_fn_even_for_radius(
-                            baseRoundingRadius, 
-                            1, 
-                            qualitySegBase,
-                            qualityFactor,
-                            qualityResolutionMin,
-                            qualityResolutionMax,
-                            qualityResolutionMultiplier,
-                            previewQuality
-                        );
+            
+            union(){
+                mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
 
-                        mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
+                if(baseClampThicknessOuter > 0){ //TODO
+                    mb_prismoid(shape = base_clamp_outer, skip_resolve = true, debug = debug);
+                }
+            }
 
-                        *mb_prismoid(
-                            shape = [bevelOuterAdjusted], 
-                            height = height, 
-                            radius = mb_xyz_rad_convert(baseRoundingRadius), 
-                            resolution = baseRoundingRadiusQuality
-                        );
-
-                        if(baseClampThicknessOuter > 0){
-                            baseClampOuterRoundingRadiusQuality = mb_fn_even_for_radius(
-                                baseClampOuterRoundingRadius, 
-                                1, 
-                                qualitySegBase,
-                                qualityFactor,
-                                qualityResolutionMin,
-                                qualityResolutionMax,
-                                qualityResolutionMultiplier,
-                                previewQuality
-                            );
-
-                            //Outer clamp
-                            //Only used to produce cutouts
-                            translate([0,0,-0.5*(height-baseClampHeight) + baseClampOffset]){
-                                /*
-                                mb_beveled_rounded_block(
-                                    bevel = beveled ? bevelBaseClampOuter : false,
-                                    sizeX = objectSizeXAdjusted + 2*baseClampThicknessOuter,
-                                    sizeY = objectSizeYAdjusted + 2*baseClampThicknessOuter,
-                                    height = baseClampHeight,
-                                    roundingRadius = baseClampOuterRoundingRadius,
-                                    roundingResolution = baseClampOuterRoundingRadiusQuality
-                                );*/
-                            
-                                mb_prismoid(
-                                    shape = [bevelBaseClampOuter], 
-                                    height = baseClampHeight, 
-                                    radius = mb_xyz_rad_convert(baseClampOuterRoundingRadius), 
-                                    resolution = baseClampOuterRoundingRadiusQuality
-                                );
-                            }
-                        }
-                    }
-
-                    if(baseReliefCut){
-                        translate([
-                            -0.5*(sideAdjustment[1] - sideAdjustment[0]) + 0.5*(baseMod[1] - baseMod[0]), 
-                            -0.5*(sideAdjustment[3] - sideAdjustment[2]) + 0.5*(baseMod[3] - baseMod[2]),
-                            -0.5*(height-baseReliefCutHeight)-0.5*cutOffset
-                        ]){
-                            difference(){
-                                cube(
-                                    size = [cutMultiplier * objectSizeXAdjusted, cutMultiplier * objectSizeYAdjusted, baseReliefCutHeight + cutOffset], 
-                                    center=true
-                                );
-
-                                reliefRadiusQuality = mb_fn_even_for_radius(
-                                    reliefRadius, 
-                                    1, 
-                                    qualitySegBase,
-                                    qualityFactor,
-                                    qualityResolutionMin,
-                                    qualityResolutionMax,
-                                    qualityResolutionMultiplier,
-                                    previewQuality
-                                );
-
-                                mb_prismoid(
-                                    shape = [bevelReliefCut], 
-                                    height = cutMultiplier * (baseReliefCutHeight + cutOffset), 
-                                    radius = mb_xyz_rad_convert(reliefRadius == 0 ? 0 : [0, 0, reliefRadius]), 
-                                    resolution = reliefRadiusQuality
-                                );
-
-                                /*
-                                mb_beveled_rounded_block(
-                                    bevel = beveled ? bevelReliefCut : false,
-                                    sizeX = objectSizeMod[0] - 2*baseReliefCutThickness,
-                                    sizeY = objectSizeMod[1] - 2*baseReliefCutThickness,
-                                    height = cutMultiplier * (baseReliefCutHeight + cutOffset),
-                                    roundingRadius = reliefRadius == 0 ? 0 : [0, 0, reliefRadius],
-                                    roundingResolution = reliefRadiusQuality
-                                );*/
-                            }
-                        }
-                    }
+            if(baseReliefCut){
+                difference(){
+                    mb_prismoid(shape = relief_cut_mask, skip_resolve = true, debug = debug);
+                    mb_prismoid(shape = relief_cut, skip_resolve = true, debug = debug);
+                }
+            }
 
                     
-               } // End difference
-                
-            //} // End translate
+              
 
             /*
             * Pit
@@ -279,23 +155,8 @@ echo(block_obj = block_obj);
             if(pit){
                 pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
                 pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
-                echo(pitSizeX = pitSizeX, pitSizeY = pitSizeY);
-                pitBevelInner = mb_inset_quad_lrfh(bevelMod, pitWallThickness);
-                pMinThickness = [-min(pitWallThickness[2], pitWallThickness[0]), -min(pitWallThickness[0], pitWallThickness[3]), -min(pitWallThickness[3], pitWallThickness[1]), -min(pitWallThickness[1], pitWallThickness[2])];
-                pitRadius = mb_base_cutout_radius(pitRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(pitRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
-
-                pitRadiusQuality = mb_fn_even_for_radius(
-                    pitRadius, 
-                    1, 
-                    qualitySegBase,
-                    qualityFactor,
-                    qualityResolutionMin,
-                    qualityResolutionMax,
-                    qualityResolutionMultiplier,
-                    previewQuality
-                );
-
-                mb_prismoid(shape = base_recess, skip_resolve = true, debug = false);
+                
+                mb_prismoid(shape = base_recess, skip_resolve = true, debug = debug);
 
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){

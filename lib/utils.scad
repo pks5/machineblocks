@@ -105,9 +105,12 @@ function mb_block_obj(
     cutout_type = "standard",
     recess = false,
     recess_depth = "auto",
-    recess_wall_thickness = 0.333, //TODO
+    recess_wall_thickness = 0.333,
     clamp = [0.1, 0.25, 0.5],
-    stud_diameter = 3
+    clamp_outer = true,
+    stud_diameter = 3,
+    relief_cut = false,
+    relief_cut_dim = [0.375, 0.375]
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -157,7 +160,8 @@ function mb_block_obj(
         wall_thickness_final = wall_thickness_pref + wall_thickness[1] * mul_mm_to_grid[0],
         wall_thickness_clamp = wall_thickness_final + clamp[0] * mul_mm_to_grid[0],
     
-        clamp_final = [clamp[0] * mul_mm_to_grid[0], clamp[1] * mul_mbu_to_grid[2], clamp[2] * mul_mbu_to_grid[2]]
+        clamp_final = [clamp[0] * mul_mm_to_grid[0], clamp[1] * mul_mbu_to_grid[2], clamp[2] * mul_mbu_to_grid[2], clamp_outer],
+        relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]]
     )
         [
             [
@@ -175,7 +179,7 @@ function mb_block_obj(
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            [recess_walls]
+            [recess, recess_walls, relief_cut, relief_cut_final] // 8 - Recesss & Relief Cut
         ];
 
 /*
@@ -206,19 +210,20 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         slope = block_obj[1][1],
         mod = block_obj[6][0],
         mod_size = block_obj[0][1][0],
+        base_adj = block_obj[6][1],
         cut_tol = 0.01
         )
     mode == "base_adjusted" ?    
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        adj = block_obj[6][1],
+        adj = base_adj,
         socket = socket,
         bevel = bevel,
         slope = slope
     ) :
     mode == "recess" ?  
-    let(rwt = block_obj[8][0])  
+    let(rwt = block_obj[8][1])  
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
@@ -289,6 +294,67 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         bevel = bevel,
         
         slope = slope
+    ):
+
+    mode == "base_clamp_outer" ?
+    let(clamp_thickness = block_obj[4][4][0],
+       clamp_offset = -block_obj[4][4][1])
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = [
+                base_adj[0] + clamp_thickness,
+                base_adj[1] + clamp_thickness,
+                base_adj[2] + clamp_thickness,
+                base_adj[3] + clamp_thickness,
+                clamp_offset,
+                -(mod_size[2] - block_obj[4][4][1] - block_obj[4][4][2])
+            ]
+        ,
+        socket = socket,
+        bevel = bevel,
+        
+        slope = slope
+    ):
+
+    mode == "relief_cut_mask" ?
+    
+    //let(wall_thickness_clamp = -(block_obj[4][3] + block_obj[4][4][0]))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = [
+            base_adj[0] + cut_tol,
+            base_adj[1] + cut_tol,
+            base_adj[2] + cut_tol,
+            base_adj[3] + cut_tol,
+            0,
+            -(mod_size[2] - block_obj[8][3][1])
+            ]
+        ,
+        bevel = mb_bevel_resolve(0),
+        slope = mb_qc_resolve(0, false),
+        socket = socket
+    ):
+
+    mode == "relief_cut" ?
+    
+    let(relief_cut_final = block_obj[8][3])
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = [
+            base_adj[0] - relief_cut_final[0],
+            base_adj[1] - relief_cut_final[0],
+            base_adj[2] - relief_cut_final[0],
+            base_adj[3] - relief_cut_final[0],
+            + cut_tol,
+            -(mod_size[2] - relief_cut_final[1]) + cut_tol
+            ]
+        ,
+        bevel = bevel,
+        slope = slope,
+        socket = socket
     ):
 
     _mb_block_to_shape_parts(
