@@ -9,17 +9,8 @@ use <quality.scad>;
 */
 module mb_base_cutout(
     block_obj,
-
-    blockId,
     debug
 ){
-    if(debug){
-        echo(
-            id = blockId,
-            debugSource = "base.scad"
-        );
-    }
-
     base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
     base_cutout_clamp_mask = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask", mul=[8, 8, 3.2]);
     base_cutout_clamp_mask_inner = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask_inner", mul=[8, 8, 3.2]);

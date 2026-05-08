@@ -1316,8 +1316,6 @@ module mb_block(
                                                         union(){
                                                             mb_base_cutout(
                                                                 block_obj = block_obj,
-
-                                                                blockId = blockId,
                                                                 debug = debug
                                                             );
 

@@ -110,7 +110,9 @@ function mb_block_obj(
     clamp_outer = true,
     stud_diameter = 3,
     relief_cut = false,
-    relief_cut_dim = [0.375, 0.375]
+    relief_cut_dim = [0.375, 0.375],
+    id = "[Block]",
+    debug = false
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -179,12 +181,26 @@ function mb_block_obj(
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            [recess, recess_walls, relief_cut, relief_cut_final] // 8 - Recesss & Relief Cut
+            [recess, recess_walls, relief_cut, relief_cut_final], // 8 - Recesss & Relief Cut
+            [],  // 9 - 
+            [],  // 10 - 
+            [],  // 11 - 
+            [],  // 12 - 
+            [],  // 13 - 
+            [],  // 14 - 
+            [],  // 15 - 
+            [],  // 16 - 
+            [],  // 17 - 
+            [],  // 18 - 
+            [],  // 19 - 
+            [id, debug] // 20 - ID, Debug
         ];
 
 /*
 * Getters
 */
+
+function mb_block_get_id(block_obj) = block_obj[20][0];
 
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);
