@@ -105,6 +105,7 @@ function mb_block_obj(
     cutout_type = "standard",
     recess = false,
     recess_depth = "auto",
+    recess_wall_thickness = 0.333, //TODO
     clamp = [0.1, 0.25, 0.5],
     stud_diameter = 3
 ) =
@@ -138,6 +139,10 @@ function mb_block_obj(
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : 1 - top_plate_height_pref),
         recess_depth_final = recess ? (recess_depth != "auto" ? min(recess_depth, recess_depth_max) : recess_depth_max) : 0,
+        recess_walls = mb_qc_resolve(
+            qc = recess_wall_thickness, 
+            cube = true
+        ),
         
         cutout_depth_calc = max(0, min(cutout_max_depth * mul_mbu_to_grid[2], mod_size[2] - top_plate_height_pref - recess_depth_final)),
         
@@ -170,7 +175,7 @@ function mb_block_obj(
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            []
+            [recess_walls]
         ];
 
 /*
@@ -202,6 +207,32 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         mod = block_obj[6][0],
         mod_size = block_obj[0][1][0]
         )
+    mode == "base_adjusted" ?    
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = block_obj[6][1],
+        socket = socket,
+        bevel = bevel,
+        slope = slope
+    ) :
+    mode == "recess" ?  
+    let(rwt = block_obj[8][0])  
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = [
+            -rwt[0],
+            -rwt[1],
+            -rwt[2],
+            -rwt[3],
+            -block_obj[4][0],
+            +0.1
+        ],
+        socket = socket,
+        bevel = bevel,
+        slope = slope
+    ) :
     mode == "base_cutout" ?    
     _mb_block_to_shape_parts(
         size = size, 

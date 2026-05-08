@@ -160,13 +160,13 @@ module mb_base(
     function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
-    function slopeSize(side) = (abs(slope[side]) >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) : (gridSizeXY * abs(slope[side]) + sideAdjustment[side])) + cutTolerance;
-    function slopeBaseHeight(side) = slope[side] < 0 ? slopeBaseHeightUpper : slopeBaseHeightLower;
-
+    base_adjusted = mb_block_to_prismoid(block_obj, mode="base_adjusted", mul=[8, 8, 3.2]);
+    base_recess = mb_block_to_prismoid(block_obj, mode="recess", mul=[8, 8, 3.2]);
+echo(block_obj = block_obj);
     union(){
         
         difference(){
-            translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(sideAdjustment[5]-sideAdjustment[4])]){
+            //translate([0.5*(sideAdjustment[1] - sideAdjustment[0]), 0.5*(sideAdjustment[3] - sideAdjustment[2]), 0.5*(sideAdjustment[5]-sideAdjustment[4])]){
                 
                 difference(){ // Subtract relief cut and slope from base
                     union(){
@@ -191,7 +191,9 @@ module mb_base(
                             roundingResolution = baseRoundingRadiusQuality
                         );*/
 
-                        mb_prismoid(
+                         mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
+
+                        *mb_prismoid(
                             shape = [bevelOuterAdjusted], 
                             height = height, 
                             radius = mb_xyz_rad_convert(baseRoundingRadius), 
@@ -276,25 +278,10 @@ module mb_base(
                         }
                     }
 
-                    /*
-                    * Slope
-                    */
-                    if(slope != false && slope != [0, 0, 0, 0]){
-                        for(side = [0 : 1 : 3]){
-                            if(slope[side] != 0){
-                                slopeSide0 = slopeSize(side);
-                                slopeBaseHeight0 = slopeBaseHeight(side);
-                                tx = ((side % 2 == 0) ? -0.5 : 0.5) * ((side < 2 ? objectSizeXAdjusted : objectSizeYAdjusted) - slopeSide0 + cutTolerance);
-                                t = [side < 2 ? tx : 0, side < 2 ? 0 : tx, sign(slope[side]) * 0.5 * (slopeBaseHeight0 + cutTolerance)];
-                                echo (t = t, s= sign(slope[0]));
-                                translate(t)
-                                    mb_slant_prism(side, slopeSide0, (side < 2 ? objectSizeYAdjusted : objectSizeXAdjusted) * cutMultiplier, height - slopeBaseHeight0 + cutTolerance, slope[side] < 0);
-                            }
-                        }
-                    }
+                    
                } // End difference
                 
-            } // End translate
+            //} // End translate
 
             /*
             * Pit
@@ -318,7 +305,9 @@ module mb_base(
                     previewQuality
                 );
 
-                translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5]+ cutOffset)]){
+                mb_prismoid(shape = base_recess, skip_resolve = true, debug = false);
+
+                /*translate([0.5*(baseMod[1] - baseMod[0]), 0.5*(baseMod[3] - baseMod[2]), 0.5 * (objectSizeMod[2] - pitDepth + baseMod[5]+ cutOffset)]){
                     mb_prismoid(
                                     shape = [pitBevelInner], 
                                     height = pitDepth + cutOffset, 
@@ -330,8 +319,8 @@ module mb_base(
                         make_bevel(pitBevelInner, pitDepth + cutOffset);
                         translate([0.5 * (pitWallThickness[0] - pitWallThickness[1]), 0.5 * (pitWallThickness[2] - pitWallThickness[3]), 0])
                             mb_cube(size = [pitSizeX, pitSizeY, pitDepth + cutOffset], radius=pitRadius == 0 ? 0 : [0, 0, pitRadius], resolution=pitRadiusQuality, center = true);
-                    }*/
-                }
+                    }* /
+                }*/
 
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
