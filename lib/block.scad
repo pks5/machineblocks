@@ -697,7 +697,7 @@ module mb_block(
     */
     
     
-    block_dim = mb_block_dim(
+    block_obj = mb_block_obj(
         size = size, 
         size_adj = sizeAdjustment,
         size_mod = baseMod, 
@@ -708,9 +708,9 @@ module mb_block(
         scale = scale
     );
     
-    block_prismoid = mb_block_to_prismoid(block_dim);
+    block_prismoid = mb_block_to_prismoid(block_obj);
 
-    echo(block_dim);
+    echo(block_obj);
 
     mbuToMm = scale * unitMbu;
 

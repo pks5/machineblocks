@@ -12,14 +12,36 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
  
 /*
 * ---------------
-* START BLOCK DIM
+* START BLOCK OBJ
 * ---------------
 */
 
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function mb_block_dim(
+function _mb_block_to_shape(mod_size, min_max, bevel = undef, slope = undef) =
+    let(
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1],
+        sl = mb_slope_matrix(slope, bevel_res, mod_size)
+    )
+    [
+        [
+            [   
+                for(i=[0:7])
+                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[0][i][0], bevel_fil[i][1] + sl[0][i][1]]
+            ],
+            [
+                for(i=[0:7])
+                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
+            ]
+        ],
+        [min_max[0][2], min_max[1][2]], // Height
+        [0.2, 0.2] // Socket - TODO
+    ];
+
+function mb_block_obj(
     size, 
     size_mod = undef, 
     size_adj = undef,
@@ -61,42 +83,24 @@ function mb_block_dim(
             _mb_block_to_shape(mod_size, min_max, bevel = bevel, slope = slope) // 8 - Shape
         ];
 
-function _mb_block_to_shape(mod_size, min_max, bevel = undef, slope = undef) =
-    let(
-        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
-        bevel_res = bevel_matrix[0],
-        bevel_fil = bevel_matrix[1],
-        sl = mb_slope_matrix(slope, bevel_res, mod_size)
-    )
-    [
-        [
-            [   
-                for(i=[0:7])
-                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[0][i][0], bevel_fil[i][1] + sl[0][i][1]]
-            ],
-            [
-                for(i=[0:7])
-                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
-            ]
-        ],
-        [min_max[0][2], min_max[1][2]], // Height
-        [0.2, 0.2] // Socket - TODO
-    ];
+/*
+* Getters
+*/
 
-function mb_obj_size(block_dim, bb = false) = 
-    block_dim[0][bb ? 0 : 1];
+function mb_obj_size(block_obj, bb = false) = 
+    block_obj[0][bb ? 0 : 1];
 
-function mb_obj_size_mod(block_dim, bb = false) = 
-    block_dim[1][bb ? 0 : 1];
+function mb_obj_size_mod(block_obj, bb = false) = 
+    block_obj[1][bb ? 0 : 1];
 
-function mb_obj_min_max(block_dim) = 
-    block_dim[5];
+function mb_obj_min_max(block_obj) = 
+    block_obj[5];
 
-function mb_block_shape_parts(block_dim) = block_dim[8];
+function mb_block_shape_parts(block_obj) = block_obj[8];
 
 /*
 * -------------
-* END BLOCK DIM
+* END BLOCK OBJ
 * -------------
 */
 
