@@ -19,11 +19,16 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function _mb_block_to_shape_parts(mod_size, min_max, bevel, slope, socket, bsa_grd) =
+function _mb_block_to_shape_parts(size, mod, bevel, slope, socket) =
     let(
+        mod_min_max = mb_block_mod_min_max(size = size, mod = mod),
+        mod_size = mod_min_max[1][0],
+        min_max = mod_min_max[1][2],
+        
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1],
+        
         sl = mb_slope_matrix(slope, bevel_res, mod_size)
     )
     [
@@ -38,8 +43,7 @@ function _mb_block_to_shape_parts(mod_size, min_max, bevel, slope, socket, bsa_g
             ]
         ],
         [min_max[0][2], min_max[1][2]], // Height
-        socket,
-        bsa_grd
+        socket
     ];
 
 function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
@@ -53,6 +57,33 @@ function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
     )
     mul;
 
+function mb_block_mod_min_max(size, mod) =
+    let(bb = mb_bounding_box(size),
+        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
+        mi = [-mod[0], -mod[2], 0],
+        ma = [size[0] + mod[1], size[1] + mod[3], size[2] + mod[5]],
+        mod_size = [
+                    size[0] + mod[0] + mod[1],
+                    size[1] + mod[2] + mod[3],
+                    size[2] + mod[4] + mod[5]
+                ],
+        min_max = [
+                [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
+                [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+            ]
+    )
+        [
+            [size, bb, c],
+            [
+                mod_size,
+                mb_bounding_box(mod_size),
+                min_max
+            ],
+            
+            [mi, ma]
+            
+        ];
+
 function mb_block_obj(
     size, 
     size_mod = undef, 
@@ -64,29 +95,19 @@ function mb_block_obj(
     scale = 1
 ) =
     let(si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
-        bb = mb_bounding_box(si),
-        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
-
         mod = mb_qc_resolve(qc = size_mod, cube = true),
-        mod_size = [
-            si[0] + mod[0] + mod[1],
-            si[1] + mod[2] + mod[3],
-            si[2] + mod[4] + mod[5]
-        ],
         
-        mi = [-mod[0], -mod[2], 0],
-        ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
-        min_max = [ // 5 - Min / Max from org center
-            [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-            [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
-        ],
-        
+        mod_min_max = mb_block_mod_min_max(size = size, mod = mod),
+        mod_size = mod_min_max[1][0],
+        min_max = mod_min_max[1][2],
+
         bsa_grd = mb_qc_resolve(
             qc = base_adj, 
             cube = true, 
             default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
             mul = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd")
         ),
+        
         adj_size = [
             mod_size[0] + bsa_grd[0] + bsa_grd[1],
             mod_size[1] + bsa_grd[2] + bsa_grd[3],
@@ -96,12 +117,12 @@ function mb_block_obj(
     )
         [
             [
-                [si, bb, c], 
-                [mod_size, mb_bounding_box(mod_size), min_max], 
+                mod_min_max[0], 
+                mod_min_max[1], 
                 [adj_size]
             ], // 0 - Original Size / Mod Size
-            [bevel, slope], // 1 - Bevel / Slope
-            [mi, ma], // 2 - Min / Max (modified)
+            [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
+            mod_min_max[3], // 2 - Min / Max (modified)
             [ // 3 - Min / Max Index
                 [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
                 [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
@@ -109,15 +130,7 @@ function mb_block_obj(
             [], // 4 - 
             [], // 5 - 
             [mod, bsa_grd], // 6 - Adjustments
-            [grid_cfg, scale], // 7 - Units
-            _mb_block_to_shape_parts(
-                mod_size = mod_size, 
-                min_max = min_max, 
-                bsa_grd = bsa_grd, 
-                socket = [0.2, 0.2], //TODO
-                bevel = bevel, 
-                slope = slope
-            ) // 8 - shape parts
+            [grid_cfg, scale] // 7 - Units
         ];
 
 /*
@@ -141,7 +154,14 @@ function mb_block_grid_cfg(block_obj) = block_obj[7][0];
 
 function mb_block_scale(block_obj) = block_obj[7][1];
 
-function mb_block_shape_parts(block_obj) = block_obj[8];
+function mb_block_shape_parts(block_obj, mode = "normal") = 
+    _mb_block_to_shape_parts(
+        size = block_obj[0][0][0], 
+        mod = block_obj[6][0], 
+        socket = [0.2, 0.2], //TODO
+        bevel = block_obj[1][0], 
+        slope = block_obj[1][1]
+    );
 /*
 * Methods
 */
@@ -477,7 +497,7 @@ function mb_face_to_int(face) =
 
 function mb_bevel_matrix(bevel, mod_size, min_max) =
     let(
-        bevel = mb_bevel_resolve(bevel),
+        
         mn = min_max[0],
         mx = min_max[1],
         bev = [
@@ -652,7 +672,6 @@ function mb_bevel_resolve(bevel) =
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
-        slope = mb_qc_resolve(slope, false),
         mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
         mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
         slo = [

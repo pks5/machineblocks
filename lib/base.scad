@@ -21,7 +21,7 @@ module mb_slant_prism(side, l, w, h, inv){
 */
 module mb_base_cutout(
     block_obj,
-    
+
     grid,
     gridSizeXY,
 
@@ -94,11 +94,12 @@ module mb_base_cutout(
     //Object Size Adjusted      
     bevelClamp = mb_inset_quad_lrfh(bevelMod, baseClampWallThickness);
     
+    baseCutout = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2]);
+    mb_prismoid(shape = baseCutout, skip_resolve = true, resolution = 100, debug = false);
+    //function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
     
-    function slopeSize(side) = (slope[side] >= grid[side < 2 ? 0 : 1] ? (side < 2 ? objectSize[0] : objectSize[1]) : (gridSizeXY * slope[side])) + cutTolerance;
-    
-    translate([offsetX, offsetY, 0.5*baseMod[5]]){
-        difference(){
+    *translate([offsetX, offsetY, 0.5*baseMod[5]]){
+        //difference(){
             
                 
             union(){
@@ -201,6 +202,7 @@ module mb_base_cutout(
             /*
             * Slope
             */
+            /*
             if(slope != false && slope != [0, 0, 0, 0]){
                 for(side = [0 : 1 : 3]){
                     if(slope[side] > 0){
@@ -210,8 +212,8 @@ module mb_base_cutout(
                             mb_slant_prism(side, slopeSide0, objectSize[side < 2 ? 1 : 0] * cutMultiplier, baseHeight - slopeBaseHeightLowerInner + cutTolerance, false);
                     }
                 }
-            }
-        }
+            }*/
+       //}
     } 
 
 }
