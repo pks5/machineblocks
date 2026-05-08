@@ -9,7 +9,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
         is_num(xyz) ? [m[0] * xyz, m[1] * xyz, m[2] * xyz] : default,
         p = is_undef(r) ? undef : (is_undef(precision) ? r : [mb_round_prec(r[0], precision), mb_round_prec(r[1], precision), mb_round_prec(r[2], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
- 
+
 /*
 * ---------------
 * START BLOCK OBJ
@@ -57,7 +57,11 @@ function mb_block_obj(
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mi = [-mod[0], -mod[2], 0],
         ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
-        bsa_mm = mb_qc_resolve(qc = base_adj, cube = true, default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]]),
+        bsa_mm = mb_qc_resolve(
+            qc = base_adj, 
+            cube = true, 
+            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]]
+        ),
         mod_size = [
             si[0] + mod[0] + mod[1],
             si[1] + mod[2] + mod[3],
@@ -87,16 +91,31 @@ function mb_block_obj(
 * Getters
 */
 
-function mb_obj_size(block_obj, bb = false) = 
+function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     block_obj[0][bb ? 0 : 1];
 
-function mb_obj_size_mod(block_obj, bb = false) = 
+function mb_block_obj_size_mod(block_obj, bb = false, unit = "grd") = 
     block_obj[1][bb ? 0 : 1];
 
-function mb_obj_min_max(block_obj) = 
-    block_obj[5];
-
 function mb_block_shape_parts(block_obj) = block_obj[8];
+
+function mb_block_grid_cfg(block_obj) = block_obj[7];
+
+/*
+* Methods
+*/
+
+function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
+    let(
+        grid_cfg = mb_block_grid_cfg(block_obj),
+        mul = from == "grd" && to == "mm" ? [grid_cfg[1]*grid_cfg[0], grid_cfg[1]*grid_cfg[0], grid_cfg[2]*grid_cfg[0]] :
+              from == "grd" && to == "mbu" ?  [grid_cfg[1], grid_cfg[1], grid_cfg[2]] :
+              from == "mbu" && to == "grd" ? [1 / grid_cfg[1], 1 / grid_cfg[1], 1 / grid_cfg[2]] :
+              from == "mbu" && to == "mm" ? grid_cfg[0] :
+              from == "mm" && to == "mbu" ? 1 / grid_config[0] :
+              from == "mm" && to == "grd" ? [1 / grid_cfg[1]*grid_cfg[0], 1 / grid_cfg[1]*grid_cfg[0], 1 / grid_cfg[2]*grid_cfg[0]] : undef
+    )
+    mb_resolve_xyz(xyz = v, mul = mul);
 
 /*
 * -------------
