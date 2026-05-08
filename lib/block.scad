@@ -702,11 +702,13 @@ module mb_block(
         size_adj = sizeAdjustment,
         size_mod = baseMod, 
         base_adj = baseSideAdjustment,
-        grid_config = [unitMbu, unitGrid[0], unitGrid[1]],
+        bevel = bevel,
+        slope = slope,
+        grid_cfg = [unitMbu, unitGrid[0], unitGrid[1]],
         scale = scale
     );
     
-    block_prismoid = mb_block_to_prismoid(block_dim, bevel = bevel, slope = slope);
+    block_prismoid = mb_block_to_prismoid(block_dim);
 
     echo(block_dim);
 

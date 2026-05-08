@@ -11,36 +11,12 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
  
 /*
-function mb_resolve_face_sext(sext, mul = undef) = 
-    let(mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
-    is_undef(sext) || is_string(sext) ? [0, 0, 0, 0, 0, 0] : 
-    is_list(sext) ? 
-    (len(sext) == 3 ? 
-        [
-            sext[0]*mul[0], 
-            sext[0]*mul[0], 
-            sext[1]*mul[1], 
-            sext[1]*mul[1], 
-            sext[2]*mul[2], 
-            sext[2]*mul[2]
-        ] : 
-        [
-            sext[0]*mul[0], 
-            sext[1]*mul[0], 
-            sext[2]*mul[1], 
-            sext[3]*mul[1], 
-            sext[4]*mul[2], 
-            sext[5]*mul[2]
-        ]) : 
-        [
-            sext * mul[0], 
-            sext * mul[0], 
-            sext * mul[1], 
-            sext * mul[1], 
-            sext * mul[2], 
-            sext * mul[2]
-        ];
+* ---------------
+* START BLOCK DIM
+* ---------------
 */
+
+
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
 function mb_block_dim(
@@ -48,7 +24,9 @@ function mb_block_dim(
     size_mod = undef, 
     size_adj = undef,
     base_adj = undef,
-    grid_config = [1.6, 5, 2], 
+    bevel = undef,
+    slope = undef,
+    grid_cfg = [1.6, 5, 2], 
     scale = 1
 ) =
     let(si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
@@ -62,114 +40,29 @@ function mb_block_dim(
             si[0] + mod[0] + mod[1],
             si[1] + mod[2] + mod[3],
             si[2] + mod[4] + mod[5]
-        ])
-    [
-        [si, bb], // Original Size 
-        [mod_size, mb_bounding_box(mod_size)], // Modified Size
-        [mi, ma], // Min / Max (modified)
-        [
-            [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
-            [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
         ],
-        [c], // org center (without mod)
-        [
+        min_max = [ // 5 - Min / Max from org center
             [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
             [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
-        ],
-        [size_adj, base_adj, bsa_mm],
-        [grid_config, scale]
-    ];
-
-function mb_slope_matrix(slope, bevel_res, mod_size) =
-    let(
-        slope = mb_qc_resolve(slope, false),
-        mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
-        mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
-        slo = [
-            min(abs(slope[0]), mx_bvx),
-            min(abs(slope[1]), mx_bvx),
-            min(abs(slope[2]), mx_bvy),
-            min(abs(slope[3]), mx_bvy),
-        ],
-        slo2 = [
-            sign(slope[0]) * slo[0],
-            sign(slope[1]) * min(slo[1], mx_bvx - slo[0]),
-            sign(slope[2]) * slo[2],
-            sign(slope[3]) * min(slo[3], mx_bvy - slo[2]),
-        ],
-        sl = [
-            [abs(min(0, slo2[0])), abs(min(0, slo2[1])), abs(min(0, slo2[2])), abs(min(0, slo2[3]))],
-            [abs(max(0, slo2[0])), abs(max(0, slo2[1])), abs(max(0, slo2[2])), abs(max(0, slo2[3]))]
         ]
     )
-    [
-        for(i=[0:1])
-            [   
-                [sl[i][0], sl[i][2]], [sl[i][0], sl[i][2]],
-                [sl[i][0], -sl[i][3]], [sl[i][0], -sl[i][3]],
-                [-sl[i][1], -sl[i][3]], [-sl[i][1], -sl[i][3]],
-                [-sl[i][1], sl[i][2]], [-sl[i][1], sl[i][2]]
-            ]
-    ];
+        [
+            [si, bb], // 0 - Original Size 
+            [mod_size, mb_bounding_box(mod_size)], // 1 - Modified Size
+            [mi, ma], // 2 - Min / Max (modified)
+            [ // 3 - Min / Max Index
+                [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
+                [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
+            ],
+            [c], // 4 - org center (without mod)
+            min_max, // 5 - Min Max from org center
+            [size_adj, base_adj, bsa_mm], // 6 - Adjustments
+            [grid_cfg, scale], // 7 - Units
+            _mb_block_to_shape(mod_size, min_max, bevel = bevel, slope = slope) // 8 - Shape
+        ];
 
-function mb_bevel_matrix(bevel, mod_size, min_max) =
+function _mb_block_to_shape(mod_size, min_max, bevel = undef, slope = undef) =
     let(
-        bevel = mb_bevel_resolve(bevel),
-        mn = min_max[0],
-        mx = min_max[1],
-        bev = [
-            [min(mod_size[0], bevel[0][0]), min(mod_size[1], bevel[0][1])],
-            [min(mod_size[0], bevel[1][0]), min(mod_size[1], bevel[1][1])],
-            [min(mod_size[0], bevel[2][0]), min(mod_size[1], bevel[2][1])],
-            [min(mod_size[0], bevel[3][0]), min(mod_size[1], bevel[3][1])]
-        ],
-        bv = [
-            [min(mod_size[0] - bev[3][0], bev[0][0]), bev[0][1]],
-            [bev[1][0], min(mod_size[1] - bev[0][1], bev[1][1])],
-            [min(mod_size[0] - bev[1][0], bev[2][0]), bev[2][1]],
-            [bev[3][0], min(mod_size[1] - bev[2][1], bev[3][1])]
-        ],
-        bc = [
-            [mn[0], mn[1]], [mn[0], mn[1]],
-            [mn[0], mx[1]], [mn[0], mx[1]], 
-            [mx[0], mx[1]], [mx[0], mx[1]], 
-            [mx[0], mn[1]], [mx[0], mn[1]]
-        ],
-        bs = [
-            bv[0][0] == 0 && bv[0][1] > 0 ? undef : [bv[0][0], 0], 
-            bv[0][1] == 0 && bv[0][0] >= 0 ? undef : [0, bv[0][1]],
-            
-            bv[1][1] == 0 && bv[1][0] > 0 ? undef :  [0, -bv[1][1]], 
-            bv[1][0] == 0 && bv[1][1] >= 0 ? undef : [bv[1][0], 0],
-            
-            bv[2][0] == 0 && bv[2][1] > 0 ? undef : [-bv[2][0], 0], 
-            bv[2][1] == 0 && bv[2][0] >= 0 ? undef : [0, -bv[2][1]],
-            
-            bv[3][1] == 0 && bv[3][0] > 0 ? undef : [0, bv[3][1]], 
-            bv[3][0] == 0 && bv[3][1] >= 0 ? undef : [-bv[3][0], 0]
-        ],
-        bb = [
-            for(i=[0:7])
-                is_undef(bs[i]) ? undef : [bc[i][0] + bs[i][0], bc[i][1] + bs[i][1]]
-        ],
-        bu = [
-            for(i=[0:7])
-                is_undef(bb[i]) || (
-                    //(bb[i] == bb[(i + 2) % 8] && false) || 
-                    (bb[i] == bb[(i + 8 - 2) % 8] && true) || 
-                
-                    //(bb[i] == bb[(i + 8 - 1) % 8] && false) ||
-                    (bb[i] == bb[(i + 1) % 8] && true)
-                ) ? undef : bb[i]
-        ]
-    )
-    [bv, bu];
-
-function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
-    let(
-        mod_size = block_dim[1][0],
-        min_max = block_dim[5],
-        
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1],
@@ -186,10 +79,26 @@ function mb_block_to_shape(block_dim, bevel = undef, slope = undef) =
                     is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
             ]
         ],
-        [min_max[0][2], min_max[1][2]],
-        [0.2, 0.2]
-        //,bevel_matrix
+        [min_max[0][2], min_max[1][2]], // Height
+        [0.2, 0.2] // Socket - TODO
     ];
+
+function mb_obj_size(block_dim, bb = false) = 
+    block_dim[0][bb ? 0 : 1];
+
+function mb_obj_size_mod(block_dim, bb = false) = 
+    block_dim[1][bb ? 0 : 1];
+
+function mb_obj_min_max(block_dim) = 
+    block_dim[5];
+
+function mb_block_shape_parts(block_dim) = block_dim[8];
+
+/*
+* -------------
+* END BLOCK DIM
+* -------------
+*/
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
         [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] 
@@ -504,6 +413,59 @@ function mb_face_to_int(face) =
 * ------------------------
 */
 
+function mb_bevel_matrix(bevel, mod_size, min_max) =
+    let(
+        bevel = mb_bevel_resolve(bevel),
+        mn = min_max[0],
+        mx = min_max[1],
+        bev = [
+            [min(mod_size[0], bevel[0][0]), min(mod_size[1], bevel[0][1])],
+            [min(mod_size[0], bevel[1][0]), min(mod_size[1], bevel[1][1])],
+            [min(mod_size[0], bevel[2][0]), min(mod_size[1], bevel[2][1])],
+            [min(mod_size[0], bevel[3][0]), min(mod_size[1], bevel[3][1])]
+        ],
+        bv = [
+            [min(mod_size[0] - bev[3][0], bev[0][0]), bev[0][1]],
+            [bev[1][0], min(mod_size[1] - bev[0][1], bev[1][1])],
+            [min(mod_size[0] - bev[1][0], bev[2][0]), bev[2][1]],
+            [bev[3][0], min(mod_size[1] - bev[2][1], bev[3][1])]
+        ],
+        bc = [
+            [mn[0], mn[1]], [mn[0], mn[1]],
+            [mn[0], mx[1]], [mn[0], mx[1]], 
+            [mx[0], mx[1]], [mx[0], mx[1]], 
+            [mx[0], mn[1]], [mx[0], mn[1]]
+        ],
+        bs = [
+            bv[0][0] == 0 && bv[0][1] > 0 ? undef : [bv[0][0], 0], 
+            bv[0][1] == 0 && bv[0][0] >= 0 ? undef : [0, bv[0][1]],
+            
+            bv[1][1] == 0 && bv[1][0] > 0 ? undef :  [0, -bv[1][1]], 
+            bv[1][0] == 0 && bv[1][1] >= 0 ? undef : [bv[1][0], 0],
+            
+            bv[2][0] == 0 && bv[2][1] > 0 ? undef : [-bv[2][0], 0], 
+            bv[2][1] == 0 && bv[2][0] >= 0 ? undef : [0, -bv[2][1]],
+            
+            bv[3][1] == 0 && bv[3][0] > 0 ? undef : [0, bv[3][1]], 
+            bv[3][0] == 0 && bv[3][1] >= 0 ? undef : [-bv[3][0], 0]
+        ],
+        bb = [
+            for(i=[0:7])
+                is_undef(bs[i]) ? undef : [bc[i][0] + bs[i][0], bc[i][1] + bs[i][1]]
+        ],
+        bu = [
+            for(i=[0:7])
+                is_undef(bb[i]) || (
+                    //(bb[i] == bb[(i + 2) % 8] && false) || 
+                    (bb[i] == bb[(i + 8 - 2) % 8] && true) || 
+                
+                    //(bb[i] == bb[(i + 8 - 1) % 8] && false) ||
+                    (bb[i] == bb[(i + 1) % 8] && true)
+                ) ? undef : bb[i]
+        ]
+    )
+    [bv, bu];
+
 function mb_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
 
 function mb_is_pair(v) =
@@ -625,6 +587,39 @@ function mb_bevel_resolve(bevel) =
 * START mb_slope_resolve()
 * ------------------------
 */
+
+function mb_slope_matrix(slope, bevel_res, mod_size) =
+    let(
+        slope = mb_qc_resolve(slope, false),
+        mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
+        mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
+        slo = [
+            min(abs(slope[0]), mx_bvx),
+            min(abs(slope[1]), mx_bvx),
+            min(abs(slope[2]), mx_bvy),
+            min(abs(slope[3]), mx_bvy),
+        ],
+        slo2 = [
+            sign(slope[0]) * slo[0],
+            sign(slope[1]) * min(slo[1], mx_bvx - slo[0]),
+            sign(slope[2]) * slo[2],
+            sign(slope[3]) * min(slo[3], mx_bvy - slo[2]),
+        ],
+        sl = [
+            [abs(min(0, slo2[0])), abs(min(0, slo2[1])), abs(min(0, slo2[2])), abs(min(0, slo2[3]))],
+            [abs(max(0, slo2[0])), abs(max(0, slo2[1])), abs(max(0, slo2[2])), abs(max(0, slo2[3]))]
+        ]
+    )
+    [
+        for(i=[0:1])
+            [   
+                [sl[i][0], sl[i][2]], [sl[i][0], sl[i][2]],
+                [sl[i][0], -sl[i][3]], [sl[i][0], -sl[i][3]],
+                [-sl[i][1], -sl[i][3]], [-sl[i][1], -sl[i][3]],
+                [-sl[i][1], sl[i][2]], [-sl[i][1], sl[i][2]]
+            ]
+    ];
+
 /*
 function mb_slope_is_num_array(a, n, i = 0) =
     is_list(a) && len(a) == n &&
