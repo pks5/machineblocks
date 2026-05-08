@@ -408,9 +408,9 @@ function mb_face_to_int(face) =
     ) : (face >= 0 && face <= 12 ? face : undef);
 
 /*
-* ------------------------
-* START mb_bevel_resolve()
-* ------------------------
+* -----------
+* START BEVEL
+* -----------
 */
 
 function mb_bevel_matrix(bevel, mod_size, min_max) =
@@ -577,15 +577,15 @@ function mb_bevel_resolve(bevel) =
     : mb_bevel_reduce(bevel);
 
 /*
-* ----------------------
-* END mb_bevel_resolve()
-* ----------------------
+* ---------
+* END BEVEL
+* ---------
 */
 
 /*
-* ------------------------
-* START mb_slope_resolve()
-* ------------------------
+* -----------
+* START SLOPE
+* -----------
 */
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
@@ -677,9 +677,9 @@ function mb_slope_resolve(slope) =
                 : [0, 0, 0, 0];
 */
 /*
-* ----------------------
-* END mb_slope_resolve()
-* ----------------------
+* ---------
+* END SLOPE
+* ---------
 */
 
 /*
