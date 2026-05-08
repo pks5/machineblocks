@@ -693,8 +693,8 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
             mb_prismoid_plane_resolve_points(s, 1, mul = mul, add = a[1], height = height, radius = r[1])
         ],
         ex = is_undef(expand) ? ar : [
-           mb_prismoid_plane_expand(ar[0], 0, expand, mul),
-           mb_prismoid_plane_expand(ar[1], 1, expand, mul)
+           mb_prismoid_plane_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
+           mb_prismoid_plane_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
         ]
     )
     [
@@ -710,18 +710,17 @@ function mb_block_to_prismoid(
     mode = "normal",
     radius = undef, 
     mul = undef, 
-    add = undef, 
-    expand = undef
+    add = undef
 ) =
     let(shape_parts = mb_block_shape_parts(block_obj, mode = mode))
     mb_prismoid_shape_resolve(
         shape = shape_parts[0], 
         height = shape_parts[1], 
-        socket = shape_parts[2],
+        socket = shape_parts[2][0],
         radius = radius, 
         mul = mul,
         add = add,
-        expand = expand
+        expand = shape_parts[2][1]
     );
 
 
@@ -982,7 +981,7 @@ echo (okt = okt, okt2 = okt2);
 */
 
 block_obj = mb_block_obj([4, 2, 3], slope = [1,0,0,0], bevel = undef);
-pr = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2], expand=undef);
+pr = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2]);
 echo(pr = pr);
 mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = true);
 //mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);

@@ -19,7 +19,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, adj = undef) =
+function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, expand = undef, adj = undef) =
     let(
         mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
         mod_size = mod_min_max[1][0],
@@ -43,7 +43,7 @@ function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, adj = undef) 
             ]
         ],
         [min_max[0][2], min_max[1][2]], // Height
-        socket
+        [socket, expand]
     ];
 
 function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
@@ -141,8 +141,8 @@ function mb_block_obj(
         * Top Plate, Recess Depth, Base Cutout
         */
         top_plate_height_pref = top_plate_height[0] * mul_mbu_to_grid[2] + top_plate_height[1] * mul_mm_to_grid[2],
-        
-        recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : 1 - top_plate_height_pref),
+        cutout_min_depth = 1 - top_plate_height_pref,
+        recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : cutout_min_depth),
         recess_depth_final = recess ? (recess_depth != "auto" ? min(recess_depth, recess_depth_max) : recess_depth_max) : 0,
         recess_walls = mb_qc_resolve(
             qc = recess_wall_thickness, 
@@ -177,7 +177,7 @@ function mb_block_obj(
                 [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
                 [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
             ], // 3 - Min / Max Index
-            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final], // 4 - Top Plate Height
+            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
@@ -202,6 +202,8 @@ function mb_block_obj(
 
 function mb_block_get_id(block_obj) = block_obj[20][0];
 
+function mb_block_get_bevel(block_obj) = block_obj[1][0];
+
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);
 
@@ -222,11 +224,12 @@ function mb_block_scale(block_obj) = block_obj[7][1];
 function mb_block_shape_parts(block_obj, mode = "normal") = 
     let(size = block_obj[0][0][0],
         socket = block_obj[5],
-        bevel = block_obj[1][0], 
+        base_adj = block_obj[6][1],
+        bevel = mb_block_get_bevel(block_obj), 
         slope = block_obj[1][1],
         mod = block_obj[6][0],
         mod_size = block_obj[0][1][0],
-        base_adj = block_obj[6][1],
+        wall_thickness = block_obj[4][3],
         cut_tol = 0.01
         )
     mode == "base_adjusted" ?    
@@ -235,40 +238,54 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         mod = mod,
         adj = base_adj,
         socket = socket,
-        bevel = bevel,
-        slope = slope
+        bevel = mb_bevel_shrink(bevel, base_adj),
+        slope = mb_slope_shrink(slope, base_adj)
     ) :
     mode == "recess" ?  
     let(rwt = block_obj[8][1])  
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        adj = [
+        expand = [[
             -rwt[0],
             -rwt[1],
             -rwt[2],
             -rwt[3],
             -block_obj[4][0],
             cut_tol
-        ],
-        socket = socket,
+        ]],
+        socket = undef,
         bevel = bevel,
         slope = slope
     ) :
     mode == "base_cutout" ?    
+    let(slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1))
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        adj = [
-            -block_obj[4][3],
-            -block_obj[4][3],
-            -block_obj[4][3],
-            -block_obj[4][3],
-            cut_tol,
-            -(block_obj[4][1] + block_obj[4][2])],
-        socket = socket,
+        
+        expand = [
+            [
+                -wall_thickness + slope_neg[0],
+                -wall_thickness + slope_neg[1],
+                -wall_thickness + slope_neg[2],
+                -wall_thickness + slope_neg[3],
+                cut_tol,
+                -(block_obj[4][1] + block_obj[4][2])
+            ],
+            [
+                slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0),
+                slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0),
+                slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0),
+                slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0),
+                cut_tol,
+                -(block_obj[4][1] + block_obj[4][2])
+            ]
+        ],
+        socket = [block_obj[4][5], 0],
         bevel = bevel,
-        slope = slope
+        slope = slope_pos
     ) :
 
     mode == "base_cutout_clamp_mask" ?
@@ -293,23 +310,24 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
 
     mode == "base_cutout_clamp_mask_inner" ?
     let(wall_thickness_clamp = -(block_obj[4][3] + block_obj[4][4][0]),
-       clamp_offset = -block_obj[4][4][1])
+       clamp_offset = -block_obj[4][4][1],
+       slope_pos = mb_slope_filter(slope, -1))
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        adj = [
-                wall_thickness_clamp,
-                wall_thickness_clamp,
-                wall_thickness_clamp,
-                wall_thickness_clamp,
+        expand = [[
+                wall_thickness_clamp + slope_pos[0],
+                wall_thickness_clamp + slope_pos[1],
+                wall_thickness_clamp + slope_pos[2],
+                wall_thickness_clamp + slope_pos[3],
                 -block_obj[4][4][1] + cut_tol,
                 -(mod_size[2] - block_obj[4][4][1] - block_obj[4][4][2]) + cut_tol
-            ]
+            ]]
         ,
         socket = socket,
         bevel = bevel,
         
-        slope = slope
+        slope = mb_qc_resolve(0, false)
     ):
 
     mode == "base_clamp_outer" ?
@@ -318,19 +336,19 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        adj = [
+        expand = [[
                 base_adj[0] + clamp_thickness,
                 base_adj[1] + clamp_thickness,
                 base_adj[2] + clamp_thickness,
                 base_adj[3] + clamp_thickness,
                 clamp_offset,
                 -(mod_size[2] - block_obj[4][4][1] - block_obj[4][4][2])
-            ]
+            ]]
         ,
         socket = socket,
         bevel = bevel,
         
-        slope = slope
+        slope = mb_qc_resolve(0, false)
     ):
 
     mode == "relief_cut_mask" ?
@@ -713,6 +731,14 @@ function mb_face_to_int(face) =
 * -----------
 */
 
+function mb_bevel_shrink(bevel, shrink) = 
+    [
+        [max(0, bevel[0][0] + shrink[0]), max(0, bevel[0][1] + shrink[2])],
+        [max(0, bevel[1][0] + shrink[0]), max(0, bevel[1][1] + shrink[3])],
+        [max(0, bevel[2][0] + shrink[1]), max(0, bevel[2][1] + shrink[3])],
+        [max(0, bevel[3][0] + shrink[1]), max(0, bevel[3][1] + shrink[2])]
+    ];
+
 function mb_bevel_matrix(bevel, mod_size, min_max) =
     let(
         
@@ -887,6 +913,22 @@ function mb_bevel_resolve(bevel) =
 * START SLOPE
 * -----------
 */
+
+function mb_slope_shrink(slope, shrink) = 
+    [
+        sign(slope[0]) * (abs(slope[0]) + shrink[0]), 
+        sign(slope[1]) * (abs(slope[1]) + shrink[1]),
+        sign(slope[2]) * (abs(slope[2]) + shrink[2]),
+        sign(slope[3]) * (abs(slope[3]) + shrink[3])
+    ];
+
+function mb_slope_filter(slope, filter = 1) = 
+    [
+        sign(slope[0]) == filter ? slope[0] : 0,
+        sign(slope[1]) == filter ? slope[1] : 0,
+        sign(slope[2]) == filter ? slope[2] : 0,
+        sign(slope[3]) == filter ? slope[3] : 0
+    ];
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
