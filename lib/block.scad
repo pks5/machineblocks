@@ -699,7 +699,7 @@ module mb_block(
     
     block_obj = mb_block_obj(
         size = size, 
-        size_adj = sizeAdjustment,
+        //size_adj = sizeAdjustment,
         size_mod = baseMod, 
         base_adj = baseSideAdjustment,
         bevel = bevel,
@@ -723,6 +723,12 @@ module mb_block(
     objectSizeZ = size[2] * gridSizeZ;
 
     objectSize = [objectSizeX, objectSizeY, objectSizeZ];
+
+    os_mm = mb_block_obj_size(block_obj, unit="mm");
+    osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
+    osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
+    
+    echo(objectSize = objectSize, os_mm = os_mm, osm_mm = osm_mm, osa_mm = osa_mm, size_mod = mb_block_size_mod(block_obj, unit="mm"), bsa = mb_block_base_adj(block_obj, unit="mm"));
 
     //Side Adjustment
    

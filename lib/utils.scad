@@ -19,7 +19,7 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
-function _mb_block_to_shape(mod_size, min_max, bevel = undef, slope = undef) =
+function _mb_block_to_shape_parts(mod_size, min_max, bevel = undef, slope = undef) =
     let(
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
@@ -41,10 +41,21 @@ function _mb_block_to_shape(mod_size, min_max, bevel = undef, slope = undef) =
         [0.2, 0.2] // Socket - TODO
     ];
 
+function mb_unit_convert(grid_cfg, from = "grd", to="mm") =
+    let(
+        mul = (from == "grd" && to == "mm") ? [grid_cfg[1]*grid_cfg[0], grid_cfg[1]*grid_cfg[0], grid_cfg[2]*grid_cfg[0]] :
+              (from == "grd" && to == "mbu") ?  [grid_cfg[1], grid_cfg[1], grid_cfg[2]] :
+              (from == "mbu" && to == "grd") ? [1 / grid_cfg[1], 1 / grid_cfg[1], 1 / grid_cfg[2]] :
+              (from == "mbu" && to == "mm") ? grid_cfg[0] :
+              (from == "mm" && to == "mbu") ? 1 / grid_config[0] :
+              (from == "mm" && to == "grd") ? [1 / (grid_cfg[1]*grid_cfg[0]), 1 / (grid_cfg[1]*grid_cfg[0]), 1 / (grid_cfg[2]*grid_cfg[0])] : undef
+    )
+    mul;
+
 function mb_block_obj(
     size, 
     size_mod = undef, 
-    size_adj = undef,
+    size_adj = [-0.1, 0],
     base_adj = undef,
     bevel = undef,
     slope = undef,
@@ -57,15 +68,21 @@ function mb_block_obj(
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mi = [-mod[0], -mod[2], 0],
         ma = [si[0] + mod[1], si[1] + mod[3], si[2] + mod[5]],
-        bsa_mm = mb_qc_resolve(
+        bsa_grd = mb_qc_resolve(
             qc = base_adj, 
             cube = true, 
-            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]]
+            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
+            mul = mb_unit_convert(grid_cfg, from="mm", to="grd")
         ),
         mod_size = [
             si[0] + mod[0] + mod[1],
             si[1] + mod[2] + mod[3],
             si[2] + mod[4] + mod[5]
+        ],
+        adj_size = [
+            mod_size[0] + bsa_grd[0] + bsa_grd[1],
+            mod_size[1] + bsa_grd[2] + bsa_grd[3],
+            mod_size[2] + bsa_grd[4] + bsa_grd[5],
         ],
         min_max = [ // 5 - Min / Max from org center
             [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
@@ -73,8 +90,12 @@ function mb_block_obj(
         ]
     )
         [
-            [si, bb], // 0 - Original Size 
-            [mod_size, mb_bounding_box(mod_size)], // 1 - Modified Size
+            [
+                [si, bb], 
+                [mod_size, mb_bounding_box(mod_size)], 
+                [adj_size]
+            ], // 0 - Original Size / Mod Size
+            [], // 1 - 
             [mi, ma], // 2 - Min / Max (modified)
             [ // 3 - Min / Max Index
                 [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
@@ -82,9 +103,9 @@ function mb_block_obj(
             ],
             [c], // 4 - org center (without mod)
             min_max, // 5 - Min Max from org center
-            [size_adj, base_adj, bsa_mm], // 6 - Adjustments
+            [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            _mb_block_to_shape(mod_size, min_max, bevel = bevel, slope = slope) // 8 - Shape
+            _mb_block_to_shape_parts(mod_size, min_max, bevel = bevel, slope = slope) // 8 - Shape Parts
         ];
 
 /*
@@ -92,30 +113,34 @@ function mb_block_obj(
 */
 
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
-    block_obj[0][bb ? 0 : 1];
+    mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);
 
 function mb_block_obj_size_mod(block_obj, bb = false, unit = "grd") = 
-    block_obj[1][bb ? 0 : 1];
+    mb_block_unit_convert(block_obj, block_obj[0][1][bb ? 0 : 1], from = "grd", to = unit);
+
+function mb_block_obj_size_adj(block_obj, unit = "grd") = 
+    mb_block_unit_convert(block_obj, block_obj[0][2][0], from = "grd", to = unit);
 
 function mb_block_shape_parts(block_obj) = block_obj[8];
 
-function mb_block_grid_cfg(block_obj) = block_obj[7];
+function mb_block_grid_cfg(block_obj) = block_obj[7][0];
 
+function mb_block_size_mod(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][0], from = "grd", to = unit);;
+
+function mb_block_base_adj(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][1], from = "grd", to = unit);;
 /*
 * Methods
 */
 
-function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
-    let(
-        grid_cfg = mb_block_grid_cfg(block_obj),
-        mul = from == "grd" && to == "mm" ? [grid_cfg[1]*grid_cfg[0], grid_cfg[1]*grid_cfg[0], grid_cfg[2]*grid_cfg[0]] :
-              from == "grd" && to == "mbu" ?  [grid_cfg[1], grid_cfg[1], grid_cfg[2]] :
-              from == "mbu" && to == "grd" ? [1 / grid_cfg[1], 1 / grid_cfg[1], 1 / grid_cfg[2]] :
-              from == "mbu" && to == "mm" ? grid_cfg[0] :
-              from == "mm" && to == "mbu" ? 1 / grid_config[0] :
-              from == "mm" && to == "grd" ? [1 / grid_cfg[1]*grid_cfg[0], 1 / grid_cfg[1]*grid_cfg[0], 1 / grid_cfg[2]*grid_cfg[0]] : undef
-    )
-    mb_resolve_xyz(xyz = v, mul = mul);
+function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") = 
+    let(mul = mb_unit_convert(mb_block_grid_cfg(block_obj), from = from, to = to))
+    is_num(v) || (is_list(v) && len(v) <= 3) ? 
+        mb_resolve_xyz(xyz = v, mul = mul) :
+        (is_list(v) && len(v) == 4) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1]] :
+        (is_list(v) && len(v) == 6) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1], v[4] * mul[2], v[5] * mul[2]] :
+        undef;
+
+
 
 /*
 * -------------
@@ -800,8 +825,8 @@ function mb_qc_overwrite(a, b, cube = false) =
             b[3] == undef ? a[3] : b[3]
         ];
 
-function mb_qc_complex(items, cube = false, i = 0, acc = undef) =
-    let(acc0 = acc == undef ? (cube ? [0, 0, 0, 0, 0, 0] : [0, 0, 0, 0]) : acc)
+function mb_qc_complex(items, cube = false, i = 0, acc = undef, def = def) =
+    let(acc0 = acc == undef ? def : acc)
     !is_list(items) || i >= len(items)
         ? acc0
         : let(b = mb_qc_complex_item(items[i], cube))
@@ -809,20 +834,22 @@ function mb_qc_complex(items, cube = false, i = 0, acc = undef) =
                 items,
                 cube,
                 i + 1,
-                b == undef ? acc0 : mb_qc_overwrite(acc0, b, cube)
+                b == undef ? acc0 : mb_qc_overwrite(acc0, b, cube),
+                def = def
             );
 
 function mb_qc_resolve(qc, cube = false, mul = undef, default = [0, 0, 0, 0, 0, 0]) =
-    let(normal = mb_qc_normal(qc, cube),
+    let(def = cube
+                    ? default
+                    : [default[0], default[1], default[2], default[3]],
+        normal = mb_qc_normal(qc, cube),
         r = normal != undef
             ? normal
             : is_list(qc)
-                ? mb_qc_complex(qc, cube)
-                : cube
-                    ? default
-                    : [default[0], default[1], default[2], default[3]],
+                ? mb_qc_complex(qc, cube, def = def)
+                : def,
         m = mb_resolve_xyz(xyz = mul, default = [1, 1, 1]))
-    is_undef(mul) ? r : [ for(i = [0 : 1 : len(r)-1]) r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
+    is_undef(mul) ? r : [ for(i = [0 : 1 : len(r) - 1]) is_undef(r[i]) ? undef : r[i] * (i < 2 ? m[0] : i < 4 ? m[1] : i < 6 ? m[2] : 1) ];
 
 
 /*
