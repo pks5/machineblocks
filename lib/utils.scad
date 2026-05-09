@@ -310,7 +310,16 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
-        
+        /*
+        expandc = [
+            [
+                -wall_thickness,
+                -wall_thickness,
+                -wall_thickness,
+                -wall_thickness,
+                cut_tol,
+                -(block_obj[4][1] + block_obj[4][2])
+            ]],*/
         expand = [
             [
                 -wall_thickness + slope_neg[0],
@@ -332,6 +341,28 @@ function mb_block_shape_parts(block_obj, mode = "normal") =
         socket = [block_obj[4][5], 0],
         bevel = bevel,
         slope = slope_pos
+    ) :
+
+    mode == "stud_base_cutout" ?    
+    let(wall_thickness_clamp = (block_obj[4][3] +  block_obj[4][4][0]),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        expand = [
+            [
+                -wall_thickness_clamp + slope_neg[0]-cut_tol,
+                -wall_thickness_clamp + slope_neg[1]-cut_tol,
+                -wall_thickness_clamp + slope_neg[2]-cut_tol,
+                -wall_thickness_clamp + slope_neg[3]-cut_tol,
+                cut_tol,
+                -(mod_size[2] - block_obj[4][5])
+            ]
+        ],
+        socket = undef,
+        bevel = bevel,
+        slope = mb_qc_resolve(0, false)
     ) :
 
     mode == "base_cutout_clamp_mask" ?

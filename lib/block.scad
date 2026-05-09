@@ -872,6 +872,11 @@ module mb_block(
         );
     
     bevelInner = mb_inset_quad_lrfh(bevelCrop, wallThickness);
+
+    stud_base_cutout = mb_block_to_prismoid(block_obj, mode="stud_base_cutout", mul=[8, 8, 3.2]);
+    base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
+    base_adjusted = mb_block_to_prismoid(block_obj, mode="base_adjusted", mul=[8, 8, 3.2]);
+
     bevelInnerOrg = mb_inset_quad_lrfh(bevelCrop, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);
     
@@ -1096,13 +1101,6 @@ module mb_block(
     function getGridItem(items, defaultValue, a, b, i, prev) = (is_bool(items) ? (items == false ? false : defaultValue) : ((i >= len(items)) ? prev : getGridItem(items, defaultValue, a, b, i+1, is_bool(items[i]) ? (items[i] == false ? false : defaultValue) : (inGridArea(a, b, items[i]) ? (items[i][4] == undef ? defaultValue : items[i][4]) : prev))));
     
     /*
-    * Slope
-    */
-    function smx(s, inv=false) = max(inv ? -s : s, 0);
-    function onSlope(a, b, inv, qx, qy) = (slope != false) && (slope != [0, 0, 0, 0]) && !inGridArea(a, b, [smx(slope[0], inv), smx(slope[2], inv), ceil(size[0]) - smx(slope[1], inv) - (inv ? qx : 1), ceil(size[1]) - smx(slope[3], inv) - (inv ? qy : 1)]);
-
-    
-    /*
     * Pillars / Pins
     */
     function isCornerZone(value, i) = (value < pillarGapCornerLength) || (value >= size[i] - (pillarGapCornerLength + 1)); 
@@ -1116,11 +1114,11 @@ module mb_block(
     
     function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
-    function drawPillar(a, b) = !onSlope(a, b, true, 2, 2) 
-                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
+    function drawPillar(a, b) = 
+        ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
 
-    function drawPin(a, b, isX) = !onSlope(a, b, true, isX ? 2 : 0, isX ? 0 : 2) 
-                                && ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
+    function drawPin(a, b, isX) = 
+        ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
 
     
     /*
@@ -1147,9 +1145,7 @@ module mb_block(
     function drawStud(a, b) = 
             let(sType = getGridItem(studs, studType, a, b, 0, false))
             (sType != false
-            && !onSlope(a, b, false, 2)
-            && mb_circle_in_rounded_rect(cornersKnobPadding, knobPaddingRoundingRadius, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-            && mb_circle_in_convex_quad(bevelKnobPadding, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
+            && mb_circle_in_convex_quad(base_adjusted[1], [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
             ? sType : false;
 
     function knobZ(a, b) = (recess && inPit(a, b) ? pitFloorZ : sideZ(1)) - knobSink;
@@ -1726,6 +1722,10 @@ module mb_block(
                                                                                     //Clamp
                                                                                     translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
                                                                                         cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=pilRoundingRes);
+                                                                                    
+                                                                                    if(topPlateHelpers)
+                                                                                        translate([0, 0, 0.5 * baseCutoutDepth - topPlateHelperHeight])
+                                                                                            cylinder(h=topPlateHelperHeight, r=0.5 * tubeZSize + topPlateHelperThickness, center=true, $fn=pilRoundingRes);
                                                                                 }
 
                                                                                 // Hollow only if there is no z-hole here
@@ -1953,31 +1953,37 @@ module mb_block(
                                             /*
                                             * Knob subtraction from base
                                             */
-                                            translate([0, 0, sideZ(0, false) + 0.5 * knobCutHeight - 0.5*cutOffset]){
+                                            
                                                 difference(){
                                                     union(){
-                                                        for (a = [ startX : 1 : ceil(endX) ]){
-                                                            for (b = [ startY : 1 : ceil(endY) ]){
-                                                                if(baseCutoutType == "studs" || !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                                                    || !mb_circle_in_convex_quad(bevelInnerOrg, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)){
-                                                                    translate([posX(a), posY(b), 0]){
-                                                                        if(bClampOffset > 0){
-                                                                            translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
-                                                                                cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
+                                                        //mb_prismoid(shape = stud_base_cutout, skip_resolve = true, debug = debug);
+                                                        translate([0, 0, sideZ(0, false) + 0.5 * knobCutHeight - 0.5*cutOffset]){
+                                                        
+                                                            for (a = [ startX : 1 : ceil(endX) ]){
+                                                                for (b = [ startY : 1 : ceil(endY) ]){
+                                                                    if(baseCutoutType == "studs" //|| !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
+                                                                        || !mb_circle_in_convex_quad(base_cutout[0], [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = 0)){
+                                                                        translate([posX(a), posY(b), 0]){
+                                                                            if(bClampOffset > 0){
+                                                                                translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
+                                                                                    cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
+                                                                            }
+                                                                            //color("red")
+                                                                            cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=studRoundingRes);
+                                                                            
+                                                                            //color("green")
+                                                                            translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
+                                                                                cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
                                                                         }
-                                                                        //color("red")
-                                                                        cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=studRoundingRes);
-                                                                        
-                                                                        //color("green")
-                                                                        translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
-                                                                            cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
                                                                     }
                                                                 }
                                                             }
-                                                        }
+                                                        } // End translate
                                                     } // End union
 
                                                     if(baseCutoutType != "studs"){
+                                                        mb_prismoid(shape = stud_base_cutout, skip_resolve = true, debug = debug);
+                                                        /*
                                                         translate([0.5*(baseModRes[1]-baseModRes[0]), 0.5*(baseModRes[3]-baseModRes[2]), 0]){
                                                             union(){
                                                                 cutoutClampRoundingRadiusQuality = mb_fn_even_for_radius(
@@ -2006,12 +2012,12 @@ module mb_block(
                                                                     height = cutMultiplier * (knobCutHeight + cutOffset),
                                                                     roundingRadius = cutoutClampRoundingRadius == 0 ? 0 : [0, 0, cutoutClampRoundingRadius],
                                                                     roundingResolution = cutoutClampRoundingRadiusQuality
-                                                                );*/
+                                                                );* /
                                                             }
-                                                        }
+                                                        }*/
                                                     }
                                                 } //End difference final cutout elements
-                                            } // End translate
+                                            
                                         }
                                     }
 
