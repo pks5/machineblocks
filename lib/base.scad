@@ -14,6 +14,9 @@ module mb_base_cutout(
     base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
     base_cutout_clamp_mask = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask", mul=[8, 8, 3.2]);
     base_cutout_clamp_mask_inner = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask_inner", mul=[8, 8, 3.2]);
+    top_plate_helpers_mask = mb_block_to_prismoid(block_obj, mode="top_plate_helpers_mask", mul=[8, 8, 3.2]);
+    top_plate_helpers_cut = mb_block_to_prismoid(block_obj, mode="top_plate_helpers_cut", mul=[8, 8, 3.2]);
+    
 
     difference(){
         mb_prismoid(shape = base_cutout, skip_resolve = true, debug = debug);
@@ -22,6 +25,13 @@ module mb_base_cutout(
             mb_prismoid(shape = base_cutout_clamp_mask, skip_resolve = true, debug = debug);
             mb_prismoid(shape = base_cutout_clamp_mask_inner, skip_resolve = true, debug = debug);
         }
+
+        if(true){ //Top Plate Helpers
+            difference(){
+                mb_prismoid(shape = top_plate_helpers_mask, skip_resolve = true, debug = debug);
+                mb_prismoid(shape = top_plate_helpers_cut, skip_resolve = true, debug = debug);
+            }
+        }    
     }
 }
 
@@ -137,7 +147,7 @@ echo(block_obj = block_obj);
                 }
             }
 
-                    
+                
               
 
             /*
