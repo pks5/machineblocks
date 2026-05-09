@@ -16,21 +16,16 @@ module mb_base_cutout(
         mb_block_part(block_obj, part="base_cutout", debug = debug);
         
         //Base Clamp Inner
-        base_cutout_clamp_mask = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask", mul=[8, 8, 3.2]);
-        base_cutout_clamp_mask_inner = mb_block_to_prismoid(block_obj, mode="base_cutout_clamp_mask_inner", mul=[8, 8, 3.2]);
-    
         difference(){
-            mb_prismoid(shape = base_cutout_clamp_mask, skip_resolve = true, debug = debug);
-            mb_prismoid(shape = base_cutout_clamp_mask_inner, skip_resolve = true, debug = debug);
+            mb_block_part(block_obj, part="base_cutout_clamp_mask", debug = debug);
+            mb_block_part(block_obj, part="base_cutout_clamp_mask_inner", debug = debug);
         }
 
         //Top Plate Helpers
         if(mb_block_get_top_plate_helpers(block_obj)){ 
-            top_plate_helpers_mask = mb_block_to_prismoid(block_obj, mode="top_plate_helpers_mask", mul=[8, 8, 3.2]);
-            top_plate_helpers_cut = mb_block_to_prismoid(block_obj, mode="top_plate_helpers_cut", mul=[8, 8, 3.2]);
             difference(){
-                mb_prismoid(shape = top_plate_helpers_mask, skip_resolve = true, debug = debug);
-                mb_prismoid(shape = top_plate_helpers_cut, skip_resolve = true, debug = debug);
+                mb_block_part(block_obj, part="top_plate_helpers_mask", debug = debug);
+                mb_block_part(block_obj, part="top_plate_helpers_cut", debug = debug);
             }
         }    
     }
@@ -112,9 +107,6 @@ module mb_base(
 
     baseRoundingRadiusZ = baseRoundingRadius[2];
     
-    reliefRadius = mb_base_cutout_radius(-baseReliefCutThickness, baseRoundingRadiusZ, minObjectSide);
-    bevelReliefCut = mb_inset_quad_lrfh(bevelOuter, baseReliefCutThickness);
-
     bevelBaseClampOuter = mb_inset_quad_lrfh(bevelOuterAdjusted, -baseClampThicknessOuter);
     baseClampOuterRoundingRadius = mb_base_rel_radius(baseClampThicknessOuter, baseRoundingRadiusZ, minObjectSide, true);
 
@@ -122,29 +114,23 @@ module mb_base(
     function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
     function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
 
-    base_adjusted = mb_block_to_prismoid(block_obj, mode="base_adjusted", mul=[8, 8, 3.2]);
-    base_recess = mb_block_to_prismoid(block_obj, mode="recess", mul=[8, 8, 3.2]);
-    relief_cut_mask = mb_block_to_prismoid(block_obj, mode="relief_cut_mask", mul=[8, 8, 3.2]);
-    relief_cut = mb_block_to_prismoid(block_obj, mode="relief_cut", mul=[8, 8, 3.2]);
-    base_clamp_outer = mb_block_to_prismoid(block_obj, mode="base_clamp_outer", mul=[8, 8, 3.2]);
 
-echo(block_obj = block_obj);
     union(){
         
         difference(){
             
             union(){
-                mb_prismoid(shape = base_adjusted, skip_resolve = true, debug = false);
-
+                mb_block_part(block_obj, part="base_adjusted", debug = debug);
+                
                 if(baseClampThicknessOuter > 0){ //TODO
-                    mb_prismoid(shape = base_clamp_outer, skip_resolve = true, debug = debug);
+                    mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
                 }
             }
 
             if(baseReliefCut){
                 difference(){
-                    mb_prismoid(shape = relief_cut_mask, skip_resolve = true, debug = debug);
-                    mb_prismoid(shape = relief_cut, skip_resolve = true, debug = debug);
+                    mb_block_part(block_obj, part="relief_cut_mask", debug = debug);
+                    mb_block_part(block_obj, part="relief_cut", debug = debug);
                 }
             }
 
@@ -158,8 +144,8 @@ echo(block_obj = block_obj);
                 pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
                 pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
                 
-                mb_prismoid(shape = base_recess, skip_resolve = true, debug = debug);
-
+                mb_block_part(block_obj, part="recess", debug = debug);
+                
                 //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
                     gap = mb_to_array(pitWallGaps[gapIndex]);

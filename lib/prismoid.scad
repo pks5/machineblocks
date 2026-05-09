@@ -696,21 +696,7 @@ function mb_block_to_prismoid(
     );
 
 
-function mb_cube_to_prismoid(
-    size, 
-    size_mod = undef, 
-    bevel = undef, 
-    slope = undef, 
-    radius = undef, 
-    
-    mul = undef, 
-    add = undef
-) =
-    mb_block_to_prismoid(
-            mb_block_obj(size, size_mod = size_mod, bevel = bevel, slope = slope),  //TODO all optional params
-            radius = radius,
-            mul = mul,
-            add = add);
+
 
 /*
 * ---------
@@ -847,9 +833,6 @@ module mb_prismoid(
 module mb_cube(
     size, 
     radius = 0, 
-    mul = undef, 
-    add = undef,
-    expand = undef,
     xyz_rad = false, 
     center = true, 
     resolution = 80, 
@@ -864,7 +847,19 @@ module mb_cube(
     else{
         rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
 
-        mb_prismoid(shape = mb_cube_to_prismoid(size, radius = rad, mul = mul, add = add), skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
+        block_obj = mb_block_obj(size);
+
+        shape_parts = mb_block_shape_parts(block_obj);
+        prismoid_shape = mb_prismoid_shape_resolve(
+            shape = shape_parts[0], 
+            height = shape_parts[1], 
+            socket = shape_parts[2][0],
+            expand = shape_parts[2][1],
+            radius = radius,
+            mul=[8, 8, 3.2, 3.2]
+        );
+
+        mb_prismoid(shape = prismoid_shape, skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
     }
 }
 
@@ -883,21 +878,6 @@ module mb_cube(
 * START TESTING (REMOVE)
 * ----------------------
 */
-
-translate([0, 0, 100])
-mb_pseudo_ellipse_ring(
-    radius=[1.6, 1.6, 1.6],
-    resolution=100,
-    h=0.001,
-    capWidth=0.1,
-    //capStep=0.001,
-    capThreshold=0.15
-    //,
-    //corner = [0,6]
-);
-
-
-
 
 
 sr = [80, 10.1, 10];
@@ -922,21 +902,13 @@ mb_prismoid(shape = [
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = [20, 0], radius = [15, 14, 6, 12], resolution = 160, debug=true, align="sticky");
 
-//mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
-
-*translate([200, 0, 0])
+translate([200, 0, 0])
 mb_cube(
     debug = true, 
-    mul=[8, 8, 3.2, 3.2], 
     size = [4, 4, 3], 
     radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[1.2, 1.2, 1, 2], [1.2, 1.2, 1, 1.2], [0.1, 0.1, 0.1,0.1], [1, 1, 1, 1]]]);
 
-//mb_cube(size = [120, 80, 50]);
-//color("#ffffffaa")
-//cube(size = [120, 80, 50], center = true);
 
-
-//mb_cube(center = false, size = [120, 80, 50]);
 *mb_prismoid(shape = [
     [[-20, -30, undef, [10,10,0]], [-20, 30, undef,[10,10,0]], [50, 30,undef, [10,10,0]], [50, -30,undef, [10,10,0]]],
     [[-20, -30, undef,[10,10,0]], [-20, 30,undef, [10,10,0]], [20, 30, undef,[10,10,0]], [20, -30, undef,[10,10,0]]]
@@ -951,72 +923,9 @@ mb_cube(
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [20, 20], radius = 0, resolution = 160, debug=true);
 
-/* 
-okt = mb_prismoid_shape_resolve([ [[-40, -20],[-35, 0], [-20, 30], [0, 40], [40, 50], undef, [20, -50], undef] ], height = 20, radius = undef);
-okt2 = mb_prismoid_shape_resolve(shape = okt, add=[[ [-100,1] ]], mul = undef, skip_resolve = true);
-echo (okt = okt, okt2 = okt2);
-*mb_prismoid(shape = okt, skip_resolve = true, resolution = 160);
-*mb_prismoid(shape = okt2, skip_resolve = true, resolution = 160);
-*/
 
-block_obj = mb_block_obj([4, 2, 3], slope = [1,0,0,0], bevel = undef);
-pr = mb_block_to_prismoid(block_obj, mul=[8, 8, 3.2]);
-echo(pr = pr);
-*mb_prismoid(shape = pr, skip_resolve = true, resolution = 160, debug = true);
-//mb_prismoid(shape = pr, mul=[8, 8, 3.2], resolution = 160, debug = false);
 
-//mb_rounded_ellipse_disk(30, 20, 20,4);
 
-module mb_rounded_ellipse_disk(x, y, h, r, n = 24, zero = 0.001, $fn = 100) {
-    r = min(r, h / 2, x, y);
-    zoff = -h / 2;
-
-    module ellipse_cylinder(rx, ry, height) {
-        scale([rx, ry, 1])
-            cylinder(h = height, r = 1, center = false, $fn = $fn);
-    }
-
-    // bottom rounding
-    for (i = [0 : n - 1]) {
-        a0 = i * 90 / n;
-        a1 = (i + 1) * 90 / n;
-
-        z0 = r - r * cos(a0);
-        z1 = r - r * cos(a1);
-
-        inset0 = r - r * sin(a0);
-
-        translate([0, 0, zoff + z0])
-            ellipse_cylinder(
-                x - inset0,
-                y - inset0,
-                max(z1 - z0, zero)
-            );
-    }
-
-    // straight middle
-    if (h > 2 * r)
-        translate([0, 0, zoff + r])
-            ellipse_cylinder(x, y, h - 2 * r);
-
-    // top rounding
-    for (i = [0 : n - 1]) {
-        a0 = i * 90 / n;
-        a1 = (i + 1) * 90 / n;
-
-        z0 = h - r + r * sin(a0);
-        z1 = h - r + r * sin(a1);
-
-        inset0 = r - r * cos(a0);
-
-        translate([0, 0, zoff + z0])
-            ellipse_cylinder(
-                x - inset0,
-                y - inset0,
-                max(z1 - z0, zero)
-            );
-    }
-}
 
 
 module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
@@ -1099,140 +1008,3 @@ module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001,
     }
 }
 
-//color("#ffffff22")
-hull()
-mb_rounded_ellipse_disk_xyz(
-    x = 9.6,  
-    y = 4.8,
-    zx = 1.6,
-    zy = 1.6,
-    n = 24,
-    hs=0.5,
-    resolution = 100
-);
-
-
-
-/*
-color("red")
-hull()
-mb_rounded_ellipse_disk_xyz2(
-    x = 4,
-    y = 2,
-    zx = 8,
-    zy = 8,
-    n = 24
-);
-
-module mb_rounded_ellipse_disk_xyz2(x, y, zx, zy, n = 48, zero = 0.001, $fn = 96) {
-    rz = max(zx, zy);
-
-    module ellipse_cylinder_cone(rx0, ry0, rx1, ry1, height) {
-        if ((x >= zx) && (y >= zy)) {
-            scale([rx0, ry0, 1])
-                cylinder(h = zero, r = 1, center = false, $fn = $fn);
-
-            translate([0, 0, height])
-                scale([rx1, ry1, 1])
-                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
-        } else {
-            min_r = 0.01;
-
-            rx0_2 = max(rx0, min_r);
-            ry0_2 = max(ry0, min_r);
-            rx1_2 = max(rx1, min_r);
-            ry1_2 = max(ry1, min_r);
-
-            ix0 = x - rx0_2;
-            iy0 = y - ry0_2;
-            ix1 = x - rx1_2;
-            iy1 = y - ry1_2;
-
-            split_x = (zx == rz) && (zx > x);
-            split_y = (zy == rz) && (zy > y);
-
-            dx0 = split_x ? max(0, zx - ix0) : 0;
-            dy0 = split_y ? max(0, zy - iy0) : 0;
-            dx1 = split_x ? max(0, zx - ix1) : 0;
-            dy1 = split_y ? max(0, zy - iy1) : 0;
-
-            xs = split_x ? [-1, 1] : [0];
-            ys = split_y ? [-1, 1] : [0];
-
-            eps = 0.01;
-            big = max(x, y, zx, zy) * 4 + 10;
-
-            if (rx0 > min_r && ry0 > min_r && rx1 > min_r && ry1 > min_r && height > 0) {
-                for (sx = xs)
-                for (sy = ys) {
-                    hull() {
-                        translate([sx * dx0, sy * dy0, 0])
-                            intersection() {
-                                scale([rx0_2, ry0_2, 1])
-                                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
-
-                                translate([
-                                    sx < 0 ? -big : (sx > 0 ? -eps : -big),
-                                    sy < 0 ? -big : (sy > 0 ? -eps : -big),
-                                    -eps
-                                ])
-                                    cube([
-                                        sx == 0 ? 2 * big : big + eps,
-                                        sy == 0 ? 2 * big : big + eps,
-                                        zero + 2 * eps
-                                    ], center = false);
-                            }
-
-                        translate([sx * dx1, sy * dy1, height])
-                            intersection() {
-                                scale([rx1_2, ry1_2, 1])
-                                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
-
-                                translate([
-                                    sx < 0 ? -big : (sx > 0 ? -eps : -big),
-                                    sy < 0 ? -big : (sy > 0 ? -eps : -big),
-                                    -eps
-                                ])
-                                    cube([
-                                        sx == 0 ? 2 * big : big + eps,
-                                        sy == 0 ? 2 * big : big + eps,
-                                        zero + 2 * eps
-                                    ], center = false);
-                            }
-                    }
-                }
-            }
-        }
-    }
-
-    function inset_at(zpos, r) =
-        let(d = abs(zpos))
-        r == rz
-            ? r - sqrt(max(0, r*r - d*d))
-            : d >= (rz - r)
-                ? r - sqrt(max(0, r*r - pow(rz - d - r, 2)))
-                : 0;
-
-    for (i = [-n : n - 1]) {
-        a0 = i * 90 / n;
-        a1 = (i + 1) * 90 / n;
-
-        z0 = rz * sin(a0);
-        z1 = rz * sin(a1);
-
-        ix0 = inset_at(z0, zx);
-        iy0 = inset_at(z0, zy);
-
-        ix1 = inset_at(z1, zx);
-        iy1 = inset_at(z1, zy);
-
-        translate([0, 0, z0])
-            ellipse_cylinder_cone(
-                x - ix0,
-                y - iy0,
-                x - ix1,
-                y - iy1,
-                max(z1 - z0, zero)
-            );
-    }
-}*/
