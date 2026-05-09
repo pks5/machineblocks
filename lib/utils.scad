@@ -90,19 +90,9 @@ function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, expand = unde
     )
     [
         [
-            //bevel_fil,
-            //bevel_fil,
             mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
             mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]])
-            /*[   
-                for(i=[0:7])
-                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[0][i][0], bevel_fil[i][1] + sl[0][i][1]]
-            ],
-            [
-                for(i=[0:7])
-                    is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
-            ]*/
-        ],
+        ], // Shape
         [min_max[0][2], min_max[1][2]], // Height
         [socket, expand]
     ];
@@ -152,26 +142,27 @@ function mb_block_mod_min_max(size, mod, adj = undef) =
 function mb_block_obj(
     size, 
     size_mod = undef, 
-    size_adj = [-0.1, 0],
+    size_adj = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
     base_adj = undef,
     bevel = undef,
     slope = undef,
-    grid_cfg = [1.6, 5, 2], 
+    grid_cfg = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
     scale = 1,
-    top_plate_height = [1, -0.6],
+    top_plate_height = [1, -0.6], // [Height (mbu), Adjustment (mm)]
+    top_plate_helpers = [0.2, 0.4], // [Thickness (mbu), Height (mbu)]
     recess_depth = "auto",
-    slope_base = [1.333, 1],
-    wall_thickness = ["auto", -0.1],
+    slope_base = [1.333, 1], // [Bottom, Top]
+    wall_thickness = ["auto", -0.1], // [Thickness (mbu), Adjustment (mm)]
     cutout_max_depth = 5,
     cutout_type = "standard",
     recess = false,
     recess_depth = "auto",
-    recess_wall_thickness = 0.333,
-    clamp = [0.1, 0.25, 0.5],
+    recess_wall_thickness = 0.333, 
+    clamp = [0.1, 0.25, 0.5], // [Thickness (mm), Offset (mbu), Height (mbu)]
     clamp_outer = true,
     stud_diameter = 3,
     relief_cut = false,
-    relief_cut_dim = [0.375, 0.375],
+    relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
     id = "[Block]",
     debug = false
 ) =
@@ -224,7 +215,9 @@ function mb_block_obj(
         wall_thickness_clamp = wall_thickness_final + clamp[0] * mul_mm_to_grid[0],
     
         clamp_final = [clamp[0] * mul_mm_to_grid[0], clamp[1] * mul_mbu_to_grid[2], clamp[2] * mul_mbu_to_grid[2], clamp_outer],
-        relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]]
+        relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
+
+        top_plate_helpers_final = [top_plate_helpers[0] * mul_mbu_to_grid[0], top_plate_helpers[1] * mul_mbu_to_grid[2]]
     )
         [
             [
@@ -243,7 +236,7 @@ function mb_block_obj(
             [mod, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, relief_cut, relief_cut_final], // 8 - Recesss & Relief Cut
-            [],  // 9 - 
+            [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [],  // 10 - 
             [],  // 11 - 
             [],  // 12 - 
@@ -265,6 +258,12 @@ function mb_block_get_id(block_obj) = block_obj[20][0];
 
 function mb_block_get_bevel(block_obj) = block_obj[1][0];
 
+function mb_block_get_slope(block_obj) = block_obj[1][1];
+
+function mb_block_get_slope_socket(block_obj) = block_obj[5];
+
+function mb_block_get_wall_thickness(block_obj) = block_obj[4][3];
+
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);
 
@@ -283,14 +282,14 @@ function mb_block_grid_cfg(block_obj) = block_obj[7][0];
 function mb_block_scale(block_obj) = block_obj[7][1];
 
 function mb_block_shape_parts(block_obj, mode = "normal") = 
-    let(size = block_obj[0][0][0],
-        socket = block_obj[5],
+    let(size = mb_block_obj_size(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
         base_adj = block_obj[6][1],
         bevel = mb_block_get_bevel(block_obj), 
-        slope = block_obj[1][1],
+        slope = mb_block_get_slope(block_obj),
         mod = block_obj[6][0],
         mod_size = block_obj[0][1][0],
-        wall_thickness = block_obj[4][3],
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = 0.01
         )
     mode == "base_adjusted" ?    
@@ -603,12 +602,6 @@ function mb_resolve_bevel_horizontal(bevelHorizontal, grid, gridSizeXY) =
         [x3, y3],
         [x4, y4]
     ];
-
-/*
-* Resolve base side adjustment
-*/
-//function mb_calc_side_adjusmtent(baseSideAdjustment, cropResolved) =
-//    [baseSideAdjustment[0] - cropResolved[0], baseSideAdjustment[1] - cropResolved[1], baseSideAdjustment[2] - cropResolved[2], baseSideAdjustment[3] - cropResolved[3]];
 
 /*
 * Strings

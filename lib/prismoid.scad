@@ -907,7 +907,7 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 0], socket_top = undef, radius = 0, resolution = 160);
 
-translate([0, 300, 0])
+*translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
