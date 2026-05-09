@@ -729,14 +729,10 @@ module mb_cube(
 
         block_obj = mb_block_obj(size);
 
-        shape_parts = mb_block_shape_parts(block_obj);
-        prismoid_shape = mb_prismoid_shape_resolve(
-            shape = shape_parts[0], 
-            height = shape_parts[1], 
-            socket = shape_parts[2][0],
-            expand = shape_parts[2][1],
+        mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
+        prismoid_shape = mb_block_to_prismoid(block_obj,
             radius = radius,
-            mul=[8, 8, 3.2, 3.2]
+            mul = mul
         );
 
         mb_prismoid(shape = prismoid_shape, skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
@@ -775,7 +771,7 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 0], socket_top = undef, radius = 0, resolution = 160);
 
-*translate([0, 300, 0])
+translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
