@@ -1454,27 +1454,18 @@ module mb_block(
 
                                                             translate([0.5*(baseModRes[1] - baseModRes[0]), 0.5*(baseModRes[3] - baseModRes[2]), topPlateZ - 0.5 * (resultingTopPlateHeight + topPlateHelperHeight) + 0.5 * cutOffset]){
                                                                 difference(){
+                                                                    /*
                                                                     cube(
                                                                         size = [objectSizeXAdjusted, objectSizeYAdjusted, topPlateHelperHeight + cutOffset], 
                                                                         center=true
                                                                     );
-
-                                                                    /*
-                                                                    mb_beveled_rounded_block(
-                                                                        bevel = beveled ? bevelTopPlateHelper : false,
-                                                                        sizeX = objectSizeMod[0] - 2*wallThickness - 2*topPlateHelperThickness,
-                                                                        sizeY = objectSizeMod[1] - 2*wallThickness - 2*topPlateHelperThickness,
-                                                                        height = cutMultiplier * (topPlateHelperHeight + cutOffset),
-                                                                        roundingRadius = topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius],
-                                                                        roundingResolution = topPlateHelperRoundingRadiusQuality
-                                                                    );*/
 
                                                                     mb_prismoid(
                                                                         shape = [bevelTopPlateHelper], 
                                                                         height = cutMultiplier * (topPlateHelperHeight + cutOffset), 
                                                                         radius = mb_xyz_rad_convert(topPlateHelperRoundingRadius == 0 ? 0 : [0, 0, topPlateHelperRoundingRadius]), 
                                                                         resolution = topPlateHelperRoundingRadiusQuality
-                                                                    );
+                                                                    );*/
 
                                                                     /*
                                                                     * Wall Gaps New

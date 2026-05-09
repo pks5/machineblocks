@@ -724,6 +724,14 @@ function mb_cube_to_prismoid(
 * ------------
 */
 
+module mb_block_part(block_obj, part, debug = false){
+    mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
+    
+    part_shape = mb_block_to_prismoid(block_obj, mode = part, mul=mul);
+    
+    mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+}
+
 /**
 * PRISMOID
 */
