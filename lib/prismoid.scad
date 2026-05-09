@@ -519,43 +519,7 @@ function mb_xyz_rad_convert(xyz_rad) =
 * PRISMOID SHAPE
 */
 
-function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
-    let(
-        sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
-        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
-        d_edge8 = [
-            -sext[0], -sext[0],
-            -sext[3], -sext[3],
-            -sext[1], -sext[1],
-            -sext[2], -sext[2]
-        ],
 
-        //pts = [ for(i=[0:7]) is_undef(punkte[i]) ? ((i % 2 == 0) ? punkte[(i + 2) % 8] : undef) : punkte[i]],
-
-        // nur vorhandene Punkte behalten
-        idx = [ for(i=[0:7]) if(pts[i] != undef) i ],
-        Pc  = [ for(i=idx) pts[i] ],
-
-        // Kante idx[j] -> idx[j+1]
-        // bekommt den Border der Originalkante direkt vor idx[j+1]
-        /*
-        dc = [
-            for(j=[0:len(idx)-1])
-                d_edge8[(idx[(j+1) % len(idx)] + 7) % 8]
-        ],*/
-        dc = [ for(i=idx) d_edge8[i] ],
-
-        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges(Pc, dc) : [],
-
-        Q8 = [
-            for(i=[0:7])
-                let(qqx = Qc[mb_array_index_of(idx, i)])
-                pts[i] == undef
-                    ? undef
-                    : [qqx[0], qqx[1], pts[i][2] + (p == 0 ? -1 : 1) * sext[4+p], pts[i][3]]
-        ]
-    )
-    Q8;
 
 function mb_prismoid_plane(shape, i) =
     let(l = len(shape))

@@ -1,3 +1,5 @@
+use <quad.scad>;
+
 function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef, precision = undef) = 
     let(m = is_undef(mul) ? [1, 1, 1] : mb_resolve_xyz(mul, default = [1, 1, 1]),
         r = is_list(xyz) ? 
@@ -19,6 +21,44 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
+function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
+    let(
+        sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
+        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
+        d_edge8 = [
+            -sext[0], -sext[0],
+            -sext[3], -sext[3],
+            -sext[1], -sext[1],
+            -sext[2], -sext[2]
+        ],
+
+        //pts = [ for(i=[0:7]) is_undef(punkte[i]) ? ((i % 2 == 0) ? punkte[(i + 2) % 8] : undef) : punkte[i]],
+
+        // nur vorhandene Punkte behalten
+        idx = [ for(i=[0:7]) if(pts[i] != undef) i ],
+        Pc  = [ for(i=idx) pts[i] ],
+
+        // Kante idx[j] -> idx[j+1]
+        // bekommt den Border der Originalkante direkt vor idx[j+1]
+        /*
+        dc = [
+            for(j=[0:len(idx)-1])
+                d_edge8[(idx[(j+1) % len(idx)] + 7) % 8]
+        ],*/
+        dc = [ for(i=idx) d_edge8[i] ],
+
+        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges(Pc, dc) : [],
+
+        Q8 = [
+            for(i=[0:7])
+                let(qqx = Qc[mb_array_index_of(idx, i)])
+                pts[i] == undef
+                    ? undef
+                    : [qqx[0], qqx[1], len(pts[i]) > 2 && !is_undef(pts[i][2]) ? (pts[i][2] + (p == 0 ? -1 : 1) * sext[4+p]) : undef, pts[i][3]]
+        ]
+    )
+    Q8;
+
 function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, expand = undef, adj = undef) =
     let(
         mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
@@ -29,18 +69,24 @@ function _mb_block_to_shape_parts(size, mod, bevel, slope, socket, expand = unde
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1],
         
-        sl = mb_slope_matrix(slope, bevel_res, mod_size)
+        sl = mb_slope_matrix(slope, bevel_res, mod_size),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1)
     )
     [
         [
-            [   
+            //bevel_fil,
+            //bevel_fil,
+            mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
+            mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]])
+            /*[   
                 for(i=[0:7])
                     is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[0][i][0], bevel_fil[i][1] + sl[0][i][1]]
             ],
             [
                 for(i=[0:7])
                     is_undef(bevel_fil[i]) ? undef : [bevel_fil[i][0] + sl[1][i][0], bevel_fil[i][1] + sl[1][i][1]]
-            ]
+            ]*/
         ],
         [min_max[0][2], min_max[1][2]], // Height
         [socket, expand]
@@ -932,8 +978,8 @@ function mb_slope_filter(slope, filter = 1) =
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
     let(
-        mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][1]), (bevel_res[1][1] + bevel_res[2][0])),
-        mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][1])),
+        mx_bvx = mod_size[0] - max((bevel_res[0][0] + bevel_res[3][0]), (bevel_res[1][0] + bevel_res[2][0])),
+        mx_bvy = mod_size[1] - max((bevel_res[0][1] + bevel_res[1][1]), (bevel_res[2][1] + bevel_res[3][1])),
         slo = [
             min(abs(slope[0]), mx_bvx),
             min(abs(slope[1]), mx_bvx),
