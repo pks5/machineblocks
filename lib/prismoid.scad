@@ -594,6 +594,9 @@ function mb_prismoid_rplane_resolve(v) =
     len(v) == 3 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) ?
         [for (i = [0:7]) v] :
 
+    len(v) == 4 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) && is_num(v[3]) ?
+        [for (i = [0:7]) v] :
+
     let(l = len(v),
         ls = l <= 4)
     [
@@ -904,16 +907,16 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 0], socket_top = undef, radius = 0, resolution = 160);
 
-*translate([0, 300, 0])
+translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [10, 4, 6], resolution = 160, debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [15, 14, 6, 12], resolution = 160, debug=true, align="sticky");
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-translate([200, 0, 0])
+*translate([200, 0, 0])
 mb_cube(
     debug = true, 
     mul=[8, 8, 3.2, 3.2], 
