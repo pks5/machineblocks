@@ -206,11 +206,7 @@ module mb_pseudo_ellipse_ring(
     radius=[40, 25, 3],
     zero = 0.001,
     precision = 0.01,
-    resolution = 32,
-    //corner = [0, 0],
-    h=0.001,
-    capWidth=0.1,
-    capThreshold=0.15
+    resolution = 32
 ) {
     s = mb_resolve_quad(xyz = radius, min_value = zero, precision = precision);
     
@@ -559,13 +555,13 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
 
 function mb_block_to_prismoid(
     block_obj,
-    mode = "normal",
+    part = undef,
     radius = undef, 
     mul = undef, 
     add = undef
 ) =
-    let(shape_parts = mb_block_shape_parts(block_obj, mode = mode))
-    mb_prismoid_shape_resolve(
+    let(shape_parts = mb_block_part_shape(block_obj, part = part))
+    is_undef(shape_parts) ? undef : mb_prismoid_shape_resolve(
         shape = shape_parts[0], 
         height = shape_parts[1], 
         socket = shape_parts[2][0],
@@ -593,9 +589,11 @@ function mb_block_to_prismoid(
 module mb_block_part(block_obj, part, debug = false){
     mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    part_shape = mb_block_to_prismoid(block_obj, mode = part, mul=mul);
+    part_shape = mb_block_to_prismoid(block_obj, part = part, mul=mul);
     
-    mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+    if(!is_undef(part_shape)){
+        mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+    }
 }
 
 /**
@@ -730,7 +728,9 @@ module mb_cube(
         block_obj = mb_block_obj(size);
 
         mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
-        prismoid_shape = mb_block_to_prismoid(block_obj,
+        prismoid_shape = mb_block_to_prismoid(
+            block_obj,
+            part = "simple",
             radius = radius,
             mul = mul
         );

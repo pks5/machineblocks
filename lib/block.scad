@@ -711,8 +711,6 @@ module mb_block(
         relief_cut = baseReliefCut
     );
     
-    block_prismoid = mb_block_to_prismoid(block_obj);
-
     mbuToMm = scale * unitMbu;
 
     gridSizeXY = unitGrid[0] * mbuToMm;
@@ -873,9 +871,9 @@ module mb_block(
     
     bevelInner = mb_inset_quad_lrfh(bevelCrop, wallThickness);
 
-    stud_base_cutout = mb_block_to_prismoid(block_obj, mode="stud_base_cutout", mul=[8, 8, 3.2]);
-    base_cutout = mb_block_to_prismoid(block_obj, mode="base_cutout", mul=[8, 8, 3.2]);
-    base_adjusted = mb_block_to_prismoid(block_obj, mode="base_adjusted", mul=[8, 8, 3.2]);
+    stud_base_cutout = mb_block_to_prismoid(block_obj, part="stud_base_cutout", mul=[8, 8, 3.2]);
+    base_cutout = mb_block_to_prismoid(block_obj, part="base_cutout", mul=[8, 8, 3.2]);
+    base_adjusted = mb_block_to_prismoid(block_obj, part="base_adjusted", mul=[8, 8, 3.2]);
 
     bevelInnerOrg = mb_inset_quad_lrfh(bevelCrop, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);
