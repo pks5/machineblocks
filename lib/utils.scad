@@ -12,6 +12,21 @@ function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef
         p = is_undef(r) ? undef : (is_undef(precision) ? r : [mb_round_prec(r[0], precision), mb_round_prec(r[1], precision), mb_round_prec(r[2], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2])]);
 
+function mb_resolve_quad(xyz, default = [0, 0, 0, undef], mul = undef, min_value = undef, precision = undef) = 
+    let(m = is_undef(mul) ? [1, 1, 1, 1] : mb_resolve_quad(mul, default = [1, 1, 1, 1]),
+        r = is_list(xyz) ? 
+        ([
+            is_num(xyz[0]) ? xyz[0] : (is_undef(default) ? 0 : default[0]), 
+            is_num(xyz[1]) ? xyz[1] : (is_undef(default) ? 0 : default[1]), 
+            is_num(xyz[2]) ? xyz[2] : (is_undef(default) ? 0 : default[2]),
+            is_num(xyz[3]) ? xyz[3] : (is_undef(default) ? undef : default[3])
+        ]) : 
+        is_num(xyz) ? [m[0] * xyz, m[1] * xyz, m[2] * xyz, undef] : default,
+        r1 = is_undef(r) ? undef : [m[0] * r[0], m[1] * r[1], m[2] * r[2], is_undef(r[3]) ? undef : m[3] * r[3]],
+        p = is_undef(r1) ? undef : (is_undef(precision) ? r1 : [mb_round_prec(r1[0], precision), mb_round_prec(r1[1], precision), mb_round_prec(r1[2], precision), is_undef(r1[3]) ? undef : mb_round_prec(r1[3], precision)]))
+    is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2]), is_undef(p[3]) ? undef : max(min_value, p[3])]);
+
+
 /*
 * ---------------
 * START BLOCK OBJ
