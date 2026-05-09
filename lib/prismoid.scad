@@ -94,7 +94,8 @@ module mb_rounding_corner(
         resolution = 80, 
         debug = false
 ){
-    radius = mb_resolve_xyz(xyz = radius, min_value = zero);
+    rs = mb_resolve_xyz(xyz = radius, min_value = zero);
+    radius = [rs[0], rs[1], rs[2], len(radius) > 3 ? radius[3]: undef];
     
     off_corner = mb_corner_offset(corner, radius);
     off = mb_corner_offset(corner, radius, -1);
@@ -191,7 +192,8 @@ module mb_pseudo_ellipse_ring(
     capWidth=0.1,
     capThreshold=0.15
 ) {
-    s = mb_resolve_xyz(xyz = radius, min_value = zero, precision = precision);
+    rs = mb_resolve_xyz(xyz = radius, min_value = zero, precision = precision);
+    s = [rs[0], rs[1], rs[2], len(radius) > 3 ? radius[3]: undef];
 
     if((s[0] <= zero && s[1] <= zero) 
         || (s[0] <= zero && s[2] <= zero) 
@@ -348,7 +350,9 @@ module mb_pseudo_ellipse_ring(
         }
     }
     else{
-        mb_rounded_ellipse_disk(radius[0], radius[1], 2*radius[2],radius[2]);
+        echo(s = s);
+        mb_rounded_ellipse_disk_xyz(s[0], s[1], s[2], len(s) < 4 || is_undef(s[3]) ? s[2] : s[3], resolution = resolution);
+        //mb_rounded_ellipse_disk(radius[0], radius[1], 2*radius[2],radius[2]);
     }
 }
 
@@ -911,12 +915,12 @@ mb_prismoid(shape = [
 
 //mb_cube(center = false, size = [120, 80, 50], radius = [[5, 10, 15, 20],0,  0], xyz_rad = true);
 
-*translate([200, 0, 0])
+translate([200, 0, 0])
 mb_cube(
     debug = true, 
     mul=[8, 8, 3.2], 
     size = [4, 2, 3], 
-    radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[.8, 0.7, 0.7], [0.8, 0.7, 0.7], [1.2, 0.7, 0.5], [1.2, 0.6, 0.5]]]);
+    radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[0.8, 0.7, 0.2,1], [0.8, 0.7, 0.7,1], [1.2, 0.7, 0.5], [1.2, 0.6, 0.5]]]);
 
 //mb_cube(size = [120, 80, 50]);
 //color("#ffffffaa")
@@ -1006,50 +1010,55 @@ module mb_rounded_ellipse_disk(x, y, h, r, n = 24, zero = 0.001, $fn = 100) {
 }
 
 
-module mb_rounded_ellipse_disk_xyz(x, y, zx, zy, n = 32, zero = 0.001, $fn = 96) {
+module mb_rounded_ellipse_disk_xyz(x, y, zx, zy, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
     rz = max(zx, zy);
     h = 2 * rz;
 
     module ellipse_cylinder(rx, ry, height) {
-    min_r = 0.01;
+    if ((x >= zx) && (y >= zy)) {
+        scale([rx, ry, 1])
+            cylinder(h = height, r = 1, center = false, $fn = resolution);
+    } else {
+        min_r = 0.01;
 
-    rx2 = max(rx, min_r);
-    ry2 = max(ry, min_r);
+        rx2 = max(rx, min_r);
+        ry2 = max(ry, min_r);
 
-    ix = x - rx2;
-    iy = y - ry2;
+        ix = x - rx2;
+        iy = y - ry2;
 
-    split_x = (zx == rz) && (zx > x);
-    split_y = (zy == rz) && (zy > y);
+        split_x = (zx == rz) && (zx > x);
+        split_y = (zy == rz) && (zy > y);
 
-    dx = split_x ? max(0, zx - ix) : 0;
-    dy = split_y ? max(0, zy - iy) : 0;
+        dx = split_x ? max(0, zx - ix) : 0;
+        dy = split_y ? max(0, zy - iy) : 0;
 
-    xs = split_x ? [-1, 1] : [0];
-    ys = split_y ? [-1, 1] : [0];
+        xs = split_x ? [-1, 1] : [0];
+        ys = split_y ? [-1, 1] : [0];
 
-    eps = 0.01;
-    big = max(x, y, zx, zy) * 4 + 10;
+        eps = 0.01;
+        big = max(x, y, zx, zy) * 4 + 10;
 
-    if (rx > min_r && ry > min_r && height > 0) {
-        for (sx = xs)
-        for (sy = ys) {
-            translate([sx * dx, sy * dy, 0])
-                intersection() {
-                    scale([rx2, ry2, 1])
-                        cylinder(h = height, r = 1, center = false, $fn = $fn);
+        if (rx > min_r && ry > min_r && height > 0) {
+            for (sx = xs)
+            for (sy = ys) {
+                translate([sx * dx, sy * dy, 0])
+                    intersection() {
+                        scale([rx2, ry2, 1])
+                            cylinder(h = height, r = 1, center = false, $fn = resolution);
 
-                    translate([
-                        sx < 0 ? -big : (sx > 0 ? -eps : -big),
-                        sy < 0 ? -big : (sy > 0 ? -eps : -big),
-                        -eps
-                    ])
-                        cube([
-                            sx == 0 ? 2 * big : big + eps,
-                            sy == 0 ? 2 * big : big + eps,
-                            height + 2 * eps
-                        ], center = false);
-                }
+                        translate([
+                            sx < 0 ? -big : (sx > 0 ? -eps : -big),
+                            sy < 0 ? -big : (sy > 0 ? -eps : -big),
+                            -eps
+                        ])
+                            cube([
+                                sx == 0 ? 2 * big : big + eps,
+                                sy == 0 ? 2 * big : big + eps,
+                                height + 2 * eps
+                            ], center = false);
+                    }
+            }
         }
     }
 }
@@ -1076,16 +1085,145 @@ module mb_rounded_ellipse_disk_xyz(x, y, zx, zy, n = 32, zero = 0.001, $fn = 96)
             ellipse_cylinder(
                 x - ix,
                 y - iy,
-                max(z1 - z0, zero)
+                hs*max(z1 - z0, zero)
             );
     }
 }
 
+//color("#ffffff22")
 hull()
 mb_rounded_ellipse_disk_xyz(
-    x = 8,
-    y = 8,
-    zx = 4,
+    x = 9.6,  
+    y = 4.8,
+    zx = 1.6,
+    zy = 1.6,
+    n = 24,
+    hs=0.5,
+    resolution = 100
+);
+
+
+
+/*
+color("red")
+hull()
+mb_rounded_ellipse_disk_xyz2(
+    x = 4,
+    y = 2,
+    zx = 8,
     zy = 8,
     n = 24
 );
+
+module mb_rounded_ellipse_disk_xyz2(x, y, zx, zy, n = 48, zero = 0.001, $fn = 96) {
+    rz = max(zx, zy);
+
+    module ellipse_cylinder_cone(rx0, ry0, rx1, ry1, height) {
+        if ((x >= zx) && (y >= zy)) {
+            scale([rx0, ry0, 1])
+                cylinder(h = zero, r = 1, center = false, $fn = $fn);
+
+            translate([0, 0, height])
+                scale([rx1, ry1, 1])
+                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
+        } else {
+            min_r = 0.01;
+
+            rx0_2 = max(rx0, min_r);
+            ry0_2 = max(ry0, min_r);
+            rx1_2 = max(rx1, min_r);
+            ry1_2 = max(ry1, min_r);
+
+            ix0 = x - rx0_2;
+            iy0 = y - ry0_2;
+            ix1 = x - rx1_2;
+            iy1 = y - ry1_2;
+
+            split_x = (zx == rz) && (zx > x);
+            split_y = (zy == rz) && (zy > y);
+
+            dx0 = split_x ? max(0, zx - ix0) : 0;
+            dy0 = split_y ? max(0, zy - iy0) : 0;
+            dx1 = split_x ? max(0, zx - ix1) : 0;
+            dy1 = split_y ? max(0, zy - iy1) : 0;
+
+            xs = split_x ? [-1, 1] : [0];
+            ys = split_y ? [-1, 1] : [0];
+
+            eps = 0.01;
+            big = max(x, y, zx, zy) * 4 + 10;
+
+            if (rx0 > min_r && ry0 > min_r && rx1 > min_r && ry1 > min_r && height > 0) {
+                for (sx = xs)
+                for (sy = ys) {
+                    hull() {
+                        translate([sx * dx0, sy * dy0, 0])
+                            intersection() {
+                                scale([rx0_2, ry0_2, 1])
+                                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
+
+                                translate([
+                                    sx < 0 ? -big : (sx > 0 ? -eps : -big),
+                                    sy < 0 ? -big : (sy > 0 ? -eps : -big),
+                                    -eps
+                                ])
+                                    cube([
+                                        sx == 0 ? 2 * big : big + eps,
+                                        sy == 0 ? 2 * big : big + eps,
+                                        zero + 2 * eps
+                                    ], center = false);
+                            }
+
+                        translate([sx * dx1, sy * dy1, height])
+                            intersection() {
+                                scale([rx1_2, ry1_2, 1])
+                                    cylinder(h = zero, r = 1, center = false, $fn = $fn);
+
+                                translate([
+                                    sx < 0 ? -big : (sx > 0 ? -eps : -big),
+                                    sy < 0 ? -big : (sy > 0 ? -eps : -big),
+                                    -eps
+                                ])
+                                    cube([
+                                        sx == 0 ? 2 * big : big + eps,
+                                        sy == 0 ? 2 * big : big + eps,
+                                        zero + 2 * eps
+                                    ], center = false);
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    function inset_at(zpos, r) =
+        let(d = abs(zpos))
+        r == rz
+            ? r - sqrt(max(0, r*r - d*d))
+            : d >= (rz - r)
+                ? r - sqrt(max(0, r*r - pow(rz - d - r, 2)))
+                : 0;
+
+    for (i = [-n : n - 1]) {
+        a0 = i * 90 / n;
+        a1 = (i + 1) * 90 / n;
+
+        z0 = rz * sin(a0);
+        z1 = rz * sin(a1);
+
+        ix0 = inset_at(z0, zx);
+        iy0 = inset_at(z0, zy);
+
+        ix1 = inset_at(z1, zx);
+        iy1 = inset_at(z1, zy);
+
+        translate([0, 0, z0])
+            ellipse_cylinder_cone(
+                x - ix0,
+                y - iy0,
+                x - ix1,
+                y - iy1,
+                max(z1 - z0, zero)
+            );
+    }
+}*/
