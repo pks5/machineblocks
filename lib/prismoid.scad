@@ -119,64 +119,85 @@ module mb_rounding_corner(
         }
 }
 
-/*
-* PSEUDO ELLIPSE RING HELPERS
-*/
+module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
+    rz = max(zx, zy);
+    h = 2 * rz;
 
-function mb_pe_curvature(rx, ry, a) =
-    abs(rx * ry) /
-    pow(
-        pow(ry * cos(a), 2) + pow(rx * sin(a), 2),
-        1.5
-    );
+    module ellipse_cylinder(rx, ry, height) {
+        if ((x >= zx) && (y >= zy)) {
+            scale([rx, ry, 1])
+                cylinder(h = height, r = 1, center = false, $fn = resolution);
+        } else {
+            min_r = 0.01;
 
-function mb_pe_adaptive_angles(
-    rx, ry,
-    a0, a1,
-    baseStep,
-    minStep,
-    maxStep,
-    kMax,
-    angles=[]
-) =
-    a0 >= a1
-        ? concat(angles, [a1])
-        : let(
-            k = mb_pe_curvature(rx, ry, a0),
+            rx2 = max(rx, min_r);
+            ry2 = max(ry, min_r);
 
-            // 0..1, hohe Krümmung => nahe 1
-            t = min(1, k / kMax),
+            ix = x - rx2;
+            iy = y - ry2;
 
-            // hohe Krümmung => minStep
-            // geringe Krümmung => maxStep
-            step = max(
-                minStep,
-                min(
-                    maxStep,
-                    maxStep - (maxStep - minStep) * sqrt(t)
-                )
-            ),
+            split_x = (zx == rz) && (zx > x);
+            split_y = (zy == rz) && (zy > y);
 
-            nextA = min(a0 + step, a1)
-        )
-        mb_pe_adaptive_angles(
-            rx, ry,
-            nextA, a1,
-            baseStep,
-            minStep,
-            maxStep,
-            kMax,
-            concat(angles, [a0])
-        );
+            dx = split_x ? max(0, zx - ix) : 0;
+            dy = split_y ? max(0, zy - iy) : 0;
 
-function mb_pe_cap_angles(center, width, step) =
-    [for (a = [center - width : step : center + width]) a];
+            xs = split_x ? [-1, 1] : [0];
+            ys = split_y ? [-1, 1] : [0];
 
-function mb_pe_in_angle_range(a, a0, a1) =
-    a >= min(a0, a1) && a <= max(a0, a1);
+            eps = 0.01;
+            big = max(x, y, zx, zy) * 4 + 10;
 
-function mb_pe_filter_angles(angles, a0, a1) =
-    [for (a = angles) if (mb_pe_in_angle_range(a, a0, a1)) a];
+            if (rx > min_r && ry > min_r && height > 0) {
+                for (sx = xs)
+                for (sy = ys) {
+                    translate([sx * dx, sy * dy, 0])
+                        intersection() {
+                            scale([rx2, ry2, 1])
+                                cylinder(h = height, r = 1, center = false, $fn = resolution);
+
+                            translate([
+                                sx < 0 ? -big : (sx > 0 ? -eps : -big),
+                                sy < 0 ? -big : (sy > 0 ? -eps : -big),
+                                -eps
+                            ])
+                                cube([
+                                    sx == 0 ? 2 * big : big + eps,
+                                    sy == 0 ? 2 * big : big + eps,
+                                    height + 2 * eps
+                                ], center = false);
+                        }
+                }
+            }
+        }
+    }
+
+    function inset_at(zpos, r) =
+        let(d = abs(zpos))
+        r == rz
+            // großer Radius: durchgehend über volle Höhe
+            ? r - sqrt(max(0, r*r - d*d))
+
+            // kleiner Radius: nur oben/unten, konvex
+            : d >= (rz - r)
+                ? r - sqrt(max(0, r*r - pow(rz - d - r, 2)))
+                : 0;
+
+    for (i = [0 : 2*n - 1]) {
+        z0 = -rz + i     * h / (2*n);
+        z1 = -rz + (i+1) * h / (2*n);
+
+        ix = inset_at(z0, zx);
+        iy = inset_at(z0, zy);
+
+        translate([0, 0, z0])
+            ellipse_cylinder(
+                x - ix,
+                y - iy,
+                hs*max(z1 - z0, zero)
+            );
+    }
+}
 
 /**
 * PSEUDO ELLIPSE RING
@@ -207,150 +228,9 @@ module mb_pseudo_ellipse_ring(
         scale(rad_rel)
             sphere(r = max_rad, $fn = resolution);    
     }
-    /*else if((s[0] == s[1]) || (s[0] == s[2]) || (s[1] == s[2])){
-        rs = min(s[0], s[1], s[2]);
-        rm = max(s[0], s[1], s[2]);
-        ch = 2 * (rm - rs);
-        rr = s[0] == rm ? [0, 90, 0] : s[1] == rm ? [90, 0, 0] : [0, 0 ,0];
-        rotate(rr){
-            cylinder(h = ch, r = rs, center=true, $fn = resolution);
-            translate([0, 0, 0.5*ch]) 
-                sphere(r = rs, $fn = resolution);
-            translate([0, 0, -0.5*ch]) 
-                sphere(r = rs, $fn = resolution);
-        }
-    }*/
-    else if(false){
-        x_smallest = s[0] < s[1] && s[0] < s[2];
-        y_smallest = s[1] < s[0] && s[1] < s[2];
-
-        /*
-        cn = corner[1] == 4 ? 0 :
-            corner[1] == 2 ? 1 :
-            corner[1] == 0 ? 2 :
-            corner[1] == 6 ? 3 : 0;
-
-    cxs = corner[0] == 0 && (corner[1] == 2 || corner[1] == 4) ? 0 :
-            corner[0] == 1 && (corner[1] == 2 || corner[1] == 4) ? 1 :
-            corner[0] == 1 && (corner[1] == 0 || corner[1] == 6) ? 2 :
-            corner[0] == 0 && (corner[1] == 0 || corner[1] == 6) ? 3 : 0;
-        //  cxs = 1; // c06, c04 => 0, c16, c14 => 1, c10, c12 => 2, c00, c02 => 3
-
-        cys = corner[0] == 1 && (corner[1] == 4 || corner[1] == 6) ? 0 :
-            corner[0] == 1 && (corner[1] == 0 || corner[1] == 2) ? 1 :
-            corner[0] == 0 && (corner[1] == 0 || corner[1] == 2) ? 2 :
-            corner[0] == 0 && (corner[1] == 4 || corner[1] == 6) ? 3 : 0;
-
-        // cys = 3; // c14, c16 => 0, c10, c12 => 1, c00, c02 => 2, c04, c06 => 3
-
-        c = x_smallest ? cxs : (y_smallest ? cys :cn);
-
-        from = c * 90;
-        to = 90 + c *90; */
-
-        startAngle = 0; //from;
-        endAngle = 360; //to;
-
-        radius = x_smallest ? 
-            [s[2], s[1], s[0]] :
-            y_smallest ?
-            [s[0], s[2], s[1]] :
-            s;
-
-        rot = x_smallest ? [0, 90, 0] : y_smallest ? [90, 0, 0] : [0, 0, 0];
-
-        rx = max(zero, radius[0] - radius[2]);
-        ry = max(zero, radius[1] - radius[2]);
-        z_rad = max(zero, radius[2]);
-
-        angleSpan = endAngle - startAngle;
-
-        max_r = max(abs(rx), abs(ry));
-        min_r = max(zero, min(abs(rx), abs(ry)));
-
-        count = max(1, ceil(resolution * abs(angleSpan) / 360));
-        steps = (count > 1) ? (count - 1) : 1;
-
-        capStep = min_r / max_r * 25;
-
-        // adaptive Grenzen
-        baseStep = 360 / resolution;
-        minStep = baseStep / sqrt(max_r / min_r);
-        maxStep = baseStep * 1.5;
-
-        // maximale Krümmung liegt ungefähr am kleinen Radius-Ende
-        use_xcaps = abs(rx) / max_r < capThreshold;
-        use_ycaps = abs(ry) / max_r < capThreshold;
-
-        baseAngles = use_xcaps || use_ycaps ? [
-            for (i = [0 : count - 1])
-                startAngle + angleSpan * i / steps
-        ] : mb_pe_adaptive_angles(
-            rx, ry,
-            startAngle, endAngle,
-            baseStep,
-            minStep,
-            maxStep,
-            max(
-                mb_pe_curvature(rx, ry, 0),
-                mb_pe_curvature(rx, ry, 90),
-                mb_pe_curvature(rx, ry, 180),
-                mb_pe_curvature(rx, ry, 270)
-            )
-        );
-
-        // Wenn rx sehr klein ist: runde Endkappen oben/unten extra sampeln
-        xCaps =
-            use_xcaps
-                ? concat(
-                    mb_pe_cap_angles(90, capWidth, capStep),
-                    mb_pe_cap_angles(270, capWidth, capStep)
-                )
-                : [];
-
-        // Wenn ry sehr klein ist: runde Endkappen links/rechts extra sampeln
-        yCaps =
-            use_ycaps
-                ? concat(
-                    mb_pe_cap_angles(0, capWidth, capStep),
-                    mb_pe_cap_angles(180, capWidth, capStep),
-                    mb_pe_cap_angles(360, capWidth, capStep)
-                )
-                : [];
-
-        angles = concat(
-            baseAngles,
-            mb_pe_filter_angles(xCaps, startAngle, endAngle),
-            mb_pe_filter_angles(yCaps, startAngle, endAngle)
-        );
-
-        //hull()
-        rotate(rot){
-            for (a = angles) {
-                p = [
-                    rx * cos(a),
-                    ry * sin(a),
-                    0
-                ];
-
-                tangent_angle = atan2(ry * cos(a), -rx * sin(a));
-
-                translate(p)
-                    rotate([0, 0, tangent_angle])
-                        rotate([0, 90, 0])
-                            cylinder(
-                                h = h,
-                                r = z_rad,
-                                center = true,
-                                $fn = resolution //max(8, ceil(radius[2] / max_r * resolution))
-                            );
-            }
-        }
-    }
     else{
         echo(s = s);
         mb_rounded_ellipse_disk_xyz(s[0], s[1], s[2], (len(s) < 4) || is_undef(s[3]) ? s[2] : s[3], resolution = resolution);
-        //mb_rounded_ellipse_disk(radius[0], radius[1], 2*radius[2],radius[2]);
     }
 }
 
@@ -922,89 +802,3 @@ mb_cube(
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [20, 20], radius = 0, resolution = 160, debug=true);
-
-
-
-
-
-
-module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
-    rz = max(zx, zy);
-    h = 2 * rz;
-
-    module ellipse_cylinder(rx, ry, height) {
-    if ((x >= zx) && (y >= zy)) {
-        scale([rx, ry, 1])
-            cylinder(h = height, r = 1, center = false, $fn = resolution);
-    } else {
-        min_r = 0.01;
-
-        rx2 = max(rx, min_r);
-        ry2 = max(ry, min_r);
-
-        ix = x - rx2;
-        iy = y - ry2;
-
-        split_x = (zx == rz) && (zx > x);
-        split_y = (zy == rz) && (zy > y);
-
-        dx = split_x ? max(0, zx - ix) : 0;
-        dy = split_y ? max(0, zy - iy) : 0;
-
-        xs = split_x ? [-1, 1] : [0];
-        ys = split_y ? [-1, 1] : [0];
-
-        eps = 0.01;
-        big = max(x, y, zx, zy) * 4 + 10;
-
-        if (rx > min_r && ry > min_r && height > 0) {
-            for (sx = xs)
-            for (sy = ys) {
-                translate([sx * dx, sy * dy, 0])
-                    intersection() {
-                        scale([rx2, ry2, 1])
-                            cylinder(h = height, r = 1, center = false, $fn = resolution);
-
-                        translate([
-                            sx < 0 ? -big : (sx > 0 ? -eps : -big),
-                            sy < 0 ? -big : (sy > 0 ? -eps : -big),
-                            -eps
-                        ])
-                            cube([
-                                sx == 0 ? 2 * big : big + eps,
-                                sy == 0 ? 2 * big : big + eps,
-                                height + 2 * eps
-                            ], center = false);
-                    }
-            }
-        }
-    }
-}
-
-    function inset_at(zpos, r) =
-        let(d = abs(zpos))
-        r == rz
-            // großer Radius: durchgehend über volle Höhe
-            ? r - sqrt(max(0, r*r - d*d))
-
-            // kleiner Radius: nur oben/unten, konvex
-            : d >= (rz - r)
-                ? r - sqrt(max(0, r*r - pow(rz - d - r, 2)))
-                : 0;
-
-    for (i = [0 : 2*n - 1]) {
-        z0 = -rz + i     * h / (2*n);
-        z1 = -rz + (i+1) * h / (2*n);
-
-        ix = inset_at(z0, zx);
-        iy = inset_at(z0, zy);
-
-        translate([0, 0, z0])
-            ellipse_cylinder(
-                x - ix,
-                y - iy,
-                hs*max(z1 - z0, zero)
-            );
-    }
-}
-
