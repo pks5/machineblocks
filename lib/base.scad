@@ -18,7 +18,7 @@ module mb_base_cutout(
         //Base Clamp Inner
         difference(){
             mb_block_part(block_obj, part="base_cutout_clamp_mask", debug = debug);
-            mb_block_part(block_obj, part="base_cutout_clamp_mask_inner", debug = debug);
+            mb_block_part(block_obj, part="base_cutout_clamp_cut", debug = debug);
         }
 
         //Top Plate Helpers
@@ -125,6 +125,7 @@ module mb_base(
                 if(baseClampThicknessOuter > 0){ //TODO
                     mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
                 }
+
             }
 
             if(baseReliefCut){
@@ -140,14 +141,19 @@ module mb_base(
             /*
             * Pit
             */
-            if(pit){
+            if(mb_block_get_recess(block_obj)){
+                mb_block_part(block_obj, part="recess", debug = debug);
+                mb_block_part(block_obj, part="recess_wall_gaps", debug = debug);
+
+
+                /*
+                //Pit Wall Gaps
                 pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
                 pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
-                
-                mb_block_part(block_obj, part="recess", debug = debug);
-                
-                //Pit Wall Gaps
                 for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
+                    
+
+                    
                     gap = mb_to_array(pitWallGaps[gapIndex]);
                     side = mb_side_to_int(gap[0]);
                     if(side < 2){
@@ -158,7 +164,7 @@ module mb_base(
                         translate([-0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, sideY(side - 2), 0.5*(height - pitDepth + cutOffset)])
                             cube([pitSizeX - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY , 2 * pitWallThickness[side] * cutMultiplier, pitDepth + cutOffset], center = true);     
                     } 
-                }
+                }*/
             } // End Pit
 
             /*

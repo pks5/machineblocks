@@ -561,16 +561,20 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    let(part_shape = mb_block_part_shape(block_obj, part = part, part_params = part_params))
-    is_undef(part_shape) ? undef : mb_prismoid_shape_resolve(
-        shape = part_shape[0], 
-        height = part_shape[1], 
-        socket = part_shape[2][0],
-        radius = radius, 
-        mul = mul,
-        add = add,
-        expand = part_shape[2][1]
-    );
+    let(part_shapes = mb_block_part_shape(block_obj, part = part, part_params = part_params))
+    is_undef(part_shapes) ? undef : 
+    [
+        for(part_shape = part_shapes)
+            mb_prismoid_shape_resolve(
+                shape = part_shape[0], 
+                height = part_shape[1], 
+                socket = part_shape[2][0],
+                radius = radius, 
+                mul = mul,
+                add = add,
+                expand = part_shape[2][1]
+            )
+    ];
 
 
 
@@ -597,10 +601,11 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
         
     }
     else{
-        part_shape = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
+        part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
         
-        if(!is_undef(part_shape)){
-            mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+        if(!is_undef(part_shapes)){
+            for(part_shape = part_shapes)
+                mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
         }
     }
 }
@@ -744,7 +749,7 @@ module mb_cube(
             mul = mul
         );
 
-        mb_prismoid(shape = prismoid_shape, skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
+        mb_prismoid(shape = prismoid_shape[0], skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
     }
 }
 
