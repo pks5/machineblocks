@@ -316,7 +316,7 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
-function mb_block_part_shape(block_obj, part = undef) = 
+function mb_block_part_shape(block_obj, part = undef, part_params = undef) = 
     let(
         size = mb_block_obj_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -335,6 +335,7 @@ function mb_block_part_shape(block_obj, part = undef) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj)
     )
+
     part == "base_adjusted" ?    
     _mb_block_to_shape_parts(
         size = size, 
@@ -344,6 +345,7 @@ function mb_block_part_shape(block_obj, part = undef) =
         bevel = mb_bevel_shrink(bevel, base_adj),
         slope = mb_slope_shrink(slope, base_adj)
     ) :
+
     part == "recess" ?  
     let(rwt = mb_block_get_recess_wall_thickness(block_obj))  
     _mb_block_to_shape_parts(
@@ -361,6 +363,7 @@ function mb_block_part_shape(block_obj, part = undef) =
         bevel = bevel,
         slope = slope
     ) :
+
     part == "base_cutout" ?    
     let(slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
@@ -482,7 +485,6 @@ function mb_block_part_shape(block_obj, part = undef) =
     ):
 
     part == "relief_cut_mask" ?
-    
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
@@ -501,7 +503,6 @@ function mb_block_part_shape(block_obj, part = undef) =
     ):
 
     part == "relief_cut" ?
-    
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
@@ -520,7 +521,6 @@ function mb_block_part_shape(block_obj, part = undef) =
     ):
 
     part == "top_plate_helpers_mask" ?
-    
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
@@ -538,7 +538,6 @@ function mb_block_part_shape(block_obj, part = undef) =
     ):
 
     part == "top_plate_helpers_cut" ?
-    
     _mb_block_to_shape_parts(
         size = size, 
         mod = mod,

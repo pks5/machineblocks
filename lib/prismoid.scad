@@ -553,22 +553,23 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
     ];
 
 
-function mb_block_to_prismoid(
+function mb_block_part_to_shape(
     block_obj,
     part = undef,
+    part_params = undef,
     radius = undef, 
     mul = undef, 
     add = undef
 ) =
-    let(shape_parts = mb_block_part_shape(block_obj, part = part))
-    is_undef(shape_parts) ? undef : mb_prismoid_shape_resolve(
-        shape = shape_parts[0], 
-        height = shape_parts[1], 
-        socket = shape_parts[2][0],
+    let(part_shape = mb_block_part_shape(block_obj, part = part, part_params = part_params))
+    is_undef(part_shape) ? undef : mb_prismoid_shape_resolve(
+        shape = part_shape[0], 
+        height = part_shape[1], 
+        socket = part_shape[2][0],
         radius = radius, 
         mul = mul,
         add = add,
-        expand = shape_parts[2][1]
+        expand = part_shape[2][1]
     );
 
 
@@ -586,13 +587,21 @@ function mb_block_to_prismoid(
 * ------------
 */
 
-module mb_block_part(block_obj, part, debug = false){
+module mb_block_part(block_obj, part, part_params = undef, debug = false){
     mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    part_shape = mb_block_to_prismoid(block_obj, part = part, mul=mul);
-    
-    if(!is_undef(part_shape)){
-        mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+    if(part == "some_custom_module_tbd"){
+
+    }
+    if(part == "some_other_custom_module_tbd"){
+        
+    }
+    else{
+        part_shape = mb_block_part_to_shape(block_obj, part = part, part_params = part_params, mul=mul);
+        
+        if(!is_undef(part_shape)){
+            mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+        }
     }
 }
 
@@ -728,7 +737,7 @@ module mb_cube(
         block_obj = mb_block_obj(size);
 
         mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
-        prismoid_shape = mb_block_to_prismoid(
+        prismoid_shape = mb_block_part_to_shape(
             block_obj,
             part = "simple",
             radius = radius,
