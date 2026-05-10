@@ -344,7 +344,7 @@ function _mb_block_to_shape_parts(
         slope_pos = mb_slope_filter(slope, 1)
     )
     [
-        "list",
+        "prismoid",
         [
             [
                 mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
@@ -365,7 +365,7 @@ function mb_block_part_to_prismoid(
     let(part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part)
     
     is_undef(part_shapes) || !is_list(part_shapes) ? undef : 
-        (part_shapes[0] == "union" || part_shapes[0] == "difference" || part_shapes[0] == "intersection"  || part_shapes[0] == "list") ?
+        (part_shapes[0] == "prismoid" || part_shapes[0] == "union" || part_shapes[0] == "difference" || part_shapes[0] == "intersection"  || part_shapes[0] == "list") ?
         [
             part_shapes[0],
             [
@@ -392,7 +392,7 @@ function mb_block_part_to_prismoid(
             ]
         ] : undef;
 
-module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
+module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef, source_custom_module = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
     part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
@@ -445,8 +445,13 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 }
             }
         }
+        else if(part_shapes[0] == "prismoid"){
+            mb_prismoid(shape = part_shapes[1][0], mul = mul, debug = debug);
+            
+            mb_block_part(block_obj, part = part_shapes[1][1], part_params=part_params, mul = mul, debug = debug);
+        }
         else{
-            mapping = mb_block_custom_module_mapping(block_obj, part_shapes[0]);
+            mapping = !is_undef(source_custom_module) ? source_custom_module : mb_block_custom_module_mapping(block_obj, part_shapes[0]);
             if(mapping == 0){
                 mb_block_part__custom_0(block_obj, part_shapes[1], part_params, debug, mul);
             }

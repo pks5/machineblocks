@@ -78,6 +78,32 @@ module mb_base(
                     mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
                 }
 
+                //Just for testing TO BE REMOVED
+                *mb_block_part(block_obj, part=[
+                    "my_cube",
+                    [
+                        "cube",
+                        [
+                            [10, 10, 10],
+                        ],
+                        [
+                            "list",
+                            [
+                                [
+                                    "my_cube",
+                                    [
+                                        "cube",
+                                        [
+                                            [35, 35, 35]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                    
+                ], debug = debug);
+
             }
 
             if(mb_block_get_relief_cut(block_obj)){
@@ -95,19 +121,6 @@ module mb_base(
                 mb_block_part(block_obj, part="recess_wall_gaps", debug = debug);
             } // End Recess
 
-
-            mb_block_part(block_obj, part=[
-                "my_cube",
-                [
-                    [
-                        "cube",
-                        [
-                            [[100, 100, 100]],
-                            []
-                        ]
-                    ]
-                ]
-            ], debug = debug);
 
             /*
             * Connectors
