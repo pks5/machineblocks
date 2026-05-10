@@ -11,6 +11,7 @@
 */
 
 include <core/api.scad>;
+use <core/block_part.scad>;
 use <prismoid.scad>;
 use <base.scad>;
 use <text3d.scad>;

@@ -1,3 +1,4 @@
+use <core/block_part.scad>;
 use <prismoid.scad>;
 use <connectors.scad>;
 use <utils.scad>;
