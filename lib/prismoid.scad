@@ -1,5 +1,6 @@
 use <utils.scad>;
 use <quad.scad>;
+use <core/geometry.scad>;
 
 /*
 * --------------------

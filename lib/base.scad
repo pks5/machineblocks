@@ -80,7 +80,7 @@ module mb_base(
 
             }
 
-            if(baseReliefCut){
+            if(mb_block_get_relief_cut(block_obj)){
                 difference(){
                     mb_block_part(block_obj, part="relief_cut_mask", debug = debug);
                     mb_block_part(block_obj, part="relief_cut", debug = debug);

@@ -3,6 +3,31 @@ use <block_model.scad>;
 use <../utils.scad>
 use <../prismoid.scad>
 
+function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socket = undef, expand = undef, adj = undef) =
+    let(
+        
+        mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
+        mod_size = mod_min_max[1][0],
+        min_max = mod_min_max[1][2],
+        
+        bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1],
+        
+        slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
+        //sl = mb_slope_matrix(slope, bevel_res, mod_size),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1)
+    )
+    [
+        [
+            mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
+            mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]])
+        ], // Shape
+        [min_max[0][2], min_max[1][2]], // Height
+        [socket, expand]
+    ];
+
 function mb_block_part_shape(block_obj, part = undef, part_params = undef) = 
     let(
         size = mb_block_obj_size(block_obj),
@@ -18,7 +43,7 @@ function mb_block_part_shape(block_obj, part = undef, part_params = undef) =
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
-        relief_cut = mb_block_get_relief_cut(block_obj),
+        relief_cut = mb_block_get_relief_cut_dim(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj)
     )
