@@ -1505,7 +1505,6 @@ module mb_block(
                                             
                                                 difference(){
                                                     union(){
-                                                        //mb_prismoid(shape = stud_base_cutout, skip_resolve = true, debug = debug);
                                                         translate([0, 0, sideZ(0, false) + 0.5 * knobCutHeight - 0.5*cutOffset]){
                                                         
                                                             for (a = [ startX : 1 : ceil(endX) ]){
@@ -1531,7 +1530,7 @@ module mb_block(
                                                     } // End union
 
                                                     if(baseCutoutType != "studs"){
-                                                        mb_prismoid(shape = stud_base_cutout, skip_resolve = true, debug = debug);
+                                                        mb_prismoid(shape = stud_base_cutout, debug = debug);
                                                         /*
                                                         translate([0.5*(baseModRes[1]-baseModRes[0]), 0.5*(baseModRes[3]-baseModRes[2]), 0]){
                                                             union(){

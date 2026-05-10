@@ -3,30 +3,7 @@ use <block_model.scad>;
 use <../utils.scad>
 use <../prismoid.scad>
 
-function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socket = undef, expand = undef, adj = undef) =
-    let(
-        
-        mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
-        mod_size = mod_min_max[1][0],
-        min_max = mod_min_max[1][2],
-        
-        bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
-        bevel_res = bevel_matrix[0],
-        bevel_fil = bevel_matrix[1],
-        
-        slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
-        //sl = mb_slope_matrix(slope, bevel_res, mod_size),
-        slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1)
-    )
-    [
-        [
-            mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
-            mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]])
-        ], // Shape
-        [min_max[0][2], min_max[1][2]], // Height
-        [socket, expand]
-    ];
+
 
 function mb_block_part_shape(block_obj, part = undef, part_params = undef) = 
     let(
@@ -339,6 +316,30 @@ function mb_block_part_shape(block_obj, part = undef, part_params = undef) =
         slope = slope
     )] : undef;
 
+function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socket = undef, expand = undef, adj = undef) =
+    let(
+        
+        mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
+        mod_size = mod_min_max[1][0],
+        min_max = mod_min_max[1][2],
+        
+        bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1],
+        
+        slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
+        //sl = mb_slope_matrix(slope, bevel_res, mod_size),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1)
+    )
+    [
+        [
+            mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
+            mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
+            [[min_max[0][2], min_max[1][2]], socket, expand]
+        ] // Shape
+    ];
+
 function mb_block_part_to_prismoid(
     block_obj,
     part = undef,
@@ -353,12 +354,9 @@ function mb_block_part_to_prismoid(
         for(part_shape = part_shapes)
             mb_prismoid_shape_resolve(
                 shape = part_shape[0], 
-                height = part_shape[1], 
-                socket = part_shape[2][0],
                 radius = radius, 
                 mul = mul,
-                add = add,
-                expand = part_shape[2][1]
+                add = add
             )
     ];
 
@@ -376,7 +374,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
         
         if(!is_undef(part_shapes)){
             for(part_shape = part_shapes)
-                mb_prismoid(shape = part_shape, skip_resolve = true, debug = debug);
+                mb_prismoid(shape = part_shape, debug = debug);
         }
     }
 }
@@ -411,7 +409,7 @@ module mb_cube(
             mul = mul
         );
 
-        mb_prismoid(shape = prismoid_shape[0], skip_resolve = true, align = center ? "center" : "start", resolution = resolution, debug = debug);
+        mb_prismoid(shape = prismoid_shape[0], align = center ? "center" : "start", resolution = resolution, debug = debug);
     }
 }
 

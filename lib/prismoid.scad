@@ -526,7 +526,11 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
 
 function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius = undef, mul = undef, add = undef, expand = undef) =
     let(
-        sck = is_undef(socket) ? (len(shape) > 2 && !is_undef(shape[2]) ? shape[2] : undef) : socket,
+        meta_data = len(shape) > 2 && !is_undef(shape[2]) && is_list(shape[2]) ? shape[2] : undef,
+        height = is_undef(height) ? (!is_undef(meta_data) && !is_undef(meta_data[0]) ? meta_data[0] : undef) : height,
+        sck = is_undef(socket) ? (!is_undef(meta_data) && !is_undef(meta_data[1]) ? meta_data[1] : undef) : socket,
+        expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : expand,
+        
         mul = mb_resolve_quad(mul, default=[1,1,1,1]),
         s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
@@ -549,7 +553,7 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
     [
         ex[0],
         ex[1],
-        is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]],
+        [height, is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]], undef],
         mb_prismoid_process(ex)
     ];
 
@@ -586,10 +590,12 @@ module mb_prismoid(
     socket = undef, 
     align = "sticky", 
     resolution = 80, 
-    skip_resolve = false, 
+    resolve = undef, 
     debug = false
 ){
-    shape = skip_resolve ? shape : mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand);
+    shape = resolve == true || (len(shape) < 4) || is_undef(shape[3]) ? 
+        mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand)
+        : shape;
     
     if(debug){
         echo (shape = shape);
@@ -599,7 +605,7 @@ module mb_prismoid(
         echo(str("ERROR: ", shape[2][5][0], " / ", shape[2][5][1], " / ", shape[2][5][2]));
     }
     else{
-        sck = shape[2];
+        sck = shape[2][1];
 
         sx = shape[3][2][0];
         sy = shape[3][2][1];
