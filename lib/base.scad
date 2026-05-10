@@ -95,6 +95,20 @@ module mb_base(
                 mb_block_part(block_obj, part="recess_wall_gaps", debug = debug);
             } // End Recess
 
+
+            mb_block_part(block_obj, part=[
+                "my_cube",
+                [
+                    [
+                        "cube",
+                        [
+                            [[100, 100, 100]],
+                            []
+                        ]
+                    ]
+                ]
+            ], debug = debug);
+
             /*
             * Connectors
             */

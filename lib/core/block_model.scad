@@ -27,6 +27,7 @@ function mb_block_obj(
     relief_cut = false,
     relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
     id = "[Block]",
+    custom_modules = ["my_cube"],
     debug = false
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
@@ -108,7 +109,7 @@ function mb_block_obj(
             [],  // 15 - 
             [],  // 16 - 
             [],  // 17 - 
-            [],  // 18 - 
+            [custom_modules],  // 18 - 
             [false],  // 19 - 
             [id, debug, 0.01] // 20 - ID, Debug, Cut Tolerance
         ];
@@ -154,9 +155,22 @@ function mb_block_get_clamp(block_obj) = block_obj[4][4];
 
 function mb_block_get_base_cutout_min_depth(block_obj) = block_obj[4][5];
 
+
 /*
 * TODO Rename or delete
 */
+
+function mb_block_custom_module_mapping(block_obj, mname) = 
+    let(mappings = block_obj[18][0], f = [
+        for(i = [0:len(mappings)-1])
+            if (mappings[i] == mname)
+                i
+    ])
+    len(f) > 0 ? f[0] : undef;
+
+    
+    
+
 
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);

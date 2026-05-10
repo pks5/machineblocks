@@ -1,9 +1,9 @@
 use <geometry.scad>;
 use <block_model.scad>;
-use <../utils.scad>
-use <../prismoid.scad>
+use <../utils.scad>;
+use <../prismoid.scad>;
 
-
+include <../custom.scad>;
 
 function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
     let(
@@ -365,7 +365,7 @@ function mb_block_part_to_prismoid(
     let(part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part)
     
     is_undef(part_shapes) || !is_list(part_shapes) ? undef : 
-    
+        (part_shapes[0] == "union" || part_shapes[0] == "difference" || part_shapes[0] == "intersection"  || part_shapes[0] == "list") ?
         [
             part_shapes[0],
             [
@@ -390,10 +390,10 @@ function mb_block_part_to_prismoid(
                     )
 
             ]
-        ];
+        ] : undef;
 
-module mb_block_part(block_obj, part, part_params = undef, debug = false){
-    mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
+module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
+    mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
     part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
         
@@ -403,7 +403,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
             union(){
                 for(part_shape = part_shapes[1]){
                     if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
                     }
                     else{
                         mb_prismoid(shape = part_shape, mul = mul, debug = debug);
@@ -415,7 +415,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
             difference(){
                 for(part_shape = part_shapes[1]){
                     if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
                     }
                     else{
                         mb_prismoid(shape = part_shape, mul = mul, debug = debug);
@@ -427,7 +427,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
             intersection(){
                 for(part_shape = part_shapes[1]){
                     if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
                     }
                     else{
                         mb_prismoid(shape = part_shape, mul = mul, debug = debug);
@@ -438,15 +438,32 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false){
         else if(part_shapes[0] == "list"){
             for(part_shape = part_shapes[1]){
                 if(is_string(part_shape[0])){
-                    mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                    mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
                 }
                 else{
                     mb_prismoid(shape = part_shape, mul = mul, debug = debug);
                 }
             }
         }
+        else{
+            mapping = mb_block_custom_module_mapping(block_obj, part_shapes[0]);
+            if(mapping == 0){
+                mb_block_part__custom_0(block_obj, part_shapes[1], part_params, debug, mul);
+            }
+            else if(mapping == 1){
+                mb_block_part__custom_1(block_obj, part_shapes[1], part_params, debug, mul);
+            }
+            else if(mapping == 2){
+                mb_block_part__custom_2(block_obj, part_shapes[1], part_params, debug, mul);
+            }
+            else if(mapping == 3){
+                mb_block_part__custom_3(block_obj, part_shapes[1], part_params, debug, mul);
+            }
+        }
     }
 }
+
+
 
 /**
 * CUBE
