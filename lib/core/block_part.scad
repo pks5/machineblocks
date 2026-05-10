@@ -336,7 +336,7 @@ function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socke
         [
             mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
             mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
-            [[min_max[0][2], min_max[1][2]], socket, expand]
+            [[min_max[0][2], min_max[1][2]], socket, undef, expand]
         ] // Shape
     ];
 
@@ -344,7 +344,7 @@ function mb_block_part_to_prismoid(
     block_obj,
     part = undef,
     part_params = undef,
-    radius = undef, 
+    radius = undef,
     mul = undef, 
     add = undef
 ) =
@@ -354,7 +354,7 @@ function mb_block_part_to_prismoid(
         for(part_shape = part_shapes)
             mb_prismoid_shape_resolve(
                 shape = part_shape[0], 
-                radius = radius, 
+                radius = radius,
                 mul = mul,
                 add = add
             )

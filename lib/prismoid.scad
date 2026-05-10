@@ -538,7 +538,8 @@ function mb_prismoid_shape_resolve(
         meta_data = len(shape) > 2 && !is_undef(shape[2]) && is_list(shape[2]) ? shape[2] : undef,
         height = is_undef(height) ? (!is_undef(meta_data) && !is_undef(meta_data[0]) ? meta_data[0] : undef) : height,
         sck = is_undef(socket) ? (!is_undef(meta_data) && !is_undef(meta_data[1]) ? meta_data[1] : undef) : socket,
-        expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : expand,
+        radius = is_undef(radius) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : radius,
+        expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[3]) ? meta_data[3] : undef) : expand,
         
         mul = mb_resolve_quad(mul, default=[1,1,1,1]),
         s = [
