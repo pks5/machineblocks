@@ -708,6 +708,7 @@ module mb_block(
         scale = scale,
         recess = recess,
         recess_wall_thickness = recessWallThickness,
+        recess_wall_gaps = recessWallGaps,
         relief_cut = baseReliefCut
     );
     
@@ -1257,33 +1258,6 @@ module mb_block(
                                                         objectSizeAdjusted = objectSizeAdjusted, 
                                                         
                                                         height = objectSizeZAdjusted,
-                                                        sideAdjustment = sideAdjustment,
-                                                        
-                                                        baseSideAdjustment = bsa,
-                                                        baseMod = baseModRes,
-                                                        baseReliefCut = baseReliefCut,
-                                                        baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
-                                                        baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
-                                                        baseClampHeight = bClampHeight,
-                                                        baseClampThicknessOuter = baseClampThicknessOuter,
-                                                        baseClampOffset = bClampOffset,
-                                                        baseRoundingRadius = baseRoundingRadiusResolved,
-
-                                                        pit = recess,
-                                                        pitRoundingRadius = recessRoundingRadius,
-                                                        pitDepth = resultingPitDepth,
-                                                        pitWallThickness = recWallThickness,
-                                                        pitWallGaps = recessWallGaps,
-                                                        
-                                                        slope = slope,
-                                                        slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
-                                                        slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
-                                                        
-                                                        beveled = beveled,
-                                                        bevelOuter = bevelOuter,
-                                                        bevelOuterAdjusted = bevelOuterAdjusted,
-                                                        bevelMod = bevelCrop,
-                                                        bevelRecess = pitBevel,
                                                         
                                                         connectors = connectors,
                                                         connectorPadding = connectorPadding,
@@ -1850,34 +1824,7 @@ module mb_block(
                                                     objectSizeAdjusted = objectSizeAdjusted, 
 
                                                     height = objectSizeZAdjusted,
-                                                    sideAdjustment = sideAdjustment,
                                                     
-                                                    baseSideAdjustment = bsa,
-                                                    baseMod = baseModRes,
-                                                    baseReliefCut = baseReliefCut,
-                                                    baseReliefCutHeight = baseReliefCutHeight * mbuToMm,
-                                                    baseReliefCutThickness = baseReliefCutThickness * mbuToMm,
-                                                    baseClampHeight = bClampHeight,
-                                                    baseClampThicknessOuter = baseClampThicknessOuter,
-                                                    baseClampOffset = bClampOffset,
-                                                    baseRoundingRadius = baseRoundingRadiusResolved,
-
-                                                    pit = recess,
-                                                    pitRoundingRadius = recessRoundingRadius,
-                                                    pitDepth = resultingPitDepth,
-                                                    pitWallThickness = recWallThickness,
-                                                    pitWallGaps = recessWallGaps,
-                                                    
-                                                    slope = slope,
-                                                    slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
-                                                    slopeBaseHeightUpper = slopeBaseHeightUpper * mbuToMm,
-
-                                                    beveled = beveled,
-                                                    bevelOuter = bevelOuter,
-                                                    bevelOuterAdjusted = bevelOuterAdjusted,
-                                                    bevelMod = bevelCrop,
-                                                    bevelRecess = pitBevel,
-
                                                     connectors = connectors,
                                                     connectorPadding = connectorPadding,
                                                     connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,

@@ -47,34 +47,6 @@ module mb_base(
 
     height, 
     
-    baseSideAdjustment, 
-    sideAdjustment,
-    
-    baseMod,
-    baseReliefCut,
-    baseReliefCutHeight,
-    baseReliefCutThickness,
-    baseClampHeight,
-    baseClampThicknessOuter,
-    baseClampOffset,
-    baseRoundingRadius,
-
-    pit,
-    pitRoundingRadius,
-    pitWallThickness,
-    pitDepth,
-    pitWallGaps,
-    
-    slope,
-    slopeBaseHeightLower,
-    slopeBaseHeightUpper,
-    
-    beveled,
-    bevelOuter,
-    bevelOuterAdjusted,
-    bevelMod,
-    bevelRecess,
-
     connectors = [],
     connectorPadding,
     connectorHeight,
@@ -93,28 +65,6 @@ module mb_base(
     blockId,
     debug
 ){
-    //Variables for cutouts        
-    cutOffset = 0.2;
-    cutMultiplier = 1.1;
-    cutTolerance = 0.01;
-
-    //Object Size Adjusted      
-    objectSizeXAdjusted = objectSizeAdjusted[0];
-    objectSizeYAdjusted = objectSizeAdjusted[1];
-    objectSizeZAdjusted = objectSizeAdjusted[2];
-
-    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
-
-    baseRoundingRadiusZ = baseRoundingRadius[2];
-    
-    bevelBaseClampOuter = mb_inset_quad_lrfh(bevelOuterAdjusted, -baseClampThicknessOuter);
-    baseClampOuterRoundingRadius = mb_base_rel_radius(baseClampThicknessOuter, baseRoundingRadiusZ, minObjectSide, true);
-
-    //TODO create functions in utils and remove this functions here
-    function sideX(side) = 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted;
-    function sideY(side) = 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted;
-
-
     union(){
         
         difference(){
@@ -122,7 +72,7 @@ module mb_base(
             union(){
                 mb_block_part(block_obj, part="base_adjusted", debug = debug);
                 
-                if(baseClampThicknessOuter > 0){ //TODO
+                if(baseClampThicknessOuter){ //TODO
                     mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
                 }
 
@@ -135,37 +85,13 @@ module mb_base(
                 }
             }
 
-                
-              
-
             /*
-            * Pit
+            * Recess
             */
             if(mb_block_get_recess(block_obj)){
                 mb_block_part(block_obj, part="recess", debug = debug);
                 mb_block_part(block_obj, part="recess_wall_gaps", debug = debug);
-
-
-                /*
-                //Pit Wall Gaps
-                pitSizeX = objectSizeMod[0] - (pitWallThickness[0] + pitWallThickness[1]);
-                pitSizeY = objectSizeMod[1] - (pitWallThickness[2] + pitWallThickness[3]);
-                for (gapIndex = [ 0 : 1 : len(pitWallGaps)-1 ]){
-                    
-
-                    
-                    gap = mb_to_array(pitWallGaps[gapIndex]);
-                    side = mb_side_to_int(gap[0]);
-                    if(side < 2){
-                        translate([sideX(side), -0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, 0.5*(height - pitDepth + cutOffset)])
-                            cube([2 * pitWallThickness[side] * cutMultiplier, pitSizeY - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY, pitDepth + cutOffset], center = true);
-                    }  
-                    else{
-                        translate([-0.5 * (mb_undef_to(gap[2]) - mb_undef_to(gap[1])) * gridSizeXY, sideY(side - 2), 0.5*(height - pitDepth + cutOffset)])
-                            cube([pitSizeX - (mb_undef_to(gap[1]) + mb_undef_to(gap[2])) * gridSizeXY , 2 * pitWallThickness[side] * cutMultiplier, pitDepth + cutOffset], center = true);     
-                    } 
-                }*/
-            } // End Pit
+            } // End Recess
 
             /*
             * Connectors
