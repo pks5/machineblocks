@@ -5,7 +5,7 @@ use <../prismoid.scad>
 
 
 
-function mb_block_part_shape(block_obj, part = undef, part_params = undef) = 
+function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
     let(
         size = mb_block_obj_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -348,7 +348,7 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    let(part_shapes = mb_block_part_shape(block_obj, part = part, part_params = part_params))
+    let(part_shapes = mb_block_part_shapes(block_obj, part = part, part_params = part_params))
     is_undef(part_shapes) ? undef : 
     [
         for(part_shape = part_shapes)
@@ -363,11 +363,12 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false){
     mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
+    //part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
+    part_shapes = mb_block_part_shapes(block_obj, part = part, part_params = part_params);
         
     if(!is_undef(part_shapes)){
         for(part_shape = part_shapes)
-            mb_prismoid(shape = part_shape, debug = debug);
+            mb_prismoid(shape = part_shape[0], mul=mul, debug = debug);
     }
 }
 

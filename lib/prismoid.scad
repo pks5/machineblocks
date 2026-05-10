@@ -445,8 +445,8 @@ function mb_prismoid_validate(shape) =
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
     ["ok"];
 
-function mb_prismoid_process(shape, skip_validate = false) = 
-    let(min_max = mb_min_max_points(shape),
+function mb_prismoid_process(planes, static, skip_validate = false) = 
+    let(min_max = mb_min_max_points(planes),
         sx = min_max[3] - min_max[0],
         sy = min_max[4] - min_max[1],
         sz = min_max[5] - min_max[2],
@@ -457,8 +457,9 @@ function mb_prismoid_process(shape, skip_validate = false) =
         [min_max[0], min_max[1], min_max[2]], //min
         [min_max[3], min_max[4], min_max[5]], //max
         [sx, sy, sz],                             //size
-        [cx, cy, cz],                             //center
-        skip_validate ? ["ok"] : mb_prismoid_validate(shape) //validation
+        [cx, cy, cz],   //center
+        static, // static data                            
+        skip_validate ? ["ok"] : mb_prismoid_validate(planes) //validation
     ];
 
 function mb_prismoid_rplane_resolve(v) =
@@ -524,7 +525,15 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
             ]
     ];
 
-function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius = undef, mul = undef, add = undef, expand = undef) =
+function mb_prismoid_shape_resolve(
+    shape, 
+    height = undef, 
+    socket = undef, 
+    radius = undef, 
+    mul = undef, 
+    add = undef, 
+    expand = undef
+) =
     let(
         meta_data = len(shape) > 2 && !is_undef(shape[2]) && is_list(shape[2]) ? shape[2] : undef,
         height = is_undef(height) ? (!is_undef(meta_data) && !is_undef(meta_data[0]) ? meta_data[0] : undef) : height,
@@ -553,8 +562,8 @@ function mb_prismoid_shape_resolve(shape, height = undef, socket = undef, radius
     [
         ex[0],
         ex[1],
-        [height, is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]], undef],
-        mb_prismoid_process(ex)
+        undef,
+        mb_prismoid_process(ex, [is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]]])
     ];
 
 
@@ -601,11 +610,11 @@ module mb_prismoid(
         echo (shape = shape);
     }
 
-    if(shape[3][4][0] != "ok"){
-        echo(str("ERROR: ", shape[2][5][0], " / ", shape[2][5][1], " / ", shape[2][5][2]));
+    if(shape[3][5][0] != "ok"){
+        echo(str("ERROR: ", shape[4][5][1]));
     }
     else{
-        sck = shape[2][1];
+        sck = shape[3][4][0];
 
         sx = shape[3][2][0];
         sy = shape[3][2][1];
