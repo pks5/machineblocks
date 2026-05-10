@@ -160,7 +160,7 @@ function mb_block_obj(
     recess = false,
     recess_depth = "auto",
     recess_wall_thickness = 0.333, 
-    recess_wall_gaps = undef,
+    recess_wall_gaps = [],
     clamp = [0.1, 0.25, 0.5], // [Thickness (mm), Offset (mbu), Height (mbu)]
     clamp_outer = true,
     stud_diameter = 3,
@@ -321,6 +321,16 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
+function mb_recess_wall_gap(block_obj, gap) = 
+    let(gap = mb_to_array(gap),
+        face = mb_side_to_int(gap[0]),
+        recess_walls = mb_block_get_recess_wall_thickness(block_obj))
+        [
+            face,
+            is_undef(gap[1]) ? 0 : gap[1],
+            is_undef(gap[2]) ? 0 : gap[2]
+        ];
+
 function mb_block_part_shape(block_obj, part = undef, part_params = undef) = 
     let(
         size = mb_block_obj_size(block_obj),
@@ -370,38 +380,76 @@ function mb_block_part_shape(block_obj, part = undef, part_params = undef) =
     )] :
 
     part == "recess_wall_gaps" ?  
-    let(rwt = mb_block_get_recess_wall_thickness(block_obj))  
+    let(rwt = mb_block_get_recess_wall_thickness(block_obj),
+        gaps = mb_block_get_recess_wall_gaps(block_obj))  
     [
+        for(gap = gaps)
+        let(gap_data = mb_recess_wall_gap(block_obj, gap),
+            face = gap_data[0])
+        face == 0 ?
         _mb_block_to_shape_parts(
             size = size, 
             mod = mod,
             expand = [[
-                cut_tol,
-                -mod_size[0] + slope[0] + rwt[0] + cut_tol,
-                -rwt[2],
-                -rwt[3],
+                +cut_tol,
+                -rwt[1],
+                -rwt[2] + gap_data[2] ,
+                -rwt[3]+ gap_data[1],
                 -(base_cutout_depth + top_plate_height),
                 base_cutout_depth + top_plate_height - socket[0]
             ]],
             socket = undef,
             bevel = bevel,
             slope = [slope[0], 0, 0, 0]
-        ),
+        ) :
+        face == 1 ? 
         _mb_block_to_shape_parts(
             size = size, 
             mod = mod,
             expand = [[
-                -mod_size[0] + slope[1] + rwt[1] + cut_tol,
+                -rwt[0] + cut_tol,
                 cut_tol,
-                -rwt[2],
-                -rwt[3],
+                -rwt[2] - gap_data[1],
+                -rwt[3] - gap_data[2],
                 -(base_cutout_depth + top_plate_height),
                 base_cutout_depth + top_plate_height - socket[0]
             ]],
             socket = undef,
             bevel = bevel,
             slope = [0, slope[1], 0, 0]
-        )
+        ) :
+        face == 2 ?
+        _mb_block_to_shape_parts(
+            size = size, 
+            mod = mod,
+            expand = [[
+                -rwt[0] - gap_data[1],
+                -rwt[1] - gap_data[2],
+                cut_tol,
+                -rwt[3] + cut_tol,
+                -(base_cutout_depth + top_plate_height),
+                base_cutout_depth + top_plate_height - socket[0]
+            ]],
+            socket = undef,
+            bevel = bevel,
+            slope = [0, 0, slope[2], 0]
+        ) :
+        face == 3 ?
+        _mb_block_to_shape_parts(
+            size = size, 
+            mod = mod,
+            expand = [[
+                -rwt[0] - gap_data[1],
+                -rwt[1] - gap_data[2],
+                -rwt[2] + cut_tol,
+                cut_tol,
+                -(base_cutout_depth + top_plate_height),
+                base_cutout_depth + top_plate_height - socket[0]
+            ]],
+            socket = undef,
+            bevel = bevel,
+            slope = [0, 0, 0, slope[3]]
+        ) : undef
     ] :
 
     part == "base_cutout" ?    
@@ -606,6 +654,9 @@ function mb_block_part_shape(block_obj, part = undef, part_params = undef) =
 * END BLOCK OBJ
 * -------------
 */
+
+
+
 
 function mb_rounding_radius(radius, gridSize) = (is_num(radius) ? 
         [radius * gridSize, radius * gridSize, radius * gridSize, radius * gridSize] 
