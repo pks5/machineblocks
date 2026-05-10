@@ -26,18 +26,18 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
     )
 
     part == "base_adjusted" ?    
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         adj = base_adj,
         socket = socket,
         bevel = mb_bevel_shrink(bevel, base_adj),
         slope = mb_slope_shrink(slope, base_adj)
-    )] :
+    ) :
 
     part == "recess" ?  
     let(rwt = mb_block_get_recess_wall_thickness(block_obj))  
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         expand = [[
@@ -51,12 +51,14 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         socket = undef,
         bevel = bevel,
         slope = slope
-    )] :
+    ) :
 
     part == "recess_wall_gaps" ?  
     let(rwt = mb_block_get_recess_wall_thickness(block_obj),
         gaps = mb_block_get_recess_wall_gaps(block_obj))  
     [
+        "list",
+        [
         for(gap = gaps)
         let(gap_data = mb_recess_wall_gap(block_obj, gap),
             face = gap_data[0])
@@ -124,12 +126,13 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
             bevel = bevel,
             slope = [0, 0, 0, slope[3]]
         ) : undef
+        ]
     ] :
 
     part == "base_cutout" ?    
     let(slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         
@@ -154,13 +157,13 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         socket = [base_cutout_min_depth, 0],
         bevel = bevel,
         slope = slope_pos
-    )] :
+    ) :
 
     part == "stud_base_cutout" ?    
     let(wall_thickness_clamp = (wall_thickness +  clamp[0]),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         expand = [
@@ -176,10 +179,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         socket = undef,
         bevel = bevel,
         slope = undef
-    )] :
+    ) :
 
     part == "base_cutout_clamp_mask" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         adj = [
@@ -194,13 +197,13 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = undef,
         slope = undef,
         socket = socket
-    )]:
+    ):
 
     part == "base_cutout_clamp_cut" ?
     let(wall_thickness_clamp = -(wall_thickness + clamp[0]),
        clamp_offset = -clamp[1],
        slope_pos = mb_slope_filter(slope, -1))
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         expand = [[
@@ -216,10 +219,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = bevel,
         
         slope = undef
-    )]:
+    ):
 
     part == "base_clamp_outer" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         expand = [[
@@ -235,10 +238,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = bevel,
         
         slope = undef
-    )]:
+    ):
 
     part == "relief_cut_mask" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         adj = [
@@ -253,10 +256,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = undef,
         slope = undef,
         socket = undef
-    )]:
+    ):
 
     part == "relief_cut" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         adj = [
@@ -271,10 +274,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = bevel,
         slope = slope,
         socket = socket
-    )]:
+    ):
 
     part == "top_plate_helpers_mask" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         adj = [
@@ -288,10 +291,10 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         ,
         bevel = undef,
         slope = undef
-    )]:
+    ):
 
     part == "top_plate_helpers_cut" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         expand = [
@@ -305,18 +308,26 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         ,
         bevel = bevel,
         slope = undef
-    )]:
+    ):
 
     part == "simple" ?
-    [_mb_block_to_shape_parts(
+    _mb_block_to_shape_parts(
         size = size, 
         mod = mod,
         socket = socket,
         bevel = bevel,
         slope = slope
-    )] : undef;
+    ) : undef;
 
-function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socket = undef, expand = undef, adj = undef) =
+function _mb_block_to_shape_parts(
+    size, 
+    mod, 
+    bevel = undef, 
+    slope = undef, 
+    socket = undef, 
+    expand = undef, 
+    adj = undef
+) =
     let(
         
         mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
@@ -333,10 +344,13 @@ function _mb_block_to_shape_parts(size, mod, bevel = undef, slope = undef, socke
         slope_pos = mb_slope_filter(slope, 1)
     )
     [
+        "list",
         [
-            mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
-            mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
-            [[min_max[0][2], min_max[1][2]], socket, undef, expand]
+            [
+                mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
+                mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
+                [[min_max[0][2], min_max[1][2]], socket, undef, expand]
+            ]
         ] // Shape
     ];
 
@@ -348,27 +362,89 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    let(part_shapes = mb_block_part_shapes(block_obj, part = part, part_params = part_params))
-    is_undef(part_shapes) ? undef : 
-    [
-        for(part_shape = part_shapes)
-            mb_prismoid_shape_resolve(
-                shape = part_shape[0], 
-                radius = radius,
-                mul = mul,
-                add = add
-            )
-    ];
+    let(part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part)
+    
+    is_undef(part_shapes) || !is_list(part_shapes) ? undef : 
+    
+        [
+            part_shapes[0],
+            [
+                for(part_shape = part_shapes[1])
+                 
+                 is_string(part_shape[0]) ?
+
+                    mb_block_part_to_prismoid(
+                        block_obj,
+                        part = part_shape,
+                        part_params = part_params,
+                        radius = radius,
+                        mul = mul, 
+                        add = add
+                    ) : 
+
+                    mb_prismoid_shape_resolve(
+                        shape = part_shape, 
+                        radius = radius,
+                        mul = mul,
+                        add = add
+                    )
+
+            ]
+        ];
 
 module mb_block_part(block_obj, part, part_params = undef, debug = false){
     mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    //part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
-    part_shapes = mb_block_part_shapes(block_obj, part = part, part_params = part_params);
+    part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
         
-    if(!is_undef(part_shapes)){
-        for(part_shape = part_shapes)
-            mb_prismoid(shape = part_shape[0], mul=mul, debug = debug);
+    if(!is_undef(part_shapes) && is_list(part_shapes)){
+        
+        if(part_shapes[0] == "union"){
+            union(){
+                for(part_shape = part_shapes[1]){
+                    if(is_string(part_shape[0])){
+                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                    }
+                    else{
+                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    }
+                }
+            }
+        }
+        else if(part_shapes[0] == "difference"){
+            difference(){
+                for(part_shape = part_shapes[1]){
+                    if(is_string(part_shape[0])){
+                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                    }
+                    else{
+                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    }
+                }
+            }
+        }
+        else if(part_shapes[0] == "intersection"){
+            intersection(){
+                for(part_shape = part_shapes[1]){
+                    if(is_string(part_shape[0])){
+                        mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                    }
+                    else{
+                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    }
+                }
+            }
+        }
+        else if(part_shapes[0] == "list"){
+            for(part_shape = part_shapes[1]){
+                if(is_string(part_shape[0])){
+                    mb_block_part(block_obj, part = part_shape, path_params=path_params, debug = debug);
+                }
+                else{
+                    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                }
+            }
+        }
     }
 }
 
