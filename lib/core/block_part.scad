@@ -363,19 +363,11 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false){
     mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    if(part == "some_custom_module_tbd"){
-
-    }
-    if(part == "some_other_custom_module_tbd"){
+    part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
         
-    }
-    else{
-        part_shapes = mb_block_part_to_prismoid(block_obj, part = part, part_params = part_params, mul=mul);
-        
-        if(!is_undef(part_shapes)){
-            for(part_shape = part_shapes)
-                mb_prismoid(shape = part_shape, debug = debug);
-        }
+    if(!is_undef(part_shapes)){
+        for(part_shape = part_shapes)
+            mb_prismoid(shape = part_shape, debug = debug);
     }
 }
 
