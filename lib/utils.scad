@@ -249,7 +249,7 @@ function mb_block_obj(
             [],  // 16 - 
             [],  // 17 - 
             [],  // 18 - 
-            [],  // 19 - 
+            [false],  // 19 - 
             [id, debug, 0.01] // 20 - ID, Debug, Cut Tolerance
         ];
 
@@ -261,6 +261,7 @@ function mb_block_get_id(block_obj) = block_obj[20][0];
 function mb_block_get_cut_tolerance(block_obj) = block_obj[20][2];
 
 function mb_block_get_bevel(block_obj) = block_obj[1][0];
+function mb_block_get_inverted(block_obj) = block_obj[19][0];
 
 function mb_block_get_slope(block_obj) = block_obj[1][1];
 

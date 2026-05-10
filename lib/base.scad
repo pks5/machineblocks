@@ -72,7 +72,7 @@ module mb_base(
             union(){
                 mb_block_part(block_obj, part="base_adjusted", debug = debug);
                 
-                if(baseClampThicknessOuter){ //TODO
+                if(mb_block_get_inverted(block_obj)){
                     mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
                 }
 
