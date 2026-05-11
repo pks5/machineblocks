@@ -5,6 +5,65 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part__base_adjusted(block_obj) =
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = base_adj,
+        socket = socket,
+        bevel = mb_bevel_shrink(bevel, base_adj),
+        slope = mb_slope_shrink(slope, base_adj)
+    ); 
+
+function mb_block_part__base_cutout(block_obj) = 
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        
+        expand = [
+            [
+                -wall_thickness + slope_neg[0],
+                -wall_thickness + slope_neg[1],
+                -wall_thickness + slope_neg[2],
+                -wall_thickness + slope_neg[3],
+                cut_tol,
+                -(top_plate_height + recess_depth)
+            ],
+            [
+                slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0),
+                slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0),
+                slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0),
+                slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0),
+                cut_tol,
+                -(top_plate_height + recess_depth)
+            ]
+        ],
+        socket = [base_cutout_min_depth, 0],
+        bevel = bevel,
+        slope = slope_pos
+    );
+
 function mb_block_part__relief_cut(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -175,48 +234,6 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj)
     )
-
-    part == "base_adjusted" ?    
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = base_adj,
-        socket = socket,
-        bevel = mb_bevel_shrink(bevel, base_adj),
-        slope = mb_slope_shrink(slope, base_adj)
-    ) :
-
-    
-
-    part == "base_cutout" ?    
-    let(slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1))
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        
-        expand = [
-            [
-                -wall_thickness + slope_neg[0],
-                -wall_thickness + slope_neg[1],
-                -wall_thickness + slope_neg[2],
-                -wall_thickness + slope_neg[3],
-                cut_tol,
-                -(top_plate_height + recess_depth)
-            ],
-            [
-                slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0),
-                slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0),
-                slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0),
-                slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0),
-                cut_tol,
-                -(top_plate_height + recess_depth)
-            ]
-        ],
-        socket = [base_cutout_min_depth, 0],
-        bevel = bevel,
-        slope = slope_pos
-    ) :
 
     part == "stud_base_cutout" ?    
     let(wall_thickness_clamp = (wall_thickness +  clamp[0]),

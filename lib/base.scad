@@ -15,7 +15,7 @@ module mb_base_cutout(
 ){
     difference(){
         //Base Cutout
-        mb_block_part(block_obj, part="base_cutout", debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
         
         //Base Clamp Inner
         difference(){
@@ -72,7 +72,7 @@ module mb_base(
         difference(){
             
             union(){
-                mb_block_part(block_obj, part="base_adjusted", debug = debug);
+                mb_block_part(block_obj, part = mb_block_part__base_adjusted(block_obj), debug = debug);
                 
                 if(mb_block_get_inverted(block_obj)){
                     mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
@@ -111,14 +111,14 @@ module mb_base(
             * Relief Cut
             */
             if(mb_block_get_relief_cut(block_obj)){
-                mb_block_part(block_obj, part=mb_block_part__relief_cut(block_obj), debug = debug);
+                mb_block_part(block_obj, part = mb_block_part__relief_cut(block_obj), debug = debug);
             }
 
             /*
             * Recess
             */
             if(mb_block_get_recess(block_obj)){
-                mb_block_part(block_obj, part=mb_block_part__recess(block_obj), debug = debug);
+                mb_block_part(block_obj, part = mb_block_part__recess(block_obj), debug = debug);
             }
 
 
