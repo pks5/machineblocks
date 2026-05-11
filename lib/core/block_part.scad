@@ -423,14 +423,16 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    let(part_shapes = part)
-    
-    is_undef(part_shapes) || !is_list(part_shapes) ? undef : 
-        (part_shapes[0] == "prismoid" || part_shapes[0] == "union" || part_shapes[0] == "difference" || part_shapes[0] == "intersection"  || part_shapes[0] == "list") ?
+    is_undef(part) || !is_list(part) ? undef : 
+        (part[0] == "prismoid" || 
+        part[0] == "union" || 
+        part[0] == "difference" || 
+        part[0] == "intersection"  || 
+        part[0] == "list") ?
         [
-            part_shapes[0],
+            part[0],
             [
-                for(part_shape = part_shapes[1])
+                for(part_shape = part[1])
                  
                  is_string(part_shape[0]) ?
 
@@ -443,12 +445,13 @@ function mb_block_part_to_prismoid(
                         add = add
                     ) : 
 
+                    part[0] == "prismoid" ?
                     mb_prismoid_shape_resolve(
                         shape = part_shape, 
                         radius = radius,
                         mul = mul,
                         add = add
-                    )
+                    ) : undef
 
             ]
         ] : undef;
