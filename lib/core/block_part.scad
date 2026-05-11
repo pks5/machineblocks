@@ -5,60 +5,37 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
-function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
-    let(
-        size = mb_block_obj_size(block_obj),
+function mb_block_part__recess(block_obj) = 
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
-        relief_cut = mb_block_get_relief_cut_dim(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj)
-    )
-
-    part == "base_adjusted" ?    
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = base_adj,
-        socket = socket,
-        bevel = mb_bevel_shrink(bevel, base_adj),
-        slope = mb_slope_shrink(slope, base_adj)
-    ) :
-
-    part == "recess" ?  
-    let(rwt = mb_block_get_recess_wall_thickness(block_obj))  
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        expand = [[
-            -rwt[0],
-            -rwt[1],
-            -rwt[2],
-            -rwt[3],
-            -(base_cutout_depth + top_plate_height),
-            cut_tol
-        ]],
-        socket = undef,
-        bevel = bevel,
-        slope = slope
-    ) :
-
-    part == "recess_wall_gaps" ?  
-    let(rwt = mb_block_get_recess_wall_thickness(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        rwt = mb_block_get_recess_wall_thickness(block_obj),
         gaps = mb_block_get_recess_wall_gaps(block_obj))  
     [
         "list",
         [
+           _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                expand = [[
+                    -rwt[0],
+                    -rwt[1],
+                    -rwt[2],
+                    -rwt[3],
+                    -(base_cutout_depth + top_plate_height),
+                    cut_tol
+                ]],
+                socket = undef,
+                bevel = bevel,
+                slope = slope
+            ), 
         for(gap = gaps)
         let(gap_data = mb_recess_wall_gap(block_obj, gap),
             face = gap_data[0])
@@ -70,7 +47,7 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
                 +cut_tol,
                 -rwt[1],
                 -rwt[2] + gap_data[2] ,
-                -rwt[3]+ gap_data[1],
+                -rwt[3] + gap_data[1],
                 -(base_cutout_depth + top_plate_height),
                 base_cutout_depth + top_plate_height - socket[0]
             ]],
@@ -127,7 +104,42 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
             slope = [0, 0, 0, slope[3]]
         ) : undef
         ]
-    ] :
+    ];
+
+function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
+    let(
+        size = mb_block_obj_size(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
+        relief_cut = mb_block_get_relief_cut_dim(block_obj),
+        clamp = mb_block_get_clamp(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj)
+    )
+
+    part == "base_adjusted" ?    
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        adj = base_adj,
+        socket = socket,
+        bevel = mb_bevel_shrink(bevel, base_adj),
+        slope = mb_slope_shrink(slope, base_adj)
+    ) :
+
+    
+
+    part == "recess" ?  
+    mb_block_part__recess(block_obj) :
 
     part == "base_cutout" ?    
     let(slope_neg = mb_slope_filter(slope, -1),
