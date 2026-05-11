@@ -9,13 +9,30 @@ function mb_block_part__tube(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
         offset = mb_block_stud_pos(block_obj, [0, 0], true))
-    mb_block_part_cylinder(
-        size = size,
-        mod = mod,
-        diameter = 1, 
-        axis = "z",
-        height_adj = [3, 0],
-        offset = offset);
+    [
+        "difference",
+        [
+            mb_block_part_cylinder(
+                size = size,
+                mod = mod,
+                diameter = 1, 
+                axis = "z",
+                height = 2,
+                height_adj = ["auto", 4],
+                offset = offset
+            ),
+            mb_block_part_cylinder(
+                size = size,
+                mod = mod,
+                diameter = 0.8, 
+                axis = "z",
+                height = 2.2,
+                height_adj = ["auto", 4.1],
+                offset = offset
+            )
+        ]
+    ]    
+    ;
 
 function mb_block_part__base(block_obj) =
     let(size = mb_block_obj_size(block_obj),
@@ -416,8 +433,11 @@ function mb_block_part_cylinder(
     let(mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = undef),
         mod_size = mod_min_max[1][0],
         axis = mb_axis_to_int(axis),
-        h = !is_undef(height) ? height : mod_size[2],
-        h_adj = !is_undef(height_adj) ? [-0.5 * h - height_adj[0], 0.5 * h + height_adj[1]] : [-0.5 * h, 0.5 * h],
+        h = mod_size[2],
+        h_adj = !is_undef(height_adj) ? 
+        [height_adj[0] == "auto" ? 0.5 * h + height_adj[1] - (!is_undef(height) ? height : h) : -0.5 * h - height_adj[0], 
+        height_adj[1] == "auto" ? -0.5 * h + height_adj[0] + (!is_undef(height) ? height : h) : 0.5 * h + height_adj[1]] : 
+        [-0.5 * (!is_undef(height) ? height : h), 0.5 * (!is_undef(height) ? height : h)],
         off = !is_undef(offset) ? [offset[0], offset[1], offset[2] + 0.5*(h_adj[0] + h_adj[1])] : [0, 0, 0.5*(h_adj[0] + h_adj[1])]
     )
     [
