@@ -209,9 +209,9 @@ function mb_recess_wall_gap(block_obj, gap) =
             is_undef(gap[2]) ? 0 : gap[2]
         ];
 
-function mb_block_stud_pos(block_obj, pos, shift = false) = 
+function mb_block_stud_pos(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))
-        [pos[0] - center[0] + (shift ? 1 : 0.5), pos[1] - center[1] + (shift ? 1 : 0.5), 0];
+        [pos[0] - center[0], pos[1] - center[1], pos[2] - center[2]];
         
 
 function mb_block_mod_min_max(size, mod, adj = undef) =

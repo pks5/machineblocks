@@ -8,7 +8,7 @@ include <../custom.scad>;
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
-        offset = mb_block_stud_pos(block_obj, [0, 0], false))
+        offset = mb_block_stud_pos(block_obj, [0.5, 0.5, 2]))
     [
         "difference",
         [
