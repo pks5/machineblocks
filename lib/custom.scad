@@ -15,5 +15,5 @@ module mb_block_part__my_cube__cube(block_obj, module_children, part_params, deb
     cube(size = module_children[0][1], center = true);
 
     // Render children
-    mb_block_part(block_obj, part = module_children[1], part_params=part_params, mul = mul, debug = debug, source_custom_module = 0);
+    mb_block_part(block_obj, part = module_children[1], part_params=part_params, mul = mul, debug = debug);
 }

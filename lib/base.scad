@@ -120,6 +120,8 @@ module mb_base(
             if(mb_block_get_recess(block_obj)){
                 mb_block_part(block_obj, part="recess", debug = debug);
                 mb_block_part(block_obj, part="recess_wall_gaps", debug = debug);
+
+                echo(w = mb_block_part_shapes(block_obj, part = "recess_wall_gaps"), g = mb_block_get_recess_wall_gaps(block_obj));
             } // End Recess
 
 

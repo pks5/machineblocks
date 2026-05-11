@@ -392,7 +392,7 @@ function mb_block_part_to_prismoid(
             ]
         ] : undef;
 
-module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef, source_custom_module = undef){
+module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
     part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
@@ -402,47 +402,47 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
         if(part_shapes[0] == "union"){
             union(){
                 for(part_shape = part_shapes[1]){
-                    if(is_string(part_shape[0])){
+                    //if(is_string(part_shape[0])){
                         mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    }
-                    else{
-                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    }
+                    //}
+                    //else{
+                    //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    //}
                 }
             }
         }
         else if(part_shapes[0] == "difference"){
             difference(){
                 for(part_shape = part_shapes[1]){
-                    if(is_string(part_shape[0])){
+                    //if(is_string(part_shape[0])){
                         mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    }
-                    else{
-                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    }
+                    //}
+                    //else{
+                    //    *mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    //}
                 }
             }
         }
         else if(part_shapes[0] == "intersection"){
             intersection(){
                 for(part_shape = part_shapes[1]){
-                    if(is_string(part_shape[0])){
+                    //if(is_string(part_shape[0])){
                         mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    }
-                    else{
-                        mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    }
+                    //}
+                    //else{
+                    //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                    //}
                 }
             }
         }
         else if(part_shapes[0] == "list"){
             for(part_shape = part_shapes[1]){
-                if(is_string(part_shape[0])){
+                //if(is_string(part_shape[0])){
                     mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                }
-                else{
-                    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                }
+                //}
+                //else{
+                //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
+                //}
             }
         }
         else if(part_shapes[0] == "prismoid"){
@@ -451,7 +451,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_block_part(block_obj, part = part_shapes[1][1], part_params=part_params, mul = mul, debug = debug);
         }
         else{
-            mapping = !is_undef(source_custom_module) ? source_custom_module : mb_block_custom_module_mapping(block_obj, part_shapes[0]);
+            mapping = mb_block_custom_module_mapping(block_obj, part_shapes[0]);
             if(mapping == 0){
                 mb_block_part__custom_0(block_obj, part_shapes[1], part_params, debug, mul);
             }
