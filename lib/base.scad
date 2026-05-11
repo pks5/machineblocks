@@ -18,10 +18,7 @@ module mb_base_cutout(
         mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
         
         //Base Clamp Inner
-        difference(){
-            mb_block_part(block_obj, part="base_cutout_clamp_mask", debug = debug);
-            mb_block_part(block_obj, part="base_cutout_clamp_cut", debug = debug);
-        }
+        mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
 
         //Top Plate Helpers
         if(mb_block_get_top_plate_helpers(block_obj)){ 
@@ -74,8 +71,8 @@ module mb_base(
             union(){
                 mb_block_part(block_obj, part = mb_block_part__base_adjusted(block_obj), debug = debug);
                 
-                if(mb_block_get_inverted(block_obj)){
-                    mb_block_part(block_obj, part="base_clamp_outer", debug = debug);
+                if(true || mb_block_get_inverted(block_obj)){
+                    mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 }
 
                 //Just for testing TO BE REMOVED

@@ -21,6 +21,33 @@ function mb_block_part__base_adjusted(block_obj) =
         slope = mb_slope_shrink(slope, base_adj)
     ); 
 
+function mb_block_part__base_clamp_outer(block_obj) = 
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        clamp = mb_block_get_clamp(block_obj),
+        slope = mb_block_get_slope(block_obj))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        expand = [[
+                base_adj[0] + clamp[0],
+                base_adj[1] + clamp[0],
+                base_adj[2] + clamp[0],
+                base_adj[3] + clamp[0],
+                -clamp[1],
+                -(mod_size[2] - clamp[1] - clamp[2])
+            ]]
+        ,
+        socket = undef,
+        bevel = bevel,
+        
+        slope = undef
+    );
+
 function mb_block_part__base_cutout(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -63,6 +90,59 @@ function mb_block_part__base_cutout(block_obj) =
         bevel = bevel,
         slope = slope_pos
     );
+
+function mb_block_part__base_cutout_clamp(block_obj) = 
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        clamp = mb_block_get_clamp(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        wall_thickness_clamp = -(wall_thickness + clamp[0]),
+        clamp_offset = -clamp[1],
+        slope_pos = mb_slope_filter(slope, -1))
+    [
+        "difference",
+        [
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                adj = [
+                    0,
+                    0,
+                    0,
+                    0,
+                    -clamp[1],
+                    -(mod_size[2] - clamp[1] - clamp[2])
+                    ]
+                ,
+                bevel = undef,
+                slope = undef,
+                socket = socket
+            ),
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                expand = [[
+                        wall_thickness_clamp + slope_pos[0],
+                        wall_thickness_clamp + slope_pos[1],
+                        wall_thickness_clamp + slope_pos[2],
+                        wall_thickness_clamp + slope_pos[3],
+                        -clamp[1] + cut_tol,
+                        -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol
+                    ]]
+                ,
+                socket = undef,
+                bevel = bevel,
+                
+                slope = undef
+            )
+        ]
+    ];
 
 function mb_block_part__relief_cut(block_obj) =
     let(size = mb_block_obj_size(block_obj),
@@ -256,69 +336,6 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = bevel,
         slope = undef
     ) :
-
-    part == "base_cutout_clamp_mask" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = [
-            0,
-            0,
-            0,
-            0,
-            -clamp[1],
-            -(mod_size[2] - clamp[1] - clamp[2])
-            ]
-        ,
-        bevel = undef,
-        slope = undef,
-        socket = socket
-    ):
-
-    part == "base_cutout_clamp_cut" ?
-    let(wall_thickness_clamp = -(wall_thickness + clamp[0]),
-       clamp_offset = -clamp[1],
-       slope_pos = mb_slope_filter(slope, -1))
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        expand = [[
-                wall_thickness_clamp + slope_pos[0],
-                wall_thickness_clamp + slope_pos[1],
-                wall_thickness_clamp + slope_pos[2],
-                wall_thickness_clamp + slope_pos[3],
-                -clamp[1] + cut_tol,
-                -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol
-            ]]
-        ,
-        socket = undef,
-        bevel = bevel,
-        
-        slope = undef
-    ):
-
-    part == "base_clamp_outer" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        expand = [[
-                base_adj[0] + clamp[0],
-                base_adj[1] + clamp[0],
-                base_adj[2] + clamp[0],
-                base_adj[3] + clamp[0],
-                -clamp[1],
-                -(mod_size[2] - clamp[1] - clamp[2])
-            ]]
-        ,
-        socket = undef,
-        bevel = bevel,
-        
-        slope = undef
-    ):
-
-    
-
-    
 
     part == "top_plate_helpers_mask" ?
     _mb_block_to_shape_parts(
