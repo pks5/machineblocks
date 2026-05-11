@@ -436,19 +436,17 @@ function mb_block_part_cylinder(
         h = mod_size[axis],
         h_adj = is_undef(length_adj) || length_adj == "auto" || length_adj == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
             [length_adj[0] == "auto" ? 0.5 * h + length_adj[1] - (!is_undef(length) ? length : h) : -0.5 * h - length_adj[0], 
-            length_adj[1] == "auto" ? -0.5 * h - length_adj[0] + (!is_undef(length) ? length : h) : 0.5 * h + length_adj[1]], 
-        off_l = 0.5*(h_adj[0] + h_adj[1])
+            length_adj[1] == "auto" ? -0.5 * h - length_adj[0] + (!is_undef(length) ? length : h) : 0.5 * h + length_adj[1]]
+        
     )
     [
         "cylinder",
         [
             [
+                axis,
                 diameter,
-                h_adj[1] - h_adj[0],
                 h_adj,
-                offset,
-                off_l,
-                axis
+                offset
             ]
         ]
     ];
@@ -593,22 +591,13 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
             else if(type == "cylinder"){
-                diameter = list[0][0];
-                height = list[0][1];
-                
-                offset = is_undef(list[0][3]) ? [0, 0, 0] : list[0][3];
-                off_l = is_undef(list[0][4]) ? [0, 0, 0] : list[0][4];
-                axis = is_undef(list[0][5]) ? 2 : list[0][5];
-                
-                
-                off_0 = [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0];
-                off = [off_0[0] + (axis == 0 ? off_l : 0), off_0[1] + (axis == 1 ? off_l : 0), off_0[2] + (axis == 2 ? off_l : 0)];
-
-                rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
-
-                translate([off[0] * mul[0], off[1] * mul[1], off[2] * mul[2]])
-                    rotate(rot)
-                        cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = height * mul[axis], center = true, $fn = 100);
+                mb_cylinder(
+                    axis = list[0][0],
+                    diameter = list[0][1],
+                    start_end = list[0][2],
+                    offset = list[0][3],
+                    mul = mul
+                );
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
@@ -632,7 +621,25 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
     }
 }
 
+module mb_cylinder(
+    diameter,
+    start_end,
+    axis = 2,
+    offset = [0, 0, 0],
+    
+    mul = [1, 1, 1]
+){
+    length = start_end[1] - start_end[0];
+    length_offset = 0.5*(start_end[0] + start_end[1]);
+    off_0 = [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0];
+    off = [off_0[0] + (axis == 0 ? length_offset : 0), off_0[1] + (axis == 1 ? length_offset : 0), off_0[2] + (axis == 2 ? length_offset : 0)];
 
+    rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
+
+    translate([off[0] * mul[0], off[1] * mul[1], off[2] * mul[2]])
+        rotate(rot)
+            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = length * mul[axis], center = true, $fn = 100);
+}
 
 /**
 * CUBE
