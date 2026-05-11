@@ -132,6 +132,8 @@ function mb_block_get_base_cutout_depth(block_obj) = block_obj[4][0];
 function mb_block_get_base_adj(block_obj) = block_obj[6][1];
 function mb_block_get_size_mod(block_obj) = block_obj[6][0];
 
+function mb_block_get_size(block_obj) = block_obj[0][0][0];
+function mb_block_get_center(block_obj) = block_obj[0][0][2];
 function mb_block_get_mod_size(block_obj) = block_obj[0][1][0];
 
 function mb_block_get_wall_thickness(block_obj) = block_obj[4][3];
@@ -207,7 +209,41 @@ function mb_recess_wall_gap(block_obj, gap) =
             is_undef(gap[2]) ? 0 : gap[2]
         ];
 
+function mb_block_stud_pos(block_obj, pos, shift = false) = 
+    let(center = mb_block_get_center(block_obj))
+        [pos[0] - center[0] + (shift ? 1 : 0.5), pos[1] - center[1] + (shift ? 1 : 0.5), 0];
+        
 
+function mb_block_mod_min_max(size, mod, adj = undef) =
+    let(bb = mb_bounding_box(size),
+        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
+        mod_final = is_undef(adj) ? mod : mb_array_add(mod, adj),
+        mi = [-mod_final[0], -mod_final[2], is_undef(adj) ? 0 : -adj[4]],
+        ma = [size[0] + mod_final[1], size[1] + mod_final[3], size[2] + mod_final[5]],
+        mod_size = [
+                    size[0] + mod_final[0] + mod_final[1],
+                    size[1] + mod_final[2] + mod_final[3],
+                    size[2] + mod_final[4] + mod_final[5]
+                ],
+        
+        min_max = [
+                [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
+                [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
+            ],
+
+        
+    )
+        [
+            [size, bb, c],
+            [
+                mod_size,
+                mb_bounding_box(mod_size),
+                min_max
+            ],
+            
+            [mi, ma]
+            
+        ];
 /*
 * Methods
 */

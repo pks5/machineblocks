@@ -87,36 +87,7 @@ function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
     )
     mul;
 
-function mb_block_mod_min_max(size, mod, adj = undef) =
-    let(bb = mb_bounding_box(size),
-        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
-        mod_final = is_undef(adj) ? mod : mb_array_add(mod, adj),
-        mi = [-mod_final[0], -mod_final[2], is_undef(adj) ? 0 : -adj[4]],
-        ma = [size[0] + mod_final[1], size[1] + mod_final[3], size[2] + mod_final[5]],
-        mod_size = [
-                    size[0] + mod_final[0] + mod_final[1],
-                    size[1] + mod_final[2] + mod_final[3],
-                    size[2] + mod_final[4] + mod_final[5]
-                ],
-        
-        min_max = [
-                [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-                [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
-            ],
 
-        
-    )
-        [
-            [size, bb, c],
-            [
-                mod_size,
-                mb_bounding_box(mod_size),
-                min_max
-            ],
-            
-            [mi, ma]
-            
-        ];
 
 
 

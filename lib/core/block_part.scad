@@ -5,6 +5,18 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part__tube(block_obj) = 
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        offset = mb_block_stud_pos(block_obj, [0, 0], true))
+    mb_block_part_cylinder(
+        size = size,
+        mod = mod,
+        diameter = 1, 
+        axis = "z",
+        height_adj = [3, 0],
+        offset = offset);
+
 function mb_block_part__base(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -392,7 +404,33 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = undef
     );
 
-
+function mb_block_part_cylinder(
+    size,
+    mod,
+    diameter,
+    axis = "z",
+    height = undef,
+    height_adj = undef,
+    offset = undef
+) = 
+    let(mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = undef),
+        mod_size = mod_min_max[1][0],
+        axis = mb_axis_to_int(axis),
+        h = !is_undef(height) ? height : mod_size[2],
+        h_adj = !is_undef(height_adj) ? [-0.5 * h - height_adj[0], 0.5 * h + height_adj[1]] : [-0.5 * h, 0.5 * h],
+        off = !is_undef(offset) ? [offset[0], offset[1], offset[2] + 0.5*(h_adj[0] + h_adj[1])] : [0, 0, 0.5*(h_adj[0] + h_adj[1])]
+    )
+    [
+        "cylinder",
+        [
+            [
+                diameter,
+                h_adj[1] - h_adj[0],
+                h_adj,
+                off
+            ]
+        ]
+    ];
 
 function mb_block_part_prismoid(
     size, 
@@ -530,6 +568,15 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             }
             else if(type == "prismoid"){
                 mb_prismoid(shape = list[0], mul = mul, debug = debug);
+                
+                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
+            }
+            else if(type == "cylinder"){
+                diameter = list[0][0];
+                height = list[0][1]; echo(h = list[0]);
+                offset = list[0][3];
+                translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
+                cylinder(d =  diameter * mul[0], h = height * mul[2], center = true, $fn = 100);
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
