@@ -144,6 +144,56 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         ]
     ];
 
+function mb_block_part__top_plate_helpers(block_obj) =
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj)) 
+    [
+        "difference",
+        [
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                adj = [
+                    base_adj[0] + cut_tol,
+                    base_adj[1] + cut_tol,
+                    base_adj[2] + cut_tol,
+                    base_adj[3] + cut_tol,
+                    -(base_cutout_depth - top_plate_helpers[1]),
+                    -(top_plate_height + recess_depth)
+                    ]
+                ,
+                bevel = undef,
+                slope = undef
+            ),
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                expand = [
+                    -wall_thickness - top_plate_helpers[0],
+                    -wall_thickness - top_plate_helpers[0],
+                    -wall_thickness - top_plate_helpers[0],
+                    -wall_thickness - top_plate_helpers[0],
+                    -(base_cutout_depth - top_plate_helpers[1]) + cut_tol,
+                    -(top_plate_height + recess_depth) + cut_tol
+                    ]
+                ,
+                bevel = bevel,
+                slope = undef
+            )
+        ]
+    ];
+
 function mb_block_part__relief_cut(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -336,40 +386,6 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         bevel = bevel,
         slope = undef
     ) :
-
-    part == "top_plate_helpers_mask" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = [
-            base_adj[0] + cut_tol,
-            base_adj[1] + cut_tol,
-            base_adj[2] + cut_tol,
-            base_adj[3] + cut_tol,
-            -(base_cutout_depth - top_plate_helpers[1]),
-            -(top_plate_height + recess_depth)
-            ]
-        ,
-        bevel = undef,
-        slope = undef
-    ):
-
-    part == "top_plate_helpers_cut" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        expand = [
-            -wall_thickness - top_plate_helpers[0],
-            -wall_thickness - top_plate_helpers[0],
-            -wall_thickness - top_plate_helpers[0],
-            -wall_thickness - top_plate_helpers[0],
-            -(base_cutout_depth - top_plate_helpers[1]) + cut_tol,
-            -(top_plate_height + recess_depth) + cut_tol
-            ]
-        ,
-        bevel = bevel,
-        slope = undef
-    ):
 
     part == "simple" ?
     _mb_block_to_shape_parts(

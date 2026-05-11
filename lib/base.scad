@@ -22,10 +22,7 @@ module mb_base_cutout(
 
         //Top Plate Helpers
         if(mb_block_get_top_plate_helpers(block_obj)){ 
-            difference(){
-                mb_block_part(block_obj, part="top_plate_helpers_mask", debug = debug);
-                mb_block_part(block_obj, part="top_plate_helpers_cut", debug = debug);
-            }
+            mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
         }    
     }
 }
