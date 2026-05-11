@@ -12,7 +12,7 @@ function mb_block_part__base_adjusted(block_obj) =
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj))
-    _mb_block_to_shape_parts(
+    mb_block_part_prismoid(
         size = size, 
         mod = mod,
         adj = base_adj,
@@ -30,7 +30,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
         bevel = mb_block_get_bevel(block_obj), 
         clamp = mb_block_get_clamp(block_obj),
         slope = mb_block_get_slope(block_obj))
-    _mb_block_to_shape_parts(
+    mb_block_part_prismoid(
         size = size, 
         mod = mod,
         expand = [[
@@ -64,7 +64,7 @@ function mb_block_part__base_cutout(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
-    _mb_block_to_shape_parts(
+    mb_block_part_prismoid(
         size = size, 
         mod = mod,
         
@@ -108,7 +108,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
     [
         "difference",
         [
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 adj = [
@@ -124,7 +124,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 slope = undef,
                 socket = socket
             ),
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 expand = [[
@@ -161,7 +161,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
     [
         "difference",
         [
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 adj = [
@@ -176,7 +176,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                 bevel = undef,
                 slope = undef
             ),
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 expand = [
@@ -209,7 +209,7 @@ function mb_block_part__relief_cut(block_obj) =
     [
         "difference",
         [
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 adj = [
@@ -225,7 +225,7 @@ function mb_block_part__relief_cut(block_obj) =
                 slope = undef,
                 socket = undef
             ),
-            _mb_block_to_shape_parts(
+            mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 adj = [
@@ -260,7 +260,7 @@ function mb_block_part__recess(block_obj) =
     [
         "list",
         [
-           _mb_block_to_shape_parts(
+           mb_block_part_prismoid(
                 size = size, 
                 mod = mod,
                 expand = [[
@@ -279,7 +279,7 @@ function mb_block_part__recess(block_obj) =
         let(gap_data = mb_recess_wall_gap(block_obj, gap),
             face = gap_data[0])
         face == 0 ?
-        _mb_block_to_shape_parts(
+        mb_block_part_prismoid(
             size = size, 
             mod = mod,
             expand = [[
@@ -295,7 +295,7 @@ function mb_block_part__recess(block_obj) =
             slope = [slope[0], 0, 0, 0]
         ) :
         face == 1 ? 
-        _mb_block_to_shape_parts(
+        mb_block_part_prismoid(
             size = size, 
             mod = mod,
             expand = [[
@@ -311,7 +311,7 @@ function mb_block_part__recess(block_obj) =
             slope = [0, slope[1], 0, 0]
         ) :
         face == 2 ?
-        _mb_block_to_shape_parts(
+        mb_block_part_prismoid(
             size = size, 
             mod = mod,
             expand = [[
@@ -327,7 +327,7 @@ function mb_block_part__recess(block_obj) =
             slope = [0, 0, slope[2], 0]
         ) :
         face == 3 ?
-        _mb_block_to_shape_parts(
+        mb_block_part_prismoid(
             size = size, 
             mod = mod,
             expand = [[
@@ -360,7 +360,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         wall_thickness_clamp = (wall_thickness +  clamp[0]),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
-    _mb_block_to_shape_parts(
+    mb_block_part_prismoid(
         size = size, 
         mod = mod,
         expand = [
@@ -378,36 +378,9 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = undef
     );
 
-function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
-    let(
-        size = mb_block_obj_size(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
-        relief_cut = mb_block_get_relief_cut_dim(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj)
-    )
 
-    part == "simple" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        socket = socket,
-        bevel = bevel,
-        slope = slope
-    ) : undef;
 
-function _mb_block_to_shape_parts(
+function mb_block_part_prismoid(
     size, 
     mod, 
     bevel = undef, 
@@ -450,7 +423,7 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    let(part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part)
+    let(part_shapes = part)
     
     is_undef(part_shapes) || !is_list(part_shapes) ? undef : 
         (part_shapes[0] == "prismoid" || part_shapes[0] == "union" || part_shapes[0] == "difference" || part_shapes[0] == "intersection"  || part_shapes[0] == "list") ?
@@ -483,7 +456,7 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
-    part_node = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
+    part_node = part;
         
     if(!is_undef(part_node) && is_list(part_node)){
         type = part_node[0];
