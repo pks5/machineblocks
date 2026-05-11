@@ -5,6 +5,20 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part__base(block_obj) =
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj))
+    mb_block_part_prismoid(
+        size = size, 
+        mod = mod,
+        socket = socket,
+        bevel = bevel,
+        slope = slope
+    ); 
+
 function mb_block_part__base_adjusted(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -415,6 +429,14 @@ function mb_block_part_prismoid(
         ] // Shape
     ];
 
+function mb_block_part_type_is_builtin(type) = 
+    is_string(type) && (
+        type == "prismoid" || 
+        type == "union" || 
+        type == "difference" || 
+        type == "intersection"  || 
+        type == "list");
+
 function mb_block_part_to_prismoid(
     block_obj,
     part = undef,
@@ -424,30 +446,28 @@ function mb_block_part_to_prismoid(
     add = undef
 ) =
     is_undef(part) || !is_list(part) ? undef : 
-        (part[0] == "prismoid" || 
-        part[0] == "union" || 
-        part[0] == "difference" || 
-        part[0] == "intersection"  || 
-        part[0] == "list") ?
+        let(type = part[0], 
+            list = part[1])
+        mb_block_part_type_is_builtin(type) ?
         [
-            part[0],
+            type,
             [
-                for(part_shape = part[1])
+                for(list_item = list)
                  
-                 is_string(part_shape[0]) ?
+                 mb_block_part_type_is_builtin(list_item[0]) ?
 
                     mb_block_part_to_prismoid(
                         block_obj,
-                        part = part_shape,
+                        part = list_item,
                         part_params = part_params,
                         radius = radius,
                         mul = mul, 
                         add = add
                     ) : 
 
-                    part[0] == "prismoid" ?
+                    type == "prismoid" ?
                     mb_prismoid_shape_resolve(
-                        shape = part_shape, 
+                        shape = list_item, 
                         radius = radius,
                         mul = mul,
                         add = add
@@ -459,11 +479,9 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
-    part_node = part;
-        
-    if(!is_undef(part_node) && is_list(part_node)){
-        type = part_node[0];
-        list = part_node[1];
+    if(!is_undef(part) && is_list(part)){
+        type = part[0];
+        list = part[1];
         list_len = len(list);
         if(is_string(type) && list_len > 0){
             if(type == "list"){
@@ -562,7 +580,7 @@ module mb_cube(
         mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
         prismoid_shape = mb_block_part_to_prismoid(
             block_obj,
-            part = "simple",
+            part = mb_block_part__base(block_obj),
             radius = radius,
             mul = mul
         );
