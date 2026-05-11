@@ -585,7 +585,7 @@ module mb_cube(
             mul = mul
         );
 
-        mb_prismoid(shape = prismoid_shape[0], align = center ? "center" : "start", resolution = resolution, debug = debug);
+        mb_prismoid(shape = prismoid_shape[1][0], align = center ? "center" : "start", resolution = resolution, debug = debug);
     }
 }
 
