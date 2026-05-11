@@ -209,7 +209,7 @@ function mb_recess_wall_gap(block_obj, gap) =
             is_undef(gap[2]) ? 0 : gap[2]
         ];
 
-function mb_block_stud_pos(block_obj, pos) = 
+function mb_block_pos_to_offset(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))
         [pos[0] - center[0], pos[1] - center[1], pos[2] - center[2]];
         

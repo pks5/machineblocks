@@ -8,13 +8,13 @@ include <../custom.scad>;
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
-        offset = mb_block_stud_pos(block_obj, [0.5, 0.5, 2]))
+        offset = mb_block_pos_to_offset(block_obj, [0.5, 0.5, 2]))
     [
         "difference",
         [
             mb_block_part_cylinder(
-                size = size,
-                mod = mod,
+                block_size = size,
+                block_mod = mod,
                 diameter = 1, 
                 axis = "y",
                 length = 2,
@@ -22,8 +22,8 @@ function mb_block_part__tube(block_obj) =
                 offset = offset
             ),
             mb_block_part_cylinder(
-                size = size,
-                mod = mod,
+                block_size = size,
+                block_mod = mod,
                 diameter = 0.8, 
                 axis = "y",
                 length = 2.2,
@@ -422,15 +422,15 @@ function mb_block_part__stud_base_cutout(block_obj) =
     );
 
 function mb_block_part_cylinder(
-    size,
-    mod,
+    block_size,
+    block_mod,
     diameter,
     axis = "z",
     length = undef,
     length_adj = undef,
     offset = undef
 ) = 
-    let(mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = undef),
+    let(mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = undef),
         mod_size = mod_min_max[1][0],
         axis = mb_axis_to_int(axis),
         h = mod_size[axis],
@@ -594,7 +594,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mb_cylinder(
                     axis = list[0][0],
                     diameter = list[0][1],
-                    start_end = list[0][2],
+                    length = list[0][2],
                     offset = list[0][3],
                     mul = mul
                 );
@@ -623,14 +623,14 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
 
 module mb_cylinder(
     diameter,
-    start_end,
+    length,
     axis = 2,
     offset = [0, 0, 0],
     
     mul = [1, 1, 1]
 ){
-    length = start_end[1] - start_end[0];
-    length_offset = 0.5*(start_end[0] + start_end[1]);
+    hl = is_list(length) ? length[1] - length[0] : length;
+    length_offset = is_list(length) ? 0.5*(length[0] + length[1]) : 0;
     off_0 = [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0];
     off = [off_0[0] + (axis == 0 ? length_offset : 0), off_0[1] + (axis == 1 ? length_offset : 0), off_0[2] + (axis == 2 ? length_offset : 0)];
 
@@ -638,7 +638,7 @@ module mb_cylinder(
 
     translate([off[0] * mul[0], off[1] * mul[1], off[2] * mul[2]])
         rotate(rot)
-            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = length * mul[axis], center = true, $fn = 100);
+            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = true, $fn = 100);
 }
 
 /**
