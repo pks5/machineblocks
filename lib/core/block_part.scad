@@ -422,76 +422,77 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
-    part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
+    part_node = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
         
-    if(!is_undef(part_shapes) && is_list(part_shapes)){
-        type = part_shapes[0];
-        list = part_shapes[1];
+    if(!is_undef(part_node) && is_list(part_node)){
+        type = part_node[0];
+        list = part_node[1];
         list_len = len(list);
-
-        if(type == "list"){
-            for(list_item = list){
-                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
-            }
-        }
-        else if(type == "union"){
-            if(list_len > 1){
-                union(){
-                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                    for(i = [1 : list_len - 1]){
-                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
-                    }
+        if(is_string(type) && list_len > 0){
+            if(type == "list"){
+                for(list_item = list){
+                    mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
                 }
             }
-            else{
-                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-            }
-        }
-        else if(type == "difference"){
-            if(list_len > 1){
-                difference(){
-                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                    for(i = [1 : list_len - 1]){
-                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+            else if(type == "union"){
+                if(list_len > 1){
+                    union(){
+                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                        for(i = [1 : list_len - 1]){
+                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                        }
                     }
                 }
-            }
-            else{
-                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-            }
-        }
-        else if(type == "intersection"){
-            if(list_len > 1){
-                intersection(){
+                else{
                     mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                    for(i = [1 : list_len - 1]){
-                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
-                    }
                 }
             }
+            else if(type == "difference"){
+                if(list_len > 1){
+                    difference(){
+                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                        for(i = [1 : list_len - 1]){
+                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                        }
+                    }
+                }
+                else{
+                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                }
+            }
+            else if(type == "intersection"){
+                if(list_len > 1){
+                    intersection(){
+                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                        for(i = [1 : list_len - 1]){
+                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                        }
+                    }
+                }
+                else{
+                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                }
+            }
+            else if(type == "prismoid"){
+                mb_prismoid(shape = list[0], mul = mul, debug = debug);
+                
+                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
+            }
             else{
-                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-            }
-        }
-        else if(type == "prismoid"){
-            mb_prismoid(shape = list[0], mul = mul, debug = debug);
-            
-            mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
-        }
-        else{
-            mapping = mb_block_custom_module_mapping(block_obj, type);
-            
-            if(mapping == 0){
-                mb_block_part__custom_0(block_obj, list, part_params, debug, mul);
-            }
-            else if(mapping == 1){
-                mb_block_part__custom_1(block_obj, list, part_params, debug, mul);
-            }
-            else if(mapping == 2){
-                mb_block_part__custom_2(block_obj, list, part_params, debug, mul);
-            }
-            else if(mapping == 3){
-                mb_block_part__custom_3(block_obj, list, part_params, debug, mul);
+                mapping = mb_block_custom_module_mapping(block_obj, type);
+                
+                if(mapping == 0){
+                    mb_block_part__custom_0(block_obj, list, part_params, debug, mul);
+                }
+                else if(mapping == 1){
+                    mb_block_part__custom_1(block_obj, list, part_params, debug, mul);
+                }
+                else if(mapping == 2){
+                    mb_block_part__custom_2(block_obj, list, part_params, debug, mul);
+                }
+                else if(mapping == 3){
+                    mb_block_part__custom_3(block_obj, list, part_params, debug, mul);
+                }
             }
         }
     }
