@@ -5,6 +5,56 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part__relief_cut(block_obj) =
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        relief_cut = mb_block_get_relief_cut_dim(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj)) 
+    [
+        "difference",
+        [
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                adj = [
+                    base_adj[0] + cut_tol,
+                    base_adj[1] + cut_tol,
+                    base_adj[2] + cut_tol,
+                    base_adj[3] + cut_tol,
+                    0,
+                    -(mod_size[2] - relief_cut[1])
+                    ]
+                ,
+                bevel = undef,
+                slope = undef,
+                socket = undef
+            ),
+            _mb_block_to_shape_parts(
+                size = size, 
+                mod = mod,
+                adj = [
+                    base_adj[0] - relief_cut[0],
+                    base_adj[1] - relief_cut[0],
+                    base_adj[2] - relief_cut[0],
+                    base_adj[3] - relief_cut[0],
+                    cut_tol,
+                    -(mod_size[2] - relief_cut[1]) + cut_tol
+                    ]
+                ,
+                bevel = bevel,
+                slope = slope,
+                socket = socket
+            )
+        ]
+    ];
+
 function mb_block_part__recess(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -60,7 +110,7 @@ function mb_block_part__recess(block_obj) =
             size = size, 
             mod = mod,
             expand = [[
-                -rwt[0] + cut_tol,
+                -rwt[0],
                 cut_tol,
                 -rwt[2] - gap_data[1],
                 -rwt[3] - gap_data[2],
@@ -79,7 +129,7 @@ function mb_block_part__recess(block_obj) =
                 -rwt[0] - gap_data[1],
                 -rwt[1] - gap_data[2],
                 cut_tol,
-                -rwt[3] + cut_tol,
+                -rwt[3],
                 -(base_cutout_depth + top_plate_height),
                 base_cutout_depth + top_plate_height - socket[0]
             ]],
@@ -94,7 +144,7 @@ function mb_block_part__recess(block_obj) =
             expand = [[
                 -rwt[0] - gap_data[1],
                 -rwt[1] - gap_data[2],
-                -rwt[2] + cut_tol,
+                -rwt[2],
                 cut_tol,
                 -(base_cutout_depth + top_plate_height),
                 base_cutout_depth + top_plate_height - socket[0]
@@ -137,9 +187,6 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
     ) :
 
     
-
-    part == "recess" ?  
-    mb_block_part__recess(block_obj) :
 
     part == "base_cutout" ?    
     let(slope_neg = mb_slope_filter(slope, -1),
@@ -252,41 +299,9 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         slope = undef
     ):
 
-    part == "relief_cut_mask" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = [
-            base_adj[0] + cut_tol,
-            base_adj[1] + cut_tol,
-            base_adj[2] + cut_tol,
-            base_adj[3] + cut_tol,
-            0,
-            -(mod_size[2] - relief_cut[1])
-            ]
-        ,
-        bevel = undef,
-        slope = undef,
-        socket = undef
-    ):
+    
 
-    part == "relief_cut" ?
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        adj = [
-            base_adj[0] - relief_cut[0],
-            base_adj[1] - relief_cut[0],
-            base_adj[2] - relief_cut[0],
-            base_adj[3] - relief_cut[0],
-            cut_tol,
-            -(mod_size[2] - relief_cut[1]) + cut_tol
-            ]
-        ,
-        bevel = bevel,
-        slope = slope,
-        socket = socket
-    ):
+    
 
     part == "top_plate_helpers_mask" ?
     _mb_block_to_shape_parts(
@@ -410,71 +425,73 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
     part_shapes = is_string(part) ? mb_block_part_shapes(block_obj, part = part, part_params = part_params) : part;
         
     if(!is_undef(part_shapes) && is_list(part_shapes)){
-        
-        if(part_shapes[0] == "union"){
-            union(){
-                for(part_shape = part_shapes[1]){
-                    //if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    //}
-                    //else{
-                    //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    //}
+        type = part_shapes[0];
+        list = part_shapes[1];
+        list_len = len(list);
+
+        if(type == "list"){
+            for(list_item = list){
+                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+            }
+        }
+        else if(type == "union"){
+            if(list_len > 1){
+                union(){
+                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : list_len - 1]){
+                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                    }
                 }
             }
+            else{
+                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+            }
         }
-        else if(part_shapes[0] == "difference"){
-            difference(){
-                for(part_shape = part_shapes[1]){
-                    //if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    //}
-                    //else{
-                    //    *mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    //}
+        else if(type == "difference"){
+            if(list_len > 1){
+                difference(){
+                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : list_len - 1]){
+                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                    }
                 }
             }
+            else{
+                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+            }
         }
-        else if(part_shapes[0] == "intersection"){
-            intersection(){
-                for(part_shape = part_shapes[1]){
-                    //if(is_string(part_shape[0])){
-                        mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                    //}
-                    //else{
-                    //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                    //}
+        else if(type == "intersection"){
+            if(list_len > 1){
+                intersection(){
+                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : list_len - 1]){
+                        mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
+                    }
                 }
             }
-        }
-        else if(part_shapes[0] == "list"){
-            for(part_shape = part_shapes[1]){
-                //if(is_string(part_shape[0])){
-                    mb_block_part(block_obj, part = part_shape, part_params=part_params, mul = mul, debug = debug);
-                //}
-                //else{
-                //    mb_prismoid(shape = part_shape, mul = mul, debug = debug);
-                //}
+            else{
+                mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
             }
         }
-        else if(part_shapes[0] == "prismoid"){
-            mb_prismoid(shape = part_shapes[1][0], mul = mul, debug = debug);
+        else if(type == "prismoid"){
+            mb_prismoid(shape = list[0], mul = mul, debug = debug);
             
-            mb_block_part(block_obj, part = part_shapes[1][1], part_params=part_params, mul = mul, debug = debug);
+            mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
         }
         else{
-            mapping = mb_block_custom_module_mapping(block_obj, part_shapes[0]);
+            mapping = mb_block_custom_module_mapping(block_obj, type);
+            
             if(mapping == 0){
-                mb_block_part__custom_0(block_obj, part_shapes[1], part_params, debug, mul);
+                mb_block_part__custom_0(block_obj, list, part_params, debug, mul);
             }
             else if(mapping == 1){
-                mb_block_part__custom_1(block_obj, part_shapes[1], part_params, debug, mul);
+                mb_block_part__custom_1(block_obj, list, part_params, debug, mul);
             }
             else if(mapping == 2){
-                mb_block_part__custom_2(block_obj, part_shapes[1], part_params, debug, mul);
+                mb_block_part__custom_2(block_obj, list, part_params, debug, mul);
             }
             else if(mapping == 3){
-                mb_block_part__custom_3(block_obj, part_shapes[1], part_params, debug, mul);
+                mb_block_part__custom_3(block_obj, list, part_params, debug, mul);
             }
         }
     }

@@ -107,11 +107,11 @@ module mb_base(
 
             }
 
+            /*
+            * Relief Cut
+            */
             if(mb_block_get_relief_cut(block_obj)){
-                difference(){
-                    mb_block_part(block_obj, part="relief_cut_mask", debug = debug);
-                    mb_block_part(block_obj, part="relief_cut", debug = debug);
-                }
+                mb_block_part(block_obj, part=mb_block_part__relief_cut(block_obj), debug = debug);
             }
 
             /*
@@ -119,7 +119,7 @@ module mb_base(
             */
             if(mb_block_get_recess(block_obj)){
                 mb_block_part(block_obj, part=mb_block_part__recess(block_obj), debug = debug);
-            } // End Recess
+            }
 
 
             /*
