@@ -345,6 +345,39 @@ function mb_block_part__recess(block_obj) =
         ]
     ];
 
+function mb_block_part__stud_base_cutout(block_obj) =
+    let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        clamp = mb_block_get_clamp(block_obj),
+        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        wall_thickness_clamp = (wall_thickness +  clamp[0]),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1))
+    _mb_block_to_shape_parts(
+        size = size, 
+        mod = mod,
+        expand = [
+            [
+                -wall_thickness_clamp + slope_neg[0] - cut_tol,
+                -wall_thickness_clamp + slope_neg[1] - cut_tol,
+                -wall_thickness_clamp + slope_neg[2] - cut_tol,
+                -wall_thickness_clamp + slope_neg[3] - cut_tol,
+                cut_tol,
+                -(mod_size[2] - base_cutout_min_depth)
+            ]
+        ],
+        socket = undef,
+        bevel = bevel,
+        slope = undef
+    );
+
 function mb_block_part_shapes(block_obj, part = undef, part_params = undef) = 
     let(
         size = mb_block_obj_size(block_obj),
@@ -364,28 +397,6 @@ function mb_block_part_shapes(block_obj, part = undef, part_params = undef) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj)
     )
-
-    part == "stud_base_cutout" ?    
-    let(wall_thickness_clamp = (wall_thickness +  clamp[0]),
-        slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1))
-    _mb_block_to_shape_parts(
-        size = size, 
-        mod = mod,
-        expand = [
-            [
-                -wall_thickness_clamp + slope_neg[0] - cut_tol,
-                -wall_thickness_clamp + slope_neg[1] - cut_tol,
-                -wall_thickness_clamp + slope_neg[2] - cut_tol,
-                -wall_thickness_clamp + slope_neg[3] - cut_tol,
-                cut_tol,
-                -(mod_size[2] - base_cutout_min_depth)
-            ]
-        ],
-        socket = undef,
-        bevel = bevel,
-        slope = undef
-    ) :
 
     part == "simple" ?
     _mb_block_to_shape_parts(
