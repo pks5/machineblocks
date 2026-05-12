@@ -242,14 +242,14 @@ function mb_block_part__top_plate_helpers(block_obj) =
             mb_block_part_prismoid(
                 block_size = size, 
                 block_mod = mod,
-                expand = [
+                expand = [[
                     -wall_thickness - top_plate_helpers[0],
                     -wall_thickness - top_plate_helpers[0],
                     -wall_thickness - top_plate_helpers[0],
                     -wall_thickness - top_plate_helpers[0],
                     -(base_cutout_depth - top_plate_helpers[1]) + cut_tol,
                     -(top_plate_height + recess_depth) + cut_tol
-                    ]
+                    ]]
                 ,
                 bevel = bevel,
                 slope = undef
@@ -542,8 +542,14 @@ function mb_block_part_prismoid(
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
         h_d = is_undef(height) ? [min_max[0][2], min_max[1][2]] : [-0.5 * height, 0.5 * height],
-        h = is_undef(expand) || (expand[4] == "auto" && expand[5] == "auto") ? h_d : [expand[4] == "auto" ? min_max[1][2] - height : h_d[0], expand[5] == "auto" ? min_max[0][2] + height : h_d[1] ],
-        exp = is_undef(expand) ? undef : [expand[0], expand[1], expand[2], expand[3], expand[4] == "auto" ? 0 : expand[4], expand[5] == "auto" ? 0 : expand[5]],
+
+        exp_sin = is_list(expand) && (len(expand) == 2) && is_list(expand[0]) && is_list(expand[1]),
+        exp_1 = is_list(expand) && (len(expand) == 1) && is_list(expand[0]),
+        exp_h = is_undef(expand) ? undef : expand[0],
+
+        h = is_undef(exp_h) || (exp_h[4] == "auto" && exp_h[5] == "auto") ? h_d : [exp_h[4] == "auto" ? min_max[1][2] - height : h_d[0], exp_h[5] == "auto" ? min_max[0][2] + height : h_d[1] ],
+        h_exp = is_undef(exp_h) ? h : [h[0] - (exp_h[4] == "auto" ? 0 : exp_h[4]), h[1] + (exp_h[5] == "auto" ? 0 : exp_h[5])],
+        exp = is_undef(expand) ? undef : exp_sin ? [ [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
         
         
         bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
@@ -561,7 +567,7 @@ function mb_block_part_prismoid(
             [
                 mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
                 mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
-                [h, socket, undef, exp]
+                [h_exp, socket, undef, exp]
             ]
         ] // Shape
     ];
@@ -569,6 +575,8 @@ function mb_block_part_prismoid(
 function mb_block_part_type_is_builtin(type) = 
     is_string(type) && (
         type == "prismoid" || 
+        type == "cylinder" ||
+        type == "cube" ||  
         type == "union" || 
         type == "difference" || 
         type == "intersection"  || 

@@ -37,6 +37,7 @@ function mb_resolve_quad(xyz, default = [0, 0, 0, undef], mul = undef, min_value
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
 
 function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
+    is_undef(expand) || (expand == [0, 0, 0, 0, 0, 0]) ? pts :
     let(
         sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
         // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
