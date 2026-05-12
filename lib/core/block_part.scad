@@ -8,7 +8,7 @@ include <../custom.scad>;
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
-        offset = mb_block_pos_to_offset(block_obj, [0.5, 0.5, 2]))
+        offset = mb_block_pos_to_offset(block_obj, [0.5, 0, 2]))
     [
         "difference",
         [
@@ -16,7 +16,7 @@ function mb_block_part__tube(block_obj) =
                 block_size = size,
                 block_mod = mod,
                 diameter = 1, 
-                axis = "y",
+                axis = "x",
                 length = 2,
                 length_adj = [2, "auto"],
                 offset = offset
@@ -25,7 +25,7 @@ function mb_block_part__tube(block_obj) =
                 block_size = size,
                 block_mod = mod,
                 diameter = 0.8, 
-                axis = "y",
+                axis = "x",
                 length = 2.2,
                 length_adj = [2.1, "auto"],
                 offset = offset
@@ -624,11 +624,12 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
 module mb_cylinder(
     diameter,
     length,
-    axis = 2,
+    axis = "z",
     offset = [0, 0, 0],
     
     mul = [1, 1, 1]
 ){
+    axis = mb_axis_to_int(axis);
     hl = is_list(length) ? length[1] - length[0] : length;
     length_offset = is_list(length) ? 0.5*(length[0] + length[1]) : 0;
     off_0 = [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0];
