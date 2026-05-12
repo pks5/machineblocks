@@ -5,6 +5,25 @@ use <../prismoid.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part__cube(block_obj) =
+ let(size = mb_block_obj_size(block_obj),
+        mod = mb_block_get_size_mod(block_obj),
+        offset = mb_block_pos_to_offset(block_obj, [0.5, 0, 2]))
+        mb_block_part_cube(
+            block_size = size,
+            block_mod = mod,
+            size = [undef, undef, 1],
+            size_adj = [
+                0,
+                0,
+                0,
+                0,
+                3,
+                "auto"
+            ],
+            //offset = offset
+        );
+
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -30,6 +49,7 @@ function mb_block_part__tube(block_obj) =
                 length_adj = [2.1, "auto"],
                 offset = offset
             )
+            
         ]
     ]    
     ;
@@ -451,6 +471,62 @@ function mb_block_part_cylinder(
         ]
     ];
 
+function mb_block_part_cube(
+    block_size,
+    block_mod,
+    size = undef,
+    size_adj,
+    offset = [0, 0, 0]
+) = 
+    let(mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = undef),
+        mod_size = mod_min_max[1][0],
+        
+        si = is_undef(size) ? mod_size : size,
+        si2 = [(is_undef(si[0]) ? mod_size[0] : si[0]), (is_undef(si[1]) ? mod_size[1] : si[1]), (is_undef(si[2]) ? mod_size[2] : si[2])],
+        s_adj = is_undef(size_adj) || size_adj == "auto" || size_adj == ["auto", "auto", "auto"] ? 
+            si :
+
+            [
+                [
+                    size_adj[0] == "auto" && size_adj[1] == "auto" ? 
+                        -0.5 * si2[0] : size_adj[0] == "auto" ? 
+                        (0.5 * mod_size[0] + size_adj[1] - si2[0]) : 
+                        -0.5 * (size_adj[1] == "auto" ? mod_size[0] : si2[0]) - size_adj[0],
+                    size_adj[2] == "auto" && size_adj[3] == "auto" ? 
+                        -0.5 * si2[1] : size_adj[2] == "auto" ? 
+                        (0.5 * mod_size[1] + size_adj[3] - si2[1]) : 
+                        -0.5 * (size_adj[3] == "auto" ? mod_size[1] : si2[1]) - size_adj[2],
+                    size_adj[4] == "auto" && size_adj[5] == "auto" ? 
+                        -0.5 * si2[2] : size_adj[4] == "auto" ? 
+                        (0.5 * mod_size[2] + size_adj[5] - si2[2]) : 
+                        -0.5 * (size_adj[5] == "auto" ? mod_size[2] : si2[2]) - size_adj[4]
+                ],
+                [
+                    size_adj[0] == "auto" && size_adj[1] == "auto" ? 
+                        0.5 * si2[0] : size_adj[1] == "auto" ? 
+                        (-0.5 * mod_size[0] - size_adj[0] + si2[0]) : 
+                        0.5 * (size_adj[0] == "auto" ? mod_size[0] : si2[0]) + size_adj[1],
+                    size_adj[2] == "auto" && size_adj[3] == "auto" ? 
+                        0.5 * si2[1] : size_adj[3] == "auto" ? 
+                        (-0.5 * mod_size[1] - size_adj[2] + si2[1]) : 
+                        0.5 * (size_adj[2] == "auto" ? mod_size[1] : si2[1]) + size_adj[3],
+                    size_adj[4] == "auto" && size_adj[5] == "auto" ? 
+                        0.5 * si2[2] : size_adj[5] == "auto" ? 
+                        (-0.5 * mod_size[2] - size_adj[4] + si2[2]) : 
+                        0.5 * (size_adj[4] == "auto" ? mod_size[2] : si2[2]) + size_adj[5]
+                ]
+            ]
+    )
+    [
+        "cube",
+        [
+            [
+                s_adj,
+                offset
+            ]
+        ]
+    ];
+
 function mb_block_part_prismoid(
     size, 
     mod, 
@@ -601,6 +677,15 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
+            else if(type == "cube"){
+                mb_cube(
+                    size = list[0][0],
+                    offset = list[0][1],
+                    mul = mul
+                );
+                
+                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
+            }
             else{
                 mapping = mb_block_custom_module_mapping(block_obj, type);
                 
@@ -627,7 +712,9 @@ module mb_cylinder(
     axis = "z",
     offset = [0, 0, 0],
     
-    mul = [1, 1, 1]
+    mul = [1, 1, 1],
+    center = true,
+    debug = false
 ){
     axis = mb_axis_to_int(axis);
     hl = is_list(length) ? length[1] - length[0] : length;
@@ -639,7 +726,7 @@ module mb_cylinder(
 
     translate([off[0] * mul[0], off[1] * mul[1], off[2] * mul[2]])
         rotate(rot)
-            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = true, $fn = 100);
+            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = center, $fn = 100);
 }
 
 /**
@@ -647,32 +734,42 @@ module mb_cylinder(
 */
 module mb_cube(
     size, 
+    offset = [0, 0, 0],
+    mul = [1, 1, 1],
     radius = 0, 
     xyz_rad = false, 
     center = true, 
     resolution = 80, 
     debug = false
 ){
-    size = mb_resolve_xyz(xyz = size);
+    size = is_list(size) && len(size) == 2 && is_list(size[0]) && is_list(size[1]) ? 
+        [
+            mb_resolve_xyz(size[0]),
+            mb_resolve_xyz(size[1])
+        ] : [mb_resolve_xyz(size[0], mul = -0.5), mb_resolve_xyz(size[0], mul = 0.5)];
+
     rad0 = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
 
     if(rad0){
-        cube(size, center = center);
+        si = [(size[1][0] - size[0][0]) * mul[0], (size[1][1] - size[0][1]) * mul[1], (size[1][2] - size[0][2]) * mul[2]];
+        echo (si = si, size0 = size[0], size1 = size[1]);
+        translate([(0.5* (size[0][0] + size[1][0]) + offset[0]) * mul[0], 
+        (0.5*(size[0][1] + size[1][1]) + offset[1]) * mul[1], 
+        (0.5*(size[0][2] + size[1][2]) + offset[2]) * mul[2]])
+        
+            cube(si, center = center);
     }
     else{
         rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
 
-        block_obj = mb_block_obj(size);
+        prismoid_shape = [
+        [
+            [size[0][0], size[0][1]], [size[0][0], size[1][1]], [size[1][0], size[1][1]], [size[1][0], size[0][1]]],
+            undef,
+            [[size[0][2], size[1][2]]]
+        ];
 
-        mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
-        prismoid_shape = mb_block_part_to_prismoid(
-            block_obj,
-            part = mb_block_part__base(block_obj),
-            radius = radius,
-            mul = mul
-        );
-
-        mb_prismoid(shape = prismoid_shape[1][0], align = center ? "center" : "start", resolution = resolution, debug = debug);
+        mb_prismoid(shape = prismoid_shape, add = [offset], mul = mul, radius = rad, align = center ? "center" : "start", resolution = resolution, debug = debug);
     }
 }
 
@@ -709,6 +806,7 @@ translate([200, 0, 0])
 mb_cube(
     debug = true, 
     size = [4, 4, 3], 
+    mul = [8, 8, 3.2],
     radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[1.2, 1.2, 1, 2], [1.2, 1.2, 1, 1.2], [0.1, 0.1, 0.1,0.1], [1, 1, 1, 1]]]);
 
 

@@ -74,6 +74,9 @@ module mb_base(
 
                 mb_block_part(block_obj, part = mb_block_part__tube(block_obj));
 
+                mb_block_part(block_obj, part = mb_block_part__cube(block_obj));
+                
+
                 //Just for testing TO BE REMOVED
                 *mb_block_part(block_obj, part=[
                     "my_cube",
