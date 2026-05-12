@@ -61,8 +61,8 @@ function mb_block_part__base(block_obj) =
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj))
     mb_block_part_prismoid(
-        size = size, 
-        mod = mod,
+        block_size = size, 
+        block_mod = mod,
         socket = socket,
         bevel = bevel,
         slope = slope
@@ -76,8 +76,8 @@ function mb_block_part__base_adjusted(block_obj) =
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj))
     mb_block_part_prismoid(
-        size = size, 
-        mod = mod,
+        block_size = size, 
+        block_mod = mod,
         adj = base_adj,
         socket = socket,
         bevel = mb_bevel_shrink(bevel, base_adj),
@@ -94,8 +94,8 @@ function mb_block_part__base_clamp_outer(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         slope = mb_block_get_slope(block_obj))
     mb_block_part_prismoid(
-        size = size, 
-        mod = mod,
+        block_size = size, 
+        block_mod = mod,
         expand = [[
                 base_adj[0] + clamp[0],
                 base_adj[1] + clamp[0],
@@ -128,8 +128,8 @@ function mb_block_part__base_cutout(block_obj) =
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
     mb_block_part_prismoid(
-        size = size, 
-        mod = mod,
+        block_size = size, 
+        block_mod = mod,
         
         expand = [
             [
@@ -172,8 +172,8 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         "difference",
         [
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 adj = [
                     0,
                     0,
@@ -188,8 +188,8 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 socket = socket
             ),
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 expand = [[
                         wall_thickness_clamp + slope_pos[0],
                         wall_thickness_clamp + slope_pos[1],
@@ -225,8 +225,8 @@ function mb_block_part__top_plate_helpers(block_obj) =
         "difference",
         [
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 adj = [
                     base_adj[0] + cut_tol,
                     base_adj[1] + cut_tol,
@@ -240,8 +240,8 @@ function mb_block_part__top_plate_helpers(block_obj) =
                 slope = undef
             ),
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 expand = [
                     -wall_thickness - top_plate_helpers[0],
                     -wall_thickness - top_plate_helpers[0],
@@ -273,8 +273,8 @@ function mb_block_part__relief_cut(block_obj) =
         "difference",
         [
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 adj = [
                     base_adj[0] + cut_tol,
                     base_adj[1] + cut_tol,
@@ -289,8 +289,8 @@ function mb_block_part__relief_cut(block_obj) =
                 socket = undef
             ),
             mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 adj = [
                     base_adj[0] - relief_cut[0],
                     base_adj[1] - relief_cut[0],
@@ -324,8 +324,8 @@ function mb_block_part__recess(block_obj) =
         "list",
         [
            mb_block_part_prismoid(
-                size = size, 
-                mod = mod,
+                block_size = size, 
+                block_mod = mod,
                 expand = [[
                     -rwt[0],
                     -rwt[1],
@@ -343,8 +343,8 @@ function mb_block_part__recess(block_obj) =
             face = gap_data[0])
         face == 0 ?
         mb_block_part_prismoid(
-            size = size, 
-            mod = mod,
+            block_size = size, 
+            block_mod = mod,
             expand = [[
                 +cut_tol,
                 -rwt[1],
@@ -359,8 +359,8 @@ function mb_block_part__recess(block_obj) =
         ) :
         face == 1 ? 
         mb_block_part_prismoid(
-            size = size, 
-            mod = mod,
+            block_size = size, 
+            block_mod = mod,
             expand = [[
                 -rwt[0],
                 cut_tol,
@@ -375,8 +375,8 @@ function mb_block_part__recess(block_obj) =
         ) :
         face == 2 ?
         mb_block_part_prismoid(
-            size = size, 
-            mod = mod,
+            block_size = size, 
+            block_mod = mod,
             expand = [[
                 -rwt[0] - gap_data[1],
                 -rwt[1] - gap_data[2],
@@ -391,8 +391,8 @@ function mb_block_part__recess(block_obj) =
         ) :
         face == 3 ?
         mb_block_part_prismoid(
-            size = size, 
-            mod = mod,
+            block_size = size, 
+            block_mod = mod,
             expand = [[
                 -rwt[0] - gap_data[1],
                 -rwt[1] - gap_data[2],
@@ -424,8 +424,8 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1))
     mb_block_part_prismoid(
-        size = size, 
-        mod = mod,
+        block_size = size, 
+        block_mod = mod,
         expand = [
             [
                 -wall_thickness_clamp + slope_neg[0] - cut_tol,
@@ -528,8 +528,8 @@ function mb_block_part_cube(
     ];
 
 function mb_block_part_prismoid(
-    size, 
-    mod, 
+    block_size, 
+    block_mod, 
     bevel = undef, 
     slope = undef, 
     socket = undef, 
@@ -538,7 +538,7 @@ function mb_block_part_prismoid(
 ) =
     let(
         
-        mod_min_max = mb_block_mod_min_max(size = size, mod = mod, adj = adj),
+        mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = adj),
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
         
