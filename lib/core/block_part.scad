@@ -13,7 +13,7 @@ function mb_block_part__cube(block_obj) =
             block_size = size,
             block_mod = mod,
             size = [undef, undef, 1],
-            size_adj = [
+            expand = [
                 0,
                 0,
                 0,
@@ -37,7 +37,7 @@ function mb_block_part__tube(block_obj) =
                 diameter = 1, 
                 axis = "x",
                 length = 2,
-                length_adj = [2, "auto"],
+                expand = [2, "auto"],
                 offset = offset
             ),
             mb_block_part_cylinder(
@@ -46,7 +46,7 @@ function mb_block_part__tube(block_obj) =
                 diameter = 0.8, 
                 axis = "x",
                 length = 2.2,
-                length_adj = [2.1, "auto"],
+                expand = [2.1, "auto"],
                 offset = offset
             )
             
@@ -447,16 +447,16 @@ function mb_block_part_cylinder(
     diameter,
     axis = "z",
     length = undef,
-    length_adj = undef,
+    expand = undef,
     offset = undef
 ) = 
     let(mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = undef),
         mod_size = mod_min_max[1][0],
         axis = mb_axis_to_int(axis),
         h = mod_size[axis],
-        h_adj = is_undef(length_adj) || length_adj == "auto" || length_adj == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
-            [length_adj[0] == "auto" ? 0.5 * h + length_adj[1] - (!is_undef(length) ? length : h) : -0.5 * h - length_adj[0], 
-            length_adj[1] == "auto" ? -0.5 * h - length_adj[0] + (!is_undef(length) ? length : h) : 0.5 * h + length_adj[1]]
+        h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
+            [expand[0] == "auto" ? 0.5 * h + expand[1] - (!is_undef(length) ? length : h) : -0.5 * h - expand[0], 
+            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(length) ? length : h) : 0.5 * h + expand[1]]
         
     )
     [
@@ -475,7 +475,7 @@ function mb_block_part_cube(
     block_size,
     block_mod,
     size = undef,
-    size_adj,
+    expand,
     offset = [0, 0, 0]
 ) = 
     let(mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = undef),
@@ -483,37 +483,37 @@ function mb_block_part_cube(
         
         si = is_undef(size) ? mod_size : size,
         si2 = [(is_undef(si[0]) ? mod_size[0] : si[0]), (is_undef(si[1]) ? mod_size[1] : si[1]), (is_undef(si[2]) ? mod_size[2] : si[2])],
-        s_adj = is_undef(size_adj) || size_adj == "auto" || size_adj == ["auto", "auto", "auto"] ? 
+        s_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto", "auto"] ? 
             si :
 
             [
                 [
-                    size_adj[0] == "auto" && size_adj[1] == "auto" ? 
-                        -0.5 * si2[0] : size_adj[0] == "auto" ? 
-                        (0.5 * mod_size[0] + size_adj[1] - si2[0]) : 
-                        -0.5 * (size_adj[1] == "auto" ? mod_size[0] : si2[0]) - size_adj[0],
-                    size_adj[2] == "auto" && size_adj[3] == "auto" ? 
-                        -0.5 * si2[1] : size_adj[2] == "auto" ? 
-                        (0.5 * mod_size[1] + size_adj[3] - si2[1]) : 
-                        -0.5 * (size_adj[3] == "auto" ? mod_size[1] : si2[1]) - size_adj[2],
-                    size_adj[4] == "auto" && size_adj[5] == "auto" ? 
-                        -0.5 * si2[2] : size_adj[4] == "auto" ? 
-                        (0.5 * mod_size[2] + size_adj[5] - si2[2]) : 
-                        -0.5 * (size_adj[5] == "auto" ? mod_size[2] : si2[2]) - size_adj[4]
+                    expand[0] == "auto" && expand[1] == "auto" ? 
+                        -0.5 * si2[0] : expand[0] == "auto" ? 
+                        (0.5 * mod_size[0] + expand[1] - si2[0]) : 
+                        -0.5 * (expand[1] == "auto" ? mod_size[0] : si2[0]) - expand[0],
+                    expand[2] == "auto" && expand[3] == "auto" ? 
+                        -0.5 * si2[1] : expand[2] == "auto" ? 
+                        (0.5 * mod_size[1] + expand[3] - si2[1]) : 
+                        -0.5 * (expand[3] == "auto" ? mod_size[1] : si2[1]) - expand[2],
+                    expand[4] == "auto" && expand[5] == "auto" ? 
+                        -0.5 * si2[2] : expand[4] == "auto" ? 
+                        (0.5 * mod_size[2] + expand[5] - si2[2]) : 
+                        -0.5 * (expand[5] == "auto" ? mod_size[2] : si2[2]) - expand[4]
                 ],
                 [
-                    size_adj[0] == "auto" && size_adj[1] == "auto" ? 
-                        0.5 * si2[0] : size_adj[1] == "auto" ? 
-                        (-0.5 * mod_size[0] - size_adj[0] + si2[0]) : 
-                        0.5 * (size_adj[0] == "auto" ? mod_size[0] : si2[0]) + size_adj[1],
-                    size_adj[2] == "auto" && size_adj[3] == "auto" ? 
-                        0.5 * si2[1] : size_adj[3] == "auto" ? 
-                        (-0.5 * mod_size[1] - size_adj[2] + si2[1]) : 
-                        0.5 * (size_adj[2] == "auto" ? mod_size[1] : si2[1]) + size_adj[3],
-                    size_adj[4] == "auto" && size_adj[5] == "auto" ? 
-                        0.5 * si2[2] : size_adj[5] == "auto" ? 
-                        (-0.5 * mod_size[2] - size_adj[4] + si2[2]) : 
-                        0.5 * (size_adj[4] == "auto" ? mod_size[2] : si2[2]) + size_adj[5]
+                    expand[0] == "auto" && expand[1] == "auto" ? 
+                        0.5 * si2[0] : expand[1] == "auto" ? 
+                        (-0.5 * mod_size[0] - expand[0] + si2[0]) : 
+                        0.5 * (expand[0] == "auto" ? mod_size[0] : si2[0]) + expand[1],
+                    expand[2] == "auto" && expand[3] == "auto" ? 
+                        0.5 * si2[1] : expand[3] == "auto" ? 
+                        (-0.5 * mod_size[1] - expand[2] + si2[1]) : 
+                        0.5 * (expand[2] == "auto" ? mod_size[1] : si2[1]) + expand[3],
+                    expand[4] == "auto" && expand[5] == "auto" ? 
+                        0.5 * si2[2] : expand[5] == "auto" ? 
+                        (-0.5 * mod_size[2] - expand[4] + si2[2]) : 
+                        0.5 * (expand[4] == "auto" ? mod_size[2] : si2[2]) + expand[5]
                 ]
             ]
     )
