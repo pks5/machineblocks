@@ -534,13 +534,17 @@ function mb_block_part_prismoid(
     slope = undef, 
     socket = undef, 
     expand = undef, 
-    adj = undef
+    adj = undef,
+    height = undef
 ) =
     let(
-        
         mod_min_max = mb_block_mod_min_max(size = block_size, mod = block_mod, adj = adj),
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
+        h_d = is_undef(height) ? [min_max[0][2], min_max[1][2]] : [-0.5 * height, 0.5 * height],
+        h = is_undef(expand) || (expand[4] == "auto" && expand[5] == "auto") ? h_d : [expand[4] == "auto" ? min_max[1][2] - height : h_d[0], expand[5] == "auto" ? min_max[0][2] + height : h_d[1] ],
+        exp = is_undef(expand) ? undef : [expand[0], expand[1], expand[2], expand[3], expand[4] == "auto" ? 0 : expand[4], expand[5] == "auto" ? 0 : expand[5]],
+        
         
         bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
@@ -557,7 +561,7 @@ function mb_block_part_prismoid(
             [
                 mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
                 mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
-                [[min_max[0][2], min_max[1][2]], socket, undef, expand]
+                [h, socket, undef, exp]
             ]
         ] // Shape
     ];
