@@ -241,25 +241,6 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 socket = undef
             ),
             mb_block_part__base_cutout(block_obj, planes = "bottom", bottom = -clamp[1] + cut_tol, top = -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol, red = -clamp[0]),
-
-
-            /*mb_block_part_prismoid(
-                block_size = size, 
-                block_mod = mod,
-                expand = [[
-                        wall_thickness_clamp + slope_neg[0],
-                        wall_thickness_clamp + slope_neg[1],
-                        wall_thickness_clamp + slope_neg[2],
-                        wall_thickness_clamp + slope_neg[3],
-                        -clamp[1] + cut_tol,
-                        -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol
-                    ]]
-                ,
-                socket = undef,
-                bevel = bevel,
-                
-                slope = undef
-            )*/
         ]
     ];
 
@@ -299,28 +280,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                 slope = undef
             ),
 
-            mb_block_part__base_cutout(block_obj, planes = "top", bottom = bottom + cut_tol, top = top + cut_tol, red = - top_plate_helpers[0]),
-
-            /*mb_block_part_prismoid(
-                block_size = size, 
-                block_mod = mod,
-                expand = [[
-                    slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0) - top_plate_helpers[0],
-                    slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) - top_plate_helpers[0],
-                    slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) - top_plate_helpers[0],
-                    slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) - top_plate_helpers[0],
-
-                    //-wall_thickness - top_plate_helpers[0],
-                    //-wall_thickness - top_plate_helpers[0],
-                    //-wall_thickness - top_plate_helpers[0],
-                    //-wall_thickness - top_plate_helpers[0],
-                    -(base_cutout_depth - top_plate_helpers[1]) + cut_tol,
-                    -(top_plate_height + recess_depth) + 2*cut_tol
-                    ]]
-                ,
-                bevel = bevel,
-                slope = undef
-            )*/
+            mb_block_part__base_cutout(block_obj, planes = "top", bottom = bottom + cut_tol, top = top + cut_tol, red = - top_plate_helpers[0])
         ]
     ];
 
