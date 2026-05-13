@@ -896,7 +896,7 @@ module mb_block(
                                                     */
                                                     difference(){
                                                         union(){
-                                                            !mb_base_cutout(
+                                                            mb_base_cutout(
                                                                 block_obj = block_obj,
                                                                 debug = debug
                                                             );

@@ -404,7 +404,7 @@ function mb_xyz_rad_convert(xyz_rad) =
 
 
 function mb_prismoid_plane(shape, i) =
-    i > 1 ? undef : shape[(len(shape) == 1 || is_undef(shape[1])) ? 0 : i];
+    i > 1 ? undef : shape[(len(shape) == 1 || (!is_undef(shape[0]) && is_undef(shape[1]))) ? 0 : (is_undef(shape[0]) && !is_undef(shape[1]) ? 1 : i)];
 
 function mb_prismoid_plane_resolve(a) =
     let(la = is_undef(a) ? undef : len(a))
