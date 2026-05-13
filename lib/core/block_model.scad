@@ -28,15 +28,16 @@ function mb_block_obj(
     relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
     id = "[Block]",
     custom_modules = ["my_cube"],
-    debug = false
+    debug = false,
+    baseWallGaps = []
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
         
-        si = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
-        mod = mb_qc_resolve(qc = size_mod, cube = true),
-        
-        mod_min_max = mb_block_mod_min_max(size = size, mod = mod),
+        mod_min_max = mb_block_mod_min_max(block_size = size, block_mod = size_mod),
+
+        si = mod_min_max[0][0],
+        mod = mod_min_max[0][3],
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
 
@@ -108,7 +109,7 @@ function mb_block_obj(
             [],  // 14 - 
             [],  // 15 - 
             [],  // 16 - 
-            [],  // 17 - 
+            [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
             [false],  // 19 - 
             [id, debug, 0.01] // 20 - ID, Debug, Cut Tolerance
@@ -145,6 +146,8 @@ function mb_block_get_recess(block_obj) = block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) = block_obj[8][1];
 function mb_block_get_recess_depth(block_obj) = block_obj[4][2];
 function mb_block_get_recess_wall_gaps(block_obj) = block_obj[8][4];
+
+function mb_block_get_base_wall_gaps(block_obj) = block_obj[17][0];
 
 function mb_block_get_grid_cfg(block_obj) = block_obj[7][0];
 
@@ -199,23 +202,33 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
-function mb_recess_wall_gap(block_obj, gap) = 
+function mb_block_recess_wall_gap(block_obj, gap) = 
     let(gap = mb_to_array(gap),
-        face = mb_side_to_int(gap[0]),
-        recess_walls = mb_block_get_recess_wall_thickness(block_obj))
+        face = mb_side_to_int(gap[0]))
         [
             face,
             is_undef(gap[1]) ? 0 : gap[1],
             is_undef(gap[2]) ? 0 : gap[2]
         ];
 
+function mb_block_base_wall_gap(block_obj, gap) = 
+    let(face = mb_side_to_int(gap[0]))
+        [
+            face,
+            is_undef(gap[1]) ? 0 : gap[1],
+            is_undef(gap[2]) ? 1 : gap[2]
+        ];
+
 function mb_block_pos_to_offset(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))
         [pos[0] - center[0], pos[1] - center[1], pos[2] - center[2]];
         
-
-function mb_block_mod_min_max(size, mod, adj = undef) =
-    let(bb = mb_bounding_box(size),
+//TODO Rename & remove adj
+function mb_block_mod_min_max(block_size, block_mod = undef, adj = undef) =
+    let(size = mb_resolve_xyz(xyz = block_size, default = [1, 1, 1]),
+        mod = mb_qc_resolve(qc = block_mod, cube = true),
+        
+        bb = mb_bounding_box(size),
         c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
         mod_final = is_undef(adj) ? mod : mb_array_add(mod, adj),
         mi = [-mod_final[0], -mod_final[2], is_undef(adj) ? 0 : -adj[4]],
@@ -234,7 +247,7 @@ function mb_block_mod_min_max(size, mod, adj = undef) =
         
     )
         [
-            [size, bb, c],
+            [size, bb, c, mod],
             [
                 mod_size,
                 mb_bounding_box(mod_size),
@@ -242,7 +255,6 @@ function mb_block_mod_min_max(size, mod, adj = undef) =
             ],
             
             [mi, ma]
-            
         ];
 /*
 * Methods

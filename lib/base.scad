@@ -13,17 +13,23 @@ module mb_base_cutout(
     block_obj,
     debug
 ){
-    difference(){
-        //Base Cutout
-        mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
-        
-        //Base Clamp Inner
-        mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
+    union(){
+        difference(){
+            //Base Cutout
+            mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
 
-        //Top Plate Helpers
-        if(mb_block_get_top_plate_helpers(block_obj)){ 
-            mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
-        }    
+            //Base Clamp Inner
+            mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
+
+            //Top Plate Helpers
+            if(mb_block_get_top_plate_helpers(block_obj)){ 
+                mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
+            }   
+        }
+    
+        
+        
+        
     }
 }
 
@@ -73,9 +79,6 @@ module mb_base(
                 }
 
                 *mb_block_part(block_obj, part = mb_block_part__tube(block_obj));
-
-                *mb_block_part(block_obj, part = mb_block_part__cube(block_obj));
-                
 
                 //Just for testing TO BE REMOVED
                 *mb_block_part(block_obj, part=[
