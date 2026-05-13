@@ -32,18 +32,18 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, face = 0,
                 
                 expand = [
                     planes == "bottom" || planes == "all" ? [
-                        face == 0 ? cut_tol : -wall_thickness + slope_neg[0] + red,
-                        face == 1 ? cut_tol : -wall_thickness + slope_neg[1] + red,
-                        face == 2 ? cut_tol : -wall_thickness + slope_neg[2] + red,
-                        face == 3 ? cut_tol : -wall_thickness + slope_neg[3] + red,
+                        face == 0 ? base_adj[0] + cut_tol : -wall_thickness + slope_neg[0] + red,
+                        face == 1 ? base_adj[1] + cut_tol : -wall_thickness + slope_neg[1] + red,
+                        face == 2 ? base_adj[2] + cut_tol : -wall_thickness + slope_neg[2] + red,
+                        face == 3 ? base_adj[3] + cut_tol : -wall_thickness + slope_neg[3] + red,
                         bottom,
                         top
                     ] : undef,
                     planes == "top" || planes == "all" ? [
-                        face == 0 ? cut_tol : slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0) + red,
-                        face == 1 ? cut_tol : slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) + red,
-                        face == 2 ? cut_tol : slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) + red,
-                        face == 3 ? cut_tol : slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) + red,
+                        face == 0 ? base_adj[0] + cut_tol : slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0) + red,
+                        face == 1 ? base_adj[1] + cut_tol : slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) + red,
+                        face == 2 ? base_adj[2] + cut_tol : slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) + red,
+                        face == 3 ? base_adj[3] + cut_tol : slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) + red,
                         bottom,
                         top
                     ] : undef
@@ -58,8 +58,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, face = 0,
                 expand = [
                     face > 1 && face < 4 ? - gap_pos - (gap_pos == 0 ? 0 : wall_thickness) + red : 0,
                     face > 1 && face < 4 ? - (mod_size[0] - gap_length - gap_pos) - wall_thickness + red : 0,
-                    face < 2 ? - gap_pos - (gap_pos == 0 ? 0 : wall_thickness) +red : 0,
-                    face < 2 ? - (mod_size[1] - gap_length - gap_pos) - wall_thickness +red : 0,
+                    face < 2 ? - gap_pos - (gap_pos == 0 ? 0 : wall_thickness) + red : 0,
+                    face < 2 ? - (mod_size[1] - gap_length - gap_pos) - wall_thickness + red : 0,
                     cut_tol,
                     0
                 ]
@@ -240,7 +240,10 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 slope = undef,
                 socket = undef
             ),
-            mb_block_part_prismoid(
+            mb_block_part__base_cutout(block_obj, planes = "bottom", bottom = -clamp[1] + cut_tol, top = -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol, red = -clamp[0]),
+
+
+            /*mb_block_part_prismoid(
                 block_size = size, 
                 block_mod = mod,
                 expand = [[
@@ -256,7 +259,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 bevel = bevel,
                 
                 slope = undef
-            )
+            )*/
         ]
     ];
 
