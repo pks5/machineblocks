@@ -232,15 +232,20 @@ module mb_tube(
     bodyRoundingResolution = 64,
     edgeRoundingResolution = 8
 ) {
-    
-    if(length > 0 && radius > 0){
+    start = is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0; 
+    end = is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0;
+
+    radius_inner = is_list(radius) && len(radius) > 1 ? radius[0] : 0;
+    radius_outer = is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius; 
+
+    if((end - start) > 0 && (radius_outer - radius_inner) > 0){
         rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
             polygon(points = _mb_tube_profile_points(
-                start = -0.5 * length, 
-                end = 0.5 * length,
+                start = start, 
+                end = end,
             
-                radius_outer = radius,
-                radius_inner = radius-10,
+                radius_outer = radius_outer,
+                radius_inner = radius_inner,
 
                 start_rounding_radius = start_rounding_radius,
                 end_rounding_radius = end_rounding_radius,
@@ -262,7 +267,7 @@ module mb_tube(
 
 mb_tube(
     length = 100,
-    radius = 20,
+    radius = [10, 20],
 
     start_rounding_radius = 4,
     
