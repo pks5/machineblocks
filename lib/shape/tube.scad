@@ -30,14 +30,15 @@ function _mb_tube_profile_points(
     let(
         radius_inner = max(0, radius_inner),
         radius_outer = max(radius_inner, radius_outer),
-        max_rr = radius_inner > 0 ? 0.5*(radius_outer - radius_inner) : radius_outer,
+        ring_thickness = radius_outer - radius_inner,
+        max_rr = radius_inner > 0 ? 0.5 * ring_thickness : radius_outer,
         end = max(start, end),
         length = end - start,
 
         // Clamp Start
         cbs_offset = min(length, max(0, clamp_start_offset)),
         cbs_height = min(length - cbs_offset, max(0, clamp_start_height)),
-        cbs_thickness = sign(clamp_start_thickness) * min(radius_outer, abs(clamp_start_thickness)),
+        cbs_thickness = clamp_start_thickness < 0 ? sign(clamp_start_thickness) * min(ring_thickness, abs(clamp_start_thickness)) : clamp_start_thickness,
         cbs = cbs_height > 0 && cbs_thickness != 0,
         cbs_rr = min(max(0, clamp_start_rounding_radius), abs(cbs_thickness), cbs_height),
         cbs_outer_radius = radius_outer + cbs_thickness,
@@ -50,7 +51,7 @@ function _mb_tube_profile_points(
         // Clamp End
         cbe_offset = min(length - cbs_offset - cbs_height, max(0, clamp_end_offset)),
         cbe_height = min(length - cbs_offset - cbs_height - cbe_offset, max(0, clamp_end_height)),
-        cbe_thickness = sign(clamp_end_thickness) * min(radius_outer, abs(clamp_end_thickness)),
+        cbe_thickness = clamp_end_thickness < 0 ? sign(clamp_end_thickness) * min(ring_thickness, abs(clamp_end_thickness)) : clamp_end_thickness,
         cbe = cbe_height > 0 && cbe_thickness != 0,
         cbe_rr = min(max(0, clamp_end_rounding_radius), abs(cbe_thickness), cbe_height),
         cbe_outer_radius = radius_outer + cbe_thickness,
@@ -62,25 +63,49 @@ function _mb_tube_profile_points(
         
         // Start
         s_rr = min(max(0, start_rounding_radius), max_rr, cbs ? cbs_offset : cbe ? (length - cbe_offset - cbe_height) : length),
-        s_x_rounding = radius_outer - s_rr,
+        si_x_rounding = radius_inner + s_rr,
+        so_x_rounding = radius_outer - s_rr,
         s_y_rounding = start + s_rr,
 
         // End
         e_rr = min(max(0, end_rounding_radius), max_rr, cbe ? cbe_offset : cbs ? (length - cbs_offset - cbs_height) : length),
-        e_x_rounding = radius_outer - e_rr,
+        ei_x_rounding = radius_inner + e_rr,
+        eo_x_rounding = radius_outer - e_rr,
         e_y_rounding = end - e_rr,
         
     )
     concat(
-        // Start
+        // Start Inner
         concat(
+            s_rr > 0 && radius_inner > 0 ? concat(
+                [
+                    [radius_inner, s_y_rounding]
+                ],
+                _mb_tube_arc_points(
+                    cx = si_x_rounding,
+                    cy = s_y_rounding,
+                    r = s_rr,
+                    a0 = -90,
+                    a1 = -180,
+                    segments = edgeRoundingResolution
+                )
+                
+            ) : [],
             [
-                [radius_inner, start],
-                [s_rr > 0 ? s_x_rounding : radius_outer, start],
+                [s_rr > 0 && radius_inner > 0 ? si_x_rounding : radius_inner, start]
+            ]
+            
+        ),
+        
+
+        // Start Outer
+        cbs && cbs_offset == 0 ? [] : concat(
+            [
+                [s_rr > 0 ? so_x_rounding : radius_outer, start],
             ],
             s_rr > 0 ? concat(
                 _mb_tube_arc_points(
-                    cx = s_x_rounding,
+                    cx = so_x_rounding,
                     cy = s_y_rounding,
                     r = s_rr,
                     a0 = -90,
@@ -95,8 +120,10 @@ function _mb_tube_profile_points(
 
         // Clamp Start
         cbs ? concat(
+            cbs_offset == 0 ? [] : [
+                [radius_outer, cbs_y_start]
+            ],
             [
-                [radius_outer, cbs_y_start],
                 [cbs_rr > 0 ? cbs_x_rounding : cbs_outer_radius, cbs_y_start],
             ],
             cbs_rr > 0 ? _mb_tube_arc_points(
@@ -129,19 +156,19 @@ function _mb_tube_profile_points(
                 a1 = cbe_thickness < 0 ? 90 : 90,
                 segments = edgeRoundingResolution
             ) : [],
-            [
+            cbe_offset == 0 ? [] : [
                 [radius_outer, cbe_y_end]
             ]
         ) : [],
 
-        // End
-        concat(
+        // End Outer
+        cbe && cbe_offset == 0 ? [] : concat(
             e_rr > 0 ? concat(
                 [
                     [radius_outer, e_y_rounding],
                 ],
                 _mb_tube_arc_points(
-                    cx = e_x_rounding,
+                    cx = eo_x_rounding,
                     cy = e_y_rounding,
                     r = e_rr,
                     a0 = 0,
@@ -150,10 +177,31 @@ function _mb_tube_profile_points(
                 )
             ) : [],
             [
-                [e_rr > 0 ? e_x_rounding : radius_outer, end],
-                [radius_inner, end],
-                [radius_inner, start]
+                [e_rr > 0 ? eo_x_rounding : radius_outer, end]
             ]
+        ),
+
+        // End Inner
+        concat(
+            e_rr > 0 && radius_inner > 0 ? concat(
+                [
+                    [ei_x_rounding, end]
+                ],
+                _mb_tube_arc_points(
+                    cx = ei_x_rounding,
+                    cy = e_y_rounding,
+                    r = e_rr,
+                    a0 = 180,
+                    a1 = 90,
+                    segments = edgeRoundingResolution
+                )
+                
+                
+            ) : [],
+            [
+                [radius_inner, e_rr > 0 && radius_inner > 0 ? e_y_rounding : end]
+            ]
+            
         )
     );
 
@@ -181,12 +229,13 @@ module mb_tube(
 ) {
     
     if(length > 0 && radius > 0){
-        //rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
+        rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
             polygon(points = _mb_tube_profile_points(
                 start = -0.5 * length, 
                 end = 0.5 * length,
             
                 radius_outer = radius,
+                radius_inner = radius-10,
 
                 start_rounding_radius = start_rounding_radius,
                 end_rounding_radius = end_rounding_radius,
@@ -216,12 +265,12 @@ mb_tube(
     
     
     clamp_start_height = 12,
-    clamp_start_thickness = -12,
+    clamp_start_thickness = 12,
     clamp_start_offset = 10,
     clamp_start_rounding_radius = 5,
 
     clamp_end_height = 12,
-    clamp_end_thickness = -15,
+    clamp_end_thickness = 15,
     clamp_end_offset=10,
     clamp_end_rounding_radius = 4,
 
