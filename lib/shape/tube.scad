@@ -259,7 +259,11 @@ module mb_tube(
         clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2];
         clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3];
 
-        is_cylinder = false;
+        is_cylinder = radius_inner == 0 && 
+            start_rounding_radius == 0 && 
+            end_rounding_radius == 0 &&
+            (clamp_start_thickness == 0 || clamp_start_height == 0) &&
+            (clamp_end_thickness == 0 || clamp_end_height == 0);
 
         translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
             rotate(rot){
@@ -300,20 +304,20 @@ module mb_tube(
 }   
 
 mb_tube(
-    radius = [10, 20],
+    radius = 20, //[10, 20],
     length = [-40, 80],
     
-    rounding_radius = [4, 12],
+    rounding_radius = 0, //[4, 12],
     axis = "y",
     offset = undef,
     mul = [8, 8, 3.2],
     
-    clamp_start = [25, 42, 10, 5],
-    clamp_end = [25, 42, 10, 5],
+    clamp_start = undef, //[25, 42, 10, 5],
+    clamp_end = undef, //[25, 42, 10, 5],
 
     rounding_resolution_tube = 64,
     rounding_resolution_edge = 8,
 
     draw_together = false,
-    debug = false
+    debug = true
 );
