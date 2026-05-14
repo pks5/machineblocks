@@ -2,6 +2,7 @@ use <geometry.scad>;
 use <block_model.scad>;
 use <../utils.scad>;
 use <../prismoid.scad>;
+use <../shape/tube.scad>;
 
 include <../custom.scad>;
 
@@ -74,24 +75,24 @@ function mb_block_part__tube(block_obj) =
     [
         "difference",
         [
-            mb_block_part_cylinder(
+            mb_block_part_tube(
                 block_size = size,
                 block_mod = mod,
-                diameter = 1, 
+                radius = [0.25, 0.5], 
                 axis = "x",
                 length = 2,
                 expand = [2, "auto"],
                 offset = offset
             ),
-            mb_block_part_cylinder(
+           /* mb_block_part_tube(
                 block_size = size,
                 block_mod = mod,
-                diameter = 0.8, 
+                radius = 0.4, 
                 axis = "x",
                 length = 2.2,
                 expand = [2.1, "auto"],
                 offset = offset
-            )
+            )*/
             
         ]
     ]    
@@ -464,16 +465,17 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = undef
     );
 
-function mb_block_part_cylinder(
+function mb_block_part_tube(
     block_size,
     block_mod = undef,
-    diameter,
+    radius,
     axis = "z",
     length = undef,
     expand = undef,
     offset = undef
 ) = 
-    let(mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
+    let(offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
+        mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
         mod_size = mod_min_max[1][0],
         axis = mb_axis_to_int(axis),
         h = mod_size[axis],
@@ -483,13 +485,13 @@ function mb_block_part_cylinder(
         
     )
     [
-        "cylinder",
+        "tube",
         [
             [
                 axis,
-                diameter,
+                radius,
                 h_adj,
-                offset
+                [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0]
             ]
         ]
     ];
@@ -599,7 +601,7 @@ function mb_block_part_prismoid(
 function mb_block_part_type_is_builtin(type) = 
     is_string(type) && (
         type == "prismoid" || 
-        type == "cylinder" ||
+        type == "tube" ||
         type == "cube" ||  
         type == "union" || 
         type == "difference" || 
@@ -702,13 +704,14 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
-            else if(type == "cylinder"){
-                mb_cylinder(
+            else if(type == "tube"){
+                mb_tube(
                     axis = list[0][0],
-                    diameter = list[0][1],
+                    radius = list[0][1],
                     length = list[0][2],
                     offset = list[0][3],
-                    mul = mul
+                    mul = mul,
+                    debug = debug
                 );
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
@@ -742,8 +745,10 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
     }
 }
 
+/*
 module mb_cylinder(
-    diameter,
+    
+    radius,
     length,
     axis = "z",
     offset = [0, 0, 0],
@@ -752,18 +757,18 @@ module mb_cylinder(
     center = true,
     debug = false
 ){
+    offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
+    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
     axis = mb_axis_to_int(axis);
     hl = is_list(length) ? length[1] - length[0] : length;
     length_offset = is_list(length) ? 0.5*(length[0] + length[1]) : 0;
-    off_0 = [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0];
-    off = [off_0[0] + (axis == 0 ? length_offset : 0), off_0[1] + (axis == 1 ? length_offset : 0), off_0[2] + (axis == 2 ? length_offset : 0)];
-
     rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
-
-    translate([off[0] * mul[0], off[1] * mul[1], off[2] * mul[2]])
+echo (l = length, hl = hl, lo = length_offset);
+    translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
         rotate(rot)
-            cylinder(d =  diameter * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = center, $fn = 100);
-}
+            translate([0, 0, length_offset * mul[axis]])
+                cylinder(r =  radius * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = center, $fn = 100);
+}*/
 
 /**
 * CUBE
