@@ -79,6 +79,7 @@ function mb_block_part__tube(block_obj) =
                 block_size = size,
                 block_mod = mod,
                 radius = [0.25, 0.5], 
+                rounding_radius = 1,
                 axis = "x",
                 length = 2,
                 expand = [2, "auto"],
@@ -469,6 +470,9 @@ function mb_block_part_tube(
     block_size,
     block_mod = undef,
     radius,
+    rounding_radius = undef,
+    clamp_start = undef,
+    clamp_end = undef,
     axis = "z",
     length = undef,
     expand = undef,
@@ -488,9 +492,13 @@ function mb_block_part_tube(
         "tube",
         [
             [
-                axis,
+                
                 radius,
                 h_adj,
+                rounding_radius,
+                clamp_start,
+                clamp_end,
+                axis,
                 [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0]
             ]
         ]
@@ -706,10 +714,13 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             }
             else if(type == "tube"){
                 mb_tube(
-                    axis = list[0][0],
-                    radius = list[0][1],
-                    length = list[0][2],
-                    offset = list[0][3],
+                    radius = list[0][0],
+                    length = list[0][1],
+                    rounding_radius = list[0][2],
+                    clamp_start = list[0][3],
+                    clamp_end = list[0][4],
+                    axis = list[0][5],
+                    offset = list[0][6],
                     mul = mul,
                     debug = debug
                 );
