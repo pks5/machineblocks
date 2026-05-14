@@ -27,7 +27,7 @@ function _mb_tube_profile_points(
     clamp_end_offset,
     clamp_end_rounding_radius,
 
-    edgeRoundingResolution
+    rounding_resolution_edge
 ) =
     let(
         radius_inner = max(0, radius_inner),
@@ -94,7 +94,7 @@ function _mb_tube_profile_points(
                     r = si_rr,
                     a0 = -90,
                     a1 = -180,
-                    segments = edgeRoundingResolution
+                    segments = rounding_resolution_edge
                 )
                 
             ) : [],
@@ -117,7 +117,7 @@ function _mb_tube_profile_points(
                     r = so_rr,
                     a0 = -90,
                     a1 = 0,
-                    segments = edgeRoundingResolution
+                    segments = rounding_resolution_edge
                 ),
                 [
                     [radius_outer, so_y_rounding]
@@ -139,7 +139,7 @@ function _mb_tube_profile_points(
                 r = cbs_rr,
                 a0 = cbs_thickness < 0 ? -90 : -90,
                 a1 = cbs_thickness < 0 ? -180 : 0,
-                segments = edgeRoundingResolution
+                segments = rounding_resolution_edge
             ) : [],
             [
                 [cbs_outer_radius, cbs_y_end],
@@ -161,7 +161,7 @@ function _mb_tube_profile_points(
                 r = cbe_rr,
                 a0 = cbe_thickness < 0 ? 180 : 0,
                 a1 = cbe_thickness < 0 ? 90 : 90,
-                segments = edgeRoundingResolution
+                segments = rounding_resolution_edge
             ) : [],
             cbe_offset == 0 ? [] : [
                 [radius_outer, cbe_y_end]
@@ -180,7 +180,7 @@ function _mb_tube_profile_points(
                     r = eo_rr,
                     a0 = 0,
                     a1 = 90,
-                    segments = edgeRoundingResolution
+                    segments = rounding_resolution_edge
                 )
             ) : [],
             [
@@ -200,7 +200,7 @@ function _mb_tube_profile_points(
                     r = ei_rr,
                     a0 = 180,
                     a1 = 90,
-                    segments = edgeRoundingResolution
+                    segments = rounding_resolution_edge
                 )
                 
                 
@@ -213,8 +213,8 @@ function _mb_tube_profile_points(
     );
 
 module mb_tube(
-    length,
     radius,
+    length,
     rounding_radius = undef,
     
     clamp_start = undef,
@@ -224,8 +224,12 @@ module mb_tube(
     offset = undef,
     mul = undef,
     
-    tubeRoundingResolution = 64,
-    edgeRoundingResolution = 8
+    rounding_resolution_tube = 64,
+    rounding_resolution_edge = 8,
+
+    color = "white",
+    draw_together = false,
+    debug = false
 ) {
     axis = mb_axis_to_int(axis);
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
@@ -255,42 +259,50 @@ module mb_tube(
         clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2];
         clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3];
 
+        is_cylinder = false;
+
         translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
             rotate(rot){
-                color("red")
-                translate([0, 0, 0.5 * (start + end)])
-                    cylinder(r = radius_outer, h = (end - start), center = true, $fn = tubeRoundingResolution);
-            
-                rotate_extrude(convexity = 10, $fn = tubeRoundingResolution)
-                    polygon(points = _mb_tube_profile_points(
-                        start = start, 
-                        end = end,
-                    
-                        radius_outer = radius_outer,
-                        radius_inner = radius_inner,
+                if(is_cylinder || draw_together){
+                    color(draw_together || debug ? "green" : color)
+                        translate([0, 0, 0.5 * (start + end)])
+                            cylinder(r = radius_outer, h = (end - start), center = true, $fn = rounding_resolution_tube);
+                }
 
-                        start_rounding_radius = start_rounding_radius,
-                        end_rounding_radius = end_rounding_radius,
+                if(!is_cylinder || draw_together){
+                    color(draw_together || debug ? "yellow" : color)
+                        rotate_extrude(convexity = 10, $fn = rounding_resolution_tube)
+                            polygon(points = _mb_tube_profile_points(
+                                start = start, 
+                                end = end,
+                            
+                                radius_outer = radius_outer,
+                                radius_inner = radius_inner,
 
-                        clamp_start_thickness = clamp_start_thickness,
-                        clamp_start_height = clamp_start_height,
-                        clamp_start_offset = clamp_start_offset,
-                        clamp_start_rounding_radius = clamp_start_rounding_radius,
-                        
-                        clamp_end_thickness = clamp_end_thickness,
-                        clamp_end_height = clamp_end_height,
-                        clamp_end_offset = clamp_end_offset,
-                        clamp_end_rounding_radius = clamp_end_rounding_radius,
+                                start_rounding_radius = start_rounding_radius,
+                                end_rounding_radius = end_rounding_radius,
 
-                        edgeRoundingResolution = edgeRoundingResolution
-                    ));
+                                clamp_start_thickness = clamp_start_thickness,
+                                clamp_start_height = clamp_start_height,
+                                clamp_start_offset = clamp_start_offset,
+                                clamp_start_rounding_radius = clamp_start_rounding_radius,
+                                
+                                clamp_end_thickness = clamp_end_thickness,
+                                clamp_end_height = clamp_end_height,
+                                clamp_end_offset = clamp_end_offset,
+                                clamp_end_rounding_radius = clamp_end_rounding_radius,
+
+                                rounding_resolution_edge = rounding_resolution_edge
+                            ));
+                }
             }
     }
 }   
 
 mb_tube(
-    length = [-40, 80],
     radius = [10, 20],
+    length = [-40, 80],
+    
     rounding_radius = [4, 12],
     axis = "y",
     offset = undef,
@@ -299,6 +311,9 @@ mb_tube(
     clamp_start = [25, 42, 10, 5],
     clamp_end = [25, 42, 10, 5],
 
-    tubeRoundingResolution = 64,
-    edgeRoundingResolution = 8
+    rounding_resolution_tube = 64,
+    rounding_resolution_edge = 8,
+
+    draw_together = false,
+    debug = false
 );
