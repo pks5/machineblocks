@@ -224,7 +224,7 @@ module mb_tube(
     offset = undef,
     mul = undef,
     
-    bodyRoundingResolution = 64,
+    tubeRoundingResolution = 64,
     edgeRoundingResolution = 8
 ) {
     axis = mb_axis_to_int(axis);
@@ -256,8 +256,12 @@ module mb_tube(
         clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3];
 
         translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
-            rotate(rot)
-                rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
+            rotate(rot){
+                color("red")
+                translate([0, 0, 0.5 * (start + end)])
+                    cylinder(r = radius_outer, h = (end - start), center = true, $fn = tubeRoundingResolution);
+            
+                rotate_extrude(convexity = 10, $fn = tubeRoundingResolution)
                     polygon(points = _mb_tube_profile_points(
                         start = start, 
                         end = end,
@@ -280,6 +284,7 @@ module mb_tube(
 
                         edgeRoundingResolution = edgeRoundingResolution
                     ));
+            }
     }
 }   
 
@@ -287,13 +292,13 @@ mb_tube(
     length = [-40, 80],
     radius = [10, 20],
     rounding_radius = [4, 12],
-    axis = "z",
+    axis = "y",
     offset = undef,
     mul = [8, 8, 3.2],
     
     clamp_start = [25, 42, 10, 5],
     clamp_end = [25, 42, 10, 5],
 
-    bodyRoundingResolution = 64,
+    tubeRoundingResolution = 64,
     edgeRoundingResolution = 8
 );
