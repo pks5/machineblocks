@@ -1,3 +1,5 @@
+use <../utils.scad>;
+
 function _mb_tube_arc_points(cx, cy, r, a0, a1, segments = 8) =
     [
         for (i = [0:segments])
@@ -12,16 +14,16 @@ function _mb_tube_profile_points(
     end,
     end_rounding_radius,
 
-    radius_inner = 0,
+    radius_inner,
     radius_outer,
 
-    clamp_start_height,
     clamp_start_thickness,
+    clamp_start_height,
     clamp_start_offset,
     clamp_start_rounding_radius,
     
-    clamp_end_height,
     clamp_end_thickness,
+    clamp_end_height,
     clamp_end_offset,
     clamp_end_rounding_radius,
 
@@ -213,76 +215,84 @@ function _mb_tube_profile_points(
 module mb_tube(
     length,
     radius,
+    rounding_radius = undef,
     
-    start_rounding_radius = 0,
+    clamp_start = undef,
+    clamp_end = undef,
     
+    axis = "z",
+    offset = undef,
+    mul = undef,
     
-    clamp_start_height = 0,
-    clamp_start_thickness = 0,
-    clamp_start_offset = 0,
-    clamp_start_rounding_radius = 0,
-    
-    clamp_end_height = 0,
-    clamp_end_thickness = 0,
-    clamp_end_offset = 0,
-    clamp_end_rounding_radius = 0,
-
-    end_rounding_radius = 0,
-
     bodyRoundingResolution = 64,
     edgeRoundingResolution = 8
 ) {
-    start = is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0; 
-    end = is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0;
+    axis = mb_axis_to_int(axis);
+    offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
+    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
+    mul_radius = mul[0];
+    mul_length = mul[axis];
 
-    radius_inner = is_list(radius) && len(radius) > 1 ? radius[0] : 0;
-    radius_outer = is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius; 
+    start = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
+    end = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
 
+    radius_inner = (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius;
+    radius_outer = (is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius) * mul_radius; 
+
+    start_rounding_radius = (is_list(rounding_radius) ? rounding_radius[0] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
+    end_rounding_radius = (is_list(rounding_radius) ? rounding_radius[1] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
+    
     if((end - start) > 0 && (radius_outer - radius_inner) > 0){
-        rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
-            polygon(points = _mb_tube_profile_points(
-                start = start, 
-                end = end,
-            
-                radius_outer = radius_outer,
-                radius_inner = radius_inner,
+        rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
 
-                start_rounding_radius = start_rounding_radius,
-                end_rounding_radius = end_rounding_radius,
+        clamp_start_thickness = !is_list(clamp_start) || is_undef(clamp_start[0]) ? 0 : clamp_start[0];
+        clamp_start_height = !is_list(clamp_start) || is_undef(clamp_start[1]) ? 0 : clamp_start[1];
+        clamp_start_offset = !is_list(clamp_start) || is_undef(clamp_start[2]) ? 0 : clamp_start[2];
+        clamp_start_rounding_radius = !is_list(clamp_start) || is_undef(clamp_start[3]) ? 0 : clamp_start[3];
 
-                clamp_start_height = clamp_start_height,
-                clamp_start_thickness = clamp_start_thickness,
-                clamp_start_offset = clamp_start_offset,
-                clamp_start_rounding_radius = clamp_start_rounding_radius,
-                
-                clamp_end_height = clamp_end_height,
-                clamp_end_thickness = clamp_end_thickness,
-                clamp_end_offset = clamp_end_offset,
-                clamp_end_rounding_radius = clamp_end_rounding_radius,
+        clamp_end_thickness = !is_list(clamp_end) || is_undef(clamp_end[0]) ? 0 : clamp_end[0];
+        clamp_end_height = !is_list(clamp_end) || is_undef(clamp_end[1]) ? 0 : clamp_end[1];
+        clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2];
+        clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3];
 
-                edgeRoundingResolution = edgeRoundingResolution
-            ));
+        translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
+            rotate(rot)
+                rotate_extrude(convexity = 10, $fn = bodyRoundingResolution)
+                    polygon(points = _mb_tube_profile_points(
+                        start = start, 
+                        end = end,
+                    
+                        radius_outer = radius_outer,
+                        radius_inner = radius_inner,
+
+                        start_rounding_radius = start_rounding_radius,
+                        end_rounding_radius = end_rounding_radius,
+
+                        clamp_start_thickness = clamp_start_thickness,
+                        clamp_start_height = clamp_start_height,
+                        clamp_start_offset = clamp_start_offset,
+                        clamp_start_rounding_radius = clamp_start_rounding_radius,
+                        
+                        clamp_end_thickness = clamp_end_thickness,
+                        clamp_end_height = clamp_end_height,
+                        clamp_end_offset = clamp_end_offset,
+                        clamp_end_rounding_radius = clamp_end_rounding_radius,
+
+                        edgeRoundingResolution = edgeRoundingResolution
+                    ));
     }
 }   
 
 mb_tube(
-    length = 100,
+    length = [-40, 80],
     radius = [10, 20],
-
-    start_rounding_radius = 4,
+    rounding_radius = [4, 12],
+    axis = "z",
+    offset = undef,
+    mul = [8, 8, 3.2],
     
-    
-    clamp_start_height = 12,
-    clamp_start_thickness = 12,
-    clamp_start_offset = 10,
-    clamp_start_rounding_radius = 5,
-
-    clamp_end_height = 12,
-    clamp_end_thickness = 15,
-    clamp_end_offset=0,
-    clamp_end_rounding_radius = 4,
-
-    end_rounding_radius = 6, 
+    clamp_start = [25, 42, 10, 5],
+    clamp_end = [25, 42, 10, 5],
 
     bodyRoundingResolution = 64,
     edgeRoundingResolution = 8
