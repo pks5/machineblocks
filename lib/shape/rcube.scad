@@ -60,7 +60,7 @@ function _mb_rcube_profile_points(
     )
     concat(
         //corner_sw,
-        concat(
+        rad_sw_x > 0 && rad_sw_y > 0 ? concat(
             [
                 [round_sw_x, corner_sw[1]]
             ],
@@ -72,15 +72,18 @@ function _mb_rcube_profile_points(
                 ry = rad_sw_y,
                 a0 = -180,
                 a1 = -90,
-                segments = rounding_resolution
+                segments = 0.25 * rounding_resolution
             ),
 
             [
                 [corner_sw[0], round_sw_y]
             ]
-        ),
+        ) : 
+        [
+            corner_sw
+        ],
         //corner_nw,
-        concat(
+        rad_nw_x > 0 && rad_nw_y > 0 ? concat(
             [
                 [corner_nw[0], round_nw_y]
             ],
@@ -92,15 +95,18 @@ function _mb_rcube_profile_points(
                 ry = rad_nw_y,
                 a0 = 180,
                 a1 = 90,
-                segments = rounding_resolution
+                segments = 0.25 * rounding_resolution
             ),
 
             [
                 [round_nw_x, corner_nw[1]]
             ]
-        ),
+        ) : 
+        [
+            corner_nw
+        ],
         //corner_ne,
-        concat(
+        rad_ne_x > 0 && rad_ne_y > 0 ? concat(
             [
                 [round_ne_x, corner_ne[1]]
             ],
@@ -112,15 +118,18 @@ function _mb_rcube_profile_points(
                 ry = rad_ne_y,
                 a0 = 90,
                 a1 = 0,
-                segments = rounding_resolution
+                segments = 0.25 * rounding_resolution
             ),
 
             [
                 [corner_ne[0], round_ne_y]
             ]
-        ),
+        ) : 
+        [
+            corner_ne
+        ],
         //corner_se
-        concat(
+        rad_se_x > 0 && rad_se_y > 0 ? concat(
             [
                 [corner_se[0], round_se_y]
             ],
@@ -132,13 +141,16 @@ function _mb_rcube_profile_points(
                 ry = rad_se_y,
                 a0 = 0,
                 a1 = -90,
-                segments = rounding_resolution
+                segments = 0.25 * rounding_resolution
             ),
 
             [
                 [round_se_x, corner_se[1]]
             ]
-        )
+        ) : 
+        [
+            corner_se
+        ]
         
         
     );
@@ -150,16 +162,29 @@ module mb_rcube(
 ){
     size =  mb_cube_size_resolve(size);
 
-    polygon(points = _mb_rcube_profile_points(
-        size = size, 
-        radius = radius, 
-        rounding_resolution = 0.25 * rounding_resolution
-    ));
+    dim = [
+            size[1][0] - size[0][0], 
+            size[1][1] - size[0][1],
+            size[1][2] - size[0][2]
+        ];
+
+    tz = 0.5 * (size[0][2] + size[1][2]);
+
+    translate([0, 0, tz])
+        linear_extrude(height = dim[2], center = true)
+            polygon(
+                points = _mb_rcube_profile_points(
+                    size = size, 
+                    radius = radius, 
+                    rounding_resolution = rounding_resolution
+                ),
+                convexity = 10
+            );
 }
 
 
 mb_rcube(
-    size = [200, 100, 300],
-    radius = [[100, 50], [100, 50], [100, 50], [100, 50]],
+    size = [[-200, -100, -200], [100, 100, 100]],
+    radius = [[0, 0], [150, 100], [150, 100], [150, 100]],
     rounding_resolution = 100
 );
