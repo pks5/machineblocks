@@ -26,7 +26,20 @@ function mb_resolve_quad(xyz, default = [0, 0, 0, undef], mul = undef, min_value
         p = is_undef(r1) ? undef : (is_undef(precision) ? r1 : [mb_round_prec(r1[0], precision), mb_round_prec(r1[1], precision), mb_round_prec(r1[2], precision), is_undef(r1[3]) ? undef : mb_round_prec(r1[3], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2]), is_undef(p[3]) ? undef : max(min_value, p[3])]);
 
-
+function mb_cube_size_resolve(size) = is_num(size) || (is_list(size) && (is_undef(size[0]) || is_num(size[0])) && (is_undef(size[1]) || is_num(size[1])) && (is_undef(size[2]) || is_num(size[2]))) ?
+        [
+            mb_resolve_xyz(size, mul = -0.5),
+            mb_resolve_xyz(size, mul = 0.5)
+        ] :
+        is_list(size) && len(size) == 2 && is_list(size[0]) && is_list(size[1]) ? 
+        [
+            mb_resolve_xyz(size[0]),
+            mb_resolve_xyz(size[1])
+        ] : 
+        [
+            mb_resolve_xyz(size[0], mul = -0.5), 
+            mb_resolve_xyz(size[0], mul = 0.5)
+        ];
 /*
 * ---------------
 * START BLOCK OBJ

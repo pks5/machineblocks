@@ -797,34 +797,49 @@ module mb_cube(
     resolution = 80, 
     debug = false
 ){
-    size = is_list(size) && len(size) == 2 && is_list(size[0]) && is_list(size[1]) ? 
-        [
-            mb_resolve_xyz(size[0]),
-            mb_resolve_xyz(size[1])
-        ] : [mb_resolve_xyz(size[0], mul = -0.5), mb_resolve_xyz(size[0], mul = 0.5)];
+    size =  mb_cube_size_resolve(size);
 
     rad0 = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
 
     if(rad0){
-        si = [(size[1][0] - size[0][0]) * mul[0], (size[1][1] - size[0][1]) * mul[1], (size[1][2] - size[0][2]) * mul[2]];
+        si = [
+            (size[1][0] - size[0][0]) * mul[0], 
+            (size[1][1] - size[0][1]) * mul[1], 
+            (size[1][2] - size[0][2]) * mul[2]
+        ];
         echo (si = si, size0 = size[0], size1 = size[1]);
-        translate([(0.5* (size[0][0] + size[1][0]) + offset[0]) * mul[0], 
-        (0.5*(size[0][1] + size[1][1]) + offset[1]) * mul[1], 
-        (0.5*(size[0][2] + size[1][2]) + offset[2]) * mul[2]])
-        
+        translate([
+            (0.5 * (size[0][0] + size[1][0]) + offset[0]) * mul[0], 
+            (0.5 * (size[0][1] + size[1][1]) + offset[1]) * mul[1], 
+            (0.5 * (size[0][2] + size[1][2]) + offset[2]) * mul[2]
+        ])
             cube(si, center = center);
     }
     else{
         rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
 
         prismoid_shape = [
-        [
-            [size[0][0], size[0][1]], [size[0][0], size[1][1]], [size[1][0], size[1][1]], [size[1][0], size[0][1]]],
-            undef,
-            [[size[0][2], size[1][2]]]
+            [ // Plane 0
+                [size[0][0], size[0][1]], 
+                [size[0][0], size[1][1]], 
+                [size[1][0], size[1][1]], 
+                [size[1][0], size[0][1]]
+            ],
+            undef, // Plane 1
+            [
+                [size[0][2], size[1][2]] // Height
+            ]
         ];
 
-        mb_prismoid(shape = prismoid_shape, add = [offset], mul = mul, radius = rad, align = center ? "center" : "start", resolution = resolution, debug = debug);
+        mb_prismoid(
+            shape = prismoid_shape, 
+            add = [offset], 
+            mul = mul, 
+            radius = rad, 
+            align = center ? "center" : "start", 
+            resolution = resolution, 
+            debug = debug
+        );
     }
 }
 

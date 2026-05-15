@@ -1038,7 +1038,7 @@ module mb_block(
                                                             
                                                         } // End stabilizer grid
 
-                                                        if(pillars != false){
+                                                        *if(pillars != false){
                                                             pilRoundingRes = mb_fn_even_for_radius(
                                                                 0.5 * tubeZSize + baseClampThickness, 
                                                                 0, 
