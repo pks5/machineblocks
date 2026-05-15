@@ -94,11 +94,8 @@ function mb_block_obj(
                 [adj_size]
             ], // 0 - Original Size / Mod Size
             [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
-            mod_min_max[3], // 2 - Min / Max (modified)
-            [ 
-                [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
-                [ceil(si[0] + mod[1] - 1), ceil(si[1] + mod[3] - 1), ceil(si[2] + mod[5] - 1)] // Max Index (modified)
-            ], // 3 - Min / Max Index
+            mod_min_max[3], // 2 - Min / Max Index
+            undef, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [mod, bsa_grd], // 6 - Adjustments
@@ -122,59 +119,56 @@ function mb_block_obj(
 * Getters
 */
 
-function mb_block_get_id(block_obj) = block_obj[20][0];
-function mb_block_get_cut_tolerance(block_obj) = block_obj[20][2];
+function mb_block_get_id(block_obj) =                        block_obj[20][0];
+function mb_block_get_cut_tolerance(block_obj) =             block_obj[20][2];
 
-function mb_block_get_bevel(block_obj) = block_obj[1][0];
-function mb_block_get_inverted(block_obj) = block_obj[19][0];
+function mb_block_get_bevel(block_obj) =                     block_obj[1][0];
+function mb_block_get_inverted(block_obj) =                  block_obj[19][0];
 
-function mb_block_get_slope(block_obj) = block_obj[1][1];
+function mb_block_get_slope(block_obj) =                     block_obj[1][1];
 
-function mb_block_get_slope_socket(block_obj) = block_obj[5];
+function mb_block_get_slope_socket(block_obj) =              block_obj[5];
 
-function mb_block_get_base_cutout_depth(block_obj) = block_obj[4][0];
-function mb_block_get_base_adj(block_obj) = block_obj[6][1];
-function mb_block_get_size_mod(block_obj) = block_obj[6][0];
+function mb_block_get_base_cutout_depth(block_obj) =         block_obj[4][0];
+function mb_block_get_base_adj(block_obj) =                  block_obj[6][1];
+function mb_block_get_size_mod(block_obj) =                  block_obj[6][0];
 
-function mb_block_get_size(block_obj) = block_obj[0][0][0];
-function mb_block_get_center(block_obj) = block_obj[0][0][2];
-function mb_block_get_mod_size(block_obj) = block_obj[0][1][0];
+function mb_block_get_size(block_obj) =                      block_obj[0][0][0];
+function mb_block_get_center(block_obj) =                    block_obj[0][0][2];
+function mb_block_get_mod_size(block_obj) =                  block_obj[0][1][0];
 
-function mb_block_get_wall_thickness(block_obj) = block_obj[4][3];
+function mb_block_get_wall_thickness(block_obj) =            block_obj[4][3];
 
-function mb_block_get_top_plate_height(block_obj) = block_obj[4][1];
-function mb_block_get_top_plate_helpers(block_obj) = block_obj[9][1];
+function mb_block_get_top_plate_height(block_obj) =          block_obj[4][1];
+function mb_block_get_top_plate_helpers(block_obj) =         block_obj[9][1];
 
-function mb_block_get_recess(block_obj) = block_obj[8][0];
-function mb_block_get_recess_wall_thickness(block_obj) = block_obj[8][1];
-function mb_block_get_recess_depth(block_obj) = block_obj[4][2];
-function mb_block_get_recess_wall_gaps(block_obj) = block_obj[8][4];
+function mb_block_get_recess(block_obj) =                    block_obj[8][0];
+function mb_block_get_recess_wall_thickness(block_obj) =     block_obj[8][1];
+function mb_block_get_recess_depth(block_obj) =              block_obj[4][2];
+function mb_block_get_recess_wall_gaps(block_obj) =          block_obj[8][4];
 
-function mb_block_get_base_wall_gaps(block_obj) = block_obj[17][0];
+function mb_block_get_base_wall_gaps(block_obj) =            block_obj[17][0];
 
-function mb_block_get_grid_cfg(block_obj) = block_obj[7][0];
+function mb_block_get_grid_cfg(block_obj) =                  block_obj[7][0];
 
-function mb_block_get_scale(block_obj) = block_obj[7][1];
+function mb_block_get_scale(block_obj) =                     block_obj[7][1];
 
-function mb_block_get_relief_cut(block_obj) = block_obj[8][2];
-function mb_block_get_relief_cut_dim(block_obj) = block_obj[8][3];
+function mb_block_get_relief_cut(block_obj) =                block_obj[8][2];
+function mb_block_get_relief_cut_dim(block_obj) =            block_obj[8][3];
 
-function mb_block_get_clamp(block_obj) = block_obj[4][4];
+function mb_block_get_clamp(block_obj) =                     block_obj[4][4];
 
-function mb_block_get_base_cutout_min_depth(block_obj) = block_obj[4][5];
+function mb_block_get_base_cutout_min_depth(block_obj) =     block_obj[4][5];
 
-function mb_block_get_stabilizers(block_obj) = block_obj[16][0];
+function mb_block_get_stabilizers(block_obj) =               block_obj[16][0];
+
+function mb_block_get_min_max_index(block_obj) =             block_obj[2];
+function mb_block_get_custom_modules(block_obj) =            block_obj[18];
 /*
 * TODO Rename or delete
 */
 
-function mb_block_custom_module_mapping(block_obj, mname) = 
-    let(mappings = block_obj[18][0], f = [
-        for(i = [0:len(mappings)-1])
-            if (mappings[i] == mname)
-                i
-    ])
-    len(f) > 0 ? f[0] : undef;
+
 
     
     
@@ -205,6 +199,15 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
+function mb_block_custom_module_mapping(block_obj, mname) = 
+    let(custom_modules = mb_block_get_custom_modules(block_obj),
+        mappings = custom_modules[0], f = [
+        for(i = [0:len(mappings)-1])
+            if (mappings[i] == mname)
+                i
+    ])
+    len(f) > 0 ? f[0] : undef;
+    
 function mb_block_recess_wall_gap(block_obj, gap) = 
     let(gap = mb_to_array(gap),
         face = mb_side_to_int(gap[0]))
@@ -250,14 +253,19 @@ function mb_block_mod_min_max(block_size, block_mod = undef, adj = undef) =
         
     )
         [
-            [size, bb, c, mod],
+            [size, bb, c, mod], // 0
             [
                 mod_size,
                 mb_bounding_box(mod_size),
                 min_max
-            ],
+            ], // 1
             
-            [mi, ma]
+            [mi, ma], // 2
+
+            [ 
+                [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
+                [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)] // Max Index (modified)
+            ] // 3
         ];
 /*
 * Methods

@@ -216,6 +216,7 @@ function mb_block_part__stabilizers(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
+        min_max_index = mb_block_get_min_max_index(block_obj)
         )
     mb_block_part_cube(
         block_size = mod_size,
