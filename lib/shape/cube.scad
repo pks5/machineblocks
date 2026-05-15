@@ -226,7 +226,6 @@ module mb_cube(
     mul = [1, 1, 1],
     radius = 0, 
     xyz_rad = false, 
-    center = true, 
     rounding_resolution = 80, 
     color = "white",
     draw_together = false,
@@ -251,7 +250,7 @@ module mb_cube(
                 (0.5 * (size[0][1] + size[1][1]) + offset[1]) * mul[1], 
                 (0.5 * (size[0][2] + size[1][2]) + offset[2]) * mul[2]
             ])
-                cube(si, center = center);
+                cube(si, center = true);
     }
 
     if(!is_simple_cube || draw_together){
@@ -276,7 +275,7 @@ module mb_cube(
                 add = [offset], 
                 mul = mul, 
                 radius = rad, 
-                align = center ? "center" : "start", 
+                align = "sticky", 
                 resolution = rounding_resolution, 
                 debug = debug
             );
