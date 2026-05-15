@@ -1,8 +1,10 @@
 use <geometry.scad>;
 use <block_model.scad>;
 use <../utils.scad>;
-use <../prismoid.scad>;
+
+use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
+use <../shape/cube.scad>;
 
 include <../custom.scad>;
 
@@ -784,71 +786,3 @@ echo (l = length, hl = hl, lo = length_offset);
                 cylinder(r =  radius * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = center, $fn = 100);
 }*/
 
-/**
-* CUBE
-*/
-module mb_cube(
-    size, 
-    offset = [0, 0, 0],
-    mul = [1, 1, 1],
-    radius = 0, 
-    xyz_rad = false, 
-    center = true, 
-    resolution = 80, 
-    debug = false
-){
-    size =  mb_cube_size_resolve(size);
-
-    rad0 = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
-
-    if(rad0){
-        si = [
-            (size[1][0] - size[0][0]) * mul[0], 
-            (size[1][1] - size[0][1]) * mul[1], 
-            (size[1][2] - size[0][2]) * mul[2]
-        ];
-        echo (si = si, size0 = size[0], size1 = size[1]);
-        translate([
-            (0.5 * (size[0][0] + size[1][0]) + offset[0]) * mul[0], 
-            (0.5 * (size[0][1] + size[1][1]) + offset[1]) * mul[1], 
-            (0.5 * (size[0][2] + size[1][2]) + offset[2]) * mul[2]
-        ])
-            cube(si, center = center);
-    }
-    else{
-        rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
-
-        prismoid_shape = [
-            [ // Plane 0
-                [size[0][0], size[0][1]], 
-                [size[0][0], size[1][1]], 
-                [size[1][0], size[1][1]], 
-                [size[1][0], size[0][1]]
-            ],
-            undef, // Plane 1
-            [
-                [size[0][2], size[1][2]] // Height
-            ]
-        ];
-
-        mb_prismoid(
-            shape = prismoid_shape, 
-            add = [offset], 
-            mul = mul, 
-            radius = rad, 
-            align = center ? "center" : "start", 
-            resolution = resolution, 
-            debug = debug
-        );
-    }
-}
-
-
-
-
-translate([200, 0, 0])
-mb_cube(
-    debug = true, 
-    size = [4, 4, 3], 
-    mul = [8, 8, 3.2],
-    radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[1.2, 1.2, 1, 2], [1.2, 1.2, 1, 1.2], [0.1, 0.1, 0.1,0.1], [1, 1, 1, 1]]]);

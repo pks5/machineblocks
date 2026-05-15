@@ -247,7 +247,7 @@ module mb_tube(
     end_rounding_radius = (is_list(rounding_radius) ? rounding_radius[1] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
     
     if((end - start) > 0 && (radius_outer - radius_inner) > 0){
-        rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
+        rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [-90, 0, 0] : [0, 0, 0];
 
         clamp_start_thickness = !is_list(clamp_start) || is_undef(clamp_start[0]) ? 0 : clamp_start[0];
         clamp_start_height = !is_list(clamp_start) || is_undef(clamp_start[1]) ? 0 : clamp_start[1];
@@ -302,6 +302,13 @@ module mb_tube(
             }
     }
 }   
+
+
+/*
+* --------------
+* START EXAMPLES
+* --------------
+*/
 
 mb_tube(
     radius = 20, //[10, 20],

@@ -1,6 +1,6 @@
-use <utils.scad>;
-use <quad.scad>;
-use <core/geometry.scad>;
+use <../utils.scad>;
+use <../quad.scad>;
+use <../core/geometry.scad>;
 
 /*
 * --------------------
@@ -707,9 +707,9 @@ module mb_prismoid(
 
 
 /*
-* ----------------------
-* START TESTING (REMOVE)
-* ----------------------
+* --------------
+* START EXAMPLES
+* --------------
 */
 
 
@@ -718,7 +718,7 @@ corner = [1,0];
 
 
 *color("#ffffff55")
-mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0], resolution = 80);
+mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0]);
 
 
 *translate([0, -300, 0])
@@ -726,14 +726,14 @@ mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
-], height = 120, socket = [20, 0], socket_top = undef, radius = 0, resolution = 160);
+], height = 120, socket = [20, 0], socket_top = undef, radius = 0);
 
 translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [15, 14, 6, 12], resolution = 160, debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [15, 14, 6, 12], debug=true, align="sticky");
 
 
 
@@ -741,7 +741,7 @@ mb_prismoid(shape = [
     [[-20, -30, undef, [10,10,0]], [-20, 30, undef,[10,10,0]], [50, 30,undef, [10,10,0]], [50, -30,undef, [10,10,0]]],
     [[-20, -30, undef,[10,10,0]], [-20, 30,undef, [10,10,0]], [20, 30, undef,[10,10,0]], [20, -30, undef,[10,10,0]]]
     
-], height = 120, socket = [0, 20], radius = 0, resolution = 160);
+], height = 120, socket = [0, 20], radius = 0);
 
 
 
@@ -749,4 +749,4 @@ mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
-], height = 120, socket = [20, 20], radius = 0, resolution = 160, debug=true);
+], height = 120, socket = [20, 20], radius = 0, debug=true);

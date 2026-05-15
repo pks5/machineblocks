@@ -77,6 +77,12 @@ module mb_ellibox(
     polyhedron(points = points, faces = faces, convexity = 10);
 }
 
+/*
+* --------------
+* START EXAMPLES
+* --------------
+*/
+
 
 color("red")
 // Test

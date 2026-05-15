@@ -13,7 +13,7 @@
 include <core/api.scad>;
 use <core/block_model.scad>;
 use <core/block_part.scad>;
-use <prismoid.scad>;
+use <shape/prismoid.scad>;
 use <base.scad>;
 use <text3d.scad>;
 use <svg3d.scad>;

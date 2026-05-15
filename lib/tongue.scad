@@ -1,7 +1,7 @@
 use <utils.scad>;
 use <quad.scad>;
 //use <polygon.scad>;
-use <prismoid.scad>;
+use <shape/prismoid.scad>;
 use <quality.scad>;
 
 module mb_tongue(

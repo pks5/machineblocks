@@ -1,4 +1,4 @@
-use <prismoid.scad>;
+use <shape/prismoid.scad>;
 
 //Dupont plug grid size is 2.54 mm
 module mb_dupont_plug(

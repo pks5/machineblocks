@@ -1,4 +1,5 @@
 use <../utils.scad>;
+use <prismoid.scad>;
 
 function _mb_rcube_ellipse_arc_points(cx, cy, rx, ry, a0, a1, segments = 8) =
     [
@@ -216,6 +217,87 @@ module mb_rcube(
     }
 }
 
+/**
+* CUBE
+*/
+module mb_cube(
+    size, 
+    offset = [0, 0, 0],
+    mul = [1, 1, 1],
+    radius = 0, 
+    xyz_rad = false, 
+    center = true, 
+    rounding_resolution = 80, 
+    color = "white",
+    draw_together = false,
+    debug = false
+){
+    size =  mb_cube_size_resolve(size);
+
+    is_simple_cube = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
+
+    if(is_simple_cube || draw_together){
+        si = [
+            (size[1][0] - size[0][0]) * mul[0], 
+            (size[1][1] - size[0][1]) * mul[1], 
+            (size[1][2] - size[0][2]) * mul[2]
+        ];
+
+        echo (si = si, size0 = size[0], size1 = size[1]);
+        
+        color(draw_together || debug ? "green" : color)
+            translate([
+                (0.5 * (size[0][0] + size[1][0]) + offset[0]) * mul[0], 
+                (0.5 * (size[0][1] + size[1][1]) + offset[1]) * mul[1], 
+                (0.5 * (size[0][2] + size[1][2]) + offset[2]) * mul[2]
+            ])
+                cube(si, center = center);
+    }
+
+    if(!is_simple_cube || draw_together){
+        rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
+
+        prismoid_shape = [
+            [ // Plane 0
+                [size[0][0], size[0][1]], 
+                [size[0][0], size[1][1]], 
+                [size[1][0], size[1][1]], 
+                [size[1][0], size[0][1]]
+            ],
+            undef, // Plane 1
+            [
+                [size[0][2], size[1][2]] // Height
+            ]
+        ];
+
+        color(draw_together || debug ? "red" : color)
+            mb_prismoid(
+                shape = prismoid_shape, 
+                add = [offset], 
+                mul = mul, 
+                radius = rad, 
+                align = center ? "center" : "start", 
+                resolution = rounding_resolution, 
+                debug = debug
+            );
+    }
+}
+
+
+/*
+* --------------
+* START EXAMPLES
+* --------------
+*/
+
+*translate([400, 0, 0])
+mb_cube(
+    debug = true, 
+    size = [4, 4, 3], 
+    mul = [8, 8, 3.2],
+    radius = [[[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]], [[1.2, 1.2, 1, 2], [1.2, 1.2, 1, 1.2], [0.1, 0.1, 0.1,0.1], [1, 1, 1, 1]]]);
+
+
 mb_rcube(
     size = [[-300, -100, -150], [200, 100, 400]],
     radius = [20, 80, 50, 30],
@@ -225,6 +307,14 @@ mb_rcube(
     draw_together = true
 );
 
+mb_cube(
+    size = [[-300, -100, -150], [200, 100, 400]],
+    //radius = [20, 80, 50, 30],
+    //axis = "z",
+    rounding_resolution = 100,
+    debug = true,
+    draw_together = true
+);
 
 
 
