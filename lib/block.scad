@@ -321,6 +321,7 @@ module mb_block(
         recess = recess,
         recess_wall_thickness = recessWallThickness,
         recess_wall_gaps = recessWallGaps,
+        baseWallGaps = baseWallGaps,
         relief_cut = baseReliefCut
     );
     

@@ -169,6 +169,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
+        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
@@ -207,7 +208,9 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 slope = planes == "all" ? slope_pos : undef,
                 socket = planes == "all" ? [base_cutout_min_depth, 0] : undef
             ),
-            mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, 1, 0, 1, red)
+            for(wall_gap = wall_gaps)
+                let(gap = mb_block_base_wall_gap(block_obj, wall_gap))
+                    mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, gap[0], gap[1], gap[2], red)
         ]
     ];
 
