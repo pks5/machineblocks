@@ -182,9 +182,179 @@ module mb_rcube(
             );
 }
 
+module mb_rcube_ellipsoid(
+    x_y,
+    x_z,
+    y_x,
+    y_z,
+    z_x,
+    z_y,
+    hs = 1,
+    n = 48,
+    zero = 0.001,
+    resolution = 96
+) {
+    rz = max(z_x, z_y);
+    h = 2 * rz;
 
-mb_rcube(
+    module rounded_cube_z(half_x, half_y, rx, ry, height) {
+        mb_rcube(
+            size = [2 * half_x, 2 * half_y, height],
+            radius = [[rx, ry], [rx, ry], [rx, ry], [rx, ry]],
+            rounding_resolution = resolution
+        );
+    }
+
+    function ellipse_inset_cap(z, rz_total, rz_axis, r_axis) =
+        z < -rz_total + rz_axis
+            ? let(t = (z + rz_total) / rz_axis)
+                r_axis * (1 - sqrt(max(0, 1 - pow(1 - t, 2))))
+
+        : z > rz_total - rz_axis
+            ? let(t = (rz_total - z) / rz_axis)
+                r_axis * (1 - sqrt(max(0, 1 - pow(1 - t, 2))))
+
+        : 0;
+
+    for (i = [0 : 2 * n - 1]) {
+        z0 = -rz + i * h / (2 * n);
+        z1 = -rz + (i + 1) * h / (2 * n);
+        zmid = (z0 + z1) / 2;
+
+        ix = ellipse_inset_cap(zmid, rz, z_x, x_z);
+        iy = ellipse_inset_cap(zmid, rz, z_y, y_z);
+
+        half_x = max(zero, max(x_y, x_z) - ix);
+        half_y = max(zero, max(y_x, y_z) - iy);
+
+        rx = max(zero, min(x_y, half_x));
+        ry = max(zero, min(y_x, half_y));
+
+        translate([0, 0, zmid])
+            rounded_cube_z(
+                half_x,
+                half_y,
+                rx,
+                ry,
+                hs * max(z1 - z0, zero)
+            );
+    }
+}
+
+
+
+
+// Beispiel
+*hull()
+mb_rcube_ellipsoid(
+    x_y = 20,
+    x_z = 5,
+    y_x = 20,
+    y_z = 5,
+    z_x = 5,
+    z_y = 5,
+    hs = 0.5,
+    n = 48,
+    zero = 0.001,
+    resolution = 96
+);
+
+*mb_rcube(
     size = [[-200, -100, -200], [100, 100, 100]],
-    radius = [[0, 0], [150, 100], [150, 100], [150, 100]],
+    radius = [[0, 0], [0, 0], [0, 0], [0, 0]],
     rounding_resolution = 100
 );
+
+
+
+function mb_ellipse_inset_cap(z, rz_total, rz_axis, r_axis) =
+    z < -rz_total + rz_axis
+        ? let(t = (z + rz_total) / rz_axis)
+            r_axis * (1 - sqrt(max(0, 1 - pow(1 - t, 2))))
+    : z > rz_total - rz_axis
+        ? let(t = (rz_total - z) / rz_axis)
+            r_axis * (1 - sqrt(max(0, 1 - pow(1 - t, 2))))
+    : 0;
+
+
+// einfache "rounded rect" Approx (superellipse style)
+function mb_rr_point(theta, hx, hy, rx, ry) =
+    let(
+        ct = cos(theta),
+        st = sin(theta),
+
+        // superellipse trick
+        nx = sign(ct) * pow(abs(ct), 0.5),
+        ny = sign(st) * pow(abs(st), 0.5)
+    )
+    [
+        nx * (hx - rx) + ct * rx,
+        ny * (hy - ry) + st * ry
+    ];
+
+
+module mb_rcube_ellipsoid_poly(
+    x_y, x_z,
+    y_x, y_z,
+    z_x, z_y,
+    n_z = 48,
+    n_a = 48
+){
+    rz = max(z_x, z_y);
+    h  = 2 * rz;
+
+    function ring(z) =
+        let(
+            ix = mb_ellipse_inset_cap(z, rz, z_x, x_z),
+            iy = mb_ellipse_inset_cap(z, rz, z_y, y_z),
+
+            hx = max(0.001, max(x_y, x_z) - ix),
+            hy = max(0.001, max(y_x, y_z) - iy),
+
+            rx = min(x_y, hx),
+            ry = min(y_x, hy)
+        )
+        [
+            for (a = [0 : n_a-1])
+                let(theta = 360 * a / n_a)
+                    concat(
+                        mb_rr_point(theta, hx, hy, rx, ry),
+                        [z]
+                    )
+        ];
+
+    // Punkte
+    points = [
+        for (i = [0 : n_z])
+            let(z = -rz + i * h / n_z)
+                each ring(z)
+    ];
+
+    // Faces
+    faces = [
+        for (i = [0 : n_z-1])
+            for (j = [0 : n_a-1])
+                let(
+                    a = i*n_a + j,
+                    b = i*n_a + (j+1)%n_a,
+                    c = (i+1)*n_a + (j+1)%n_a,
+                    d = (i+1)*n_a + j
+                )
+                [a,b,c,d]
+    ];
+
+    polyhedron(points = points, faces = faces, convexity = 10);
+}
+
+
+color("red")
+// Test
+mb_rcube_ellipsoid_poly(
+    20,15,
+    10,5,
+    20,20,
+    n_z = 64,
+    n_a = 64
+);
+
+
