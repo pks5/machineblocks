@@ -1,4 +1,4 @@
-use <../utils.scad>;
+use <../core/utils.scad>;
 
 function _mb_tube_arc_points(cx, cy, r, a0, a1, segments = 8) =
     [

@@ -1,11 +1,11 @@
-use <core/block_model.scad>;
-use <core/block_part.scad>;
-use <layout/layout.scad>;
-use <shape/prismoid.scad>;
-use <shape/connectors.scad>;
-use <utils.scad>;
-use <quad.scad>;
-use <quality.scad>;
+use <../core/block_model.scad>;
+use <../core/block_part.scad>;
+use <layout.scad>;
+use <../shape/prismoid.scad>;
+use <../shape/connectors.scad>;
+use <../core/utils.scad>;
+use <../quad.scad>;
+use <../core/quality.scad>;
 
 /*
 * Base Cutout

@@ -1,4 +1,4 @@
-use <quad.scad>;
+use <../quad.scad>;
 
 function mb_resolve_xyz(xyz, default = [0, 0, 0], mul = undef, min_value = undef, precision = undef) = 
     let(m = is_undef(mul) ? [1, 1, 1] : mb_resolve_xyz(mul, default = [1, 1, 1]),

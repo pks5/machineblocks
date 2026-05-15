@@ -1,4 +1,4 @@
-use <../utils.scad>;
+use <../core/utils.scad>;
 use <prismoid.scad>;
 
 function _mb_rcube_ellipse_arc_points(cx, cy, rx, ry, a0, a1, segments = 8) =

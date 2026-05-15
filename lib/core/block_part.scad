@@ -1,6 +1,6 @@
 use <geometry.scad>;
 use <block_model.scad>;
-use <../utils.scad>;
+use <utils.scad>;
 
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;

@@ -10,24 +10,27 @@
 *
 */
 
-include <core/api.scad>;
 use <core/block_model.scad>;
 use <core/block_part.scad>;
+use <core/utils.scad>;
+use <core/quality.scad>;
+
 use <layout/layout.scad>;
+use <layout/base.scad>;
+
 use <shape/prismoid.scad>;
-use <base.scad>;
 use <shape/text3d.scad>;
 use <shape/svg3d.scad>;
 use <shape/pcb.scad>;
 use <shape/axis.scad>;
-use <utils.scad>;
+
 use <bevel.scad>;
 use <rounded.scad>;
 use <quad.scad>;
 use <tongue.scad>;
 use <stud.scad>;
-use <quality.scad>;
 
+include <core/api.scad>;
 
 /*
 * Main Module

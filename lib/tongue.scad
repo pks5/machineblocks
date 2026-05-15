@@ -1,8 +1,8 @@
-use <utils.scad>;
+use <core/utils.scad>;
 use <quad.scad>;
 //use <polygon.scad>;
 use <shape/prismoid.scad>;
-use <quality.scad>;
+use <core/quality.scad>;
 
 module mb_tongue(
     block_obj,

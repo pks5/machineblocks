@@ -1,4 +1,4 @@
-use <../utils.scad>;
+use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 

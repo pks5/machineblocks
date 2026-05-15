@@ -1,5 +1,5 @@
 use <geometry.scad>;
-use <../utils.scad>;
+use <utils.scad>;
 
 function mb_block_obj(
     size, 

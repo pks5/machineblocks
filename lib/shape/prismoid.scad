@@ -1,4 +1,4 @@
-use <../utils.scad>;
+use <../core/utils.scad>;
 use <../quad.scad>;
 use <../core/geometry.scad>;
 
