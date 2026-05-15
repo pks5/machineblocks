@@ -319,8 +319,8 @@ mb_tube(
     offset = undef,
     mul = [8, 8, 3.2],
     
-    clamp_start = undef, //[25, 42, 10, 5],
-    clamp_end = undef, //[25, 42, 10, 5],
+    clamp_start = [25, 42, 10, 5],
+    clamp_end = [25, 42, 10, 5],
 
     rounding_resolution_tube = 64,
     rounding_resolution_edge = 8,
