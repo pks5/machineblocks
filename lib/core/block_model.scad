@@ -29,7 +29,8 @@ function mb_block_obj(
     id = "[Block]",
     custom_modules = ["my_cube"],
     debug = false,
-    baseWallGaps = []
+    baseWallGaps = [],
+    stabilizers = [0.5, 0.5, 0.2]
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -82,7 +83,9 @@ function mb_block_obj(
         clamp_final = [clamp[0] * mul_mm_to_grid[0], clamp[1] * mul_mbu_to_grid[2], clamp[2] * mul_mbu_to_grid[2], clamp_outer],
         relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
 
-        top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]]
+        top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]],
+
+        stabilizers_res = [stabilizers[0] * mul_mbu_to_grid[0], stabilizers[1] * mul_mbu_to_grid[2], stabilizers[2] * mul_mm_to_grid[2]]
     )
         [
             [
@@ -108,7 +111,7 @@ function mb_block_obj(
             [],  // 13 - 
             [],  // 14 - 
             [],  // 15 - 
-            [],  // 16 - 
+            [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
             [false],  // 19 - 
@@ -160,7 +163,7 @@ function mb_block_get_clamp(block_obj) = block_obj[4][4];
 
 function mb_block_get_base_cutout_min_depth(block_obj) = block_obj[4][5];
 
-
+function mb_block_get_stabilizers(block_obj) = block_obj[16][0];
 /*
 * TODO Rename or delete
 */

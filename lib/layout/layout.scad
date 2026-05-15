@@ -210,6 +210,19 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         ]
     ];
 
+function mb_block_part__stabilizers(block_obj) =
+    let(mod_size = mb_block_get_mod_size(block_obj),
+        stabilizers = mb_block_get_stabilizers(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        )
+    mb_block_part_cube(
+        block_size = mod_size,
+        size = [stabilizers[0], undef, stabilizers[1] + cut_tol],
+        expand = [0, 0, 0, 0, "auto", - (recess_depth + top_plate_height) + cut_tol]
+    ); 
+
 function mb_block_part__base_cutout_clamp(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -256,10 +269,11 @@ function mb_block_part__top_plate_helpers(block_obj) =
         slope_pos = mb_slope_filter(slope, 1),
         mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
+        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = -(base_cutout_depth - top_plate_helpers[1]),
         top = -(top_plate_height + recess_depth) + cut_tol

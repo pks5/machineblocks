@@ -59,9 +59,13 @@ function mb_block_part_cube(
         mod_size = mod_min_max[1][0],
         
         si = is_undef(size) ? mod_size : size,
-        si2 = [(is_undef(si[0]) ? mod_size[0] : si[0]), (is_undef(si[1]) ? mod_size[1] : si[1]), (is_undef(si[2]) ? mod_size[2] : si[2])],
+        si2 = [
+            (is_undef(si[0]) ? mod_size[0] : si[0]), 
+            (is_undef(si[1]) ? mod_size[1] : si[1]), 
+            (is_undef(si[2]) ? mod_size[2] : si[2])
+        ],
         s_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto", "auto"] ? 
-            si :
+            si2 :
 
             [
                 [
@@ -99,7 +103,7 @@ function mb_block_part_cube(
         [
             [
                 s_adj,
-                offset
+                offset,
             ]
         ]
     ];

@@ -25,7 +25,10 @@ module mb_base_cutout(
             //Top Plate Helpers
             if(mb_block_get_top_plate_helpers(block_obj)){ 
                 mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
-            }   
+            }  
+
+            // Stabilizers 
+            mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
         }
     
         
