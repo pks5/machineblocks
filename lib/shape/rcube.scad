@@ -8,27 +8,11 @@ function _mb_rcube_ellipse_arc_points(cx, cy, rx, ry, a0, a1, segments = 8) =
     ];
 
 function _mb_rcube_profile_points(
-    size,
+    dim,
     radius,
     rounding_resolution
 ) =
     let(
-        size = [
-            [
-                size[0][0],
-                size[0][1]
-            ],
-            [
-                max(size[0][0], size[1][0]),
-                max(size[0][1], size[1][1])
-            ]
-        ],
-
-        dim = [
-            size[1][0] - size[0][0], 
-            size[1][1] - size[0][1]
-        ],
-
         rad_sw_x = min(dim[0], max(0, radius[0][0])),
         rad_sw_y = min(dim[1], max(0, radius[0][1])),
 
@@ -41,10 +25,10 @@ function _mb_rcube_profile_points(
         rad_se_x = min(dim[0] - rad_sw_x, max(0, radius[3][0])),
         rad_se_y = min(dim[1] - rad_ne_y, max(0, radius[3][1])),
 
-        corner_sw = [size[0][0], size[0][1]],
-        corner_nw = [size[0][0], size[1][1]],
-        corner_ne = [size[1][0], size[1][1]],
-        corner_se = [size[1][0], size[0][1]],
+        corner_sw = [-0.5 * dim[0], -0.5 * dim[1]],
+        corner_nw = [-0.5 * dim[0], 0.5 * dim[1]],
+        corner_ne = [0.5 * dim[0], 0.5 * dim[1]],
+        corner_se = [0.5 * dim[0], -0.5 * dim[1]],
 
         round_sw_x = corner_sw[0] + rad_sw_x,
         round_sw_y = corner_sw[1] + rad_sw_y,
@@ -158,9 +142,18 @@ function _mb_rcube_profile_points(
 module mb_rcube(
     size,
     radius,
+    axis = "z",
+    offset = undef,
+    mul = undef,
+    color = "white",
+    draw_together = false,
+    debug = false,
     rounding_resolution = 100
 ){
     size =  mb_cube_size_resolve(size);
+    axis = mb_axis_to_int(axis);
+    offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
+    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
 
     dim = [
             size[1][0] - size[0][0], 
@@ -168,20 +161,76 @@ module mb_rcube(
             size[1][2] - size[0][2]
         ];
 
-    tz = 0.5 * (size[0][2] + size[1][2]);
+    tr = [
+        0.5 * (size[0][0] + size[1][0]),
+        0.5 * (size[0][1] + size[1][1]),
+        0.5 * (size[0][2] + size[1][2])
+    ];
 
-    translate([0, 0, tz])
-        linear_extrude(height = dim[2], center = true)
-            polygon(
-                points = _mb_rcube_profile_points(
-                    size = size, 
-                    radius = radius, 
-                    rounding_resolution = rounding_resolution
-                ),
-                convexity = 10
-            );
+    is_plain_cube = radius[0] == [0, 0] &&
+                radius[1] == [0, 0] &&
+                radius[2] == [0, 0] &&
+                radius[3] == [0, 0];
+
+    if(is_plain_cube || draw_together){
+        color(draw_together || debug ? "green" : color)
+            translate(tr)
+                cube(size = dim, center = true);
+    }
+
+    if(!is_plain_cube || draw_together){
+        rot = axis == 0 ? 
+            [0, 90 , 0] : 
+            axis == 1 ? 
+            [90, 0, 0] : 
+            [0, 0, 0];
+
+        square_dim = axis == 0 ? 
+            [
+                dim[2],
+                dim[1],
+                dim[0]    
+            ] : 
+            axis == 1 ?
+            [
+                dim[0],
+                dim[2],
+                dim[1]    
+            ] : 
+            
+            dim;
+
+        color(draw_together || debug ? "yellow" : color)
+            translate(tr)
+                rotate(rot)
+                    linear_extrude(height = square_dim[2], center = true)
+                        polygon(
+                            points = _mb_rcube_profile_points(
+                                dim = square_dim, 
+                                radius = radius, 
+                                rounding_resolution = rounding_resolution
+                            ),
+                            convexity = 10
+                        );
+    }
 }
 
+mb_rcube(
+    size = [[-200, -100, -150], [200, 100, 400]],
+    radius = [[20, 20], [20, 20], [20, 20], [20, 20]],
+    axis = "y",
+    rounding_resolution = 100,
+    debug = true,
+    draw_together = true
+);
+
+
+
+
+
+
+
+/*
 module mb_rcube_ellipsoid(
     x_y,
     x_z,
@@ -257,13 +306,9 @@ mb_rcube_ellipsoid(
     n = 48,
     zero = 0.001,
     resolution = 96
-);
+); */
 
-*mb_rcube(
-    size = [[-200, -100, -200], [100, 100, 100]],
-    radius = [[0, 0], [0, 0], [0, 0], [0, 0]],
-    rounding_resolution = 100
-);
+
 
 
 
