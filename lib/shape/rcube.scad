@@ -151,6 +151,7 @@ module mb_rcube(
     rounding_resolution = 100
 ){
     size =  mb_cube_size_resolve(size);
+    radius = mb_cube_radius_resolve(radius);
     axis = mb_axis_to_int(axis);
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
@@ -216,9 +217,9 @@ module mb_rcube(
 }
 
 mb_rcube(
-    size = [[-200, -100, -150], [200, 100, 400]],
-    radius = [[20, 20], [20, 20], [20, 20], [20, 20]],
-    axis = "y",
+    size = [[-300, -100, -150], [200, 100, 400]],
+    radius = [20, 80, 50, 30],
+    axis = "z",
     rounding_resolution = 100,
     debug = true,
     draw_together = true

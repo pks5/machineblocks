@@ -40,7 +40,19 @@ function mb_cube_size_resolve(size) = is_num(size) || (is_list(size) && (is_unde
             mb_resolve_xyz(size[0], mul = -0.5), 
             mb_resolve_xyz(size[0], mul = 0.5)
         ];
-/*
+
+function mb_cube_radius_resolve(radius) = is_num(radius) ?
+        [[radius, radius], [radius, radius], [radius, radius], [radius, radius]] :
+        is_list(radius) && len(radius) == 1 && is_num(radius[0]) ?
+        [[radius[0], radius[0]], [radius[0], radius[0]], [radius[0], radius[0]], [radius[0], radius[0]]] :
+        is_list(radius) && len(radius) == 2 && is_num(radius[0]) && is_num(radius[1]) ?
+        [[radius[0], radius[1]], [radius[0], radius[1]], [radius[0], radius[1]], [radius[0], radius[1]]] :
+        is_list(radius) && len(radius) == 4 && is_num(radius[0]) && is_num(radius[1]) && is_num(radius[2]) && is_num(radius[3]) ?
+        [[radius[0], radius[0]], [radius[1], radius[1]], [radius[2], radius[2]], [radius[3], radius[3]]] :
+        is_list(radius) && len(radius) == 1 && is_list(radius[0]) && is_num(radius[0][0]) && is_num(radius[0][1]) ?
+        [radius[0], radius[0], radius[0], radius[0]] :
+        radius;
+ /*
 * ---------------
 * START BLOCK OBJ
 * ---------------
