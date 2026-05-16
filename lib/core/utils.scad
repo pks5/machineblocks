@@ -401,7 +401,7 @@ function mb_side_to_int(side) =
     side == "z-" ? 4 :
     side == "z+" ? 5 :
     undef
-    ) : side;
+    ) : (side >= 0 && side <= 5 ? side : undef);
 
 function mb_face_to_int(face) =
     is_string(face) ? (

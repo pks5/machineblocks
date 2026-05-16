@@ -2,7 +2,7 @@ use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 
-function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, face = 0, gap_pos = 0, gap_length = 1, red = undef) =
+function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, gap, red = undef) =
  let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -18,6 +18,9 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, face = 0,
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
+        face = gap[0],
+        gap_start_offset = gap[3],
+        gap_end_offset = gap[4],
         red = is_undef(red) ? 0 : red)
     [
         "intersection",
@@ -53,10 +56,10 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, face = 0,
             mb_block_part_cube(
                 block_size = mod_size,
                 expand = [
-                    face > 1 && face < 4 ? - gap_pos - (gap_pos == 0 ? 0 : wall_thickness) + red : 0,
-                    face > 1 && face < 4 ? - (mod_size[0] - gap_length - gap_pos) - wall_thickness + red : 0,
-                    face < 2 ? - gap_pos - (gap_pos == 0 ? 0 : wall_thickness) + red : 0,
-                    face < 2 ? - (mod_size[1] - gap_length - gap_pos) - wall_thickness + red : 0,
+                    face > 1 && face < 4 ? - gap_start_offset + red : 0,
+                    face > 1 && face < 4 ? - gap_end_offset + red : 0,
+                    face < 2 ? - gap_start_offset + red : 0,
+                    face < 2 ? - gap_end_offset + red : 0,
                     cut_tol,
                     0
                 ]
@@ -206,7 +209,8 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
             ),
             for(wall_gap = wall_gaps)
                 let(gap = mb_block_base_wall_gap(block_obj, wall_gap))
-                    mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, gap[0], gap[1], gap[2], red)
+                    if(!is_undef(gap))
+                        mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, gap, red)
         ]
     ];
 
@@ -225,8 +229,10 @@ function mb_block_part__stabilizers(block_obj) =
         start_index_x = min_max_index[0][0],
         end_index_x = min_max_index[1][0],
         start_index_y = min_max_index[0][1],
-        end_index_y = min_max_index[1][1]
-        
+        end_index_y = min_max_index[1][1],
+        default_segment_length = 1 - default_tube_diameter + tube_thickness,
+        segment_thickness = stabilizers[0],
+        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0)
         )
     [
         "list",
@@ -242,7 +248,11 @@ function mb_block_part__stabilizers(block_obj) =
                         [
                             mb_block_part_cube(
                                 block_size = mod_size,
-                                size = [stabilizers[0], 1 - default_tube_diameter + tube_thickness, ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + stabilizers[2] + cut_tol],
+                                size = [
+                                    segment_thickness, 
+                                    default_segment_length, 
+                                    ((i % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
+                                ],
                                 expand = [
                                     0, 
                                     0, 
@@ -253,19 +263,24 @@ function mb_block_part__stabilizers(block_obj) =
                                 
                                 offset = offset
                             ),
-                            !top_plate_helpers ? undef : mb_block_part_cube(
-                                block_size = mod_size,
-                                size = [stabilizers[0] + 2* top_plate_helpers[0], 1 - default_tube_diameter + tube_thickness, top_plate_helpers[1] + cut_tol],
-                                expand = [
-                                    0, 
-                                    0, 
-                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    "auto", 
-                                    - (recess_depth + top_plate_height) + cut_tol],
-                                
-                                offset = offset
-                            )
+                            if(top_plate_helpers) 
+                                mb_block_part_cube(
+                                    block_size = mod_size,
+                                    size = [
+                                        segment_thickness + 2 * top_plate_helpers[0], 
+                                        default_segment_length, 
+                                        top_plate_helpers[1] + cut_tol
+                                    ],
+                                    expand = [
+                                        0, 
+                                        0, 
+                                        j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        "auto", 
+                                        - (recess_depth + top_plate_height) + cut_tol],
+                                    
+                                    offset = offset
+                                )
                         ]
                     ]
                     
@@ -277,13 +292,20 @@ function mb_block_part__stabilizers(block_obj) =
                 "list",
                 [
                     for(j = [start_index_x : end_index_x])
-                    let(offset = mb_block_pos_to_offset(block_obj, [j + 0.5, i, undef]))
+                    let(
+                        offset = mb_block_pos_to_offset(block_obj, [j + 0.5, i, undef])
+                          
+                    )
                     [
                         "list",
                         [
                             mb_block_part_cube(
                                 block_size = mod_size,
-                                size = [1 - default_tube_diameter + tube_thickness, stabilizers[0], ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + cut_tol],
+                                size = [
+                                    default_segment_length, 
+                                    segment_thickness, 
+                                    ((i % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
+                                ],
                                 expand = [
                                     j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
                                     j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
@@ -295,20 +317,25 @@ function mb_block_part__stabilizers(block_obj) =
                                 
                                 offset = offset
                             ),
-                            !top_plate_helpers ? undef : mb_block_part_cube(
-                                block_size = mod_size,
-                                size = [1 - default_tube_diameter + tube_thickness, stabilizers[0] + 2 * top_plate_helpers[0], top_plate_helpers[1] + cut_tol],
-                                expand = [
-                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    0, 
-                                    0, 
-                                
-                                    "auto", 
-                                    - (recess_depth + top_plate_height) + cut_tol],
-                                
-                                offset = offset
-                            )
+                            if(top_plate_helpers)
+                                mb_block_part_cube(
+                                    block_size = mod_size,
+                                    size = [
+                                        default_segment_length, 
+                                        segment_thickness + 2 * top_plate_helpers[0], 
+                                        top_plate_helpers[1] + cut_tol
+                                    ],
+                                    expand = [
+                                        j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        0, 
+                                        0, 
+                                    
+                                        "auto", 
+                                        - (recess_depth + top_plate_height) + cut_tol],
+                                    
+                                    offset = offset
+                                )
                         ]
                     ]
                     

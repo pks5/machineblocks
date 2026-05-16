@@ -230,11 +230,25 @@ function mb_block_recess_wall_gap(block_obj, gap) =
         ];
 
 function mb_block_base_wall_gap(block_obj, gap) = 
-    let(face = mb_side_to_int(gap[0]))
+    let(
+        mod_size = mb_block_get_mod_size(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        face = mb_side_to_int(gap[0]),
+        axis = mb_side_to_axis(face)
+    )
+        is_undef(face) ? undef : 
+        let(
+            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis], gap[2]),
+            gap_start_offset = gap_start_pos + wall_thickness,
+            gap_end_offset = mod_size[axis] - gap_length - gap_start_pos + wall_thickness
+        )
         [
             face,
-            is_undef(gap[1]) ? 0 : gap[1],
-            is_undef(gap[2]) ? 1 : gap[2]
+            gap_start_pos,
+            gap_length,
+            gap_start_offset,
+            gap_end_offset
         ];
 
 function mb_block_pos_to_offset(block_obj, pos) = 
