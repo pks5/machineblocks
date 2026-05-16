@@ -237,6 +237,7 @@ function mb_block_part__stabilizers(block_obj) =
     [
         "list",
         [
+            // X (lines in Y direction)
             for(i = [start_index_x + 1 : end_index_x])
             [
                 "list",
@@ -287,6 +288,7 @@ function mb_block_part__stabilizers(block_obj) =
                 ]
             ],
 
+            // Y (lines in X direction)
             for(i = [start_index_y + 1 : end_index_y])
             [
                 "list",
