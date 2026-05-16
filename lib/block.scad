@@ -945,7 +945,7 @@ module mb_block(
                                                                 * Stabilizer Grid
                                                                 */
                                                                 union(){
-                                                                    if(grille == "none" || grille == "x" || grilleSmall){
+                                                                    *if(grille == "none" || grille == "x" || grilleSmall){
                                                                         //Helpers X
                                                                         for (a = [ startX : 1 : endX -1 ]){
                                                                             translate([posX(a + 0.5), 0.5*(baseModRes[3] - baseModRes[2]), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
@@ -954,7 +954,7 @@ module mb_block(
                                                                         }
                                                                     }
                                                                     
-                                                                    if(grille == "none" || grille == "y" || grilleSmall){
+                                                                    *if(grille == "none" || grille == "y" || grilleSmall){
                                                                         //Helpers Y
                                                                         for (b = [ startY : 1 : endY - 1 ]){
                                                                         translate([0.5*(baseModRes[1] - baseModRes[0]), posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
@@ -1042,7 +1042,7 @@ module mb_block(
                                                             
                                                         } // End stabilizer grid
 
-                                                        *if(pillars != false){
+                                                        if(pillars != false){
                                                             pilRoundingRes = mb_fn_even_for_radius(
                                                                 0.5 * tubeZSize + baseClampThickness, 
                                                                 0, 

@@ -30,7 +30,8 @@ function mb_block_obj(
     custom_modules = ["my_cube"],
     debug = false,
     baseWallGaps = [],
-    stabilizers = [0.5, 0.5, 0.2]
+    stabilizers = [0.5, 0.5, 0.2, 0.5, 2],
+    tubeWallThickness = 0.53125
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -84,8 +85,17 @@ function mb_block_obj(
         relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
 
         top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]],
+        tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],
+        stud_diameter_res = stud_diameter * mul_mbu_to_grid[0],
+        default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,
 
-        stabilizers_res = [stabilizers[0] * mul_mbu_to_grid[0], stabilizers[1] * mul_mbu_to_grid[2], stabilizers[2] * mul_mm_to_grid[2]]
+        stabilizers_res = [
+            stabilizers[0] * mul_mbu_to_grid[0], // Thickness (mbu)
+            stabilizers[1] * mul_mbu_to_grid[2], // Height (mbu)
+            stabilizers[2] * mul_mm_to_grid[2], // Offset (mm)
+            stabilizers[3] * mul_mbu_to_grid[2], // Expansion Offset (mm)
+            stabilizers[4]                       // Expansion Each
+        ],
     )
         [
             [
@@ -107,7 +117,7 @@ function mb_block_obj(
             [],  // 12 - 
             [],  // 13 - 
             [],  // 14 - 
-            [],  // 15 - 
+            [default_tube_diameter, tube_wall_thickness_res],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
@@ -164,6 +174,8 @@ function mb_block_get_stabilizers(block_obj) =               block_obj[16][0];
 
 function mb_block_get_min_max_index(block_obj) =             block_obj[2];
 function mb_block_get_custom_modules(block_obj) =            block_obj[18];
+function mb_block_get_default_tube_diameter(block_obj) =     block_obj[15][0];
+function mb_block_get_tube_thickness(block_obj) =            block_obj[15][1];
 /*
 * TODO Rename or delete
 */
@@ -227,7 +239,7 @@ function mb_block_base_wall_gap(block_obj, gap) =
 
 function mb_block_pos_to_offset(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))
-        [pos[0] - center[0], pos[1] - center[1], pos[2] - center[2]];
+        [is_undef(pos[0]) ? 0 : pos[0] - center[0], is_undef(pos[1]) ? 0 : pos[1] - center[1], is_undef(pos[2]) ? 0 : pos[2] - center[2]];
         
 //TODO Rename & remove adj
 function mb_block_mod_min_max(block_size, block_mod = undef, adj = undef) =
