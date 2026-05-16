@@ -217,6 +217,7 @@ function mb_block_part__stabilizers(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         default_tube_diameter = mb_block_get_default_tube_diameter(block_obj),
         tube_thickness = mb_block_get_tube_thickness(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
@@ -236,19 +237,38 @@ function mb_block_part__stabilizers(block_obj) =
                 [
                     for(j = [start_index_y : end_index_y])
                     let(offset = mb_block_pos_to_offset(block_obj, [i, j + 0.5, undef]))
-                    mb_block_part_cube(
-                        block_size = mod_size,
-                        size = [stabilizers[0], 1 - default_tube_diameter + tube_thickness, ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + stabilizers[2] + cut_tol],
-                        expand = [
-                            0, 
-                            0, 
-                            j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                            j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                            "auto", 
-                            - (recess_depth + top_plate_height) + cut_tol],
-                        
-                        offset = offset
-                    )
+                    [
+                        "list",
+                        [
+                            mb_block_part_cube(
+                                block_size = mod_size,
+                                size = [stabilizers[0], 1 - default_tube_diameter + tube_thickness, ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + stabilizers[2] + cut_tol],
+                                expand = [
+                                    0, 
+                                    0, 
+                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    "auto", 
+                                    - (recess_depth + top_plate_height) + cut_tol],
+                                
+                                offset = offset
+                            ),
+                            !top_plate_helpers ? undef : mb_block_part_cube(
+                                block_size = mod_size,
+                                size = [stabilizers[0] + 2* top_plate_helpers[0], 1 - default_tube_diameter + tube_thickness, top_plate_helpers[1] + cut_tol],
+                                expand = [
+                                    0, 
+                                    0, 
+                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    "auto", 
+                                    - (recess_depth + top_plate_height) + cut_tol],
+                                
+                                offset = offset
+                            )
+                        ]
+                    ]
+                    
                 ]
             ],
 
@@ -258,20 +278,40 @@ function mb_block_part__stabilizers(block_obj) =
                 [
                     for(j = [start_index_x : end_index_x])
                     let(offset = mb_block_pos_to_offset(block_obj, [j + 0.5, i, undef]))
-                    mb_block_part_cube(
-                        block_size = mod_size,
-                        size = [1 - default_tube_diameter + tube_thickness, stabilizers[0], ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + cut_tol],
-                        expand = [
-                            j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                            j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                            0, 
-                            0, 
-                           
-                            "auto", 
-                            - (recess_depth + top_plate_height) + cut_tol],
-                        
-                        offset = offset
-                    )
+                    [
+                        "list",
+                        [
+                            mb_block_part_cube(
+                                block_size = mod_size,
+                                size = [1 - default_tube_diameter + tube_thickness, stabilizers[0], ((i % stabilizer_expansion) == 0 ? max(base_cutout_depth - stabilizers[3], 0) : stabilizers[1]) + cut_tol],
+                                expand = [
+                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    0, 
+                                    0, 
+                                
+                                    "auto", 
+                                    - (recess_depth + top_plate_height) + cut_tol],
+                                
+                                offset = offset
+                            ),
+                            !top_plate_helpers ? undef : mb_block_part_cube(
+                                block_size = mod_size,
+                                size = [1 - default_tube_diameter + tube_thickness, stabilizers[0] + 2 * top_plate_helpers[0], top_plate_helpers[1] + cut_tol],
+                                expand = [
+                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    0, 
+                                    0, 
+                                
+                                    "auto", 
+                                    - (recess_depth + top_plate_height) + cut_tol],
+                                
+                                offset = offset
+                            )
+                        ]
+                    ]
+                    
                 ]
             ]
         ]

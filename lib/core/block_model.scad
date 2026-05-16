@@ -11,7 +11,7 @@ function mb_block_obj(
     grid_cfg = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
     scale = 1,
     top_plate_height = [1, -0.6], // [Height (mbu), Adjustment (mm)]
-    top_plate_helpers = [0.4, 0.2], // [Thickness (mbu), Height (mbu)]
+    top_plate_helpers = [0.2, 0.2], // [Thickness (mbu), Height (mbu)]
     recess_depth = "auto",
     slope_base = [1.333, 1], // [Bottom, Top]
     wall_thickness = ["auto", -0.1], // [Thickness (mbu), Adjustment (mm)]
