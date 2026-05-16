@@ -238,12 +238,12 @@ function mb_block_part__stabilizers(block_obj) =
         "list",
         [
             // X (lines in Y direction)
-            for(i = [start_index_x + 1 : end_index_x])
+            for(x = [start_index_x + 1 : end_index_x])
             [
                 "list",
                 [
-                    for(j = [start_index_y : end_index_y])
-                    let(offset = mb_block_pos_to_offset(block_obj, [i, j + 0.5, undef]))
+                    for(y = [start_index_y : end_index_y])
+                    let(offset = mb_block_pos_to_offset(block_obj, [x, y + 0.5, undef]))
                     [
                         "list",
                         [
@@ -252,13 +252,13 @@ function mb_block_part__stabilizers(block_obj) =
                                 size = [
                                     segment_thickness, 
                                     default_segment_length, 
-                                    ((i % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
+                                    ((x % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
                                 ],
                                 expand = [
                                     0, 
                                     0, 
-                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
                                     "auto", 
                                     - (recess_depth + top_plate_height) + cut_tol],
                                 
@@ -275,8 +275,8 @@ function mb_block_part__stabilizers(block_obj) =
                                     expand = [
                                         0, 
                                         0, 
-                                        j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                        j == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
                                         "auto", 
                                         - (recess_depth + top_plate_height) + cut_tol],
                                     
@@ -289,13 +289,13 @@ function mb_block_part__stabilizers(block_obj) =
             ],
 
             // Y (lines in X direction)
-            for(i = [start_index_y + 1 : end_index_y])
+            for(y = [start_index_y + 1 : end_index_y])
             [
                 "list",
                 [
-                    for(j = [start_index_x : end_index_x])
+                    for(x = [start_index_x : end_index_x])
                     let(
-                        offset = mb_block_pos_to_offset(block_obj, [j + 0.5, i, undef])
+                        offset = mb_block_pos_to_offset(block_obj, [x + 0.5, y, undef])
                           
                     )
                     [
@@ -306,11 +306,11 @@ function mb_block_part__stabilizers(block_obj) =
                                 size = [
                                     default_segment_length, 
                                     segment_thickness, 
-                                    ((i % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
+                                    ((y % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
                                 ],
                                 expand = [
-                                    j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                    x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
                                     0, 
                                     0, 
                                 
@@ -328,8 +328,8 @@ function mb_block_part__stabilizers(block_obj) =
                                         top_plate_helpers[1] + cut_tol
                                     ],
                                     expand = [
-                                        j == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                        j == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
                                         0, 
                                         0, 
                                     
