@@ -2,7 +2,7 @@ use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 
-function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, gap, red = undef) =
+function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red = undef) =
  let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -18,52 +18,65 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, gap, red 
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
-        face = gap[0],
-        gap_start_offset = gap[3],
-        gap_end_offset = gap[4],
-        red = is_undef(red) ? 0 : red)
-    [
-        "intersection",
-        [
+        gaps = mb_block_base_wall_gap(block_obj, wall_gap),
+        red = is_undef(red) ? 0 : red
+    )
     
-            mb_block_part_prismoid(
-                block_size = mod_size, 
-                block_mod = undef,
-                
-                expand = [
-                    planes == "bottom" || planes == "all" ? [
-                        face == 0 ? base_adj[0] + cut_tol : -wall_thickness + slope_neg[0] + red,
-                        face == 1 ? base_adj[1] + cut_tol : -wall_thickness + slope_neg[1] + red,
-                        face == 2 ? base_adj[2] + cut_tol : -wall_thickness + slope_neg[2] + red,
-                        face == 3 ? base_adj[3] + cut_tol : -wall_thickness + slope_neg[3] + red,
-                        bottom,
-                        top
-                    ] : undef,
-                    planes == "top" || planes == "all" ? [
-                        face == 0 ? base_adj[0] + cut_tol : slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0) + red,
-                        face == 1 ? base_adj[1] + cut_tol : slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) + red,
-                        face == 2 ? base_adj[2] + cut_tol : slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) + red,
-                        face == 3 ? base_adj[3] + cut_tol : slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) + red,
-                        bottom,
-                        top
-                    ] : undef
-                ],
-                socket = [base_cutout_min_depth, 0],
-                bevel = bevel,
-                slope = slope_pos
-            ),
-
-            mb_block_part_cube(
-                block_size = mod_size,
-                expand = [
-                    face > 1 && face < 4 ? - gap_start_offset + red : 0,
-                    face > 1 && face < 4 ? - gap_end_offset + red : 0,
-                    face < 2 ? - gap_start_offset + red : 0,
-                    face < 2 ? - gap_end_offset + red : 0,
-                    cut_tol,
-                    0
+    [
+        "list",
+        [
+            for(gap = gaps)
+                let(face = gap[0],
+                    gap_start_offset = gap[3],
+                    gap_end_offset = gap[4]
+                )
+                [
+                    "intersection",
+                    [
+                        
+                        mb_block_part_prismoid(
+                            block_size = mod_size, 
+                            block_mod = undef,
+                            
+                            expand = [
+                                planes == "bottom" || planes == "all" ? [
+                                    for(f = [0 : 3])
+                                        mb_face_has_common(face, f) ? base_adj[f] + cut_tol : -wall_thickness + slope_neg[f] + red,
+                                    //mb_face_contains(face, 1) ? base_adj[1] + cut_tol : -wall_thickness + slope_neg[1] + red,
+                                    //mb_face_contains(face, 2) ? base_adj[2] + cut_tol : -wall_thickness + slope_neg[2] + red,
+                                    //mb_face_contains(face, 3) ? base_adj[3] + cut_tol : -wall_thickness + slope_neg[3] + red,
+                                    bottom,
+                                    top
+                                ] : undef,
+                                planes == "top" || planes == "all" ? [
+                                    
+                                    for(f = [0 : 3])
+                                        mb_face_has_common(face, f) ? base_adj[f] + cut_tol : slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
+                                    //mb_face_has_common(face, 1) ? base_adj[1] + cut_tol : slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) + red,
+                                    //mb_face_has_common(face, 2) ? base_adj[2] + cut_tol : slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) + red,
+                                    //mb_face_has_common(face, 3) ? base_adj[3] + cut_tol : slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) + red,
+                                    bottom,
+                                    top
+                                ] : undef
+                            ],
+                            socket = [base_cutout_min_depth, 0],
+                            bevel = bevel,
+                            slope = slope_pos
+                        ),
+                        
+                        mb_block_part_cube(
+                            block_size = mod_size,
+                            expand = [
+                                mb_face_has_common(face, "y") ? - gap_start_offset + red : 0,
+                                mb_face_has_common(face, "y") ? - gap_end_offset + red : 0,
+                                mb_face_has_common(face, "x") ? - gap_start_offset + red : 0,
+                                mb_face_has_common(face, "x") ? - gap_end_offset + red : 0,
+                                cut_tol,
+                                0
+                            ]
+                        )
+                    ]
                 ]
-            )
         ]
     ];
 
@@ -208,9 +221,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 socket = planes == "all" ? [base_cutout_min_depth, 0] : undef
             ),
             for(wall_gap = wall_gaps)
-                let(gap = mb_block_base_wall_gap(block_obj, wall_gap))
-                    if(!is_undef(gap))
-                        mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, gap, red)
+                mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, wall_gap, red)
         ]
     ];
 
@@ -243,34 +254,16 @@ function mb_block_part__stabilizers(block_obj) =
                 "list",
                 [
                     for(y = [start_index_y : end_index_y])
-                    let(offset = mb_block_pos_to_offset(block_obj, [x, y + 0.5, undef]))
-                    [
-                        "list",
+                        let(offset = mb_block_pos_to_offset(block_obj, [x, y + 0.5, undef]))
                         [
-                            mb_block_part_cube(
-                                block_size = mod_size,
-                                size = [
-                                    segment_thickness, 
-                                    default_segment_length, 
-                                    ((x % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
-                                ],
-                                expand = [
-                                    0, 
-                                    0, 
-                                    y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    "auto", 
-                                    - (recess_depth + top_plate_height) + cut_tol],
-                                
-                                offset = offset
-                            ),
-                            if(top_plate_helpers) 
+                            "list",
+                            [
                                 mb_block_part_cube(
                                     block_size = mod_size,
                                     size = [
-                                        segment_thickness + 2 * top_plate_helpers[0], 
+                                        segment_thickness, 
                                         default_segment_length, 
-                                        top_plate_helpers[1] + cut_tol
+                                        ((x % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
                                     ],
                                     expand = [
                                         0, 
@@ -281,10 +274,27 @@ function mb_block_part__stabilizers(block_obj) =
                                         - (recess_depth + top_plate_height) + cut_tol],
                                     
                                     offset = offset
-                                )
+                                ),
+                                if(top_plate_helpers) 
+                                    mb_block_part_cube(
+                                        block_size = mod_size,
+                                        size = [
+                                            segment_thickness + 2 * top_plate_helpers[0], 
+                                            default_segment_length, 
+                                            top_plate_helpers[1] + cut_tol
+                                        ],
+                                        expand = [
+                                            0, 
+                                            0, 
+                                            y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            "auto", 
+                                            - (recess_depth + top_plate_height) + cut_tol],
+                                        
+                                        offset = offset
+                                    )
+                            ]
                         ]
-                    ]
-                    
                 ]
             ],
 
@@ -294,38 +304,19 @@ function mb_block_part__stabilizers(block_obj) =
                 "list",
                 [
                     for(x = [start_index_x : end_index_x])
-                    let(
-                        offset = mb_block_pos_to_offset(block_obj, [x + 0.5, y, undef])
-                          
-                    )
-                    [
-                        "list",
+                        let(
+                            offset = mb_block_pos_to_offset(block_obj, [x + 0.5, y, undef])
+                            
+                        )
                         [
-                            mb_block_part_cube(
-                                block_size = mod_size,
-                                size = [
-                                    default_segment_length, 
-                                    segment_thickness, 
-                                    ((y % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
-                                ],
-                                expand = [
-                                    x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                    0, 
-                                    0, 
-                                
-                                    "auto", 
-                                    - (recess_depth + top_plate_height) + cut_tol],
-                                
-                                offset = offset
-                            ),
-                            if(top_plate_helpers)
+                            "list",
+                            [
                                 mb_block_part_cube(
                                     block_size = mod_size,
                                     size = [
                                         default_segment_length, 
-                                        segment_thickness + 2 * top_plate_helpers[0], 
-                                        top_plate_helpers[1] + cut_tol
+                                        segment_thickness, 
+                                        ((y % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
                                     ],
                                     expand = [
                                         x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
@@ -337,10 +328,28 @@ function mb_block_part__stabilizers(block_obj) =
                                         - (recess_depth + top_plate_height) + cut_tol],
                                     
                                     offset = offset
-                                )
+                                ),
+                                if(top_plate_helpers)
+                                    mb_block_part_cube(
+                                        block_size = mod_size,
+                                        size = [
+                                            default_segment_length, 
+                                            segment_thickness + 2 * top_plate_helpers[0], 
+                                            top_plate_helpers[1] + cut_tol
+                                        ],
+                                        expand = [
+                                            x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            0, 
+                                            0, 
+                                        
+                                            "auto", 
+                                            - (recess_depth + top_plate_height) + cut_tol],
+                                        
+                                        offset = offset
+                                    )
+                            ]
                         ]
-                    ]
-                    
                 ]
             ]
         ]

@@ -392,34 +392,7 @@ function mb_round_prec(x, p) = round(x / p) * p;
 
 function mb_undef_to(v, to = 0) = is_undef(v) ? to : v;
 
-function mb_side_to_int(side) =
-    is_string(side) ? (
-    side == "x-" ? 0 :
-    side == "x+" ? 1 :
-    side == "y-" ? 2 :
-    side == "y+" ? 3 :
-    side == "z-" ? 4 :
-    side == "z+" ? 5 :
-    undef
-    ) : (side >= 0 && side <= 5 ? side : undef);
 
-function mb_face_to_int(face) =
-    is_string(face) ? (
-    face == "x-" ? 0 :
-    face == "x+" ? 1 :
-    face == "y-" ? 2 :
-    face == "y+" ? 3 :
-    face == "z-" ? 4 :
-    face == "z+" ? 5 :
-    face == "x" ? 6 :
-    face == "y" ? 7 :
-    face == "z" ? 8 :
-    face == "xy" ? 9 :
-    face == "xz" ? 10 :
-    face == "yz" ? 11 :
-    face == "xyz" ? 12 :
-    undef
-    ) : (face >= 0 && face <= 12 ? face : undef);
 
 /*
 * -----------
@@ -878,11 +851,126 @@ function mb_dir_to_int(dir, m = false) =
     undef
     ) : (dir >= 0 && dir <= 23 ? dir : undef)) m ? d % 8 : d;
 
-
+function mb_side_to_int(side) =
+    is_string(side) ? (
+    side == "x-" ? 0 :
+    side == "x+" ? 1 :
+    side == "y-" ? 2 :
+    side == "y+" ? 3 :
+    side == "z-" ? 4 :
+    side == "z+" ? 5 :
+    undef
+    ) : (side >= 0 && side <= 5 ? side : undef);
 
 function mb_side_to_axis(side) = floor(mb_side_to_int(side) / 2);
 
 function mb_side_to_axis_face(side) = mb_side_to_int(side) % 2;
+
+function mb_face_to_int(face) =
+    is_string(face) ? (
+    face == "x-" ? 0 :
+    face == "x+" ? 1 :
+    face == "y-" ? 2 :
+    face == "y+" ? 3 :
+    face == "z-" ? 4 :
+    face == "z+" ? 5 :
+    
+    face == "x" ? 6 :
+    face == "y" ? 7 :
+    face == "z" ? 8 :
+    
+    face == "xy" ? 9 :
+    face == "xz" ? 10 :
+    face == "yz" ? 11 :
+    
+    face == "xyz" ? 12 :
+    undef
+    ) : (face >= 0 && face <= 12 ? face : undef);
+
+function mb_face_common(face, cface) =
+    let(
+        face = mb_face_to_int(face),
+        cface = mb_face_to_int(cface)
+    )
+    face == cface ? cface :
+
+    // xyz
+    face == 12 ? cface :
+    cface == 12 ? face :
+
+    // yz
+    face == 11 ? ((cface == 10) ? 8 : (cface == 9) ? 7 : ((cface == 8 || cface == 7 || cface == 5 || cface == 4 || cface == 3 || cface == 2) ? cface : undef)) :
+    // xz
+    face == 10 ? ((cface == 11) ? 8 : (cface == 9) ? 6 : ((cface == 8 || cface == 6 || cface == 5 || cface == 4  || cface == 1 || cface == 0) ? cface : undef)) :
+    // xy
+    face == 9 ? ((cface == 11) ? 7 : (cface == 10) ? 6 : (cface == 7 || cface == 6 || cface == 3 || cface == 2  || cface == 1 || cface == 0) ? cface : undef) :
+    
+    // z
+    face == 8 ? ((cface == 11) ? face : (cface == 10) ? face : (cface == 5 || cface == 4) ? cface : undef) :
+    // y
+    face == 7 ? ((cface == 11) ? face : (cface == 9) ? face : (cface == 3 || cface == 2) ? cface : undef) :
+    // x
+    face == 6 ? ((cface == 10) ? face : (cface == 9) ? face : (cface == 1 || cface == 0) ? cface : undef) :
+
+    // z+
+    face == 5 ? ((cface == 11 || cface == 10 || cface == 8) ? face : undef):
+    // z-
+    face == 4 ? ((cface == 11 || cface == 10 || cface == 8) ? face : undef):
+    // y+
+    face == 3 ? ((cface == 11 || cface == 9 || cface == 7) ? face : undef):
+    // y-
+    face == 2 ? ((cface == 11 || cface == 9 || cface == 7) ? face : undef):
+    // x+
+    face == 1 ? ((cface == 10 || cface == 9 || cface == 6) ? face : undef):
+    // x-
+    face == 0 ? ((cface == 10 || cface == 9 || cface == 6) ? face : undef) : undef;
+
+function mb_face_has_common(face, cface) = !is_undef(mb_face_common(face, cface));
+
+function mb_face_to_axis(face) =
+    face == 6 ? 0 :
+    face == 7 ? 1 :
+    face == 8 ? 2 :
+    face < 6 ? mb_side_to_axis(side = face) :
+    undef;
+
+function mb_face_split(face, splits) = 
+    [
+        for(split = splits)
+            let(f = mb_face_common(face, split))
+                if(!is_undef(f)) f
+    ];
+
+/*
+function mb_face_contains(face, cface) =
+    let(
+        face = mb_face_to_int(face),
+        cface = mb_face_to_int(cface)
+    )
+    face == 12 ||
+    face == cface ||
+    (face == 6 && (cface == 0 || cface == 1)) ||
+    (face == 7 && (cface == 2 || cface == 3)) ||
+    (face == 8 && (cface == 4 || cface == 5)) ||
+    
+    (face == 9 && (cface == 0 || cface == 1 || cface == 2 || cface == 3 || cface == 6 || cface == 7)) ||
+    (face == 10 && (cface == 0 || cface == 1 || cface == 4 || cface == 5 || cface == 6 || cface == 8)) || 
+    (face == 11 && (cface == 2 || cface == 3 || cface == 4 || cface == 5 || cface == 7 || cface == 8));
+
+function mb_face_is(face, cface) =
+    let(face = mb_face_to_int(face),
+    cface = mb_face_to_int(cface))
+    face == cface;
+
+function mb_face_contains_axis(face, axis) =
+    let(face = mb_face_to_int(face),
+    axis = mb_axis_to_int(axis))
+    (axis == 0 && (face == 0 || face == 1 || face == 6 || face == 9 || face == 10 || face == 12)) ||
+    (axis == 1 && (face == 2 || face == 3 || face == 7 || face == 9 || face == 11 || face == 12)) ||
+    (axis == 2 && (face == 4 || face == 5 || face == 8 || face == 10 || face == 11 || face == 12));
+*/
+
+
 
 function mb_axis_to_int(axis) = 
     is_string(axis) ? (
