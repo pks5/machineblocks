@@ -332,7 +332,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
         bottom = -(base_cutout_depth - top_plate_helpers[1]),
         top = -(top_plate_height + recess_depth) + cut_tol
         ) 
-    [
+    !top_plate_helpers ? undef : [
         "difference",
         [
             mb_block_part_prismoid(
