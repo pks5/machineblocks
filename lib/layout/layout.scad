@@ -493,7 +493,9 @@ function mb_block_part__recess(block_obj) =
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
-        rwgs = mb_block_get_recess_wall_gaps(block_obj))  
+        rwgs = mb_block_get_recess_wall_gaps(block_obj),
+        exp_bottom = -(base_cutout_depth + top_plate_height),
+        exp_cutout_top = base_cutout_depth + top_plate_height - socket[0])  
     [
         "list",
         [
@@ -501,11 +503,9 @@ function mb_block_part__recess(block_obj) =
                 block_size = size, 
                 block_mod = mod,
                 expand = [[
-                    -rwt[0],
-                    -rwt[1],
-                    -rwt[2],
-                    -rwt[3],
-                    -(base_cutout_depth + top_plate_height),
+                    for(f = [0 : 3])
+                        -rwt[f],
+                    exp_bottom,
                     cut_tol
                 ]],
                 socket = undef,
@@ -528,20 +528,16 @@ function mb_block_part__recess(block_obj) =
                         block_size = size, 
                         block_mod = mod,
                         expand = [[
-                            mb_face_has_common(face, 0) ? cut_tol : -rwt[0],
-                            mb_face_has_common(face, 1) ? cut_tol : -rwt[1],
-                            mb_face_has_common(face, 2) ? cut_tol : -rwt[2],
-                            mb_face_has_common(face, 3) ? cut_tol : -rwt[3],
-                            -(base_cutout_depth + top_plate_height),
-                            base_cutout_depth + top_plate_height - socket[0]
+                            for(f = [0 : 3])
+                                mb_face_has_common(face, f) ? cut_tol : -rwt[f],
+                            exp_bottom,
+                            exp_cutout_top
                         ]],
                         socket = undef,
                         bevel = bevel,
                         slope = [
-                            mb_face_has_common(face, 0) ? slope_pos[0] : 0, 
-                            mb_face_has_common(face, 1) ? slope_pos[1] : 0, 
-                            mb_face_has_common(face, 2) ? slope_pos[2] : 0, 
-                            mb_face_has_common(face, 3) ? slope_pos[3] : 0
+                            for(f = [0 : 3])
+                                mb_face_has_common(face, f) ? slope_pos[f] : 0, 
                         ]
                     ),
 
