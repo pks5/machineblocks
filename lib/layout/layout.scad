@@ -79,8 +79,9 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
 * Base Cutout
 * -----------
 */
-function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, red = undef) = 
-    let(base_adj = mb_block_get_base_adj(block_obj),
+function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, inner_adj = undef) = 
+    let(
+        base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         mod_size = mb_block_get_mod_size(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
@@ -95,9 +96,8 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope_pos = mb_slope_filter(slope, 1),
         bottom = is_undef(bottom) ? cut_tol : bottom,
         top = is_undef(top) ? -(top_plate_height + recess_depth) : top,
-        red = is_undef(red) ? 0 : red
-        
-        )
+        inner_adj = is_undef(inner_adj) ? 0 : inner_adj
+    )
 
     [
         "list",
@@ -110,7 +110,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                         plane = "bottom",
                         value = [
                             for(f = [0 : 3])
-                                -wall_thickness + slope_neg[f] + red,
+                                -wall_thickness + slope_neg[f] + inner_adj,
                             bottom,
                             top
                         ]
@@ -120,7 +120,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                         plane = "top",
                         value = [
                             for(f = [0 : 3])
-                                slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
+                                slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + inner_adj,
                             bottom,
                             top
                         ]
@@ -131,7 +131,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 socket = _mb_block_part__plane_value(planes, [base_cutout_min_depth, 0])
             ),
             for(wall_gap = wall_gaps)
-                mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red)
+                mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj)
         ]
     ];
 
@@ -140,7 +140,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 * Base Wall Gaps
 * --------------
 */
-function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red = undef) =
+function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef, outer_adj = undef) =
     let(
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
@@ -152,7 +152,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         gaps = mb_block_base_wall_gap(block_obj, wall_gap),
-        red = is_undef(red) ? 0 : red
+        inner_adj = is_undef(inner_adj) ? 0 : inner_adj,
+        outer_adj = is_undef(outer_adj) ? 0 : outer_adj
     )
     
     [
@@ -176,8 +177,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     value = [
                                         for(f = [0 : 3])
                                             mb_face_has_common(face, f) ? 
-                                                base_adj[f] + cut_tol : 
-                                                -wall_thickness + slope_neg[f] + red,
+                                                base_adj[f] + cut_tol + outer_adj : 
+                                                -wall_thickness + slope_neg[f] + inner_adj,
                                         bottom,
                                         top
                                     ]
@@ -188,8 +189,10 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     value = [
                                         for(f = [0 : 3])
                                             mb_face_has_common(face, f) ? 
-                                                base_adj[f] + cut_tol : 
-                                                slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
+                                                base_adj[f] + cut_tol + outer_adj : 
+                                                slope_neg[f] + 
+                                                    (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + 
+                                                    inner_adj,
                                         bottom,
                                         top
                                     ]
@@ -203,16 +206,109 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                         mb_block_part_cube(
                             block_size = mod_size,
                             expand = [
-                                mb_face_has_common(face, "y") ? - gap_start_offset + red : 0,
-                                mb_face_has_common(face, "y") ? - gap_end_offset + red : 0,
-                                mb_face_has_common(face, "x") ? - gap_start_offset + red : 0,
-                                mb_face_has_common(face, "x") ? - gap_end_offset + red : 0,
+                                mb_face_has_common(face, "y") ? - gap_start_offset + inner_adj : outer_adj,
+                                mb_face_has_common(face, "y") ? - gap_end_offset + inner_adj : outer_adj,
+                                mb_face_has_common(face, "x") ? - gap_start_offset + inner_adj : outer_adj,
+                                mb_face_has_common(face, "x") ? - gap_end_offset + inner_adj : outer_adj,
                                 cut_tol,
                                 0
                             ]
                         )
                     ]
                 ]
+        ]
+    ];
+
+
+
+/**
+* -----------------
+* Base Cutout Clamp
+* -----------------
+*/
+function mb_block_part__base_cutout_clamp(block_obj) = 
+    let(base_adj = mb_block_get_base_adj(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        clamp = mb_block_get_clamp(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        bottom = -clamp[2],
+        top = -(mod_size[2] - clamp[1] - clamp[2]))
+    [
+        "difference",
+        [
+            _mb_block_part__mask_frame(
+                mod_size = mod_size, 
+                base_adj = base_adj, 
+                bottom = bottom, 
+                top = top, 
+                cut_tol = cut_tol
+            ),
+            mb_block_part__base_cutout(
+                block_obj, 
+                planes = "bottom", 
+                bottom = bottom + cut_tol, 
+                top = top + cut_tol, 
+                inner_adj = -clamp[0]
+            )
+        ]
+    ];
+
+/**
+* ----------------
+* Base Clamp Outer
+* ----------------
+*/
+function mb_block_part__base_clamp_outer(block_obj) = 
+    let(
+        mod_size = mb_block_get_mod_size(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        clamp = mb_block_get_clamp(block_obj)
+    )
+    mb_block_part_prismoid(
+        block_size = mod_size, 
+        expand = [[
+                for(f = [0 : 3])
+                    base_adj[f] + clamp[0],
+                -clamp[2],
+                -(mod_size[2] - clamp[1] - clamp[2])
+        ]],
+        bevel = mb_block_get_bevel(block_obj)
+    );
+
+/**
+* -----------------
+* Top Plate Helpers
+* -----------------
+*/
+function mb_block_part__top_plate_helpers(block_obj) =
+    let(base_adj = mb_block_get_base_adj(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        recess_depth = mb_block_get_recess_depth(block_obj),
+        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        bottom = -(base_cutout_depth - top_plate_helpers[1]),
+        top = -(top_plate_height + recess_depth) + cut_tol
+    ) 
+    !top_plate_helpers ? undef : [
+        "difference",
+        [
+            _mb_block_part__mask_frame(
+                mod_size = mod_size, 
+                base_adj = base_adj, 
+                bottom = bottom, 
+                top = top, 
+                cut_tol = cut_tol
+            ),
+            mb_block_part__base_cutout(
+                block_obj, 
+                planes = "top", 
+                bottom = bottom + cut_tol, 
+                top = top + cut_tol, 
+                inner_adj = - top_plate_helpers[0]
+            )
         ]
     ];
 
@@ -353,97 +449,6 @@ function mb_block_part__stabilizers(block_obj) =
             ]
         ]
     ]; 
-
-/**
-* -----------------
-* Base Cutout Clamp
-* -----------------
-*/
-function mb_block_part__base_cutout_clamp(block_obj) = 
-    let(base_adj = mb_block_get_base_adj(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = -clamp[2],
-        top = -(mod_size[2] - clamp[1] - clamp[2]))
-    [
-        "difference",
-        [
-            _mb_block_part__mask_frame(
-                mod_size = mod_size, 
-                base_adj = base_adj, 
-                bottom = bottom, 
-                top = top, 
-                cut_tol = cut_tol
-            ),
-            mb_block_part__base_cutout(
-                block_obj, 
-                planes = "bottom", 
-                bottom = bottom + cut_tol, 
-                top = top + cut_tol, 
-                red = -clamp[0]
-            )
-        ]
-    ];
-
-/**
-* ----------------
-* Base Clamp Outer
-* ----------------
-*/
-function mb_block_part__base_clamp_outer(block_obj) = 
-    let(
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        clamp = mb_block_get_clamp(block_obj)
-    )
-    mb_block_part_prismoid(
-        block_size = mod_size, 
-        expand = [[
-                for(f = [0 : 3])
-                    base_adj[f] + clamp[0],
-                -clamp[2],
-                -(mod_size[2] - clamp[1] - clamp[2])
-        ]],
-        bevel = mb_block_get_bevel(block_obj)
-    );
-
-/**
-* -----------------
-* Top Plate Helpers
-* -----------------
-*/
-function mb_block_part__top_plate_helpers(block_obj) =
-    let(base_adj = mb_block_get_base_adj(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = -(base_cutout_depth - top_plate_helpers[1]),
-        top = -(top_plate_height + recess_depth) + cut_tol
-    ) 
-    !top_plate_helpers ? undef : [
-        "difference",
-        [
-            _mb_block_part__mask_frame(
-                mod_size = mod_size, 
-                base_adj = base_adj, 
-                bottom = bottom, 
-                top = top, 
-                cut_tol = cut_tol
-            ),
-            mb_block_part__base_cutout(
-                block_obj, 
-                planes = "top", 
-                bottom = bottom + cut_tol, 
-                top = top + cut_tol, 
-                red = - top_plate_helpers[0]
-            )
-        ]
-    ];
 
 /**
 * ----------
