@@ -43,7 +43,7 @@ function mb_block_part_tube(
                 clamp_start,
                 clamp_end,
                 axis,
-                [axis != 0 ? offset[0] : 0, axis != 1 ? offset[1] : 0, axis != 2 ? offset[2] : 0]
+                offset
             ]
         ]
     ];
@@ -53,7 +53,7 @@ function mb_block_part_cube(
     block_mod = undef,
     size = undef,
     expand = undef,
-    offset = [0, 0, 0]
+    offset = undef
 ) = 
     let(mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
         mod_size = mod_min_max[1][0],
