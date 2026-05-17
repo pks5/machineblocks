@@ -30,18 +30,9 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 * Tube
 * ----
 */
-function mb_block_part__tubes(block_obj) = 
+function mb_block_part__tubes(block_obj, axis = "z") = 
     let(mod_size = mb_block_get_mod_size(block_obj),
-        axis = "z",
-        tube_z_diameter = mb_block_get_tube_diameter(block_obj, axis),
-        tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, axis),
-        
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        
-        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        tube_length = base_cutout_depth + cut_tol,
-        
         tube_range = mb_block_tube_range(block_obj, axis)
     )
     [
@@ -71,7 +62,7 @@ function mb_block_part__tubes(block_obj) =
                             clamp_end = tube_clamp_end, 
                             clamp_start = tube_clamp_start, 
                             axis = axis,
-                            length = tube_length,
+                            //length = mb_block_tube_length(block_obj, axis, x, y) + cut_tol,
                             expand = [
                                 tube_expand[0],
                                 tube_expand[1] + cut_tol
