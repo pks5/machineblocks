@@ -549,26 +549,22 @@ function mb_block_part__recess(block_obj) =
 */
 function mb_block_part__stud_base_cutout(block_obj) =
     let(mod_size = mb_block_get_mod_size(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
         clamp = mb_block_get_clamp(block_obj),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        wall_thickness_clamp = (wall_thickness +  clamp[0]),
+        slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1),
+        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         top = -(mod_size[2] - base_cutout_min_depth))
     mb_block_part_prismoid(
         block_size = mod_size, 
         expand = [
             [
                 for(f = [0 : 3])
-                    -wall_thickness_clamp + slope_neg[f] - cut_tol,
+                    -(wall_thickness + clamp[0]) + slope_neg[f] - cut_tol,
                 cut_tol,
                 top
             ]
         ],
-        bevel = bevel
+        bevel = mb_block_get_bevel(block_obj)
     );
