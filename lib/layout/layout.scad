@@ -19,77 +19,11 @@ function _mb_block_part__mask_frame(mod_size, base_adj, bottom, top, cut_tol) =
         ]]
     );
 
-/**
-* --------------
-* Base Wall Gaps
-* --------------
-*/
-function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red = undef) =
- let(base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
-        slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1),
-        gaps = mb_block_base_wall_gap(block_obj, wall_gap),
-        red = is_undef(red) ? 0 : red
-    )
-    
-    [
-        "list",
-        [
-            for(gap = gaps)
-                let(
-                    face = gap[0],
-                    gap_start_offset = gap[3],
-                    gap_end_offset = gap[4]
-                )
-                [
-                    "intersection",
-                    [
-                        mb_block_part_prismoid(
-                            block_size = mod_size, 
-                            expand = [
-                                planes == "bottom" || planes == "all" ? 
-                                    [
-                                        for(f = [0 : 3])
-                                            mb_face_has_common(face, f) ? base_adj[f] + cut_tol : -wall_thickness + slope_neg[f] + red,
-                                        bottom,
-                                        top
-                                    ] : 
-                                    undef,
-                                planes == "top" || planes == "all" ? 
-                                    [
-                                        for(f = [0 : 3])
-                                            mb_face_has_common(face, f) ? base_adj[f] + cut_tol : slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
-                                        bottom,
-                                        top
-                                    ] : 
-                                    undef
-                            ],
-                            socket = [base_cutout_min_depth, 0],
-                            bevel = bevel,
-                            slope = slope_pos
-                        ),
-                        
-                        mb_block_part_cube(
-                            block_size = mod_size,
-                            expand = [
-                                mb_face_has_common(face, "y") ? - gap_start_offset + red : 0,
-                                mb_face_has_common(face, "y") ? - gap_end_offset + red : 0,
-                                mb_face_has_common(face, "x") ? - gap_start_offset + red : 0,
-                                mb_face_has_common(face, "x") ? - gap_end_offset + red : 0,
-                                cut_tol,
-                                0
-                            ]
-                        )
-                    ]
-                ]
-        ]
-    ];
+function _mb_block_part__plane_value(planes, value, plane = "all") = 
+    planes == plane || planes == "all" ? value : undef;
+
+
+
 
 /**
 * ----
@@ -191,29 +125,114 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [
-                    planes == "bottom" || planes == "all" ? 
-                        [
+                    _mb_block_part__plane_value(
+                        planes = planes, 
+                        plane = "bottom",
+                        value = [
                             for(f = [0 : 3])
                                 -wall_thickness + slope_neg[f] + red,
                             bottom,
                             top
-                        ] : 
-                        undef,
-                    planes == "top" || planes == "all" ? 
-                        [
+                        ]
+                    ),
+                    _mb_block_part__plane_value(
+                        planes = planes, 
+                        plane = "top",
+                        value = [
                             for(f = [0 : 3])
                                 slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
                             bottom,
                             top
-                        ] : 
-                        undef
+                        ]
+                    )
                 ],
                 bevel = bevel,
-                slope = planes == "all" ? slope_pos : undef,
-                socket = planes == "all" ? [base_cutout_min_depth, 0] : undef
+                slope = _mb_block_part__plane_value(planes, slope_pos),
+                socket = _mb_block_part__plane_value(planes, [base_cutout_min_depth, 0])
             ),
             for(wall_gap = wall_gaps)
-                mb_block_part__base_wall_gaps(block_obj, "all", bottom, top, wall_gap, red)
+                mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red)
+        ]
+    ];
+
+/**
+* --------------
+* Base Wall Gaps
+* --------------
+*/
+function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red = undef) =
+    let(
+        base_adj = mb_block_get_base_adj(block_obj),
+        bevel = mb_block_get_bevel(block_obj), 
+        slope = mb_block_get_slope(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
+        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1),
+        gaps = mb_block_base_wall_gap(block_obj, wall_gap),
+        red = is_undef(red) ? 0 : red
+    )
+    
+    [
+        "list",
+        [
+            for(gap = gaps)
+                let(
+                    face = gap[0],
+                    gap_start_offset = gap[3],
+                    gap_end_offset = gap[4]
+                )
+                [
+                    "intersection",
+                    [
+                        mb_block_part_prismoid(
+                            block_size = mod_size, 
+                            expand = [
+                                _mb_block_part__plane_value(
+                                    planes = planes, 
+                                    plane = "bottom",
+                                    value = [
+                                        for(f = [0 : 3])
+                                            mb_face_has_common(face, f) ? 
+                                                base_adj[f] + cut_tol : 
+                                                -wall_thickness + slope_neg[f] + red,
+                                        bottom,
+                                        top
+                                    ]
+                                ),
+                                _mb_block_part__plane_value(
+                                    planes = planes, 
+                                    plane = "top",
+                                    value = [
+                                        for(f = [0 : 3])
+                                            mb_face_has_common(face, f) ? 
+                                                base_adj[f] + cut_tol : 
+                                                slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
+                                        bottom,
+                                        top
+                                    ]
+                                )
+                            ],
+                            socket = [base_cutout_min_depth, 0],
+                            bevel = bevel,
+                            slope = slope_pos
+                        ),
+                        
+                        mb_block_part_cube(
+                            block_size = mod_size,
+                            expand = [
+                                mb_face_has_common(face, "y") ? - gap_start_offset + red : 0,
+                                mb_face_has_common(face, "y") ? - gap_end_offset + red : 0,
+                                mb_face_has_common(face, "x") ? - gap_start_offset + red : 0,
+                                mb_face_has_common(face, "x") ? - gap_end_offset + red : 0,
+                                cut_tol,
+                                0
+                            ]
+                        )
+                    ]
+                ]
         ]
     ];
 
