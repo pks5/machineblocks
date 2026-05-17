@@ -241,7 +241,9 @@ function mb_block_tube_range(block_obj, axis) =
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
         is_pin = mb_block_tube_is_pin(block_obj, axis),
-        range_offset_start = is_pin[0] || is_pin[1] ? [is_pin[0] ? 0 : 1, is_pin[1] ? 0 : 1] : [1, 1],
+        range_offset_start = (is_pin[0] || is_pin[1]) && !(is_pin[0] && is_pin[1]) 
+            ? [is_pin[0] ? 0 : 1, is_pin[1] ? 0 : 1] 
+            : [1, 1],
         range_offset_end = [0, 0]
     )
     [
@@ -255,7 +257,9 @@ function mb_block_tube_render(block_obj, axis, x, y) =
 function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
     let(
         is_pin = mb_block_tube_is_pin(block_obj, axis, x, y),
-        tube_offset = is_pin[0] || is_pin[1] ? [is_pin[0] ? 0.5 : 0, is_pin[1] ? 0.5 : 0] : [0, 0]
+        tube_offset = is_pin[0] || is_pin[1] 
+            ? [is_pin[0] ? 0.5 : 0, is_pin[1] ? 0.5 : 0] 
+            : [0, 0]
     )
     mb_block_pos_to_offset(block_obj, [x + tube_offset[0], y + tube_offset[1], undef]);
 
@@ -280,7 +284,9 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
         pin_diameter = mb_block_get_pin_diameter(block_obj)
         
     )
-    is_pin[0] || is_pin[1] ? 0.5 * pin_diameter : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
+    is_pin[0] || is_pin[1] 
+        ? 0.5 * pin_diameter 
+        : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
 /**
 * -----------
