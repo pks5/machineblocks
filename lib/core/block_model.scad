@@ -222,6 +222,25 @@ function mb_block_base_cutout_ceiling_offset(block_obj) =
     ];
 
 /**
+* -----
+* Tubes
+* -----
+*/
+
+function mb_block_tube_range(block_obj, axis) =
+    let(
+        axis = mb_axis_to_int(axis),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1])
+    [
+        [start_index_x + 1 : end_index_x],
+        [start_index_y + 1 : end_index_y]
+    ];
+
+/**
 * -----------
 * Stabilizers
 * -----------
@@ -298,7 +317,7 @@ function mb_block_stabilizer_segment_expand(block_obj, axis, x, y) =
         axis == 1 && y == end_index_y ? 0.5 * tube_z_diameter : 0
     ];
 
-function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
+function mb_block_stabilizer_segment_render(block_obj, axis, x, y) =
     let(axis = mb_axis_to_int(axis = axis),
         min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],

@@ -974,7 +974,7 @@ module mb_block(
                                                             
                                                         } // End stabilizer grid
 
-                                                        if(pillars != false){
+                                                        *if(pillars != false){
                                                             pilRoundingRes = mb_fn_even_for_radius(
                                                                 0.5 * tubeZSize + baseClampThickness, 
                                                                 0, 
@@ -1029,7 +1029,7 @@ module mb_block(
                                                             }
                                                         } // End if pillars
 
-                                                        if(pillars != false){
+                                                        *if(pillars != false){
                                                             pinRoundingRes = mb_fn_even_for_radius(
                                                                 0.5 * pinSize + baseClampThickness, 
                                                                 0, 

@@ -27,6 +27,9 @@ module mb_base_cutout(
               
             // Stabilizers 
             mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
+
+            // Tubes
+            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
         }
     }
 }
@@ -74,7 +77,7 @@ module mb_base(
                 
                 mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 
-                mb_block_part(block_obj, part = mb_block_part__tube(block_obj));
+                
 
                 //Just for testing TO BE REMOVED
                 *mb_block_part(block_obj, part=[

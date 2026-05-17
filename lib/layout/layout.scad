@@ -30,7 +30,7 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 * Tube
 * ----
 */
-function mb_block_part__tube(block_obj) = 
+function mb_block_part__tubes(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
@@ -38,23 +38,28 @@ function mb_block_part__tube(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         tube_length = base_cutout_depth + cut_tol,
-        offset = mb_block_pos_to_offset(block_obj, [0.5, 0, 2]))
+        tube_range = mb_block_tube_range(block_obj, "z")
+    )
     [
-        "difference",
+        "list",
         [
-            mb_block_part_tube(
-                block_size = size,
-                block_mod = mod,
-                radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
-                clamp_end = [top_plate_helpers[0], top_plate_helpers[1]], 
-                clamp_start = [clamp[0], clamp[1] + cut_tol, clamp[2]], 
-                axis = "z",
-                length = tube_length,
-                expand = [tube_length, "auto"],
-                offset = offset
-            )
+            for(x = tube_range[0])
+                for(y = tube_range[1])
+                    let(offset = mb_block_pos_to_offset(block_obj, [x, y, undef]))
+                    mb_block_part_tube(
+                        block_size = size,
+                        block_mod = mod,
+                        radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
+                        clamp_end = [top_plate_helpers[0], top_plate_helpers[1], cut_tol], 
+                        clamp_start = [clamp[0], clamp[1], clamp[2]], 
+                        axis = "z",
+                        length = tube_length,
+                        expand = [0, -base_cutout_ceiling_offset[1] + cut_tol],
+                        offset = offset
+                    )
         ]
     ];
 
@@ -351,7 +356,7 @@ function mb_block_part__stabilizers(block_obj) =
                                 seg_size = mb_block_stabilizer_segment_size(block_obj, axis, x, y),
                                 seg_expand = mb_block_stabilizer_segment_expand(block_obj, axis, x, y)
                             )
-                            if(mb_block_render_stabilizer_segment(block_obj, axis, x, y))
+                            if(mb_block_stabilizer_segment_render(block_obj, axis, x, y))
                             [
                                 "list",
                                 [
