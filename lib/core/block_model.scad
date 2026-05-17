@@ -131,7 +131,7 @@ function mb_block_obj(
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
-            [true],  // 19 - Inverted
+            [false],  // 19 - Inverted
             [id, debug, 0.01] // 20 - ID, Debug, Cut Tolerance
         ];
 
@@ -320,6 +320,11 @@ function mb_block_stabilizer_segment_offset(block_obj, axis, x, y) =
 
 function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
     let(
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1],
         axis = mb_axis_to_int(axis),
         stabilizers = mb_block_get_stabilizers(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
@@ -330,9 +335,10 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         stabilizer_expansion = stabilizers[4],
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
+        is_pin = mb_block_tube_is_pin(block_obj, axis),
         expanded = axis == 1 ? 
-            (x % stabilizer_expansion) == 0 : 
-            (y % stabilizer_expansion) == 0,
+            is_pin[1] || ((x % stabilizer_expansion) == 0 && ((end_index_x - start_index_x) > 2)): 
+            is_pin[0] || ((y % stabilizer_expansion) == 0 && ((end_index_y - start_index_y) > 2)),
         seg_size = [
             axis == 1 ? segment_thickness : default_segment_length, 
             axis == 1 ? default_segment_length : segment_thickness, 
