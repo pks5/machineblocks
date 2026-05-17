@@ -113,19 +113,12 @@ function mb_block_part__tube(block_obj) =
 * ----------
 */
 function mb_block_part__base_outer(block_obj, adjusted = true) =
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj))
     mb_block_part_prismoid(
-        block_size = mod_size, 
-        expand = adjusted ? [base_adj] : 0,
-        socket = socket,
-        bevel = bevel,
-        slope = slope
+        block_size = mb_block_get_mod_size(block_obj), 
+        expand = adjusted ? [mb_block_get_base_adj(block_obj)] : undef,
+        socket = mb_block_get_slope_socket(block_obj),
+        bevel = mb_block_get_bevel(block_obj),
+        slope = mb_block_get_slope(block_obj)
     ); 
 
 /**
@@ -134,27 +127,20 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
 * -----------
 */
 function mb_block_part__base_clamp_outer(block_obj) = 
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
+    let(
         mod_size = mb_block_get_mod_size(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        clamp = mb_block_get_clamp(block_obj),
-        slope = mb_block_get_slope(block_obj))
-    
+        clamp = mb_block_get_clamp(block_obj)
+    )
     mb_block_part_prismoid(
-        block_size = size, 
-        block_mod = mod,
+        block_size = mod_size, 
         expand = [[
-                base_adj[0] + clamp[0],
-                base_adj[1] + clamp[0],
-                base_adj[2] + clamp[0],
-                base_adj[3] + clamp[0],
+                for(f = [0 : 3])
+                    base_adj[f] + clamp[0],
                 -clamp[2],
                 -(mod_size[2] - clamp[1] - clamp[2])
         ]],
-        bevel = bevel
+        bevel = mb_block_get_bevel(block_obj)
     );
 
 /**
