@@ -98,7 +98,7 @@ function mb_block_part__tube(block_obj) =
                 block_mod = mod,
                 radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
                 clamp_end = [top_plate_helpers[0], top_plate_helpers[1]], 
-                clamp_start = [clamp[0], clamp[1], clamp[2]], 
+                clamp_start = [clamp[0], clamp[1] + cut_tol, clamp[2]], 
                 rounding_radius = 0,
                 axis = "z",
                 length = base_cutout_depth + cut_tol,
@@ -166,7 +166,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 base_adj[1] + clamp[0],
                 base_adj[2] + clamp[0],
                 base_adj[3] + clamp[0],
-                -clamp[1],
+                -clamp[2],
                 -(mod_size[2] - clamp[1] - clamp[2])
             ]]
         ,
@@ -390,14 +390,14 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                     0,
                     0,
                     0,
-                    -clamp[1],
+                    -clamp[2],
                     -(mod_size[2] - clamp[1] - clamp[2])
                 ]],
                 bevel = undef,
                 slope = undef,
                 socket = undef
             ),
-            mb_block_part__base_cutout(block_obj, planes = "bottom", bottom = -clamp[1] + cut_tol, top = -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol, red = -clamp[0]),
+            mb_block_part__base_cutout(block_obj, planes = "bottom", bottom = -clamp[2] + cut_tol, top = -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol, red = -clamp[0]),
         ]
     ];
 

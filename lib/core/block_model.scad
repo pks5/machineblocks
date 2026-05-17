@@ -21,7 +21,7 @@ function mb_block_obj(
     recess_depth = "auto",
     recess_wall_thickness = 0.333, 
     recess_wall_gaps = [],
-    clamp = [0.1, 0.25, 0.5], // [Thickness (mm), Offset (mbu), Height (mbu)]
+    clamp = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
     clamp_outer = true,
     stud_diameter = 3,
     relief_cut = false,
@@ -83,8 +83,8 @@ function mb_block_obj(
     
         clamp_final = [
             clamp[0] * mul_mm_to_grid[0], // Thickness
-            clamp[1] * mul_mbu_to_grid[2], // Offset
-            clamp[2] * mul_mbu_to_grid[2], // Height
+            clamp[1] * mul_mbu_to_grid[2], // Height
+            clamp[2] * mul_mbu_to_grid[2], // Offset
             clamp_outer
         ],
         relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
