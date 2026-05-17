@@ -234,11 +234,28 @@ function mb_block_tube_range(block_obj, axis) =
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
-        end_index_y = min_max_index[1][1])
+        end_index_y = min_max_index[1][1]
+    )
     [
         [start_index_x + 1 : end_index_x],
         [start_index_y + 1 : end_index_y]
     ];
+
+function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
+    mb_block_pos_to_offset(block_obj, [x, y, undef]);
+
+function mb_block_tube_radius(block_obj, axis, x, y) =
+    let(
+        axis = mb_axis_to_int(axis),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1],
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, "z")
+    )
+    [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
 /**
 * -----------

@@ -41,24 +41,25 @@ function mb_block_part__tubes(block_obj) =
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         tube_length = base_cutout_depth + cut_tol,
-        tube_range = mb_block_tube_range(block_obj, "z")
+        axis = "z",
+        tube_range = mb_block_tube_range(block_obj, axis)
     )
     [
         "list",
         [
             for(x = tube_range[0])
                 for(y = tube_range[1])
-                    let(offset = mb_block_pos_to_offset(block_obj, [x, y, undef]))
+                    let(tube_offset = mb_block_tube_offset(block_obj, axis, x, y))
                     mb_block_part_tube(
                         block_size = size,
                         block_mod = mod,
-                        radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
+                        radius = mb_block_tube_radius(block_obj, axis, x, y),
                         clamp_end = [top_plate_helpers[0], top_plate_helpers[1], cut_tol], 
                         clamp_start = [clamp[0], clamp[1], clamp[2]], 
                         axis = "z",
                         length = tube_length,
                         expand = [0, -base_cutout_ceiling_offset[1] + cut_tol],
-                        offset = offset
+                        offset = tube_offset
                     )
         ]
     ];
