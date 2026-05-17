@@ -30,7 +30,7 @@ function mb_block_obj(
     custom_modules = ["my_cube"],
     debug = false,
     baseWallGaps = [],
-    stabilizers = [0.5, 0.5, 0.2, 0.5, 2],
+    stabilizers = [0.5, 0.5, 0.2, 1, 2],
     tubeWallThickness = 0.53125
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
@@ -93,7 +93,7 @@ function mb_block_obj(
             stabilizers[0] * mul_mbu_to_grid[0], // Thickness (mbu)
             stabilizers[1] * mul_mbu_to_grid[2], // Height (mbu)
             stabilizers[2] * mul_mm_to_grid[2], // Offset (mm)
-            stabilizers[3] * mul_mbu_to_grid[2], // Expansion Offset (mm)
+            stabilizers[3] * mul_mbu_to_grid[2], // Expansion Offset (mbu)
             stabilizers[4]                       // Expansion Each
         ],
     )
@@ -211,6 +211,42 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
+function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) = 
+    let(
+        face = mb_face_to_int(face),
+        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
+        all_gaps = [
+            for(wall_gap = wall_gaps)
+               let(gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false))
+               for(g = gaps)
+                if(face == g[0] && ((pos_min > g[5] && pos_min < g[6]) || (pos_max > g[5] && pos_max < g[6]))) 1
+        ]
+    )
+    len(all_gaps) > 0;
+
+function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
+    let(axis = mb_axis_to_int(axis = axis),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1],
+        stabilizers = mb_block_get_stabilizers(block_obj),
+        
+        stablilizer_thickness = stabilizers[0],
+        x_min = x - 0.5 * stablilizer_thickness,
+        x_max = x + 0.5 * stablilizer_thickness,
+        y_min = y - 0.5 * stablilizer_thickness,
+        y_max = y + 0.5 * stablilizer_thickness
+    )
+    !((axis == 1 && x == start_index_x && mb_block_in_wall_gap(block_obj, "x-", y_min, y_max)) ||
+    (axis == 1 && x == end_index_x && mb_block_in_wall_gap(block_obj, "x+", y_min, y_max)) || 
+    (axis == 0 && y == start_index_y && mb_block_in_wall_gap(block_obj, "y-", x_min, x_max)) || 
+    (axis == 0 && y == end_index_y && mb_block_in_wall_gap(block_obj, "y+", x_min, x_max))
+    );
+
+
+
 function mb_block_custom_module_mapping(block_obj, mname) = 
     let(custom_modules = mb_block_get_custom_modules(block_obj),
         mappings = custom_modules[0], f = [
@@ -229,11 +265,12 @@ function mb_block_recess_wall_gap(block_obj, gap) =
             is_undef(gap[2]) ? 0 : gap[2]
         ];
 
-function mb_block_base_wall_gap(block_obj, gap) = 
+function mb_block_base_wall_gap(block_obj, gap, split_axis = true) = 
     let(
         mod_size = mb_block_get_mod_size(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        faces = mb_face_split(gap[0], ["x", "y"])
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
     )
     [
         for(face = faces)
@@ -250,7 +287,10 @@ function mb_block_base_wall_gap(block_obj, gap) =
             gap_start_pos,
             gap_length,
             gap_start_offset,
-            gap_end_offset
+            gap_end_offset,
+            min_max_index[0][1 - axis] + gap_start_offset,
+            min_max_index[1][1 - axis] + 1 - gap_end_offset,
+            
         ]
     ];
 

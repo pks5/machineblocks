@@ -938,7 +938,7 @@ module mb_block(
 
                                                         
 
-                                                        if(stabilizerGrid){
+                                                        *if(stabilizerGrid){
                                                             
                                                             difference(){
                                                                 /*
@@ -1697,7 +1697,7 @@ module mb_block(
                                                 /*
                                                 * Groove Wall Gaps New
                                                 */
-                                                for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
+                                                *for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
                                                     gap = baseWallGaps[i];
                                                     
                                                     gapSide = mb_side_to_int(gap[0]);

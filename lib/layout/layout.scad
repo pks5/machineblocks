@@ -228,7 +228,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 function mb_block_part__stabilizers(block_obj) =
     let(mod_size = mb_block_get_mod_size(block_obj),
         stabilizers = mb_block_get_stabilizers(block_obj),
-        stabilizer_expansion = stabilizers[4],
+        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
@@ -238,11 +238,12 @@ function mb_block_part__stabilizers(block_obj) =
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
-        end_index_x = min_max_index[1][0],
         start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
         default_segment_length = 1 - default_tube_diameter + tube_thickness,
         segment_thickness = stabilizers[0],
+        stabilizer_expansion = stabilizers[4],
         segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0)
         )
     [
@@ -255,6 +256,7 @@ function mb_block_part__stabilizers(block_obj) =
                 [
                     for(y = [start_index_y : end_index_y])
                         let(offset = mb_block_pos_to_offset(block_obj, [x, y + 0.5, undef]))
+                        if(mb_block_render_stabilizer_segment(block_obj, "x", x, y))
                         [
                             "list",
                             [
@@ -308,6 +310,7 @@ function mb_block_part__stabilizers(block_obj) =
                             offset = mb_block_pos_to_offset(block_obj, [x + 0.5, y, undef])
                             
                         )
+                        if(mb_block_render_stabilizer_segment(block_obj, "y", x, y))
                         [
                             "list",
                             [
