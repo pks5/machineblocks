@@ -272,23 +272,25 @@ function mb_block_part__base_clamp_outer(block_obj) =
         bottom = -clamp[2],
         top = -(mod_size[2] - clamp[1] - clamp[2])
     )
-    block_inverted ? [
-        "difference",
-        [
+    block_inverted ? 
+    //[
+    //    "difference",
+    //    [
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
-                        for(f = [0 : 3])
-                            base_adj[f] + clamp[0],
-                        bottom,
-                        top
+                    for(f = [0 : 3])
+                        base_adj[f] + clamp[0],
+                    bottom,
+                    top
                 ]],
                 bevel = mb_block_get_bevel(block_obj)
-            ),
+            )
             //for(wall_gap = wall_gaps)
             //    mb_block_part__base_wall_gaps(block_obj, "bottom", bottom + cut_tol, top + cut_tol, wall_gap, -clamp[0])
-        ]
-    ] : undef;
+    //    ]
+    //] 
+    : undef;
 
 /**
 * -----------------
@@ -351,7 +353,8 @@ function mb_block_part__stabilizers(block_obj) =
         default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
         segment_thickness = stabilizers[0],
         stabilizer_expansion = stabilizers[4],
-        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0)
+        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
+        top = - (recess_depth + top_plate_height)
         )
     [
         "list",
@@ -380,8 +383,8 @@ function mb_block_part__stabilizers(block_obj) =
                                         y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                         y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                         "auto", 
-                                        - (recess_depth + top_plate_height) + cut_tol],
-                                    
+                                        top + cut_tol
+                                    ],
                                     offset = offset
                                 ),
                                 if(top_plate_helpers) 
@@ -398,8 +401,8 @@ function mb_block_part__stabilizers(block_obj) =
                                             y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                             y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                             "auto", 
-                                            - (recess_depth + top_plate_height) + cut_tol],
-                                        
+                                            top + cut_tol
+                                        ],
                                         offset = offset
                                     )
                             ]
@@ -433,10 +436,9 @@ function mb_block_part__stabilizers(block_obj) =
                                         x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                         0, 
                                         0, 
-                                    
                                         "auto", 
-                                        - (recess_depth + top_plate_height) + cut_tol],
-                                    
+                                        top + cut_tol
+                                    ],
                                     offset = offset
                                 ),
                                 if(top_plate_helpers)
@@ -452,10 +454,9 @@ function mb_block_part__stabilizers(block_obj) =
                                             x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                             0, 
                                             0, 
-                                        
                                             "auto", 
-                                            - (recess_depth + top_plate_height) + cut_tol],
-                                        
+                                            top + cut_tol
+                                        ],
                                         offset = offset
                                     )
                             ]
