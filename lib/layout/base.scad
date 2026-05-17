@@ -28,18 +28,7 @@ module mb_base_cutout(
             // Stabilizers 
             mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
         }
-    
-        
-        
-        
     }
-
-wall_gaps = mb_block_get_base_wall_gaps(block_obj);
-    for(wall_gap = wall_gaps){
-               gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false);
-               for(g = gaps){
-                echo (g = g, i = 0 == g[0] && (1 < g[6] || 1 > g[5]));
-               }}
 }
 
 /*

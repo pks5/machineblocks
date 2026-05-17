@@ -2,6 +2,11 @@ use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 
+/**
+* --------------
+* Base Wall Gaps
+* --------------
+*/
 function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, red = undef) =
  let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -80,6 +85,11 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         ]
     ];
 
+/**
+* ----
+* Tube
+* ----
+*/
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -104,21 +114,15 @@ function mb_block_part__tube(block_obj) =
                 length = base_cutout_depth + cut_tol,
                 expand = [base_cutout_depth + cut_tol, "auto"],
                 offset = offset
-            ),
-           /* mb_block_part_tube(
-                block_size = size,
-                block_mod = mod,
-                radius = 0.4, 
-                axis = "x",
-                length = 2.2,
-                expand = [2.1, "auto"],
-                offset = offset
-            )*/
-            
+            )
         ]
-    ]    
-    ;
+    ];
 
+/**
+* ----------
+* Base Outer
+* ----------
+*/
 function mb_block_part__base(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -133,6 +137,11 @@ function mb_block_part__base(block_obj) =
         slope = slope
     ); 
 
+/**
+* -------------------
+* Base Outer Adjusted
+* -------------------
+*/
 function mb_block_part__base_adjusted(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -149,6 +158,11 @@ function mb_block_part__base_adjusted(block_obj) =
         slope = mb_slope_shrink(slope, base_adj)
     ); 
 
+/**
+* -----------
+* Clamp Outer
+* -----------
+*/
 function mb_block_part__base_clamp_outer(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -158,6 +172,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
         bevel = mb_block_get_bevel(block_obj), 
         clamp = mb_block_get_clamp(block_obj),
         slope = mb_block_get_slope(block_obj))
+    
     mb_block_part_prismoid(
         block_size = size, 
         block_mod = mod,
@@ -168,14 +183,15 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 base_adj[3] + clamp[0],
                 -clamp[2],
                 -(mod_size[2] - clamp[1] - clamp[2])
-            ]]
-        ,
-        socket = undef,
-        bevel = bevel,
-        
-        slope = undef
+        ]],
+        bevel = bevel
     );
 
+/**
+* -----------
+* Base Cutout
+* -----------
+*/
 function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, red = undef) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -233,6 +249,11 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         ]
     ];
 
+/**
+* -----------
+* Stabilizers
+* -----------
+*/
 function mb_block_part__stabilizers(block_obj) =
     let(mod_size = mb_block_get_mod_size(block_obj),
         stabilizers = mb_block_get_stabilizers(block_obj),
@@ -366,6 +387,11 @@ function mb_block_part__stabilizers(block_obj) =
         ]
     ]; 
 
+/**
+* -----------------
+* Base Cutout Clamp
+* -----------------
+*/
 function mb_block_part__base_cutout_clamp(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -401,6 +427,11 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         ]
     ];
 
+/**
+* -----------------
+* Top Plate Helpers
+* -----------------
+*/
 function mb_block_part__top_plate_helpers(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -442,6 +473,11 @@ function mb_block_part__top_plate_helpers(block_obj) =
         ]
     ];
 
+/**
+* ----------
+* Relief Cut
+* ----------
+*/
 function mb_block_part__relief_cut(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -488,6 +524,11 @@ function mb_block_part__relief_cut(block_obj) =
         ]
     ];
 
+/**
+* ------
+* Recess
+* ------
+*/
 function mb_block_part__recess(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
@@ -566,6 +607,11 @@ function mb_block_part__recess(block_obj) =
         ]
     ];
 
+/**
+* ----------------
+* Stud Base Cutout
+* ----------------
+*/
 function mb_block_part__stud_base_cutout(block_obj) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
