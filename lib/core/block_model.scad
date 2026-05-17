@@ -228,6 +228,48 @@ function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) =
     )
     len(found) > 0;
 
+function mb_block_stabilizer_segment_offset(block_obj, axis, x, y) =
+    let(axis = mb_axis_to_int(axis))
+        mb_block_pos_to_offset(block_obj, axis == 1 ? [x, y + 0.5, undef] : [x + 0.5, y, undef]);
+
+function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
+    let(
+        axis = mb_axis_to_int(axis),
+        stabilizers = mb_block_get_stabilizers(block_obj),
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
+        default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
+        segment_thickness = stabilizers[0],
+        stabilizer_expansion = stabilizers[4],
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
+        expanded = axis == 1 ? 
+            (x % stabilizer_expansion) == 0 : 
+            (y % stabilizer_expansion) == 0
+    )
+    [
+        axis == 1 ? segment_thickness : default_segment_length, 
+        axis == 1 ? default_segment_length : segment_thickness, 
+        (expanded ? segment_height_expanded : stabilizers[1]) + (axis == 1 ? -stabilizers[2] : 0)
+    ];
+
+function mb_block_stabilizer_segment_expand(block_obj, axis, x, y) =
+    let(    
+        axis = mb_axis_to_int(axis),
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1],
+    )    
+    [
+        axis == 0 && x == 0 ? 0.5 * tube_z_diameter : 0, 
+        axis == 0 && x == end_index_x ? 0.5 * tube_z_diameter : 0, 
+        axis == 1 && y == 0 ? 0.5 * tube_z_diameter : 0, 
+        axis == 1 && y == end_index_y ? 0.5 * tube_z_diameter : 0
+    ];
+
 function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
     let(axis = mb_axis_to_int(axis = axis),
         min_max_index = mb_block_get_min_max_index(block_obj),
@@ -243,10 +285,10 @@ function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
         y_min = y - 0.5 * stablilizer_thickness,
         y_max = y + 0.5 * stablilizer_thickness
     )
-    !((axis == 1 && x == start_index_x && mb_block_in_wall_gap(block_obj, "x-", y_min, y_max)) ||
-    (axis == 1 && x == end_index_x && mb_block_in_wall_gap(block_obj, "x+", y_min, y_max)) || 
-    (axis == 0 && y == start_index_y && mb_block_in_wall_gap(block_obj, "y-", x_min, x_max)) || 
-    (axis == 0 && y == end_index_y && mb_block_in_wall_gap(block_obj, "y+", x_min, x_max))
+    !((axis == 0 && x == start_index_x && mb_block_in_wall_gap(block_obj, "x-", y_min, y_max)) ||
+    (axis == 0 && x == end_index_x && mb_block_in_wall_gap(block_obj, "x+", y_min, y_max)) || 
+    (axis == 1 && y == start_index_y && mb_block_in_wall_gap(block_obj, "y-", x_min, x_max)) || 
+    (axis == 1 && y == end_index_y && mb_block_in_wall_gap(block_obj, "y+", x_min, x_max))
     );
 
 

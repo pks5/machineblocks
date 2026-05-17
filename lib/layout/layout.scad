@@ -350,75 +350,21 @@ function mb_block_part__stabilizers(block_obj) =
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
-        default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
-        segment_thickness = stabilizers[0],
-        stabilizer_expansion = stabilizers[4],
-        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
         top = - (recess_depth + top_plate_height)
         )
     [
         "list",
         [
-            // X (lines in Y direction)
+            // Y - Direction
             for(x = [start_index_x + 1 : end_index_x])
             [
                 "list",
                 [
                     for(y = [start_index_y : end_index_y])
-                        let(offset = mb_block_pos_to_offset(block_obj, [x, y + 0.5, undef]))
-                        if(mb_block_render_stabilizer_segment(block_obj, "x", x, y))
-                        [
-                            "list",
-                            [
-                                mb_block_part_cube(
-                                    block_size = mod_size,
-                                    size = [
-                                        segment_thickness, 
-                                        default_segment_length, 
-                                        ((x % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + stabilizers[2] + cut_tol
-                                    ],
-                                    expand = [
-                                        0, 
-                                        0, 
-                                        y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                        y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                        "auto", 
-                                        top + cut_tol
-                                    ],
-                                    offset = offset
-                                ),
-                                if(top_plate_helpers) 
-                                    mb_block_part_cube(
-                                        block_size = mod_size,
-                                        size = [
-                                            segment_thickness + 2 * top_plate_helpers[0], 
-                                            default_segment_length, 
-                                            top_plate_helpers[1] + cut_tol
-                                        ],
-                                        expand = [
-                                            0, 
-                                            0, 
-                                            y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                            y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                            "auto", 
-                                            top + cut_tol
-                                        ],
-                                        offset = offset
-                                    )
-                            ]
-                        ]
-                ]
-            ],
-
-            // Y (lines in X direction)
-            for(y = [start_index_y + 1 : end_index_y])
-            [
-                "list",
-                [
-                    for(x = [start_index_x : end_index_x])
                         let(
-                            offset = mb_block_pos_to_offset(block_obj, [x + 0.5, y, undef])
-                            
+                            seg_offset = mb_block_stabilizer_segment_offset(block_obj, "y", x, y),
+                            seg_size = mb_block_stabilizer_segment_size(block_obj, "y", x, y),
+                            seg_expand = mb_block_stabilizer_segment_expand(block_obj, "y", x, y)
                         )
                         if(mb_block_render_stabilizer_segment(block_obj, "y", x, y))
                         [
@@ -427,37 +373,84 @@ function mb_block_part__stabilizers(block_obj) =
                                 mb_block_part_cube(
                                     block_size = mod_size,
                                     size = [
-                                        default_segment_length, 
-                                        segment_thickness, 
-                                        ((y % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
+                                        seg_size[0], 
+                                        seg_size[1], 
+                                        seg_size[2] + cut_tol
                                     ],
                                     expand = [
-                                        x == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                        x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                        0, 
-                                        0, 
+                                        for(f = [0 : 3])
+                                            seg_expand[f],
                                         "auto", 
                                         top + cut_tol
                                     ],
-                                    offset = offset
+                                    offset = seg_offset
+                                ),
+                                if(top_plate_helpers) 
+                                    mb_block_part_cube(
+                                        block_size = mod_size,
+                                        size = [
+                                            seg_size[0] + 2 * top_plate_helpers[0], 
+                                            seg_size[1], 
+                                            top_plate_helpers[1] + cut_tol
+                                        ],
+                                        expand = [
+                                            for(f = [0 : 3])
+                                                seg_expand[f],
+                                            "auto", 
+                                            top + cut_tol
+                                        ],
+                                        offset = seg_offset
+                                    )
+                            ]
+                        ]
+                ]
+            ],
+
+            // X - Direction
+            for(y = [start_index_y + 1 : end_index_y])
+            [
+                "list",
+                [
+                    for(x = [start_index_x : end_index_x])
+                        let(
+                            seg_offset = mb_block_stabilizer_segment_offset(block_obj, "x", x, y),
+                            seg_size = mb_block_stabilizer_segment_size(block_obj, "x", x, y),
+                            seg_expand = mb_block_stabilizer_segment_expand(block_obj, "x", x, y)
+                        )
+                        if(mb_block_render_stabilizer_segment(block_obj, "x", x, y))
+                        [
+                            "list",
+                            [
+                                mb_block_part_cube(
+                                    block_size = mod_size,
+                                    size = [
+                                        seg_size[0], 
+                                        seg_size[1], 
+                                        seg_size[2] + cut_tol
+                                    ],
+                                    expand = [
+                                        for(f = [0 : 3])
+                                            seg_expand[f],
+                                        "auto", 
+                                        top + cut_tol
+                                    ],
+                                    offset = seg_offset
                                 ),
                                 if(top_plate_helpers)
                                     mb_block_part_cube(
                                         block_size = mod_size,
                                         size = [
-                                            default_segment_length, 
-                                            segment_thickness + 2 * top_plate_helpers[0], 
+                                            seg_size[0], 
+                                            seg_size[1] + 2 * top_plate_helpers[0], 
                                             top_plate_helpers[1] + cut_tol
                                         ],
                                         expand = [
-                                            x == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                            x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
-                                            0, 
-                                            0, 
+                                            for(f = [0 : 3])
+                                                seg_expand[f],
                                             "auto", 
                                             top + cut_tol
                                         ],
-                                        offset = offset
+                                        offset = seg_offset
                                     )
                             ]
                         ]
