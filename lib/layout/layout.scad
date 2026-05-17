@@ -3,6 +3,23 @@ use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 
 /**
+* -------
+* HELPERS
+* -------
+*/
+
+function _mb_block_part__mask_frame(mod_size, base_adj, bottom, top, cut_tol) = 
+    mb_block_part_prismoid(
+        block_size = mod_size, 
+        expand = [[
+            for(f = [0 : 3])
+                base_adj[f] + cut_tol,
+            bottom,
+            top
+        ]]
+    );
+
+/**
 * --------------
 * Base Wall Gaps
 * --------------
@@ -149,12 +166,8 @@ function mb_block_part__base_clamp_outer(block_obj) =
 * -----------
 */
 function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, red = undef) = 
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
+    let(base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
@@ -163,6 +176,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
+        slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         bottom = is_undef(bottom) ? cut_tol : bottom,
@@ -175,9 +189,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         "list",
         [
             mb_block_part_prismoid(
-                block_size = size, 
-                block_mod = mod,
-                
+                block_size = mod_size, 
                 expand = [
                     planes == "bottom" || planes == "all" ? 
                         [
@@ -358,14 +370,12 @@ function mb_block_part__base_cutout_clamp(block_obj) =
     [
         "difference",
         [
-            mb_block_part_prismoid(
-                block_size = mod_size, 
-                expand = [[
-                    for(f = [0 : 3])
-                        0,
-                    bottom,
-                    top
-                ]]
+            _mb_block_part__mask_frame(
+                mod_size = mod_size, 
+                base_adj = base_adj, 
+                bottom = bottom, 
+                top = top, 
+                cut_tol = cut_tol
             ),
             mb_block_part__base_cutout(
                 block_obj, 
@@ -397,16 +407,13 @@ function mb_block_part__top_plate_helpers(block_obj) =
     !top_plate_helpers ? undef : [
         "difference",
         [
-            mb_block_part_prismoid(
-                block_size = mod_size, 
-                expand = [[
-                    for(f = [0 : 3])
-                        base_adj[f] + cut_tol,
-                    bottom,
-                    top
-                ]]
+            _mb_block_part__mask_frame(
+                mod_size = mod_size, 
+                base_adj = base_adj, 
+                bottom = bottom, 
+                top = top, 
+                cut_tol = cut_tol
             ),
-
             mb_block_part__base_cutout(
                 block_obj, 
                 planes = "top", 
@@ -430,25 +437,24 @@ function mb_block_part__relief_cut(block_obj) =
         mod_size = mb_block_get_mod_size(block_obj),
         relief_cut = mb_block_get_relief_cut_dim(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
+        bottom = cut_tol,
         top = -(mod_size[2] - relief_cut[1])) 
     [
         "difference",
         [
-            mb_block_part_prismoid(
-                block_size = mod_size, 
-                expand = [[
-                    for(f = [0 : 3])
-                        base_adj[f] + cut_tol,
-                    0,
-                    top
-                ]]
+            _mb_block_part__mask_frame(
+                mod_size = mod_size, 
+                base_adj = base_adj, 
+                bottom = bottom, 
+                top = top, 
+                cut_tol = cut_tol
             ),
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
                     for(f = [0 : 3])
                         base_adj[f] - relief_cut[0],
-                    cut_tol,
+                    bottom + cut_tol,
                     top + cut_tol
                 ]],
                 bevel = bevel,
@@ -476,8 +482,8 @@ function mb_block_part__recess(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
-        exp_bottom = -(base_cutout_depth + top_plate_height),
-        exp_cutout_top = base_cutout_depth + top_plate_height - socket[0])  
+        bottom = -(base_cutout_depth + top_plate_height),
+        top_cutout = base_cutout_depth + top_plate_height - socket[0])  
     [
         "list",
         [
@@ -486,7 +492,7 @@ function mb_block_part__recess(block_obj) =
                 expand = [[
                     for(f = [0 : 3])
                         -rwt[f],
-                    exp_bottom,
+                    bottom,
                     cut_tol
                 ]],
                 bevel = bevel,
@@ -496,42 +502,43 @@ function mb_block_part__recess(block_obj) =
             for(rwg = rwgs)
                 let(gap_data = mb_block_recess_wall_gap(block_obj, rwg))
                 for(gap = gap_data)
-                    let(face = gap[0],
+                    let(
+                        face = gap[0],
                         gap_start_offset = gap[3],
                         gap_end_offset = gap[4]
                     )
-            [
-                
-                "intersection",
-                [
-                    mb_block_part_prismoid(
-                        block_size = mod_size, 
-                        expand = [[
-                            for(f = [0 : 3])
-                                mb_face_has_common(face, f) ? cut_tol : -rwt[f],
-                            exp_bottom,
-                            exp_cutout_top
-                        ]],
-                        bevel = bevel,
-                        slope = [
-                            for(f = [0 : 3])
-                                mb_face_has_common(face, f) ? slope_pos[f] : 0, 
-                        ]
-                    ),
+                    [
+                        
+                        "intersection",
+                        [
+                            mb_block_part_prismoid(
+                                block_size = mod_size, 
+                                expand = [[
+                                    for(f = [0 : 3])
+                                        mb_face_has_common(face, f) ? cut_tol : -rwt[f],
+                                    bottom,
+                                    top_cutout
+                                ]],
+                                bevel = bevel,
+                                slope = [
+                                    for(f = [0 : 3])
+                                        mb_face_has_common(face, f) ? slope_pos[f] : 0, 
+                                ]
+                            ),
 
-                    mb_block_part_cube(
-                        block_size = mod_size, 
-                        expand = [
-                            mb_face_has_common(face, "y") ? - gap_start_offset : 0,
-                            mb_face_has_common(face, "y") ? - gap_end_offset : 0,
-                            mb_face_has_common(face, "x") ? - gap_start_offset : 0,
-                            mb_face_has_common(face, "x") ? - gap_end_offset : 0,
-                            cut_tol,
-                            0
+                            mb_block_part_cube(
+                                block_size = mod_size, 
+                                expand = [
+                                    mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                                    mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                                    mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                                    mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                                    0,
+                                    cut_tol
+                                ]
+                            )
                         ]
-                    )
-                ]
-            ]
+                    ]
         ]
     ];
 
