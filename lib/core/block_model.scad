@@ -228,14 +228,35 @@ function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) =
     )
     len(found) > 0;
 
+function mb_block_stabilizer_range(block_obj, axis) =
+    let(
+        axis = mb_axis_to_int(axis),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1])
+    axis == 1 ? 
+    [
+        [start_index_x + 1 : end_index_x],
+        [start_index_y : end_index_y]
+    ] :
+    [
+        [start_index_x : end_index_x],
+        [start_index_y + 1 : end_index_y]
+    ];
+
 function mb_block_stabilizer_segment_offset(block_obj, axis, x, y) =
-    let(axis = mb_axis_to_int(axis))
-        mb_block_pos_to_offset(block_obj, axis == 1 ? [x, y + 0.5, undef] : [x + 0.5, y, undef]);
+    let(
+        axis = mb_axis_to_int(axis)
+    )
+    mb_block_pos_to_offset(block_obj, axis == 1 ? [x, y + 0.5, undef] : [x + 0.5, y, undef]);
 
 function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
     let(
         axis = mb_axis_to_int(axis),
         stabilizers = mb_block_get_stabilizers(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
         tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
         default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
@@ -245,12 +266,20 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
         expanded = axis == 1 ? 
             (x % stabilizer_expansion) == 0 : 
-            (y % stabilizer_expansion) == 0
+            (y % stabilizer_expansion) == 0,
+        seg_size = [
+            axis == 1 ? segment_thickness : default_segment_length, 
+            axis == 1 ? default_segment_length : segment_thickness, 
+            (expanded ? segment_height_expanded : stabilizers[1]) + (axis == 1 ? -stabilizers[2] : 0)
+        ]
     )
     [
-        axis == 1 ? segment_thickness : default_segment_length, 
-        axis == 1 ? default_segment_length : segment_thickness, 
-        (expanded ? segment_height_expanded : stabilizers[1]) + (axis == 1 ? -stabilizers[2] : 0)
+        seg_size,
+        [
+            seg_size[0] + (axis == 1 ? 2 * top_plate_helpers[0] : 0),
+            seg_size[1] + (axis == 0 ? 2 * top_plate_helpers[0] : 0),
+            top_plate_helpers[1]
+        ]
     ];
 
 function mb_block_stabilizer_segment_expand(block_obj, axis, x, y) =

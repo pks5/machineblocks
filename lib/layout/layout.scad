@@ -336,62 +336,42 @@ function mb_block_part__top_plate_helpers(block_obj) =
 */
 function mb_block_part__stabilizers(block_obj) =
     let(mod_size = mb_block_get_mod_size(block_obj),
-        stabilizers = mb_block_get_stabilizers(block_obj),
-        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
-        tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
         top = - (recess_depth + top_plate_height)
-        )
+    )
     [
         "list",
         [
-            // Y - Direction
-            for(x = [start_index_x + 1 : end_index_x])
-            [
-                "list",
+            for(axis = ["x", "y"])
+                let(range = mb_block_stabilizer_range(block_obj, axis))
+                for(x = range[0])
                 [
-                    for(y = [start_index_y : end_index_y])
-                        let(
-                            seg_offset = mb_block_stabilizer_segment_offset(block_obj, "y", x, y),
-                            seg_size = mb_block_stabilizer_segment_size(block_obj, "y", x, y),
-                            seg_expand = mb_block_stabilizer_segment_expand(block_obj, "y", x, y)
-                        )
-                        if(mb_block_render_stabilizer_segment(block_obj, "y", x, y))
-                        [
-                            "list",
+                    "list",
+                    [
+                        for(y = range[1])
+                            let(
+                                seg_offset = mb_block_stabilizer_segment_offset(block_obj, axis, x, y),
+                                seg_size = mb_block_stabilizer_segment_size(block_obj, axis, x, y),
+                                seg_expand = mb_block_stabilizer_segment_expand(block_obj, axis, x, y)
+                            )
+                            if(mb_block_render_stabilizer_segment(block_obj, axis, x, y))
                             [
-                                mb_block_part_cube(
-                                    block_size = mod_size,
-                                    size = [
-                                        seg_size[0], 
-                                        seg_size[1], 
-                                        seg_size[2] + cut_tol
-                                    ],
-                                    expand = [
-                                        for(f = [0 : 3])
-                                            seg_expand[f],
-                                        "auto", 
-                                        top + cut_tol
-                                    ],
-                                    offset = seg_offset
-                                ),
-                                if(top_plate_helpers) 
+                                "list",
+                                [
                                     mb_block_part_cube(
                                         block_size = mod_size,
                                         size = [
-                                            seg_size[0] + 2 * top_plate_helpers[0], 
-                                            seg_size[1], 
-                                            top_plate_helpers[1] + cut_tol
+                                            seg_size[0][0], 
+                                            seg_size[0][1], 
+                                            seg_size[0][2] + cut_tol
                                         ],
                                         expand = [
                                             for(f = [0 : 3])
@@ -400,62 +380,29 @@ function mb_block_part__stabilizers(block_obj) =
                                             top + cut_tol
                                         ],
                                         offset = seg_offset
-                                    )
+                                    ),
+                                    if(top_plate_helpers)
+                                        mb_block_part_cube(
+                                            block_size = mod_size,
+                                            size = [
+                                                seg_size[1][0], 
+                                                seg_size[1][1], 
+                                                seg_size[1][2] + cut_tol
+                                            ],
+                                            expand = [
+                                                for(f = [0 : 3])
+                                                    seg_expand[f],
+                                                "auto", 
+                                                top + cut_tol
+                                            ],
+                                            offset = seg_offset
+                                        )
+                                ]
                             ]
-                        ]
+                    ]
                 ]
-            ],
 
-            // X - Direction
-            for(y = [start_index_y + 1 : end_index_y])
-            [
-                "list",
-                [
-                    for(x = [start_index_x : end_index_x])
-                        let(
-                            seg_offset = mb_block_stabilizer_segment_offset(block_obj, "x", x, y),
-                            seg_size = mb_block_stabilizer_segment_size(block_obj, "x", x, y),
-                            seg_expand = mb_block_stabilizer_segment_expand(block_obj, "x", x, y)
-                        )
-                        if(mb_block_render_stabilizer_segment(block_obj, "x", x, y))
-                        [
-                            "list",
-                            [
-                                mb_block_part_cube(
-                                    block_size = mod_size,
-                                    size = [
-                                        seg_size[0], 
-                                        seg_size[1], 
-                                        seg_size[2] + cut_tol
-                                    ],
-                                    expand = [
-                                        for(f = [0 : 3])
-                                            seg_expand[f],
-                                        "auto", 
-                                        top + cut_tol
-                                    ],
-                                    offset = seg_offset
-                                ),
-                                if(top_plate_helpers)
-                                    mb_block_part_cube(
-                                        block_size = mod_size,
-                                        size = [
-                                            seg_size[0], 
-                                            seg_size[1] + 2 * top_plate_helpers[0], 
-                                            top_plate_helpers[1] + cut_tol
-                                        ],
-                                        expand = [
-                                            for(f = [0 : 3])
-                                                seg_expand[f],
-                                            "auto", 
-                                            top + cut_tol
-                                        ],
-                                        offset = seg_offset
-                                    )
-                            ]
-                        ]
-                ]
-            ]
+            
         ]
     ]; 
 
