@@ -408,43 +408,37 @@ function mb_block_part__base_cutout_clamp(block_obj) =
 * -----------------
 */
 function mb_block_part__top_plate_helpers(block_obj) =
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
-        slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1),
+    let(base_adj = mb_block_get_base_adj(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
         
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = -(base_cutout_depth - top_plate_helpers[1]),
         top = -(top_plate_height + recess_depth) + cut_tol
-        ) 
+    ) 
     !top_plate_helpers ? undef : [
         "difference",
         [
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
-                    base_adj[0] + cut_tol,
-                    base_adj[1] + cut_tol,
-                    base_adj[2] + cut_tol,
-                    base_adj[3] + cut_tol,
+                    for(f = [0 : 3])
+                        base_adj[f] + cut_tol,
                     bottom,
                     top
-                ]],
-                bevel = undef,
-                slope = undef
+                ]]
             ),
 
-            mb_block_part__base_cutout(block_obj, planes = "top", bottom = bottom + cut_tol, top = top + cut_tol, red = - top_plate_helpers[0])
+            mb_block_part__base_cutout(
+                block_obj, 
+                planes = "top", 
+                bottom = bottom + cut_tol, 
+                top = top + cut_tol, 
+                red = - top_plate_helpers[0]
+            )
         ]
     ];
 
@@ -454,43 +448,33 @@ function mb_block_part__top_plate_helpers(block_obj) =
 * ----------
 */
 function mb_block_part__relief_cut(block_obj) =
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
+    let(socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         relief_cut = mb_block_get_relief_cut_dim(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj)) 
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        top = -(mod_size[2] - relief_cut[1])) 
     [
         "difference",
         [
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
-                    base_adj[0] + cut_tol,
-                    base_adj[1] + cut_tol,
-                    base_adj[2] + cut_tol,
-                    base_adj[3] + cut_tol,
+                    for(f = [0 : 3])
+                        base_adj[f] + cut_tol,
                     0,
-                    -(mod_size[2] - relief_cut[1])
-                ]],
-                bevel = undef,
-                slope = undef,
-                socket = undef
+                    top
+                ]]
             ),
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
-                    base_adj[0] - relief_cut[0],
-                    base_adj[1] - relief_cut[0],
-                    base_adj[2] - relief_cut[0],
-                    base_adj[3] - relief_cut[0],
+                    for(f = [0 : 3])
+                        base_adj[f] - relief_cut[0],
                     cut_tol,
-                    -(mod_size[2] - relief_cut[1]) + cut_tol
+                    top + cut_tol
                 ]],
                 bevel = bevel,
                 slope = slope,
@@ -505,8 +489,7 @@ function mb_block_part__relief_cut(block_obj) =
 * ------
 */
 function mb_block_part__recess(block_obj) = 
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
+    let(mod_size = mb_block_get_mod_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
@@ -524,15 +507,13 @@ function mb_block_part__recess(block_obj) =
         "list",
         [
            mb_block_part_prismoid(
-                block_size = size, 
-                block_mod = mod,
+                block_size = mod_size, 
                 expand = [[
                     for(f = [0 : 3])
                         -rwt[f],
                     exp_bottom,
                     cut_tol
                 ]],
-                socket = undef,
                 bevel = bevel,
                 slope = slope
             ), 
@@ -549,15 +530,13 @@ function mb_block_part__recess(block_obj) =
                 "intersection",
                 [
                     mb_block_part_prismoid(
-                        block_size = size, 
-                        block_mod = mod,
+                        block_size = mod_size, 
                         expand = [[
                             for(f = [0 : 3])
                                 mb_face_has_common(face, f) ? cut_tol : -rwt[f],
                             exp_bottom,
                             exp_cutout_top
                         ]],
-                        socket = undef,
                         bevel = bevel,
                         slope = [
                             for(f = [0 : 3])
@@ -566,8 +545,7 @@ function mb_block_part__recess(block_obj) =
                     ),
 
                     mb_block_part_cube(
-                        block_size = size, 
-                        block_mod = mod,
+                        block_size = mod_size, 
                         expand = [
                             mb_face_has_common(face, "y") ? - gap_start_offset : 0,
                             mb_face_has_common(face, "y") ? - gap_end_offset : 0,
@@ -588,9 +566,7 @@ function mb_block_part__recess(block_obj) =
 * ----------------
 */
 function mb_block_part__stud_base_cutout(block_obj) =
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
+    let(mod_size = mb_block_get_mod_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
@@ -600,18 +576,16 @@ function mb_block_part__stud_base_cutout(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_thickness_clamp = (wall_thickness +  clamp[0]),
         slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1))
+        slope_pos = mb_slope_filter(slope, 1),
+        top = -(mod_size[2] - base_cutout_min_depth))
     mb_block_part_prismoid(
-        block_size = size, 
-        block_mod = mod,
+        block_size = mod_size, 
         expand = [
             [
-                -wall_thickness_clamp + slope_neg[0] - cut_tol,
-                -wall_thickness_clamp + slope_neg[1] - cut_tol,
-                -wall_thickness_clamp + slope_neg[2] - cut_tol,
-                -wall_thickness_clamp + slope_neg[3] - cut_tol,
+                for(f = [0 : 3])
+                    -wall_thickness_clamp + slope_neg[f] - cut_tol,
                 cut_tol,
-                -(mod_size[2] - base_cutout_min_depth)
+                top
             ]
         ],
         bevel = bevel
