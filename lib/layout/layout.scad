@@ -300,14 +300,12 @@ function mb_block_part__base_clamp_outer(block_obj) =
 function mb_block_part__top_plate_helpers(block_obj) =
     let(base_adj = mb_block_get_base_adj(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = -(base_cutout_depth - top_plate_helpers[1]),
-        top = -(top_plate_height + recess_depth) + cut_tol
+        bottom = -(base_cutout_ceiling_offset[0] - top_plate_helpers[1]),
+        top = -base_cutout_ceiling_offset[1] + cut_tol
     ) 
     !top_plate_helpers ? undef : [
         "difference",
@@ -337,15 +335,8 @@ function mb_block_part__top_plate_helpers(block_obj) =
 function mb_block_part__stabilizers(block_obj) =
     let(mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        min_max_index = mb_block_get_min_max_index(block_obj),
-        start_index_x = min_max_index[0][0],
-        start_index_y = min_max_index[0][1],
-        end_index_x = min_max_index[1][0],
-        end_index_y = min_max_index[1][1],
-        top = - (recess_depth + top_plate_height)
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
+        top = -base_cutout_ceiling_offset[1]
     )
     [
         "list",
@@ -381,13 +372,13 @@ function mb_block_part__stabilizers(block_obj) =
                                         ],
                                         offset = seg_offset
                                     ),
-                                    if(top_plate_helpers)
+                                    if(len(seg_size) > 1)
                                         mb_block_part_cube(
                                             block_size = mod_size,
                                             size = [
-                                                seg_size[1][0], 
-                                                seg_size[1][1], 
-                                                seg_size[1][2] + cut_tol
+                                                seg_size[0][0] + seg_size[1][0], 
+                                                seg_size[0][1] + seg_size[1][1], 
+                                                                 seg_size[1][2] + cut_tol
                                             ],
                                             expand = [
                                                 for(f = [0 : 3])

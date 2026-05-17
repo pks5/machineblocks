@@ -215,6 +215,12 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
+function mb_block_base_cutout_ceiling_offset(block_obj) = 
+    [
+        mb_block_get_base_cutout_depth(block_obj),
+        mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
+    ];
+
 function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) = 
     let(
         face = mb_face_to_int(face),
@@ -276,8 +282,8 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
     [
         seg_size,
         [
-            seg_size[0] + (axis == 1 ? 2 * top_plate_helpers[0] : 0),
-            seg_size[1] + (axis == 0 ? 2 * top_plate_helpers[0] : 0),
+            (axis == 1 ? 2 * top_plate_helpers[0] : 0),
+            (axis == 0 ? 2 * top_plate_helpers[0] : 0),
             top_plate_helpers[1]
         ]
     ];
