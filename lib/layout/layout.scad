@@ -44,16 +44,20 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                         let(
                             tube_top_plate_helpers = mb_block_tube_top_plate_helpers(block_obj, axis, x, y),
                             tube_clamp = mb_block_tube_clamp(block_obj, axis, x, y),
-                            tube_clamp_end = [
-                                tube_top_plate_helpers[0], 
-                                tube_top_plate_helpers[1], 
-                                cut_tol
-                            ],
-                            tube_clamp_start = [
-                                tube_clamp[0],
-                                tube_clamp[1],
-                                tube_clamp[2]
-                            ],
+                            tube_clamp_end = is_undef(tube_top_plate_helpers) 
+                                ? undef
+                                : [
+                                    tube_top_plate_helpers[0], 
+                                    tube_top_plate_helpers[1], 
+                                    cut_tol
+                                ],
+                            tube_clamp_start = is_undef(tube_clamp) 
+                                ? undef
+                                : [
+                                    tube_clamp[0],
+                                    tube_clamp[1],
+                                    tube_clamp[2]
+                                ],
                             tube_expand = mb_block_tube_expand(block_obj, axis, x, y)
                         )
                         mb_block_part_tube(
