@@ -945,23 +945,7 @@ module mb_block(
                                                                 * Stabilizer Grid
                                                                 */
                                                                 union(){
-                                                                    *if(grille == "none" || grille == "x" || grilleSmall){
-                                                                        //Helpers X
-                                                                        for (a = [ startX : 1 : endX -1 ]){
-                                                                            translate([posX(a + 0.5), 0.5*(baseModRes[3] - baseModRes[2]), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersXHeight(a)) + 0.5 * cutOffset]){ 
-                                                                                cube([sGridThickness, objectSizeMod[1], stabilizersXHeight(a) + cutOffset], center = true);
-                                                                            }
-                                                                        }
-                                                                    }
                                                                     
-                                                                    *if(grille == "none" || grille == "y" || grilleSmall){
-                                                                        //Helpers Y
-                                                                        for (b = [ startY : 1 : endY - 1 ]){
-                                                                        translate([0.5*(baseModRes[1] - baseModRes[0]), posY(b + 0.5), topPlateZ - 0.5 * (resultingTopPlateHeight + stabilizersYHeight(b)) + 0.5 * cutOffset]){
-                                                                                cube([objectSizeMod[0], sGridThickness, stabilizersYHeight(b) + cutOffset], center = true);
-                                                                            };
-                                                                        }
-                                                                    }
 
                                                                     if(grille == "none" || grilleSmall){
                                                                         /*
@@ -984,59 +968,7 @@ module mb_block(
                                                                     }
                                                                 } // End union stabilizer grid
 
-                                                                /*
-                                                                * Pillar cutouts from stabilizer grid
-                                                                */
-                                                                if(pillars != false){
-                                                                    cutoutHoleZRoundingRes = mb_fn_even_for_radius(
-                                                                        0.5 * holeZSize, 
-                                                                        2, 
-                                                                        qualitySegBase,
-                                                                        qualityFactor,
-                                                                        qualityResolutionMin,
-                                                                        qualityResolutionMax,
-                                                                        qualityResolutionMultiplier,
-                                                                        previewQuality
-                                                                    );
-                                                                    /*
-                                                                    * Cut TubeZ area
-                                                                    */
-                                                                    
-                                                                    for (a = [ pillarStartX : 1 : pillarEndX ]){
-                                                                        for (b = [ pillarStartY : 1 : pillarEndY ]){
-                                                                            if(drawPillar(a, b)){
-                                                                                    translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ + cutTolerance]){
-                                                                                        cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=cutoutHoleZRoundingRes);
-                                                                                    };
-                                                                            }
-                                                                        }   
-                                                                    }
-
-                                                                    /*
-                                                                    * Wall Gaps New
-                                                                    */
-                                                                    for (i = [ 0 : 1 : len(baseWallGaps)-1 ]){
-                                                                        gap = baseWallGaps[i];
-                                                                        
-                                                                        gapSide = mb_side_to_int(gap[0]);
-                                                                        gapPos = gap[1] != undef ? gap[1]: 0;
-                                                                        gapLength = gap[2] != undef ? gap[2] : 1;
-
-                                                                        if(gapLength > 0 && gapSide < 4){
-                                                                            for (p = [ 0 : 1 : gapLength - 2 ]){
-                                                                                t = gapSide < 2
-                                                                                ? [posX(gapPos + p + 0.5), posY(gapSide == 0 ? -0.5 : (endY + 0.5)), baseCutoutZ + cutTolerance]
-                                                                                : [posX(gapSide == 2 ? -0.5 : (endX + 0.5)), posY(gapPos + p + 0.5), baseCutoutZ + cutTolerance];
-                                                                                
-                                                                                translate(t){
-                                                                                    cylinder(h=baseCutoutDepth + 2 * cutOffset, r=0.5 * holeZSize, center=true, $fn=cutoutHoleZRoundingRes);
-                                                                                };
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    
-                                                                } // End Pillars Cutouts from stabilizer grid
+                                                                
                                                             } // End difference stabilizer Grid
 
                                                             

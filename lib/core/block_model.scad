@@ -215,14 +215,14 @@ function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) =
     let(
         face = mb_face_to_int(face),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        all_gaps = [
+        found = [
             for(wall_gap = wall_gaps)
                let(gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false))
                for(g = gaps)
                 if(face == g[0] && ((pos_min > g[5] && pos_min < g[6]) || (pos_max > g[5] && pos_max < g[6]))) 1
         ]
     )
-    len(all_gaps) > 0;
+    len(found) > 0;
 
 function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
     let(axis = mb_axis_to_int(axis = axis),
@@ -256,14 +256,30 @@ function mb_block_custom_module_mapping(block_obj, mname) =
     ])
     len(f) > 0 ? f[0] : undef;
     
-function mb_block_recess_wall_gap(block_obj, gap) = 
-    let(gap = mb_to_array(gap),
-        face = mb_side_to_int(gap[0]))
-        [
-            face,
-            is_undef(gap[1]) ? 0 : gap[1],
-            is_undef(gap[2]) ? 0 : gap[2]
-        ];
+function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) = 
+    let(mod_size = mb_block_get_mod_size(block_obj),
+        recess_wall_thickness = mb_block_get_recess_wall_thickness(block_obj),
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        gap = mb_to_array(gap),
+        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+    )
+    [
+        for(face = faces)
+            let(axis = mb_face_to_axis(face),
+            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis], gap[2]),
+            gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
+            gap_end_offset = mod_size[axis] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3])
+            [
+                face,
+                gap_start_pos,
+                gap_length,
+                gap_start_offset,
+                gap_end_offset,
+                min_max_index[0][1 - axis] + gap_start_offset,
+                min_max_index[1][1 - axis] + 1 - gap_end_offset,
+            ]
+    ];
 
 function mb_block_base_wall_gap(block_obj, gap, split_axis = true) = 
     let(
@@ -289,8 +305,7 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = true) =
             gap_start_offset,
             gap_end_offset,
             min_max_index[0][1 - axis] + gap_start_offset,
-            min_max_index[1][1 - axis] + 1 - gap_end_offset,
-            
+            min_max_index[1][1 - axis] + 1 - gap_end_offset
         ]
     ];
 

@@ -487,12 +487,13 @@ function mb_block_part__recess(block_obj) =
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
+        slope_pos = mb_slope_filter(slope, 1),
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
-        gaps = mb_block_get_recess_wall_gaps(block_obj))  
+        rwgs = mb_block_get_recess_wall_gaps(block_obj))  
     [
         "list",
         [
@@ -511,73 +512,53 @@ function mb_block_part__recess(block_obj) =
                 bevel = bevel,
                 slope = slope
             ), 
-        for(gap = gaps)
-        let(gap_data = mb_block_recess_wall_gap(block_obj, gap),
-            face = gap_data[0])
-        face == 0 ?
-        mb_block_part_prismoid(
-            block_size = size, 
-            block_mod = mod,
-            expand = [[
-                +cut_tol,
-                -rwt[1],
-                -rwt[2] + gap_data[2] ,
-                -rwt[3] + gap_data[1],
-                -(base_cutout_depth + top_plate_height),
-                base_cutout_depth + top_plate_height - socket[0]
-            ]],
-            socket = undef,
-            bevel = bevel,
-            slope = [slope[0], 0, 0, 0]
-        ) :
-        face == 1 ? 
-        mb_block_part_prismoid(
-            block_size = size, 
-            block_mod = mod,
-            expand = [[
-                -rwt[0],
-                cut_tol,
-                -rwt[2] - gap_data[1],
-                -rwt[3] - gap_data[2],
-                -(base_cutout_depth + top_plate_height),
-                base_cutout_depth + top_plate_height - socket[0]
-            ]],
-            socket = undef,
-            bevel = bevel,
-            slope = [0, slope[1], 0, 0]
-        ) :
-        face == 2 ?
-        mb_block_part_prismoid(
-            block_size = size, 
-            block_mod = mod,
-            expand = [[
-                -rwt[0] - gap_data[1],
-                -rwt[1] - gap_data[2],
-                cut_tol,
-                -rwt[3],
-                -(base_cutout_depth + top_plate_height),
-                base_cutout_depth + top_plate_height - socket[0]
-            ]],
-            socket = undef,
-            bevel = bevel,
-            slope = [0, 0, slope[2], 0]
-        ) :
-        face == 3 ?
-        mb_block_part_prismoid(
-            block_size = size, 
-            block_mod = mod,
-            expand = [[
-                -rwt[0] - gap_data[1],
-                -rwt[1] - gap_data[2],
-                -rwt[2],
-                cut_tol,
-                -(base_cutout_depth + top_plate_height),
-                base_cutout_depth + top_plate_height - socket[0]
-            ]],
-            socket = undef,
-            bevel = bevel,
-            slope = [0, 0, 0, slope[3]]
-        ) : undef
+            
+            for(rwg = rwgs)
+                let(gap_data = mb_block_recess_wall_gap(block_obj, rwg))
+                for(gap = gap_data)
+                    let(face = gap[0],
+                        gap_start_offset = gap[3],
+                        gap_end_offset = gap[4]
+                    )
+            [
+                
+                "intersection",
+                [
+                    mb_block_part_prismoid(
+                        block_size = size, 
+                        block_mod = mod,
+                        expand = [[
+                            mb_face_has_common(face, 0) ? cut_tol : -rwt[0],
+                            mb_face_has_common(face, 1) ? cut_tol : -rwt[1],
+                            mb_face_has_common(face, 2) ? cut_tol : -rwt[2],
+                            mb_face_has_common(face, 3) ? cut_tol : -rwt[3],
+                            -(base_cutout_depth + top_plate_height),
+                            base_cutout_depth + top_plate_height - socket[0]
+                        ]],
+                        socket = undef,
+                        bevel = bevel,
+                        slope = [
+                            mb_face_has_common(face, 0) ? slope_pos[0] : 0, 
+                            mb_face_has_common(face, 1) ? slope_pos[1] : 0, 
+                            mb_face_has_common(face, 2) ? slope_pos[2] : 0, 
+                            mb_face_has_common(face, 3) ? slope_pos[3] : 0
+                        ]
+                    ),
+
+                    mb_block_part_cube(
+                        block_size = size, 
+                        block_mod = mod,
+                        expand = [
+                            mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                            mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                            mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                            mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                            cut_tol,
+                            0
+                        ]
+                    )
+                ]
+            ]
         ]
     ];
 
