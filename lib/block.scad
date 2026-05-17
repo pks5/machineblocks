@@ -493,7 +493,7 @@ module mb_block(
     
     stud_base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__stud_base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
     base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
-    base_adjusted = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_adjusted(block_obj), mul=mul_grd_to_mm)[1][0];
+    base_adjusted = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_outer(block_obj, adjusted = true), mul=mul_grd_to_mm)[1][0];
 
     bevelInnerOrg = mb_inset_quad_lrfh(bevelCrop, wallThicknessOrg);
     bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);

@@ -99,6 +99,7 @@ function mb_block_part__tube(block_obj) =
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
+        tube_length = base_cutout_depth + cut_tol,
         offset = mb_block_pos_to_offset(block_obj, [0.5, 0, 2]))
     [
         "difference",
@@ -109,10 +110,9 @@ function mb_block_part__tube(block_obj) =
                 radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
                 clamp_end = [top_plate_helpers[0], top_plate_helpers[1]], 
                 clamp_start = [clamp[0], clamp[1] + cut_tol, clamp[2]], 
-                rounding_radius = 0,
                 axis = "z",
-                length = base_cutout_depth + cut_tol,
-                expand = [base_cutout_depth + cut_tol, "auto"],
+                length = tube_length,
+                expand = [tube_length, "auto"],
                 offset = offset
             )
         ]
@@ -123,26 +123,7 @@ function mb_block_part__tube(block_obj) =
 * Base Outer
 * ----------
 */
-function mb_block_part__base(block_obj) =
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj))
-    mb_block_part_prismoid(
-        block_size = size, 
-        block_mod = mod,
-        socket = socket,
-        bevel = bevel,
-        slope = slope
-    ); 
-
-/**
-* -------------------
-* Base Outer Adjusted
-* -------------------
-*/
-function mb_block_part__base_adjusted(block_obj) =
+function mb_block_part__base_outer(block_obj, adjusted = true) =
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
@@ -152,10 +133,10 @@ function mb_block_part__base_adjusted(block_obj) =
         slope = mb_block_get_slope(block_obj))
     mb_block_part_prismoid(
         block_size = mod_size, 
-        expand = [base_adj],
+        expand = adjusted ? [base_adj] : 0,
         socket = socket,
-        bevel = mb_bevel_shrink(bevel, base_adj),
-        slope = mb_slope_shrink(slope, base_adj)
+        bevel = bevel,
+        slope = slope
     ); 
 
 /**
@@ -223,22 +204,22 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 block_mod = mod,
                 
                 expand = [
-                    planes == "bottom" || planes == "all" ? [
-                        -wall_thickness + slope_neg[0] + red,
-                        -wall_thickness + slope_neg[1] + red,
-                        -wall_thickness + slope_neg[2] + red,
-                        -wall_thickness + slope_neg[3] + red,
-                        bottom,
-                        top
-                    ] : undef,
-                    planes == "top" || planes == "all" ? [
-                        slope_neg[0] + (slope_pos[0] <= wall_thickness ? -(wall_thickness - slope_pos[0]) : 0) + red,
-                        slope_neg[1] + (slope_pos[1] <= wall_thickness ? -(wall_thickness - slope_pos[1]) : 0) + red,
-                        slope_neg[2] + (slope_pos[2] <= wall_thickness ? -(wall_thickness - slope_pos[2]) : 0) + red,
-                        slope_neg[3] + (slope_pos[3] <= wall_thickness ? -(wall_thickness - slope_pos[3]) : 0) + red,
-                        bottom,
-                        top
-                    ] : undef
+                    planes == "bottom" || planes == "all" ? 
+                        [
+                            for(f = [0 : 3])
+                                -wall_thickness + slope_neg[f] + red,
+                            bottom,
+                            top
+                        ] : 
+                        undef,
+                    planes == "top" || planes == "all" ? 
+                        [
+                            for(f = [0 : 3])
+                                slope_neg[f] + (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + red,
+                            bottom,
+                            top
+                        ] : 
+                        undef
                 ],
                 bevel = bevel,
                 slope = planes == "all" ? slope_pos : undef,
@@ -393,37 +374,31 @@ function mb_block_part__stabilizers(block_obj) =
 * -----------------
 */
 function mb_block_part__base_cutout_clamp(block_obj) = 
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        bevel = mb_block_get_bevel(block_obj), 
-        slope = mb_block_get_slope(block_obj),
+    let(base_adj = mb_block_get_base_adj(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         clamp = mb_block_get_clamp(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        wall_thickness_clamp = -(wall_thickness + clamp[0]),
-        clamp_offset = -clamp[1],
-        slope_neg = mb_slope_filter(slope, -1))
+        bottom = -clamp[2],
+        top = -(mod_size[2] - clamp[1] - clamp[2]))
     [
         "difference",
         [
             mb_block_part_prismoid(
                 block_size = mod_size, 
                 expand = [[
-                    0,
-                    0,
-                    0,
-                    0,
-                    -clamp[2],
-                    -(mod_size[2] - clamp[1] - clamp[2])
-                ]],
-                bevel = undef,
-                slope = undef,
-                socket = undef
+                    for(f = [0 : 3])
+                        0,
+                    bottom,
+                    top
+                ]]
             ),
-            mb_block_part__base_cutout(block_obj, planes = "bottom", bottom = -clamp[2] + cut_tol, top = -(mod_size[2] - clamp[1] - clamp[2]) + cut_tol, red = -clamp[0]),
+            mb_block_part__base_cutout(
+                block_obj, 
+                planes = "bottom", 
+                bottom = bottom + cut_tol, 
+                top = top + cut_tol, 
+                red = -clamp[0]
+            )
         ]
     ];
 
