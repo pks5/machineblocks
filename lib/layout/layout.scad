@@ -31,15 +31,14 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 * ----
 */
 function mb_block_part__tubes(block_obj) = 
-    let(size = mb_block_obj_size(block_obj),
-        mod = mb_block_get_size_mod(block_obj),
+    let(mod_size = mb_block_get_mod_size(block_obj),
         axis = "z",
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, axis),
         tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, axis),
-        clamp = mb_block_get_clamp(block_obj),
+        
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
+        
+        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         tube_length = base_cutout_depth + cut_tol,
         
@@ -50,31 +49,34 @@ function mb_block_part__tubes(block_obj) =
         [
             for(x = tube_range[0])
                 for(y = tube_range[1])
-                    let(
-                        tube_offset = mb_block_tube_offset(block_obj, axis, x, y)
-                    )
                     if(mb_block_tube_render(block_obj, axis, x, y))
-                        mb_block_part_tube(
-                            block_size = size,
-                            block_mod = mod,
-                            radius = mb_block_tube_radius(block_obj, axis, x, y),
-                            clamp_end = [
-                                top_plate_helpers[0], 
-                                top_plate_helpers[1], 
+                        let(
+                            tube_top_plate_helpers = mb_block_tube_top_plate_helpers(block_obj, axis, x, y),
+                            tube_clamp = mb_block_tube_clamp(block_obj, axis, x, y),
+                            tube_clamp_end = [
+                                tube_top_plate_helpers[0], 
+                                tube_top_plate_helpers[1], 
                                 cut_tol
-                            ], 
-                            clamp_start = [
-                                clamp[0], 
-                                clamp[1], 
-                                clamp[2]
-                            ], 
+                            ],
+                            tube_clamp_start = [
+                                tube_clamp[0],
+                                tube_clamp[1],
+                                tube_clamp[2]
+                            ],
+                            tube_expand = mb_block_tube_expand(block_obj, axis, x, y)
+                        )
+                        mb_block_part_tube(
+                            block_size = mod_size,
+                            radius = mb_block_tube_radius(block_obj, axis, x, y),
+                            clamp_end = tube_clamp_end, 
+                            clamp_start = tube_clamp_start, 
                             axis = axis,
                             length = tube_length,
                             expand = [
-                                0, 
-                                -base_cutout_ceiling_offset[1] + cut_tol
+                                tube_expand[0],
+                                tube_expand[1] + cut_tol
                             ],
-                            offset = tube_offset
+                            offset = mb_block_tube_offset(block_obj, axis, x, y)
                         )
         ]
     ];

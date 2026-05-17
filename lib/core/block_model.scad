@@ -288,6 +288,34 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
         ? 0.5 * pin_diameter 
         : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
+function mb_block_tube_top_plate_helpers(block_obj, axis, x, y) =
+    let(
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj)
+    )
+    [
+        top_plate_helpers[0], 
+        top_plate_helpers[1]
+    ];
+
+function mb_block_tube_clamp(block_obj, axis, x, y) =
+    let(
+        clamp = mb_block_get_clamp(block_obj)
+    )
+    [
+        clamp[0], 
+        clamp[1], 
+        clamp[2]
+    ];
+
+function mb_block_tube_expand(block_obj, axis, x, y) =
+    let(
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj)
+    )
+    [
+        0, 
+        -base_cutout_ceiling_offset[1]
+    ];
+
 /**
 * -----------
 * Stabilizers
