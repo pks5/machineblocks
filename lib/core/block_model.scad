@@ -31,7 +31,9 @@ function mb_block_obj(
     debug = false,
     baseWallGaps = [],
     stabilizers = [0.5, 0.5, 0.2, 1, 2],
-    tubeWallThickness = 0.53125
+    tubeWallThickness = 0.53125,
+    pinDiameter = "auto",
+    pinDiameterAdjustment = 0
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -102,6 +104,8 @@ function mb_block_obj(
             stabilizers[3] * mul_mbu_to_grid[2], // Expansion Offset (mbu)
             stabilizers[4]                       // Expansion Each
         ],
+
+        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0]
     )
         [
             [
@@ -123,7 +127,7 @@ function mb_block_obj(
             [],  // 12 - 
             [],  // 13 - 
             [],  // 14 - 
-            [default_tube_diameter, tube_hole_size, tube_wall_thickness_res],  // 15 - 
+            [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
@@ -185,6 +189,7 @@ function mb_block_get_custom_modules(block_obj) =                   block_obj[18
 function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0];
 function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15][1];
 function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
+function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
 
 /*
 * TODO Rename or delete
@@ -234,28 +239,48 @@ function mb_block_tube_range(block_obj, axis) =
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
-        end_index_y = min_max_index[1][1]
+        end_index_y = min_max_index[1][1],
+        is_pin = mb_block_tube_is_pin(block_obj, axis),
+        range_offset_start = is_pin[0] || is_pin[1] ? [is_pin[0] ? 0 : 1, is_pin[1] ? 0 : 1] : [1, 1],
+        range_offset_end = [0, 0]
     )
     [
-        [start_index_x + 1 : end_index_x],
-        [start_index_y + 1 : end_index_y]
+        [start_index_x + range_offset_start[0] : end_index_x + range_offset_end[0]],
+        [start_index_y + range_offset_start[1] : end_index_y + range_offset_end[1]]
     ];
 
-function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
-    mb_block_pos_to_offset(block_obj, [x, y, undef]);
+function mb_block_tube_render(block_obj, axis, x, y) =
+    true;
 
-function mb_block_tube_radius(block_obj, axis, x, y) =
+function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
     let(
-        axis = mb_axis_to_int(axis),
+        is_pin = mb_block_tube_is_pin(block_obj, axis, x, y),
+        tube_offset = is_pin[0] || is_pin[1] ? [is_pin[0] ? 0.5 : 0, is_pin[1] ? 0.5 : 0] : [0, 0]
+    )
+    mb_block_pos_to_offset(block_obj, [x + tube_offset[0], y + tube_offset[1], undef]);
+
+function mb_block_tube_is_pin(block_obj, axis, x = undef, y = undef) =
+    let(
         min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
-        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
-        tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, "z")
+        is_pin = [end_index_x - start_index_x == 0, end_index_y - start_index_y == 0],
     )
-    [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
+    is_pin;
+
+function mb_block_tube_radius(block_obj, axis, x, y) =
+    let(
+        axis = mb_axis_to_int(axis),
+        is_pin = mb_block_tube_is_pin(block_obj, axis, x, y),
+
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, "z"),
+        pin_diameter = mb_block_get_pin_diameter(block_obj)
+        
+    )
+    is_pin[0] || is_pin[1] ? 0.5 * pin_diameter : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
 /**
 * -----------

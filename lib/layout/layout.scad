@@ -49,18 +49,32 @@ function mb_block_part__tubes(block_obj) =
         [
             for(x = tube_range[0])
                 for(y = tube_range[1])
-                    let(tube_offset = mb_block_tube_offset(block_obj, axis, x, y))
-                    mb_block_part_tube(
-                        block_size = size,
-                        block_mod = mod,
-                        radius = mb_block_tube_radius(block_obj, axis, x, y),
-                        clamp_end = [top_plate_helpers[0], top_plate_helpers[1], cut_tol], 
-                        clamp_start = [clamp[0], clamp[1], clamp[2]], 
-                        axis = "z",
-                        length = tube_length,
-                        expand = [0, -base_cutout_ceiling_offset[1] + cut_tol],
-                        offset = tube_offset
+                    let(
+                        tube_offset = mb_block_tube_offset(block_obj, axis, x, y)
                     )
+                    if(mb_block_tube_render(block_obj, axis, x, y))
+                        mb_block_part_tube(
+                            block_size = size,
+                            block_mod = mod,
+                            radius = mb_block_tube_radius(block_obj, axis, x, y),
+                            clamp_end = [
+                                top_plate_helpers[0], 
+                                top_plate_helpers[1], 
+                                cut_tol
+                            ], 
+                            clamp_start = [
+                                clamp[0], 
+                                clamp[1], 
+                                clamp[2]
+                            ], 
+                            axis = "z",
+                            length = tube_length,
+                            expand = [
+                                0, 
+                                -base_cutout_ceiling_offset[1] + cut_tol
+                            ],
+                            offset = tube_offset
+                        )
         ]
     ];
 
