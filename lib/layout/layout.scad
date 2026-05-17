@@ -83,6 +83,12 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
 function mb_block_part__tube(block_obj) = 
     let(size = mb_block_obj_size(block_obj),
         mod = mb_block_get_size_mod(block_obj),
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, "z"),
+        clamp = mb_block_get_clamp(block_obj),
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
         offset = mb_block_pos_to_offset(block_obj, [0.5, 0, 2]))
     [
         "difference",
@@ -90,11 +96,13 @@ function mb_block_part__tube(block_obj) =
             mb_block_part_tube(
                 block_size = size,
                 block_mod = mod,
-                radius = [0.25, 0.5], 
-                rounding_radius = 1,
-                axis = "x",
-                length = 2,
-                expand = [2, "auto"],
+                radius = [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter],
+                clamp_end = [top_plate_helpers[0], top_plate_helpers[1]], 
+                clamp_start = [clamp[0], clamp[1], clamp[2]], 
+                rounding_radius = 0,
+                axis = "z",
+                length = base_cutout_depth + cut_tol,
+                expand = [base_cutout_depth + cut_tol, "auto"],
                 offset = offset
             ),
            /* mb_block_part_tube(
@@ -233,15 +241,15 @@ function mb_block_part__stabilizers(block_obj) =
         recess_depth = mb_block_get_recess_depth(block_obj),
         top_plate_height = mb_block_get_top_plate_height(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        default_tube_diameter = mb_block_get_default_tube_diameter(block_obj),
-        tube_thickness = mb_block_get_tube_thickness(block_obj),
+        tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
+        tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
-        default_segment_length = 1 - default_tube_diameter + tube_thickness,
+        default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
         segment_thickness = stabilizers[0],
         stabilizer_expansion = stabilizers[4],
         segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0)
@@ -270,8 +278,8 @@ function mb_block_part__stabilizers(block_obj) =
                                     expand = [
                                         0, 
                                         0, 
-                                        y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                        y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
+                                        y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                         "auto", 
                                         - (recess_depth + top_plate_height) + cut_tol],
                                     
@@ -288,8 +296,8 @@ function mb_block_part__stabilizers(block_obj) =
                                         expand = [
                                             0, 
                                             0, 
-                                            y == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                            y == end_index_y ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            y == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
+                                            y == end_index_y ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                             "auto", 
                                             - (recess_depth + top_plate_height) + cut_tol],
                                         
@@ -322,8 +330,8 @@ function mb_block_part__stabilizers(block_obj) =
                                         ((y % stabilizer_expansion) == 0 ? segment_height_expanded : stabilizers[1]) + cut_tol
                                     ],
                                     expand = [
-                                        x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                        x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                        x == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
+                                        x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                         0, 
                                         0, 
                                     
@@ -341,8 +349,8 @@ function mb_block_part__stabilizers(block_obj) =
                                             top_plate_helpers[1] + cut_tol
                                         ],
                                         expand = [
-                                            x == 0 ? 0.5 * default_tube_diameter + cut_tol : 0, 
-                                            x == end_index_x ? 0.5 * default_tube_diameter + cut_tol : 0, 
+                                            x == 0 ? 0.5 * tube_z_diameter + cut_tol : 0, 
+                                            x == end_index_x ? 0.5 * tube_z_diameter + cut_tol : 0, 
                                             0, 
                                             0, 
                                         
@@ -563,7 +571,6 @@ function mb_block_part__stud_base_cutout(block_obj) =
         mod = mb_block_get_size_mod(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
         clamp = mb_block_get_clamp(block_obj),
@@ -586,7 +593,5 @@ function mb_block_part__stud_base_cutout(block_obj) =
                 -(mod_size[2] - base_cutout_min_depth)
             ]
         ],
-        socket = undef,
-        bevel = bevel,
-        slope = undef
+        bevel = bevel
     );

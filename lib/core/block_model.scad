@@ -81,13 +81,19 @@ function mb_block_obj(
         wall_thickness_final = wall_thickness_pref + wall_thickness[1] * mul_mm_to_grid[0],
         wall_thickness_clamp = wall_thickness_final + clamp[0] * mul_mm_to_grid[0],
     
-        clamp_final = [clamp[0] * mul_mm_to_grid[0], clamp[1] * mul_mbu_to_grid[2], clamp[2] * mul_mbu_to_grid[2], clamp_outer],
+        clamp_final = [
+            clamp[0] * mul_mm_to_grid[0], // Thickness
+            clamp[1] * mul_mbu_to_grid[2], // Offset
+            clamp[2] * mul_mbu_to_grid[2], // Height
+            clamp_outer
+        ],
         relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
 
         top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]],
-        tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],
+        tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],  // TODO XYZ
         stud_diameter_res = stud_diameter * mul_mbu_to_grid[0],
-        default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,
+        default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
+        tube_hole_size = stud_diameter_res, // TODO XYZ
 
         stabilizers_res = [
             stabilizers[0] * mul_mbu_to_grid[0], // Thickness (mbu)
@@ -117,7 +123,7 @@ function mb_block_obj(
             [],  // 12 - 
             [],  // 13 - 
             [],  // 14 - 
-            [default_tube_diameter, tube_wall_thickness_res],  // 15 - 
+            [default_tube_diameter, tube_hole_size, tube_wall_thickness_res],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
@@ -129,62 +135,60 @@ function mb_block_obj(
 * Getters
 */
 
-function mb_block_get_id(block_obj) =                        block_obj[20][0];
-function mb_block_get_cut_tolerance(block_obj) =             block_obj[20][2];
+function mb_block_get_id(block_obj) =                               block_obj[20][0];
+function mb_block_get_cut_tolerance(block_obj) =                    block_obj[20][2];
 
-function mb_block_get_bevel(block_obj) =                     block_obj[1][0];
-function mb_block_get_inverted(block_obj) =                  block_obj[19][0];
+function mb_block_get_bevel(block_obj) =                            block_obj[1][0];
+function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
 
-function mb_block_get_slope(block_obj) =                     block_obj[1][1];
+function mb_block_get_slope(block_obj) =                            block_obj[1][1];
 
-function mb_block_get_slope_socket(block_obj) =              block_obj[5];
+function mb_block_get_slope_socket(block_obj) =                     block_obj[5];
 
-function mb_block_get_base_cutout_depth(block_obj) =         block_obj[4][0];
-function mb_block_get_base_adj(block_obj) =                  block_obj[6][1];
-function mb_block_get_size_mod(block_obj) =                  block_obj[6][0];
+function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
+function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];
+function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
 
-function mb_block_get_size(block_obj) =                      block_obj[0][0][0];
-function mb_block_get_center(block_obj) =                    block_obj[0][0][2];
-function mb_block_get_mod_size(block_obj) =                  block_obj[0][1][0];
+function mb_block_get_size(block_obj) =                             block_obj[0][0][0];
+function mb_block_get_center(block_obj) =                           block_obj[0][0][2];
+function mb_block_get_mod_size(block_obj) =                         block_obj[0][1][0];
 
-function mb_block_get_wall_thickness(block_obj) =            block_obj[4][3];
+function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 
-function mb_block_get_top_plate_height(block_obj) =          block_obj[4][1];
-function mb_block_get_top_plate_helpers(block_obj) =         block_obj[9][1];
+function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
+function mb_block_get_top_plate_helpers(block_obj) =                block_obj[9][1];
 
-function mb_block_get_recess(block_obj) =                    block_obj[8][0];
-function mb_block_get_recess_wall_thickness(block_obj) =     block_obj[8][1];
-function mb_block_get_recess_depth(block_obj) =              block_obj[4][2];
-function mb_block_get_recess_wall_gaps(block_obj) =          block_obj[8][4];
+function mb_block_get_recess(block_obj) =                           block_obj[8][0];
+function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
+function mb_block_get_recess_depth(block_obj) =                     block_obj[4][2];
+function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][4];
 
-function mb_block_get_base_wall_gaps(block_obj) =            block_obj[17][0];
+function mb_block_get_base_wall_gaps(block_obj) =                   block_obj[17][0];
 
-function mb_block_get_grid_cfg(block_obj) =                  block_obj[7][0];
+function mb_block_get_grid_cfg(block_obj) =                         block_obj[7][0];
 
-function mb_block_get_scale(block_obj) =                     block_obj[7][1];
+function mb_block_get_scale(block_obj) =                            block_obj[7][1];
 
-function mb_block_get_relief_cut(block_obj) =                block_obj[8][2];
-function mb_block_get_relief_cut_dim(block_obj) =            block_obj[8][3];
+function mb_block_get_relief_cut(block_obj) =                       block_obj[8][2];
+function mb_block_get_relief_cut_dim(block_obj) =                   block_obj[8][3];
 
-function mb_block_get_clamp(block_obj) =                     block_obj[4][4];
+function mb_block_get_clamp(block_obj) =                            block_obj[4][4];
 
-function mb_block_get_base_cutout_min_depth(block_obj) =     block_obj[4][5];
+function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
 
-function mb_block_get_stabilizers(block_obj) =               block_obj[16][0];
+function mb_block_get_stabilizers(block_obj) =                      block_obj[16][0];
 
-function mb_block_get_min_max_index(block_obj) =             block_obj[2];
-function mb_block_get_custom_modules(block_obj) =            block_obj[18];
-function mb_block_get_default_tube_diameter(block_obj) =     block_obj[15][0];
-function mb_block_get_tube_thickness(block_obj) =            block_obj[15][1];
+function mb_block_get_min_max_index(block_obj) =                    block_obj[2];
+function mb_block_get_custom_modules(block_obj) =                   block_obj[18];
+
+// Tubes
+function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0];
+function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15][1];
+function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
+
 /*
 * TODO Rename or delete
 */
-
-
-
-    
-    
-
 
 function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
     mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);

@@ -249,15 +249,15 @@ module mb_tube(
     if((end - start) > 0 && (radius_outer - radius_inner) > 0){
         rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [-90, 0, 0] : [0, 0, 0];
 
-        clamp_start_thickness = !is_list(clamp_start) || is_undef(clamp_start[0]) ? 0 : clamp_start[0];
-        clamp_start_height = !is_list(clamp_start) || is_undef(clamp_start[1]) ? 0 : clamp_start[1];
-        clamp_start_offset = !is_list(clamp_start) || is_undef(clamp_start[2]) ? 0 : clamp_start[2];
-        clamp_start_rounding_radius = !is_list(clamp_start) || is_undef(clamp_start[3]) ? 0 : clamp_start[3];
+        clamp_start_thickness = !is_list(clamp_start) || is_undef(clamp_start[0]) ? 0 : clamp_start[0] * mul_radius;
+        clamp_start_height = !is_list(clamp_start) || is_undef(clamp_start[1]) ? 0 : clamp_start[1] * mul_length;
+        clamp_start_offset = !is_list(clamp_start) || is_undef(clamp_start[2]) ? 0 : clamp_start[2] * mul_length;
+        clamp_start_rounding_radius = !is_list(clamp_start) || is_undef(clamp_start[3]) ? 0 : clamp_start[3] * mul_radius;
 
-        clamp_end_thickness = !is_list(clamp_end) || is_undef(clamp_end[0]) ? 0 : clamp_end[0];
-        clamp_end_height = !is_list(clamp_end) || is_undef(clamp_end[1]) ? 0 : clamp_end[1];
-        clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2];
-        clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3];
+        clamp_end_thickness = !is_list(clamp_end) || is_undef(clamp_end[0]) ? 0 : clamp_end[0] * mul_radius;
+        clamp_end_height = !is_list(clamp_end) || is_undef(clamp_end[1]) ? 0 : clamp_end[1] * mul_length;
+        clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2] * mul_length;
+        clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3] * mul_radius;
 
         is_cylinder = radius_inner == 0 && 
             start_rounding_radius == 0 && 
