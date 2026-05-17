@@ -221,18 +221,11 @@ function mb_block_base_cutout_ceiling_offset(block_obj) =
         mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
     ];
 
-function mb_block_in_wall_gap(block_obj, face, pos_min, pos_max) = 
-    let(
-        face = mb_face_to_int(face),
-        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        found = [
-            for(wall_gap = wall_gaps)
-               let(gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false))
-               for(g = gaps)
-                if(face == g[0] && ((pos_min > g[5] && pos_min < g[6]) || (pos_max > g[5] && pos_max < g[6]))) 1
-        ]
-    )
-    len(found) > 0;
+/**
+* -----------
+* Stabilizers
+* -----------
+*/
 
 function mb_block_stabilizer_range(block_obj, axis) =
     let(
@@ -320,23 +313,22 @@ function mb_block_render_stabilizer_segment(block_obj, axis, x, y) =
         y_min = y - 0.5 * stablilizer_thickness,
         y_max = y + 0.5 * stablilizer_thickness
     )
-    !((axis == 0 && x == start_index_x && mb_block_in_wall_gap(block_obj, "x-", y_min, y_max)) ||
-    (axis == 0 && x == end_index_x && mb_block_in_wall_gap(block_obj, "x+", y_min, y_max)) || 
-    (axis == 1 && y == start_index_y && mb_block_in_wall_gap(block_obj, "y-", x_min, x_max)) || 
-    (axis == 1 && y == end_index_y && mb_block_in_wall_gap(block_obj, "y+", x_min, x_max))
+    !((axis == 0 && x == start_index_x && mb_block_in_base_wall_gap(block_obj, "x-", y_min, y_max)) ||
+    (axis == 0 && x == end_index_x && mb_block_in_base_wall_gap(block_obj, "x+", y_min, y_max)) || 
+    (axis == 1 && y == start_index_y && mb_block_in_base_wall_gap(block_obj, "y-", x_min, x_max)) || 
+    (axis == 1 && y == end_index_y && mb_block_in_base_wall_gap(block_obj, "y+", x_min, x_max))
     );
 
 
 
-function mb_block_custom_module_mapping(block_obj, mname) = 
-    let(custom_modules = mb_block_get_custom_modules(block_obj),
-        mappings = custom_modules[0], f = [
-        for(i = [0:len(mappings)-1])
-            if (mappings[i] == mname)
-                i
-    ])
-    len(f) > 0 ? f[0] : undef;
-    
+
+
+/**
+* ------
+* Recess 
+* ------
+*/  
+
 function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) = 
     let(mod_size = mb_block_get_mod_size(block_obj),
         recess_wall_thickness = mb_block_get_recess_wall_thickness(block_obj),
@@ -361,6 +353,12 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
                 min_max_index[1][1 - axis] + 1 - gap_end_offset,
             ]
     ];
+
+/**
+* ---------
+* Base Wall
+* ---------
+*/ 
 
 function mb_block_base_wall_gap(block_obj, gap, split_axis = true) = 
     let(
@@ -389,6 +387,34 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = true) =
             min_max_index[1][1 - axis] + 1 - gap_end_offset
         ]
     ];
+
+function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) = 
+    let(
+        face = mb_face_to_int(face),
+        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
+        found = [
+            for(wall_gap = wall_gaps)
+               let(gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false))
+               for(g = gaps)
+                if(face == g[0] && ((pos_min > g[5] && pos_min < g[6]) || (pos_max > g[5] && pos_max < g[6]))) 1
+        ]
+    )
+    len(found) > 0;
+
+/**
+* ----
+* Misc
+* ----
+*/ 
+
+function mb_block_custom_module_mapping(block_obj, mname) = 
+    let(custom_modules = mb_block_get_custom_modules(block_obj),
+        mappings = custom_modules[0], f = [
+        for(i = [0:len(mappings)-1])
+            if (mappings[i] == mname)
+                i
+    ])
+    len(f) > 0 ? f[0] : undef;
 
 function mb_block_pos_to_offset(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))
@@ -432,13 +458,6 @@ function mb_block_mod_min_max(block_size, block_mod = undef, adj = undef) =
                 [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)] // Max Index (modified)
             ] // 3
         ];
-/*
-* Methods
-*/
-
-
-
-
 
 /*
 * -------------
