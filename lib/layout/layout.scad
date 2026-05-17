@@ -84,10 +84,8 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         mod_size = mb_block_get_mod_size(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        recess_depth = mb_block_get_recess_depth(block_obj),
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
@@ -95,7 +93,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         bottom = is_undef(bottom) ? cut_tol : bottom,
-        top = is_undef(top) ? -(top_plate_height + recess_depth) : top,
+        top = is_undef(top) ? -base_cutout_ceiling_offset[1] : top,
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
 
