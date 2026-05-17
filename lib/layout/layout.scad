@@ -72,27 +72,7 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
         slope = mb_block_get_slope(block_obj)
     ); 
 
-/**
-* -----------
-* Clamp Outer
-* -----------
-*/
-function mb_block_part__base_clamp_outer(block_obj) = 
-    let(
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
-        clamp = mb_block_get_clamp(block_obj)
-    )
-    mb_block_part_prismoid(
-        block_size = mod_size, 
-        expand = [[
-                for(f = [0 : 3])
-                    base_adj[f] + clamp[0],
-                -clamp[2],
-                -(mod_size[2] - clamp[1] - clamp[2])
-        ]],
-        bevel = mb_block_get_bevel(block_obj)
-    );
+
 
 /**
 * -----------
@@ -405,6 +385,28 @@ function mb_block_part__base_cutout_clamp(block_obj) =
             )
         ]
     ];
+
+/**
+* ----------------
+* Base Clamp Outer
+* ----------------
+*/
+function mb_block_part__base_clamp_outer(block_obj) = 
+    let(
+        mod_size = mb_block_get_mod_size(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        clamp = mb_block_get_clamp(block_obj)
+    )
+    mb_block_part_prismoid(
+        block_size = mod_size, 
+        expand = [[
+                for(f = [0 : 3])
+                    base_adj[f] + clamp[0],
+                -clamp[2],
+                -(mod_size[2] - clamp[1] - clamp[2])
+        ]],
+        bevel = mb_block_get_bevel(block_obj)
+    );
 
 /**
 * -----------------

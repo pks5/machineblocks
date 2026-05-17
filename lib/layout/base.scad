@@ -72,7 +72,7 @@ module mb_base(
             union(){
                 mb_block_part(block_obj, part = mb_block_part__base_outer(block_obj, adjusted = true), debug = debug);
                 
-                if(mb_block_get_inverted(block_obj)){
+                if(true ||mb_block_get_inverted(block_obj)){
                     mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 }
 
