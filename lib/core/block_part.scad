@@ -12,8 +12,7 @@ include <../custom.scad>;
 
 
 function mb_block_part_tube(
-    block_size,
-    block_mod = undef,
+    block_dim,
     radius,
     rounding_radius = undef,
     clamp_start = undef,
@@ -25,7 +24,6 @@ function mb_block_part_tube(
 ) = 
     let(
         offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
-        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
         mod_size = mb_block_dim_mod_size(block_dim),
         
         axis = mb_axis_to_int(axis),
@@ -52,14 +50,12 @@ function mb_block_part_tube(
     ];
 
 function mb_block_part_cube(
-    block_size,
-    block_mod = undef,
+    block_dim,
     size = undef,
     expand = undef,
     offset = undef
 ) = 
     let(
-        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
         mod_size = mb_block_dim_mod_size(block_dim),
         
         si = is_undef(size) ? mod_size : size,
@@ -113,8 +109,7 @@ function mb_block_part_cube(
     ];
 
 function mb_block_part_prismoid(
-    block_size, 
-    block_mod = undef, 
+    block_dim, 
     bevel = undef, 
     slope = undef, 
     socket = undef, 
@@ -122,8 +117,6 @@ function mb_block_part_prismoid(
     height = undef
 ) =
     let(
-        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
-        
         mod_size = mb_block_dim_mod_size(block_dim),
         min_max = mb_block_dim_min_max_pos(block_dim),
         

@@ -1,6 +1,5 @@
 use <utils.scad>;
 
-//TODO Rename
 function mb_block_dim(block_size, block_mod = undef) =
     let(
         size = mb_resolve_xyz(xyz = block_size, default = [1, 1, 1]),

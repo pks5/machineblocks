@@ -8,9 +8,9 @@ use <../core/block_part.scad>;
 * -------
 */
 
-function _mb_layout_mask_frame(mod_size, base_adj, bottom, top, cut_tol, outer_adjust = 0) = 
+function _mb_layout_mask_frame(block_dim, base_adj, bottom, top, cut_tol, outer_adjust = 0) = 
     mb_block_part_prismoid(
-        block_size = mod_size, 
+        block_dim = block_dim, 
         expand = [[
             for(f = [0 : 3])
                 base_adj[f] + cut_tol + outer_adjust,
@@ -29,6 +29,7 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 */
 function mb_block_part__tongue(block_obj) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
@@ -47,7 +48,7 @@ function mb_block_part__tongue(block_obj) =
         "difference",
         [
             mb_block_part_prismoid(
-                block_size = mb_block_get_mod_size(block_obj), 
+                block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
                         -slope_pos[f] - tongue_offset,
@@ -57,7 +58,7 @@ function mb_block_part__tongue(block_obj) =
                 bevel = mb_block_get_bevel(block_obj)
             ),
             mb_block_part_prismoid(
-                block_size = mb_block_get_mod_size(block_obj), 
+                block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
                         -slope_pos[f] - tongue_offset - tongue_thickness,
@@ -76,6 +77,7 @@ function mb_block_part__tongue(block_obj) =
 */
 function mb_block_part__studs(block_obj) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
@@ -92,7 +94,7 @@ function mb_block_part__studs(block_obj) =
                 for(y = stud_range[1])
                     if(mb_block_stud_render(block_obj, x, y))
                         mb_block_part_tube(
-                            block_size = mod_size,
+                            block_dim = block_dim,
                             radius = mb_block_stud_radius(block_obj, x, y),
                             rounding_radius = stud_rounding,
                             axis = "z",
@@ -111,7 +113,9 @@ function mb_block_part__studs(block_obj) =
 * ----
 */
 function mb_block_part__tubes(block_obj, axis = "z") = 
-    let(mod_size = mb_block_get_mod_size(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         tube_range = mb_block_tube_range(block_obj, axis)
     )
@@ -141,7 +145,7 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                             tube_expand = mb_block_tube_expand(block_obj, axis, x, y)
                         )
                         mb_block_part_tube(
-                            block_size = mod_size,
+                            block_dim = block_dim,
                             radius = mb_block_tube_radius(block_obj, axis, x, y),
                             clamp_end = tube_clamp_end, 
                             clamp_start = tube_clamp_start, 
@@ -163,7 +167,7 @@ function mb_block_part__tubes(block_obj, axis = "z") =
 */
 function mb_block_part__base_outer(block_obj, adjusted = true) =
     mb_block_part_prismoid(
-        block_size = mb_block_get_mod_size(block_obj), 
+        block_dim = mb_block_get_dim(block_obj), 
         expand = adjusted ? [mb_block_get_base_adj(block_obj)] : undef,
         socket = mb_block_get_slope_socket(block_obj),
         bevel = mb_block_get_bevel(block_obj),
@@ -179,6 +183,7 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
 */
 function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, inner_adj = undef) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         mod_size = mb_block_get_mod_size(block_obj),
@@ -199,7 +204,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         "list",
         [
             mb_block_part_prismoid(
-                block_size = mod_size, 
+                block_dim = block_dim, 
                 expand = [
                     _mb_layout_plane_value(
                         planes = planes, 
@@ -238,6 +243,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 */
 function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef) =
     let(
+        block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
@@ -267,7 +273,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                     "intersection",
                     [
                         mb_block_part_prismoid(
-                            block_size = mod_size, 
+                            block_dim = block_dim, 
                             expand = [
                                 _mb_layout_plane_value(
                                     planes = planes, 
@@ -302,7 +308,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                         ),
                         
                         mb_block_part_cube(
-                            block_size = mod_size,
+                            block_dim = block_dim,
                             expand = [
                                 mb_face_has_common(face, "y") ? - gap_start_offset + inner_adj : 0,
                                 mb_face_has_common(face, "y") ? - gap_end_offset + inner_adj : 0,
@@ -325,7 +331,9 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
 * -----------------
 */
 function mb_block_part__base_cutout_clamp(block_obj) = 
-    let(base_adj = mb_block_get_base_adj(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
@@ -335,7 +343,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         "difference",
         [
             _mb_layout_mask_frame(
-                mod_size = mod_size, 
+                block_dim = block_dim, 
                 base_adj = base_adj, 
                 bottom = bottom, 
                 top = top, 
@@ -359,6 +367,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
 */
 function mb_block_part__base_clamp_outer(block_obj) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
         block_inverted = mb_block_get_inverted(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
@@ -373,7 +382,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
     //    "difference",
     //    [
             mb_block_part_prismoid(
-                block_size = mod_size, 
+                block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
                         base_adj[f] + clamp[0],
@@ -394,7 +403,9 @@ function mb_block_part__base_clamp_outer(block_obj) =
 * -----------------
 */
 function mb_block_part__top_plate_helpers(block_obj) =
-    let(base_adj = mb_block_get_base_adj(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
@@ -407,7 +418,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
         "difference",
         [
             _mb_layout_mask_frame(
-                mod_size = mod_size, 
+                block_dim = block_dim, 
                 base_adj = base_adj, 
                 bottom = bottom, 
                 top = top, 
@@ -429,7 +440,9 @@ function mb_block_part__top_plate_helpers(block_obj) =
 * -----------
 */
 function mb_block_part__stabilizers(block_obj) =
-    let(mod_size = mb_block_get_mod_size(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top = -base_cutout_ceiling_offset[1]
@@ -454,7 +467,7 @@ function mb_block_part__stabilizers(block_obj) =
                                 "list",
                                 [
                                     mb_block_part_cube(
-                                        block_size = mod_size,
+                                        block_dim = block_dim,
                                         size = [
                                             seg_size[0][0], 
                                             seg_size[0][1], 
@@ -470,7 +483,7 @@ function mb_block_part__stabilizers(block_obj) =
                                     ),
                                     if(len(seg_size) > 1)
                                         mb_block_part_cube(
-                                            block_size = mod_size,
+                                            block_dim = block_dim,
                                             size = [
                                                 seg_size[0][0] + seg_size[1][0], 
                                                 seg_size[0][1] + seg_size[1][1], 
@@ -499,7 +512,9 @@ function mb_block_part__stabilizers(block_obj) =
 * ----------
 */
 function mb_block_part__relief_cut(block_obj) =
-    let(socket = mb_block_get_slope_socket(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
@@ -508,12 +523,13 @@ function mb_block_part__relief_cut(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = cut_tol,
-        top = -(mod_size[2] - relief_cut[1])) 
+        top = -(mod_size[2] - relief_cut[1])
+    ) 
     [
         "difference",
         [
             _mb_layout_mask_frame(
-                mod_size = mod_size, 
+                block_dim = block_dim, 
                 base_adj = base_adj, 
                 bottom = bottom, 
                 top = top, 
@@ -521,7 +537,7 @@ function mb_block_part__relief_cut(block_obj) =
                 outer_adjust = clamp[0]
             ),
             mb_block_part_prismoid(
-                block_size = mod_size, 
+                block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
                         base_adj[f] - relief_cut[0],
@@ -541,7 +557,9 @@ function mb_block_part__relief_cut(block_obj) =
 * ------
 */
 function mb_block_part__recess(block_obj) = 
-    let(mod_size = mb_block_get_mod_size(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
@@ -562,7 +580,7 @@ function mb_block_part__recess(block_obj) =
                 "intersection",
                 [
                     mb_block_part_prismoid(
-                        block_size = mod_size, 
+                        block_dim = block_dim, 
                         expand = [[
                             for(f = [0 : 3])
                                 -rwt[f],
@@ -575,7 +593,7 @@ function mb_block_part__recess(block_obj) =
                     ),
 
                     mb_block_part_cube(
-                        block_size = mod_size, 
+                        block_dim = block_dim, 
                         expand = [
                             0,
                             0,
@@ -601,7 +619,7 @@ function mb_block_part__recess(block_obj) =
                         "intersection",
                         [
                             mb_block_part_prismoid(
-                                block_size = mod_size, 
+                                block_dim = block_dim, 
                                 expand = [[
                                     for(f = [0 : 3])
                                         mb_face_has_common(face, f) ? cut_tol : -rwt[f],
@@ -614,7 +632,7 @@ function mb_block_part__recess(block_obj) =
                             ),
 
                             mb_block_part_cube(
-                                block_size = mod_size, 
+                                block_dim = block_dim, 
                                 expand = [
                                     mb_face_has_common(face, "y") ? - gap_start_offset : 0,
                                     mb_face_has_common(face, "y") ? - gap_end_offset : 0,
@@ -635,16 +653,19 @@ function mb_block_part__recess(block_obj) =
 * ----------------
 */
 function mb_block_part__stud_base_cutout(block_obj) =
-    let(mod_size = mb_block_get_mod_size(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        mod_size = mb_block_get_mod_size(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = -(mod_size[2] - base_cutout_min_depth))
+        top = -(mod_size[2] - base_cutout_min_depth)
+    )
     mb_block_part_prismoid(
-        block_size = mod_size, 
+        block_dim = block_dim, 
         expand = [
             [
                 for(f = [0 : 3])

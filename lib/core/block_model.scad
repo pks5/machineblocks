@@ -157,7 +157,7 @@ function mb_block_obj(
             ], // 0 - Original Size / Mod Size
             [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
-            undef, // 3 - 
+            block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, bsa_grd], // 6 - Adjustments
@@ -180,6 +180,8 @@ function mb_block_obj(
 /*
 * Getters
 */
+
+function mb_block_get_dim(block_obj) =                              block_obj[3];
 
 function mb_block_get_size(block_obj) =                             block_obj[0][0];
 function mb_block_get_mod_size(block_obj) =                         block_obj[0][1];
