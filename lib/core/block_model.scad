@@ -23,7 +23,12 @@ function mb_block_obj(
     recess_wall_gaps = [],
     clamp = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
     clamp_outer = true,
-    stud_diameter = 3,
+    studDiameter = 3,
+    studRounding = 0.0625,
+    studDiameterAdjustment = 0.2,
+    studHeight = 1,
+    studHeightAdjustment = 0,
+    studSink = 0.25,
     relief_cut = false,
     relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
     id = "[Block]",
@@ -78,11 +83,17 @@ function mb_block_obj(
         /*
         * Base Wall Thickness
         */
-        p_diameter = grid_cfg[1] - stud_diameter,
+        p_diameter = grid_cfg[1] - studDiameter,
         wall_thickness_pref = (wall_thickness[0] == "auto" ? 0.5 * p_diameter : wall_thickness[0]) * mul_mbu_to_grid[0],
         wall_thickness_final = wall_thickness_pref + wall_thickness[1] * mul_mm_to_grid[0],
         wall_thickness_clamp = wall_thickness_final + clamp[0] * mul_mm_to_grid[0],
-    
+        stud_diameter_res = studDiameter * mul_mbu_to_grid[0],
+
+        stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mul_mm_to_grid[0],
+        stud_height_final = studHeight * mul_mbu_to_grid[2] + studHeightAdjustment * mul_mm_to_grid[2],
+        stud_sink_final = studSink * mul_mbu_to_grid[2],
+        stud_rounding_final = studRounding * mul_mbu_to_grid[0],
+
         clamp_final = [
             clamp[0] * mul_mm_to_grid[0], // Thickness
             clamp[1] * mul_mbu_to_grid[2], // Height
@@ -93,9 +104,11 @@ function mb_block_obj(
 
         top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]],
         tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],  // TODO XYZ
-        stud_diameter_res = stud_diameter * mul_mbu_to_grid[0],
+        
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
         tube_hole_size = stud_diameter_res, // TODO XYZ
+
+
 
         stabilizers_res = [
             stabilizers[0] * mul_mbu_to_grid[0], // Thickness (mbu)
@@ -126,7 +139,7 @@ function mb_block_obj(
             [],  // 11 - 
             [],  // 12 - 
             [],  // 13 - 
-            [],  // 14 - 
+            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
@@ -191,6 +204,13 @@ function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15
 function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
 
+// Studs
+function mb_block_get_stud_diameter(block_obj) =                    block_obj[14][0];
+function mb_block_get_stud_height(block_obj) =                      block_obj[14][1];
+function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
+function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
+
+
 /*
 * TODO Rename or delete
 */
@@ -225,6 +245,39 @@ function mb_block_base_cutout_ceiling_offset(block_obj) =
         mb_block_get_base_cutout_depth(block_obj),
         mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
     ];
+
+/**
+* -----
+* Studs
+* -----
+*/
+
+function mb_block_stud_range(block_obj) =
+    let(
+        min_max_index = mb_block_get_min_max_index(block_obj),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1]
+    )
+    [
+        [start_index_x : end_index_x],
+        [start_index_y : end_index_y]
+    ];
+
+function mb_block_stud_render(block_obj, x, y) =
+    true;
+
+function mb_block_stud_offset(block_obj, x, y) = //TODO
+    let(
+        
+    )
+    mb_block_pos_to_offset(block_obj, [x + 0.5, y + 0.5, undef]);
+
+function mb_block_stud_radius(block_obj, x, y) =
+    let(stud_diameter = mb_block_get_stud_diameter(block_obj))
+        0.5 * stud_diameter;
+
 
 /**
 * -----

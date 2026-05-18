@@ -23,7 +23,40 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
     planes == plane || planes == "all" ? value : undef;
 
 
-
+/**
+* -----
+* Studs
+* ----.
+*/
+function mb_block_part__studs(block_obj) = 
+    let(mod_size = mb_block_get_mod_size(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
+        stud_range = mb_block_stud_range(block_obj),
+        
+        stud_height = mb_block_get_stud_height(block_obj),
+        stud_rounding = mb_block_get_stud_rounding(block_obj),
+        stud_sink = mb_block_get_stud_sink(block_obj),
+    )
+    [
+        "list",
+        [
+            for(x = stud_range[0])
+                for(y = stud_range[1])
+                    if(mb_block_stud_render(block_obj, x, y))
+                        mb_block_part_tube(
+                            block_size = mod_size,
+                            radius = mb_block_stud_radius(block_obj, x, y),
+                            rounding_radius = stud_rounding,
+                            axis = "z",
+                            expand = [
+                                - (mod_size[2] + base_adj[5]) + stud_sink,
+                                base_adj[5] + stud_height
+                            ],
+                            offset = mb_block_stud_offset(block_obj, x, y)
+                        )
+        ]
+    ];
 
 /**
 * ----

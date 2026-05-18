@@ -1782,7 +1782,7 @@ module mb_block(
                             /*
                             * Classic Knobs
                             */
-                            if(studs != false){
+                            *if(studs != false){
                                 color(baseColor){
                                     studRoundingRes = mb_fn_even_for_radius(
                                         0.5 * knobSize + studClampThickness, 

@@ -77,7 +77,7 @@ module mb_base(
                 
                 mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 
-                
+                mb_block_part(block_obj, part = mb_block_part__studs(block_obj), debug = debug);
 
                 //Just for testing TO BE REMOVED
                 *mb_block_part(block_obj, part=[
