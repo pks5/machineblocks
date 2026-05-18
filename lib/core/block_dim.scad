@@ -1,9 +1,10 @@
 use <utils.scad>;
 
-function mb_block_dim(block_size, block_mod = undef) =
+function mb_block_dim(size, size_mod = undef, base_adj = undef) =
     let(
-        size = mb_resolve_xyz(xyz = block_size, default = [1, 1, 1]),
-        mod = mb_qc_resolve(qc = block_mod, cube = true),
+        size = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
+        mod = mb_qc_resolve(qc = size_mod, cube = true),
+        bsa = mb_qc_resolve(qc = base_adj, cube = true),
         
         bb = mb_bounding_box(size),
         c = [
@@ -27,6 +28,12 @@ function mb_block_dim(block_size, block_mod = undef) =
             size[0] + mod[0] + mod[1],
             size[1] + mod[2] + mod[3],
             size[2] + mod[4] + mod[5]
+        ],
+
+        adj_size = [
+            mod_size[0] + bsa[0] + bsa[1],
+            mod_size[1] + bsa[2] + bsa[3],
+            mod_size[2] + bsa[4] + bsa[5],
         ],
         
         min_max_pos = [
@@ -72,7 +79,8 @@ function mb_block_dim(block_size, block_mod = undef) =
                 ceil(ma[1] - 1), 
                 ceil(ma[2] - 1)
             ] // Max Index (modified)
-        ] // 3
+        ], // 3
+        [adj_size, bsa] // 4
     ];
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
@@ -85,3 +93,6 @@ function mb_block_dim_mod_size_bounding_box(block_dim) =         block_dim[1][1]
 
 function mb_block_dim_min_max_pos(block_dim) =                   block_dim[1][2];
 function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
+
+function mb_block_dim_adj_size(block_dim) =                      block_dim[4][0];
+function mb_block_dim_base_adj(block_dim) =                      block_dim[4][1];

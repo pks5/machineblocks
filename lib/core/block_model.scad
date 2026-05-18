@@ -65,8 +65,9 @@ function mb_block_obj(
         ),
         
         block_dim = mb_block_dim(
-            block_size = size, 
-            block_mod = size_mod
+            size = size, 
+            size_mod = size_mod,
+            base_adj = bsa_grd
         ),
 
         size_res = mb_block_dim_size(block_dim),
@@ -78,11 +79,7 @@ function mb_block_obj(
 
         
         
-        adj_size = [
-            mod_size[0] + bsa_grd[0] + bsa_grd[1],
-            mod_size[1] + bsa_grd[2] + bsa_grd[3],
-            mod_size[2] + bsa_grd[4] + bsa_grd[5],
-        ],
+        adj_size = mb_block_dim_adj_size(block_dim),
 
         /*
         * Top Plate, Recess Depth, Base Cutout
@@ -160,7 +157,7 @@ function mb_block_obj(
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
-            [size_mod_res, bsa_grd], // 6 - Adjustments
+            [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, relief_cut, relief_cut_final, recess_wall_gaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
