@@ -25,8 +25,8 @@ function mb_block_part_tube(
 ) = 
     let(
         offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
-        mod_min_max = mb_block_dim(block_size = block_size, block_mod = block_mod),
-        mod_size = mod_min_max[1][0],
+        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
+        mod_size = mb_block_dim_mod_size(block_dim),
         
         axis = mb_axis_to_int(axis),
         h = mod_size[axis],
@@ -59,8 +59,8 @@ function mb_block_part_cube(
     offset = undef
 ) = 
     let(
-        mod_min_max = mb_block_dim(block_size = block_size, block_mod = block_mod),
-        mod_size = mod_min_max[1][0],
+        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
+        mod_size = mb_block_dim_mod_size(block_dim),
         
         si = is_undef(size) ? mod_size : size,
         si2 = [
@@ -122,10 +122,10 @@ function mb_block_part_prismoid(
     height = undef
 ) =
     let(
-        mod_min_max = mb_block_dim(block_size = block_size, block_mod = block_mod),
+        block_dim = mb_block_dim(block_size = block_size, block_mod = block_mod),
         
-        mod_size = mod_min_max[1][0],
-        min_max = mod_min_max[1][2],
+        mod_size = mb_block_dim_mod_size(block_dim),
+        min_max = mb_block_dim_min_max_pos(block_dim),
         
         h_d = is_undef(height) ? [min_max[0][2], min_max[1][2]] : [-0.5 * height, 0.5 * height],
 
