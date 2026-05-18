@@ -71,6 +71,7 @@ function mb_block_obj(
 
         size_res = mb_block_dim_size(block_dim),
         size_mod_res = mb_block_dim_size_mod(block_dim),
+        center = mb_block_dim_center(block_dim),
         
         mod_size = mb_block_dim_mod_size(block_dim),
         min_max_pos = mb_block_dim_min_max_pos(block_dim),
@@ -149,9 +150,10 @@ function mb_block_obj(
     )
         [
             [
-                block_dim[0], 
-                block_dim[1], 
-                [adj_size]
+                size, 
+                mod_size, 
+                adj_size,
+                center
             ], // 0 - Original Size / Mod Size
             [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
@@ -179,10 +181,10 @@ function mb_block_obj(
 * Getters
 */
 
-function mb_block_get_size(block_obj) =                             block_obj[0][0][0];
-function mb_block_get_mod_size(block_obj) =                         block_obj[0][1][0];
-function mb_block_get_size_adjusted(block_obj) =                    block_obj[0][2][0];
-function mb_block_get_center(block_obj) =                           block_obj[0][0][2];
+function mb_block_get_size(block_obj) =                             block_obj[0][0];
+function mb_block_get_mod_size(block_obj) =                         block_obj[0][1];
+function mb_block_get_size_adjusted(block_obj) =                    block_obj[0][2];
+function mb_block_get_center(block_obj) =                           block_obj[0][3];
 
 function mb_block_get_id(block_obj) =                               block_obj[20][0];
 function mb_block_get_cut_tolerance(block_obj) =                    block_obj[20][2];
