@@ -1,5 +1,6 @@
 use <geometry.scad>;
 use <utils.scad>;
+use <block_dim.scad>;
 
 function mb_block_obj(
     size, 
@@ -45,13 +46,15 @@ function mb_block_obj(
     tongueThicknessAdjustment = 0,
     tongueOffset = 1
 ) =
-    let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
+    let(
+        mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
         
         mod_min_max = mb_block_mod_min_max(block_size = size, block_mod = size_mod),
 
         si = mod_min_max[0][0],
         mod = mod_min_max[0][3],
+        
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
 
@@ -597,44 +600,7 @@ function mb_block_pos_to_offset(block_obj, pos) =
     let(center = mb_block_get_center(block_obj))
         [is_undef(pos[0]) ? 0 : pos[0] - center[0], is_undef(pos[1]) ? 0 : pos[1] - center[1], is_undef(pos[2]) ? 0 : pos[2] - center[2]];
         
-//TODO Rename & remove adj
-function mb_block_mod_min_max(block_size, block_mod = undef, adj = undef) =
-    let(size = mb_resolve_xyz(xyz = block_size, default = [1, 1, 1]),
-        mod = mb_qc_resolve(qc = block_mod, cube = true),
-        
-        bb = mb_bounding_box(size),
-        c = [0.5 * bb[0], 0.5 * bb[1], 0.5 * bb[2]],
-        mod_final = is_undef(adj) ? mod : mb_array_add(mod, adj),
-        mi = [-mod_final[0], -mod_final[2], is_undef(adj) ? 0 : -adj[4]],
-        ma = [size[0] + mod_final[1], size[1] + mod_final[3], size[2] + mod_final[5]],
-        mod_size = [
-                    size[0] + mod_final[0] + mod_final[1],
-                    size[1] + mod_final[2] + mod_final[3],
-                    size[2] + mod_final[4] + mod_final[5]
-                ],
-        
-        min_max = [
-                [mi[0] - c[0], mi[1] - c[1], mi[2] - c[2]], // min from org center
-                [ma[0] - c[0], ma[1] - c[1], ma[2] - c[2]] // max from org center
-            ],
 
-        
-    )
-        [
-            [size, bb, c, mod], // 0
-            [
-                mod_size,
-                mb_bounding_box(mod_size),
-                min_max
-            ], // 1
-            
-            [mi, ma], // 2
-
-            [ 
-                [floor(-mod[0]), floor(-mod[2]), 0], // Min Index (modified)
-                [ceil(size[0] + mod[1] - 1), ceil(size[1] + mod[3] - 1), ceil(size[2] + mod[5] - 1)] // Max Index (modified)
-            ] // 3
-        ];
 
 /*
 * -------------

@@ -1,5 +1,6 @@
 use <geometry.scad>;
 use <block_model.scad>;
+use <block_dim.scad>;
 use <utils.scad>;
 
 use <../shape/prismoid.scad>;
@@ -22,9 +23,11 @@ function mb_block_part_tube(
     expand = undef,
     offset = undef
 ) = 
-    let(offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
+    let(
+        offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
         mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
         mod_size = mod_min_max[1][0],
+        
         axis = mb_axis_to_int(axis),
         h = mod_size[axis],
         h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
@@ -55,7 +58,8 @@ function mb_block_part_cube(
     expand = undef,
     offset = undef
 ) = 
-    let(mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
+    let(
+        mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
         mod_size = mod_min_max[1][0],
         
         si = is_undef(size) ? mod_size : size,
@@ -119,8 +123,10 @@ function mb_block_part_prismoid(
 ) =
     let(
         mod_min_max = mb_block_mod_min_max(block_size = block_size, block_mod = block_mod),
+        
         mod_size = mod_min_max[1][0],
         min_max = mod_min_max[1][2],
+        
         h_d = is_undef(height) ? [min_max[0][2], min_max[1][2]] : [-0.5 * height, 0.5 * height],
 
         exp_sin = is_list(expand) && (len(expand) == 2) && is_list(expand[0]) && is_list(expand[1]),
