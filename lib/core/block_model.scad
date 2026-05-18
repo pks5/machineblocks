@@ -49,21 +49,33 @@ function mb_block_obj(
     let(
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
-        
-        mod_min_max = mb_block_mod_min_max(block_size = size, block_mod = size_mod),
-
-        si = mod_min_max[0][0],
-        mod = mod_min_max[0][3],
-        
-        mod_size = mod_min_max[1][0],
-        min_max = mod_min_max[1][2],
 
         bsa_grd = mb_qc_resolve(
             qc = base_adj, 
             cube = true, 
-            default = [size_adj[0], size_adj[0], size_adj[0], size_adj[0], 0, size_adj[1]],
+            default = [
+                size_adj[0], 
+                size_adj[0], 
+                size_adj[0], 
+                size_adj[0], 
+                0, 
+                size_adj[1]
+            ],
             mul = mul_mm_to_grid
         ),
+        
+        block_dim = mb_block_dim(
+            block_size = size, 
+            block_mod = size_mod
+        ),
+
+        size_res = mb_block_dim_size(block_dim),
+        size_mod_res = mb_block_dim_size_mod(block_dim),
+        
+        mod_size = mb_block_dim_mod_size(block_dim),
+        min_max_pos = mb_block_dim_min_max_pos(block_dim),
+
+        
         
         adj_size = [
             mod_size[0] + bsa_grd[0] + bsa_grd[1],
@@ -137,16 +149,16 @@ function mb_block_obj(
     )
         [
             [
-                mod_min_max[0], 
-                mod_min_max[1], 
+                block_dim[0], 
+                block_dim[1], 
                 [adj_size]
             ], // 0 - Original Size / Mod Size
             [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
-            mod_min_max[3], // 2 - Min / Max Index
+            mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             undef, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
-            [mod, bsa_grd], // 6 - Adjustments
+            [size_mod_res, bsa_grd], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, relief_cut, relief_cut_final, recess_wall_gaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
@@ -167,6 +179,11 @@ function mb_block_obj(
 * Getters
 */
 
+function mb_block_get_size(block_obj) =                             block_obj[0][0][0];
+function mb_block_get_mod_size(block_obj) =                         block_obj[0][1][0];
+function mb_block_get_size_adjusted(block_obj) =                    block_obj[0][2][0];
+function mb_block_get_center(block_obj) =                           block_obj[0][0][2];
+
 function mb_block_get_id(block_obj) =                               block_obj[20][0];
 function mb_block_get_cut_tolerance(block_obj) =                    block_obj[20][2];
 
@@ -180,10 +197,6 @@ function mb_block_get_slope_socket(block_obj) =                     block_obj[5]
 function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
 function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];
 function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
-
-function mb_block_get_size(block_obj) =                             block_obj[0][0][0];
-function mb_block_get_center(block_obj) =                           block_obj[0][0][2];
-function mb_block_get_mod_size(block_obj) =                         block_obj[0][1][0];
 
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 
@@ -235,21 +248,29 @@ function mb_block_get_tongue_offset(block_obj) =                    block_obj[13
 * TODO Rename or delete
 */
 
-function mb_block_obj_size(block_obj, bb = false, unit = "grd") = 
-    mb_block_unit_convert(block_obj, block_obj[0][0][bb ? 0 : 1], from = "grd", to = unit);
+function mb_block_obj_size(block_obj, unit = "grd") = 
+    mb_block_unit_convert(block_obj, mb_block_get_size(block_obj), from = "grd", to = unit);
 
-function mb_block_obj_size_mod(block_obj, bb = false, unit = "grd") = 
-    mb_block_unit_convert(block_obj, block_obj[0][1][bb ? 0 : 1], from = "grd", to = unit);
+function mb_block_obj_size_mod(block_obj, unit = "grd") = 
+    mb_block_unit_convert(block_obj, mb_block_get_mod_size(block_obj), from = "grd", to = unit);
 
 function mb_block_obj_size_adj(block_obj, unit = "grd") = 
-    mb_block_unit_convert(block_obj, block_obj[0][2][0], from = "grd", to = unit);
+    mb_block_unit_convert(block_obj, mb_block_get_size_adjusted(block_obj), from = "grd", to = unit);
 
-function mb_block_size_mod(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][0], from = "grd", to = unit);
+function mb_block_size_mod(block_obj, unit = "grd") = 
+    mb_block_unit_convert(block_obj, mb_block_get_size_mod(block_obj), from = "grd", to = unit);
 
-function mb_block_base_adj(block_obj, unit = "grd") = mb_block_unit_convert(block_obj, block_obj[6][1], from = "grd", to = unit);
+function mb_block_base_adj(block_obj, unit = "grd") = 
+    mb_block_unit_convert(block_obj, mb_block_get_base_adj(block_obj), from = "grd", to = unit);
 
 function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") = 
-    let(mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from = from, to = to))
+    let(
+        mul = mb_unit_mul(mb_block_get_grid_cfg(block_obj), 
+            scale = mb_block_get_scale(block_obj), 
+            from = from, 
+            to = to
+        )
+    )
     is_num(v) || (is_list(v) && len(v) <= 3) ? 
         mb_resolve_xyz(xyz = v, mul = mul) :
         (is_list(v) && len(v) == 4) ? [v[0] * mul[0], v[1] * mul[0], v[2] * mul[1], v[3] * mul[1]] :

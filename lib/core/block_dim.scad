@@ -1,7 +1,7 @@
 use <utils.scad>;
 
 //TODO Rename
-function mb_block_mod_min_max(block_size, block_mod = undef) =
+function mb_block_dim(block_size, block_mod = undef) =
     let(
         size = mb_resolve_xyz(xyz = block_size, default = [1, 1, 1]),
         mod = mb_qc_resolve(qc = block_mod, cube = true),
@@ -30,7 +30,7 @@ function mb_block_mod_min_max(block_size, block_mod = undef) =
             size[2] + mod[4] + mod[5]
         ],
         
-        min_max = [
+        min_max_pos = [
             [
                 mi[0] - c[0], 
                 mi[1] - c[1], 
@@ -54,7 +54,7 @@ function mb_block_mod_min_max(block_size, block_mod = undef) =
         [
             mod_size,
             mb_bounding_box(mod_size),
-            min_max
+            min_max_pos
         ], // 1
         
         [
@@ -75,3 +75,14 @@ function mb_block_mod_min_max(block_size, block_mod = undef) =
             ] // Max Index (modified)
         ] // 3
     ];
+
+function mb_block_dim_size(block_dim) =                          block_dim[0][0];
+function mb_block_dim_size_bounding_box(block_dim) =             block_dim[0][1];
+function mb_block_dim_center(block_dim) =                        block_dim[0][2];
+function mb_block_dim_size_mod(block_dim) =                      block_dim[0][3];
+
+function mb_block_dim_mod_size(block_dim) =                      block_dim[1][0];
+function mb_block_dim_mod_size_bounding_box(block_dim) =         block_dim[1][1];
+
+function mb_block_dim_min_max_pos(block_dim) =                   block_dim[1][2];
+function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
