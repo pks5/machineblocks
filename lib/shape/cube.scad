@@ -222,7 +222,7 @@ module mb_rcube(
 */
 module mb_cube(
     size, 
-    offset = [0, 0, 0],
+    offset = undef,
     mul = [1, 1, 1],
     radius = 0, 
     xyz_rad = false, 
@@ -232,6 +232,7 @@ module mb_cube(
     debug = false
 ){
     size =  mb_cube_size_resolve(size);
+    offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]);
 
     is_simple_cube = radius == 0 || radius == [0, 0, 0] || (xyz_rad && (radius == [[0,0,0,0],[0,0,0,0],[0,0,0,0]]));
 

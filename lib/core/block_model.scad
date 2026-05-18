@@ -38,7 +38,12 @@ function mb_block_obj(
     stabilizers = [0.5, 0.5, 0.2, 1, 2],
     tubeWallThickness = 0.53125,
     pinDiameter = "auto",
-    pinDiameterAdjustment = 0
+    pinDiameterAdjustment = 0,
+    tongue = false,
+    tongueHeight = 1.25,
+    tongueThickness = 0.666,
+    tongueThicknessAdjustment = 0,
+    tongueOffset = 1
 ) =
     let(mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -108,6 +113,13 @@ function mb_block_obj(
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
         tube_hole_size = stud_diameter_res, // TODO XYZ
 
+        tongue_thickness_adj = tongueThicknessAdjustment * mul_mm_to_grid[0],
+        tongue_final = [
+            tongue,
+            tongueThickness * mul_mbu_to_grid[0] + tongue_thickness_adj,
+            tongueHeight * mul_mbu_to_grid[2],
+            tongueOffset * mul_mbu_to_grid[0] - 0.5 * tongue_thickness_adj
+        ],
 
 
         stabilizers_res = [
@@ -138,7 +150,7 @@ function mb_block_obj(
             [],  // 10 - 
             [],  // 11 - 
             [],  // 12 - 
-            [],  // 13 - 
+            tongue_final,  // 13 - Tongue
             [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
@@ -210,6 +222,11 @@ function mb_block_get_stud_height(block_obj) =                      block_obj[14
 function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
 
+// Tongue
+function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
+function mb_block_get_tongue_thickness(block_obj) =                 block_obj[13][1];
+function mb_block_get_tongue_height(block_obj) =                    block_obj[13][2];
+function mb_block_get_tongue_offset(block_obj) =                    block_obj[13][3];
 
 /*
 * TODO Rename or delete
