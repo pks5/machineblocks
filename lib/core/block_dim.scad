@@ -105,7 +105,10 @@ function mb_block_dim_cut_offset(block_dim, cut = false) =
     let(cut_tol = mb_block_dim_cut_tol(block_dim))
     (is_num(cut) ? cut * cut_tol : cut == true ? cut_tol : 0);
 
-function mb_block_dim_height_offset(block_dim, off = 0, cut = false) =
+function mb_block_dim_this_offset(block_dim, off = 0, cut = false) =
+    - off + mb_block_dim_cut_offset(block_dim, cut);
+
+function mb_block_dim_opposite_offset(block_dim, off = 0, cut = false) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim)
     )
