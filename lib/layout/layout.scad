@@ -411,7 +411,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = -(base_cutout_ceiling_offset[0] - top_plate_helpers[1]),
+        bottom = -base_cutout_ceiling_offset[0] + top_plate_helpers[1],
         top = -base_cutout_ceiling_offset[1] + cut_tol
     ) 
     !top_plate_helpers ? undef : [
@@ -566,13 +566,12 @@ function mb_block_part__recess(block_obj) =
         slope = mb_block_get_slope(block_obj),
         slope_pos = mb_slope_filter(slope, 1),
         recess_depth = mb_block_get_recess_depth(block_obj),
-        top_plate_height = mb_block_get_top_plate_height(block_obj),
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        recess_floor_offset = mb_block_recess_floor_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
-        bottom = -(base_cutout_depth + top_plate_height),
-        top_cutout = base_cutout_depth + top_plate_height - socket[0])  
+        bottom = -recess_floor_offset[0]
+    )
     [
         "list",
         [
@@ -585,7 +584,7 @@ function mb_block_part__recess(block_obj) =
                             for(f = [0 : 3])
                                 -rwt[f],
                             0,
-                            cut_tol,//top_cutout
+                            cut_tol,
                         ]],
                         bevel = bevel,
                         slope = slope,

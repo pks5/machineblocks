@@ -50,7 +50,7 @@ function mb_block_obj(
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
 
-        bsa_grd = mb_qc_resolve(
+        base_adj_grd = mb_qc_resolve(
             qc = base_adj, 
             cube = true, 
             default = [
@@ -67,7 +67,7 @@ function mb_block_obj(
         block_dim = mb_block_dim(
             size = size, 
             size_mod = size_mod,
-            base_adj = bsa_grd
+            base_adj = base_adj_grd
         ),
 
         size_res = mb_block_dim_size(block_dim),
@@ -85,18 +85,20 @@ function mb_block_obj(
         * Top Plate, Recess Depth, Base Cutout
         */
         top_plate_height_pref = top_plate_height[0] * mul_mbu_to_grid[2] + top_plate_height[1] * mul_mm_to_grid[2],
+        
         cutout_min_depth = 1 - top_plate_height_pref,
+        cutout_max_depth = cutout_max_depth * mul_mbu_to_grid[2],
+        
         recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : cutout_min_depth),
+        
         recess_depth_final = recess ? (recess_depth != "auto" ? min(recess_depth, recess_depth_max) : recess_depth_max) : 0,
-        recess_walls = mb_qc_resolve(
-            qc = recess_wall_thickness, 
-            cube = true
-        ),
-        
-        cutout_depth_calc = max(0, min(cutout_max_depth * mul_mbu_to_grid[2], mod_size[2] - top_plate_height_pref - recess_depth_final)),
-        
+        cutout_depth_calc = max(0, min(cutout_max_depth, mod_size[2] - top_plate_height_pref - recess_depth_final)),
         top_plate_height_final = mod_size[2] - recess_depth_final - cutout_depth_calc,
         cutout_depth = cutout_type == "none" ? 0 : cutout_depth_calc,
+
+        recess_walls = mb_qc_resolve(
+            qc = recess_wall_thickness
+        ),
 
         /*
         * Base Wall Thickness
@@ -171,7 +173,7 @@ function mb_block_obj(
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
             [false],  // 19 - Inverted
-            [id, debug, 0.01] // 20 - ID, Debug, Cut Tolerance
+            [id, debug, 0.001] // 20 - ID, Debug, Cut Tolerance
         ];
 
 /*
@@ -286,6 +288,12 @@ function mb_block_base_cutout_ceiling_offset(block_obj) =
     [
         mb_block_get_base_cutout_depth(block_obj),
         mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
+    ];
+
+function mb_block_recess_floor_offset(block_obj) = 
+    [
+        mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
+        mb_block_get_recess_depth(block_obj)
     ];
 
 /**
