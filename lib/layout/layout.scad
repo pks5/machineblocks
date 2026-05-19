@@ -16,7 +16,7 @@ function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) =
             for(f = [0 : 3])
                 mb_block_dim_face_edge_expand(
                     block_dim, 
-                    off = outer_adj, 
+                    exp = outer_adj, 
                     adjusted = true, 
                     face = f
                 ),
@@ -44,10 +44,16 @@ function mb_block_part__tongue(block_obj) =
         tongue_height = mb_block_get_tongue_height(block_obj),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
-        bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
+        
+        bottom = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = stud_sink, 
+            adjusted = true, 
+            face = "x-"
+        ),
         top = mb_block_dim_face_edge_expand(
             block_dim, 
-            off = tongue_height, 
+            exp = tongue_height, 
             adjusted = true, 
             face = "z+"
         )
@@ -92,10 +98,15 @@ function mb_block_part__studs(block_obj) =
         stud_height = mb_block_get_stud_height(block_obj),
         stud_rounding = mb_block_get_stud_rounding(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
-        bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
+        bottom = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = stud_sink, 
+            adjusted = true, 
+            face = "x-"
+        ),
         top = mb_block_dim_face_edge_expand(
             block_dim, 
-            off = stud_height, 
+            exp = stud_height, 
             adjusted = true, 
             face = "z+"
         )
@@ -134,7 +145,7 @@ function mb_block_part__tubes(block_obj, axis = "z") =
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
-        base_cutout_ceiling_offset_with_cut = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut = true)
+        base_cutout_ceiling_offset_with_cut = mb_block_base_cutout_ceiling_offset(block_obj, face = "z+", cut = true)
     )
     [
         "list",
@@ -200,8 +211,19 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
-        bottom = is_undef(bottom) ? mb_block_dim_this_offset(block_dim, cut = true) : bottom,
-        top = is_undef(top) ? mb_block_base_cutout_ceiling_offset(block_obj, "z+") : top,
+        
+        bottom = is_undef(bottom) 
+            ? mb_block_dim_this_offset(
+                block_dim, 
+                cut = true
+            ) 
+            : bottom,
+        top = is_undef(top) 
+            ? mb_block_base_cutout_ceiling_offset(
+                block_obj, 
+                face = "z+"
+            ) 
+            : top,
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
 
@@ -284,7 +306,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                             mb_face_has_common(face, f) ? 
                                                 mb_block_dim_face_edge_expand(
                                                     block_dim, 
-                                                    off = outer_adj, 
+                                                    exp = outer_adj, 
                                                     adjusted = true, 
                                                     face = f, 
                                                     cut = true
@@ -302,7 +324,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                             mb_face_has_common(face, f) ? 
                                                 mb_block_dim_face_edge_expand(
                                                     block_dim, 
-                                                    off = outer_adj, 
+                                                    exp = outer_adj, 
                                                     adjusted = true, 
                                                     face = f, 
                                                     cut = true
@@ -327,7 +349,10 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                 mb_face_has_common(face, "y") ? - gap_end_offset + inner_adj : 0,
                                 mb_face_has_common(face, "x") ? - gap_start_offset + inner_adj : 0,
                                 mb_face_has_common(face, "x") ? - gap_end_offset + inner_adj : 0,
-                                mb_block_dim_this_offset(block_dim, cut = true),
+                                mb_block_dim_this_offset(
+                                    block_dim, 
+                                    cut = true
+                                ),
                                 0
                             ]
                         )
@@ -349,8 +374,15 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
-        bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset),
-        top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset)
+
+        bottom = mb_block_dim_this_offset(
+            block_dim, 
+            off = base_clamp_offset
+        ),
+        top = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = base_clamp_height + base_clamp_offset
+        )
     )
     [
         "difference",
@@ -364,8 +396,16 @@ function mb_block_part__base_cutout_clamp(block_obj) =
             mb_block_part__base_cutout(
                 block_obj, 
                 planes = "bottom", 
-                bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset, cut = true), 
-                top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset, cut = true), 
+                bottom = mb_block_dim_this_offset(
+                    block_dim, 
+                    off = base_clamp_offset, 
+                    cut = true
+                ), 
+                top = mb_block_dim_opposite_offset(
+                    block_dim, 
+                    off = base_clamp_height + base_clamp_offset, 
+                    cut = true
+                ), 
                 inner_adj = -base_clamp_thickness
             )
         ]
@@ -385,8 +425,15 @@ function mb_block_part__base_clamp_outer(block_obj) =
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset),
-        top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset)
+        
+        bottom = mb_block_dim_this_offset(
+            block_dim, 
+            off = base_clamp_offset
+        ),
+        top = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = base_clamp_height + base_clamp_offset
+        )
     )
     block_inverted ? 
     //[
@@ -398,7 +445,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
                     for(f = [0 : 3])
                         mb_block_dim_face_edge_expand(
                             block_dim, 
-                            off = base_clamp_thickness, 
+                            exp = base_clamp_thickness, 
                             adjusted = true, 
                             face = f
                         ),
@@ -430,14 +477,31 @@ function mb_block_part__top_plate_helpers(block_obj) =
             [
                 _mb_layout_mask_frame(
                     block_dim = block_dim, 
-                    bottom = mb_block_base_cutout_ceiling_offset(block_obj, "z-", top_plate_helpers_height), 
-                    top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut = true)
+                    bottom = mb_block_base_cutout_ceiling_offset(
+                        block_obj, 
+                        face = "z-", 
+                        off = top_plate_helpers_height
+                    ), 
+                    top = mb_block_base_cutout_ceiling_offset(
+                        block_obj, 
+                        face = "z+", 
+                        cut = true
+                    )
                 ),
                 mb_block_part__base_cutout(
                     block_obj, 
                     planes = "top", 
-                    bottom = mb_block_base_cutout_ceiling_offset(block_obj, "z-", top_plate_helpers_height, cut = true), 
-                    top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut = 2), 
+                    bottom = mb_block_base_cutout_ceiling_offset(
+                        block_obj, 
+                        face = "z-", 
+                        off = top_plate_helpers_height, 
+                        cut = true
+                    ), 
+                    top = mb_block_base_cutout_ceiling_offset(
+                        block_obj, 
+                        face = "z+", 
+                        cut = 2
+                    ), 
                     inner_adj = -top_plate_helpers_thickness
                 )
             ]
@@ -453,7 +517,10 @@ function mb_block_part__stabilizers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        top = mb_block_base_cutout_ceiling_offset(block_obj, "z+")
+        top = mb_block_base_cutout_ceiling_offset(
+            block_obj, 
+            face = "z+"
+        )
     )
     [
         "list",
@@ -535,8 +602,14 @@ function mb_block_part__relief_cut(block_obj) =
         [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 
-                bottom = mb_block_dim_this_offset(block_dim, cut = 1), 
-                top =  mb_block_dim_opposite_offset(block_dim, relief_cut_height), 
+                bottom = mb_block_dim_this_offset(
+                    block_dim, 
+                    cut = 1
+                ), 
+                top =  mb_block_dim_opposite_offset(
+                    block_dim, 
+                    off = relief_cut_height
+                ), 
                 outer_adj = base_clamp_thickness
             ),
             mb_block_part_prismoid(
@@ -545,12 +618,19 @@ function mb_block_part__relief_cut(block_obj) =
                     for(f = [0 : 3])
                         mb_block_dim_face_edge_expand(
                             block_dim, 
-                            off = -relief_cut_thickness, 
+                            exp = -relief_cut_thickness, 
                             adjusted = true, 
                             face = f
                         ),
-                    mb_block_dim_this_offset(block_dim, cut = 2),
-                    mb_block_dim_opposite_offset(block_dim, relief_cut_height, cut = true)
+                    mb_block_dim_this_offset(
+                        block_dim, 
+                        cut = 2
+                    ),
+                    mb_block_dim_opposite_offset(
+                        block_dim, 
+                        off = relief_cut_height, 
+                        cut = true
+                    )
                 ]],
                 bevel = bevel,
                 slope = slope,
@@ -675,7 +755,10 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = mb_block_dim_opposite_offset(block_dim, base_cutout_min_depth)
+        top = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = base_cutout_min_depth
+        )
     )
     mb_block_part_prismoid(
         block_dim = block_dim, 

@@ -120,9 +120,9 @@ function mb_block_dim_opposite_offset(block_dim, off = 0, adjusted = false, face
     )
     (adjusted ? -base_adj[face == 4 ? 5 : 4] : 0) - (mod_size[2] - off) + mb_block_dim_cut_offset(block_dim, cut);
 
-function mb_block_dim_face_edge_expand(block_dim, off = 0, adjusted = false, face = "x-", cut = false) =
+function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", cut = false) =
     let(
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    (adjusted ? base_adj[face < 6 ? face : 0] : 0) + off + mb_block_dim_cut_offset(block_dim, cut);
+    (adjusted ? base_adj[face < 6 ? face : 0] : 0) + exp + mb_block_dim_cut_offset(block_dim, cut);
