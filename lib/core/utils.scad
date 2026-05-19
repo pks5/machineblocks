@@ -591,12 +591,10 @@ function mb_slope_shrink(slope, shrink) =
         sign(slope[3]) * (abs(slope[3]) + shrink[3])
     ];
 
-function mb_slope_filter(slope, filter = 1) = 
+function mb_slope_filter(slope, filter = 1, res = 0) = 
     [
-        sign(slope[0]) == filter ? slope[0] : 0,
-        sign(slope[1]) == filter ? slope[1] : 0,
-        sign(slope[2]) == filter ? slope[2] : 0,
-        sign(slope[3]) == filter ? slope[3] : 0
+        for(f = [0 : 3])
+            sign(slope[f]) == filter ? (res < 0 ? -abs(slope[f]) : res > 0 ? abs(slope[f]) : slope[f]) : 0
     ];
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =

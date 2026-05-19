@@ -9,6 +9,7 @@ function mb_block_obj(
     base_adj = undef,
     bevel = undef,
     slope = undef,
+    inverted = false,
     grid_cfg = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
     scale = 1,
     top_plate_height = [1, -0.6], // [Height (mbu), Adjustment (mm)]
@@ -172,8 +173,8 @@ function mb_block_obj(
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
-            [true],  // 19 - Inverted
-            [id, debug, mb_block_dim_cut_tol(block_dim)] // 20 - ID, Debug, Cut Tolerance
+            [inverted],  // 19 - Inverted
+            [id, debug] // 20 - ID, Debug
         ];
 
 /*
@@ -188,7 +189,6 @@ function mb_block_get_size_adjusted(block_obj) =                    block_obj[0]
 function mb_block_get_center(block_obj) =                           block_obj[0][3];
 
 function mb_block_get_id(block_obj) =                               block_obj[20][0];
-function mb_block_get_cut_tolerance(block_obj) =                    block_obj[20][2];
 
 function mb_block_get_bevel(block_obj) =                            block_obj[1][0];
 function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
