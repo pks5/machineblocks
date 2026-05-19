@@ -102,39 +102,24 @@ function mb_block_part__studs(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         stud_range = mb_block_stud_range(block_obj),
+        stud_rounding = mb_block_get_stud_rounding(block_obj)
+
         
-        stud_height = mb_block_get_stud_height(block_obj),
-        stud_rounding = mb_block_get_stud_rounding(block_obj),
-        stud_sink = mb_block_get_stud_sink(block_obj),
-        bottom = mb_block_dim_opposite_offset(
-            block_dim, 
-            off = stud_sink, 
-            adjusted = true, 
-            face = "z-"
-        ),
-        top = mb_block_dim_face_edge_expand(
-            block_dim, 
-            exp = stud_height, 
-            adjusted = true, 
-            face = "z+"
-        )
     )
     [
         "list",
         [
             for(x = stud_range[0])
                 for(y = stud_range[1])
-                    if(mb_block_stud_render(block_obj, x, y))
+                    let(render = mb_block_stud_render(block_obj, x, y))
+                    if(render[0])
                         mb_block_part_tube(
                             block_dim = block_dim,
                             radius = mb_block_stud_radius(block_obj, x, y),
                             rounding_radius = stud_rounding,
                             axis = "z",
-                            expand = [
-                                bottom,
-                                top
-                            ],
-                            offset = mb_block_stud_offset(block_obj, x, y)
+                            expand = render[2],
+                            offset = render[1]
                         )
         ]
     ];

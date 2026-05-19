@@ -326,7 +326,8 @@ module mb_block(
         recess_wall_thickness = recessWallThickness,
         recess_wall_gaps = recessWallGaps,
         baseWallGaps = baseWallGaps,
-        relief_cut = baseReliefCut
+        relief_cut = baseReliefCut,
+        studPadding = studPadding
     );
     
     mbuToMm = scale * unitMbu;

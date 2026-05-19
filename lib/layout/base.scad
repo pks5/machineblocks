@@ -32,6 +32,9 @@ module mb_base_cutout(
             mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
         }
     }
+
+    surface_shape = mb_block_get_surface_shape(block_obj);
+    echo (ss = surface_shape, s = mb_slope_filter(mb_block_get_slope(block_obj), 1));
 }
 
 /*

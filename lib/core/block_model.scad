@@ -1,6 +1,7 @@
 use <geometry.scad>;
 use <utils.scad>;
 use <block_dim.scad>;
+use <../bevel.scad>;
 
 function mb_block_obj(
     size, 
@@ -23,6 +24,7 @@ function mb_block_obj(
     recess_depth = "auto",
     recess_wall_thickness = 0.333, 
     recess_wall_gaps = [],
+    recessStudPadding = 0.2,
     clamp = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
     clamp_outer = true,
     studDiameter = 3,
@@ -31,6 +33,8 @@ function mb_block_obj(
     studHeight = 1,
     studHeightAdjustment = 0,
     studSink = 0.25,
+    studMaxOverhang = 0,
+    studPadding = 0.2,
     relief_cut = false,
     relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
     id = "[Block]",
@@ -146,7 +150,13 @@ function mb_block_obj(
             stabilizers[4]                       // Expansion Each
         ],
 
-        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0]
+        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
+
+        bevel = mb_bevel_resolve(bevel),
+        slope = mb_qc_resolve(slope, false),
+        studPadding = mb_qc_resolve(studPadding, false),
+        surface_shape = _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, studPadding),
+        recess_surface_shape = _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_walls, recessStudPadding)
     )
         [
             [
@@ -155,7 +165,7 @@ function mb_block_obj(
                 adj_size,
                 center
             ], // 0 - Original Size / Mod Size
-            [mb_bevel_resolve(bevel), mb_qc_resolve(slope, false)], // 1 - Bevel / Slope
+            [bevel, slope], // 1 - Bevel / Slope
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
@@ -164,11 +174,11 @@ function mb_block_obj(
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, relief_cut, relief_cut_final, recess_wall_gaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
-            [],  // 10 - 
+            [surface_shape, recess_surface_shape],  // 10 - 
             [],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
-            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final],  // 14 - 
+            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final, stud_diameter_res],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
@@ -242,7 +252,7 @@ function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
 
 // Studs
-function mb_block_get_stud_diameter(block_obj) =                    block_obj[14][0];
+function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
 function mb_block_get_stud_height(block_obj) =                      block_obj[14][1];
 function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
@@ -252,6 +262,10 @@ function mb_block_has_tongue(block_obj) =                           block_obj[13
 function mb_block_get_tongue_thickness(block_obj) =                 block_obj[13][1];
 function mb_block_get_tongue_height(block_obj) =                    block_obj[13][2];
 function mb_block_get_tongue_offset(block_obj) =                    block_obj[13][3];
+
+// Shapes
+function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
+function mb_block_get_recess_surface_shape(block_obj) =             block_obj[10][1];
 
 /*
 * TODO Rename or delete
@@ -332,7 +346,47 @@ function mb_block_stud_range(block_obj) =
     ];
 
 function mb_block_stud_render(block_obj, x, y) =
-    true;
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        surface_shape = mb_block_get_surface_shape(block_obj),
+        recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
+        stud_offset = mb_block_stud_offset(block_obj, x, y),
+        stud_diameter = mb_block_get_stud_diameter(block_obj, false),
+        stud_height = mb_block_get_stud_height(block_obj),
+        stud_sink = mb_block_get_stud_sink(block_obj),
+        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter),
+        in_recess = mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter),
+        bottom = in_recess 
+        ? mb_block_recess_floor_offset(
+            block_obj,
+            off = stud_sink,
+            face = "z-"
+        )
+        : mb_block_dim_opposite_offset(
+            block_dim, 
+            off = stud_sink, 
+            adjusted = true, 
+            face = "z-"
+        ),
+        top = in_recess ? 
+        mb_block_recess_floor_offset(
+            block_obj,
+            off = stud_height,
+            face = "z+"
+        )
+        : mb_block_dim_face_edge_expand(
+            block_dim, 
+            exp = stud_height, 
+            adjusted = true, 
+            face = "z+"
+        )
+        
+    )
+    [
+        render_stud,
+        stud_offset,
+        [bottom, top]  
+    ];
 
 function mb_block_stud_offset(block_obj, x, y) = //TODO
     let(
@@ -613,7 +667,30 @@ function mb_block_pos_to_offset(block_obj, pos) =
     let(center = mb_block_get_center(block_obj))
         [is_undef(pos[0]) ? 0 : pos[0] - center[0], is_undef(pos[1]) ? 0 : pos[1] - center[1], is_undef(pos[2]) ? 0 : pos[2] - center[2]];
         
+/**
+* ---------------
+* Private Helpers
+* ---------------
+*/ 
 
+function _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, stud_padding) =
+    let(
+        exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(stud_padding, -1)),
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1]
+    )
+    mb_prismoid_plane_expand(bevel_fil, 0, exp);
+
+function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, recess_stud_padding) =
+    let(
+        pad = mb_array_add(recess_wall_thickness, recess_stud_padding),
+        exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1]
+    )
+    mb_prismoid_plane_expand(bevel_fil, 0, exp);
 
 /*
 * -------------
