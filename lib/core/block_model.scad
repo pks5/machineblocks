@@ -156,7 +156,8 @@ function mb_block_obj(
         slope = mb_qc_resolve(slope, false),
         studPadding = mb_qc_resolve(studPadding, false),
         surface_shape = _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, studPadding),
-        recess_surface_shape = _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_walls, recessStudPadding)
+        recess_surface_shape = _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_walls, recessStudPadding),
+        recess_inverse_shape = _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_walls, studPadding)
     )
         [
             [
@@ -174,7 +175,7 @@ function mb_block_obj(
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, relief_cut, relief_cut_final, recess_wall_gaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
-            [surface_shape, recess_surface_shape],  // 10 - 
+            [surface_shape, recess_surface_shape, recess_inverse_shape],  // 10 - 
             [],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
@@ -266,6 +267,7 @@ function mb_block_get_tongue_offset(block_obj) =                    block_obj[13
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
 function mb_block_get_recess_surface_shape(block_obj) =             block_obj[10][1];
+function mb_block_get_recess_inverse_shape(block_obj) =             block_obj[10][2];
 
 /*
 * TODO Rename or delete
@@ -350,12 +352,14 @@ function mb_block_stud_render(block_obj, x, y) =
         block_dim = mb_block_get_dim(block_obj),
         surface_shape = mb_block_get_surface_shape(block_obj),
         recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
+        recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
         stud_offset = mb_block_stud_offset(block_obj, x, y),
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_height = mb_block_get_stud_height(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
-        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter),
-        in_recess = mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter),
+        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter, overhang = 0.2),
+        in_recess = mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter, overhang = 0.2),
+        on_recess_wall = !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
         bottom = in_recess 
         ? mb_block_recess_floor_offset(
             block_obj,
@@ -383,7 +387,7 @@ function mb_block_stud_render(block_obj, x, y) =
         
     )
     [
-        render_stud,
+        render_stud && (in_recess || on_recess_wall),
         stud_offset,
         [bottom, top]  
     ];
@@ -685,6 +689,16 @@ function _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, stud
 function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, recess_stud_padding) =
     let(
         pad = mb_array_add(recess_wall_thickness, recess_stud_padding),
+        exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
+        bevel_res = bevel_matrix[0],
+        bevel_fil = bevel_matrix[1]
+    )
+    mb_prismoid_plane_expand(bevel_fil, 0, exp);
+
+function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, stud_padding) =
+    let(
+        pad = mb_array_add(mb_array_sub_simple(recess_wall_thickness, stud_padding), 0.0125),
         exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
         bevel_res = bevel_matrix[0],
