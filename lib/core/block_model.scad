@@ -284,13 +284,17 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
-function mb_block_base_cutout_ceiling_offset(block_obj) = 
-    [
-        mb_block_get_base_cutout_depth(block_obj),
-        mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
-    ];
+function mb_block_base_cutout_ceiling_offset(block_obj, face = undef, off = 0) = 
+    let(
+        face = mb_face_to_int(face),
+        offs = [
+            mb_block_get_base_cutout_depth(block_obj),
+            mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
+        ]
+    )
+    is_undef(face) ? offs : (face == 4 ? -(offs[0] - off) : face == 5 ? -(offs[1] - off) : undef);
 
-function mb_block_recess_floor_offset(block_obj, face = undef) =
+function mb_block_recess_floor_offset(block_obj, face = undef, off = 0) =
     let(
         face = mb_face_to_int(face),
         offs = [
@@ -298,7 +302,7 @@ function mb_block_recess_floor_offset(block_obj, face = undef) =
             mb_block_get_recess_depth(block_obj)
         ]
     )
-    is_undef(face) ? offs : (face == 4 ? -offs[0] : face == 5 ? -offs[1] : undef);
+    is_undef(face) ? offs : (face == 4 ? -(offs[0] - off) : face == 5 ? -(offs[1] - off) : undef);
 
 /**
 * -----

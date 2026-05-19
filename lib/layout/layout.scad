@@ -187,7 +187,6 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
@@ -195,7 +194,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         bottom = is_undef(bottom) ? cut_tol : bottom,
-        top = is_undef(top) ? -base_cutout_ceiling_offset[1] : top,
+        top = is_undef(top) ? mb_block_base_cutout_ceiling_offset(block_obj, "z+") : top,
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
 
@@ -403,12 +402,10 @@ function mb_block_part__top_plate_helpers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
-        
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = -base_cutout_ceiling_offset[0] + top_plate_helpers[1],
-        top = -base_cutout_ceiling_offset[1] + cut_tol
+        bottom = mb_block_base_cutout_ceiling_offset(block_obj, "z-", top_plate_helpers[1]),
+        top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut_tol)
     ) 
     !top_plate_helpers ? undef : [
         "difference",
@@ -561,6 +558,7 @@ function mb_block_part__recess(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
+        
         bottom = mb_block_recess_floor_offset(block_obj, "z-"),
         exp_top = mb_block_dim_face_edge_expand(block_dim, "z+", cut_tol)
     )
