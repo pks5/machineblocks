@@ -172,7 +172,7 @@ function mb_block_obj(
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
-            [false],  // 19 - Inverted
+            [true],  // 19 - Inverted
             [id, debug, mb_block_dim_cut_tol(block_dim)] // 20 - ID, Debug, Cut Tolerance
         ];
 

@@ -238,7 +238,6 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
@@ -357,7 +356,6 @@ function mb_block_part__base_clamp_outer(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         block_inverted = mb_block_get_inverted(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
@@ -372,7 +370,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        base_adj[f] + clamp[0],
+                        mb_block_dim_face_edge_expand(block_dim, f, clamp[0], adjusted = true),
                     bottom,
                     top
                 ]],
