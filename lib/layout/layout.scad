@@ -9,12 +9,12 @@ use <../core/block_part.scad>;
 * -------
 */
 
-function _mb_layout_mask_frame(block_dim, bottom, top, outer_adjust = 0) = 
+function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) = 
     mb_block_part_prismoid(
         block_dim = block_dim, 
         expand = [[
             for(f = [0 : 3])
-                mb_block_dim_face_edge_expand(block_dim, f, outer_adjust, adjusted = true),
+                mb_block_dim_face_edge_expand(block_dim, f, outer_adj, adjusted = true),
             bottom,
             top
         ]]
@@ -31,8 +31,6 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 function mb_block_part__tongue(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope = mb_block_get_slope(block_obj),
         slope_pos = mb_slope_filter(slope, 1),
@@ -41,7 +39,7 @@ function mb_block_part__tongue(block_obj) =
         tongue_height = mb_block_get_tongue_height(block_obj),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
-        bottom = - (mod_size[2] + base_adj[5]) + stud_sink,
+        bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
         top = mb_block_dim_face_edge_expand(block_dim, "z+", tongue_height, adjusted = true)
     )
     has_tongue ? 
@@ -79,13 +77,13 @@ function mb_block_part__tongue(block_obj) =
 function mb_block_part__studs(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         stud_range = mb_block_stud_range(block_obj),
         
         stud_height = mb_block_get_stud_height(block_obj),
         stud_rounding = mb_block_get_stud_rounding(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
+        bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
+        top = mb_block_dim_face_edge_expand(block_dim, "z+", stud_height, adjusted = true)
     )
     [
         "list",
@@ -99,8 +97,8 @@ function mb_block_part__studs(block_obj) =
                             rounding_radius = stud_rounding,
                             axis = "z",
                             expand = [
-                                - (mod_size[2] + base_adj[5]) + stud_sink,
-                                mb_block_dim_face_edge_expand(block_dim, "z+", stud_height, adjusted = true)
+                                bottom,
+                                top
                             ],
                             offset = mb_block_stud_offset(block_obj, x, y)
                         )
@@ -334,7 +332,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 block_dim = block_dim, 
                 bottom = bottom, 
                 top = top, 
-                outer_adjust = base_clamp_thickness
+                outer_adj = base_clamp_thickness
             ),
             mb_block_part__base_cutout(
                 block_obj, 
@@ -507,7 +505,7 @@ function mb_block_part__relief_cut(block_obj) =
                 block_dim = block_dim, 
                 bottom = mb_block_dim_this_offset(block_dim, cut = 1), 
                 top =  mb_block_dim_opposite_offset(block_dim, relief_cut_height), 
-                outer_adjust = base_clamp_thickness
+                outer_adj = base_clamp_thickness
             ),
             mb_block_part_prismoid(
                 block_dim = block_dim, 
