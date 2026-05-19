@@ -14,7 +14,12 @@ function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) =
         block_dim = block_dim, 
         expand = [[
             for(f = [0 : 3])
-                mb_block_dim_face_edge_expand(block_dim, f, outer_adj, adjusted = true),
+                mb_block_dim_face_edge_expand(
+                    block_dim, 
+                    off = outer_adj, 
+                    adjusted = true, 
+                    face = f
+                ),
             bottom,
             top
         ]]
@@ -40,7 +45,12 @@ function mb_block_part__tongue(block_obj) =
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
         bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
-        top = mb_block_dim_face_edge_expand(block_dim, "z+", tongue_height, adjusted = true)
+        top = mb_block_dim_face_edge_expand(
+            block_dim, 
+            off = tongue_height, 
+            adjusted = true, 
+            face = "z+"
+        )
     )
     has_tongue ? 
     [
@@ -83,7 +93,12 @@ function mb_block_part__studs(block_obj) =
         stud_rounding = mb_block_get_stud_rounding(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
         bottom = mb_block_dim_opposite_offset(block_dim, stud_sink, adjusted = true, face = "x-"),
-        top = mb_block_dim_face_edge_expand(block_dim, "z+", stud_height, adjusted = true)
+        top = mb_block_dim_face_edge_expand(
+            block_dim, 
+            off = stud_height, 
+            adjusted = true, 
+            face = "z+"
+        )
     )
     [
         "list",
@@ -267,7 +282,13 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     value = [
                                         for(f = [0 : 3])
                                             mb_face_has_common(face, f) ? 
-                                                mb_block_dim_face_edge_expand(block_dim, f, outer_adj, adjusted = true, cut = true) : 
+                                                mb_block_dim_face_edge_expand(
+                                                    block_dim, 
+                                                    off = outer_adj, 
+                                                    adjusted = true, 
+                                                    face = f, 
+                                                    cut = true
+                                                ) : 
                                                 -wall_thickness + slope_neg[f] + inner_adj,
                                         bottom,
                                         top
@@ -279,7 +300,13 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     value = [
                                         for(f = [0 : 3])
                                             mb_face_has_common(face, f) ? 
-                                                mb_block_dim_face_edge_expand(block_dim, f, outer_adj, adjusted = true, cut = true) : 
+                                                mb_block_dim_face_edge_expand(
+                                                    block_dim, 
+                                                    off = outer_adj, 
+                                                    adjusted = true, 
+                                                    face = f, 
+                                                    cut = true
+                                                ) : 
                                                 slope_neg[f] + 
                                                     (slope_pos[f] <= wall_thickness ? -(wall_thickness - slope_pos[f]) : 0) + 
                                                     inner_adj,
@@ -369,7 +396,12 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(block_dim, f, base_clamp_thickness, adjusted = true),
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            off = base_clamp_thickness, 
+                            adjusted = true, 
+                            face = f
+                        ),
                     bottom,
                     top
                 ]],
@@ -511,7 +543,12 @@ function mb_block_part__relief_cut(block_obj) =
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(block_dim, f, -relief_cut_thickness, adjusted = true),
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            off = -relief_cut_thickness, 
+                            adjusted = true, 
+                            face = f
+                        ),
                     mb_block_dim_this_offset(block_dim, cut = 2),
                     mb_block_dim_opposite_offset(block_dim, relief_cut_height, cut = true)
                 ]],
@@ -541,7 +578,12 @@ function mb_block_part__recess(block_obj) =
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
         
         bottom = mb_block_recess_floor_offset(block_obj, "z-"),
-        exp_top = mb_block_dim_face_edge_expand(block_dim, "z+", adjusted = true, cut = true)
+        exp_top = mb_block_dim_face_edge_expand(
+            block_dim, 
+            adjusted = true, 
+            face = "z+", 
+            cut = true
+        )
     )
     mb_block_has_recess(block_obj) 
     ? [
