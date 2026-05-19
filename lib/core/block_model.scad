@@ -290,11 +290,15 @@ function mb_block_base_cutout_ceiling_offset(block_obj) =
         mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
     ];
 
-function mb_block_recess_floor_offset(block_obj) = 
-    [
-        mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
-        mb_block_get_recess_depth(block_obj)
-    ];
+function mb_block_recess_floor_offset(block_obj, face = undef) =
+    let(
+        face = mb_face_to_int(face),
+        offs = [
+            mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
+            mb_block_get_recess_depth(block_obj)
+        ]
+    )
+    is_undef(face) ? offs : (face == 4 ? -offs[0] : face == 5 ? -offs[1] : undef);
 
 /**
 * -----

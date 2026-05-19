@@ -335,7 +335,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = -clamp[2],
-        top = -mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
+        top = mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
     )
     [
         "difference",
@@ -372,7 +372,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         bottom = -clamp[2],
-        top = -mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
+        top = mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
     )
     block_inverted ? 
     //[
@@ -517,7 +517,7 @@ function mb_block_part__relief_cut(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = cut_tol,
-        top = -mb_block_dim_height_offset(block_dim, relief_cut[1])
+        top = mb_block_dim_height_offset(block_dim, relief_cut[1])
     ) 
     [
         "difference",
@@ -534,7 +534,7 @@ function mb_block_part__relief_cut(block_obj) =
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        base_adj[f] - relief_cut[0],
+                        mb_block_dim_face_edge_expand(block_dim, f, -relief_cut[0]),
                     bottom + cut_tol,
                     top + cut_tol
                 ]],
@@ -554,17 +554,15 @@ function mb_block_part__recess(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
-        base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
         slope_pos = mb_slope_filter(slope, 1),
         recess_depth = mb_block_get_recess_depth(block_obj),
-        recess_floor_offset = mb_block_recess_floor_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
-        bottom = -recess_floor_offset[0],
-        top = base_adj[5]
+        bottom = mb_block_recess_floor_offset(block_obj, "z-"),
+        exp_top = mb_block_dim_face_edge_expand(block_dim, "z+", cut_tol)
     )
     [
         "list",
@@ -578,7 +576,7 @@ function mb_block_part__recess(block_obj) =
                             for(f = [0 : 3])
                                 -rwt[f],
                             0,
-                            top + cut_tol,
+                            exp_top,
                         ]],
                         bevel = bevel,
                         slope = slope,
@@ -593,7 +591,7 @@ function mb_block_part__recess(block_obj) =
                             0,
                             0,
                             bottom,
-                            top + cut_tol
+                            exp_top
                         ]
                     )
                 ]
@@ -617,7 +615,7 @@ function mb_block_part__recess(block_obj) =
                                     for(f = [0 : 3])
                                         mb_face_has_common(face, f) ? cut_tol : -rwt[f],
                                     0,
-                                    top + cut_tol
+                                    exp_top
                                 ]],
                                 bevel = bevel,
                                 slope = slope,
@@ -632,7 +630,7 @@ function mb_block_part__recess(block_obj) =
                                     mb_face_has_common(face, "x") ? - gap_start_offset : 0,
                                     mb_face_has_common(face, "x") ? - gap_end_offset : 0,
                                     bottom,
-                                    top + cut_tol
+                                    exp_top
                                 ]
                             )
                         ]
@@ -654,7 +652,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = -mb_block_dim_height_offset(block_dim, base_cutout_min_depth)
+        top = mb_block_dim_height_offset(block_dim, base_cutout_min_depth)
     )
     mb_block_part_prismoid(
         block_dim = block_dim, 

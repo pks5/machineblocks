@@ -101,4 +101,11 @@ function mb_block_dim_height_offset(block_dim, off = 0) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim)
     )
-    mod_size[2] - off;
+    - (mod_size[2] - off);
+
+function mb_block_dim_face_edge_expand(block_dim, face, off = 0) =
+    let(
+        face = mb_face_to_int(face = face),
+        base_adj = mb_block_dim_base_adj(block_dim)
+    )
+    base_adj[face] + off;

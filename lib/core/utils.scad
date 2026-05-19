@@ -867,6 +867,7 @@ function mb_side_to_axis(side) = floor(mb_side_to_int(side) / 2);
 function mb_side_to_axis_face(side) = mb_side_to_int(side) % 2;
 
 function mb_face_to_int(face) =
+    is_undef(face) ? undef :
     is_string(face) ? (
     face == "x-" ? 0 :
     face == "x+" ? 1 :
