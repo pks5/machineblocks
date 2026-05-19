@@ -504,7 +504,7 @@ function mb_block_part__relief_cut(block_obj) =
         relief_cut = mb_block_get_relief_cut_dim(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        bottom = cut_tol,
+        bottom = mb_block_dim_this_offset(block_dim, cut = true),
         top = mb_block_dim_opposite_offset(block_dim, relief_cut[1])
     ) 
     [
