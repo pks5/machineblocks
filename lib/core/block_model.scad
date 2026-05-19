@@ -209,7 +209,7 @@ function mb_block_has_top_plate_helpers(block_obj) =                block_obj[9]
 function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[9][1][0];
 function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[9][1][1];
 
-function mb_block_get_recess(block_obj) =                           block_obj[8][0];
+function mb_block_has_recess(block_obj) =                           block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
 function mb_block_get_recess_depth(block_obj) =                     block_obj[4][2];
 function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][4];
@@ -220,8 +220,9 @@ function mb_block_get_grid_cfg(block_obj) =                         block_obj[7]
 
 function mb_block_get_scale(block_obj) =                            block_obj[7][1];
 
-function mb_block_get_relief_cut(block_obj) =                       block_obj[8][2];
-function mb_block_get_relief_cut_dim(block_obj) =                   block_obj[8][3];
+function mb_block_has_relief_cut(block_obj) =                       block_obj[8][2];
+function mb_block_get_relief_cut_thickness(block_obj) =             block_obj[8][3][0];
+function mb_block_get_relief_cut_height(block_obj) =                block_obj[8][3][1];
 
 function mb_block_get_clamp(block_obj) =                            block_obj[4][4];
 

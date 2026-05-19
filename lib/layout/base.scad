@@ -113,17 +113,13 @@ module mb_base(
             /*
             * Relief Cut
             */
-            if(mb_block_get_relief_cut(block_obj)){
-                mb_block_part(block_obj, part = mb_block_part__relief_cut(block_obj), debug = debug);
-            }
-
+            mb_block_part(block_obj, part = mb_block_part__relief_cut(block_obj), debug = debug);
+            
             /*
             * Recess
             */
-            if(mb_block_get_recess(block_obj)){
-                mb_block_part(block_obj, part = mb_block_part__recess(block_obj), debug = debug);
-            }
-
+            mb_block_part(block_obj, part = mb_block_part__recess(block_obj), debug = debug);
+            
 
             /*
             * Connectors

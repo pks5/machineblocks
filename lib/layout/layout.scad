@@ -407,7 +407,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                     planes = "top", 
                     bottom = mb_block_base_cutout_ceiling_offset(block_obj, "z-", top_plate_helpers_height, cut = true), 
                     top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut = 2), 
-                    inner_adj = - top_plate_helpers_thickness
+                    inner_adj = -top_plate_helpers_thickness
                 )
             ]
         ] 
@@ -494,32 +494,35 @@ function mb_block_part__relief_cut(block_obj) =
         socket = mb_block_get_slope_socket(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
-        relief_cut = mb_block_get_relief_cut_dim(block_obj),
+        relief_cut_thickness = mb_block_get_relief_cut_thickness(block_obj),
+        relief_cut_height = mb_block_get_relief_cut_height(block_obj),
         clamp = mb_block_get_clamp(block_obj)
     ) 
-    [
+    mb_block_has_relief_cut(block_obj) 
+    ? [
         "difference",
         [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 
                 bottom = mb_block_dim_this_offset(block_dim, cut = 1), 
-                top =  mb_block_dim_opposite_offset(block_dim, relief_cut[1]), 
+                top =  mb_block_dim_opposite_offset(block_dim, relief_cut_height), 
                 outer_adjust = clamp[0]
             ),
             mb_block_part_prismoid(
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(block_dim, f, -relief_cut[0], adjusted = true),
+                        mb_block_dim_face_edge_expand(block_dim, f, -relief_cut_thickness, adjusted = true),
                     mb_block_dim_this_offset(block_dim, cut = 2),
-                    mb_block_dim_opposite_offset(block_dim, relief_cut[1], cut = true)
+                    mb_block_dim_opposite_offset(block_dim, relief_cut_height, cut = true)
                 ]],
                 bevel = bevel,
                 slope = slope,
                 socket = socket
             )
         ]
-    ];
+    ]
+    : undef;
 
 /**
 * ------
@@ -541,7 +544,8 @@ function mb_block_part__recess(block_obj) =
         bottom = mb_block_recess_floor_offset(block_obj, "z-"),
         exp_top = mb_block_dim_face_edge_expand(block_dim, "z+", adjusted = true, cut = true)
     )
-    [
+    mb_block_has_recess(block_obj) 
+    ? [
         "list",
         [
             [
@@ -613,7 +617,8 @@ function mb_block_part__recess(block_obj) =
                         ]
                     ]
         ]
-    ];
+    ]
+    : undef;
 
 /**
 * ----------------
