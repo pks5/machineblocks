@@ -334,7 +334,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = -clamp[2],
-        top = mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
+        top = mb_block_dim_height_offset(block_dim, "z+", clamp[1] + clamp[2])
     )
     [
         "difference",
@@ -371,7 +371,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         bottom = -clamp[2],
-        top = mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
+        top = mb_block_dim_height_offset(block_dim, "z+", clamp[1] + clamp[2])
     )
     block_inverted ? 
     //[
@@ -436,8 +436,7 @@ function mb_block_part__stabilizers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
-        top = -base_cutout_ceiling_offset[1]
+        top = mb_block_base_cutout_ceiling_offset(block_obj, "z+")
     )
     [
         "list",
@@ -514,7 +513,7 @@ function mb_block_part__relief_cut(block_obj) =
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = cut_tol,
-        top = mb_block_dim_height_offset(block_dim, relief_cut[1])
+        top = mb_block_dim_height_offset(block_dim, "z+", relief_cut[1])
     ) 
     [
         "difference",
@@ -650,7 +649,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = mb_block_dim_height_offset(block_dim, base_cutout_min_depth)
+        top = mb_block_dim_height_offset(block_dim, "z+", base_cutout_min_depth)
     )
     mb_block_part_prismoid(
         block_dim = block_dim, 
