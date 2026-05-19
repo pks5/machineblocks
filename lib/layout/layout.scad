@@ -36,27 +36,13 @@ function _mb_layout_plane_value(planes, value, plane = "all") =
 function mb_block_part__tongue(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope = mb_block_get_slope(block_obj),
         slope_pos = mb_slope_filter(slope, 1),
         has_tongue = mb_block_has_tongue(block_obj),
         tongue_offset = mb_block_get_tongue_offset(block_obj),
         tongue_height = mb_block_get_tongue_height(block_obj),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
-        stud_sink = mb_block_get_stud_sink(block_obj),
-        
-        bottom = mb_block_dim_opposite_offset(
-            block_dim, 
-            off = stud_sink, 
-            adjusted = true, 
-            face = "x-"
-        ),
-        top = mb_block_dim_face_edge_expand(
-            block_dim, 
-            exp = tongue_height, 
-            adjusted = true, 
-            face = "z+"
-        )
+        stud_sink = mb_block_get_stud_sink(block_obj)
     )
     has_tongue ? 
     [
@@ -67,8 +53,18 @@ function mb_block_part__tongue(block_obj) =
                 expand = [[
                     for(f = [0 : 3])
                         -slope_pos[f] - tongue_offset,
-                    bottom,
-                    top
+                    mb_block_dim_opposite_offset(
+                        block_dim, 
+                        off = stud_sink, 
+                        adjusted = true, 
+                        face = "z-"
+                    ),
+                    mb_block_dim_face_edge_expand(
+                        block_dim, 
+                        exp = tongue_height, 
+                        adjusted = true, 
+                        face = "z+"
+                    )
                 ]],
                 bevel = mb_block_get_bevel(block_obj)
             ),
@@ -77,8 +73,20 @@ function mb_block_part__tongue(block_obj) =
                 expand = [[
                     for(f = [0 : 3])
                         -slope_pos[f] - tongue_offset - tongue_thickness,
-                    bottom + cut_tol,
-                    top + cut_tol
+                    mb_block_dim_opposite_offset(
+                        block_dim, 
+                        off = stud_sink, 
+                        adjusted = true, 
+                        face = "z-",
+                        cut = true
+                    ),
+                    mb_block_dim_face_edge_expand(
+                        block_dim, 
+                        exp = tongue_height, 
+                        adjusted = true, 
+                        face = "z+",
+                        cut = true
+                    )
                 ]],
                 bevel = mb_block_get_bevel(block_obj)
             )
@@ -102,7 +110,7 @@ function mb_block_part__studs(block_obj) =
             block_dim, 
             off = stud_sink, 
             adjusted = true, 
-            face = "x-"
+            face = "z-"
         ),
         top = mb_block_dim_face_edge_expand(
             block_dim, 
@@ -423,7 +431,6 @@ function mb_block_part__base_clamp_outer(block_obj) =
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         
         bottom = mb_block_dim_this_offset(
@@ -436,29 +443,22 @@ function mb_block_part__base_clamp_outer(block_obj) =
         )
     )
     block_inverted ? 
-    //[
-    //    "difference",
-    //    [
-            mb_block_part_prismoid(
-                block_dim = block_dim, 
-                expand = [[
-                    for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(
-                            block_dim, 
-                            exp = base_clamp_thickness, 
-                            adjusted = true, 
-                            face = f
-                        ),
-                    bottom,
-                    top
-                ]],
-                bevel = mb_block_get_bevel(block_obj)
-            )
-            //for(wall_gap = wall_gaps)
-            //    mb_block_part__base_wall_gaps(block_obj, "bottom", bottom + cut_tol, top + cut_tol, wall_gap, -base_clamp_thickness)
-    //    ]
-    //] 
-    : undef;
+        mb_block_part_prismoid(
+            block_dim = block_dim, 
+            expand = [[
+                for(f = [0 : 3])
+                    mb_block_dim_face_edge_expand(
+                        block_dim, 
+                        exp = base_clamp_thickness, 
+                        adjusted = true, 
+                        face = f
+                    ),
+                bottom,
+                top
+            ]],
+            bevel = mb_block_get_bevel(block_obj)
+        )
+        : undef;
 
 /**
 * -----------------
@@ -516,10 +516,10 @@ function mb_block_part__top_plate_helpers(block_obj) =
 function mb_block_part__stabilizers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
         top = mb_block_base_cutout_ceiling_offset(
             block_obj, 
-            face = "z+"
+            face = "z+",
+            cut = true
         )
     )
     [
@@ -546,13 +546,13 @@ function mb_block_part__stabilizers(block_obj) =
                                         size = [
                                             seg_size[0][0], 
                                             seg_size[0][1], 
-                                            seg_size[0][2] + cut_tol
+                                            seg_size[0][2] + mb_block_dim_cut_offset(block_dim, cut = true)
                                         ],
                                         expand = [
                                             for(f = [0 : 3])
                                                 seg_expand[f],
                                             "auto", 
-                                            top + cut_tol
+                                            top
                                         ],
                                         offset = seg_offset
                                     ),
@@ -562,13 +562,13 @@ function mb_block_part__stabilizers(block_obj) =
                                             size = [
                                                 seg_size[0][0] + seg_size[1][0], 
                                                 seg_size[0][1] + seg_size[1][1], 
-                                                                 seg_size[1][2] + cut_tol
+                                                                 seg_size[1][2] + mb_block_dim_cut_offset(block_dim, cut = true)
                                             ],
                                             expand = [
                                                 for(f = [0 : 3])
                                                     seg_expand[f],
                                                 "auto", 
-                                                top + cut_tol
+                                                top
                                             ],
                                             offset = seg_offset
                                         )
@@ -652,8 +652,6 @@ function mb_block_part__recess(block_obj) =
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
         slope_pos = mb_slope_filter(slope, 1),
-        recess_depth = mb_block_get_recess_depth(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
         
@@ -715,7 +713,14 @@ function mb_block_part__recess(block_obj) =
                                 block_dim = block_dim, 
                                 expand = [[
                                     for(f = [0 : 3])
-                                        mb_face_has_common(face, f) ? cut_tol : -rwt[f],
+                                        mb_face_has_common(face, f) 
+                                            ? mb_block_dim_face_edge_expand(
+                                                block_dim, 
+                                                adjusted = true, 
+                                                face = f,
+                                                cut = true
+                                            ) 
+                                            : -rwt[f],
                                     0,
                                     exp_top
                                 ]],
@@ -751,7 +756,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
+        cut_tol = mb_block_get_cut_tolerance(block_obj), //TODO remove
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
