@@ -407,16 +407,6 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
         ? 0.5 * pin_diameter 
         : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
-
-function mb_block_tube_expand(block_obj, axis, x, y) =
-    let(
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj, "z+")
-    )
-    [
-        0, 
-        base_cutout_ceiling_offset
-    ];
-
 /**
 * -----------
 * Stabilizers

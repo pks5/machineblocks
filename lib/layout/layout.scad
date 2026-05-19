@@ -121,7 +121,8 @@ function mb_block_part__tubes(block_obj, axis = "z") =
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
-        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
+        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj, "z+")
     )
     [
         "list",
@@ -139,8 +140,7 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                                     base_clamp_thickness,
                                     base_clamp_height,
                                     base_clamp_offset
-                                ],
-                            tube_expand = mb_block_tube_expand(block_obj, axis, x, y)
+                                ]
                         )
                         mb_block_part_tube(
                             block_dim = block_dim,
@@ -149,8 +149,8 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                             clamp_start = tube_clamp_start, 
                             axis = axis,
                             expand = [
-                                tube_expand[0],
-                                tube_expand[1] + cut_tol
+                                0,
+                                base_cutout_ceiling_offset + cut_tol
                             ],
                             offset = mb_block_tube_offset(block_obj, axis, x, y)
                         )
