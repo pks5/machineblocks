@@ -332,11 +332,11 @@ function mb_block_part__base_cutout_clamp(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = -clamp[2],
-        top = -(mod_size[2] - clamp[1] - clamp[2]))
+        top = -mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
+    )
     [
         "difference",
         [
@@ -513,12 +513,11 @@ function mb_block_part__relief_cut(block_obj) =
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         relief_cut = mb_block_get_relief_cut_dim(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = cut_tol,
-        top = -(mod_size[2] - relief_cut[1])
+        top = -mb_block_dim_height_offset(block_dim, relief_cut[1])
     ) 
     [
         "difference",
@@ -649,14 +648,13 @@ function mb_block_part__recess(block_obj) =
 function mb_block_part__stud_base_cutout(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope = mb_block_get_slope(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = -(mod_size[2] - base_cutout_min_depth)
+        top = -mb_block_dim_height_offset(block_dim, base_cutout_min_depth)
     )
     mb_block_part_prismoid(
         block_dim = block_dim, 
