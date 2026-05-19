@@ -80,7 +80,6 @@ function mb_block_part__studs(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_get_mod_size(block_obj),
-        cut_tol = mb_block_get_cut_tolerance(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         stud_range = mb_block_stud_range(block_obj),
         
@@ -150,7 +149,6 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                             clamp_end = tube_clamp_end, 
                             clamp_start = tube_clamp_start, 
                             axis = axis,
-                            //length = mb_block_tube_length(block_obj, axis, x, y) + cut_tol,
                             expand = [
                                 tube_expand[0],
                                 tube_expand[1] + cut_tol
@@ -503,7 +501,7 @@ function mb_block_part__relief_cut(block_obj) =
         [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 
-                bottom = mb_block_dim_this_offset(block_dim, cut = true), 
+                bottom = mb_block_dim_this_offset(block_dim, cut = 1), 
                 top =  mb_block_dim_opposite_offset(block_dim, relief_cut[1]), 
                 outer_adjust = clamp[0]
             ),

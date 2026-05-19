@@ -429,12 +429,6 @@ function mb_block_tube_expand(block_obj, axis, x, y) =
         base_cutout_ceiling_offset
     ];
 
-function mb_block_tube_length(block_obj, axis, x, y) =
-    let(
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj)
-    )
-    base_cutout_depth;
-
 /**
 * -----------
 * Stabilizers
