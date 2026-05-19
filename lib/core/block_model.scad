@@ -204,7 +204,10 @@ function mb_block_get_size_mod(block_obj) =                         block_obj[6]
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
-function mb_block_get_top_plate_helpers(block_obj) =                block_obj[9][1];
+
+function mb_block_has_top_plate_helpers(block_obj) =                block_obj[9][1];
+function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[9][1][0];
+function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[9][1][1];
 
 function mb_block_get_recess(block_obj) =                           block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
@@ -403,11 +406,12 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
 
 function mb_block_tube_top_plate_helpers(block_obj, axis, x, y) =
     let(
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj)
+        top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
+        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
     )
     [
-        top_plate_helpers[0], 
-        top_plate_helpers[1]
+        top_plate_helpers_thickness, 
+        top_plate_helpers_height
     ];
 
 function mb_block_tube_clamp(block_obj, axis, x, y) =
@@ -468,7 +472,8 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         end_index_y = min_max_index[1][1],
         axis = mb_axis_to_int(axis),
         stabilizers = mb_block_get_stabilizers(block_obj),
-        top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
+        top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
+        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
         tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
         default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
@@ -489,9 +494,9 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
     [
         seg_size,
         [
-            (axis == 1 ? 2 * top_plate_helpers[0] : 0),
-            (axis == 0 ? 2 * top_plate_helpers[0] : 0),
-            top_plate_helpers[1]
+            (axis == 1 ? 2 * top_plate_helpers_thickness : 0),
+            (axis == 0 ? 2 * top_plate_helpers_thickness : 0),
+            top_plate_helpers_height
         ]
     ];
 
