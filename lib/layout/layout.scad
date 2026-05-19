@@ -405,7 +405,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         bottom = mb_block_base_cutout_ceiling_offset(block_obj, "z-", top_plate_helpers[1]),
-        top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut_tol)
+        top = mb_block_base_cutout_ceiling_offset(block_obj, "z+", cut = true)
     ) 
     !top_plate_helpers ? undef : [
         "difference",
