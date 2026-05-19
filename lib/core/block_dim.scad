@@ -48,6 +48,8 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef) =
                 ma[2] - c[2]
             ] // max from org center
         ],
+
+        cut_tol = 0.001
     )
     [
         [
@@ -80,7 +82,8 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef) =
                 ceil(ma[2] - 1)
             ] // Max Index (modified)
         ], // 3
-        [adj_size, bsa] // 4
+        [adj_size, bsa],  // 4
+        cut_tol  // 5
     ];
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
@@ -96,16 +99,21 @@ function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
 
 function mb_block_dim_adj_size(block_dim) =                      block_dim[4][0];
 function mb_block_dim_base_adj(block_dim) =                      block_dim[4][1];
+function mb_block_dim_cut_tol(block_dim) =                       block_dim[5];
 
-function mb_block_dim_height_offset(block_dim, face, off = 0) =
+function mb_block_dim_cut_offset(block_dim, cut = false) =
+    let(cut_tol = mb_block_dim_cut_tol(block_dim))
+    (is_num(cut) ? cut * cut_tol : cut == true ? cut_tol : 0);
+
+function mb_block_dim_height_offset(block_dim, off = 0, cut = false) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim)
     )
-    - (mod_size[2] - off);
+    - (mod_size[2] - off) + mb_block_dim_cut_offset(block_dim, cut);
 
-function mb_block_dim_face_edge_expand(block_dim, face, off = 0) =
+function mb_block_dim_face_edge_expand(block_dim, face, off = 0, adjusted = false, cut = false) =
     let(
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    base_adj[face] + off;
+    (adjusted ? base_adj[face] : 0) + off + mb_block_dim_cut_offset(block_dim, cut);

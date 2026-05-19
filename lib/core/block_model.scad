@@ -173,7 +173,7 @@ function mb_block_obj(
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
             [false],  // 19 - Inverted
-            [id, debug, 0.001] // 20 - ID, Debug, Cut Tolerance
+            [id, debug, mb_block_dim_cut_tol(block_dim)] // 20 - ID, Debug, Cut Tolerance
         ];
 
 /*
@@ -284,25 +284,27 @@ function mb_block_unit_convert(block_obj, v, from = "grd", to="mm") =
 * END TODO Rename or delete
 */
 
-function mb_block_base_cutout_ceiling_offset(block_obj, face = undef, off = 0) = 
+function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = false) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(face),
         offs = [
             mb_block_get_base_cutout_depth(block_obj),
             mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
         ]
     )
-    is_undef(face) ? offs : (face == 4 ? -(offs[0] - off) : face == 5 ? -(offs[1] - off) : undef);
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_cut_offset(block_dim, cut) : undef;
 
-function mb_block_recess_floor_offset(block_obj, face = undef, off = 0) =
+function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
     let(
+        block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(face),
         offs = [
             mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
             mb_block_get_recess_depth(block_obj)
         ]
     )
-    is_undef(face) ? offs : (face == 4 ? -(offs[0] - off) : face == 5 ? -(offs[1] - off) : undef);
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_cut_offset(block_dim, cut) : undef;
 
 /**
 * -----
@@ -420,11 +422,11 @@ function mb_block_tube_clamp(block_obj, axis, x, y) =
 
 function mb_block_tube_expand(block_obj, axis, x, y) =
     let(
-        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj)
+        base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj, "z+")
     )
     [
         0, 
-        -base_cutout_ceiling_offset[1]
+        base_cutout_ceiling_offset
     ];
 
 function mb_block_tube_length(block_obj, axis, x, y) =
