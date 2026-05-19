@@ -116,7 +116,12 @@ function mb_block_part__tubes(block_obj, axis = "z") =
     let(
         block_dim = mb_block_get_dim(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
-        tube_range = mb_block_tube_range(block_obj, axis)
+        tube_range = mb_block_tube_range(block_obj, axis),
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
+        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
+        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
+        top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
+        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
     )
     [
         "list",
@@ -125,21 +130,15 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                 for(y = tube_range[1])
                     if(mb_block_tube_render(block_obj, axis, x, y))
                         let(
-                            tube_top_plate_helpers = mb_block_tube_top_plate_helpers(block_obj, axis, x, y),
-                            tube_clamp = mb_block_tube_clamp(block_obj, axis, x, y),
-                            tube_clamp_end = is_undef(tube_top_plate_helpers) 
-                                ? undef
-                                : [
-                                    tube_top_plate_helpers[0], 
-                                    tube_top_plate_helpers[1], 
+                            tube_clamp_end = [
+                                    top_plate_helpers_thickness, 
+                                    top_plate_helpers_height, 
                                     cut_tol
                                 ],
-                            tube_clamp_start = is_undef(tube_clamp) 
-                                ? undef
-                                : [
-                                    tube_clamp[0],
-                                    tube_clamp[1],
-                                    tube_clamp[2]
+                            tube_clamp_start = [
+                                    base_clamp_thickness,
+                                    base_clamp_height,
+                                    base_clamp_offset
                                 ],
                             tube_expand = mb_block_tube_expand(block_obj, axis, x, y)
                         )
@@ -246,9 +245,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         slope_pos = mb_slope_filter(slope, 1),
         gaps = mb_block_base_wall_gap(block_obj, wall_gap),
         block_inverted = mb_block_get_inverted(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj,
-        outer_adj = block_inverted ? clamp[0] : 0
+        outer_adj = block_inverted ? mb_block_get_base_clamp_thickness(block_obj) : 0
     )
     
     [
@@ -324,9 +322,11 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
 function mb_block_part__base_cutout_clamp(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
-        bottom = mb_block_dim_this_offset(block_dim, clamp[2]),
-        top = mb_block_dim_opposite_offset(block_dim, clamp[1] + clamp[2])
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
+        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
+        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
+        bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset),
+        top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset)
     )
     [
         "difference",
@@ -335,14 +335,14 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 block_dim = block_dim, 
                 bottom = bottom, 
                 top = top, 
-                outer_adjust = clamp[0]
+                outer_adjust = base_clamp_thickness
             ),
             mb_block_part__base_cutout(
                 block_obj, 
                 planes = "bottom", 
-                bottom = mb_block_dim_this_offset(block_dim, clamp[2], cut = true), 
-                top = mb_block_dim_opposite_offset(block_dim, clamp[1] + clamp[2], cut = true), 
-                inner_adj = -clamp[0]
+                bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset, cut = true), 
+                top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset, cut = true), 
+                inner_adj = -base_clamp_thickness
             )
         ]
     ];
@@ -356,11 +356,13 @@ function mb_block_part__base_clamp_outer(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         block_inverted = mb_block_get_inverted(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
+        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
+        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        bottom = mb_block_dim_this_offset(block_dim, clamp[2]),
-        top = mb_block_dim_opposite_offset(block_dim, clamp[1] + clamp[2])
+        bottom = mb_block_dim_this_offset(block_dim, base_clamp_offset),
+        top = mb_block_dim_opposite_offset(block_dim, base_clamp_height + base_clamp_offset)
     )
     block_inverted ? 
     //[
@@ -370,14 +372,14 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 block_dim = block_dim, 
                 expand = [[
                     for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(block_dim, f, clamp[0], adjusted = true),
+                        mb_block_dim_face_edge_expand(block_dim, f, base_clamp_thickness, adjusted = true),
                     bottom,
                     top
                 ]],
                 bevel = mb_block_get_bevel(block_obj)
             )
             //for(wall_gap = wall_gaps)
-            //    mb_block_part__base_wall_gaps(block_obj, "bottom", bottom + cut_tol, top + cut_tol, wall_gap, -clamp[0])
+            //    mb_block_part__base_wall_gaps(block_obj, "bottom", bottom + cut_tol, top + cut_tol, wall_gap, -base_clamp_thickness)
     //    ]
     //] 
     : undef;
@@ -496,7 +498,7 @@ function mb_block_part__relief_cut(block_obj) =
         slope = mb_block_get_slope(block_obj),
         relief_cut_thickness = mb_block_get_relief_cut_thickness(block_obj),
         relief_cut_height = mb_block_get_relief_cut_height(block_obj),
-        clamp = mb_block_get_clamp(block_obj)
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj)
     ) 
     mb_block_has_relief_cut(block_obj) 
     ? [
@@ -506,7 +508,7 @@ function mb_block_part__relief_cut(block_obj) =
                 block_dim = block_dim, 
                 bottom = mb_block_dim_this_offset(block_dim, cut = 1), 
                 top =  mb_block_dim_opposite_offset(block_dim, relief_cut_height), 
-                outer_adjust = clamp[0]
+                outer_adjust = base_clamp_thickness
             ),
             mb_block_part_prismoid(
                 block_dim = block_dim, 
@@ -628,7 +630,7 @@ function mb_block_part__recess(block_obj) =
 function mb_block_part__stud_base_cutout(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        clamp = mb_block_get_clamp(block_obj),
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         slope = mb_block_get_slope(block_obj),
@@ -641,7 +643,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         expand = [
             [
                 for(f = [0 : 3])
-                    -(wall_thickness + clamp[0]) + slope_neg[f] - cut_tol,
+                    -(wall_thickness + base_clamp_thickness) + slope_neg[f] - cut_tol,
                 cut_tol,
                 top
             ]

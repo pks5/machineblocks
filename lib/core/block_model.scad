@@ -224,7 +224,9 @@ function mb_block_has_relief_cut(block_obj) =                       block_obj[8]
 function mb_block_get_relief_cut_thickness(block_obj) =             block_obj[8][3][0];
 function mb_block_get_relief_cut_height(block_obj) =                block_obj[8][3][1];
 
-function mb_block_get_clamp(block_obj) =                            block_obj[4][4];
+function mb_block_get_base_clamp_thickness(block_obj) =             block_obj[4][4][0];
+function mb_block_get_base_clamp_height(block_obj) =                block_obj[4][4][1];
+function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4][4][2];
 
 function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
 
@@ -405,25 +407,6 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
         ? 0.5 * pin_diameter 
         : [0.5 * tube_z_hole_size, 0.5 * tube_z_diameter];
 
-function mb_block_tube_top_plate_helpers(block_obj, axis, x, y) =
-    let(
-        top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
-        top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
-    )
-    [
-        top_plate_helpers_thickness, 
-        top_plate_helpers_height
-    ];
-
-function mb_block_tube_clamp(block_obj, axis, x, y) =
-    let(
-        clamp = mb_block_get_clamp(block_obj)
-    )
-    [
-        clamp[0], 
-        clamp[1], 
-        clamp[2]
-    ];
 
 function mb_block_tube_expand(block_obj, axis, x, y) =
     let(
