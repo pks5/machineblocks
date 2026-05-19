@@ -1,5 +1,6 @@
 use <../core/utils.scad>;
 use <../core/block_model.scad>;
+use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
 /**
@@ -115,7 +116,6 @@ function mb_block_part__studs(block_obj) =
 function mb_block_part__tubes(block_obj, axis = "z") = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         tube_range = mb_block_tube_range(block_obj, axis)
     )
@@ -186,7 +186,6 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
-        mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
@@ -247,7 +246,6 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
@@ -369,13 +367,12 @@ function mb_block_part__base_clamp_outer(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         block_inverted = mb_block_get_inverted(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         clamp = mb_block_get_clamp(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         bottom = -clamp[2],
-        top = -(mod_size[2] - clamp[1] - clamp[2])
+        top = -mb_block_dim_height_offset(block_dim, clamp[1] + clamp[2])
     )
     block_inverted ? 
     //[
@@ -406,7 +403,6 @@ function mb_block_part__top_plate_helpers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top_plate_helpers = mb_block_get_top_plate_helpers(block_obj),
         
@@ -442,7 +438,6 @@ function mb_block_part__top_plate_helpers(block_obj) =
 function mb_block_part__stabilizers(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         base_cutout_ceiling_offset = mb_block_base_cutout_ceiling_offset(block_obj),
         top = -base_cutout_ceiling_offset[1]
@@ -559,7 +554,6 @@ function mb_block_part__relief_cut(block_obj) =
 function mb_block_part__recess(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_get_mod_size(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         base_adj = mb_block_get_base_adj(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
@@ -570,7 +564,8 @@ function mb_block_part__recess(block_obj) =
         cut_tol = mb_block_get_cut_tolerance(block_obj),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
-        bottom = -recess_floor_offset[0]
+        bottom = -recess_floor_offset[0],
+        top = base_adj[5]
     )
     [
         "list",
@@ -584,7 +579,7 @@ function mb_block_part__recess(block_obj) =
                             for(f = [0 : 3])
                                 -rwt[f],
                             0,
-                            cut_tol,
+                            top + cut_tol,
                         ]],
                         bevel = bevel,
                         slope = slope,
@@ -599,7 +594,7 @@ function mb_block_part__recess(block_obj) =
                             0,
                             0,
                             bottom,
-                            cut_tol
+                            top + cut_tol
                         ]
                     )
                 ]
@@ -623,7 +618,7 @@ function mb_block_part__recess(block_obj) =
                                     for(f = [0 : 3])
                                         mb_face_has_common(face, f) ? cut_tol : -rwt[f],
                                     0,
-                                    cut_tol
+                                    top + cut_tol
                                 ]],
                                 bevel = bevel,
                                 slope = slope,
@@ -638,7 +633,7 @@ function mb_block_part__recess(block_obj) =
                                     mb_face_has_common(face, "x") ? - gap_start_offset : 0,
                                     mb_face_has_common(face, "x") ? - gap_end_offset : 0,
                                     bottom,
-                                    cut_tol
+                                    top + cut_tol
                                 ]
                             )
                         ]

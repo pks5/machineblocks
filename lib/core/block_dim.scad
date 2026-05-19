@@ -96,3 +96,9 @@ function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
 
 function mb_block_dim_adj_size(block_dim) =                      block_dim[4][0];
 function mb_block_dim_base_adj(block_dim) =                      block_dim[4][1];
+
+function mb_block_dim_height_offset(block_dim, off) =
+    let(
+        mod_size = mb_block_dim_mod_size(block_dim)
+    )
+    mod_size[2] - off;
