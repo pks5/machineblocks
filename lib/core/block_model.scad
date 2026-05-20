@@ -4,29 +4,39 @@ use <block_dim.scad>;
 use <../bevel.scad>;
 
 function mb_block_obj(
+    gridSize = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
+    scale = 1,
+    
     size, 
-    size_mod = undef, 
-    size_adj = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
-    base_adj = undef,
+    sizeMod = undef, 
+    sizeAdjustment = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
+    
     bevel = undef,
     slope = undef,
+    slopeBaseHeight = [1.333, 1], // [Bottom, Top]
+    
     inverted = false,
-    grid_cfg = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
-    scale = 1,
-    top_plate_height = [1, -0.6], // [Height (mbu), Adjustment (mm)]
-    top_plate_helpers = [0.2, 0.2], // [Thickness (mbu), Height (mbu)]
-    recess_depth = "auto",
-    slope_base = [1.333, 1], // [Bottom, Top]
-    wall_thickness = ["auto", -0.1], // [Thickness (mbu), Adjustment (mm)]
-    cutout_max_depth = 5,
-    cutout_type = "standard",
-    recess = false,
-    recess_depth = "auto",
-    recess_wall_thickness = 0.333, 
-    recess_wall_gaps = [],
-    recessStudPadding = 0.2,
-    clamp = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
+    
+    topPlateHeight = 1, // [Height (mbu), ]
+    topPlateAdjustment = -0.6, // Adjustment (mm)
+    topPlateHelpersSize = [0.2, 0.2], // [Thickness (mbu), Height (mm)]
+    
+    baseAdjustment = undef,
+    baseWallGaps = [],
+    baseWallThickness = "auto", // [Thickness (mbu), Adjustment (mm)]
+    baseWallAdjustment = -0.1,
+    baseCutoutMaxDepth = 5,
+    baseCutoutType = "standard",
+    baseClamp = true,
+    baseClampSize = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
     clamp_outer = true,
+    
+    recess = false,
+    recessDepth = "auto",
+    recessWallThickness = 0.333, 
+    recessWallGaps = [],
+    recessStudPadding = 0.2,
+
     studDiameter = 3,
     studRounding = 0.0625,
     studDiameterAdjustment = 0.2,
@@ -35,43 +45,48 @@ function mb_block_obj(
     studSink = 0.25,
     studMaxOverhang = 0,
     studPadding = 0.2,
-    relief_cut = false,
-    relief_cut_dim = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
-    id = "[Block]",
-    custom_modules = ["my_cube"],
-    debug = false,
-    baseWallGaps = [],
+
+    reliefCut = false,
+    reliefCutSize = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
+    
+    
     stabilizers = [0.5, 0.5, 0.2, 1, 2],
     tubeWallThickness = 0.53125,
+    
     pinDiameter = "auto",
     pinDiameterAdjustment = 0,
+    
     tongue = false,
     tongueHeight = 1.25,
     tongueThickness = 0.666,
     tongueThicknessAdjustment = 0,
-    tongueOffset = 1
+    tongueOffset = 1,
+
+    id = "[Block]",
+    custom_modules = ["my_cube"],
+    debug = false
 ) =
     let(
-        mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
-        mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
+        mul_mbu_to_grid = mb_unit_mul(gridSize, scale = scale, from="mbu", to="grd"),
+        mul_mm_to_grid = mb_unit_mul(gridSize, scale = scale, from="mm", to="grd"),
 
         base_adj_grd = mb_qc_resolve(
-            qc = base_adj, 
+            qc = baseAdjustment, 
             cube = true, 
             default = [
-                size_adj[0], 
-                size_adj[0], 
-                size_adj[0], 
-                size_adj[0], 
+                sizeAdjustment[0], 
+                sizeAdjustment[0], 
+                sizeAdjustment[0], 
+                sizeAdjustment[0], 
                 0, 
-                size_adj[1]
+                sizeAdjustment[1]
             ],
             mul = mul_mm_to_grid
         ),
         
         block_dim = mb_block_dim(
             size = size, 
-            size_mod = size_mod,
+            size_mod = sizeMod,
             base_adj = base_adj_grd
         ),
 
@@ -89,29 +104,29 @@ function mb_block_obj(
         /*
         * Top Plate, Recess Depth, Base Cutout
         */
-        top_plate_height_pref = top_plate_height[0] * mul_mbu_to_grid[2] + top_plate_height[1] * mul_mm_to_grid[2],
+        top_plate_height_pref = topPlateHeight * mul_mbu_to_grid[2] + topPlateAdjustment * mul_mm_to_grid[2],
         
         cutout_min_depth = 1 - top_plate_height_pref,
-        cutout_max_depth = cutout_max_depth * mul_mbu_to_grid[2],
+        baseCutoutMaxDepth = baseCutoutMaxDepth * mul_mbu_to_grid[2],
         
-        recess_depth_max = mod_size[2] - top_plate_height_pref - (cutout_type == "none" ? 0 : cutout_min_depth),
+        recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
         
-        recess_depth_final = recess ? (recess_depth != "auto" ? min(recess_depth, recess_depth_max) : recess_depth_max) : 0,
-        cutout_depth_calc = max(0, min(cutout_max_depth, mod_size[2] - top_plate_height_pref - recess_depth_final)),
+        recess_depth_final = recess ? (recessDepth != "auto" ? min(recessDepth, recess_depth_max) : recess_depth_max) : 0,
+        cutout_depth_calc = max(0, min(baseCutoutMaxDepth, mod_size[2] - top_plate_height_pref - recess_depth_final)),
         top_plate_height_final = mod_size[2] - recess_depth_final - cutout_depth_calc,
-        cutout_depth = cutout_type == "none" ? 0 : cutout_depth_calc,
+        cutout_depth = baseCutoutType == "none" ? 0 : cutout_depth_calc,
 
         recess_walls = mb_qc_resolve(
-            qc = recess_wall_thickness
+            qc = recessWallThickness
         ),
 
         /*
         * Base Wall Thickness
         */
-        p_diameter = grid_cfg[1] - studDiameter,
-        wall_thickness_pref = (wall_thickness[0] == "auto" ? 0.5 * p_diameter : wall_thickness[0]) * mul_mbu_to_grid[0],
-        wall_thickness_final = wall_thickness_pref + wall_thickness[1] * mul_mm_to_grid[0],
-        wall_thickness_clamp = wall_thickness_final + clamp[0] * mul_mm_to_grid[0],
+        p_diameter = gridSize[1] - studDiameter,
+        wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mul_mbu_to_grid[0],
+        wall_thickness_final = wall_thickness_pref + baseWallAdjustment * mul_mm_to_grid[0],
+        wall_thickness_clamp = wall_thickness_final + baseClampSize[0] * mul_mm_to_grid[0],
         stud_diameter_res = studDiameter * mul_mbu_to_grid[0],
 
         stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mul_mm_to_grid[0],
@@ -120,14 +135,14 @@ function mb_block_obj(
         stud_rounding_final = studRounding * mul_mbu_to_grid[0],
 
         clamp_final = [
-            clamp[0] * mul_mm_to_grid[0], // Thickness
-            clamp[1] * mul_mbu_to_grid[2], // Height
-            clamp[2] * mul_mbu_to_grid[2], // Offset
+            baseClampSize[0] * mul_mm_to_grid[0], // Thickness
+            baseClampSize[1] * mul_mbu_to_grid[2], // Height
+            baseClampSize[2] * mul_mbu_to_grid[2], // Offset
             clamp_outer
         ],
-        relief_cut_final = [relief_cut_dim[0] * mul_mbu_to_grid[0], relief_cut_dim[1] * mul_mbu_to_grid[2]],
+        relief_cut_final = [reliefCutSize[0] * mul_mbu_to_grid[0], reliefCutSize[1] * mul_mbu_to_grid[2]],
 
-        top_plate_helpers_final = [top_plate_helpers[0] * mul_mm_to_grid[0], top_plate_helpers[1] * mul_mm_to_grid[2]],
+        top_plate_helpers_final = [topPlateHelpersSize[0] * mul_mm_to_grid[0], topPlateHelpersSize[1] * mul_mm_to_grid[2]],
         tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],  // TODO XYZ
         
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
@@ -170,10 +185,10 @@ function mb_block_obj(
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
-            [slope_base[0] * mul_mbu_to_grid[2], slope_base[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
+            [slopeBaseHeight[0] * mul_mbu_to_grid[2], slopeBaseHeight[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
-            [grid_cfg, scale], // 7 - Units
-            [recess, recess_walls, relief_cut, relief_cut_final, recess_wall_gaps], // 8 - Recesss & Relief Cut
+            [gridSize, scale], // 7 - Units
+            [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape],  // 10 - 
             [],  // 11 - 

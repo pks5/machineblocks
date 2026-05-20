@@ -315,18 +315,18 @@ module mb_block(
     
     block_obj = mb_block_obj(
         size = size, 
-        size_adj = sizeAdjustment,
-        size_mod = baseMod, 
-        base_adj = baseSideAdjustment,
+        sizeAdjustment = sizeAdjustment,
+        sizeMod = baseMod, 
+        baseAdjustment = baseSideAdjustment,
         bevel = bevel,
         slope = slope,
-        grid_cfg = [unitMbu, unitGrid[0], unitGrid[1]],
+        gridSize = [unitMbu, unitGrid[0], unitGrid[1]],
         scale = scale,
         recess = recess,
-        recess_wall_thickness = recessWallThickness,
-        recess_wall_gaps = recessWallGaps,
+        recessWallThickness = recessWallThickness,
+        recessWallGaps = recessWallGaps,
         baseWallGaps = baseWallGaps,
-        relief_cut = baseReliefCut,
+        reliefCut = baseReliefCut,
         studPadding = studPadding
     );
     
