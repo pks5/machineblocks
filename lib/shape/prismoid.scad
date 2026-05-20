@@ -624,6 +624,7 @@ module mb_prismoid(
         cy = shape[3][3][1];
         cz = shape[3][3][2];
 
+        min_point = shape[3][0];
         center_point = shape[3][3];
         off = [-cx + 0.5 * sx, -cy + 0.5 * sy, -cz + 0.5 * sz];
         
@@ -652,7 +653,7 @@ module mb_prismoid(
                                 prev_point = mb_prev_point(shape, i, j);
                                 next_point = mb_next_point(shape, i, j);
                                 inv_point = mb_inv_point(shape, i, j);
-                                inv_dis = mb_point_distance(mb_point_distance(center_point, point, true), mb_point_distance(center_point, inv_point, true));
+                                inv_dis = mb_point_distance(mb_point_distance(point, min_point, false), mb_point_distance(inv_point, min_point, false));
                                 
                                 
 

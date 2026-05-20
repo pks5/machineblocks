@@ -243,7 +243,7 @@ module mb_cube(
             (size[1][2] - size[0][2]) * mul[2]
         ];
 
-        echo (si = si, size0 = size[0], size1 = size[1]);
+        //echo (si = si, size0 = size[0], size1 = size[1]);
         
         color(draw_together || debug ? "green" : color)
             translate([

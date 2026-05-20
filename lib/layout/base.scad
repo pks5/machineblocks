@@ -17,7 +17,7 @@ module mb_base_cutout(
     union(){
         difference(){
             //Base Cutout
-            !mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
+            mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
 
             //Base Clamp Inner
             mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
@@ -33,8 +33,8 @@ module mb_base_cutout(
         }
     }
 
-    surface_shape = mb_block_get_surface_shape(block_obj);
-    echo (ss = surface_shape, s = mb_slope_filter(mb_block_get_slope(block_obj), 1));
+    //surface_shape = mb_block_get_surface_shape(block_obj);
+    //echo (ss = surface_shape, s = mb_slope_filter(mb_block_get_slope(block_obj), 1));
 }
 
 /*
