@@ -475,7 +475,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                 ),
                 mb_block_part__base_cutout(
                     block_obj, 
-                    planes = "top", 
+                    planes = "bottom", 
                     bottom = mb_block_base_cutout_ceiling_offset(
                         block_obj, 
                         face = "z-", 
