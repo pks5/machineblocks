@@ -5,7 +5,7 @@ use <../bevel.scad>;
 
 function mb_block_obj(
     gridBaseUnit = 1.6, // 1 mbu (mm)
-    gridSize = [1.6, 5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
+    gridSize = [5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
     
     scale = 1,
     layerHeight = 0.2,
@@ -77,8 +77,9 @@ function mb_block_obj(
     debug = false
 ) =
     let(
-        mul_mbu_to_grid = mb_unit_mul(gridSize, scale = scale, from="mbu", to="grd"),
-        mul_mm_to_grid = mb_unit_mul(gridSize, scale = scale, from="mm", to="grd"),
+        grid_cfg = [gridBaseUnit, gridSize[0], gridSize[1]],
+        mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
+        mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
 
         base_adj_grd = mb_qc_resolve(
             qc = baseAdjustment, 
@@ -133,7 +134,7 @@ function mb_block_obj(
         /*
         * Base Wall Thickness
         */
-        p_diameter = gridSize[1] - studDiameter,
+        p_diameter = grid_cfg[1] - studDiameter,
         wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mul_mbu_to_grid[0],
         wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mul_mm_to_grid[0],
         wall_thickness_clamp = wall_thickness_final + baseClampThickness * mul_mm_to_grid[0],
@@ -196,7 +197,7 @@ function mb_block_obj(
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
             [slopeBaseHeight[0] * mul_mbu_to_grid[2], slopeBaseHeight[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
-            [gridSize, scale], // 7 - Units
+            [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape],  // 10 - 
