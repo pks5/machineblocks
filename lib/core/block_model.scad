@@ -165,7 +165,7 @@ function mb_block_obj(
         stud_rounding_final = studRounding * mul_mbu_to_grid[0],
         stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mul_mbu_to_grid[0],
 
-        clamp_final = [
+        base_clamp = [
             baseClampThickness * mul_mm_to_grid[0], // Thickness
             baseClampHeight * mul_mbu_to_grid[2], // Height
             baseClampOffset * mul_mbu_to_grid[2] // Offset
@@ -214,7 +214,7 @@ function mb_block_obj(
             [bevel, slope], // 1 - Bevel / Slope
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
-            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
+            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
             [slopeBaseHeightBottom * mul_mbu_to_grid[2], slopeBaseHeightTop * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
@@ -251,7 +251,8 @@ function mb_block_get_inverted(block_obj) =                         block_obj[19
 
 function mb_block_get_slope(block_obj) =                            block_obj[1][1];
 
-function mb_block_get_slope_socket(block_obj) =                     block_obj[5];
+function mb_block_get_slope_socket(block_obj) =                     [block_obj[5][0], block_obj[5][1]];
+function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5][2];
 
 function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
 function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];

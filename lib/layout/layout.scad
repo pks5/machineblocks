@@ -198,7 +198,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
     let(
         block_dim = mb_block_get_dim(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         slope = mb_block_get_slope(block_obj),
@@ -249,7 +249,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 ],
                 bevel = bevel,
                 slope = _mb_layout_plane_value(planes, slope_pos),
-                socket = _mb_layout_plane_value(planes, [base_cutout_min_depth, 0])
+                socket = _mb_layout_plane_value(planes, [slope_base_height_inner, 0])
             ),
             for(wall_gap = wall_gaps)
                 mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj)
@@ -266,7 +266,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         block_dim = mb_block_get_dim(block_obj),
         bevel = mb_block_get_bevel(block_obj), 
         slope = mb_block_get_slope(block_obj),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
+        slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
+
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
@@ -330,9 +331,9 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     ]
                                 )
                             ],
-                            socket = [base_cutout_min_depth, 0],
                             bevel = bevel,
-                            slope = slope_pos
+                            slope = _mb_layout_plane_value(planes, slope_pos),
+                            socket = _mb_layout_plane_value(planes, [slope_base_height_inner, 0])
                         ),
                         
                         mb_block_part_cube(
