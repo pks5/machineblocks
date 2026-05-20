@@ -63,7 +63,7 @@ function mb_block_obj(
     reliefCutThickness = 0.375,
     reliefCutHeight = 0.375,
     
-    stabilizers = [0.5, 0.5, 0.2, 1, 2], //TODO
+    stabilizers = true,
     stabilizerHeight = 0.5,
     stabilizerThickness = 0.5,
     stabilizerOffset = 0.2, 
@@ -177,11 +177,11 @@ function mb_block_obj(
 
 
         stabilizers_res = [
-            stabilizers[0] * mul_mbu_to_grid[0], // Thickness (mbu)
-            stabilizers[1] * mul_mbu_to_grid[2], // Height (mbu)
-            stabilizers[2] * mul_mm_to_grid[2], // Offset (mm)
-            stabilizers[3] * mul_mbu_to_grid[2], // Expansion Offset (mbu)
-            stabilizers[4]                       // Expansion Each
+            stabilizerThickness * mul_mbu_to_grid[0], // Thickness (mbu)
+            stabilizerHeight * mul_mbu_to_grid[2], // Height (mbu)
+            stabilizerOffset * mul_mm_to_grid[2], // Offset (mm)
+            stabilizerExpansionOffset * mul_mbu_to_grid[2], // Expansion Offset (mbu)
+            stabilizerExpansion                       // Expansion Each
         ],
 
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
