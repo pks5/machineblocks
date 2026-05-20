@@ -4,9 +4,12 @@ use <block_dim.scad>;
 use <../bevel.scad>;
 
 function mb_block_obj(
-    gridSize = [1.6, 5, 2], // [1 mbu (mm), Grid Size XY (mbu), Grid Size Z (mbu)]
-    scale = 1,
+    gridBaseUnit = 1.6, // 1 mbu (mm)
+    gridSize = [1.6, 5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
     
+    scale = 1,
+    layerHeight = 0.2,
+
     size, 
     sizeMod = undef, 
     sizeAdjustment = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
@@ -17,19 +20,26 @@ function mb_block_obj(
     
     inverted = false,
     
-    topPlateHeight = 1, // [Height (mbu), ]
-    topPlateAdjustment = -0.6, // Adjustment (mm)
-    topPlateHelpersSize = [0.2, 0.2], // [Thickness (mbu), Height (mm)]
+    topPlateHeight = 1, 
+    topPlateHeightAdjustment = -0.6, // Adjustment (mm)
     
+    topPlateHelpers = true,
+    topPlateHelperThickness = 0.2,
+    topPlateHelperHeight = 0.2,
+    
+
     baseAdjustment = undef,
     baseWallGaps = [],
-    baseWallThickness = "auto", // [Thickness (mbu), Adjustment (mm)]
-    baseWallAdjustment = -0.1,
+    baseWallThickness = "auto",
+    baseWallThicknessAdjustment = -0.1,
     baseCutoutMaxDepth = 5,
     baseCutoutType = "standard",
+    
     baseClamp = true,
-    baseClampSize = [0.1, 0.5, 0.25], // [Thickness (mm), Height (mbu), Offset (mbu)]
-    clamp_outer = true,
+    baseClampThickness = 0.1,
+    baseClampHeight = 0.5,
+    baseClampOffset = 0.25,
+    
     
     recess = false,
     recessDepth = "auto",
@@ -47,8 +57,8 @@ function mb_block_obj(
     studPadding = 0.2,
 
     reliefCut = false,
-    reliefCutSize = [0.375, 0.375], // [Thickness (mbu), Height (mbu)]
-    
+    reliefCutThickness = 0.375,
+    reliefCutHeight = 0.375,
     
     stabilizers = [0.5, 0.5, 0.2, 1, 2],
     tubeWallThickness = 0.53125,
@@ -104,7 +114,7 @@ function mb_block_obj(
         /*
         * Top Plate, Recess Depth, Base Cutout
         */
-        top_plate_height_pref = topPlateHeight * mul_mbu_to_grid[2] + topPlateAdjustment * mul_mm_to_grid[2],
+        top_plate_height_pref = topPlateHeight * mul_mbu_to_grid[2] + topPlateHeightAdjustment * mul_mm_to_grid[2],
         
         cutout_min_depth = 1 - top_plate_height_pref,
         baseCutoutMaxDepth = baseCutoutMaxDepth * mul_mbu_to_grid[2],
@@ -125,8 +135,8 @@ function mb_block_obj(
         */
         p_diameter = gridSize[1] - studDiameter,
         wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mul_mbu_to_grid[0],
-        wall_thickness_final = wall_thickness_pref + baseWallAdjustment * mul_mm_to_grid[0],
-        wall_thickness_clamp = wall_thickness_final + baseClampSize[0] * mul_mm_to_grid[0],
+        wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mul_mm_to_grid[0],
+        wall_thickness_clamp = wall_thickness_final + baseClampThickness * mul_mm_to_grid[0],
         stud_diameter_res = studDiameter * mul_mbu_to_grid[0],
 
         stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mul_mm_to_grid[0],
@@ -135,14 +145,13 @@ function mb_block_obj(
         stud_rounding_final = studRounding * mul_mbu_to_grid[0],
 
         clamp_final = [
-            baseClampSize[0] * mul_mm_to_grid[0], // Thickness
-            baseClampSize[1] * mul_mbu_to_grid[2], // Height
-            baseClampSize[2] * mul_mbu_to_grid[2], // Offset
-            clamp_outer
+            baseClampThickness * mul_mm_to_grid[0], // Thickness
+            baseClampHeight * mul_mbu_to_grid[2], // Height
+            baseClampOffset * mul_mbu_to_grid[2] // Offset
         ],
-        relief_cut_final = [reliefCutSize[0] * mul_mbu_to_grid[0], reliefCutSize[1] * mul_mbu_to_grid[2]],
+        relief_cut_final = [reliefCutThickness * mul_mbu_to_grid[0], reliefCutHeight * mul_mbu_to_grid[2]],
 
-        top_plate_helpers_final = [topPlateHelpersSize[0] * mul_mm_to_grid[0], topPlateHelpersSize[1] * mul_mm_to_grid[2]],
+        top_plate_helpers_final = [topPlateHelperThickness * mul_mm_to_grid[0], topPlateHelperHeight * mul_mm_to_grid[2]],
         tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],  // TODO XYZ
         
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
