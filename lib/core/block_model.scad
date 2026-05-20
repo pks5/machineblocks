@@ -15,6 +15,7 @@ function mb_block_obj(
     sizeAdjustment = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
     
     bevel = undef,
+    
     slope = undef,
     slopeBaseHeightLower = 1.333,
     slopeBaseHeightUpper = 1,
@@ -62,7 +63,7 @@ function mb_block_obj(
     reliefCutThickness = 0.375,
     reliefCutHeight = 0.375,
     
-    stabilizers = [0.5, 0.5, 0.2, 1, 2],
+    stabilizers = [0.5, 0.5, 0.2, 1, 2], //TODO
     stabilizerHeight = 0.5,
     stabilizerThickness = 0.5,
     stabilizerOffset = 0.2, 
