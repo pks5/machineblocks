@@ -4,11 +4,12 @@ use <block_dim.scad>;
 use <../bevel.scad>;
 
 function mb_block_obj(
-    gridBaseUnit = 1.6, // 1 mbu (mm)
-    gridSize = [5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
+    unitMbuToMm = 1.6, // 1 mbu (mm)
+    unitGridToMbu = [5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
     
     scale = 1,
-    layerHeight = 0.2,
+    printerNozzleDiameter = 0.4,
+    printerLayerHeight = 0.2,
 
     size, 
     sizeMod = undef, 
@@ -17,9 +18,9 @@ function mb_block_obj(
     bevel = undef,
     
     slope = undef,
-    slopeBaseHeightLower = 1.333,
-    slopeBaseHeightUpper = 1,
-    slopeBaseHeightInner = 1.125,
+    slopeBaseHeightBottom = 1.333,
+    slopeBaseHeightTop = 1,
+    slopeBaseHeightInner = 1.125, // mbu (1.8 mm)
 
     inverted = false,
     
@@ -27,8 +28,8 @@ function mb_block_obj(
     topPlateHeightAdjustment = -0.6, // Adjustment (mm)
     
     topPlateHelpers = true,
-    topPlateHelperThickness = 0.2,
-    topPlateHelperHeight = 0.2,
+    topPlateHelperThickness = 0.2, // mm
+    topPlateHelperHeight = 0.2, // mm
     
 
     baseAdjustment = undef,
@@ -38,7 +39,6 @@ function mb_block_obj(
     baseCutoutMaxDepth = 5,
     baseCutoutType = "standard",
     
-    baseClamp = true,
     baseClampThickness = 0.1,
     baseClampHeight = 0.5,
     baseClampOffset = 0.25,
@@ -66,7 +66,7 @@ function mb_block_obj(
     stabilizers = true,
     stabilizerHeight = 0.5,
     stabilizerThickness = 0.5,
-    stabilizerOffset = 0.2, 
+    stabilizerPrintOffset = 0.2, // mm
     stabilizerExpansion = 2,
     stabilizerExpansionOffset = 1,
 
@@ -86,7 +86,7 @@ function mb_block_obj(
     debug = false
 ) =
     let(
-        grid_cfg = [gridBaseUnit, gridSize[0], gridSize[1]],
+        grid_cfg = [unitMbuToMm, unitGridToMbu[0], unitGridToMbu[1]],
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
 
@@ -179,7 +179,7 @@ function mb_block_obj(
         stabilizers_res = [
             stabilizerThickness * mul_mbu_to_grid[0], // Thickness (mbu)
             stabilizerHeight * mul_mbu_to_grid[2], // Height (mbu)
-            stabilizerOffset * mul_mm_to_grid[2], // Offset (mm)
+            stabilizerPrintOffset * mul_mm_to_grid[2], // Offset (mm)
             stabilizerExpansionOffset * mul_mbu_to_grid[2], // Expansion Offset (mbu)
             stabilizerExpansion                       // Expansion Each
         ],
@@ -204,7 +204,7 @@ function mb_block_obj(
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
-            [slopeBaseHeightLower * mul_mbu_to_grid[2], slopeBaseHeightUpper * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
+            [slopeBaseHeightBottom * mul_mbu_to_grid[2], slopeBaseHeightTop * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut

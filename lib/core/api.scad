@@ -46,8 +46,6 @@ function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_par
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
 function mb_param_baseWallGaps(config, settings, default = undef) = mb_param(config, settings, "baseWallGaps", default != undef ? default : []);
-//function mb_param_baseWallGapsX(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsX", default != undef ? default : []);
-//function mb_param_baseWallGapsY(config, settings, default = undef) = mb_param(config, settings, "baseWallGapsY", default != undef ? default : []);
 
 function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(config, settings, "topPlateHelpers", default != undef ? default : true);
 function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
