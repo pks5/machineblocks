@@ -16,8 +16,10 @@ function mb_block_obj(
     
     bevel = undef,
     slope = undef,
-    slopeBaseHeight = [1.333, 1], // [Bottom, Top]
-    
+    slopeBaseHeightLower = 1.333,
+    slopeBaseHeightUpper = 1,
+    slopeBaseHeightInner = 1.125,
+
     inverted = false,
     
     topPlateHeight = 1, 
@@ -61,6 +63,12 @@ function mb_block_obj(
     reliefCutHeight = 0.375,
     
     stabilizers = [0.5, 0.5, 0.2, 1, 2],
+    stabilizerHeight = 0.5,
+    stabilizerThickness = 0.5,
+    stabilizerOffset = 0.2, 
+    stabilizerExpansion = 2,
+    stabilizerExpansionOffset = 1,
+
     tubeWallThickness = 0.53125,
     
     pinDiameter = "auto",
@@ -195,7 +203,7 @@ function mb_block_obj(
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, clamp_final, cutout_min_depth], // 4 - Top Plate Height
-            [slopeBaseHeight[0] * mul_mbu_to_grid[2], slopeBaseHeight[1] * mul_mbu_to_grid[2]], // 5 - Slope Base 
+            [slopeBaseHeightLower * mul_mbu_to_grid[2], slopeBaseHeightUpper * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
