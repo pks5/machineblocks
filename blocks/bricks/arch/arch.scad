@@ -149,9 +149,9 @@ module mb_block__mb__bricks__arch(config = undef, settings = undef){
     size             = mb_param_size(config, settings, [4, 1, 6]);
     baseCutoutType   = mb_param_baseCutoutType(config, settings);
     pillars          = mb_param_pillars(config, settings);
-    baseReliefCut    = mb_param_baseReliefCut(config, settings);
-    baseReliefCutHeight     = mb_param_baseReliefCutHeight(config, settings);
-    baseReliefCutThickness  = mb_param_baseReliefCutThickness(config, settings);
+    baseReliefCut    = mb_param_reliefCut(config, settings);
+    baseReliefCutHeight     = mb_param_reliefCutHeight(config, settings);
+    baseReliefCutThickness  = mb_param_reliefCutThickness(config, settings);
     grille           = mb_param_grille(config, settings);
     grilleInverted   = mb_param_grilleInverted(config, settings);
     grilleDepth      = mb_param_grilleDepth(config, settings);
@@ -164,11 +164,11 @@ module mb_block__mb__bricks__arch(config = undef, settings = undef){
     surfacePattern   = mb_param_surfacePattern(config, settings);
     surfacePatternScale = mb_param_surfacePatternScale(config, settings);
     studIcon         = mb_param_studIcon(config, settings);
-    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseSideAdjustment = mb_param_baseAdjustment(config, settings);
 
     // System Parameters
-    unitMbu  = mb_param_unitMbu(config, settings);
-    unitGrid = mb_param_unitGrid(config, settings);
+    unitMbu  = mb_param_unitMbuToMm(config, settings);
+    unitGrid = mb_param_unitGridToMbu(config, settings);
     scale    = mb_param_scale(config, settings);
 
     // Custom Parameters

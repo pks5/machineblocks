@@ -2,14 +2,17 @@ use <geometry.scad>;
 use <utils.scad>;
 use <block_dim.scad>;
 use <../bevel.scad>;
+use <api.scad>;
 
 function mb_block_obj(
+    config,
+    settings,
+
     unitMbuToMm = 1.6, // 1 mbu (mm)
     unitGridToMbu = [5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
     
     scale = 1,
-    printerNozzleDiameter = 0.4,
-    printerLayerHeight = 0.2,
+    
 
     size, 
     sizeMod = undef, 
@@ -22,7 +25,7 @@ function mb_block_obj(
     slopeBaseHeightTop = 1,
     slopeBaseHeightInner = 1.125, // mbu (1.8 mm)
 
-    inverted = false,
+    
     
     topPlateHeight = 1, 
     topPlateHeightAdjustment = -0.6, // Adjustment (mm)
@@ -44,7 +47,7 @@ function mb_block_obj(
     baseClampOffset = 0.25,
     
     
-    recess = false,
+    
     recessDepth = "auto",
     recessWallThickness = 0.333, 
     recessWallGaps = [],
@@ -56,7 +59,7 @@ function mb_block_obj(
     studHeight = 1,
     studHeightAdjustment = 0,
     studSink = 0.25,
-    studMaxOverhang = 0,
+    
     studPadding = 0.2,
 
     reliefCut = false,
@@ -82,10 +85,17 @@ function mb_block_obj(
     tongueOffset = 1,
 
     id = "[Block]",
-    custom_modules = ["my_cube"],
     debug = false
 ) =
     let(
+
+        recess = mb_param_recess(config, settings),
+
+
+        inverted = false,
+        printerNozzleDiameter = 0.4,
+        printerLayerHeight = 0.2,
+        custom_modules = ["my_cube"],
         grid_cfg = [unitMbuToMm, unitGridToMbu[0], unitGridToMbu[1]],
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -153,6 +163,7 @@ function mb_block_obj(
         stud_height_final = studHeight * mul_mbu_to_grid[2] + studHeightAdjustment * mul_mm_to_grid[2],
         stud_sink_final = studSink * mul_mbu_to_grid[2],
         stud_rounding_final = studRounding * mul_mbu_to_grid[0],
+        stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mul_mbu_to_grid[0],
 
         clamp_final = [
             baseClampThickness * mul_mm_to_grid[0], // Thickness
@@ -191,7 +202,7 @@ function mb_block_obj(
         studPadding = mb_qc_resolve(studPadding, false),
         surface_shape = _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, studPadding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_walls, recessStudPadding),
-        recess_inverse_shape = _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_walls, studPadding)
+        recess_inverse_shape = _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_walls, studPadding, stud_max_overhang)
     )
         [
             [
@@ -213,7 +224,7 @@ function mb_block_obj(
             [],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
-            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final, stud_diameter_res],  // 14 - 
+            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final, stud_diameter_res, stud_max_overhang],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
@@ -291,6 +302,7 @@ function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14
 function mb_block_get_stud_height(block_obj) =                      block_obj[14][1];
 function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
+function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14][5];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
@@ -391,9 +403,11 @@ function mb_block_stud_render(block_obj, x, y) =
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_height = mb_block_get_stud_height(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
-        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter, overhang = 0.2),
-        in_recess = mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter, overhang = 0.2),
-        on_recess_wall = !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
+        has_recess = mb_block_has_recess(block_obj),
+        stud_max_overhang = mb_block_get_stud_max_overhang(block_obj),
+        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        on_recess_wall = has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
         bottom = in_recess 
         ? mb_block_recess_floor_offset(
             block_obj,
@@ -421,7 +435,7 @@ function mb_block_stud_render(block_obj, x, y) =
         
     )
     [
-        render_stud && (in_recess || on_recess_wall),
+        render_stud && (!has_recess || in_recess || on_recess_wall),
         stud_offset,
         [bottom, top]  
     ];
@@ -730,9 +744,9 @@ function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slop
     )
     mb_prismoid_plane_expand(bevel_fil, 0, exp);
 
-function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, stud_padding) =
+function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, stud_padding, stud_max_overhang) =
     let(
-        pad = mb_array_add(mb_array_sub_simple(recess_wall_thickness, stud_padding), 0.0125),
+        pad = mb_array_add(mb_array_sub_simple(recess_wall_thickness, stud_padding), stud_max_overhang),
         exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
         bevel_res = bevel_matrix[0],

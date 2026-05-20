@@ -1,9 +1,11 @@
+use <utils.scad>;
+
 /**
  * Native Gatters
  */
 
-function mb_param_unitMbu(config, settings, default = undef) = mb_param(config, settings, "unitMbu", default != undef ? default : 1.6);
-function mb_param_unitGrid(config, settings, default = undef) = mb_param(config, settings, "unitGrid", default != undef ? default : [5, 2]);
+function mb_param_unitMbuToMm(config, settings, default = undef) = mb_param(config, settings, "unitMbuToMm", default != undef ? default : 1.6);
+function mb_param_unitGridToMbu(config, settings, default = undef) = mb_param(config, settings, "unitGridToMbu", default != undef ? default : [5, 2]);
 function mb_param_scale(config, settings, default = undef) = mb_param(config, settings, "scale", default != undef ? default : 1.0);
 
 function mb_param_rotation(config, settings, default = undef) = mb_param(config, settings, "rotation", default != undef ? default : [0, 0, 0]);
@@ -37,11 +39,11 @@ function mb_param_baseClampOuter(config, settings, default = undef) = mb_param(c
 function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);
 function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseCutoutRoundingRadius", default != undef ? default : "auto");
 
-function mb_param_baseReliefCut(config, settings, default = undef) = mb_param(config, settings, "baseReliefCut", default != undef ? default : false);
-function mb_param_baseReliefCutHeight(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutHeight", default != undef ? default : 0.375);
-function mb_param_baseReliefCutThickness(config, settings, default = undef) = mb_param(config, settings, "baseReliefCutThickness", default != undef ? default : 0.375);
+function mb_param_reliefCut(config, settings, default = undef) = mb_param(config, settings, "reliefCut", default != undef ? default : false);
+function mb_param_reliefCutHeight(config, settings, default = undef) = mb_param(config, settings, "reliefCutHeight", default != undef ? default : 0.375);
+function mb_param_reliefCutThickness(config, settings, default = undef) = mb_param(config, settings, "reliefCutThickness", default != undef ? default : 0.375);
 
-function mb_param_baseSideAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseSideAdjustment", default != undef ? default : undef);
+function mb_param_baseAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseAdjustment", default != undef ? default : undef);
 
 function mb_param_baseWallThickness(config, settings, default = undef) = mb_param(config, settings, "baseWallThickness", default != undef ? default : "auto");
 function mb_param_baseWallThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseWallThicknessAdjustment", default != undef ? default : -0.1);
@@ -51,10 +53,10 @@ function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(
 function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
 function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : 0.4);
 
-function mb_param_stabilizerGrid(config, settings, default = undef) = mb_param(config, settings, "stabilizerGrid", default != undef ? default : true);
-function mb_param_stabilizerGridOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridOffset", default != undef ? default : 0.2);
-function mb_param_stabilizerGridHeight(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridHeight", default != undef ? default : 0.5);
-function mb_param_stabilizerGridThickness(config, settings, default = undef) = mb_param(config, settings, "stabilizerGridThickness", default != undef ? default : 0.5);
+function mb_param_stabilizers(config, settings, default = undef) = mb_param(config, settings, "stabilizers", default != undef ? default : true);
+function mb_param_stabilizerPrintOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerPrintOffset", default != undef ? default : 0.2);
+function mb_param_stabilizerHeight(config, settings, default = undef) = mb_param(config, settings, "stabilizerHeight", default != undef ? default : 0.5);
+function mb_param_stabilizerThickness(config, settings, default = undef) = mb_param(config, settings, "stabilizerThickness", default != undef ? default : 0.5);
 function mb_param_stabilizerExpansion(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansion", default != undef ? default : 2);
 function mb_param_stabilizerExpansionOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansionOffset", default != undef ? default : 1);
 
@@ -75,9 +77,9 @@ function mb_param_tubeZDiameterAdjustment(config, settings, default = undef) = m
 function mb_param_tubeInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "tubeInnerClampThickness", default != undef ? default : 0.1);
 
 function mb_param_slope(config, settings, default = undef) = mb_param(config, settings, "slope", default != undef ? default : false);
-function mb_param_slopeBaseHeightLower(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLower", default != undef ? default : 1.333);
-function mb_param_slopeBaseHeightLowerInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLowerInner", default != undef ? default : 1.125);
-function mb_param_slopeBaseHeightUpper(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightUpper", default != undef ? default : 1);
+function mb_param_slopeBaseHeightBottom(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightBottom", default != undef ? default : 1.333);
+function mb_param_slopeBaseHeightInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLower", default != undef ? default : 1.125);
+function mb_param_slopeBaseHeightTop(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightTop", default != undef ? default : 1);
 
 function mb_param_bevel(config, settings, default = undef) = mb_param(config, settings, "bevel", default != undef ? default : [[0,0], [0,0], [0,0], [0,0]]);
 

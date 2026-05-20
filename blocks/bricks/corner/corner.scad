@@ -131,9 +131,9 @@ module mb_block__mb__bricks__corner(config = undef, settings = undef){
     align = mb_param_align(config, settings);
     baseCutoutType = mb_param_baseCutoutType(config, settings);
     pillars = mb_param_pillars(config, settings);
-    baseReliefCut = mb_param_baseReliefCut(config, settings);
-    baseReliefCutHeight = mb_param_baseReliefCutHeight(config, settings);
-    baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
+    baseReliefCut = mb_param_reliefCut(config, settings);
+    baseReliefCutHeight = mb_param_reliefCutHeight(config, settings);
+    baseReliefCutThickness = mb_param_reliefCutThickness(config, settings);
     grille = mb_param_grille(config, settings);
     grilleInverted = mb_param_grilleInverted(config, settings);
     grilleDepth = mb_param_grilleDepth(config, settings);

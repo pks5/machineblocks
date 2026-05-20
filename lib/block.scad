@@ -42,8 +42,8 @@ module mb_block(
     
 
     //START get parameters
-    unitMbu = mb_param_unitMbu(config, settings);
-    unitGrid = mb_param_unitGrid(config, settings);
+    unitMbu = mb_param_unitMbuToMm(config, settings);
+    unitGrid = mb_param_unitGridToMbu(config, settings);
 
     scale = mb_param_scale(config, settings);
 
@@ -81,11 +81,11 @@ module mb_block(
     baseCutoutRoundingRadius = mb_param_baseCutoutRoundingRadius(config, settings);
     
 
-    baseReliefCut = mb_param_baseReliefCut(config, settings);
-    baseReliefCutHeight = mb_param_baseReliefCutHeight(config, settings);
-    baseReliefCutThickness = mb_param_baseReliefCutThickness(config, settings);
+    baseReliefCut = mb_param_reliefCut(config, settings);
+    baseReliefCutHeight = mb_param_reliefCutHeight(config, settings);
+    baseReliefCutThickness = mb_param_reliefCutThickness(config, settings);
 
-    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseSideAdjustment = mb_param_baseAdjustment(config, settings);
     
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
@@ -97,10 +97,10 @@ module mb_block(
     topPlateHelperHeight = mb_param_topPlateHelperHeight(config, settings);
     topPlateHelperThickness = mb_param_topPlateHelperThickness(config, settings);
 
-    stabilizerGrid = mb_param_stabilizerGrid(config, settings);
-    stabilizerGridOffset = mb_param_stabilizerGridOffset(config, settings);
-    stabilizerGridHeight = mb_param_stabilizerGridHeight(config, settings);
-    stabilizerGridThickness = mb_param_stabilizerGridThickness(config, settings);
+    stabilizerGrid = mb_param_stabilizers(config, settings);
+    stabilizerGridOffset = mb_param_stabilizerPrintOffset(config, settings);
+    stabilizerGridHeight = mb_param_stabilizerHeight(config, settings);
+    stabilizerGridThickness = mb_param_stabilizerThickness(config, settings);
     stabilizerExpansion = mb_param_stabilizerExpansion(config, settings);
     stabilizerExpansionOffset = mb_param_stabilizerExpansionOffset(config, settings);
 
@@ -121,9 +121,9 @@ module mb_block(
     tubeInnerClampThickness = mb_param_tubeInnerClampThickness(config, settings);
 
     slope = mb_param_slope(config, settings);
-    slopeBaseHeightLower = mb_param_slopeBaseHeightLower(config, settings);
-    slopeBaseHeightLowerInner = mb_param_slopeBaseHeightLowerInner(config, settings);
-    slopeBaseHeightUpper = mb_param_slopeBaseHeightUpper(config, settings);
+    slopeBaseHeightLower = mb_param_slopeBaseHeightBottom(config, settings);
+    slopeBaseHeightLowerInner = mb_param_slopeBaseHeightInner(config, settings);
+    slopeBaseHeightUpper = mb_param_slopeBaseHeightTop(config, settings);
 
     bevel = mb_param_bevel(config, settings);
 
@@ -314,6 +314,11 @@ module mb_block(
     
     
     block_obj = mb_block_obj(
+        config = config,
+        settings = settings,
+
+
+
         size = size, 
         sizeAdjustment = sizeAdjustment,
         sizeMod = baseMod, 
@@ -323,7 +328,6 @@ module mb_block(
         unitMbuToMm = unitMbu,
         unitGridToMbu = unitGrid,
         scale = scale,
-        recess = recess,
         recessWallThickness = recessWallThickness,
         recessWallGaps = recessWallGaps,
         baseWallGaps = baseWallGaps,
