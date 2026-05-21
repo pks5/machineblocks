@@ -1,6 +1,6 @@
 use <utils.scad>;
 
-function mb_block_dim(size, size_mod = undef, base_adj = undef) =
+function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, slope = undef) =
     let(
         size = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
         mod = mb_qc_resolve(qc = size_mod, cube = true),
@@ -49,6 +49,10 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef) =
             ] // max from org center
         ],
 
+        bevel = mb_bevel_resolve(bevel, mod_size),
+        slope = mb_slope_resolve(slope, mod_size),
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
+
         cut_tol = 0.001
     )
     [
@@ -83,7 +87,8 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef) =
             ] // Max Index (modified)
         ], // 3
         [adj_size, bsa],  // 4
-        cut_tol  // 5
+        [bevel, bevel_matrix, slope], // 5
+        cut_tol  // 6
     ];
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
@@ -99,7 +104,13 @@ function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
 
 function mb_block_dim_adj_size(block_dim) =                      block_dim[4][0];
 function mb_block_dim_base_adj(block_dim) =                      block_dim[4][1];
-function mb_block_dim_cut_tol(block_dim) =                       block_dim[5];
+
+function mb_block_dim_bevel(block_dim) =                         block_dim[5][0];
+function mb_block_dim_bevel_matrix(block_dim) =                  block_dim[5][1];
+function mb_block_dim_slope(block_dim) =                         block_dim[5][2];
+
+
+function mb_block_dim_cut_tol(block_dim) =                       block_dim[6];
 
 function mb_block_dim_cut_offset(block_dim, cut = false) =
     let(cut_tol = mb_block_dim_cut_tol(block_dim))
