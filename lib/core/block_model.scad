@@ -731,30 +731,24 @@ function _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, stud
     let(
         exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(stud_padding, -1)),
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
-        bevel_res = bevel_matrix[0],
-        bevel_fil = bevel_matrix[1]
     )
-    mb_poly_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_matrix, 0, exp);
 
 function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, recess_stud_padding) =
     let(
         pad = mb_array_add(recess_wall_thickness, recess_stud_padding),
         exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
-        bevel_res = bevel_matrix[0],
-        bevel_fil = bevel_matrix[1]
     )
-    mb_poly_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_matrix, 0, exp);
 
 function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, stud_padding, stud_max_overhang) =
     let(
         pad = mb_array_add(mb_array_sub_simple(recess_wall_thickness, stud_padding), stud_max_overhang),
         exp = mb_array_add(mb_slope_filter(slope, 1, -1), mb_array_mul(pad, -1)),
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
-        bevel_res = bevel_matrix[0],
-        bevel_fil = bevel_matrix[1]
     )
-    mb_poly_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_matrix, 0, exp);
 
 /*
 * -------------

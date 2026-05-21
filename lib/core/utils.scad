@@ -456,7 +456,7 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
                 ) ? undef : bb[i]
         ]
     )
-    [bv, bu];
+    bu;
 
 function _mb_bevel_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
 
