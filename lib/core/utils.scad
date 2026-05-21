@@ -545,18 +545,46 @@ function mb_bevel_resolve(bevel) =
 * -----------
 */
 
+
+
+function _mb_slope_resolve_pair(a, b, max_size) =
+    let(
+        aa = abs(a),
+        ab = abs(b),
+        sa = sign(a),
+        sb = sign(b),
+        sum = aa + ab,
+        scale = (a != 0 && b != 0 && sa == sb && sum > max_size)
+            ? max_size / sum
+            : 1
+    )
+    [
+        a == 0 ? 0 : sa * min(aa * scale, max_size),
+        b == 0 ? 0 : sb * min(ab * scale, max_size)
+    ];
+
+function mb_slope_resolve(slope, mod_size) =
+    let(
+        s = mb_qc_resolve(slope, false),
+        x = _mb_slope_resolve_pair(s[0], s[1], mod_size[0]),
+        y = _mb_slope_resolve_pair(s[2], s[3], mod_size[1])
+    )
+    [x[0], x[1], y[0], y[1]];
+
+function mb_slope_filter(slope, filter = 1, res = 0) = 
+    [
+        for(f = [0 : 3])
+            sign(slope[f]) == filter ? (res < 0 ? -abs(slope[f]) : res > 0 ? abs(slope[f]) : slope[f]) : 0
+    ];
+
+/*
+
 function mb_slope_shrink(slope, shrink) = 
     [
         sign(slope[0]) * (abs(slope[0]) + shrink[0]), 
         sign(slope[1]) * (abs(slope[1]) + shrink[1]),
         sign(slope[2]) * (abs(slope[2]) + shrink[2]),
         sign(slope[3]) * (abs(slope[3]) + shrink[3])
-    ];
-
-function mb_slope_filter(slope, filter = 1, res = 0) = 
-    [
-        for(f = [0 : 3])
-            sign(slope[f]) == filter ? (res < 0 ? -abs(slope[f]) : res > 0 ? abs(slope[f]) : slope[f]) : 0
     ];
 
 function mb_slope_matrix(slope, bevel_res, mod_size) =
@@ -589,63 +617,8 @@ function mb_slope_matrix(slope, bevel_res, mod_size) =
                 [-sl[i][1], sl[i][2]], [-sl[i][1], sl[i][2]]
             ]
     ];
-
-/*
-function mb_slope_is_num_array(a, n, i = 0) =
-    is_list(a) && len(a) == n &&
-    (i >= n || (is_num(a[i]) && mb_slope_is_num_array(a, n, i + 1)));
-
-function mb_slope_normal(slope) =
-    is_num(slope)
-        ? [slope, slope, slope, slope]
-        : mb_slope_is_num_array(slope, 1)
-            ? [slope[0], slope[0], slope[0], slope[0]]
-        : mb_slope_is_num_array(slope, 2)
-            ? [slope[0], slope[0], slope[1], slope[1]]
-        : mb_slope_is_num_array(slope, 3)
-            ? [slope[0], slope[1], slope[2], 0]
-        : mb_slope_is_num_array(slope, 4)
-            ? [slope[0], slope[1], slope[2], slope[3]]
-        : undef;
-
-function mb_slope_complex_item(item) =
-    is_list(item) && len(item) == 2 && is_num(item[1])
-        ? let(k = mb_face_to_int(item[0]), v = item[1])
-            k == 0 ? [v, undef, undef, undef] :
-            k == 1 ? [undef, v, undef, undef] :
-            k == 2 ? [undef, undef, v, undef] :
-            k == 3 ? [undef, undef, undef, v] :
-            k == 6 ? [v, v, undef, undef] :
-            k == 7 ? [undef, undef, v, v] :
-            k == 9 ? [v, v, v, v] :
-            undef
-        : undef;
-
-function mb_slope_overwrite(a, b) = [
-    b[0] == undef ? a[0] : b[0],
-    b[1] == undef ? a[1] : b[1],
-    b[2] == undef ? a[2] : b[2],
-    b[3] == undef ? a[3] : b[3]
-];
-
-function mb_slope_complex(items, i = 0, acc = [0, 0, 0, 0]) =
-    !is_list(items) || i >= len(items)
-        ? acc
-        : let(b = mb_slope_complex_item(items[i]))
-            mb_slope_complex(
-                items,
-                i + 1,
-                b == undef ? acc : mb_slope_overwrite(acc, b)
-            );
-
-function mb_slope_resolve(slope) =
-    let(normal = mb_slope_normal(slope))
-        normal != undef
-            ? normal
-            : is_list(slope)
-                ? mb_slope_complex(slope)
-                : [0, 0, 0, 0];
 */
+
 /*
 * ---------
 * END SLOPE

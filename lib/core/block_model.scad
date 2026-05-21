@@ -199,7 +199,7 @@ function mb_block_obj(
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
 
         bevel = mb_bevel_resolve(bevel),
-        slope = mb_qc_resolve(slope, false),
+        slope = mb_slope_resolve(slope, mod_size),
         studPadding = mb_qc_resolve(studPadding, false),
         surface_shape = _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, studPadding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_walls, recessStudPadding),
