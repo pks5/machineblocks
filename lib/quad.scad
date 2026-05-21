@@ -1,4 +1,4 @@
-
+use <core/utils.scad>;
 
 // =====================
 // Hilfsfunktionen
@@ -101,3 +101,161 @@ function mb_array_index_of(a, v, i=0) =
     a[i] == v ? i :
     mb_array_index_of(a, v, i + 1);
 
+// =========================
+// GEOMETRY BASICS
+// =========================
+
+function mb_orient2(a, b, c) =
+    (b[0] - a[0]) * (c[1] - a[1]) -
+    (b[1] - a[1]) * (c[0] - a[0]);
+
+function mb_between(a, b, c, eps = 0.000001) =
+    min(a, b) - eps <= c && c <= max(a, b) + eps;
+
+function mb_point_on_segment(a, b, p, eps = 0.000001) =
+    abs(mb_orient2(a, b, p)) <= eps &&
+    mb_between(a[0], b[0], p[0], eps) &&
+    mb_between(a[1], b[1], p[1], eps);
+
+// =========================
+// SEGMENT INTERSECTION
+// =========================
+
+function mb_segments_intersect(a, b, c, d, eps = 0.000001) =
+    let(
+        o1 = mb_orient2(a, b, c),
+        o2 = mb_orient2(a, b, d),
+        o3 = mb_orient2(c, d, a),
+        o4 = mb_orient2(c, d, b)
+    )
+    (
+        (o1 * o2 < -eps && o3 * o4 < -eps) ||
+        mb_point_on_segment(a, b, c, eps) ||
+        mb_point_on_segment(a, b, d, eps) ||
+        mb_point_on_segment(c, d, a, eps) ||
+        mb_point_on_segment(c, d, b, eps)
+    );
+
+// =========================
+// POLYGON VALIDATION
+// =========================
+
+function mb_edges_adjacent(n, i, j) =
+    i == j ||
+    (i + 1) % n == j ||
+    (j + 1) % n == i;
+
+function mb_poly_self_intersects_pair(p, i, j, eps) =
+    let(n = len(p))
+    mb_edges_adjacent(n, i, j)
+        ? false
+        : mb_segments_intersect(
+            p[i],
+            p[(i + 1) % n],
+            p[j],
+            p[(j + 1) % n],
+            eps
+        );
+
+function mb_poly_self_intersects_j(p, i, j, eps) =
+    j >= len(p)
+        ? false
+        : mb_poly_self_intersects_pair(p, i, j, eps)
+            ? true
+            : mb_poly_self_intersects_j(p, i, j + 1, eps);
+
+function mb_poly_self_intersects_i(p, i = 0, eps = 0.000001) =
+    i >= len(p)
+        ? false
+        : mb_poly_self_intersects_j(p, i, i + 1, eps)
+            ? true
+            : mb_poly_self_intersects_i(p, i + 1, eps);
+
+function mb_poly_valid_simple(p, eps = 0.000001) =
+    len(p) >= 3 && !mb_poly_self_intersects_i(p, 0, eps);
+
+// =========================
+// ORIENTATION CHECK
+// =========================
+
+function mb_poly_area2(p, i = 0, a = 0) =
+    i >= len(p)
+        ? a
+        : mb_poly_area2(
+            p,
+            i + 1,
+            a + p[i][0] * p[(i + 1) % len(p)][1]
+              - p[(i + 1) % len(p)][0] * p[i][1]
+        );
+
+function mb_poly_same_orientation(a, b, eps = 0.000001) =
+    let(aa = mb_poly_area2(a), bb = mb_poly_area2(b))
+        abs(bb) > eps && ((aa > 0 && bb > 0) || (aa < 0 && bb < 0));
+
+// =========================
+// VALIDATION COMBINED
+// =========================
+
+function mb_inset_ngon_valid(p, q, eps = 0.000001) =
+    mb_poly_same_orientation(p, q, eps) &&
+    mb_poly_valid_simple(q, eps);
+
+// =========================
+// UTILS
+// =========================
+
+function mb_scale_array(a, s) =
+    [for(v = a) v * s];
+
+// =========================
+// SAFE INSET (BINARY SEARCH)
+// =========================
+
+function mb_inset_ngon_edges_safe_iter(p, dc, lo, hi, steps, eps) =
+    steps <= 0
+        ? mb_inset_ngon_edges(p, mb_scale_array(dc, lo))
+        : let(
+            mid = (lo + hi) / 2,
+            q = mb_inset_ngon_edges(p, mb_scale_array(dc, mid)),
+            ok = mb_inset_ngon_valid(p, q, eps)
+        )
+        ok
+            ? mb_inset_ngon_edges_safe_iter(p, dc, mid, hi, steps - 1, eps)
+            : mb_inset_ngon_edges_safe_iter(p, dc, lo, mid, steps - 1, eps);
+
+function mb_inset_ngon_edges_safe(p, dc, steps = 24, eps = 0.000001) =
+    let(q = mb_inset_ngon_edges(p, dc))
+        mb_inset_ngon_valid(p, q, eps)
+            ? q
+            : mb_inset_ngon_edges_safe_iter(p, dc, 0, 1, steps, eps);
+
+
+function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
+    is_undef(expand) || (expand == [0, 0, 0, 0, 0, 0]) ? pts :
+    let(
+        sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
+        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
+        d_edge8 = [
+            -sext[0], -sext[0],
+            -sext[3], -sext[3],
+            -sext[1], -sext[1],
+            -sext[2], -sext[2]
+        ],
+
+        // nur vorhandene Punkte behalten
+        idx = [ for(i=[0:7]) if(pts[i] != undef) i ],
+        Pc  = [ for(i=idx) pts[i] ],
+
+        dc = [ for(i=idx) d_edge8[i] ],
+
+        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges_safe(Pc, dc) : [],
+
+        Q8 = [
+            for(i=[0:7])
+                let(qqx = Qc[mb_array_index_of(idx, i)])
+                pts[i] == undef
+                    ? undef
+                    : [qqx[0], qqx[1], len(pts[i]) > 2 && !is_undef(pts[i][2]) ? (pts[i][2] + (p == 0 ? -1 : 1) * sext[4+p]) : undef, pts[i][3]]
+        ]
+    )
+    Q8;

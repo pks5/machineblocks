@@ -2,6 +2,7 @@ use <geometry.scad>;
 use <utils.scad>;
 use <block_dim.scad>;
 use <../bevel.scad>;
+use <../quad.scad>;
 use <api.scad>;
 
 function mb_block_obj(

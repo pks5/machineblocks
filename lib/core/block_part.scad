@@ -2,6 +2,7 @@ use <geometry.scad>;
 use <block_model.scad>;
 use <block_dim.scad>;
 use <utils.scad>;
+use <../quad.scad>;
 
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
