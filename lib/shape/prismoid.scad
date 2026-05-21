@@ -320,15 +320,13 @@ function mb_socket_point(point, inv_point, socket_top = undef, socket_bottom = u
     socket_bottom > 0 && (i == 1) ?
                         [inv_point[0], inv_point[1], inv_point[2] + socket_bottom] : undef;   
 
-function mb_socket_point_bottom(point, inv_point, inv_dis, socket, i) =
-    socket[0] <= 0 ? undef : (i == 0) ?
-                        ((inv_dis[0] < 0 || inv_dis[1] < 0) ? [point[0], point[1], point[2] + socket[0]] : undef) : 
-                        ((inv_dis[0] > 0 || inv_dis[1] > 0) ? [inv_point[0], inv_point[1], inv_point[2] + socket[0]] : undef);
+function mb_socket_point_bottom(point, inv_point, inv_dis, socket, corner, slope) =
+    socket[0] <= 0 ? undef : 
+                        ((slope[0] > 0 || slope[1] > 0) ? ((corner[0] == 0) ? [point[0], point[1], point[2] + socket[0]] : [inv_point[0], inv_point[1], inv_point[2] + socket[0]]) : undef);
     
-function mb_socket_point_top(point, inv_point, inv_dis, socket, i) =
-    socket[1] <= 0 ? undef : (i == 1) ?
-                        ((inv_dis[0] < 0 || inv_dis[1] < 0) ? [point[0], point[1], point[2] - socket[1]] : undef) : 
-                        ((inv_dis[0] > 0 || inv_dis[1] > 0) ? [inv_point[0], inv_point[1], inv_point[2] - socket[1]] : undef);            
+function mb_socket_point_top(point, inv_point, inv_dis, socket, corner, slope) =
+    socket[1] <= 0 ? undef : 
+                        ((slope[0] < 0 || slope[1] < 0) ? ((corner[0] == 1) ? [point[0], point[1], point[2] - socket[1]] : [inv_point[0], inv_point[1], inv_point[2] - socket[1]]) : undef);            
 
 function mb_point_radius(shape, i, j) =
     let(plane = mb_prismoid_plane(shape, i))
@@ -653,24 +651,24 @@ module mb_prismoid(
                                 prev_point = mb_prev_point(shape, i, j);
                                 next_point = mb_next_point(shape, i, j);
                                 inv_point = mb_inv_point(shape, i, j);
-                                inv_dis = mb_point_distance(mb_point_distance(point, min_point, false), mb_point_distance(inv_point, min_point, false));
-                                
-                                
+                                inv_dis = mb_point_distance(point, inv_point);
 
-                                socket_point_bottom = mb_socket_point_bottom(point, inv_point, inv_dis, sck, i);
-                                socket_point_top = mb_socket_point_top(point, inv_point, inv_dis, sck, i);
+                                slope = [(corner[0] == 0 ? 1 : -1) * (corner[1] < 4 ? 1 : -1) * mb_round_prec(inv_dis[0], 0.001), (corner[0] == 0 ? 1 : -1) * (corner[1] == 0 || corner[1] == 1  || corner[1] == 6 || corner[1] == 7 ? 1 : -1) * mb_round_prec(inv_dis[1], 0.001)];
+                                
+                                socket_point_bottom = mb_socket_point_bottom(point, inv_point, inv_dis, sck, corner, slope);
+                                socket_point_top = mb_socket_point_top(point, inv_point, inv_dis, sck, corner, slope);
 
                                 angle = mb_corner_angle(corner, prev_point, point, next_point, (socket_point_bottom != undef && socket_point_top != undef) ? inv_point : (socket_point_bottom != undef ? socket_point_bottom : (socket_point_top != undef ? socket_point_top : inv_point)));
 
                                 if(debug){
-                                    echo(level = i, 
-                                        corner = j, 
+                                    echo(corner = corner, 
                                         ang = angle, 
                                         pp = prev_point, 
                                         p = point, 
                                         np = next_point, 
                                         ip = inv_point, 
                                         inv_dis = inv_dis,
+                                        slope = slope,
                                         spt = socket_point_top,
                                         sptb = socket_point_bottom);
                                 }

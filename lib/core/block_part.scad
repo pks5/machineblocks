@@ -141,14 +141,14 @@ function mb_block_part_prismoid(
         slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
         //sl = mb_slope_matrix(slope, bevel_res, mod_size),
         slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1)
+        slope_pos_inv = mb_slope_filter(slope, 1, -1)
     )
     [
         "prismoid",
         [
             [
                 mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
-                mb_prismoid_plane_expand(bevel_fil, 1, [-slope_pos[0], -slope_pos[1], -slope_pos[2], -slope_pos[3]]),
+                mb_prismoid_plane_expand(bevel_fil, 1, slope_pos_inv),
                 [h_exp, socket, undef, exp]
             ]
         ] // Shape
