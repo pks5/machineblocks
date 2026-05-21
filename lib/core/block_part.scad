@@ -111,7 +111,7 @@ function mb_block_part_cube(
 
 function mb_block_part_prismoid(
     block_dim, 
-    bevel = undef, 
+    bevel = true, 
     slope = undef, 
     socket = undef, 
     expand = undef, 
@@ -134,7 +134,7 @@ function mb_block_part_prismoid(
         exp = is_undef(expand) ? undef : exp_sin ? [ is_undef(expand[0]) ? undef : [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], is_undef(expand[1]) ? undef : [expand[1][0], expand[1][1], expand[1][2], expand[1][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
         
         
-        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
+        bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         
         slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
         
