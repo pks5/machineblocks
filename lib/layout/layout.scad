@@ -10,9 +10,9 @@ use <../core/block_part.scad>;
 */
 
 function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) = 
-    mb_block_part_prismoid(
+    mb_block_part_cube(
         block_dim = block_dim, 
-        expand = [[
+        expand = [
             for(f = [0 : 3])
                 mb_block_dim_face_edge_expand(
                     block_dim, 
@@ -22,7 +22,7 @@ function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) =
                 ),
             bottom,
             top
-        ]]
+        ]
     );
 
 function _mb_layout_plane_value(planes, value, plane = "all", all = true, else_value = undef) = 
@@ -641,7 +641,6 @@ function mb_block_part__recess(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
         slope = mb_block_dim_slope(block_dim),
-        slope_pos = mb_slope_filter(slope, 1),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
         
