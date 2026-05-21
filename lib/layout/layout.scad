@@ -22,8 +22,7 @@ function _mb_layout_mask_frame(block_dim, bottom, top, outer_adj = 0) =
                 ),
             bottom,
             top
-        ]],
-        bevel = false
+        ]]
     );
 
 function _mb_layout_plane_value(planes, value, plane = "all", all = true, else_value = undef) = 
@@ -37,7 +36,7 @@ function _mb_layout_plane_value(planes, value, plane = "all", all = true, else_v
 function mb_block_part__tongue(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_pos = mb_slope_filter(slope, 1),
         has_tongue = mb_block_has_tongue(block_obj),
         tongue_offset = mb_block_get_tongue_offset(block_obj),
@@ -178,11 +177,12 @@ function mb_block_part__tubes(block_obj, axis = "z") =
 * ----------
 */
 function mb_block_part__base_outer(block_obj, adjusted = true) =
+    let(block_dim = mb_block_get_dim(block_obj))
     mb_block_part_prismoid(
-        block_dim = mb_block_get_dim(block_obj), 
+        block_dim = block_dim, 
         expand = adjusted ? [mb_block_get_base_adj(block_obj)] : undef,
         socket = mb_block_get_slope_socket(block_obj),
-        slope = mb_block_get_slope(block_obj)
+        slope = mb_block_dim_slope(block_dim)
     ); 
 
 
@@ -198,7 +198,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         
@@ -268,7 +268,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
 
         wall_thickness = mb_block_get_wall_thickness(block_obj),
@@ -584,7 +584,7 @@ function mb_block_part__relief_cut(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         relief_cut_thickness = mb_block_get_relief_cut_thickness(block_obj),
         relief_cut_height = mb_block_get_relief_cut_height(block_obj),
@@ -640,7 +640,7 @@ function mb_block_part__recess(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_pos = mb_slope_filter(slope, 1),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
@@ -745,7 +745,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         cut_tol = mb_block_dim_cut_offset(block_dim, cut = true), //TODO remove
-        slope = mb_block_get_slope(block_obj),
+        slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
         top = mb_block_dim_opposite_offset(

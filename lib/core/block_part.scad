@@ -139,7 +139,8 @@ function mb_block_part_prismoid(
         slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
         
         slope_neg = mb_slope_filter(slope, -1),
-        slope_pos_inv = mb_slope_filter(slope, 1, -1)
+        slope_pos_inv = mb_slope_filter(slope, 1, -1),
+        //socket = slope_inner ? [] : []
     )
     [
         "prismoid",

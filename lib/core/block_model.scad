@@ -200,7 +200,6 @@ function mb_block_obj(
 
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
 
-        bevel = mb_block_dim_bevel(block_dim),
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
         studPadding = mb_qc_resolve(studPadding, false),
@@ -215,7 +214,7 @@ function mb_block_obj(
                 adj_size,
                 center
             ], // 0 - Original Size / Mod Size
-            [bevel, slope], // 1 - Bevel / Slope
+            [], // 1 - 
             mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
@@ -253,7 +252,6 @@ function mb_block_get_id(block_obj) =                               block_obj[20
 function mb_block_get_bevel(block_obj) =                            block_obj[1][0];
 function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
 
-function mb_block_get_slope(block_obj) =                            block_obj[1][1];
 
 function mb_block_get_slope_socket(block_obj) =                     [block_obj[5][0], block_obj[5][1]];
 function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5][2];
