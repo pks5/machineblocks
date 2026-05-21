@@ -1,5 +1,5 @@
 use <../core/utils.scad>;
-use <../quad.scad>;
+use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
 
 /*
@@ -320,11 +320,11 @@ function mb_socket_point(point, inv_point, socket_top = undef, socket_bottom = u
     socket_bottom > 0 && (i == 1) ?
                         [inv_point[0], inv_point[1], inv_point[2] + socket_bottom] : undef;   
 
-function mb_socket_point_bottom(point, inv_point, inv_dis, socket, corner, slope) =
+function mb_socket_point_bottom(point, inv_point, socket, corner, slope) =
     socket[0] <= 0 ? undef : 
                         ((slope[0] > 0 || slope[1] > 0) ? ((corner[0] == 0) ? [point[0], point[1], point[2] + socket[0]] : [inv_point[0], inv_point[1], inv_point[2] + socket[0]]) : undef);
     
-function mb_socket_point_top(point, inv_point, inv_dis, socket, corner, slope) =
+function mb_socket_point_top(point, inv_point, socket, corner, slope) =
     socket[1] <= 0 ? undef : 
                         ((slope[0] < 0 || slope[1] < 0) ? ((corner[0] == 1) ? [point[0], point[1], point[2] - socket[1]] : [inv_point[0], inv_point[1], inv_point[2] - socket[1]]) : undef);            
 
@@ -553,8 +553,8 @@ function mb_prismoid_shape_resolve(
             mb_prismoid_plane_resolve_points(s, 1, mul = mul, add = a[1], height = height, radius = r[1])
         ],
         ex = is_undef(expand) ? ar : [
-           mb_prismoid_plane_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
-           mb_prismoid_plane_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
+           mb_poly_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
+           mb_poly_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
         ]
     )
     [
@@ -655,8 +655,8 @@ module mb_prismoid(
 
                                 slope = [(corner[0] == 0 ? 1 : -1) * (corner[1] < 4 ? 1 : -1) * mb_round_prec(inv_dis[0], 0.001), (corner[0] == 0 ? 1 : -1) * (corner[1] == 0 || corner[1] == 1  || corner[1] == 6 || corner[1] == 7 ? 1 : -1) * mb_round_prec(inv_dis[1], 0.001)];
                                 
-                                socket_point_bottom = mb_socket_point_bottom(point, inv_point, inv_dis, sck, corner, slope);
-                                socket_point_top = mb_socket_point_top(point, inv_point, inv_dis, sck, corner, slope);
+                                socket_point_bottom = mb_socket_point_bottom(point, inv_point, sck, corner, slope);
+                                socket_point_top = mb_socket_point_top(point, inv_point, sck, corner, slope);
 
                                 angle = mb_corner_angle(corner, prev_point, point, next_point, (socket_point_bottom != undef && socket_point_top != undef) ? inv_point : (socket_point_bottom != undef ? socket_point_bottom : (socket_point_top != undef ? socket_point_top : inv_point)));
 

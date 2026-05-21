@@ -2,7 +2,7 @@ use <geometry.scad>;
 use <block_model.scad>;
 use <block_dim.scad>;
 use <utils.scad>;
-use <../quad.scad>;
+use <poly_expand.scad>;
 
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
@@ -147,8 +147,8 @@ function mb_block_part_prismoid(
         "prismoid",
         [
             [
-                mb_prismoid_plane_expand(bevel_fil, 0, slope_neg),
-                mb_prismoid_plane_expand(bevel_fil, 1, slope_pos_inv),
+                mb_poly_expand(bevel_fil, 0, slope_neg),
+                mb_poly_expand(bevel_fil, 1, slope_pos_inv),
                 [h_exp, socket, undef, exp]
             ]
         ] // Shape

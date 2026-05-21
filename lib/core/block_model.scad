@@ -2,7 +2,7 @@ use <geometry.scad>;
 use <utils.scad>;
 use <block_dim.scad>;
 use <../bevel.scad>;
-use <../quad.scad>;
+use <poly_expand.scad>;
 use <api.scad>;
 
 function mb_block_obj(
@@ -734,7 +734,7 @@ function _mb_block_model_surface_shape(mod_size, min_max_pos, bevel, slope, stud
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1]
     )
-    mb_prismoid_plane_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_fil, 0, exp);
 
 function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, recess_stud_padding) =
     let(
@@ -744,7 +744,7 @@ function _mb_block_model_recess_surface_shape(mod_size, min_max_pos, bevel, slop
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1]
     )
-    mb_prismoid_plane_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_fil, 0, exp);
 
 function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slope, recess_wall_thickness, stud_padding, stud_max_overhang) =
     let(
@@ -754,7 +754,7 @@ function _mb_block_model_recess_inverse_shape(mod_size, min_max_pos, bevel, slop
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1]
     )
-    mb_prismoid_plane_expand(bevel_fil, 0, exp);
+    mb_poly_expand(bevel_fil, 0, exp);
 
 /*
 * -------------
