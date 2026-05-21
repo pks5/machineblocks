@@ -362,20 +362,55 @@ function mb_undef_to(v, to = 0) = is_undef(v) ? to : v;
 * -----------
 */
 
-function mb_bevel_shrink(bevel, shrink) = 
+function _mb_radius_pair(v) =
+    is_list(v) && len(v) >= 2
+        ? [max(0, v[0]), max(0, v[1])]
+        : [0, 0];
+
+function _mb_radius_resolve_pair(a, b, max_size) =
+    let(
+        aa = max(0, a),
+        bb = max(0, b),
+        sum = aa + bb,
+        scale = sum > max_size ? max_size / sum : 1
+    )
     [
-        [max(0, bevel[0][0] + shrink[0]), max(0, bevel[0][1] + shrink[2])],
-        [max(0, bevel[1][0] + shrink[0]), max(0, bevel[1][1] + shrink[3])],
-        [max(0, bevel[2][0] + shrink[1]), max(0, bevel[2][1] + shrink[3])],
-        [max(0, bevel[3][0] + shrink[1]), max(0, bevel[3][1] + shrink[2])]
+        aa * scale,
+        bb * scale
     ];
+
+function mb_corner_radius_resolve(radius, mod_size) =
+    let(
+        r = [
+            _mb_radius_pair(radius[0]),
+            _mb_radius_pair(radius[1]),
+            _mb_radius_pair(radius[2]),
+            _mb_radius_pair(radius[3])
+        ],
+
+        // X-Kanten: unten sw+se, oben nw+ne
+        x0 = _mb_radius_resolve_pair(r[0][0], r[3][0], mod_size[0]),
+        x1 = _mb_radius_resolve_pair(r[1][0], r[2][0], mod_size[0]),
+
+        // Y-Kanten: links sw+nw, rechts se+ne
+        y0 = _mb_radius_resolve_pair(r[0][1], r[1][1], mod_size[1]),
+        y1 = _mb_radius_resolve_pair(r[3][1], r[2][1], mod_size[1])
+    )
+    [
+        [x0[0], y0[0]], // sw
+        [x1[0], y0[1]], // nw
+        [x1[1], y1[1]], // ne
+        [x0[1], y1[0]]  // se
+    ];
+
+
 
 function mb_bevel_matrix(bevel, mod_size, min_max) =
     let(
-        
+        bv = is_undef(bevel) ? mb_bevel_resolve(0, mod_size) : bevel,
         mn = min_max[0],
         mx = min_max[1],
-        bev = [
+        /*bv = [
             [min(mod_size[0], bevel[0][0]), min(mod_size[1], bevel[0][1])],
             [min(mod_size[0], bevel[1][0]), min(mod_size[1], bevel[1][1])],
             [min(mod_size[0], bevel[2][0]), min(mod_size[1], bevel[2][1])],
@@ -386,7 +421,7 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
             [bev[1][0], min(mod_size[1] - bev[0][1], bev[1][1])],
             [min(mod_size[0] - bev[1][0], bev[2][0]), bev[2][1]],
             [bev[3][0], min(mod_size[1] - bev[2][1], bev[3][1])]
-        ],
+        ],*/
         bc = [
             [mn[0], mn[1]], [mn[0], mn[1]],
             [mn[0], mx[1]], [mn[0], mx[1]], 
@@ -423,35 +458,35 @@ function mb_bevel_matrix(bevel, mod_size, min_max) =
     )
     [bv, bu];
 
-function mb_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
+function _mb_bevel_clamp0(v) = (is_num(v) && v > 0) ? v : 0;
 
-function mb_is_pair(v) =
+function _mb_bevel_is_pair(v) =
     is_list(v) && len(v) == 2 && is_num(v[0]) && is_num(v[1]);
 
 function mb_pair(v) =
-    mb_is_pair(v)
-        ? [mb_clamp0(v[0]), mb_clamp0(v[1])]
+    _mb_bevel_is_pair(v)
+        ? [_mb_bevel_clamp0(v[0]), _mb_bevel_clamp0(v[1])]
         : is_num(v)
-            ? [mb_clamp0(v), mb_clamp0(v)]
+            ? [_mb_bevel_clamp0(v), _mb_bevel_clamp0(v)]
             : [0,0];
 
 function mb_pair_or_undef(v) =
-    mb_is_pair(v)
-        ? [mb_clamp0(v[0]), mb_clamp0(v[1])]
+    _mb_bevel_is_pair(v)
+        ? [_mb_bevel_clamp0(v[0]), _mb_bevel_clamp0(v[1])]
         : undef;
 
 // b overwrites a if b != undef
-function mb_pair_overwrite(a, b) =
+function _mb_bevel_pair_overwrite(a, b) =
     b == undef ? a : b;
 
 function mb_bevel_merge(a, b) = [
-    mb_pair_overwrite(a[0], b[0]),
-    mb_pair_overwrite(a[1], b[1]),
-    mb_pair_overwrite(a[2], b[2]),
-    mb_pair_overwrite(a[3], b[3])
+    _mb_bevel_pair_overwrite(a[0], b[0]),
+    _mb_bevel_pair_overwrite(a[1], b[1]),
+    _mb_bevel_pair_overwrite(a[2], b[2]),
+    _mb_bevel_pair_overwrite(a[3], b[3])
 ];
 
-function mb_bevel_normalize(a) = [
+function _mb_bevel_normalize(a) = [
     a[0] == undef ? [0,0] : a[0],
     a[1] == undef ? [0,0] : a[1],
     a[2] == undef ? [0,0] : a[2],
@@ -459,8 +494,8 @@ function mb_bevel_normalize(a) = [
 ];
 
 // direction mapping → 4 slots, undef = no overwrite
-function mb_bevel_dir_map(d, x, y) =
-    let(p = [mb_clamp0(x), mb_clamp0(y)])
+function _mb_bevel_dir_map(d, x, y) =
+    let(p = [_mb_bevel_clamp0(x), _mb_bevel_clamp0(y)])
     d == 0 ? [p, undef, undef, undef] :       // sw
     d == 1 ? [p, p, undef, undef] :           // w
     d == 2 ? [undef, p, undef, undef] :       // nw
@@ -471,17 +506,17 @@ function mb_bevel_dir_map(d, x, y) =
     d == 7 ? [p, undef, undef, p] :           // s
     [undef, undef, undef, undef];
 
-function mb_bevel_reduce(arr, i=0, acc=[undef, undef, undef, undef]) =
+function _mb_bevel_reduce(arr, i=0, acc=[undef, undef, undef, undef]) =
     i >= len(arr)
-        ? mb_bevel_normalize(acc)
+        ? _mb_bevel_normalize(acc)
         : let(v = arr[i])
-          mb_bevel_reduce(
+          _mb_bevel_reduce(
               arr,
               i + 1,
               (is_list(v) && len(v) == 3)
                   ? mb_bevel_merge(
                         acc,
-                        mb_bevel_dir_map(
+                        _mb_bevel_dir_map(
                             mb_dir_to_int(v[0], true),
                             v[1],
                             v[2]
@@ -490,39 +525,42 @@ function mb_bevel_reduce(arr, i=0, acc=[undef, undef, undef, undef]) =
                   : acc
           );
 
-function mb_bevel_all(p) = [p,p,p,p];
+function _mb_bevel_all(p) = [p,p,p,p];
+
+function mb_bevel_resolve(bevel, mod_size) =
+    mb_corner_radius_resolve(_mb_bevel_resolve(bevel), mod_size);
 
 // --- main ---
-function mb_bevel_resolve(bevel) =
+function _mb_bevel_resolve(bevel) =
     // undef / [] / string
     (!is_list(bevel) || len(bevel) == 0)
         ? [[0,0],[0,0],[0,0],[0,0]]
 
     // number or [x]
     : is_num(bevel) || (len(bevel) == 1 && is_num(bevel[0]))
-        ? let(v = mb_clamp0(is_num(bevel) ? bevel : bevel[0]))
-          mb_bevel_all([v,v])
+        ? let(v = _mb_bevel_clamp0(is_num(bevel) ? bevel : bevel[0]))
+          _mb_bevel_all([v,v])
 
     // [x,y]
-    : mb_is_pair(bevel)
-        ? mb_bevel_all(mb_pair(bevel))
+    : _mb_bevel_is_pair(bevel)
+        ? _mb_bevel_all(mb_pair(bevel))
 
     // [[x,y]]
-    : len(bevel) == 1 && mb_is_pair(bevel[0])
-        ? mb_bevel_all(mb_pair(bevel[0]))
+    : len(bevel) == 1 && _mb_bevel_is_pair(bevel[0])
+        ? _mb_bevel_all(mb_pair(bevel[0]))
 
     // [[x1,y1],[x2,y2]]
-    : len(bevel) == 2 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1])
+    : len(bevel) == 2 && _mb_bevel_is_pair(bevel[0]) && _mb_bevel_is_pair(bevel[1])
         ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]))
           [a,a,b,b]
 
     // [[x1,y1],[x2,y2],[x3,y3]]
-    : len(bevel) == 3 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1]) && mb_is_pair(bevel[2])
+    : len(bevel) == 3 && _mb_bevel_is_pair(bevel[0]) && _mb_bevel_is_pair(bevel[1]) && _mb_bevel_is_pair(bevel[2])
         ? let(a = mb_pair(bevel[0]), b = mb_pair(bevel[1]), c = mb_pair(bevel[2]))
           [a,b,c,[0,0]]
 
     // [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
-    : len(bevel) == 4 && mb_is_pair(bevel[0]) && mb_is_pair(bevel[1]) && mb_is_pair(bevel[2]) && mb_is_pair(bevel[3])
+    : len(bevel) == 4 && _mb_bevel_is_pair(bevel[0]) && _mb_bevel_is_pair(bevel[1]) && _mb_bevel_is_pair(bevel[2]) && _mb_bevel_is_pair(bevel[3])
         ? [
             mb_pair(bevel[0]),
             mb_pair(bevel[1]),
@@ -531,7 +569,17 @@ function mb_bevel_resolve(bevel) =
           ]
 
     // complex mode
-    : mb_bevel_reduce(bevel);
+    : _mb_bevel_reduce(bevel);
+
+/*
+*function mb_bevel_shrink(bevel, shrink) = 
+    [
+        [max(0, bevel[0][0] + shrink[0]), max(0, bevel[0][1] + shrink[2])],
+        [max(0, bevel[1][0] + shrink[0]), max(0, bevel[1][1] + shrink[3])],
+        [max(0, bevel[2][0] + shrink[1]), max(0, bevel[2][1] + shrink[3])],
+        [max(0, bevel[3][0] + shrink[1]), max(0, bevel[3][1] + shrink[2])]
+    ];
+*/
 
 /*
 * ---------
@@ -547,27 +595,34 @@ function mb_bevel_resolve(bevel) =
 
 
 
-function _mb_slope_resolve_pair(a, b, max_size) =
+function _mb_slope_resolve_pair(a, b, max_size, allow_neg=true) =
     let(
-        aa = abs(a),
-        ab = abs(b),
-        sa = sign(a),
-        sb = sign(b),
+        // optional negatives clampen
+        a0 = (!allow_neg && a < 0) ? 0 : a,
+        b0 = (!allow_neg && b < 0) ? 0 : b,
+
+        aa = abs(a0),
+        ab = abs(b0),
+        sa = sign(a0),
+        sb = sign(b0),
+
         sum = aa + ab,
-        scale = (a != 0 && b != 0 && sa == sb && sum > max_size)
+
+        scale = (a0 != 0 && b0 != 0 && sa == sb && sum > max_size)
             ? max_size / sum
             : 1
     )
     [
-        a == 0 ? 0 : sa * min(aa * scale, max_size),
-        b == 0 ? 0 : sb * min(ab * scale, max_size)
+        a0 == 0 ? 0 : sa * min(aa * scale, max_size),
+        b0 == 0 ? 0 : sb * min(ab * scale, max_size)
     ];
 
-function mb_slope_resolve(slope, mod_size) =
+function mb_slope_resolve(slope, mod_size, allow_neg=true) =
     let(
         s = mb_qc_resolve(slope, false),
-        x = _mb_slope_resolve_pair(s[0], s[1], mod_size[0]),
-        y = _mb_slope_resolve_pair(s[2], s[3], mod_size[1])
+
+        x = _mb_slope_resolve_pair(s[0], s[1], mod_size[0], allow_neg),
+        y = _mb_slope_resolve_pair(s[2], s[3], mod_size[1], allow_neg)
     )
     [x[0], x[1], y[0], y[1]];
 

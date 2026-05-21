@@ -358,7 +358,7 @@ module mb_block(
     baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
     baseModR = mb_qc_resolve(qc = baseMod, cube = true);
     bevelMod = [[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]];
-    bevelRes = mb_bevel_resolve(bevel);
+    bevelRes = mb_bevel_resolve(bevel, osm_mm);
 
     objectSizeMod = [
         objectSizeX + baseModRes[0] + baseModRes[1],

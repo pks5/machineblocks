@@ -134,7 +134,7 @@ function mb_block_part_prismoid(
         exp = is_undef(expand) ? undef : exp_sin ? [ is_undef(expand[0]) ? undef : [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], is_undef(expand[1]) ? undef : [expand[1][0], expand[1][1], expand[1][2], expand[1][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
         
         
-        bevel_matrix = mb_bevel_matrix(is_undef(bevel) ? mb_bevel_resolve(0) : bevel, mod_size, min_max),
+        bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max),
         bevel_res = bevel_matrix[0],
         bevel_fil = bevel_matrix[1],
         
