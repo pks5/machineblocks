@@ -2,6 +2,7 @@ use <../core/block_dim.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 use <layout.scad>;
+use <tongue.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 use <../core/utils.scad>;
