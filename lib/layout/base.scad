@@ -36,7 +36,7 @@ module mb_base_cutout(
     }
 
     block_dim = mb_block_get_dim(block_obj);
-    echo(min_max_index_bottom = mb_block_dim_min_max_index_bottom(block_dim));
+    echo(sp = mb_block_slope_partial(block_obj, 0, 0));
 }
 
 /*
