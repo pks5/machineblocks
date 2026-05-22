@@ -154,7 +154,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                         value = [
                             for(f = [0 : 3])
                                 slope_neg[f] 
-                                - max(mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff), wall_thickness)
+                                - max(wall_thickness + mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff - wall_thickness), wall_thickness)
                                 //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                 //- wall_thickness 
                                 + inner_adj,
@@ -244,7 +244,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                     cut = true
                                                 ) : 
                                                 slope_neg[f] + 
-                                                    - max(mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff), wall_thickness)
+                                                    - max(wall_thickness + mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff - wall_thickness), wall_thickness)
                                                     //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                                     //- wall_thickness
                                                     + inner_adj,
@@ -415,7 +415,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                         cut = 2
                     ), 
                     inner_adj = -top_plate_helpers_thickness,
-                    top_offset = 0.5*top_plate_helpers_height
+                    top_offset = top_plate_helpers_height
                 )
             ]
         ] 

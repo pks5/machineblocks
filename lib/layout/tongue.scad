@@ -70,6 +70,7 @@ function mb_block_part__tongue(block_obj) =
                             )
                         ]]
                     ),
+                    if(false)
                     for(wall_gap = wall_gaps)
                         let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap))
                         for(gap = gap_data)
@@ -182,6 +183,7 @@ function mb_block_part__tongue(block_obj) =
                             )
                         ]]
                     ),
+                    if(false)
                     for(wall_gap = wall_gaps)
                         let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap, true))
                         for(gap = gap_data)
