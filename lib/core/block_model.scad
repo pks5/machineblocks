@@ -40,7 +40,7 @@ function mb_block_obj(
     baseWallGaps = [],
     baseWallThickness = "auto",
     baseWallThicknessAdjustment = -0.1,
-    baseCutoutMaxDepth = 5,
+    
     baseCutoutType = "standard",
     
     baseClampThickness = 0.1,
@@ -140,7 +140,7 @@ function mb_block_obj(
         top_plate_height_pref = topPlateHeight * mul_mbu_to_grid[2] + topPlateHeightAdjustment * mul_mm_to_grid[2],
         
         cutout_min_depth = 1 - top_plate_height_pref,
-        baseCutoutMaxDepth = baseCutoutMaxDepth * mul_mbu_to_grid[2],
+        baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings) * mul_mbu_to_grid[2],
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
         
@@ -224,7 +224,7 @@ function mb_block_obj(
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape],  // 10 - 
-            [],  // 11 - 
+            [top_plate_height_pref],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
             [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final, stud_diameter_res, stud_max_overhang],  // 14 - 
@@ -263,6 +263,7 @@ function mb_block_get_size_mod(block_obj) =                         block_obj[6]
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
+function mb_block_get_top_plate_height_pref(block_obj) =            block_obj[11][0];
 
 function mb_block_has_top_plate_helpers(block_obj) =                block_obj[9][1];
 function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[9][1][0];
