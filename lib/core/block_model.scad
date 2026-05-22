@@ -79,12 +79,6 @@ function mb_block_obj(
     pinDiameter = "auto",
     pinDiameterAdjustment = 0,
     
-    tongue = false,
-    tongueHeight = 1.25,
-    tongueThickness = 0.666,
-    tongueThicknessAdjustment = 0,
-    tongueOffset = 1,
-
     id = "[Block]",
     debug = false
 ) =
@@ -180,13 +174,20 @@ function mb_block_obj(
         
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
         tube_hole_size = stud_diameter_res, // TODO XYZ
+        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
 
-        tongue_thickness_adj = tongueThicknessAdjustment * mul_mm_to_grid[0],
+        /*
+        * Tongue
+        */
+        tongue_thickness_adj = mb_param_tongueThicknessAdjustment(config, settings) * mul_mm_to_grid[0],
         tongue_final = [
-            tongue,
-            tongueThickness * mul_mbu_to_grid[0] + tongue_thickness_adj,
-            tongueHeight * mul_mbu_to_grid[2],
-            tongueOffset * mul_mbu_to_grid[0] - 0.5 * tongue_thickness_adj
+            mb_param_tongue(config, settings),
+            mb_param_tongueThickness(config, settings) * mul_mbu_to_grid[0] + tongue_thickness_adj,
+            mb_param_tongueHeight(config, settings) * mul_mbu_to_grid[2],
+            mb_param_tongueOffset(config, settings) * mul_mbu_to_grid[0] - 0.5 * tongue_thickness_adj,
+            mb_param_tongueClampThickness(config, settings) * mul_mbu_to_grid[0],
+            mb_param_tongueClampHeight(config, settings) * mul_mbu_to_grid[2],
+            mb_param_tongueClampOffset(config, settings) * mul_mbu_to_grid[2]
         ],
 
 
@@ -198,8 +199,7 @@ function mb_block_obj(
             stabilizerExpansion                       // Expansion Each
         ],
 
-        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
-
+        
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
         studPadding = mb_qc_resolve(studPadding, false),
@@ -312,6 +312,9 @@ function mb_block_has_tongue(block_obj) =                           block_obj[13
 function mb_block_get_tongue_thickness(block_obj) =                 block_obj[13][1];
 function mb_block_get_tongue_height(block_obj) =                    block_obj[13][2];
 function mb_block_get_tongue_offset(block_obj) =                    block_obj[13][3];
+function mb_block_get_tongue_clamp_thickness(block_obj) =           block_obj[13][4];
+function mb_block_get_tongue_clamp_height(block_obj) =              block_obj[13][5];
+function mb_block_get_tongue_clamp_offset(block_obj) =              block_obj[13][6];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];

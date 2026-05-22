@@ -46,50 +46,101 @@ function mb_block_part__tongue(block_obj) =
     )
     has_tongue ? 
     [
-        "difference",
+        "list",
         [
-            mb_block_part_prismoid(
-                block_dim = block_dim, 
-                expand = [[
-                    for(f = [0 : 3])
-                        -slope_pos[f] - tongue_offset,
-                    mb_block_dim_opposite_offset(
-                        block_dim, 
-                        off = stud_sink, 
-                        adjusted = true, 
-                        face = "z-"
+            [
+                "difference",
+                [
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -slope_pos[f] - tongue_offset,
+                            mb_block_dim_opposite_offset(
+                                block_dim, 
+                                off = stud_sink, 
+                                adjusted = true, 
+                                face = "z-"
+                            ),
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                exp = tongue_height, 
+                                adjusted = true, 
+                                face = "z+"
+                            )
+                        ]]
                     ),
-                    mb_block_dim_face_edge_expand(
-                        block_dim, 
-                        exp = tongue_height, 
-                        adjusted = true, 
-                        face = "z+"
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -slope_pos[f] - tongue_offset - tongue_thickness,
+                            mb_block_dim_opposite_offset(
+                                block_dim, 
+                                off = stud_sink, 
+                                adjusted = true, 
+                                face = "z-",
+                                cut = true
+                            ),
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                exp = tongue_height, 
+                                adjusted = true, 
+                                face = "z+",
+                                cut = true
+                            )
+                        ]]
                     )
-                ]]
-            ),
-            mb_block_part_prismoid(
-                block_dim = block_dim, 
-                expand = [[
-                    for(f = [0 : 3])
-                        -slope_pos[f] - tongue_offset - tongue_thickness,
-                    mb_block_dim_opposite_offset(
-                        block_dim, 
-                        off = stud_sink, 
-                        adjusted = true, 
-                        face = "z-",
-                        cut = true
+                ]
+            ],
+
+            [
+                "difference",
+                [
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -slope_pos[f] - tongue_offset,
+                            mb_block_dim_opposite_offset(
+                                block_dim, 
+                                off = stud_sink, 
+                                adjusted = true, 
+                                face = "z-"
+                            ),
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                exp = tongue_height, 
+                                adjusted = true, 
+                                face = "z+"
+                            )
+                        ]]
                     ),
-                    mb_block_dim_face_edge_expand(
-                        block_dim, 
-                        exp = tongue_height, 
-                        adjusted = true, 
-                        face = "z+",
-                        cut = true
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -slope_pos[f] - tongue_offset - tongue_thickness,
+                            mb_block_dim_opposite_offset(
+                                block_dim, 
+                                off = stud_sink, 
+                                adjusted = true, 
+                                face = "z-",
+                                cut = true
+                            ),
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                exp = tongue_height, 
+                                adjusted = true, 
+                                face = "z+",
+                                cut = true
+                            )
+                        ]]
                     )
-                ]]
-            )
-        ]
-    ] : undef;
+                ]
+            ] 
+         ]
+     ] : undef;
 
 /**
 * -----

@@ -62,13 +62,6 @@ module mb_base(
     connectorDepthTolerance,
     connectorSideTolerance,
 
-    qualitySegBase,
-    qualityFactor,
-    qualityResolutionMin,
-    qualityResolutionMax,
-    qualityResolutionMultiplier,
-    previewQuality,
-
     blockId,
     debug
 ){

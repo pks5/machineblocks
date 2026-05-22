@@ -891,13 +891,6 @@ module mb_block(
                                                         connectorDepthTolerance = connectorDepthTolerance,
                                                         connectorSideTolerance = connectorSideTolerance,
 
-                                                        qualitySegBase = qualitySegBase,
-                                                        qualityFactor = qualityFactor,
-                                                        qualityResolutionMin = qualityResolutionMin,
-                                                        qualityResolutionMax = qualityResolutionMax,
-                                                        qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                        previewQuality = previewQuality,
-
                                                         blockId = blockId,
                                                         debug = debug
                                                     );
@@ -1161,13 +1154,6 @@ module mb_block(
                                                     connectorSize = connectorWidth * mbuToMm,
                                                     connectorDepthTolerance = connectorDepthTolerance,
                                                     connectorSideTolerance = connectorSideTolerance,
-
-                                                    qualitySegBase = qualitySegBase,
-                                                    qualityFactor = qualityFactor,
-                                                    qualityResolutionMin = qualityResolutionMin,
-                                                    qualityResolutionMax = qualityResolutionMax,
-                                                    qualityResolutionMultiplier = qualityResolutionMultiplier,
-                                                    previewQuality = previewQuality,
 
                                                     blockId = blockId,
                                                     debug = debug
@@ -1944,7 +1930,7 @@ module mb_block(
                             /*
                             * Tongue
                             */
-                            if(tongue){
+                            *if(tongue){
                                 color(baseColor){
                                     translate([0, 0, sideZ(1) + 0.5 * tonHeightCalc]){ 
                                         mb_tongue(
