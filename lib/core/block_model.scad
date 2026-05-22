@@ -160,7 +160,10 @@ function mb_block_obj(
         wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mm2grd_xy,
         wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
         
-        
+        /*
+        * Studs
+        */
+        has_studs = mb_param_studs(config, settings), // TODO
         stud_diameter_res = studDiameter * mbu2grd_xy,
 
         stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mm2grd_xy,
@@ -242,7 +245,15 @@ function mb_block_obj(
             [top_plate_height_pref],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
-            [stud_diameter_final, stud_height_final, stud_sink_final, stud_rounding_final, stud_diameter_res, stud_max_overhang],  // 14 - 
+            [
+                stud_diameter_final, 
+                stud_height_final, 
+                stud_sink_final, 
+                stud_rounding_final, 
+                stud_diameter_res, 
+                stud_max_overhang,
+                has_studs
+            ],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
@@ -321,6 +332,7 @@ function mb_block_get_stud_height(block_obj) =                      block_obj[14
 function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
 function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14][5];
+function mb_block_has_studs(block_obj) =                            block_obj[14][6];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
@@ -708,6 +720,42 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = true) =
         min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
+        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+    )
+    [
+        for(face = faces)
+        
+        let(
+            axis = mb_face_to_axis(face),
+            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis], gap[2]),
+            gap_start_offset = gap_start_pos + wall_thickness,
+            gap_end_offset = mod_size[axis] - gap_length - gap_start_pos + wall_thickness
+        )
+        [
+            face,
+            gap_start_pos,
+            gap_length,
+            gap_start_offset,
+            gap_end_offset,
+            min_max_index[0][1 - axis] + gap_start_offset,
+            min_max_index[1][1 - axis] + 1 - gap_end_offset
+        ]
+    ];
+
+function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = true) = 
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index(block_dim),
+        mod_size = mb_block_get_mod_size(block_obj),
+        
+        tongue_offset = mb_block_get_tongue_offset(block_obj),
+        tongue_height = mb_block_get_tongue_height(block_obj),
+        tongue_thickness = mb_block_get_tongue_thickness(block_obj),
+        tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
+        tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
+        tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
+        wall_thickness = tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
         faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
     )
     [

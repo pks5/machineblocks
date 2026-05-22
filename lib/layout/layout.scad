@@ -45,6 +45,7 @@ function mb_block_part__tongue(block_obj) =
         tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
         tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
         tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
+        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj)
     )
     has_tongue ? 
@@ -93,7 +94,73 @@ function mb_block_part__tongue(block_obj) =
                                 cut = true
                             )
                         ]]
-                    )
+                    ),
+                    for(wall_gap = wall_gaps)
+                        let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap))
+                        for(gap = gap_data)
+                            let(
+                                face = gap[0],
+                                gap_start_offset = gap[3],
+                                gap_end_offset = gap[4]
+                            )
+                            [
+                                
+                                "intersection",
+                                [
+                                    mb_block_part_prismoid(
+                                        block_dim = block_dim, 
+                                        expand = [[
+                                            for(f = [0 : 3])
+                                                mb_face_has_common(face, f) 
+                                                    ? mb_block_dim_face_edge_expand(
+                                                        block_dim, 
+                                                        adjusted = true, 
+                                                        face = f,
+                                                        cut = true
+                                                    ) 
+                                                    : -(slope_pos[f] + tongue_offset + tongue_thickness),
+                                            mb_block_dim_opposite_offset(
+                                                block_dim, 
+                                                off = stud_sink, 
+                                                adjusted = true, 
+                                                face = "z-",
+                                                cut = true
+                                            ),
+                                            mb_block_dim_face_edge_expand(
+                                                block_dim, 
+                                                exp = tongue_height, 
+                                                adjusted = true, 
+                                                face = "z+",
+                                                cut = true
+                                            )
+                                        ]]
+                                    ),
+
+                                    mb_block_part_cube(
+                                        block_dim = block_dim, 
+                                        expand = [
+                                            mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                                            mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                                            mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                                            mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                                            mb_block_dim_opposite_offset(
+                                                block_dim, 
+                                                off = stud_sink, 
+                                                adjusted = true, 
+                                                face = "z-",
+                                                cut = true
+                                            ),
+                                            mb_block_dim_face_edge_expand(
+                                                block_dim, 
+                                                exp = tongue_height, 
+                                                adjusted = true, 
+                                                face = "z+",
+                                                cut = true
+                                            )
+                                        ]
+                                    )
+                                ]
+                            ]
                 ]
             ],
 
@@ -139,7 +206,73 @@ function mb_block_part__tongue(block_obj) =
                                 cut = true
                             )
                         ]]
-                    )
+                    ),
+                    for(wall_gap = wall_gaps)
+                        let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap, true))
+                        for(gap = gap_data)
+                            let(
+                                face = gap[0],
+                                gap_start_offset = gap[3],
+                                gap_end_offset = gap[4]
+                            )
+                            [
+                                
+                                "intersection",
+                                [
+                                    mb_block_part_prismoid(
+                                        block_dim = block_dim, 
+                                        expand = [[
+                                            for(f = [0 : 3])
+                                                mb_face_has_common(face, f) 
+                                                    ? mb_block_dim_face_edge_expand(
+                                                        block_dim, 
+                                                        adjusted = true, 
+                                                        face = f,
+                                                        cut = true
+                                                    ) 
+                                                    : -(slope_pos[f] + tongue_offset + tongue_thickness + tongue_clamp_thickness),
+                                            mb_block_dim_opposite_offset(
+                                                block_dim, 
+                                                off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
+                                                adjusted = true, 
+                                                face = "z-",
+                                                cut = true
+                                            ),
+                                            mb_block_dim_face_edge_expand(
+                                                block_dim, 
+                                                exp = tongue_height - tongue_clamp_offset, 
+                                                adjusted = true, 
+                                                face = "z+",
+                                                cut = true
+                                            )
+                                        ]]
+                                    ),
+
+                                    mb_block_part_cube(
+                                        block_dim = block_dim, 
+                                        expand = [
+                                            mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                                            mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                                            mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                                            mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                                            mb_block_dim_opposite_offset(
+                                                block_dim, 
+                                                off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
+                                                adjusted = true, 
+                                                face = "z-",
+                                                cut = true
+                                            ),
+                                            mb_block_dim_face_edge_expand(
+                                                block_dim, 
+                                                exp = tongue_height - tongue_clamp_offset, 
+                                                adjusted = true, 
+                                                face = "z+",
+                                                cut = true
+                                            )
+                                        ]
+                                    )
+                                ]
+                            ]
                 ]
             ] 
          ]
@@ -158,7 +291,7 @@ function mb_block_part__studs(block_obj) =
 
         
     )
-    [
+    mb_block_has_studs(block_obj) ? [
         "list",
         [
             for(x = stud_range[0])
@@ -174,7 +307,7 @@ function mb_block_part__studs(block_obj) =
                             offset = render[1]
                         )
         ]
-    ];
+    ] : undef;
 
 /**
 * ----
@@ -330,7 +463,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         slope_partial = mb_block_slope_partial(block_obj, top_offset),
-        gaps = mb_block_base_wall_gap(block_obj, wall_gap),
+        base_wall_gap_res = mb_block_base_wall_gap(block_obj, wall_gap),
         block_inverted = mb_block_get_inverted(block_obj),
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj,
         outer_adj = block_inverted ? mb_block_get_base_clamp_thickness(block_obj) : 0
@@ -339,7 +472,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
     [
         "list",
         [
-            for(gap = gaps)
+            for(gap = base_wall_gap_res)
                 let(
                     face = gap[0],
                     gap_start_offset = gap[3],
