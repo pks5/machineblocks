@@ -663,6 +663,18 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
 * ---------
 */ 
 
+function mb_block_slope_partial(block_obj, top_offset) = 
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
+        mod_size = mb_block_dim_mod_size(block_dim),
+        top_plate_height_pref = mb_block_get_top_plate_height_pref(block_obj),
+        full_slope_height = mod_size[2] - top_plate_height_pref - slope_base_height_inner,
+        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
+        slope_partial = (base_cutout_depth - top_offset - slope_base_height_inner) / full_slope_height
+    )
+    slope_partial;
+
 function mb_block_base_wall_gap(block_obj, gap, split_axis = true) = 
     let(
         mod_size = mb_block_get_mod_size(block_obj),

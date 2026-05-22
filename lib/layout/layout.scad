@@ -192,7 +192,7 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
 * Base Cutout
 * -----------
 */
-function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, inner_adj = undef) = 
+function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, inner_adj = undef, top_offset = 0) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
@@ -201,11 +201,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
-        mod_size = mb_block_dim_mod_size(block_dim),
-        top_plate_height_pref = mb_block_get_top_plate_height_pref(block_obj),
-        full_slope_height = mod_size[2] - top_plate_height_pref - slope_base_height_inner,
-        base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        perc = (base_cutout_depth - slope_base_height_inner) / full_slope_height,
+        slope_partial = mb_block_slope_partial(block_obj, top_offset),
 
         bottom = is_undef(bottom) 
             ? mb_block_dim_this_offset(
@@ -244,7 +240,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                         value = [
                             for(f = [0 : 3])
                                 slope_neg[f] 
-                                + _mb_layout_plane_value(planes = planes, plane = "top", value = - perc * slope_pos[f], else_value = 0, all = false) 
+                                + _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                 - wall_thickness + inner_adj,
                             bottom,
                             top
@@ -253,7 +249,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 ],
                 slope = _mb_layout_plane_value(
                     planes = planes, 
-                    value = mb_array_mul(slope_pos, perc)
+                    value = mb_array_mul(slope_pos, slope_partial)
                 ),
                 socket = _mb_layout_plane_value(
                     planes = planes, 
@@ -261,7 +257,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 )
             ),
             for(wall_gap = wall_gaps)
-                mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj)
+                mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj, top_offset)
         ]
     ];
 
@@ -270,7 +266,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 * Base Wall Gaps
 * --------------
 */
-function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef) =
+function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj = undef, top_offset = 0) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         slope = mb_block_dim_slope(block_dim),
@@ -279,6 +275,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
+        slope_partial = mb_block_slope_partial(block_obj, top_offset),
         gaps = mb_block_base_wall_gap(block_obj, wall_gap),
         block_inverted = mb_block_get_inverted(block_obj),
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj,
@@ -332,7 +329,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                     cut = true
                                                 ) : 
                                                 slope_neg[f] + 
-                                                    + _mb_layout_plane_value(planes = planes, plane = "top", value = -slope_pos[f], else_value = 0, all = false) 
+                                                    + _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                                     - wall_thickness + 
                                                     inner_adj,
                                         bottom,
@@ -342,7 +339,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                             ],
                             slope = _mb_layout_plane_value(
                                 planes = planes, 
-                                value = slope_pos
+                                value = mb_array_mul(slope_pos, slope_partial)
                             ),
                             socket = _mb_layout_plane_value(
                                 planes = planes, 
@@ -501,7 +498,8 @@ function mb_block_part__top_plate_helpers(block_obj) =
                         face = "z+", 
                         cut = 2
                     ), 
-                    inner_adj = -top_plate_helpers_thickness
+                    inner_adj = -top_plate_helpers_thickness,
+                    top_offset = top_plate_helpers_height
                 )
             ]
         ] 
