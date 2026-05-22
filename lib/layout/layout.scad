@@ -42,6 +42,9 @@ function mb_block_part__tongue(block_obj) =
         tongue_offset = mb_block_get_tongue_offset(block_obj),
         tongue_height = mb_block_get_tongue_height(block_obj),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
+        tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
+        tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
+        tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj)
     )
     has_tongue ? 
@@ -101,16 +104,16 @@ function mb_block_part__tongue(block_obj) =
                         block_dim = block_dim, 
                         expand = [[
                             for(f = [0 : 3])
-                                -slope_pos[f] - tongue_offset,
+                                -slope_pos[f] - tongue_offset + tongue_clamp_thickness,
                             mb_block_dim_opposite_offset(
                                 block_dim, 
-                                off = stud_sink, 
+                                off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
                                 adjusted = true, 
                                 face = "z-"
                             ),
                             mb_block_dim_face_edge_expand(
                                 block_dim, 
-                                exp = tongue_height, 
+                                exp = tongue_height - tongue_clamp_offset, 
                                 adjusted = true, 
                                 face = "z+"
                             )
@@ -120,17 +123,17 @@ function mb_block_part__tongue(block_obj) =
                         block_dim = block_dim, 
                         expand = [[
                             for(f = [0 : 3])
-                                -slope_pos[f] - tongue_offset - tongue_thickness,
+                                -slope_pos[f] - tongue_offset - tongue_thickness - tongue_clamp_thickness,
                             mb_block_dim_opposite_offset(
                                 block_dim, 
-                                off = stud_sink, 
+                                off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
                                 adjusted = true, 
                                 face = "z-",
                                 cut = true
                             ),
                             mb_block_dim_face_edge_expand(
                                 block_dim, 
-                                exp = tongue_height, 
+                                exp = tongue_height - tongue_clamp_offset, 
                                 adjusted = true, 
                                 face = "z+",
                                 cut = true

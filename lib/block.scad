@@ -205,7 +205,6 @@ module mb_block(
     tongueHeight = mb_param_tongueHeight(config, settings);
     tongueGrooveDepth = mb_param_tongueGrooveDepth(config, settings);
     tongueRoundingRadius = mb_param_tongueRoundingRadius(config, settings);
-    tongueInnerRoundingRadius = mb_param_tongueInnerRoundingRadius(config, settings);
     tongueThickness = mb_param_tongueThickness(config, settings);
     tongueThicknessAdjustment = mb_param_tongueThicknessAdjustment(config, settings);
     tongueOffset = mb_param_tongueOffset(config, settings);
@@ -1596,7 +1595,6 @@ module mb_block(
                                                         tongueClampHeight = tonClampHeightCalc,
                                                         tongueClampOffset = tonClampOffsetCalc + tonGrooveDepthCalc - tonHeightCalc,
                                                         tongueRoundingRadius = tongueRoundingRadius,
-                                                        tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                                                         
                                                         pit = true,
                                                         pitWallGaps = recessWallGaps,
@@ -1953,7 +1951,6 @@ module mb_block(
                                             tongueClampHeight = tonClampHeightCalc,
                                             tongueClampOffset = tonClampOffsetCalc,
                                             tongueRoundingRadius = tongueRoundingRadius,
-                                            tongueInnerRoundingRadius = tongueInnerRoundingRadius,
                                             
                                             pit = recess,
                                             pitWallGaps = recessWallGaps,

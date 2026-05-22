@@ -94,6 +94,11 @@ function mb_block_obj(
         grid_cfg = [unitMbuToMm, unitGridToMbu[0], unitGridToMbu[1]],
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
+        mbu2grd_xy = mul_mbu_to_grid[0],
+        mbu2grd_z = mul_mbu_to_grid[2],
+        mm2grd_xy = mul_mm_to_grid[0],
+        mm2grd_z = mul_mm_to_grid[2],
+
 
         base_adj_grd = mb_qc_resolve(
             qc = baseAdjustment, 
@@ -131,10 +136,10 @@ function mb_block_obj(
         /*
         * Top Plate, Recess Depth, Base Cutout
         */
-        top_plate_height_pref = topPlateHeight * mul_mbu_to_grid[2] + topPlateHeightAdjustment * mul_mm_to_grid[2],
+        top_plate_height_pref = topPlateHeight * mbu2grd_z + topPlateHeightAdjustment * mm2grd_z,
         
         cutout_min_depth = 1 - top_plate_height_pref,
-        baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings) * mul_mbu_to_grid[2],
+        baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings) * mbu2grd_z,
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
         
@@ -151,55 +156,65 @@ function mb_block_obj(
         * Base Wall Thickness
         */
         p_diameter = grid_cfg[1] - studDiameter,
-        wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mul_mbu_to_grid[0],
-        wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mul_mm_to_grid[0],
-        wall_thickness_clamp = wall_thickness_final + baseClampThickness * mul_mm_to_grid[0],
-        stud_diameter_res = studDiameter * mul_mbu_to_grid[0],
+        wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mbu2grd_xy,
+        wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mm2grd_xy,
+        wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
+        
+        
+        stud_diameter_res = studDiameter * mbu2grd_xy,
 
-        stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mul_mm_to_grid[0],
-        stud_height_final = studHeight * mul_mbu_to_grid[2] + studHeightAdjustment * mul_mm_to_grid[2],
-        stud_sink_final = studSink * mul_mbu_to_grid[2],
-        stud_rounding_final = studRounding * mul_mbu_to_grid[0],
-        stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mul_mbu_to_grid[0],
+        stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mm2grd_xy,
+        stud_height_final = studHeight * mbu2grd_z + studHeightAdjustment * mm2grd_z,
+        stud_sink_final = studSink * mbu2grd_z,
+        stud_rounding_final = studRounding * mbu2grd_xy,
+        stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mbu2grd_xy,
 
         base_clamp = [
-            baseClampThickness * mul_mm_to_grid[0], // Thickness
-            baseClampHeight * mul_mbu_to_grid[2], // Height
-            baseClampOffset * mul_mbu_to_grid[2] // Offset
+            baseClampThickness * mm2grd_xy, // Thickness
+            baseClampHeight * mbu2grd_z, // Height
+            baseClampOffset * mbu2grd_z // Offset
         ],
-        relief_cut_final = [reliefCutThickness * mul_mbu_to_grid[0], reliefCutHeight * mul_mbu_to_grid[2]],
+        relief_cut_final = [reliefCutThickness * mbu2grd_xy, reliefCutHeight * mbu2grd_z],
 
-        top_plate_helpers_final = [topPlateHelperThickness * mul_mm_to_grid[0], topPlateHelperHeight * mul_mm_to_grid[2]],
-        tube_wall_thickness_res = tubeWallThickness * mul_mbu_to_grid[0],  // TODO XYZ
+        top_plate_helpers_final = [topPlateHelperThickness * mm2grd_xy, topPlateHelperHeight * mm2grd_z],
+        tube_wall_thickness_res = tubeWallThickness * mbu2grd_xy,  // TODO XYZ
         
+        /*
+        * Tube / Pin
+        */
+
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
         tube_hole_size = stud_diameter_res, // TODO XYZ
-        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mul_mbu_to_grid[0] + pinDiameterAdjustment * mul_mm_to_grid[0],
+        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy + pinDiameterAdjustment * mm2grd_xy,
 
         /*
         * Tongue
         */
-        tongue_thickness_adj = mb_param_tongueThicknessAdjustment(config, settings) * mul_mm_to_grid[0],
+        tongue_thickness_adj = mb_param_tongueThicknessAdjustment(config, settings) * mm2grd_xy,
         tongue_final = [
             mb_param_tongue(config, settings),
-            mb_param_tongueThickness(config, settings) * mul_mbu_to_grid[0] + tongue_thickness_adj,
-            mb_param_tongueHeight(config, settings) * mul_mbu_to_grid[2],
-            mb_param_tongueOffset(config, settings) * mul_mbu_to_grid[0] - 0.5 * tongue_thickness_adj,
-            mb_param_tongueClampThickness(config, settings) * mul_mbu_to_grid[0],
-            mb_param_tongueClampHeight(config, settings) * mul_mbu_to_grid[2],
-            mb_param_tongueClampOffset(config, settings) * mul_mbu_to_grid[2]
+            mb_param_tongueThickness(config, settings) * mbu2grd_xy + tongue_thickness_adj,
+            mb_param_tongueHeight(config, settings) * mbu2grd_z,
+            mb_param_tongueOffset(config, settings) * mbu2grd_xy - 0.5 * tongue_thickness_adj,
+            mb_param_tongueClampThickness(config, settings) * mbu2grd_xy,
+            mb_param_tongueClampHeight(config, settings) * mbu2grd_z,
+            mb_param_tongueClampOffset(config, settings) * mbu2grd_z
         ],
 
-
+        /*
+        * Stabilizers
+        */
         stabilizers_res = [
-            stabilizerThickness * mul_mbu_to_grid[0], // Thickness (mbu)
-            stabilizerHeight * mul_mbu_to_grid[2], // Height (mbu)
-            stabilizerPrintOffset * mul_mm_to_grid[2], // Offset (mm)
-            stabilizerExpansionOffset * mul_mbu_to_grid[2], // Expansion Offset (mbu)
+            stabilizerThickness * mbu2grd_xy, // Thickness (mbu)
+            stabilizerHeight * mbu2grd_z, // Height (mbu)
+            stabilizerPrintOffset * mm2grd_z, // Offset (mm)
+            stabilizerExpansionOffset * mbu2grd_z, // Expansion Offset (mbu)
             stabilizerExpansion                       // Expansion Each
         ],
 
-        
+        /*
+        * Stud Masks
+        */
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
         studPadding = mb_qc_resolve(studPadding, false),
@@ -218,7 +233,7 @@ function mb_block_obj(
             undef, // 2 - 
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
-            [slopeBaseHeightBottom * mul_mbu_to_grid[2], slopeBaseHeightTop * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
+            [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut

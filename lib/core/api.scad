@@ -155,7 +155,6 @@ function mb_param_tongue(config, settings, default = undef) = mb_param(config, s
 function mb_param_tongueHeight(config, settings, default = undef) = mb_param(config, settings, "tongueHeight", default != undef ? default : 1.25);
 function mb_param_tongueGrooveDepth(config, settings, default = undef) = mb_param(config, settings, "tongueGrooveDepth", default != undef ? default : 1.5);
 function mb_param_tongueRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueRoundingRadius", default != undef ? default : "auto");
-function mb_param_tongueInnerRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueInnerRoundingRadius", default != undef ? default : "auto");
 function mb_param_tongueThickness(config, settings, default = undef) = mb_param(config, settings, "tongueThickness", default != undef ? default : 0.666);
 function mb_param_tongueThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "tongueThicknessAdjustment", default != undef ? default : 0);
 function mb_param_tongueOffset(config, settings, default = undef) = mb_param(config, settings, "tongueOffset", default != undef ? default : 1);

@@ -21,7 +21,6 @@ module mb_tongue(
     tongueClampHeight,
     tongueClampOffset,
     tongueRoundingRadius,
-    tongueInnerRoundingRadius,
     pit,
     pitWallGaps,
     pitSizeX,
@@ -52,7 +51,7 @@ module mb_tongue(
     tongueInnerSizeY = tongueSizeY - 2 * tongueThicknessAdjusted;
 
     tongueRadius = mb_base_cutout_radius(tongueRoundingRadius == "auto" ? -tongueOffset : mb_rounding_radius(tongueRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
-    tongueRadiusInner = mb_base_cutout_radius(tongueInnerRoundingRadius == "auto" ? -tongueThickness : mb_rounding_radius(tongueInnerRoundingRadius, gridSizeXY), tongueRadius, minObjectSide);
+    tongueRadiusInner = mb_base_cutout_radius(-tongueThickness, tongueRadius, minObjectSide);
     
     bevelTongueOuter = mb_inset_quad_lrfh(bevelOuter, tongueOffsetAdjusted);
     bevelTongueInner = mb_inset_quad_lrfh(bevelOuter, tongueInnerOffsetAdjusted);
