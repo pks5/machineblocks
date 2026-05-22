@@ -13,6 +13,25 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             0.5 * bb[2]
         ],
         
+        
+        
+        mod_size = [
+            size[0] + mod[0] + mod[1],
+            size[1] + mod[2] + mod[3],
+            size[2] + mod[4] + mod[5]
+        ],
+
+        bevel = mb_bevel_resolve(bevel, mod_size),
+        slope = mb_slope_resolve(slope, mod_size),
+        slope_neg = mb_slope_filter(slope, -1, 1),
+        slope_pos = mb_slope_filter(slope, 1, 1),
+
+        adj_size = [
+            mod_size[0] + bsa[0] + bsa[1],
+            mod_size[1] + bsa[2] + bsa[3],
+            mod_size[2] + bsa[4] + bsa[5],
+        ],
+
         mi = [
             -mod[0], 
             -mod[2], 
@@ -23,17 +42,29 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             size[1] + mod[3], 
             size[2] + mod[5]
         ],
-        
-        mod_size = [
-            size[0] + mod[0] + mod[1],
-            size[1] + mod[2] + mod[3],
-            size[2] + mod[4] + mod[5]
+
+        mi_top = [
+            mi[0] + slope_pos[0],
+            mi[1] + slope_pos[2],
+            mi[2]
         ],
 
-        adj_size = [
-            mod_size[0] + bsa[0] + bsa[1],
-            mod_size[1] + bsa[2] + bsa[3],
-            mod_size[2] + bsa[4] + bsa[5],
+        ma_top = [
+            ma[0] - slope_pos[1],
+            ma[1] - slope_pos[3],
+            ma[2]
+        ],
+
+        mi_bottom = [
+            mi[0] + slope_neg[0],
+            mi[1] + slope_neg[2],
+            mi[2]
+        ],
+
+        ma_bottom = [
+            ma[0] - slope_neg[1],
+            ma[1] - slope_neg[3],
+            ma[2]
         ],
         
         min_max_pos = [
@@ -49,10 +80,68 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             ] // max from org center
         ],
 
-        bevel = mb_bevel_resolve(bevel, mod_size),
-        slope = mb_slope_resolve(slope, mod_size),
+        min_max_pos_top = [
+            [
+                mi_top[0] - c[0], 
+                mi_top[1] - c[1], 
+                mi_top[2] - c[2]
+            ], // min from org center
+            [
+                ma_top[0] - c[0], 
+                ma_top[1] - c[1], 
+                ma_top[2] - c[2]
+            ] // max from org center
+        ],
+
+        min_max_pos_bottom = [
+            [
+                mi_bottom[0] - c[0], 
+                mi_bottom[1] - c[1], 
+                mi_bottom[2] - c[2]
+            ], // min from org center
+            [
+                ma_bottom[0] - c[0], 
+                ma_bottom[1] - c[1], 
+                ma_bottom[2] - c[2]
+            ] // max from org center
+        ],
+
+        min_index = [
+            floor(mi[0]), 
+            floor(mi[1]), 
+            floor(mi[2]), 
+        ], 
+        max_index = [
+            ceil(ma[0] - 1), 
+            ceil(ma[1] - 1), 
+            ceil(ma[2] - 1)
+        ],
+
+        min_index_top = [
+            floor(mi_top[0]), 
+            floor(mi_top[1]), 
+            floor(mi_top[2]), 
+        ], 
+        max_index_top = [
+            ceil(ma_top[0] - 1), 
+            ceil(ma_top[1] - 1), 
+            ceil(ma_top[2] - 1)
+        ],
+
+        min_index_bottom = [
+            floor(mi_bottom[0]), 
+            floor(mi_bottom[1]), 
+            floor(mi_bottom[2]), 
+        ], 
+        max_index_bottom = [
+            ceil(ma_bottom[0] - 1), 
+            ceil(ma_bottom[1] - 1), 
+            ceil(ma_bottom[2] - 1)
+        ],
+
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
 
+        
         cut_tol = 0.001
     )
     [
@@ -75,20 +164,22 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
         ], // 2
 
         [ 
-            [
-                floor(mi[0]), 
-                floor(mi[1]), 
-                floor(mi[2]), 
-            ], // Min Index (modified)
-            [
-                ceil(ma[0] - 1), 
-                ceil(ma[1] - 1), 
-                ceil(ma[2] - 1)
-            ] // Max Index (modified)
+            min_index, // Min Index (modified)
+            max_index // Max Index (modified)
         ], // 3
-        [adj_size, bsa],  // 4
-        [bevel, bevel_matrix, slope], // 5
-        cut_tol  // 6
+        [ 
+            min_index_top, // Min Index Top
+            max_index_top // Max Index Top
+        ], // 4
+        [ 
+            min_index_bottom, // Min Index Bottom
+            max_index_bottom // Max Index Bottom
+        ], // 5
+        undef, // 6
+        undef, // 7
+        [adj_size, bsa],  // 8
+        [bevel, bevel_matrix, slope], // 9
+        cut_tol  // 10
     ];
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
@@ -100,17 +191,20 @@ function mb_block_dim_mod_size(block_dim) =                      block_dim[1][0]
 function mb_block_dim_mod_size_bounding_box(block_dim) =         block_dim[1][1];
 
 function mb_block_dim_min_max_pos(block_dim) =                   block_dim[1][2];
+
 function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
+function mb_block_dim_min_max_index_top(block_dim) =             block_dim[4];
+function mb_block_dim_min_max_index_bottom(block_dim) =          block_dim[5];
 
-function mb_block_dim_adj_size(block_dim) =                      block_dim[4][0];
-function mb_block_dim_base_adj(block_dim) =                      block_dim[4][1];
+function mb_block_dim_adj_size(block_dim) =                      block_dim[8][0];
+function mb_block_dim_base_adj(block_dim) =                      block_dim[8][1];
 
-function mb_block_dim_bevel(block_dim) =                         block_dim[5][0];
-function mb_block_dim_bevel_matrix(block_dim) =                  block_dim[5][1];
-function mb_block_dim_slope(block_dim) =                         block_dim[5][2];
+function mb_block_dim_bevel(block_dim) =                         block_dim[9][0];
+function mb_block_dim_bevel_matrix(block_dim) =                  block_dim[9][1];
+function mb_block_dim_slope(block_dim) =                         block_dim[9][2];
 
 
-function mb_block_dim_cut_tol(block_dim) =                       block_dim[6];
+function mb_block_dim_cut_tol(block_dim) =                       block_dim[10];
 
 function mb_block_dim_cut_offset(block_dim, cut = false) =
     let(cut_tol = mb_block_dim_cut_tol(block_dim))

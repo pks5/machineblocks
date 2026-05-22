@@ -1,3 +1,4 @@
+use <../core/block_dim.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 use <layout.scad>;
@@ -32,6 +33,9 @@ module mb_base_cutout(
             mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
         }
     }
+
+    block_dim = mb_block_get_dim(block_obj);
+    echo(min_max_index_bottom = mb_block_dim_min_max_index_bottom(block_dim));
 }
 
 /*

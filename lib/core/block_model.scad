@@ -215,7 +215,7 @@ function mb_block_obj(
                 center
             ], // 0 - Original Size / Mod Size
             [], // 1 - 
-            mb_block_dim_min_max_index(block_dim), // 2 - Min / Max Index
+            undef, // 2 - 
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
             [slopeBaseHeightBottom * mul_mbu_to_grid[2], slopeBaseHeightTop * mul_mbu_to_grid[2], slopeBaseHeightInner * mul_mbu_to_grid[2]], // 5 - Slope Base 
@@ -292,7 +292,6 @@ function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4]
 
 function mb_block_get_stabilizers(block_obj) =                      block_obj[16][0];
 
-function mb_block_get_min_max_index(block_obj) =                    block_obj[2];
 function mb_block_get_custom_modules(block_obj) =                   block_obj[18];
 
 // Tubes
@@ -386,7 +385,8 @@ function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
 
 function mb_block_stud_range(block_obj) =
     let(
-        min_max_index = mb_block_get_min_max_index(block_obj),
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_top(block_dim),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -463,8 +463,9 @@ function mb_block_stud_radius(block_obj, x, y) =
 
 function mb_block_tube_range(block_obj, axis) =
     let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         axis = mb_axis_to_int(axis),
-        min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -494,7 +495,8 @@ function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
 
 function mb_block_tube_is_pin(block_obj, axis, x = undef, y = undef) =
     let(
-        min_max_index = mb_block_get_min_max_index(block_obj),
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -525,8 +527,9 @@ function mb_block_tube_radius(block_obj, axis, x, y) =
 
 function mb_block_stabilizer_range(block_obj, axis) =
     let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         axis = mb_axis_to_int(axis),
-        min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -549,7 +552,8 @@ function mb_block_stabilizer_segment_offset(block_obj, axis, x, y) =
 
 function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
     let(
-        min_max_index = mb_block_get_min_max_index(block_obj),
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -586,24 +590,27 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
 
 function mb_block_stabilizer_segment_expand(block_obj, axis, x, y) =
     let(    
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         axis = mb_axis_to_int(axis),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
-        min_max_index = mb_block_get_min_max_index(block_obj),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
     )    
     [
-        axis == 0 && x == 0 ? 0.5 * tube_z_diameter : 0, 
+        axis == 0 && x == start_index_x ? 0.5 * tube_z_diameter : 0, 
         axis == 0 && x == end_index_x ? 0.5 * tube_z_diameter : 0, 
-        axis == 1 && y == 0 ? 0.5 * tube_z_diameter : 0, 
+        axis == 1 && y == start_index_y ? 0.5 * tube_z_diameter : 0, 
         axis == 1 && y == end_index_y ? 0.5 * tube_z_diameter : 0
     ];
 
 function mb_block_stabilizer_segment_render(block_obj, axis, x, y) =
-    let(axis = mb_axis_to_int(axis = axis),
-        min_max_index = mb_block_get_min_max_index(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
+        axis = mb_axis_to_int(axis = axis),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
@@ -633,9 +640,11 @@ function mb_block_stabilizer_segment_render(block_obj, axis, x, y) =
 */  
 
 function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) = 
-    let(mod_size = mb_block_get_mod_size(block_obj),
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index(block_dim),
+        mod_size = mb_block_get_mod_size(block_obj),
         recess_wall_thickness = mb_block_get_recess_wall_thickness(block_obj),
-        min_max_index = mb_block_get_min_max_index(block_obj),
         gap = mb_to_array(gap),
         faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
     )
@@ -677,9 +686,10 @@ function mb_block_slope_partial(block_obj, top_offset) =
 
 function mb_block_base_wall_gap(block_obj, gap, split_axis = true) = 
     let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        min_max_index = mb_block_get_min_max_index(block_obj),
         faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
     )
     [
