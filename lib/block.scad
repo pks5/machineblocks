@@ -193,7 +193,8 @@ module mb_block(
 
     studSink = mb_param_studSink(config, settings);
 
-    studCutoutAdjustment = mb_param_studCutoutAdjustment(config, settings);
+    studCutoutDiameterAdjustment = mb_param_studCutoutDiameterAdjustment(config, settings);
+    studCutoutHeightAdjustment = mb_param_studCutoutHeightAdjustment(config, settings);
 
     studIcon = mb_param_studIcon(config, settings);
     studIconDimensions = mb_param_studIconDimensions(config, settings);
@@ -330,8 +331,7 @@ module mb_block(
         recessWallThickness = recessWallThickness,
         recessWallGaps = recessWallGaps,
         baseWallGaps = baseWallGaps,
-        reliefCut = baseReliefCut,
-        studPadding = studPadding
+        reliefCut = baseReliefCut
     );
     
     mbuToMm = scale * unitMbu;
@@ -536,8 +536,8 @@ module mb_block(
     knobHeightOrg = studHeight * mbuToMm;
     knobHeight = knobHeightOrg + studHeightAdjustment;
 
-    knobCutSize = knobSizeOrg + studCutoutAdjustment[0];
-    knobCutHeight = knobHeightOrg + studCutoutAdjustment[1];
+    knobCutSize = knobSizeOrg + studCutoutDiameterAdjustment;
+    knobCutHeight = knobHeightOrg + studCutoutHeightAdjustment;
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
     knobRounding = studRounding * mbuToMm;
@@ -1188,7 +1188,7 @@ module mb_block(
                                     *
                                     */
 
-                                    if(baseCutoutType != "none" && baseCutoutType != "groove"){
+                                    *if(baseCutoutType != "none" && baseCutoutType != "groove"){
                                         studRoundingRes = mb_fn_even_for_radius(
                                             0.5 * knobCutSize, 
                                             0, 

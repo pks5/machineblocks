@@ -144,7 +144,9 @@ function mb_param_studDiameterAdjustment(config, settings, default = undef) = mb
 function mb_param_studHeight(config, settings, default = undef) = mb_param(config, settings, "studHeight", default != undef ? default : 1);
 function mb_param_studHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "studHeightAdjustment", default != undef ? default : 0.0);
 function mb_param_studSink(config, settings, default = undef) = mb_param(config, settings, "studSink", default != undef ? default : 0.25);
-function mb_param_studCutoutAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutAdjustment", default != undef ? default : [0.2, 0.4]);
+function mb_param_studCutoutDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutDiameterAdjustment", default != undef ? default : 0.2);
+function mb_param_studCutoutHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutHeightAdjustment", default != undef ? default : 0.4);
+
 function mb_param_studIcon(config, settings, default = undef) = mb_param(config, settings, "studIcon", default != undef ? default : "../../pattern/bolt-solid-full.svg");
 function mb_param_studIconDimensions(config, settings, default = undef) = mb_param(config, settings, "studIconDimensions", default != undef ? default : [169.333, 169.333]);
 function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.024);

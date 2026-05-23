@@ -54,15 +54,6 @@ function mb_block_obj(
     recessWallGaps = [],
     recessStudPadding = 0.2,
 
-    studDiameter = 3,
-    studRounding = 0.0625,
-    studDiameterAdjustment = 0.2,
-    studHeight = 1,
-    studHeightAdjustment = 0,
-    studSink = 0.25,
-    
-    studPadding = 0.2,
-
     reliefCut = false,
     reliefCutThickness = 0.375,
     reliefCutHeight = 0.375,
@@ -155,7 +146,8 @@ function mb_block_obj(
         /*
         * Base Wall Thickness
         */
-        p_diameter = grid_cfg[1] - studDiameter,
+        stud_diameter = mb_param_studDiameter(config, settings),
+        p_diameter = grid_cfg[1] - stud_diameter,
         wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mbu2grd_xy,
         wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mm2grd_xy,
         wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
@@ -164,13 +156,17 @@ function mb_block_obj(
         * Studs
         */
         has_studs = mb_param_studs(config, settings), // TODO
-        stud_diameter_res = studDiameter * mbu2grd_xy,
+        stud_diameter_res = stud_diameter * mbu2grd_xy,
+        stud_height_res = mb_param_studHeight(config, settings) * mbu2grd_z,
 
-        stud_diameter_final = stud_diameter_res + studDiameterAdjustment * mm2grd_xy,
-        stud_height_final = studHeight * mbu2grd_z + studHeightAdjustment * mm2grd_z,
-        stud_sink_final = studSink * mbu2grd_z,
-        stud_rounding_final = studRounding * mbu2grd_xy,
+        stud_diameter_final = stud_diameter_res + mb_param_studDiameterAdjustment(config, settings) * mm2grd_xy,
+        stud_height_final = stud_height_res + mb_param_studHeightAdjustment(config, settings) * mm2grd_z,
+        stud_sink_final = mb_param_studSink(config, settings) * mbu2grd_z,
+        stud_rounding_final = mb_param_studRounding(config, settings) * mbu2grd_xy,
         stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mbu2grd_xy,
+
+        stud_cutout_diameter = stud_diameter_res + mb_param_studCutoutDiameterAdjustment(config, settings) * mm2grd_xy,
+        stud_cutout_height = stud_height_res + mb_param_studCutoutHeightAdjustment(config, settings) * mm2grd_z,
 
         base_clamp = [
             baseClampThickness * mm2grd_xy, // Thickness
@@ -220,10 +216,11 @@ function mb_block_obj(
         */
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
-        studPadding = mb_qc_resolve(studPadding, false),
-        surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, studPadding),
+        stud_padding = mb_qc_resolve(mb_param_studPadding(config, settings), false),
+        base_cutout_bounds = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
+        surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recessStudPadding),
-        recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, studPadding, stud_max_overhang)
+        recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang)
     )
         [
             [
@@ -252,7 +249,9 @@ function mb_block_obj(
                 stud_rounding_final, 
                 stud_diameter_res, 
                 stud_max_overhang,
-                has_studs
+                has_studs,
+                stud_cutout_diameter,
+                stud_cutout_height
             ],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
@@ -335,6 +334,8 @@ function mb_block_get_stud_sink(block_obj) =                        block_obj[14
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
 function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14][5];
 function mb_block_has_studs(block_obj) =                            block_obj[14][6];
+function mb_block_get_stud_cutout_diameter(block_obj) =             block_obj[14][7];
+function mb_block_get_stud_cutout_height(block_obj) =               block_obj[14][8];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
@@ -414,6 +415,20 @@ function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
 * Studs
 * -----
 */
+
+function mb_block_stud_cutouts_range(block_obj) =
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1]
+    )
+    [
+        [start_index_x : end_index_x],
+        [start_index_y : end_index_y]
+    ];
 
 function mb_block_stud_range(block_obj) =
     let(
@@ -758,7 +773,7 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = false) =
         ]
     ];
 
-function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = true) = 
+function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = false) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
@@ -779,9 +794,9 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = tr
         let(
             axis = mb_face_to_axis(face),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis], gap[2]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[1-axis]- gap_start_pos, gap[2]),
             gap_start_offset = gap_start_pos + wall_thickness,
-            gap_end_offset = mod_size[axis] - gap_length - gap_start_pos + wall_thickness
+            gap_end_offset = mod_size[1-axis] - gap_length - gap_start_pos + wall_thickness
         )
         [
             face,

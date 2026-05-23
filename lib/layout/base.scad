@@ -3,6 +3,7 @@ use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 use <layout.scad>;
 use <tongue.scad>;
+use <stud_cutouts.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 use <../core/utils.scad>;
@@ -16,11 +17,12 @@ module mb_base_cutout(
     block_obj,
     debug
 ){
+    difference() {
     union(){
         difference(){
             //Base Cutout
             mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
-
+                
             //Base Clamp Inner
             mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
 
@@ -30,9 +32,13 @@ module mb_base_cutout(
             // Stabilizers 
             mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
 
-            // Tubes
-            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
+            
         }
+
+        mb_block_part(block_obj, part = mb_block_part__stud_cutouts(block_obj));
+    }
+    // Tubes
+            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
     }
 
     block_dim = mb_block_get_dim(block_obj);
