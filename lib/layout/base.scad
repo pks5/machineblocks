@@ -36,7 +36,7 @@ module mb_base_cutout(
     }
 
     block_dim = mb_block_get_dim(block_obj);
-    echo(sp = mb_block_slope_partial(block_obj, 0, 0));
+    
 }
 
 /*

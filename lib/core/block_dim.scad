@@ -142,7 +142,7 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
 
         
-        cut_tol = 0.001
+        cut_tol = 0.01
     )
     [
         [

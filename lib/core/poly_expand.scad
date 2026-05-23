@@ -256,10 +256,17 @@ function mb_poly_expand(pts, p, expand, mul = undef) =
 
             // 0/1 left, 2/3 back, 4/5 right, 6/7 front
             d_edge8 = [
-                -sext[0], -sext[0],
-                -sext[3], -sext[3],
-                -sext[1], -sext[1],
-                -sext[2], -sext[2]
+                is_undef(pts[1]) ? -sext[0] : -max(sext[0], sext[2]), -sext[0],  //-sqrt(pow(sext[0], 2) + pow(sext[2], 2)),
+                is_undef(pts[3]) ? -sext[3] : -max(sext[3], sext[0]), -sext[3], //-0.5*(sext[3]+sext[0]),
+                is_undef(pts[5]) ? -sext[1] : -max(sext[1], sext[3]), -sext[1], //-0.5*(sext[1] + sext[3]),
+                is_undef(pts[7]) ? -sext[2] : -max(sext[2], sext[1]), -sext[2], //-0.5*(sext[2] + sext[1])
+            ],
+
+            d_edge89 = [
+                -sext[0], -sqrt(sext[0] * sext[2]),
+                -sext[3], -sqrt(sext[3] * sext[0]),
+                -sext[1], -sqrt(sext[1] * sext[3]),
+                -sext[2], -sqrt(sext[2] * sext[1]),
             ],
 
             idx = [

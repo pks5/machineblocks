@@ -115,7 +115,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
-        slope_base_height_diff = mb_block_get_slope_base_height_diff(block_obj),
+        
 
         bottom = is_undef(bottom) 
             ? mb_block_dim_this_offset(
@@ -154,7 +154,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                         value = [
                             for(f = [0 : 3])
                                 slope_neg[f] 
-                                - max(wall_thickness + mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff - wall_thickness), wall_thickness)
+                                -wall_thickness - max(mb_block_slope_partial(block_obj, top_offset, f), 0)
                                 //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                 //- wall_thickness 
                                 + inner_adj,
@@ -187,7 +187,6 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         block_dim = mb_block_get_dim(block_obj),
         slope = mb_block_dim_slope(block_dim),
         slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
-        slope_base_height_diff = mb_block_get_slope_base_height_diff(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
@@ -227,7 +226,10 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                 ) : 
                                                 slope_neg[f] - wall_thickness + inner_adj,
                                         bottom,
-                                        top
+                                        planes == "all" && slope_pos[face] > 0 ? mb_block_dim_opposite_offset(
+                                            block_dim, 
+                                            off = slope_base_height_inner
+                                        ) : top
                                     ]
                                 ),
                                 _mb_layout_plane_value(
@@ -244,12 +246,15 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                     cut = true
                                                 ) : 
                                                 slope_neg[f] + 
-                                                    - max(wall_thickness + mb_block_slope_partial(block_obj, top_offset, f) * (slope_pos[f] + slope_base_height_diff - wall_thickness), wall_thickness)
+                                                    - wall_thickness - (planes == "all" && slope_pos[face] > 0 ? 0 : max(mb_block_slope_partial(block_obj, top_offset, f), 0))
                                                     //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
                                                     //- wall_thickness
                                                     + inner_adj,
                                         bottom,
-                                        top
+                                        planes == "all" && slope_pos[face] > 0 ? mb_block_dim_opposite_offset(
+                                            block_dim, 
+                                            off = slope_base_height_inner
+                                        ) : top
                                     ]
                                 )
                             ],
@@ -415,7 +420,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
                         cut = 2
                     ), 
                     inner_adj = -top_plate_helpers_thickness,
-                    top_offset = top_plate_helpers_height
+                    top_offset = 0, //top_plate_helpers_height
                 )
             ]
         ] 
