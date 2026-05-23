@@ -18,26 +18,26 @@ module mb_base_cutout(
     debug
 ){
     difference() {
-    union(){
-        difference(){
-            //Base Cutout
-            mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
-                
-            //Base Clamp Inner
-            mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
+            union(){
+                difference(){
+                    //Base Cutout
+                    mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
+                        
+                    //Base Clamp Inner
+                    mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
 
-            //Top Plate Helpers
-            mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
-              
-            // Stabilizers 
-            mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
+                    //Top Plate Helpers
+                    mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
+                    
+                    // Stabilizers 
+                    mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
 
-            
-        }
+                    
+                }
 
-        mb_block_part(block_obj, part = mb_block_part__stud_cutouts(block_obj));
-    }
-    // Tubes
+                mb_block_part(block_obj, part = mb_block_part__stud_cutouts(block_obj));
+            }
+            // Tubes
             mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
     }
 

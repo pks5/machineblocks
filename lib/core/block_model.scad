@@ -217,7 +217,7 @@ function mb_block_obj(
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
         stud_padding = mb_qc_resolve(mb_param_studPadding(config, settings), false),
-        base_cutout_bounds = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
+        base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
         surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recessStudPadding),
         recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang)
@@ -238,7 +238,7 @@ function mb_block_obj(
             [grid_cfg, scale], // 7 - Units
             [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
-            [surface_shape, recess_surface_shape, recess_inverse_shape],  // 10 - 
+            [surface_shape, recess_surface_shape, recess_inverse_shape, base_cutout_mask],  // 10 - 
             [top_plate_height_pref],  // 11 - 
             [],  // 12 - 
             tongue_final,  // 13 - Tongue
@@ -284,6 +284,9 @@ function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5]
 function mb_block_get_slope_base_height_diff(block_obj) =           block_obj[5][3];
 
 function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
+function mb_block_in_base_cutout(block_obj, off, dia) =
+    mb_circle_in_convex_quad(block_obj[10][3], off, 0.5 * dia, overhang = 0);
+
 function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];
 function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
 
@@ -429,6 +432,13 @@ function mb_block_stud_cutouts_range(block_obj) =
         [start_index_x : end_index_x],
         [start_index_y : end_index_y]
     ];
+
+function mb_block_stud_cutout_render(block_obj, x, y) =
+    let(
+        stud_diameter = mb_block_get_stud_cutout_diameter(block_obj),
+        stud_offset = mb_block_stud_offset(block_obj, x, y)
+    )
+    !mb_block_in_base_cutout(block_obj, stud_offset, stud_diameter);
 
 function mb_block_stud_range(block_obj) =
     let(
