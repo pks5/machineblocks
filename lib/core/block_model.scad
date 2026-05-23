@@ -165,6 +165,13 @@ function mb_block_obj(
         stud_rounding_final = mb_param_studRounding(config, settings) * mbu2grd_xy,
         stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mbu2grd_xy,
 
+        stud_padding = mb_qc_resolve(mb_param_studPadding(config, settings), false),
+        
+        stud_icon = mb_param_studIcon(config, settings),
+        stud_icon_dimensions = mb_param_studIconDimensions(config, settings),
+        stud_icon_size = mb_param_studIconSize(config, settings),
+        stud_icon_color = mb_param_studIconColor(config, settings),
+
         stud_cutout_diameter = stud_diameter_res + mb_param_studCutoutDiameterAdjustment(config, settings) * mm2grd_xy,
         stud_cutout_height = stud_height_res + mb_param_studCutoutHeightAdjustment(config, settings) * mm2grd_z,
 
@@ -212,11 +219,11 @@ function mb_block_obj(
         ],
 
         /*
-        * Stud Masks
+        * Masks
         */
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
-        stud_padding = mb_qc_resolve(mb_param_studPadding(config, settings), false),
+        
         base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
         surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recessStudPadding),
@@ -258,7 +265,13 @@ function mb_block_obj(
             [baseWallGaps],  // 17 - 
             [custom_modules],  // 18 - 
             [inverted],  // 19 - Inverted
-            [id, debug] // 20 - ID, Debug
+            [id, debug], // 20 - ID, Debug
+            [
+                stud_icon,
+                stud_icon_dimensions,
+                stud_icon_size,
+                stud_icon_color
+            ] // 21 - Stud Icon
         ];
 
 /*
@@ -339,6 +352,11 @@ function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14
 function mb_block_has_studs(block_obj) =                            block_obj[14][6];
 function mb_block_get_stud_cutout_diameter(block_obj) =             block_obj[14][7];
 function mb_block_get_stud_cutout_height(block_obj) =               block_obj[14][8];
+
+function mb_block_get_stud_icon(block_obj) =                        block_obj[21][0];
+function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
+function mb_block_get_stud_icon_size(block_obj) =                   block_obj[21][2];
+function mb_block_get_stud_icon_color(block_obj) =                  block_obj[21][3];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];

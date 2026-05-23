@@ -219,6 +219,51 @@ function mb_block_dim_overlap(block_dim, overlap = false) =
 * -------
 */
 
+function mb_block_dim_size_expand(block_dim, size, expand) = 
+    let(
+        mod_size = mb_block_dim_mod_size(block_dim),
+        
+        si = is_undef(size) ? mod_size : size,
+        si2 = [
+            (is_undef(si[0]) ? mod_size[0] : si[0]), 
+            (is_undef(si[1]) ? mod_size[1] : si[1]), 
+            (is_undef(si[2]) ? mod_size[2] : si[2])
+        ],
+        s_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto", "auto"] ? 
+            si2 :
+
+            [
+                [
+                    expand[0] == "auto" && expand[1] == "auto" ? 
+                        -0.5 * si2[0] : expand[0] == "auto" ? 
+                        (0.5 * mod_size[0] + expand[1] - si2[0]) : 
+                        -0.5 * (expand[1] == "auto" ? mod_size[0] : si2[0]) - expand[0],
+                    expand[2] == "auto" && expand[3] == "auto" ? 
+                        -0.5 * si2[1] : expand[2] == "auto" ? 
+                        (0.5 * mod_size[1] + expand[3] - si2[1]) : 
+                        -0.5 * (expand[3] == "auto" ? mod_size[1] : si2[1]) - expand[2],
+                    expand[4] == "auto" && expand[5] == "auto" ? 
+                        -0.5 * si2[2] : expand[4] == "auto" ? 
+                        (0.5 * mod_size[2] + expand[5] - si2[2]) : 
+                        -0.5 * (expand[5] == "auto" ? mod_size[2] : si2[2]) - expand[4]
+                ],
+                [
+                    expand[0] == "auto" && expand[1] == "auto" ? 
+                        0.5 * si2[0] : expand[1] == "auto" ? 
+                        (-0.5 * mod_size[0] - expand[0] + si2[0]) : 
+                        0.5 * (expand[0] == "auto" ? mod_size[0] : si2[0]) + expand[1],
+                    expand[2] == "auto" && expand[3] == "auto" ? 
+                        0.5 * si2[1] : expand[3] == "auto" ? 
+                        (-0.5 * mod_size[1] - expand[2] + si2[1]) : 
+                        0.5 * (expand[2] == "auto" ? mod_size[1] : si2[1]) + expand[3],
+                    expand[4] == "auto" && expand[5] == "auto" ? 
+                        0.5 * si2[2] : expand[5] == "auto" ? 
+                        (-0.5 * mod_size[2] - expand[4] + si2[2]) : 
+                        0.5 * (expand[4] == "auto" ? mod_size[2] : si2[2]) + expand[5]
+                ]
+            ])
+    s_adj;
+
 function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "z-", overlap = false) =
     let(
         face = mb_face_to_int(face = face),

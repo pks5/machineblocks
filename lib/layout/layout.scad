@@ -10,6 +10,40 @@ use <shared.scad>;
 * Studs
 * ----.
 */
+
+function mb_block_part__stud_icon(block_obj, stud_render) =
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        stud_icon = mb_block_get_stud_icon(block_obj),
+        stud_icon_dimensions = mb_block_get_stud_icon_dimensions(block_obj),
+        stud_icon_size = mb_block_get_stud_icon_size(block_obj),
+        has_stud_icon = !mb_is_empty_string(stud_icon) && stud_icon != "none",
+        
+        si = [
+            stud_icon_size[0],
+            stud_icon_size[1],
+            undef
+        ],
+        height = abs(stud_icon_size[2])
+
+    )
+    mb_block_part_svg(
+        block_dim,
+        stud_icon,
+        stud_icon_dimensions,
+        size = si,
+        expand = [
+            0,
+            0,
+            0,
+            0,
+            stud_render[2][1],
+            stud_render[2][1] + height
+        ],
+        offset = stud_render[1],
+        render = has_stud_icon
+    );
+
 function mb_block_part__studs(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
@@ -18,21 +52,26 @@ function mb_block_part__studs(block_obj) =
 
         
     )
-    mb_block_has_studs(block_obj) ? [
+    mb_block_has_studs(block_obj) 
+    ? [
         "list",
         [
             for(x = stud_range[0])
                 for(y = stud_range[1])
                     let(render = mb_block_stud_render(block_obj, x, y))
                     if(render[0])
-                        mb_block_part_tube(
-                            block_dim = block_dim,
-                            radius = mb_block_stud_radius(block_obj, x, y),
-                            rounding_radius = stud_rounding,
-                            axis = "z",
-                            expand = render[2],
-                            offset = render[1]
-                        )
+                        mb_block_part(block_obj, "list", [
+                            mb_block_part_tube(
+                                block_dim = block_dim,
+                                radius = mb_block_stud_radius(block_obj, x, y),
+                                rounding_radius = stud_rounding,
+                                axis = "z",
+                                expand = render[2],
+                                offset = render[1]
+                            ),
+                           // mb_block_part__stud_icon(block_obj, render) 
+                        ])
+                        
         ]
     ] : undef;
 

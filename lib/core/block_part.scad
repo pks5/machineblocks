@@ -7,10 +7,50 @@ use <poly_expand.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
 use <../shape/cube.scad>;
+use <../shape/svg3d.scad>;
 
 include <../custom.scad>;
 
+function mb_block_part(type, data, render = true) =
+    render ? [
+        type,
+        data
+    ] : undef;
 
+function mb_block_part_svg(
+    block_dim,
+    svg_file,
+    svg_size,
+    size = undef,
+    expand = undef,
+    offset = undef,
+    render = true
+) = 
+mb_block_part("svg",
+    [
+        [
+            svg_file,
+            svg_size,
+            mb_block_dim_size_expand(block_dim, size, expand),
+            offset
+        ]
+    ]
+, render = render);
+
+function mb_block_part_text(
+    block_dim,
+    size = undef,
+    expand = undef,
+    offset = undef
+) = 
+[
+    "text",
+    [
+        [
+            
+        ]
+    ]
+];
 
 function mb_block_part_tube(
     block_dim,
@@ -67,54 +107,11 @@ function mb_block_part_cube(
     expand = undef,
     offset = undef
 ) = 
-    let(
-        mod_size = mb_block_dim_mod_size(block_dim),
-        
-        si = is_undef(size) ? mod_size : size,
-        si2 = [
-            (is_undef(si[0]) ? mod_size[0] : si[0]), 
-            (is_undef(si[1]) ? mod_size[1] : si[1]), 
-            (is_undef(si[2]) ? mod_size[2] : si[2])
-        ],
-        s_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto", "auto"] ? 
-            si2 :
-
-            [
-                [
-                    expand[0] == "auto" && expand[1] == "auto" ? 
-                        -0.5 * si2[0] : expand[0] == "auto" ? 
-                        (0.5 * mod_size[0] + expand[1] - si2[0]) : 
-                        -0.5 * (expand[1] == "auto" ? mod_size[0] : si2[0]) - expand[0],
-                    expand[2] == "auto" && expand[3] == "auto" ? 
-                        -0.5 * si2[1] : expand[2] == "auto" ? 
-                        (0.5 * mod_size[1] + expand[3] - si2[1]) : 
-                        -0.5 * (expand[3] == "auto" ? mod_size[1] : si2[1]) - expand[2],
-                    expand[4] == "auto" && expand[5] == "auto" ? 
-                        -0.5 * si2[2] : expand[4] == "auto" ? 
-                        (0.5 * mod_size[2] + expand[5] - si2[2]) : 
-                        -0.5 * (expand[5] == "auto" ? mod_size[2] : si2[2]) - expand[4]
-                ],
-                [
-                    expand[0] == "auto" && expand[1] == "auto" ? 
-                        0.5 * si2[0] : expand[1] == "auto" ? 
-                        (-0.5 * mod_size[0] - expand[0] + si2[0]) : 
-                        0.5 * (expand[0] == "auto" ? mod_size[0] : si2[0]) + expand[1],
-                    expand[2] == "auto" && expand[3] == "auto" ? 
-                        0.5 * si2[1] : expand[3] == "auto" ? 
-                        (-0.5 * mod_size[1] - expand[2] + si2[1]) : 
-                        0.5 * (expand[2] == "auto" ? mod_size[1] : si2[1]) + expand[3],
-                    expand[4] == "auto" && expand[5] == "auto" ? 
-                        0.5 * si2[2] : expand[5] == "auto" ? 
-                        (-0.5 * mod_size[2] - expand[4] + si2[2]) : 
-                        0.5 * (expand[4] == "auto" ? mod_size[2] : si2[2]) + expand[5]
-                ]
-            ]
-    )
     [
         "cube",
         [
             [
-                s_adj,
+                mb_block_dim_size_expand(block_dim, size, expand),
                 offset,
             ]
         ]
@@ -289,6 +286,17 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mb_cube(
                     size = list[0][0],
                     offset = list[0][1],
+                    mul = mul
+                );
+                
+                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
+            }
+            else if(type == "svg_file"){
+                mb_svg(
+                    svg_file = list[0][0],
+                    svg_size = list[0][1],
+                    size = list[0][2],
+                    offset = list[0][3],
                     mul = mul
                 );
                 
