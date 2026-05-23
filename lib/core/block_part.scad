@@ -21,7 +21,8 @@ function mb_block_part_tube(
     axis = "z",
     length = undef,
     expand = undef,
-    offset = undef
+    offset = undef,
+    overlap = undef
 ) = 
     let(
         offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
@@ -31,7 +32,17 @@ function mb_block_part_tube(
         h = mod_size[axis],
         h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
             [expand[0] == "auto" ? 0.5 * h + expand[1] - (!is_undef(length) ? length : h) : -0.5 * h - expand[0], 
-            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(length) ? length : h) : 0.5 * h + expand[1]]
+            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(length) ? length : h) : 0.5 * h + expand[1]],
+
+        /*
+        clamp_start = is_undef(clamp_start) 
+            ? undef 
+            : [
+                clamp_start[0],
+                clamp_start[1],
+                clamp_start[2],
+                clamp_start[3]
+            ]*/
         
     )
     [

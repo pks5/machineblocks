@@ -13,7 +13,9 @@ function mb_block_part__stud_cutouts(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         stud_cutout_diameter = mb_block_get_stud_cutout_diameter(block_obj),
         stud_cutout_height = mb_block_get_stud_cutout_height(block_obj),
-
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
+        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
+        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         stud_range = mb_block_stud_cutouts_range(block_obj),
     )
     [
@@ -25,6 +27,11 @@ function mb_block_part__stud_cutouts(block_obj) =
                         block_dim = block_dim,
                         radius = 0.5 * stud_cutout_diameter,
                         axis = "z",
+                        clamp_start = [
+                            -base_clamp_thickness,
+                            base_clamp_height,
+                            base_clamp_offset + mb_block_dim_cut_offset(block_dim, cut=true)
+                        ],
                         expand = [
                              mb_block_dim_this_offset(
                                 block_dim, 
@@ -32,8 +39,7 @@ function mb_block_part__stud_cutouts(block_obj) =
                             ),
                             mb_block_dim_opposite_offset(
                                 block_dim, 
-                                off = stud_cutout_height, 
-                                cut = true
+                                off = stud_cutout_height
                             )
                         ],
                         offset = mb_block_stud_offset(block_obj, x, y)
