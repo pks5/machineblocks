@@ -62,7 +62,7 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                             tube_clamp_end = [
                                     top_plate_helpers_thickness, 
                                     top_plate_helpers_height, 
-                                    mb_block_dim_cut_offset(block_dim, cut = true)
+                                    mb_block_dim_overlap(block_dim, overlap = true)
                                 ],
                             tube_clamp_start = [
                                     base_clamp_thickness,
@@ -120,7 +120,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         bottom = is_undef(bottom) 
             ? mb_block_dim_this_offset(
                 block_dim, 
-                cut = true
+                overlap = true
             ) 
             : bottom,
         top = is_undef(top) 
@@ -169,7 +169,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 ),*/
                 socket = _mb_layout_plane_value(
                     planes = planes, 
-                    value = [slope_base_height_inner + mb_block_dim_cut_offset(block_dim, cut = true), 0]
+                    value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]
                 )
             ),
             for(wall_gap = wall_gaps)
@@ -222,7 +222,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                     exp = outer_adj, 
                                                     adjusted = true, 
                                                     face = f, 
-                                                    cut = true
+                                                    overlap = true
                                                 ) : 
                                                 slope_neg[f] - wall_thickness + inner_adj,
                                         bottom,
@@ -243,7 +243,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                     exp = outer_adj, 
                                                     adjusted = true, 
                                                     face = f, 
-                                                    cut = true
+                                                    overlap = true
                                                 ) : 
                                                 slope_neg[f] + 
                                                     - wall_thickness - (planes == "all" && slope_pos[face] > 0 ? 0 : max(mb_block_slope_partial(block_obj, top_offset, f), 0))
@@ -264,7 +264,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                             ),*/
                             socket = _mb_layout_plane_value(
                                 planes = planes, 
-                                value = [slope_base_height_inner + mb_block_dim_cut_offset(block_dim, cut = true), 0]
+                                value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]
                             )
                         ),
                         
@@ -277,7 +277,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                 mb_face_has_common(face, "x") ? - gap_end_offset + inner_adj : 0,
                                 mb_block_dim_this_offset(
                                     block_dim, 
-                                    cut = true
+                                    overlap = true
                                 ),
                                 0
                             ]
@@ -325,12 +325,12 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 bottom = mb_block_dim_this_offset(
                     block_dim, 
                     off = base_clamp_offset, 
-                    cut = true
+                    overlap = true
                 ), 
                 top = mb_block_dim_opposite_offset(
                     block_dim, 
                     off = base_clamp_height + base_clamp_offset, 
-                    cut = true
+                    overlap = true
                 ), 
                 inner_adj = -base_clamp_thickness
             )
@@ -464,7 +464,7 @@ function mb_block_part__stabilizers(block_obj) =
                                         size = [
                                             seg_size[0][0], 
                                             seg_size[0][1], 
-                                            seg_size[0][2] + mb_block_dim_cut_offset(block_dim, cut = true)
+                                            seg_size[0][2] + mb_block_dim_overlap(block_dim, overlap = true)
                                         ],
                                         expand = [
                                             for(f = [0 : 3])
@@ -480,7 +480,7 @@ function mb_block_part__stabilizers(block_obj) =
                                             size = [
                                                 seg_size[0][0] + seg_size[1][0], 
                                                 seg_size[0][1] + seg_size[1][1], 
-                                                                 seg_size[1][2] + mb_block_dim_cut_offset(block_dim, cut = true)
+                                                                 seg_size[1][2] + mb_block_dim_overlap(block_dim, overlap = true)
                                             ],
                                             expand = [
                                                 for(f = [0 : 3])
@@ -522,7 +522,7 @@ function mb_block_part__relief_cut(block_obj) =
                 block_dim = block_dim, 
                 bottom = mb_block_dim_this_offset(
                     block_dim, 
-                    cut = 1
+                    overlap = 1
                 ), 
                 top =  mb_block_dim_opposite_offset(
                     block_dim, 
@@ -542,12 +542,12 @@ function mb_block_part__relief_cut(block_obj) =
                         ),
                     mb_block_dim_this_offset(
                         block_dim, 
-                        cut = 2
+                        overlap = 2
                     ),
                     mb_block_dim_opposite_offset(
                         block_dim, 
                         off = relief_cut_height, 
-                        cut = true
+                        overlap = true
                     )
                 ]]
             )
@@ -573,7 +573,7 @@ function mb_block_part__recess(block_obj) =
             block_dim, 
             adjusted = true, 
             face = "z+", 
-            cut = true
+            overlap = true
         )
     )
     mb_block_has_recess(block_obj) 
@@ -630,7 +630,7 @@ function mb_block_part__recess(block_obj) =
                                                 block_dim, 
                                                 adjusted = true, 
                                                 face = f,
-                                                cut = true
+                                                overlap = true
                                             ) 
                                             : -rwt[f],
                                     0,
@@ -667,7 +667,7 @@ function mb_block_part__stud_base_cutout(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        cut_tol = mb_block_dim_cut_offset(block_dim, cut = true), //TODO remove
+        cut_tol = mb_block_dim_overlap(block_dim, overlap = true), //TODO remove
         slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),
         base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),

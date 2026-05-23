@@ -206,28 +206,28 @@ function mb_block_dim_slope(block_dim) =                         block_dim[9][2]
 
 function mb_block_dim_cut_tol(block_dim) =                       block_dim[10];
 
-function mb_block_dim_cut_offset(block_dim, cut = false) =
+function mb_block_dim_overlap(block_dim, overlap = false) =
     let(cut_tol = mb_block_dim_cut_tol(block_dim))
-    (is_num(cut) ? cut * cut_tol : cut == true ? cut_tol : 0);
+    (is_num(overlap) ? overlap * cut_tol : overlap == true ? cut_tol : 0);
 
-function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "z-", cut = false) =
+function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "z-", overlap = false) =
     let(
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    (adjusted ? base_adj[face == 5 ? 5 : 4] : 0) - off + mb_block_dim_cut_offset(block_dim, cut);
+    (adjusted ? base_adj[face == 5 ? 5 : 4] : 0) - off + mb_block_dim_overlap(block_dim, overlap = overlap);
 
-function mb_block_dim_opposite_offset(block_dim, off = 0, adjusted = false, face = "z+", cut = false) =
+function mb_block_dim_opposite_offset(block_dim, off = 0, adjusted = false, face = "z+", overlap = false) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
         base_adj = mb_block_dim_base_adj(block_dim),
         face = mb_face_to_int(face = face)
     )
-    (adjusted ? -base_adj[face == 4 ? 5 : 4] : 0) - (mod_size[2] - off) + mb_block_dim_cut_offset(block_dim, cut);
+    (adjusted ? -base_adj[face == 4 ? 5 : 4] : 0) - (mod_size[2] - off) + mb_block_dim_overlap(block_dim, overlap = overlap);
 
-function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", cut = false) =
+function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", overlap = false) =
     let(
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    (adjusted ? base_adj[face < 6 ? face : 0] : 0) + exp + mb_block_dim_cut_offset(block_dim, cut);
+    (adjusted ? base_adj[face < 6 ? face : 0] : 0) + exp + mb_block_dim_overlap(block_dim, overlap = overlap);

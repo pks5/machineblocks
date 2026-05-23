@@ -397,7 +397,7 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
             mb_block_get_recess_depth(block_obj) + mb_block_get_top_plate_height(block_obj)
         ]
     )
-    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_cut_offset(block_dim, cut) : undef;
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
 function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
     let(
@@ -408,7 +408,7 @@ function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
             mb_block_get_recess_depth(block_obj)
         ]
     )
-    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_cut_offset(block_dim, cut) : undef;
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
 /**
 * -----

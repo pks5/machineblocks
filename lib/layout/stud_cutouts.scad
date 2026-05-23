@@ -30,12 +30,12 @@ function mb_block_part__stud_cutouts(block_obj) =
                         clamp_start = [
                             -base_clamp_thickness,
                             base_clamp_height,
-                            base_clamp_offset + mb_block_dim_cut_offset(block_dim, cut=true)
+                            base_clamp_offset + mb_block_dim_overlap(block_dim, overlap=true)
                         ],
                         expand = [
                              mb_block_dim_this_offset(
                                 block_dim, 
-                                cut = true
+                                overlap = true
                             ),
                             mb_block_dim_opposite_offset(
                                 block_dim, 

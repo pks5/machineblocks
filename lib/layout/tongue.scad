@@ -59,14 +59,14 @@ function mb_block_part__tongue(block_obj) =
                                 off = stud_sink, 
                                 adjusted = true, 
                                 face = "z-",
-                                cut = true
+                                overlap = true
                             ),
                             mb_block_dim_face_edge_expand(
                                 block_dim, 
                                 exp = tongue_height, 
                                 adjusted = true, 
                                 face = "z+",
-                                cut = true
+                                overlap = true
                             )
                         ]]
                     ),
@@ -92,7 +92,7 @@ function mb_block_part__tongue(block_obj) =
                                                         block_dim, 
                                                         adjusted = true, 
                                                         face = f,
-                                                        cut = true
+                                                        overlap = true
                                                     ) 
                                                     : -(slope_pos[f] + tongue_offset + tongue_thickness),
                                             mb_block_dim_opposite_offset(
@@ -100,14 +100,14 @@ function mb_block_part__tongue(block_obj) =
                                                 off = stud_sink, 
                                                 adjusted = true, 
                                                 face = "z-",
-                                                cut = true
+                                                overlap = true
                                             ),
                                             mb_block_dim_face_edge_expand(
                                                 block_dim, 
                                                 exp = tongue_height, 
                                                 adjusted = true, 
                                                 face = "z+",
-                                                cut = true
+                                                overlap = true
                                             )
                                         ]]
                                     ),
@@ -124,14 +124,14 @@ function mb_block_part__tongue(block_obj) =
                                                 off = stud_sink, 
                                                 adjusted = true, 
                                                 face = "z-",
-                                                cut = true
+                                                overlap = true
                                             ),
                                             mb_block_dim_face_edge_expand(
                                                 block_dim, 
                                                 exp = tongue_height, 
                                                 adjusted = true, 
                                                 face = "z+",
-                                                cut = true
+                                                overlap = true
                                             )
                                         ]
                                     )
@@ -172,14 +172,14 @@ function mb_block_part__tongue(block_obj) =
                                 off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
                                 adjusted = true, 
                                 face = "z-",
-                                cut = true
+                                overlap = true
                             ),
                             mb_block_dim_face_edge_expand(
                                 block_dim, 
                                 exp = tongue_height - tongue_clamp_offset, 
                                 adjusted = true, 
                                 face = "z+",
-                                cut = true
+                                overlap = true
                             )
                         ]]
                     ),
@@ -205,7 +205,7 @@ function mb_block_part__tongue(block_obj) =
                                                         block_dim, 
                                                         adjusted = true, 
                                                         face = f,
-                                                        cut = true
+                                                        overlap = true
                                                     ) 
                                                     : -(slope_pos[f] + tongue_offset + tongue_thickness + tongue_clamp_thickness),
                                             mb_block_dim_opposite_offset(
@@ -213,14 +213,14 @@ function mb_block_part__tongue(block_obj) =
                                                 off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
                                                 adjusted = true, 
                                                 face = "z-",
-                                                cut = true
+                                                overlap = true
                                             ),
                                             mb_block_dim_face_edge_expand(
                                                 block_dim, 
                                                 exp = tongue_height - tongue_clamp_offset, 
                                                 adjusted = true, 
                                                 face = "z+",
-                                                cut = true
+                                                overlap = true
                                             )
                                         ]]
                                     ),
@@ -237,14 +237,14 @@ function mb_block_part__tongue(block_obj) =
                                                 off = -(tongue_height - tongue_clamp_offset - tongue_clamp_height), 
                                                 adjusted = true, 
                                                 face = "z-",
-                                                cut = true
+                                                overlap = true
                                             ),
                                             mb_block_dim_face_edge_expand(
                                                 block_dim, 
                                                 exp = tongue_height - tongue_clamp_offset, 
                                                 adjusted = true, 
                                                 face = "z+",
-                                                cut = true
+                                                overlap = true
                                             )
                                         ]
                                     )
