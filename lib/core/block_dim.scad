@@ -142,7 +142,7 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
 
         
-        cut_tol = 0.01
+        overlap_length = 0.01
     )
     [
         [
@@ -179,8 +179,14 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
         undef, // 7
         [adj_size, bsa],  // 8
         [bevel, bevel_matrix, slope], // 9
-        cut_tol  // 10
+        overlap_length  // 10
     ];
+
+/*
+* ------
+* GETTER
+* ------
+*/
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
 function mb_block_dim_size_bounding_box(block_dim) =             block_dim[0][1];
@@ -203,12 +209,15 @@ function mb_block_dim_bevel(block_dim) =                         block_dim[9][0]
 function mb_block_dim_bevel_matrix(block_dim) =                  block_dim[9][1];
 function mb_block_dim_slope(block_dim) =                         block_dim[9][2];
 
-
-function mb_block_dim_cut_tol(block_dim) =                       block_dim[10];
-
 function mb_block_dim_overlap(block_dim, overlap = false) =
-    let(cut_tol = mb_block_dim_cut_tol(block_dim))
-    (is_num(overlap) ? overlap * cut_tol : overlap == true ? cut_tol : 0);
+    let(overlap_length = block_dim[10])
+    (is_num(overlap) ? overlap * overlap_length : overlap == true ? overlap_length : 0);
+
+/*
+* -------
+* METHODS
+* -------
+*/
 
 function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "z-", overlap = false) =
     let(
