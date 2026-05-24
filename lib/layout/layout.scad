@@ -65,17 +65,20 @@ function mb_block_part__studs(block_obj) =
                 for(y = stud_range[1])
                     let(render = mb_block_stud_render(block_obj, x, y))
                     if(render[0])
-                        mb_block_part_model(stud_icon_size[2] > 0 ? "union" : "difference", [
-                            mb_block_part_tube(
-                                block_dim = block_dim,
-                                radius = mb_block_stud_radius(block_obj, x, y),
-                                rounding_radius = stud_rounding,
-                                axis = "z",
-                                expand = render[2],
-                                offset = render[1]
-                            ),
-                            mb_block_part__stud_icon(block_obj, render) 
-                        ])
+                        mb_block_part_model(
+                            type = stud_icon_size[2] > 0 ? "union" : "difference", 
+                            items = [
+                                mb_block_part_tube(
+                                    block_dim = block_dim,
+                                    radius = mb_block_stud_radius(block_obj, x, y),
+                                    rounding_radius = stud_rounding,
+                                    axis = "z",
+                                    expand = render[2],
+                                    offset = render[1]
+                                ),
+                                mb_block_part__stud_icon(block_obj, render) 
+                            ]
+                        )
                         
         ]
     ] : undef;

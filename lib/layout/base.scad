@@ -83,29 +83,29 @@ module mb_base(
                 
                 
                 //Just for testing TO BE REMOVED
-                *mb_block_part(block_obj, part=[
-                    "my_cube",
-                    [
-                        [
-                            [10, 40, 40],
-                        ],
-                        [
-                            "list",
+                mb_block_part(
+                    block_obj, 
+                    part= mb_block_part_custom(
+                        type = "my_cube", 
+                        items = [
                             [
-                                [
-                                    "my_cube",
-                                    [
-                                        
-                                        [
-                                            [34, 14, 44]
+                                [10, 40, 40],
+                            ],
+                            mb_block_part_model(
+                                type = "list",
+                                items = [
+                                    mb_block_part_custom(
+                                        type = "my_cube", 
+                                        data = [
+                                                [34, 14, 44]
                                         ]
-                                    ]
+                                    )
                                 ]
-                            ]
+                            )
                         ]
-                    ]
-                    
-                ], debug = debug);
+                    ), 
+                    debug = debug
+                );
 
             }
 

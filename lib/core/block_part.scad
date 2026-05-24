@@ -11,11 +11,20 @@ use <../shape/svg3d.scad>;
 
 include <../custom.scad>;
 
-function mb_block_part_model(type, data, render = true) =
+function mb_block_part_model(type, items = undef, data = undef, render = true) =
     render ? [
         type,
-        data
+        is_undef(data) ? items : [data]
     ] : undef;
+
+function mb_block_part_custom(type, items = undef, data = undef, render = true) =
+    mb_block_part_type_is_builtin(type) ? undef 
+    : mb_block_part_model(
+        type = type, 
+        items = items, 
+        data = data, 
+        render = render
+    );
 
 function _mb_block_part_model_valid(part_model) =
     is_list(part_model) && len(part_model) == 2 && is_string(part_model[0]) && is_list(part_model[1]);
@@ -41,16 +50,16 @@ function mb_block_part_svg(
     offset = undef,
     render = true
 ) = 
-mb_block_part_model("mb_svg",
-    [
-        [
+mb_block_part_model(
+    type = "mb_svg",
+    data = [
             svg_file,
             svg_size,
             mb_block_dim_size_expand(block_dim, size, expand),
             offset
-        ]
-    ]
-, render = render);
+    ], 
+    render = render
+);
 
 function mb_block_part_text(
     block_dim,
@@ -180,7 +189,8 @@ function mb_block_part_type_is_builtin(type) =
     is_string(type) && (
         type == "mb_prismoid" || 
         type == "mb_tube" ||
-        type == "mb_cube" ||  
+        type == "mb_cube" ||
+        type == "mb_svg" ||  
         type == "union" || 
         type == "difference" || 
         type == "intersection"  || 
