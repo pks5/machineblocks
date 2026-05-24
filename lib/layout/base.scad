@@ -83,12 +83,11 @@ module mb_base(
                 
                 
                 //Just for testing TO BE REMOVED
-                mb_block_part(block_obj, part=[
+                *mb_block_part(block_obj, part=[
                     "my_cube",
                     [
                         [
-                            "cube",
-                            [10, 10, 10],
+                            [10, 40, 40],
                         ],
                         [
                             "list",
@@ -98,8 +97,7 @@ module mb_base(
                                     [
                                         
                                         [
-                                            "cube",
-                                            [34, 34, 44]
+                                            [34, 14, 44]
                                         ]
                                     ]
                                 ]
