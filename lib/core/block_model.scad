@@ -81,7 +81,6 @@ function mb_block_obj(
         inverted = false,
         printerNozzleDiameter = 0.4,
         printerLayerHeight = 0.2,
-        custom_modules = ["my_cube"],
         grid_cfg = [unitMbuToMm, unitGridToMbu[0], unitGridToMbu[1]],
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -263,7 +262,7 @@ function mb_block_obj(
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
-            [custom_modules],  // 18 - 
+            [],  // 18 - 
             [inverted],  // 19 - Inverted
             [id, debug], // 20 - ID, Debug
             [
@@ -856,14 +855,6 @@ function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) =
 * ----
 */ 
 
-function mb_block_custom_module_mapping(block_obj, mname) = 
-    let(custom_modules = mb_block_get_custom_modules(block_obj),
-        mappings = custom_modules[0], f = [
-        for(i = [0:len(mappings)-1])
-            if (mappings[i] == mname)
-                i
-    ])
-    len(f) > 0 ? f[0] : undef;
 
 function mb_block_pos_to_offset(block_obj, pos) = 
     let(center = mb_block_get_center(block_obj))

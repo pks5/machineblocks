@@ -41,7 +41,7 @@ function mb_block_part_svg(
     offset = undef,
     render = true
 ) = 
-mb_block_part_model("svg",
+mb_block_part_model("mb_svg",
     [
         [
             svg_file,
@@ -101,7 +101,7 @@ function mb_block_part_tube(
         
     )
     [
-        "tube",
+        "mb_tube",
         [
             [
                 
@@ -123,7 +123,7 @@ function mb_block_part_cube(
     offset = undef
 ) = 
     [
-        "cube",
+        "mb_cube",
         [
             [
                 mb_block_dim_size_expand(block_dim, size, expand),
@@ -166,7 +166,7 @@ function mb_block_part_prismoid(
         //socket = slope_inner ? [] : []
     )
     [
-        "prismoid",
+        "mb_prismoid",
         [
             [
                 mb_poly_expand(bevel_matrix, 0, slope_neg),
@@ -178,9 +178,9 @@ function mb_block_part_prismoid(
 
 function mb_block_part_type_is_builtin(type) = 
     is_string(type) && (
-        type == "prismoid" || 
-        type == "tube" ||
-        type == "cube" ||  
+        type == "mb_prismoid" || 
+        type == "mb_tube" ||
+        type == "mb_cube" ||  
         type == "union" || 
         type == "difference" || 
         type == "intersection"  || 
@@ -276,12 +276,12 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
             }
         }
-        else if(part_type == "prismoid"){
+        else if(part_type == "mb_prismoid"){
             mb_prismoid(shape = mb_block_part_model_data_item(part, 0), mul = mul, debug = debug);
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
-        else if(part_type == "tube"){
+        else if(part_type == "mb_tube"){
             tube_data = mb_block_part_model_data_item(part, 0);
 
             mb_tube(
@@ -298,7 +298,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
-        else if(part_type == "cube"){
+        else if(part_type == "mb_cube"){
             cube_data = mb_block_part_model_data_item(part, 0);
 
             mb_cube(
@@ -309,7 +309,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
-        else if(part_type == "svg"){
+        else if(part_type == "mb_svg"){
             svg_data = mb_block_part_model_data_item(part, 0);
 
             mb_svg(
@@ -323,20 +323,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
         else{
-            mapping = mb_block_custom_module_mapping(block_obj, part_type);
-            
-            if(mapping == 0){
-                mb_block_part__custom_0(block_obj, part_data, part_params, debug, mul);
-            }
-            else if(mapping == 1){
-                mb_block_part__custom_1(block_obj, part_data, part_params, debug, mul);
-            }
-            else if(mapping == 2){
-                mb_block_part__custom_2(block_obj, part_data, part_params, debug, mul);
-            }
-            else if(mapping == 3){
-                mb_block_part__custom_3(block_obj, part_data, part_params, debug, mul);
-            }
+            mb_block_part__custom(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
         }
         
     }

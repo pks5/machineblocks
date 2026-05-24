@@ -83,7 +83,7 @@ module mb_base(
                 
                 
                 //Just for testing TO BE REMOVED
-                *mb_block_part(block_obj, part=[
+                mb_block_part(block_obj, part=[
                     "my_cube",
                     [
                         [
