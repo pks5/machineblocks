@@ -1,3 +1,4 @@
+use <../core/utils.scad>;
 
 module mb_svg(
     svg_file,

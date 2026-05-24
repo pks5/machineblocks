@@ -11,7 +11,7 @@ use <../shape/svg3d.scad>;
 
 include <../custom.scad>;
 
-function mb_block_part(type, data, render = true) =
+function mb_block_part_model(type, data, render = true) =
     render ? [
         type,
         data
@@ -26,7 +26,7 @@ function mb_block_part_svg(
     offset = undef,
     render = true
 ) = 
-mb_block_part("svg",
+mb_block_part_model("svg",
     [
         [
             svg_file,
@@ -291,7 +291,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 
                 mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
             }
-            else if(type == "svg_file"){
+            else if(type == "svg"){
                 mb_svg(
                     svg_file = list[0][0],
                     svg_size = list[0][1],
