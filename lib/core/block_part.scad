@@ -17,6 +17,21 @@ function mb_block_part_model(type, data, render = true) =
         data
     ] : undef;
 
+function _mb_block_part_model_valid(part_model) =
+    is_list(part_model) && len(part_model) == 2 && is_string(part_model[0]) && is_list(part_model[1]);
+
+function mb_block_part_model_type(part_model) = 
+    _mb_block_part_model_valid(part_model) ? part_model[0] : undef;
+
+function mb_block_part_model_data(part_model) = 
+    _mb_block_part_model_valid(part_model) ? part_model[1] : undef;
+
+function mb_block_part_model_data_length(part_model) = 
+    _mb_block_part_model_valid(part_model) ? len(part_model[1]) : undef;
+
+function mb_block_part_model_data_item(part_model, item) = 
+    _mb_block_part_model_valid(part_model) && len(part_model[1]) > 0 ? part_model[1][item] : undef;
+
 function mb_block_part_svg(
     block_dim,
     svg_file,
@@ -180,13 +195,13 @@ function mb_block_part_to_prismoid(
     add = undef
 ) =
     is_undef(part) || !is_list(part) ? undef : 
-        let(type = part[0], 
-            list = part[1])
-        mb_block_part_type_is_builtin(type) ?
+        let(part_type = part[0], 
+            part_data = part[1])
+        mb_block_part_type_is_builtin(part_type) ?
         [
-            type,
+            part_type,
             [
-                for(list_item = list)
+                for(list_item = part_data)
                  
                  mb_block_part_type_is_builtin(list_item[0]) ?
 
@@ -199,7 +214,7 @@ function mb_block_part_to_prismoid(
                         add = add
                     ) : 
 
-                    type == "prismoid" ?
+                    part_type == "prismoid" ?
                     mb_prismoid_shape_resolve(
                         shape = list_item, 
                         radius = radius,
@@ -213,137 +228,117 @@ function mb_block_part_to_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
     
-    if(!is_undef(part) && is_list(part)){
-        type = part[0];
-        list = part[1];
-        list_len = len(list);
-        if(is_string(type) && list_len > 0){
-            if(type == "list"){
-                for(list_item = list){
-                    mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
-                }
-            }
-            else if(type == "union"){
-                if(list_len > 1){
-                    union(){
-                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                        for(i = [1 : list_len - 1]){
-                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
-                        }
-                    }
-                }
-                else{
-                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                }
-            }
-            else if(type == "difference"){
-                if(list_len > 1){
-                    difference(){
-                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                        for(i = [1 : list_len - 1]){
-                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
-                        }
-                    }
-                }
-                else{
-                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                }
-            }
-            else if(type == "intersection"){
-                if(list_len > 1){
-                    intersection(){
-                        mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                        for(i = [1 : list_len - 1]){
-                            mb_block_part(block_obj, part = list[i], part_params=part_params, mul = mul, debug = debug);
-                        }
-                    }
-                }
-                else{
-                    mb_block_part(block_obj, part = list[0], part_params=part_params, mul = mul, debug = debug);
-                }
-            }
-            else if(type == "prismoid"){
-                mb_prismoid(shape = list[0], mul = mul, debug = debug);
-                
-                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
-            }
-            else if(type == "tube"){
-                mb_tube(
-                    radius = list[0][0],
-                    length = list[0][1],
-                    rounding_radius = list[0][2],
-                    clamp_start = list[0][3],
-                    clamp_end = list[0][4],
-                    axis = list[0][5],
-                    offset = list[0][6],
-                    mul = mul,
-                    debug = debug
-                );
-                
-                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
-            }
-            else if(type == "cube"){
-                mb_cube(
-                    size = list[0][0],
-                    offset = list[0][1],
-                    mul = mul
-                );
-                
-                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
-            }
-            else if(type == "svg"){
-                mb_svg(
-                    svg_file = list[0][0],
-                    svg_size = list[0][1],
-                    size = list[0][2],
-                    offset = list[0][3],
-                    mul = mul
-                );
-                
-                mb_block_part(block_obj, part = list[1], part_params=part_params, mul = mul, debug = debug);
-            }
-            else{
-                mapping = mb_block_custom_module_mapping(block_obj, type);
-                
-                if(mapping == 0){
-                    mb_block_part__custom_0(block_obj, list, part_params, debug, mul);
-                }
-                else if(mapping == 1){
-                    mb_block_part__custom_1(block_obj, list, part_params, debug, mul);
-                }
-                else if(mapping == 2){
-                    mb_block_part__custom_2(block_obj, list, part_params, debug, mul);
-                }
-                else if(mapping == 3){
-                    mb_block_part__custom_3(block_obj, list, part_params, debug, mul);
-                }
+    part_type = mb_block_part_model_type(part);
+    part_data = mb_block_part_model_data(part);
+    part_data_length = mb_block_part_model_data_length(part);
+
+    if(is_string(part_type) && part_data_length > 0){
+        if(part_type == "list"){
+            for(list_item = part_data){
+                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
             }
         }
+        else if(part_type == "union"){
+            if(part_data_length > 1){
+                union(){
+                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : part_data_length - 1]){
+                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                    }
+                }
+            }
+            else{
+                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+            }
+        }
+        else if(part_type == "difference"){
+            if(part_data_length > 1){
+                difference(){
+                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : part_data_length - 1]){
+                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                    }
+                }
+            }
+            else{
+                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+            }
+        }
+        else if(part_type == "intersection"){
+            if(part_data_length > 1){
+                intersection(){
+                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                    for(i = [1 : part_data_length - 1]){
+                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                    }
+                }
+            }
+            else{
+                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+            }
+        }
+        else if(part_type == "prismoid"){
+            mb_prismoid(shape = mb_block_part_model_data_item(part, 0), mul = mul, debug = debug);
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else if(part_type == "tube"){
+            tube_data = mb_block_part_model_data_item(part, 0);
+
+            mb_tube(
+                radius = tube_data[0],
+                length = tube_data[1],
+                rounding_radius = tube_data[2],
+                clamp_start = tube_data[3],
+                clamp_end = tube_data[4],
+                axis = tube_data[5],
+                offset = tube_data[6],
+                mul = mul,
+                debug = debug
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else if(part_type == "cube"){
+            cube_data = mb_block_part_model_data_item(part, 0);
+
+            mb_cube(
+                size = cube_data[0],
+                offset = cube_data[1],
+                mul = mul
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else if(part_type == "svg"){
+            svg_data = mb_block_part_model_data_item(part, 0);
+
+            mb_svg(
+                svg_file = svg_data[0],
+                svg_size = svg_data[1],
+                size = svg_data[2],
+                offset = svg_data[3],
+                mul = mul
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else{
+            mapping = mb_block_custom_module_mapping(block_obj, part_type);
+            
+            if(mapping == 0){
+                mb_block_part__custom_0(block_obj, part_data, part_params, debug, mul);
+            }
+            else if(mapping == 1){
+                mb_block_part__custom_1(block_obj, part_data, part_params, debug, mul);
+            }
+            else if(mapping == 2){
+                mb_block_part__custom_2(block_obj, part_data, part_params, debug, mul);
+            }
+            else if(mapping == 3){
+                mb_block_part__custom_3(block_obj, part_data, part_params, debug, mul);
+            }
+        }
+        
     }
 }
-
-/*
-module mb_cylinder(
-    
-    radius,
-    length,
-    axis = "z",
-    offset = [0, 0, 0],
-    
-    mul = [1, 1, 1],
-    center = true,
-    debug = false
-){
-    offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
-    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
-    axis = mb_axis_to_int(axis);
-    hl = is_list(length) ? length[1] - length[0] : length;
-    length_offset = is_list(length) ? 0.5*(length[0] + length[1]) : 0;
-    rot = axis == 0 ? [0, 90 , 0] : axis == 1 ? [90, 0, 0] : [0, 0, 0];
-echo (l = length, hl = hl, lo = length_offset);
-    translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
-        rotate(rot)
-            translate([0, 0, length_offset * mul[axis]])
-                cylinder(r =  radius * mul[axis == 2 ? 0 : 2], h = hl * mul[axis], center = center, $fn = 100);
-}*/
-
