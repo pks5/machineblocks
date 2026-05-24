@@ -194,9 +194,8 @@ function mb_block_part_to_prismoid(
     mul = undef, 
     add = undef
 ) =
-    is_undef(part) || !is_list(part) ? undef : 
-        let(part_type = part[0], 
-            part_data = part[1])
+    let(part_type = mb_block_part_model_type(part), 
+        part_data = mb_block_part_model_data(part))
         mb_block_part_type_is_builtin(part_type) ?
         [
             part_type,
