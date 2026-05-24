@@ -174,6 +174,16 @@ function mb_block_obj(
         stud_cutout_diameter = stud_diameter_res + mb_param_studCutoutDiameterAdjustment(config, settings) * mm2grd_xy,
         stud_cutout_height = stud_height_res + mb_param_studCutoutHeightAdjustment(config, settings) * mm2grd_z,
 
+        /*
+        * Surface Pattern
+        */
+        surface_pattern = mb_param_surfacePattern(config, settings),
+        surface_pattern_dimensions = mb_param_surfacePatternDimensions(config, settings),
+        surface_pattern_offset = mb_param_surfacePatternOffset(config, settings),
+        surface_pattern_size = mb_param_surfacePatternSize(config, settings),
+        surface_pattern_color = mb_param_surfacePatternColor(config, settings),
+        surface_pattern_padding = mb_param_surfacePatternPadding(config, settings),
+
         base_clamp = [
             baseClampThickness * mm2grd_xy, // Thickness
             baseClampHeight * mbu2grd_z, // Height
@@ -262,7 +272,14 @@ function mb_block_obj(
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
             [stabilizers_res],  // 16 - 
             [baseWallGaps],  // 17 - 
-            [],  // 18 - 
+            [
+                surface_pattern,
+                surface_pattern_dimensions,
+                surface_pattern_size,
+                surface_pattern_offset,
+                surface_pattern_padding,
+                surface_pattern_color
+            ],  // 18 - 
             [inverted],  // 19 - Inverted
             [id, debug], // 20 - ID, Debug
             [
@@ -356,6 +373,14 @@ function mb_block_get_stud_icon(block_obj) =                        block_obj[21
 function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
 function mb_block_get_stud_icon_size(block_obj) =                   block_obj[21][2];
 function mb_block_get_stud_icon_color(block_obj) =                  block_obj[21][3];
+
+// Surface Pattern
+function mb_block_get_surface_pattern(block_obj) =                  block_obj[18][0];
+function mb_block_get_surface_pattern_dimensions(block_obj) =       block_obj[18][1];
+function mb_block_get_surface_pattern_size(block_obj) =             block_obj[18][2];
+function mb_block_get_surface_pattern_offset(block_obj) =           block_obj[18][3];
+function mb_block_get_surface_pattern_padding(block_obj) =          block_obj[18][4];
+function mb_block_get_surface_pattern_color(block_obj) =            block_obj[18][5];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];

@@ -4,6 +4,7 @@ use <../core/block_part.scad>;
 use <layout.scad>;
 use <tongue.scad>;
 use <stud_cutouts.scad>;
+use <surface_pattern.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 use <../core/utils.scad>;
@@ -81,9 +82,10 @@ module mb_base(
                 
                 mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 
-                
+                mb_block_part(block_obj, part = mb_block_part__surface_pattern(block_obj), debug = debug);
+
                 //Just for testing TO BE REMOVED
-                mb_block_part(
+                *mb_block_part(
                     block_obj, 
                     part= mb_block_part_custom(
                         type = "my_cube", 
@@ -97,7 +99,7 @@ module mb_base(
                                     mb_block_part_custom(
                                         type = "my_cube", 
                                         data = [
-                                                [34, 14, 44]
+                                            [34, 14, 44]
                                         ]
                                     )
                                 ]

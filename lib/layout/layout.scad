@@ -54,13 +54,11 @@ function mb_block_part__studs(block_obj) =
         stud_range = mb_block_stud_range(block_obj),
         stud_rounding = mb_block_get_stud_rounding(block_obj),
         stud_icon_size = mb_block_get_stud_icon_size(block_obj)
-
-        
     )
-    mb_block_has_studs(block_obj) 
-    ? [
-        "list",
-        [
+    mb_block_part_model(
+        render = mb_block_has_studs(block_obj),
+        type = "list",
+        items = [
             for(x = stud_range[0])
                 for(y = stud_range[1])
                     let(render = mb_block_stud_render(block_obj, x, y))
@@ -79,9 +77,8 @@ function mb_block_part__studs(block_obj) =
                                 mb_block_part__stud_icon(block_obj, render) 
                             ]
                         )
-                        
         ]
-    ] : undef;
+     );
 
 /**
 * ----
@@ -107,15 +104,15 @@ function mb_block_part__tubes(block_obj, axis = "z") =
                     if(mb_block_tube_render(block_obj, axis, x, y))
                         let(
                             tube_clamp_end = [
-                                    top_plate_helpers_thickness, 
-                                    top_plate_helpers_height, 
-                                    mb_block_dim_overlap(block_dim, overlap = true)
-                                ],
+                                top_plate_helpers_thickness, 
+                                top_plate_helpers_height, 
+                                mb_block_dim_overlap(block_dim, overlap = true)
+                            ],
                             tube_clamp_start = [
-                                    base_clamp_thickness,
-                                    base_clamp_height,
-                                    base_clamp_offset
-                                ]
+                                base_clamp_thickness,
+                                base_clamp_height,
+                                base_clamp_offset
+                            ]
                         )
                         mb_block_part_tube(
                             block_dim = block_dim,

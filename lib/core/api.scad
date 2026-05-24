@@ -195,6 +195,9 @@ function mb_param_textColor(config, settings, default = undef) = mb_param(config
 function mb_param_surfacePattern(config, settings, default = undef) = mb_param(config, settings, "surfacePattern", default != undef ? default : "none");
 function mb_param_surfacePatternDimensions(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDimensions", default != undef ? default : [451.556, 451.556]);
 function mb_param_surfacePatternOffset(config, settings, default = undef) = mb_param(config, settings, "surfacePatternOffset", default != undef ? default : [0, 0]);
+function mb_param_surfacePatternSize(config, settings, default = undef) = mb_param(config, settings, "surfacePatternSize", default != undef ? default : [undef, undef, -0.0625]);
+function mb_param_surfacePatternPadding(config, settings, default = undef) = mb_param(config, settings, "surfacePatternPadding", default != undef ? default : [0, 0]);
+
 function mb_param_surfacePatternScale(config, settings, default = undef) = mb_param(config, settings, "surfacePatternScale", default != undef ? default : 0.25);
 function mb_param_surfacePatternDepth(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDepth", default != undef ? default : -0.2);
 function mb_param_surfacePatternColor(config, settings, default = undef) = mb_param(config, settings, "surfacePatternColor", default != undef ? default : "inherit");

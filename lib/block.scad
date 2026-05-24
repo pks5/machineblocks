@@ -1415,7 +1415,7 @@ module mb_block(
                                     /*
                                     * Surface Pattern Cutout
                                     */
-                                    if(!mb_is_empty_string(surfacePattern) && surfacePattern != "none" && surfacePatternDepth < 0){
+                                    *if(!mb_is_empty_string(surfacePattern) && surfacePattern != "none" && surfacePatternDepth < 0){
                                         textureRoundingRadiusQuality = mb_fn_even_for_radius(
                                             textureRoundingRadius, 
                                             2, 
