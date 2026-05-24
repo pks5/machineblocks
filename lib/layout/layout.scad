@@ -38,7 +38,10 @@ function mb_block_part__stud_icon(block_obj, stud_render) =
             0,
             0,
             0,
-            stud_render[2][1] - (extruded ? overlap : height),
+            mb_block_dim_opposite_offset(
+                    block_dim,
+                    off = -stud_render[2][1] + (extruded ? overlap : height)
+            ),
             stud_render[2][1] + (extruded ? height : overlap)
         ],
         offset = stud_render[1],

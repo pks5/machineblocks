@@ -149,7 +149,7 @@ function mb_param_studCutoutHeightAdjustment(config, settings, default = undef) 
 
 function mb_param_studIcon(config, settings, default = undef) = mb_param(config, settings, "studIcon", default != undef ? default : "../../pattern/bolt-solid-full.svg");
 function mb_param_studIconDimensions(config, settings, default = undef) = mb_param(config, settings, "studIconDimensions", default != undef ? default : [169.333, 169.333]);
-function mb_param_studIconSize(config, settings, default = undef) = mb_param(config, settings, "studIconSize", default != undef ? default : [0.5, 0.5, -0.2]);
+function mb_param_studIconSize(config, settings, default = undef) = mb_param(config, settings, "studIconSize", default != undef ? default : [0.5, 0.5, -0.0625]);
 
 function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.024);
 function mb_param_studIconDepth(config, settings, default = undef) = mb_param(config, settings, "studIconDepth", default != undef ? default : -0.2);
