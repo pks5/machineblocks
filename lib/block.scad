@@ -66,8 +66,8 @@ module mb_block(
     
     baseMod = mb_param_sizeMod(config, settings);
 
-    baseTopPlateHeight = mb_param_baseTopPlateHeight(config, settings);
-    baseTopPlateHeightAdjustment = mb_param_baseTopPlateHeightAdjustment(config, settings);
+    baseTopPlateHeight = mb_param_topPlateHeight(config, settings);
+    baseTopPlateHeightAdjustment = mb_param_topPlateHeightAdjustment(config, settings);
 
     baseCutoutType = mb_param_baseCutoutType(config, settings);
     baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings);

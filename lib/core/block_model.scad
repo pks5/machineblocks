@@ -26,15 +26,6 @@ function mb_block_obj(
     slopeBaseHeightTop = 1,
     slopeBaseHeightInner = 1.125, // mbu (1.8 mm)
 
-    
-    
-    topPlateHeight = 1, 
-    topPlateHeightAdjustment = -0.6, // Adjustment (mm)
-    
-    topPlateHelpers = true,
-    topPlateHelperThickness = 0.2, // mm
-    topPlateHelperHeight = 0.2, // mm
-
 ) =
     let(
         id = mb_param_id(config, settings),
@@ -91,7 +82,8 @@ function mb_block_obj(
         /*
         * Top Plate, Recess Depth, Base Cutout
         */
-        top_plate_height_pref = topPlateHeight * mbu2grd_z + topPlateHeightAdjustment * mm2grd_z,
+        top_plate_height_pref = mb_param_topPlateHeight(config, settings) * mbu2grd_z 
+                                + mb_param_topPlateHeightAdjustment(config, settings) * mm2grd_z,
         
         cutout_min_depth = 1 - top_plate_height_pref,
         
@@ -182,8 +174,9 @@ function mb_block_obj(
         * Top Plate Helpers
         */
         top_plate_helpers_final = [
-            topPlateHelperThickness * mm2grd_xy, 
-            topPlateHelperHeight * mm2grd_z
+            mb_param_topPlateHelpers(config, settings),
+            mb_param_topPlateHelperThickness(config, settings) * mm2grd_xy, 
+            mb_param_topPlateHelperHeight(config, settings) * mm2grd_z
         ],
         
         /*
@@ -241,7 +234,7 @@ function mb_block_obj(
                 center
             ], // 0 - Original Size / Mod Size
             [], // 1 - 
-            undef, // 2 - 
+            top_plate_helpers_final, // 2 - 
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, undef, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
             [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z], // 5 - Slope Base 
@@ -253,7 +246,7 @@ function mb_block_obj(
                 recess_depth_final, 
                 recessWallGaps
             ], // 8 - Recesss & Relief Cut
-            [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
+            [top_plate_height_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape, base_cutout_mask],  // 10 - 
             [top_plate_height_pref],  // 11 - 
             relief_cut_final,  // 12 - 
@@ -339,9 +332,9 @@ function mb_block_get_wall_thickness(block_obj) =                   block_obj[4]
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
 function mb_block_get_top_plate_height_pref(block_obj) =            block_obj[11][0];
 
-function mb_block_has_top_plate_helpers(block_obj) =                block_obj[9][1];
-function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[9][1][0];
-function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[9][1][1];
+function mb_block_has_top_plate_helpers(block_obj) =                block_obj[2][0];
+function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[2][1];
+function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[2][2];
 
 function mb_block_has_recess(block_obj) =                           block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
@@ -364,6 +357,7 @@ function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4]
 
 function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
 
+// Stabilizers
 function mb_block_has_stabilizers(block_obj) =                      block_obj[16][0];
 function mb_block_get_stabilizer_thickness(block_obj) =             block_obj[16][1];
 function mb_block_get_stabilizer_height(block_obj) =                block_obj[16][2];

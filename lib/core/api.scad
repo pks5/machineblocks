@@ -25,8 +25,8 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
 
-function mb_param_baseTopPlateHeight(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeight", default != undef ? default : 1);
-function mb_param_baseTopPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseTopPlateHeightAdjustment", default != undef ? default : -0.6);
+function mb_param_topPlateHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHeight", default != undef ? default : 1);
+function mb_param_topPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "topPlateHeightAdjustment", default != undef ? default : -0.6);
 
 function mb_param_baseCutoutType(config, settings, default = undef) = mb_param(config, settings, "baseCutoutType", default != undef ? default : "standard");
 function mb_param_baseCutoutMaxDepth(config, settings, default = undef) = mb_param(config, settings, "baseCutoutMaxDepth", default != undef ? default : 5);
