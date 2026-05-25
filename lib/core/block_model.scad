@@ -34,18 +34,7 @@ function mb_block_obj(
     topPlateHelpers = true,
     topPlateHelperThickness = 0.2, // mm
     topPlateHelperHeight = 0.2, // mm
-    
 
-    baseAdjustment = undef,
-    baseWallGaps = [],
-    baseWallThickness = "auto",
-    baseWallThicknessAdjustment = -0.1,
-    
-    baseCutoutType = "standard",
-    
-    baseClampThickness = 0.1,
-    baseClampHeight = 0.5,
-    baseClampOffset = 0.25
 ) =
     let(
         id = mb_param_id(config, settings),
@@ -67,7 +56,7 @@ function mb_block_obj(
 
 
         base_adj_grd = mb_qc_resolve(
-            qc = baseAdjustment, 
+            qc = mb_param_baseAdjustment(config, settings), 
             cube = true, 
             default = [
                 sizeAdjustment[0], 
@@ -105,6 +94,8 @@ function mb_block_obj(
         top_plate_height_pref = topPlateHeight * mbu2grd_z + topPlateHeightAdjustment * mm2grd_z,
         
         cutout_min_depth = 1 - top_plate_height_pref,
+        
+        baseCutoutType = mb_param_baseCutoutType(config, settings),
         baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings) * mbu2grd_z,
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
@@ -122,10 +113,12 @@ function mb_block_obj(
         /*
         * Base Wall Thickness
         */
+        baseWallThickness = mb_param_baseWallThickness(config, settings),
+        baseClampThickness = mb_param_baseClampThickness(config, settings),
         stud_diameter = mb_param_studDiameter(config, settings),
         p_diameter = grid_cfg[1] - stud_diameter,
         wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mbu2grd_xy,
-        wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mm2grd_xy,
+        wall_thickness_final = wall_thickness_pref + mb_param_baseWallThicknessAdjustment(config, settings) * mm2grd_xy,
         wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
         
         /*
@@ -133,8 +126,8 @@ function mb_block_obj(
         */
         base_clamp = [
             baseClampThickness * mm2grd_xy, // Thickness
-            baseClampHeight * mbu2grd_z, // Height
-            baseClampOffset * mbu2grd_z // Offset
+            mb_param_baseClampHeight(config, settings) * mbu2grd_z, // Height
+            mb_param_baseClampOffset(config, settings) * mbu2grd_z // Offset
         ],
 
         /*
@@ -276,9 +269,16 @@ function mb_block_obj(
                 stud_cutout_diameter,
                 stud_cutout_height
             ],  // 14 - 
-            [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
+            [
+                default_tube_diameter, 
+                tube_hole_size, 
+                tube_wall_thickness_res, 
+                pin_diameter
+            ],  // 15 - 
             stabilizers_res,  // 16 - 
-            [baseWallGaps],  // 17 - 
+            [
+                mb_param_baseWallGaps(config, settings)
+            ],  // 17 - 
             [
                 surface_pattern,
                 surface_pattern_dimensions,
@@ -289,7 +289,9 @@ function mb_block_obj(
                 surface_pattern_scale,
                 surface_pattern_depth
             ],  // 18 - 
-            [inverted],  // 19 - Inverted
+            [
+                inverted
+            ],  // 19 - Inverted
             [
                 id, 
                 debug

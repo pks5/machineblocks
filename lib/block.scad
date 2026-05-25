@@ -322,13 +322,11 @@ module mb_block(
         size = size, 
         sizeAdjustment = sizeAdjustment,
         sizeMod = baseMod, 
-        baseAdjustment = baseSideAdjustment,
         bevel = bevel,
         slope = slope,
         unitMbuToMm = unitMbu,
         unitGridToMbu = unitGrid,
-        scale = scale,
-        baseWallGaps = baseWallGaps
+        scale = scale
     );
     
     mbuToMm = scale * unitMbu;
