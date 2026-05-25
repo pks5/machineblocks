@@ -149,9 +149,9 @@ function mb_param_studCutoutHeightAdjustment(config, settings, default = undef) 
 
 function mb_param_studIcon(config, settings, default = undef) = mb_param(config, settings, "studIcon", default != undef ? default : "../../pattern/bolt-solid-full.svg");
 function mb_param_studIconDimensions(config, settings, default = undef) = mb_param(config, settings, "studIconDimensions", default != undef ? default : [169.333, 169.333]);
-function mb_param_studIconSize(config, settings, default = undef) = mb_param(config, settings, "studIconSize", default != undef ? default : [0.5, 0.5, -0.0625]);
 
-function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.024);
+function mb_param_studIconSize(config, settings, default = undef) = mb_param(config, settings, "studIconSize", default != undef ? default : [0.5, 0.5, -0.0625]);
+function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.8);
 function mb_param_studIconDepth(config, settings, default = undef) = mb_param(config, settings, "studIconDepth", default != undef ? default : -0.2);
 function mb_param_studIconColor(config, settings, default = undef) = mb_param(config, settings, "studIconColor", default != undef ? default : "inherit");
 
@@ -198,8 +198,8 @@ function mb_param_surfacePatternOffset(config, settings, default = undef) = mb_p
 function mb_param_surfacePatternSize(config, settings, default = undef) = mb_param(config, settings, "surfacePatternSize", default != undef ? default : [undef, undef, -0.0625]);
 function mb_param_surfacePatternPadding(config, settings, default = undef) = mb_param(config, settings, "surfacePatternPadding", default != undef ? default : [0, 0]);
 
-function mb_param_surfacePatternScale(config, settings, default = undef) = mb_param(config, settings, "surfacePatternScale", default != undef ? default : 0.25);
-function mb_param_surfacePatternDepth(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDepth", default != undef ? default : -0.2);
+function mb_param_surfacePatternScale(config, settings, default = undef) = mb_param(config, settings, "surfacePatternScale", default != undef ? default : 1);
+function mb_param_surfacePatternDepth(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDepth", default != undef ? default : -0.0625);
 function mb_param_surfacePatternColor(config, settings, default = undef) = mb_param(config, settings, "surfacePatternColor", default != undef ? default : "inherit");
 
 function mb_param_svg(config, settings, default = undef) = mb_param(config, settings, "svg", default != undef ? default : "");

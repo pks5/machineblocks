@@ -170,6 +170,8 @@ function mb_block_obj(
         stud_icon_dimensions = mb_param_studIconDimensions(config, settings),
         stud_icon_size = mb_param_studIconSize(config, settings),
         stud_icon_color = mb_param_studIconColor(config, settings),
+        stud_icon_scale = mb_param_studIconScale(config, settings),
+        stud_icon_depth = mb_param_studIconDepth(config, settings) * mbu2grd_z,
 
         stud_cutout_diameter = stud_diameter_res + mb_param_studCutoutDiameterAdjustment(config, settings) * mm2grd_xy,
         stud_cutout_height = stud_height_res + mb_param_studCutoutHeightAdjustment(config, settings) * mm2grd_z,
@@ -182,7 +184,9 @@ function mb_block_obj(
         surface_pattern_offset = mb_param_surfacePatternOffset(config, settings),
         surface_pattern_size = mb_param_surfacePatternSize(config, settings),
         surface_pattern_color = mb_param_surfacePatternColor(config, settings),
-        surface_pattern_padding = mb_param_surfacePatternPadding(config, settings),
+        surface_pattern_padding = mb_qc_resolve(mb_param_surfacePatternPadding(config, settings)),
+        surface_pattern_scale = mb_param_surfacePatternScale(config, settings),
+        surface_pattern_depth = mb_param_surfacePatternDepth(config, settings),
 
         base_clamp = [
             baseClampThickness * mm2grd_xy, // Thickness
@@ -278,7 +282,9 @@ function mb_block_obj(
                 surface_pattern_size,
                 surface_pattern_offset,
                 surface_pattern_padding,
-                surface_pattern_color
+                surface_pattern_color,
+                surface_pattern_scale,
+                surface_pattern_depth
             ],  // 18 - 
             [inverted],  // 19 - Inverted
             [id, debug], // 20 - ID, Debug
@@ -286,7 +292,9 @@ function mb_block_obj(
                 stud_icon,
                 stud_icon_dimensions,
                 stud_icon_size,
-                stud_icon_color
+                stud_icon_color,
+                stud_icon_scale,
+                stud_icon_depth
             ] // 21 - Stud Icon
         ];
 
@@ -373,6 +381,8 @@ function mb_block_get_stud_icon(block_obj) =                        block_obj[21
 function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
 function mb_block_get_stud_icon_size(block_obj) =                   block_obj[21][2];
 function mb_block_get_stud_icon_color(block_obj) =                  block_obj[21][3];
+function mb_block_get_stud_icon_scale(block_obj) =                  block_obj[21][4];
+function mb_block_get_stud_icon_depth(block_obj) =                  block_obj[21][5];
 
 // Surface Pattern
 function mb_block_get_surface_pattern(block_obj) =                  block_obj[18][0];
@@ -381,6 +391,8 @@ function mb_block_get_surface_pattern_size(block_obj) =             block_obj[18
 function mb_block_get_surface_pattern_offset(block_obj) =           block_obj[18][3];
 function mb_block_get_surface_pattern_padding(block_obj) =          block_obj[18][4];
 function mb_block_get_surface_pattern_color(block_obj) =            block_obj[18][5];
+function mb_block_get_surface_pattern_scale(block_obj) =            block_obj[18][6];
+function mb_block_get_surface_pattern_depth(block_obj) =            block_obj[18][7];
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];

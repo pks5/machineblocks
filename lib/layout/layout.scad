@@ -14,17 +14,21 @@ use <shared.scad>;
 function mb_block_part__stud_icon(block_obj, stud_render) =
     let(
         block_dim = mb_block_get_dim(block_obj),
+        stud_diameter = mb_block_get_stud_diameter(block_obj, adjusted = false),
         stud_icon = mb_block_get_stud_icon(block_obj),
         stud_icon_dimensions = mb_block_get_stud_icon_dimensions(block_obj),
-        stud_icon_size = mb_block_get_stud_icon_size(block_obj),
-        height = abs(stud_icon_size[2]),
-        has_stud_icon = !mb_is_empty_string(stud_icon) && stud_icon != "none" && height != 0,
-        extruded = stud_icon_size[2] > 0,
         
+        stud_icon_scale = mb_block_get_stud_icon_scale(block_obj),
+        stud_icon_depth = mb_block_get_stud_icon_depth(block_obj),
+        height = abs(stud_icon_depth),
+        has_stud_icon = !mb_is_empty_string(stud_icon) && stud_icon != "none" && height != 0,
+        extruded = stud_icon_depth > 0,
+        stud_icon_size = stud_diameter * stud_icon_scale,
+
         overlap = mb_block_dim_overlap(block_dim, overlap = true),
         si = [
-            stud_icon_size[0],
-            stud_icon_size[1],
+            stud_icon_size,
+            stud_icon_size,
             undef
         ]
     )
