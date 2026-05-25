@@ -891,7 +891,7 @@ module mb_block(
                                                             /*
                                                             * Grille
                                                             */
-                                                            if(grille != "none"){
+                                                            *if(grille != "none"){
                                                                 grilleHeight = grilleDepth * mbuToMm + cutOffset;
                                                                 color(baseColor){
                                                                     if(grille == "x"){

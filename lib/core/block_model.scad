@@ -289,7 +289,13 @@ function mb_block_obj(
                 stud_icon_color,
                 stud_icon_scale,
                 stud_icon_depth
-            ] // 21 - Stud Icon
+            ], // 21 - Stud Icon
+            [
+                mb_param_grille(config, settings),
+                mb_param_grilleInverted(config, settings),
+                mb_param_grilleDepth(config, settings) * mbu2grd_z,
+                mb_param_grilleCount(config, settings)
+            ], // 22 - Grille
         ];
 
 /*
@@ -349,6 +355,12 @@ function mb_block_get_base_clamp_height(block_obj) =                block_obj[4]
 function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4][4][2];
 
 function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
+
+// Grille
+function mb_block_get_grille(block_obj) =                           block_obj[22][0];
+function mb_block_is_grille_inverted(block_obj) =                   block_obj[22][1];
+function mb_block_get_grille_depth(block_obj) =                     block_obj[22][2];
+function mb_block_get_grille_count(block_obj) =                     block_obj[22][3];
 
 // Stabilizers
 function mb_block_has_stabilizers(block_obj) =                      block_obj[16][0];

@@ -4,9 +4,9 @@ use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
 /**
-* -----
+* ------------
 * Stud Cutouts
-* ----.
+* ------------
 */
 function mb_block_part__stud_cutouts(block_obj) = 
     let(

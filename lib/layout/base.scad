@@ -5,6 +5,7 @@ use <layout.scad>;
 use <tongue.scad>;
 use <stud_cutouts.scad>;
 use <surface_pattern.scad>;
+use <grille.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 use <../core/utils.scad>;
@@ -84,6 +85,8 @@ module mb_base(
                 
                 mb_block_part(block_obj, part = mb_block_part__surface_pattern(block_obj), debug = debug);
 
+                
+                
                 //Just for testing TO BE REMOVED
                 *mb_block_part(
                     block_obj, 
@@ -110,6 +113,11 @@ module mb_base(
                 );
 
             }
+
+            /*
+            * Grille
+            */
+            mb_block_part(block_obj, part = mb_block_part__grille(block_obj), debug = debug);
 
             /*
             * Relief Cut
