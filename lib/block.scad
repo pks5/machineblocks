@@ -322,8 +322,6 @@ module mb_block(
         size = size, 
         sizeAdjustment = sizeAdjustment,
         sizeMod = baseMod, 
-        bevel = bevel,
-        slope = slope,
         unitMbuToMm = unitMbu,
         unitGridToMbu = unitGrid,
         scale = scale

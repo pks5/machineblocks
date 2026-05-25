@@ -18,14 +18,6 @@ function mb_block_obj(
     size, 
     sizeMod = undef, 
     sizeAdjustment = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
-    
-    bevel = undef,
-    
-    slope = undef,
-    slopeBaseHeightBottom = 1.333,
-    slopeBaseHeightTop = 1,
-    slopeBaseHeightInner = 1.125, // mbu (1.8 mm)
-
 ) =
     let(
         id = mb_param_id(config, settings),
@@ -64,8 +56,8 @@ function mb_block_obj(
             size = size, 
             size_mod = sizeMod,
             base_adj = base_adj_grd,
-            bevel = bevel,
-            slope = slope
+            bevel = mb_param_bevel(config, settings),
+            slope = mb_param_slope(config, settings)
         ),
 
         size_res = mb_block_dim_size(block_dim),
@@ -237,7 +229,11 @@ function mb_block_obj(
             top_plate_helpers_final, // 2 - 
             block_dim, // 3 - 
             [cutout_depth, top_plate_height_final, undef, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
-            [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z], // 5 - Slope Base 
+            [
+                mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z, 
+                mb_param_slopeBaseHeightTop(config, settings) * mbu2grd_z, 
+                mb_param_slopeBaseHeightInner(config, settings) * mbu2grd_z
+            ], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
             [
