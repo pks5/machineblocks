@@ -125,6 +125,9 @@ function mb_block_obj(
         stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mbu2grd_xy,
 
         stud_padding = mb_qc_resolve(mb_param_studPadding(config, settings), false),
+        studHoleDiameter  = mb_param_studHoleDiameter(config, settings),
+        stud_hole_diameter = (studHoleDiameter == "auto" ? p_diameter : studHoleDiameter) * mbu2grd_xy 
+                              + mb_param_studHoleDiameterAdjustment(config, settings) * mm2grd_xy,
         
         stud_icon = mb_param_studIcon(config, settings),
         stud_icon_dimensions = mb_param_studIconDimensions(config, settings),
@@ -225,23 +228,45 @@ function mb_block_obj(
             [], // 1 - 
             top_plate_helpers_final, // 2 - 
             block_dim, // 3 - 
-            [cutout_depth, top_plate_height_final, undef, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
+            [
+                cutout_depth, 
+                top_plate_height_final, 
+                undef, 
+                wall_thickness_final, 
+                base_clamp, 
+                cutout_min_depth
+            ], // 4 - Top Plate Height
             [
                 mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z, 
                 mb_param_slopeBaseHeightTop(config, settings) * mbu2grd_z, 
                 mb_param_slopeBaseHeightInner(config, settings) * mbu2grd_z
             ], // 5 - Slope Base 
-            [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
-            [grid_cfg, scale], // 7 - Units
+            [
+                size_mod_res, 
+                mb_block_dim_base_adj(block_dim)
+            ], // 6 - Adjustments
+            [
+                grid_cfg, 
+                scale
+            ], // 7 - Units
             [
                 recess, 
                 recess_walls, 
                 recess_depth_final, 
                 recessWallGaps
             ], // 8 - Recesss & Relief Cut
-            [top_plate_height_final],  // 9 - Top Plate
-            [surface_shape, recess_surface_shape, recess_inverse_shape, base_cutout_mask],  // 10 - 
-            [top_plate_height_pref],  // 11 - 
+            [
+                top_plate_height_final
+            ],  // 9 - Top Plate
+            [
+                surface_shape, 
+                recess_surface_shape, 
+                recess_inverse_shape, 
+                base_cutout_mask
+            ],  // 10 - 
+            [
+                top_plate_height_pref
+            ],  // 11 - 
             relief_cut_final,  // 12 - 
             tongue_final,  // 13 - Tongue
             [
@@ -253,7 +278,14 @@ function mb_block_obj(
                 stud_max_overhang,
                 has_studs,
                 stud_cutout_diameter,
-                stud_cutout_height
+                stud_cutout_height,
+                mb_param_studShift(config, settings),
+                stud_hole_diameter,
+                mb_param_studHoleClampThickness(config, settings),
+                mb_param_studType(config, settings),
+                mb_param_recessStuds(config, settings),
+                mb_param_recessStudType(config, settings),
+                mb_param_recessStudShift(config, settings)
             ],  // 14 - 
             [
                 default_tube_diameter, 
@@ -385,6 +417,13 @@ function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14
 function mb_block_has_studs(block_obj) =                            block_obj[14][6];
 function mb_block_get_stud_cutout_diameter(block_obj) =             block_obj[14][7];
 function mb_block_get_stud_cutout_height(block_obj) =               block_obj[14][8];
+function mb_block_get_stud_shift(block_obj) =                       block_obj[14][9];
+function mb_block_get_stud_hole_diameter(block_obj) =               block_obj[14][10];
+function mb_block_get_stud_hole_clamp_thickness(block_obj) =        block_obj[14][11];
+function mb_block_get_stud_type(block_obj) =                        block_obj[14][12];
+function mb_block_get_recess_studs(block_obj) =                     block_obj[14][13];
+function mb_block_get_recess_stud_type(block_obj) =                 block_obj[14][14];
+function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14][15];
 
 function mb_block_get_stud_icon(block_obj) =                        block_obj[21][0];
 function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
@@ -499,7 +538,7 @@ function mb_block_stud_cutouts_range(block_obj) =
 function mb_block_stud_cutout_render(block_obj, x, y) =
     let(
         stud_diameter = mb_block_get_stud_cutout_diameter(block_obj),
-        stud_offset = mb_block_stud_offset(block_obj, x, y)
+        stud_offset = mb_block_stud_cutout_offset(block_obj, x, y)
     )
     !mb_block_in_base_cutout(block_obj, stud_offset, stud_diameter);
 
@@ -523,15 +562,29 @@ function mb_block_stud_render(block_obj, x, y) =
         surface_shape = mb_block_get_surface_shape(block_obj),
         recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
         recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
-        stud_offset = mb_block_stud_offset(block_obj, x, y),
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_height = mb_block_get_stud_height(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
         has_recess = mb_block_has_recess(block_obj),
         stud_max_overhang = mb_block_get_stud_max_overhang(block_obj),
-        render_stud = mb_circle_in_convex_quad(surface_shape, stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
-        in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        
+        stud_shift = mb_block_get_stud_shift(block_obj),
+        off = stud_shift ? 1 : 0.5,
+        stud_offset = mb_block_pos_to_offset(block_obj, [x + off, y + off, undef]),
+        
+        recess_stud_shift = mb_block_get_recess_stud_shift(block_obj),
+        r_off = recess_stud_shift ? 1 : 0.5,
+        recess_stud_offset = mb_block_pos_to_offset(block_obj, [x + r_off, y + r_off, undef]),
+
+        in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        
+
+        render_stud = mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        
         on_recess_wall = has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
+        
+        
+        
         bottom = in_recess 
         ? mb_block_recess_floor_offset(
             block_obj,
@@ -560,19 +613,23 @@ function mb_block_stud_render(block_obj, x, y) =
     )
     [
         render_stud && (!has_recess || in_recess || on_recess_wall),
-        stud_offset,
+        in_recess ? recess_stud_offset : stud_offset,
         [bottom, top]  
     ];
 
-function mb_block_stud_offset(block_obj, x, y) = //TODO
+function mb_block_stud_cutout_offset(block_obj, x, y) =
     let(
         
     )
     mb_block_pos_to_offset(block_obj, [x + 0.5, y + 0.5, undef]);
 
 function mb_block_stud_radius(block_obj, x, y) =
-    let(stud_diameter = mb_block_get_stud_diameter(block_obj))
-        0.5 * stud_diameter;
+    let(
+        stud_diameter = mb_block_get_stud_diameter(block_obj),
+        stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
+        stud_type = mb_block_get_stud_type(block_obj)
+    )
+       stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter];
 
 
 /**

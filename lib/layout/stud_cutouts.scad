@@ -45,7 +45,7 @@ function mb_block_part__stud_cutouts(block_obj) =
                                     off = stud_cutout_height
                                 )
                             ],
-                            offset = mb_block_stud_offset(block_obj, x, y)
+                            offset = mb_block_stud_cutout_offset(block_obj, x, y)
                         )
         ]
     ];

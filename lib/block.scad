@@ -888,34 +888,6 @@ module mb_block(
                                                                 debug = debug
                                                             );
 
-                                                            /*
-                                                            * Grille
-                                                            */
-                                                            *if(grille != "none"){
-                                                                grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                                                color(baseColor){
-                                                                    if(grille == "x"){
-                                                                        grilleWidthY = size[1] * unitGrid[0] * mbuToMm / grilleCount;
-                                                                        for (g = [ 0 : 1 : grilleCount - 1 ]){
-                                                                            if(g % 2 == (grilleInverted ? 0 : 1)){
-                                                                                translate([0, sideY(0) + (0.5 + g) * grilleWidthY, sideZ(1, false) - 0.5 * (grilleHeight - cutOffset)])
-                                                                                    cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidthY, grilleHeight+ cutOffset], center=true);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    else if(grille == "y"){
-                                                                        grilleWidthX = size[0] * unitGrid[0] * mbuToMm / grilleCount;
-                                                                        for (g = [ 0 : 1 : grilleCount - 1 ]){
-                                                                            if(g % 2 == (grilleInverted ? 0 : 1)){
-                                                                                translate([sideX(0) + (0.5 + g) * grilleWidthX, 0, sideZ(1, false) - 0.5 * (grilleHeight - cutOffset)])
-                                                                                    cube(size=[grilleWidthX, objectSizeYAdjusted*cutMultiplier, grilleHeight+ cutOffset], center=true);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-
-                                                            
                                                         } // End union cutout
 
                                                         
@@ -956,106 +928,7 @@ module mb_block(
                                                             
                                                         } // End stabilizer grid
 
-                                                        *if(pillars != false){
-                                                            pilRoundingRes = mb_fn_even_for_radius(
-                                                                0.5 * tubeZSize + baseClampThickness, 
-                                                                0, 
-                                                                qualitySegBase,
-                                                                qualityFactor,
-                                                                qualityResolutionMin,
-                                                                qualityResolutionMax,
-                                                                qualityResolutionMultiplier,
-                                                                previewQuality
-                                                            );
-
-                                                            holeZRoundingRes = mb_fn_even_for_radius(
-                                                                0.5 * holeZSize, 
-                                                                0, 
-                                                                qualitySegBase,
-                                                                qualityFactor,
-                                                                qualityResolutionMin,
-                                                                qualityResolutionMax,
-                                                                qualityResolutionMultiplier,
-                                                                previewQuality
-                                                            );
-
-                                                            //Tubes with holes
-                                                            for (a = [ pillarStartX : 1 : pillarEndX ]){
-                                                                for (b = [ pillarStartY : 1 : pillarEndY ]){
-                                                                    if(drawPillar(a, b)){
-                                                                        translate([posX(a + 0.5), posY(b + 0.5), baseCutoutZ]){
-                                                                            difference(){
-                                                                                union(){
-                                                                                    cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * tubeZSize, center=true, $fn=pilRoundingRes);
-                                                                                    
-                                                                                    //Clamp
-                                                                                    translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
-                                                                                        cylinder(h=bClampHeight, r=0.5 * tubeZSize + baseClampThickness, center=true, $fn=pilRoundingRes);
-                                                                                    
-                                                                                    if(topPlateHelpers)
-                                                                                        translate([0, 0, 0.5 * baseCutoutDepth - topPlateHelperHeight])
-                                                                                            cylinder(h=topPlateHelperHeight, r=0.5 * tubeZSize + topPlateHelperThickness, center=true, $fn=pilRoundingRes);
-                                                                                }
-
-                                                                                // Hollow only if there is no z-hole here
-                                                                                if(drawHoleZ(a, b) == false || a > holeZEndX || b > holeZEndY){
-                                                                                    intersection(){
-                                                                                        cylinder(h=baseCutoutDepth*cutMultiplier, r=0.5 * holeZSize, center=true, $fn=holeZRoundingRes);
-                                                                                        cube([holeZSize-2*tubeInnerClampThickness, holeZSize-2*tubeInnerClampThickness, baseCutoutDepth *cutMultiplier], center=true);
-                                                                                    };
-                                                                                }
-                                                                            }
-                                                                        };
-                                                                    }
-                                                                }
-                                                            }
-                                                        } // End if pillars
-
-                                                        *if(pillars != false){
-                                                            pinRoundingRes = mb_fn_even_for_radius(
-                                                                0.5 * pinSize + baseClampThickness, 
-                                                                0, 
-                                                                qualitySegBase,
-                                                                qualityFactor,
-                                                                qualityResolutionMin,
-                                                                qualityResolutionMax,
-                                                                qualityResolutionMultiplier,
-                                                                previewQuality
-                                                            );
-
-                                                            /*
-                                                            * Middle Pins
-                                                            */
-                                                            //Middle Pin X
-                                                            if(gridSizeX > 1 && gridSizeY == 1){
-                                                                for (b = [ startY : 1 : ceil(endY) ]){
-                                                                    for (a = [ startX : 1 : ceil(endX) - 1 ]){
-                                                                        if(drawPin(a, b, true)){
-                                                                            translate([posX(a + 0.5), posY(b), baseCutoutZ]){
-                                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=pinRoundingRes);
-                                                                                translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
-                                                                                    cylinder(h=bClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=pinRoundingRes);
-                                                                            };
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            
-                                                            //Middle Pin Y
-                                                            if(gridSizeX == 1 && gridSizeY > 1){
-                                                                for (a = [ startX : 1 : ceil(endX)]){
-                                                                    for (b = [ startY : 1 : ceil(endY) - 1 ]){
-                                                                        if(drawPin(a, b, false)){
-                                                                            translate([posX(a), posY(b + 0.5), baseCutoutZ]){
-                                                                                cylinder(h=baseCutoutDepth * cutMultiplier, r=0.5 * pinSize, center=true, $fn=pinRoundingRes);
-                                                                                translate([0, 0, bClampOffset + 0.5 * (bClampHeight - baseCutoutDepth)])
-                                                                                    cylinder(h=bClampHeight, r=0.5 * pinSize + baseClampThickness, center=true, $fn=pinRoundingRes);
-                                                                            };
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } // End if pillars
+                                                        
                                                         
                                                         //X-Holes Outer
                                                         if(holeX != false){
@@ -1443,33 +1316,7 @@ module mb_block(
                                         } // End color
                                     } // End if surface pattern
 
-                                    /*
-                                    * Grille
-                                    */
-                                    if(grille != "none" && baseCutoutType != "standard"){
-                                        grilleHeight = grilleDepth * mbuToMm + cutOffset;
-                                        color(baseColor){
-                                            if(grille == "x"){
-                                                
-                                                grilleWidthY = size[1] * unitGrid[0] * mbuToMm / grilleCount;
-                                                for (g = [ 0 : 1 : grilleCount - 1 ]){
-                                                    if(g % 2 == (grilleInverted ? 0 : 1)){
-                                                        translate([0, sideY(0) + (0.5 + g) * grilleWidthY, sideZ(1, false) - 0.5 * (grilleHeight - cutOffset)])
-                                                            cube(size=[objectSizeXAdjusted*cutMultiplier, grilleWidthY, grilleHeight+ cutOffset], center=true);
-                                                    }
-                                                }
-                                            }
-                                            else if(grille == "y"){
-                                                grilleWidthX = size[0] * unitGrid[0] * mbuToMm / grilleCount;
-                                                for (g = [ 0 : 1 : grilleCount - 1 ]){
-                                                    if(g % 2 == (grilleInverted ? 0 : 1)){
-                                                        translate([sideX(0) + (0.5 + g) * grilleWidthX, 0, sideZ(1, false) - 0.5 * (grilleHeight - cutOffset)])
-                                                            cube(size=[grilleWidthX, objectSizeYAdjusted*cutMultiplier, grilleHeight+ cutOffset], center=true);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    
 
                                     /*
                                     * Screw Holes Z
