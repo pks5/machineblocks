@@ -7,24 +7,20 @@ use <api.scad>;
 
 function mb_block_obj(
     config,
-    settings,
-
-    unitMbuToMm = 1.6, // 1 mbu (mm)
-    unitGridToMbu = [5, 2], // [, Grid Size XY (mbu), Grid Size Z (mbu)]
-    
-    scale = 1,
-    
-
-    size, 
-    sizeMod = undef, 
-    sizeAdjustment = [-0.1, 0], // [XY Side Adjustment (mm), Height Adjustment (mm)]
+    settings
 ) =
     let(
         id = mb_param_id(config, settings),
         debug = mb_param_debug(config, settings),
 
-        recess = mb_param_recess(config, settings),
+        
+        unitMbuToMm = mb_param_unitMbuToMm(config, settings),
+        unitGridToMbu = mb_param_unitGridToMbu(config, settings),
+        scale = mb_param_scale(config, settings),
 
+        size = mb_param_size(config, settings),
+        sizeMod = mb_param_sizeMod(config, settings),
+        sizeAdjustment = mb_param_sizeAdjustment(config, settings),
 
         inverted = false,
         printerNozzleDiameter = 0.4,
@@ -84,6 +80,7 @@ function mb_block_obj(
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
         
+        recess = mb_param_recess(config, settings),
         recessDepth = mb_param_recessDepth(config, settings),
         recess_depth_final = recess ? (recessDepth != "auto" ? min(recessDepth, recess_depth_max) : recess_depth_max) : 0,
         cutout_depth_calc = max(0, min(baseCutoutMaxDepth, mod_size[2] - top_plate_height_pref - recess_depth_final)),

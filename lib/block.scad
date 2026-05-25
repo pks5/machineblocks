@@ -315,16 +315,7 @@ module mb_block(
     
     block_obj = mb_block_obj(
         config = config,
-        settings = settings,
-
-
-
-        size = size, 
-        sizeAdjustment = sizeAdjustment,
-        sizeMod = baseMod, 
-        unitMbuToMm = unitMbu,
-        unitGridToMbu = unitGrid,
-        scale = scale
+        settings = settings
     );
     
     mbuToMm = scale * unitMbu;
