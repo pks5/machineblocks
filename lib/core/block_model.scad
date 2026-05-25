@@ -52,28 +52,11 @@ function mb_block_obj(
     recessDepth = "auto",
     recessWallThickness = 0.333, 
     recessWallGaps = [],
-    recessStudPadding = 0.2,
-
-    reliefCut = false,
-    reliefCutThickness = 0.375,
-    reliefCutHeight = 0.375,
-    
-    stabilizers = true,
-    stabilizerHeight = 0.5,
-    stabilizerThickness = 0.5,
-    stabilizerPrintOffset = 0.2, // mm
-    stabilizerExpansion = 2,
-    stabilizerExpansionOffset = 1,
-
-    tubeWallThickness = 0.53125,
-    
-    pinDiameter = "auto",
-    pinDiameterAdjustment = 0,
-    
-    id = "[Block]",
-    debug = false
+    recessStudPadding = 0.2
 ) =
     let(
+        id = mb_param_id(config, settings),
+        debug = mb_param_debug(config, settings),
 
         recess = mb_param_recess(config, settings),
 
@@ -193,18 +176,24 @@ function mb_block_obj(
             baseClampHeight * mbu2grd_z, // Height
             baseClampOffset * mbu2grd_z // Offset
         ],
-        relief_cut_final = [reliefCutThickness * mbu2grd_xy, reliefCutHeight * mbu2grd_z],
+        relief_cut_final = [
+            mb_param_reliefCut(config, settings),
+            mb_param_reliefCutThickness(config, settings) * mbu2grd_xy, 
+            mb_param_reliefCutHeight(config, settings) * mbu2grd_z
+        ],
 
         top_plate_helpers_final = [topPlateHelperThickness * mm2grd_xy, topPlateHelperHeight * mm2grd_z],
-        tube_wall_thickness_res = tubeWallThickness * mbu2grd_xy,  // TODO XYZ
+        tube_wall_thickness_res = mb_param_tubeWallThickness(config, settings) * mbu2grd_xy,  // TODO XYZ
         
         /*
         * Tube / Pin
         */
 
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
-        tube_hole_size = stud_diameter_res, // TODO XYZ
-        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy + pinDiameterAdjustment * mm2grd_xy,
+        tube_hole_size = stud_diameter_res,  // TODO XYZ
+        pinDiameter = mb_param_pinDiameter(config, settings),
+        pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy 
+                        + mb_param_pinDiameterAdjustment(config, settings) * mm2grd_xy,
 
         /*
         * Tongue
@@ -224,11 +213,12 @@ function mb_block_obj(
         * Stabilizers
         */
         stabilizers_res = [
-            stabilizerThickness * mbu2grd_xy, // Thickness (mbu)
-            stabilizerHeight * mbu2grd_z, // Height (mbu)
-            stabilizerPrintOffset * mm2grd_z, // Offset (mm)
-            stabilizerExpansionOffset * mbu2grd_z, // Expansion Offset (mbu)
-            stabilizerExpansion                       // Expansion Each
+            mb_param_stabilizers(config, settings), // Has Stabilizers
+            mb_param_stabilizerThickness(config, settings) * mbu2grd_xy, // Thickness (mbu)
+            mb_param_stabilizerHeight(config, settings) * mbu2grd_z, // Height (mbu)
+            mb_param_stabilizerPrintOffset(config, settings) * mm2grd_z, // Offset (mm)
+            mb_param_stabilizerExpansion(config, settings),                       // Expansion Each
+            mb_param_stabilizerExpansionOffset(config, settings) * mbu2grd_z // Expansion Offset (mbu)
         ],
 
         /*
@@ -256,11 +246,11 @@ function mb_block_obj(
             [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z, (slopeBaseHeightBottom - slopeBaseHeightInner) * mbu2grd_xy], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            [recess, recess_walls, reliefCut, relief_cut_final, recessWallGaps], // 8 - Recesss & Relief Cut
+            [recess, recess_walls, undef, undef, recessWallGaps], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape, base_cutout_mask],  // 10 - 
             [top_plate_height_pref],  // 11 - 
-            [],  // 12 - 
+            relief_cut_final,  // 12 - 
             tongue_final,  // 13 - Tongue
             [
                 stud_diameter_final, 
@@ -274,7 +264,7 @@ function mb_block_obj(
                 stud_cutout_height
             ],  // 14 - 
             [default_tube_diameter, tube_hole_size, tube_wall_thickness_res, pin_diameter],  // 15 - 
-            [stabilizers_res],  // 16 - 
+            stabilizers_res,  // 16 - 
             [baseWallGaps],  // 17 - 
             [
                 surface_pattern,
@@ -287,7 +277,10 @@ function mb_block_obj(
                 surface_pattern_depth
             ],  // 18 - 
             [inverted],  // 19 - Inverted
-            [id, debug], // 20 - ID, Debug
+            [
+                id, 
+                debug
+            ], // 20 - ID, Debug
             [
                 stud_icon,
                 stud_icon_dimensions,
@@ -347,9 +340,9 @@ function mb_block_get_grid_cfg(block_obj) =                         block_obj[7]
 
 function mb_block_get_scale(block_obj) =                            block_obj[7][1];
 
-function mb_block_has_relief_cut(block_obj) =                       block_obj[8][2];
-function mb_block_get_relief_cut_thickness(block_obj) =             block_obj[8][3][0];
-function mb_block_get_relief_cut_height(block_obj) =                block_obj[8][3][1];
+function mb_block_has_relief_cut(block_obj) =                       block_obj[12][0];
+function mb_block_get_relief_cut_thickness(block_obj) =             block_obj[12][1];
+function mb_block_get_relief_cut_height(block_obj) =                block_obj[12][2];
 
 function mb_block_get_base_clamp_thickness(block_obj) =             block_obj[4][4][0];
 function mb_block_get_base_clamp_height(block_obj) =                block_obj[4][4][1];
@@ -357,9 +350,12 @@ function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4]
 
 function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
 
-function mb_block_get_stabilizers(block_obj) =                      block_obj[16][0];
-
-function mb_block_get_custom_modules(block_obj) =                   block_obj[18];
+function mb_block_has_stabilizers(block_obj) =                      block_obj[16][0];
+function mb_block_get_stabilizer_thickness(block_obj) =             block_obj[16][1];
+function mb_block_get_stabilizer_height(block_obj) =                block_obj[16][2];
+function mb_block_get_stabilizer_start_offset(block_obj) =          block_obj[16][3];
+function mb_block_get_stabilizer_expansion(block_obj) =             block_obj[16][4];
+function mb_block_get_stabilizer_expansion_offset(block_obj) =      block_obj[16][5];
 
 // Tubes
 function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0];
@@ -670,16 +666,15 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
         axis = mb_axis_to_int(axis),
-        stabilizers = mb_block_get_stabilizers(block_obj),
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
         tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
         default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
-        segment_thickness = stabilizers[0],
-        stabilizer_expansion = stabilizers[4],
+        segment_thickness = mb_block_get_stabilizer_thickness(block_obj),
+        stabilizer_expansion = mb_block_get_stabilizer_expansion(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        segment_height_expanded = max(base_cutout_depth - stabilizers[3], 0),
+        segment_height_expanded = max(base_cutout_depth - mb_block_get_stabilizer_expansion_offset(block_obj), 0),
         is_pin = mb_block_tube_is_pin(block_obj, axis),
         expanded = axis == 1 ? 
             is_pin[1] || ((x % stabilizer_expansion) == 0 && ((end_index_x - start_index_x) > 2)): 
@@ -687,7 +682,7 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         seg_size = [
             axis == 1 ? segment_thickness : default_segment_length, 
             axis == 1 ? default_segment_length : segment_thickness, 
-            (expanded ? segment_height_expanded : stabilizers[1]) + (axis == 1 ? -stabilizers[2] : 0)
+            (expanded ? segment_height_expanded : mb_block_get_stabilizer_height(block_obj)) + (axis == 1 ? -mb_block_get_stabilizer_start_offset(block_obj) : 0)
         ]
     )
     [
@@ -726,9 +721,8 @@ function mb_block_stabilizer_segment_render(block_obj, axis, x, y) =
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
-        stabilizers = mb_block_get_stabilizers(block_obj),
+        stablilizer_thickness = mb_block_get_stabilizer_thickness(block_obj),
         
-        stablilizer_thickness = stabilizers[0],
         x_min = x - 0.5 * stablilizer_thickness,
         x_max = x + 0.5 * stablilizer_thickness,
         y_min = y - 0.5 * stablilizer_thickness,
