@@ -45,14 +45,7 @@ function mb_block_obj(
     
     baseClampThickness = 0.1,
     baseClampHeight = 0.5,
-    baseClampOffset = 0.25,
-    
-    
-    
-    recessDepth = "auto",
-    recessWallThickness = 0.333, 
-    recessWallGaps = [],
-    recessStudPadding = 0.2
+    baseClampOffset = 0.25
 ) =
     let(
         id = mb_param_id(config, settings),
@@ -116,14 +109,15 @@ function mb_block_obj(
         
         recess_depth_max = mod_size[2] - top_plate_height_pref - (baseCutoutType == "none" ? 0 : cutout_min_depth),
         
+        recessDepth = mb_param_recessDepth(config, settings),
         recess_depth_final = recess ? (recessDepth != "auto" ? min(recessDepth, recess_depth_max) : recess_depth_max) : 0,
         cutout_depth_calc = max(0, min(baseCutoutMaxDepth, mod_size[2] - top_plate_height_pref - recess_depth_final)),
         top_plate_height_final = mod_size[2] - recess_depth_final - cutout_depth_calc,
         cutout_depth = baseCutoutType == "none" ? 0 : cutout_depth_calc,
 
-        recess_walls = mb_qc_resolve(
-            qc = recessWallThickness
-        ),
+        recess_walls = mb_qc_resolve(mb_param_recessWallThickness(config, settings)),
+        recessStudPadding =  mb_param_recessStudPadding(config, settings),
+        recessWallGaps = mb_param_recessWallGaps(config, settings),
 
         /*
         * Base Wall Thickness
@@ -134,6 +128,15 @@ function mb_block_obj(
         wall_thickness_final = wall_thickness_pref + baseWallThicknessAdjustment * mm2grd_xy,
         wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
         
+        /*
+        * Base Clamp
+        */
+        base_clamp = [
+            baseClampThickness * mm2grd_xy, // Thickness
+            baseClampHeight * mbu2grd_z, // Height
+            baseClampOffset * mbu2grd_z // Offset
+        ],
+
         /*
         * Studs
         */
@@ -171,24 +174,29 @@ function mb_block_obj(
         surface_pattern_scale = mb_param_surfacePatternScale(config, settings),
         surface_pattern_depth = mb_param_surfacePatternDepth(config, settings),
 
-        base_clamp = [
-            baseClampThickness * mm2grd_xy, // Thickness
-            baseClampHeight * mbu2grd_z, // Height
-            baseClampOffset * mbu2grd_z // Offset
-        ],
+        
+
+        /*
+        * Relief Cut
+        */
         relief_cut_final = [
             mb_param_reliefCut(config, settings),
             mb_param_reliefCutThickness(config, settings) * mbu2grd_xy, 
             mb_param_reliefCutHeight(config, settings) * mbu2grd_z
         ],
 
-        top_plate_helpers_final = [topPlateHelperThickness * mm2grd_xy, topPlateHelperHeight * mm2grd_z],
-        tube_wall_thickness_res = mb_param_tubeWallThickness(config, settings) * mbu2grd_xy,  // TODO XYZ
+        /*
+        * Top Plate Helpers
+        */
+        top_plate_helpers_final = [
+            topPlateHelperThickness * mm2grd_xy, 
+            topPlateHelperHeight * mm2grd_z
+        ],
         
         /*
         * Tube / Pin
         */
-
+        tube_wall_thickness_res = mb_param_tubeWallThickness(config, settings) * mbu2grd_xy,  // TODO XYZ
         default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
         tube_hole_size = stud_diameter_res,  // TODO XYZ
         pinDiameter = mb_param_pinDiameter(config, settings),
@@ -242,11 +250,16 @@ function mb_block_obj(
             [], // 1 - 
             undef, // 2 - 
             block_dim, // 3 - 
-            [cutout_depth, top_plate_height_final, recess_depth_final, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
-            [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z, (slopeBaseHeightBottom - slopeBaseHeightInner) * mbu2grd_xy], // 5 - Slope Base 
+            [cutout_depth, top_plate_height_final, undef, wall_thickness_final, base_clamp, cutout_min_depth], // 4 - Top Plate Height
+            [slopeBaseHeightBottom * mbu2grd_z, slopeBaseHeightTop * mbu2grd_z, slopeBaseHeightInner * mbu2grd_z], // 5 - Slope Base 
             [size_mod_res, mb_block_dim_base_adj(block_dim)], // 6 - Adjustments
             [grid_cfg, scale], // 7 - Units
-            [recess, recess_walls, undef, undef, recessWallGaps], // 8 - Recesss & Relief Cut
+            [
+                recess, 
+                recess_walls, 
+                recess_depth_final, 
+                recessWallGaps
+            ], // 8 - Recesss & Relief Cut
             [top_plate_height_final, top_plate_helpers_final],  // 9 - Top Plate
             [surface_shape, recess_surface_shape, recess_inverse_shape, base_cutout_mask],  // 10 - 
             [top_plate_height_pref],  // 11 - 
@@ -311,7 +324,6 @@ function mb_block_get_inverted(block_obj) =                         block_obj[19
 function mb_block_get_slope_socket(block_obj) =                     [block_obj[5][0], block_obj[5][1]];
 function mb_block_get_slope_base_height_bottom(block_obj) =          block_obj[5][0];
 function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5][2];
-function mb_block_get_slope_base_height_diff(block_obj) =           block_obj[5][3];
 
 function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
 function mb_block_in_base_cutout(block_obj, off, dia) =
@@ -331,8 +343,8 @@ function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[9]
 
 function mb_block_has_recess(block_obj) =                           block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
-function mb_block_get_recess_depth(block_obj) =                     block_obj[4][2];
-function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][4];
+function mb_block_get_recess_depth(block_obj) =                     block_obj[8][2];
+function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][3];
 
 function mb_block_get_base_wall_gaps(block_obj) =                   block_obj[17][0];
 
@@ -757,9 +769,9 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
         for(face = faces)
             let(axis = mb_face_to_axis(face),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis], gap[2]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[1 - axis] - gap_start_pos, gap[2]),
             gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
-            gap_end_offset = mod_size[axis] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3])
+            gap_end_offset = mod_size[1 - axis] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3])
             [
                 face,
                 gap_start_pos,
@@ -787,20 +799,8 @@ function mb_block_slope_partial(block_obj, top_offset, f) =
         slope = mb_block_dim_slope(block_dim),
         slope_pos = mb_slope_filter(slope, 1),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
-        
-        /*
-        sl = slope_pos[f] / (mod_size[2] - slope_base_height_bottom),
-        base_adj = mb_block_dim_base_adj(block_dim),
-        wall_thickness_effective = mb_block_get_wall_thickness(block_obj), // base_adj[f],
-        wall_thickness_as_height = wall_thickness_effective * 2.5, // width as height - TODO 
-        
-        slope_base_height_diff = mb_block_get_slope_base_height_diff(block_obj),
-        full_slope_height = mod_size[2]  - wall_thickness_as_height - slope_base_height_inner, //+ base_adj[5]
-        
-        slope_partial = (base_cutout_depth - top_offset - slope_base_height_inner) / full_slope_height, */
-         
     )
-    slope_pos[f] == 0 ? 0 : (base_cutout_depth - top_offset - slope_base_height_inner) * (slope_pos[f] / (mod_size[2] - slope_base_height_bottom));//slope_partial * (slope_pos[f] + slope_base_height_diff - wall_thickness_effective);
+    slope_pos[f] == 0 ? 0 : (base_cutout_depth - top_offset - slope_base_height_inner) * (slope_pos[f] / (mod_size[2] - slope_base_height_bottom));
 
 function mb_block_base_wall_gap(block_obj, gap, split_axis = false) = 
     let(

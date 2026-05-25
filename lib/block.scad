@@ -328,8 +328,6 @@ module mb_block(
         unitMbuToMm = unitMbu,
         unitGridToMbu = unitGrid,
         scale = scale,
-        recessWallThickness = recessWallThickness,
-        recessWallGaps = recessWallGaps,
         baseWallGaps = baseWallGaps
     );
     
