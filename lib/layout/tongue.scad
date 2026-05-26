@@ -20,16 +20,16 @@ function mb_block_part__tongue(block_obj) =
         tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
         tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
         tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
-        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
+        wall_gaps = mb_block_get_recess_wall_gaps(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj)
     )
-    has_tongue ? 
-    [
-        "list",
-        [
-            [
-                "difference",
-                [
+    mb_block_part_model(
+        render = has_tongue,
+        type = "list",
+        items = [
+            mb_block_part_model(
+                type = "difference",
+                items = [
                     mb_block_part_prismoid(
                         block_dim = block_dim, 
                         expand = [[
@@ -79,10 +79,9 @@ function mb_block_part__tongue(block_obj) =
                                 gap_start_offset = gap[3],
                                 gap_end_offset = gap[4]
                             )
-                            [
-                                
-                                "intersection",
-                                [
+                            mb_block_part_model(
+                                type = "intersection",
+                                items = [
                                     mb_block_part_prismoid(
                                         block_dim = block_dim, 
                                         expand = [[
@@ -136,13 +135,13 @@ function mb_block_part__tongue(block_obj) =
                                         ]
                                     )
                                 ]
-                            ]
+                            ),
                 ]
-            ],
+            ),
 
-            [
-                "difference",
-                [
+            mb_block_part_model(
+                type = "difference",
+                items = [
                     mb_block_part_prismoid(
                         block_dim = block_dim, 
                         expand = [[
@@ -192,10 +191,9 @@ function mb_block_part__tongue(block_obj) =
                                 gap_start_offset = gap[3],
                                 gap_end_offset = gap[4]
                             )
-                            [
-                                
-                                "intersection",
-                                [
+                            mb_block_part_model(
+                                type = "intersection",
+                                items = [
                                     mb_block_part_prismoid(
                                         block_dim = block_dim, 
                                         expand = [[
@@ -249,8 +247,8 @@ function mb_block_part__tongue(block_obj) =
                                         ]
                                     )
                                 ]
-                            ]
+                            ),
                 ]
-            ] 
-         ]
-     ] : undef;
+            )
+        ]
+    );

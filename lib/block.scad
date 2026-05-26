@@ -247,7 +247,7 @@ module mb_block(
     surfacePatternColor = mb_param_surfacePatternColor(config, settings);
 
     svg = mb_param_svg(config, settings);
-    svgSide = mb_param_svgSide(config, settings);
+    svgSide = mb_param_svgFace(config, settings);
     svgDepth = mb_param_svgDepth(config, settings);
     svgDimensions = mb_param_svgDimensions(config, settings);
     svgScale = mb_param_svgScale(config, settings);

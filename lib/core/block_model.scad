@@ -89,7 +89,7 @@ function mb_block_obj(
 
         recess_walls = mb_qc_resolve(mb_param_recessWallThickness(config, settings)),
         recessStudPadding =  mb_param_recessStudPadding(config, settings),
-        recessWallGaps = mb_param_recessWallGaps(config, settings),
+        recessWallGaps = mb_to_array(mb_param_recessWallGaps(config, settings)),
 
         /*
         * Base Wall Thickness
@@ -295,7 +295,7 @@ function mb_block_obj(
             ],  // 15 - 
             stabilizers_res,  // 16 - 
             [
-                mb_param_baseWallGaps(config, settings)
+                mb_to_array(mb_param_baseWallGaps(config, settings))
             ],  // 17 - 
             [
                 surface_pattern,
@@ -328,6 +328,15 @@ function mb_block_obj(
                 mb_param_grilleDepth(config, settings) * mbu2grd_z,
                 mb_param_grilleCount(config, settings)
             ], // 22 - Grille
+            [
+                mb_param_svg(config, settings),
+                mb_param_svgDimensions(config, settings),
+                mb_param_svgFace(config, settings),
+                mb_param_svgDepth(config, settings),
+                mb_param_svgScale(config, settings),
+                mb_param_svgOffset(config, settings),
+                mb_param_svgColor(config, settings)
+            ] // 23 - SVG Decorator
         ];
 
 /*
@@ -455,6 +464,15 @@ function mb_block_get_tongue_clamp_offset(block_obj) =              block_obj[13
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
 function mb_block_get_recess_surface_shape(block_obj) =             block_obj[10][1];
 function mb_block_get_recess_inverse_shape(block_obj) =             block_obj[10][2];
+
+// SVG Decorator
+function mb_block_get_svg(block_obj) =                              block_obj[23][0];
+function mb_block_get_svg_dimensions(block_obj) =                   block_obj[23][1];
+function mb_block_get_svg_face(block_obj) =                         block_obj[23][2];
+function mb_block_get_svg_depth(block_obj) =                        block_obj[23][3];
+function mb_block_get_svg_scale(block_obj) =                        block_obj[23][4];
+function mb_block_get_svg_offset(block_obj) =                       block_obj[23][5];
+function mb_block_get_svg_color(block_obj) =                        block_obj[23][6];
 
 /*
 * TODO Rename or delete
@@ -827,7 +845,8 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
         for(face = faces)
             let(axis = mb_face_to_axis(face),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[1 - axis] - gap_start_pos, gap[2]),
+            max_gap_length = mod_size[1 - axis] - gap_start_pos,
+            gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
             gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
             gap_end_offset = mod_size[1 - axis] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3])
             [
@@ -894,7 +913,7 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = fa
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
-        
+        gap = mb_to_array(gap),
         tongue_offset = mb_block_get_tongue_offset(block_obj),
         tongue_height = mb_block_get_tongue_height(block_obj),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj),
@@ -910,7 +929,8 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = fa
         let(
             axis = mb_face_to_axis(face),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[1-axis]- gap_start_pos, gap[2]),
+            max_gap_length = mod_size[1-axis] - gap_start_pos,
+            gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
             gap_start_offset = gap_start_pos + wall_thickness,
             gap_end_offset = mod_size[1-axis] - gap_length - gap_start_pos + wall_thickness
         )

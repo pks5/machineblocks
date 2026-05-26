@@ -203,7 +203,7 @@ function mb_param_surfacePatternDepth(config, settings, default = undef) = mb_pa
 function mb_param_surfacePatternColor(config, settings, default = undef) = mb_param(config, settings, "surfacePatternColor", default != undef ? default : "inherit");
 
 function mb_param_svg(config, settings, default = undef) = mb_param(config, settings, "svg", default != undef ? default : "");
-function mb_param_svgSide(config, settings, default = undef) = mb_param(config, settings, "svgSide", default != undef ? default : 5);
+function mb_param_svgFace(config, settings, default = undef) = mb_param(config, settings, "svgFace", default != undef ? default : 5);
 function mb_param_svgDepth(config, settings, default = undef) = mb_param(config, settings, "svgDepth", default != undef ? default : 0.4);
 function mb_param_svgDimensions(config, settings, default = undef) = mb_param(config, settings, "svgDimensions", default != undef ? default : [100, 100]);
 function mb_param_svgScale(config, settings, default = undef) = mb_param(config, settings, "svgScale", default != undef ? default : 1.0);
