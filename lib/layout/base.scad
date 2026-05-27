@@ -1,16 +1,20 @@
 use <../core/block_dim.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
-use <layout.scad>;
-use <tongue.scad>;
-use <stud_cutouts.scad>;
-use <surface_pattern.scad>;
-use <grille.scad>;
-use <../shape/prismoid.scad>;
-use <../shape/connectors.scad>;
 use <../core/utils.scad>;
 use <../quad.scad>;
 use <../core/quality.scad>;
+
+use <../shape/prismoid.scad>;
+use <../shape/connectors.scad>;
+
+use <layout.scad>;
+use <studs.scad>;
+use <tongue.scad>;
+use <pillars.scad>;
+use <stud_cutouts.scad>;
+use <surface_pattern.scad>;
+use <grille.scad>;
 
 /*
 * Base Cutout
