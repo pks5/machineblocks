@@ -10,13 +10,7 @@ use <../shape/connectors.scad>;
 use <base_outer.scad>;
 use <base_outer_clamp.scad>;
 
-use <base_cutout.scad>;
-use <base_cutout_clamp.scad>;
-
-use <top_plate_helpers.scad>;
-use <stabilizers.scad>;
-use <pillars.scad>;
-use <stud_cutouts.scad>;
+use <standard_cutout.scad>;
 
 use <recess.scad>;
 use <relief_cut.scad>;
@@ -34,31 +28,7 @@ module mb_base_cutout(
     block_obj,
     debug
 ){
-    difference() {
-            union(){
-                difference(){
-                    //Base Cutout
-                    mb_block_part(block_obj, part = mb_block_part__base_cutout(block_obj), debug = debug);
-                        
-                    //Base Clamp Inner
-                    mb_block_part(block_obj, part = mb_block_part__base_cutout_clamp(block_obj), debug = debug);
-
-                    //Top Plate Helpers
-                    mb_block_part(block_obj, part = mb_block_part__top_plate_helpers(block_obj), debug = debug);
-                    
-                    // Stabilizers 
-                    mb_block_part(block_obj, part = mb_block_part__stabilizers(block_obj), debug = debug);
-
-                    
-                }
-
-                mb_block_part(block_obj, part = mb_block_part__stud_cutouts(block_obj));
-            }
-            // Tubes
-            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj));
-    }
-
-    block_dim = mb_block_get_dim(block_obj);
+    mb_block_part(block_obj, part = mb_block_part__standard_cutout(block_obj));
     
 }
 

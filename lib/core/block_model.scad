@@ -395,7 +395,10 @@ function mb_block_get_base_clamp_thickness(block_obj) =             block_obj[4]
 function mb_block_get_base_clamp_height(block_obj) =                block_obj[4][4][1];
 function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4][4][2];
 
+// Base Cutout
+
 function mb_block_get_base_cutout_min_depth(block_obj) =            block_obj[4][5];
+function mb_block_has_standard_cutout(block_obj) =                  block_obj[4][2] == "standard";
 
 // Grille
 function mb_block_get_grille(block_obj) =                           block_obj[22][0];
