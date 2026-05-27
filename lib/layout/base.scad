@@ -8,10 +8,12 @@ use <../core/quality.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 
-use <layout.scad>;
+use <base_outer.scad>;
 use <recess.scad>;
 use <relief_cut.scad>;
 use <standard_base_cutout.scad>;
+use <top_plate_helpers.scad>;
+use <stabilizers.scad>;
 use <studs.scad>;
 use <tongue.scad>;
 use <pillars.scad>;
