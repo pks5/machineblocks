@@ -9,6 +9,8 @@ use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 
 use <layout.scad>;
+use <recess.scad>;
+use <relief_cut.scad>;
 use <studs.scad>;
 use <tongue.scad>;
 use <pillars.scad>;

@@ -18,7 +18,44 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
         slope = mb_block_dim_slope(block_dim)
     ); 
 
-
+/**
+* ----------------
+* Base Clamp Outer
+* ----------------
+*/
+function mb_block_part__base_clamp_outer(block_obj) = 
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        block_inverted = mb_block_get_inverted(block_obj),
+        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
+        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
+        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
+        
+        bottom = mb_block_dim_this_offset(
+            block_dim, 
+            off = base_clamp_offset
+        ),
+        top = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = base_clamp_height + base_clamp_offset
+        )
+    )
+    block_inverted ? 
+        mb_block_part_prismoid(
+            block_dim = block_dim, 
+            expand = [[
+                for(f = [0 : 3])
+                    mb_block_dim_face_edge_expand(
+                        block_dim, 
+                        exp = base_clamp_thickness, 
+                        adjusted = true, 
+                        face = f
+                    ),
+                bottom,
+                top
+            ]]
+        )
+        : undef;
 
 /**
 * -----------
@@ -256,45 +293,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
         ]
     ];
 
-/**
-* ----------------
-* Base Clamp Outer
-* ----------------
-*/
-function mb_block_part__base_clamp_outer(block_obj) = 
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        block_inverted = mb_block_get_inverted(block_obj),
-        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
-        base_clamp_height = mb_block_get_base_clamp_height(block_obj),
-        base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
-        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        
-        bottom = mb_block_dim_this_offset(
-            block_dim, 
-            off = base_clamp_offset
-        ),
-        top = mb_block_dim_opposite_offset(
-            block_dim, 
-            off = base_clamp_height + base_clamp_offset
-        )
-    )
-    block_inverted ? 
-        mb_block_part_prismoid(
-            block_dim = block_dim, 
-            expand = [[
-                for(f = [0 : 3])
-                    mb_block_dim_face_edge_expand(
-                        block_dim, 
-                        exp = base_clamp_thickness, 
-                        adjusted = true, 
-                        face = f
-                    ),
-                bottom,
-                top
-            ]]
-        )
-        : undef;
+
 
 /**
 * -----------------
@@ -416,193 +415,4 @@ function mb_block_part__stabilizers(block_obj) =
 
             
         ]
-    ]; 
-
-/**
-* ----------
-* Relief Cut
-* ----------
-*/
-function mb_block_part__relief_cut(block_obj) =
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        slope = mb_block_dim_slope(block_dim),
-        slope_neg = mb_slope_filter(slope, -1),
-        relief_cut_thickness = mb_block_get_relief_cut_thickness(block_obj),
-        relief_cut_height = mb_block_get_relief_cut_height(block_obj),
-        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj)
-    ) 
-    mb_block_has_relief_cut(block_obj) 
-    ? [
-        "difference",
-        [
-            _mb_layout_mask_frame(
-                block_dim = block_dim, 
-                bottom = mb_block_dim_this_offset(
-                    block_dim, 
-                    overlap = 1
-                ), 
-                top =  mb_block_dim_opposite_offset(
-                    block_dim, 
-                    off = relief_cut_height
-                ), 
-                outer_adj = base_clamp_thickness
-            ),
-            mb_block_part_prismoid(
-                block_dim = block_dim, 
-                expand = [[
-                    for(f = [0 : 3])
-                        mb_block_dim_face_edge_expand(
-                            block_dim, 
-                            exp = -relief_cut_thickness + slope_neg[f], 
-                            adjusted = true, 
-                            face = f
-                        ),
-                    mb_block_dim_this_offset(
-                        block_dim, 
-                        overlap = 2
-                    ),
-                    mb_block_dim_opposite_offset(
-                        block_dim, 
-                        off = relief_cut_height, 
-                        overlap = true
-                    )
-                ]]
-            )
-        ]
-    ]
-    : undef;
-
-/**
-* ------
-* Recess
-* ------
-*/
-function mb_block_part__recess(block_obj) = 
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        socket = mb_block_get_slope_socket(block_obj),
-        slope = mb_block_dim_slope(block_dim),
-        rwt = mb_block_get_recess_wall_thickness(block_obj),
-        rwgs = mb_block_get_recess_wall_gaps(block_obj),
-        
-        bottom = mb_block_recess_floor_offset(block_obj, "z-"),
-        exp_top = mb_block_dim_face_edge_expand(
-            block_dim, 
-            adjusted = true, 
-            face = "z+", 
-            overlap = true
-        )
-    )
-    mb_block_has_recess(block_obj) 
-    ? [
-        "list",
-        [
-            [
-                "intersection",
-                [
-                    mb_block_part_prismoid(
-                        block_dim = block_dim, 
-                        expand = [[
-                            for(f = [0 : 3])
-                                -rwt[f],
-                            0,
-                            exp_top,
-                        ]],
-                        slope = slope,
-                        socket = socket
-                    ),
-
-                    mb_block_part_cube(
-                        block_dim = block_dim, 
-                        expand = [
-                            0,
-                            0,
-                            0,
-                            0,
-                            bottom,
-                            exp_top
-                        ]
-                    )
-                ]
-            ], 
-            
-            for(rwg = rwgs)
-                let(gap_data = mb_block_recess_wall_gap(block_obj, rwg))
-                for(gap = gap_data)
-                    let(
-                        face = gap[0],
-                        gap_start_offset = gap[3],
-                        gap_end_offset = gap[4]
-                    )
-                    [
-                        
-                        "intersection",
-                        [
-                            mb_block_part_prismoid(
-                                block_dim = block_dim, 
-                                expand = [[
-                                    for(f = [0 : 3])
-                                        mb_face_has_common(face, f) 
-                                            ? mb_block_dim_face_edge_expand(
-                                                block_dim, 
-                                                adjusted = true, 
-                                                face = f,
-                                                overlap = true
-                                            ) 
-                                            : -rwt[f],
-                                    0,
-                                    exp_top
-                                ]],
-                                slope = slope,
-                                socket = socket
-                            ),
-
-                            mb_block_part_cube(
-                                block_dim = block_dim, 
-                                expand = [
-                                    mb_face_has_common(face, "y") ? - gap_start_offset : 0,
-                                    mb_face_has_common(face, "y") ? - gap_end_offset : 0,
-                                    mb_face_has_common(face, "x") ? - gap_start_offset : 0,
-                                    mb_face_has_common(face, "x") ? - gap_end_offset : 0,
-                                    bottom,
-                                    exp_top
-                                ]
-                            )
-                        ]
-                    ]
-        ]
-    ]
-    : undef;
-
-/**
-* ----------------
-* Stud Base Cutout
-* ----------------
-*/
-function mb_block_part__stud_base_cutout(block_obj) =
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
-        cut_tol = mb_block_dim_overlap(block_dim, overlap = true), //TODO remove
-        slope = mb_block_dim_slope(block_dim),
-        slope_neg = mb_slope_filter(slope, -1),
-        base_cutout_min_depth = mb_block_get_base_cutout_min_depth(block_obj),
-        top = mb_block_dim_opposite_offset(
-            block_dim, 
-            off = base_cutout_min_depth
-        )
-    )
-    mb_block_part_prismoid(
-        block_dim = block_dim, 
-        expand = [
-            [
-                for(f = [0 : 3])
-                    -(wall_thickness + base_clamp_thickness) + slope_neg[f] - cut_tol,
-                cut_tol,
-                top
-            ]
-        ]
-    );
+    ];

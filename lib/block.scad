@@ -480,7 +480,6 @@ module mb_block(
 
     mul_grd_to_mm = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
-    stud_base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__stud_base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
     base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
     base_adjusted = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_outer(block_obj, adjusted = true), mul=mul_grd_to_mm)[1][0];
 
@@ -1045,56 +1044,7 @@ module mb_block(
                                     *
                                     */
 
-                                    *if(baseCutoutType != "none" && baseCutoutType != "groove"){
-                                        studRoundingRes = mb_fn_even_for_radius(
-                                            0.5 * knobCutSize, 
-                                            0, 
-                                            qualitySegBase,
-                                            qualityFactor,
-                                            qualityResolutionMin,
-                                            qualityResolutionMax,
-                                            qualityResolutionMultiplier,
-                                            previewQuality
-                                        );
-
-                                        color(baseColor){
-                                            /*
-                                            * Knob subtraction from base
-                                            */
-                                            
-                                                difference(){
-                                                    union(){
-                                                        translate([0, 0, sideZ(0, false) + 0.5 * knobCutHeight - 0.5*cutOffset]){
-                                                        
-                                                            for (a = [ startX : 1 : ceil(endX) ]){
-                                                                for (b = [ startY : 1 : ceil(endY) ]){
-                                                                    if(baseCutoutType == "studs" //|| !mb_circle_in_rounded_rect(cornersInnerOrg, baseRoundingRadiusZ, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                                                        || !mb_circle_in_convex_quad(base_cutout[0], [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = 0)){
-                                                                        translate([posX(a), posY(b), 0]){
-                                                                            if(bClampOffset > 0){
-                                                                                translate([0,0, -0.5 * (knobCutHeight - bClampOffset)])
-                                                                                    cylinder(h=bClampOffset + cutOffset, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
-                                                                            }
-                                                                            //color("red")
-                                                                            cylinder(h=knobCutHeight + cutOffset, r=0.5 * (knobCutSize - 2*baseClampThickness), center=true, $fn=studRoundingRes);
-                                                                            
-                                                                            //color("green")
-                                                                            translate([0,0, 0.5*(knobCutHeight + cutOffset) - 0.5*(knobCutHeight - bClampOffset - bClampHeight)])
-                                                                                cylinder(h=knobCutHeight - bClampOffset - bClampHeight, r=0.5 * knobCutSize, center=true, $fn=studRoundingRes);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } // End translate
-                                                    } // End union
-
-                                                    if(baseCutoutType != "studs"){
-                                                        mb_prismoid(shape = stud_base_cutout, debug = debug);
-                                                    }
-                                                } //End difference final cutout elements
-                                            
-                                        }
-                                    }
+                                    
 
                                     //Cut X-Holes
                                     if(holeX != false){
