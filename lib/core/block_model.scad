@@ -231,7 +231,7 @@ function mb_block_obj(
             [
                 cutout_depth, 
                 top_plate_height_final, 
-                undef, 
+                baseCutoutType, 
                 wall_thickness_final, 
                 base_clamp, 
                 cutout_min_depth
@@ -453,12 +453,15 @@ function mb_block_get_surface_pattern_depth(block_obj) =            block_obj[18
 
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
-function mb_block_get_tongue_thickness(block_obj) =                 block_obj[13][1];
-function mb_block_get_tongue_height(block_obj) =                    block_obj[13][2];
-function mb_block_get_tongue_offset(block_obj) =                    block_obj[13][3];
-function mb_block_get_tongue_clamp_thickness(block_obj) =           block_obj[13][4];
-function mb_block_get_tongue_clamp_height(block_obj) =              block_obj[13][5];
-function mb_block_get_tongue_clamp_offset(block_obj) =              block_obj[13][6];
+function mb_block_get_tongue_thickness(block_obj, groove) =         block_obj[13][1];
+function mb_block_get_tongue_height(block_obj, groove) =            block_obj[13][2];
+function mb_block_get_tongue_offset(block_obj, groove) =            block_obj[13][3];
+function mb_block_get_tongue_clamp_thickness(block_obj, groove) =   block_obj[13][4];
+function mb_block_get_tongue_clamp_height(block_obj, groove) =      block_obj[13][5];
+function mb_block_get_tongue_clamp_offset(block_obj, groove) =      block_obj[13][6];
+
+// Groove
+function mb_block_has_groove(block_obj) =                           block_obj[4][2] == "groove";
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];

@@ -1401,7 +1401,7 @@ module mb_block(
                                     /*
                                     * Cut Groove
                                     */
-                                    if(baseCutoutType == "groove"){
+                                    *if(baseCutoutType == "groove"){
                                         color(baseColor){
                                             translate([0, 0, sideZ(0, false) + 0.5*tonGrooveDepthCalc]){ 
                                                 translate([0, 0, -0.5 * cutOffset]){

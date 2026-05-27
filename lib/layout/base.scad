@@ -129,6 +129,10 @@ module mb_base(
             */
             mb_block_part(block_obj, part = mb_block_part__recess(block_obj), debug = debug);
             
+            /*
+            * Groove
+            */
+            mb_block_part(block_obj, part = mb_block_part__tongue(block_obj, groove = true), debug = debug);
 
             /*
             * Connectors
@@ -167,6 +171,7 @@ module mb_base(
 
         mb_block_part(block_obj, part = mb_block_part__tongue(block_obj), debug = debug);
 
+        
 
         /*
         * Connectors
