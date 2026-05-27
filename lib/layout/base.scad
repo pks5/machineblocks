@@ -5,19 +5,25 @@ use <../core/utils.scad>;
 use <../quad.scad>;
 use <../core/quality.scad>;
 
-use <../shape/prismoid.scad>;
 use <../shape/connectors.scad>;
 
 use <base_outer.scad>;
-use <recess.scad>;
-use <relief_cut.scad>;
-use <standard_base_cutout.scad>;
+use <base_outer_clamp.scad>;
+
+use <base_cutout.scad>;
+use <base_cutout_clamp.scad>;
+
 use <top_plate_helpers.scad>;
 use <stabilizers.scad>;
-use <studs.scad>;
-use <tongue.scad>;
 use <pillars.scad>;
 use <stud_cutouts.scad>;
+
+use <recess.scad>;
+use <relief_cut.scad>;
+
+use <studs.scad>;
+use <tongue.scad>;
+
 use <surface_pattern.scad>;
 use <grille.scad>;
 

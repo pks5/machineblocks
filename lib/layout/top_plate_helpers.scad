@@ -3,7 +3,7 @@ use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 use <shared.scad>;
-use <standard_base_cutout.scad>;
+use <base_cutout.scad>;
 
 /**
 * -----------------
