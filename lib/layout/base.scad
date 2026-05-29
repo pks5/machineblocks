@@ -11,7 +11,6 @@ use <base_outer.scad>;
 use <base_outer_clamp.scad>;
 
 use <standard_cutout.scad>;
-use <groove.scad>;
 
 use <recess.scad>;
 use <relief_cut.scad>;
@@ -118,7 +117,7 @@ module mb_base(
             /*
             * Groove
             */
-            mb_block_part(block_obj, part = mb_block_part__groove(block_obj), debug = debug);
+            mb_block_part(block_obj, part = mb_block_part__tongue(block_obj, groove = true), debug = debug);
 
             /*
             * Connectors
