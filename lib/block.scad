@@ -24,6 +24,7 @@ use <shape/text3d.scad>;
 use <shape/svg3d.scad>;
 use <shape/pcb.scad>;
 use <shape/axis.scad>;
+use <shape/cube.scad>;
 
 use <bevel.scad>;
 use <rounded.scad>;
@@ -1533,7 +1534,7 @@ module mb_block(
                                                                     else if(shape[0] == "rect"){
                                                                         mb_cube(
                                                                             size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
-                                                                            radius = shape[3][1], center=true, resolution=20);
+                                                                            radius = shape[3][1], rounding_resolution=20);
                                                                     }
                                                                 }
                                                             }

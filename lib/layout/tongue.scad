@@ -14,7 +14,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
         block_dim = mb_block_get_dim(block_obj),
         slope = mb_block_dim_slope(block_dim),
         slope_pos = mb_slope_filter(slope, 1),
-        has_tongue = groove || mb_block_has_tongue(block_obj),
+        has_tongue = groove ? mb_block_has_groove(block_obj) : mb_block_has_tongue(block_obj),
         tongue_offset = mb_block_get_tongue_offset(block_obj, groove),
         tongue_height = mb_block_get_tongue_height(block_obj, groove),
         tongue_thickness = mb_block_get_tongue_thickness(block_obj, groove),
