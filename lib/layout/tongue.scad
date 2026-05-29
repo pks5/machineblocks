@@ -21,7 +21,9 @@ function mb_block_part__tongue(block_obj, groove = false) =
         tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj, groove),
         tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj, groove),
         tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj, groove),
-        wall_gaps = mb_block_get_recess_wall_gaps(block_obj),
+        recess_wall_gaps = mb_block_get_recess_wall_gaps(block_obj),
+        base_wall_gaps = mb_block_get_base_wall_gaps(block_obj),
+
         stud_sink = mb_block_get_stud_sink(block_obj),
         // Bottom
         tongue_bottom = groove
@@ -135,22 +137,76 @@ function mb_block_part__tongue(block_obj, groove = false) =
             overlap = true
         )
     )
+    
     mb_block_part_model(
         render = has_tongue,
         type = "list",
         items = [
+            // Main Frame
             mb_block_part_model(
                 type = "difference",
                 items = [
-                    mb_block_part_prismoid(
-                        block_dim = block_dim, 
-                        expand = [[
-                            for(f = [0 : 3])
-                                -slope_pos[f] - tongue_offset,
-                            tongue_bottom,
-                            tongue_top
-                        ]]
+                    mb_block_part_model(
+                        type = "union",
+                        items = [
+                            mb_block_part_prismoid(
+                                block_dim = block_dim, 
+                                expand = [[
+                                    for(f = [0 : 3])
+                                        -slope_pos[f] - tongue_offset,
+                                    tongue_bottom,
+                                    tongue_top
+                                ]]
+                            ),
+
+                            // Base Wall Gaps
+                            if(groove)
+                            for(base_wall_gap = base_wall_gaps)
+                                let(gap_data = mb_block_tongue_wall_gap(block_obj, base_wall_gap, clamp = false, groove = true))
+                                for(gap = gap_data)
+                                    let(
+                                        face = gap[0],
+                                        gap_start_offset = gap[3],
+                                        gap_end_offset = gap[4]
+                                    )
+                                    mb_block_part_model(
+                                        type = "intersection",
+                                        items = [
+                                            mb_block_part_prismoid(
+                                                block_dim = block_dim, 
+                                                expand = [[
+                                                    for(f = [0 : 3])
+                                                        mb_face_has_common(face, f) 
+                                                            ? mb_block_dim_face_edge_expand(
+                                                                block_dim, 
+                                                                adjusted = true, 
+                                                                face = f,
+                                                                overlap = true
+                                                            ) 
+                                                            : -(slope_pos[f] + tongue_offset),
+                                                    tongue_bottom,
+                                                    tongue_top
+                                                ]]
+                                            ),
+
+                                            mb_block_part_cube(
+                                                block_dim = block_dim, 
+                                                expand = [
+                                                    mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                                                    mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                                                    mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                                                    mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                                                    tongue_bottom,
+                                                    tongue_top
+                                                ]
+                                            )
+                                        ]
+                                    ),
+
+                        ]
                     ),
+
+                    // Inner Cutout
                     mb_block_part_prismoid(
                         block_dim = block_dim, 
                         expand = [[
@@ -161,8 +217,9 @@ function mb_block_part__tongue(block_obj, groove = false) =
                         ]]
                     ),
                     
-                    for(wall_gap = wall_gaps)
-                        let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap))
+                    // Recess Gaps
+                    for(recess_gap = recess_wall_gaps)
+                        let(gap_data = mb_block_tongue_wall_gap(block_obj, recess_gap, clamp = false))
                         for(gap = gap_data)
                             let(
                                 face = gap[0],
@@ -204,19 +261,71 @@ function mb_block_part__tongue(block_obj, groove = false) =
                             ),
                 ]
             ),
-
+            // Clamp
             mb_block_part_model(
                 type = "difference",
                 items = [
-                    mb_block_part_prismoid(
-                        block_dim = block_dim, 
-                        expand = [[
-                            for(f = [0 : 3])
-                                -slope_pos[f] - tongue_offset + tongue_clamp_thickness,
-                            tongue_clamp_bottom,
-                            tongue_clamp_top
-                        ]]
+                    mb_block_part_model(
+                        type = "union",
+                        items = [
+                            // Main Frame Clamp
+                            mb_block_part_prismoid(
+                                block_dim = block_dim, 
+                                expand = [[
+                                    for(f = [0 : 3])
+                                        -slope_pos[f] - tongue_offset + tongue_clamp_thickness,
+                                    tongue_clamp_bottom,
+                                    tongue_clamp_top
+                                ]]
+                            ),
+
+                            // Base Wall Gaps
+                            if(groove)
+                            for(base_wall_gap = base_wall_gaps)
+                                let(gap_data = mb_block_tongue_wall_gap(block_obj, base_wall_gap, clamp = true, groove = true))
+                                for(gap = gap_data)
+                                    let(
+                                        face = gap[0],
+                                        gap_start_offset = gap[3],
+                                        gap_end_offset = gap[4]
+                                    )
+                                    mb_block_part_model(
+                                        type = "intersection",
+                                        items = [
+                                            mb_block_part_prismoid(
+                                                block_dim = block_dim, 
+                                                expand = [[
+                                                    for(f = [0 : 3])
+                                                        mb_face_has_common(face, f) 
+                                                            ? mb_block_dim_face_edge_expand(
+                                                                block_dim, 
+                                                                adjusted = true, 
+                                                                face = f,
+                                                                overlap = true
+                                                            ) 
+                                                            : -(slope_pos[f] + tongue_offset - tongue_clamp_thickness),
+                                                    tongue_clamp_bottom,
+                                                    tongue_clamp_top
+                                                ]]
+                                            ),
+
+                                            mb_block_part_cube(
+                                                block_dim = block_dim, 
+                                                expand = [
+                                                    mb_face_has_common(face, "y") ? - gap_start_offset : 0,
+                                                    mb_face_has_common(face, "y") ? - gap_end_offset : 0,
+                                                    mb_face_has_common(face, "x") ? - gap_start_offset : 0,
+                                                    mb_face_has_common(face, "x") ? - gap_end_offset : 0,
+                                                    tongue_clamp_bottom,
+                                                    tongue_clamp_top
+                                                ]
+                                            )
+                                        ]
+                                    ),
+                        ]
                     ),
+
+                    // Inner Cutout
                     mb_block_part_prismoid(
                         block_dim = block_dim, 
                         expand = [[
@@ -227,8 +336,9 @@ function mb_block_part__tongue(block_obj, groove = false) =
                         ]]
                     ),
                     
-                    for(wall_gap = wall_gaps)
-                        let(gap_data = mb_block_tongue_wall_gap(block_obj, wall_gap, true))
+                    // Recess Wall Gaps
+                    for(recess_gap = recess_wall_gaps)
+                        let(gap_data = mb_block_tongue_wall_gap(block_obj, recess_gap, clamp = true))
                         for(gap = gap_data)
                             let(
                                 face = gap[0],

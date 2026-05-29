@@ -51,7 +51,7 @@ function mb_param_baseWallGaps(config, settings, default = undef) = mb_param(con
 
 function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(config, settings, "topPlateHelpers", default != undef ? default : true);
 function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
-function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : 0.4);
+function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : 0.2);
 
 function mb_param_stabilizers(config, settings, default = undef) = mb_param(config, settings, "stabilizers", default != undef ? default : true);
 function mb_param_stabilizerPrintOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerPrintOffset", default != undef ? default : 0.2);

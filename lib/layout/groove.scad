@@ -30,7 +30,7 @@ function mb_block_part__groove(block_obj) =
         type = "union",
         items = [
             mb_block_part__tongue(block_obj, groove = true),
-            mb_block_part_model(
+            true ? undef : mb_block_part_model(
                 type = "difference",
                 items = [
                     mb_block_part_model(
@@ -43,7 +43,7 @@ function mb_block_part__groove(block_obj) =
                         block_dim = block_dim, 
                         expand = [[
                             for(f = [0 : 3])
-                                -slope_pos[f] - tongue_offset,
+                                -slope_pos[f] - tongue_offset - mb_block_dim_overlap(block_dim, overlap = true),
                             mb_block_dim_this_offset(
                                 block_dim, 
                                 overlap = true,

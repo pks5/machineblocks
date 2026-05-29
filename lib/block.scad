@@ -15,7 +15,8 @@ use <core/block_part.scad>;
 use <core/utils.scad>;
 use <core/quality.scad>;
 
-use <layout/layout.scad>;
+use <layout/base_outer.scad>;
+use <layout/base_cutout.scad>;
 use <layout/base.scad>;
 
 use <shape/prismoid.scad>;

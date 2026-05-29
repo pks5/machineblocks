@@ -914,7 +914,7 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = false) =
         ]
     ];
 
-function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = false) = 
+function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false, split_axis = false) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
@@ -926,7 +926,9 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, split_axis = fa
         tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
         tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
         tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
-        wall_thickness = tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
+        wall_thickness = groove
+            ? tongue_offset - (clamp ? tongue_clamp_thickness : 0)
+            : tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
         faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
     )
     [
