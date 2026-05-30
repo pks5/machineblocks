@@ -1,3 +1,4 @@
+use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
@@ -16,7 +17,7 @@ function mb_block_part__svg_decorator(block_obj) =
         height = abs(svg_depth),
         has_svg_decorator = !mb_is_empty_string(svg_decorator) && svg_decorator != "none" && height != 0,
         extruded = svg_depth > 0,
-        side_length = svg_scale * max(mod_size[0], mod_size[1] - surface_pattern_padding[2] - surface_pattern_padding[3]),
+        side_length = svg_scale * min(mod_size[0], mod_size[1]),
         overlap = mb_block_dim_overlap(block_dim, overlap = true),
         rel = svg_dimensions[1] / svg_dimensions[0],
         si = [

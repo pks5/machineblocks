@@ -21,6 +21,8 @@ use <tongue.scad>;
 use <surface_pattern.scad>;
 use <grille.scad>;
 
+use <svg_decorator.scad>;
+
 /*
 * Base Cutout
 */
@@ -167,7 +169,7 @@ module mb_base(
 
         mb_block_part(block_obj, part = mb_block_part__tongue(block_obj), debug = debug);
 
-        
+        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj), debug = debug);
 
         /*
         * Connectors

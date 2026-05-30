@@ -847,7 +847,7 @@ module mb_block(
                             
                             if(base){
                                 difference(){
-                                    color(baseColor){
+                                    //color(baseColor){
                                         union(){
                                             if(baseCutoutType == "standard"){
                                                 difference() {
@@ -1038,7 +1038,7 @@ module mb_block(
                                                 }
                                             }
                                         } //End base union
-                                    } //End base color
+                                    //} //End base color
                                     
                                     /*
                                     * Final Subtraction
