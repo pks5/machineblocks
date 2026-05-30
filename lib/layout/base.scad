@@ -28,7 +28,7 @@ module mb_base_cutout(
     block_obj,
     debug
 ){
-    mb_block_part(block_obj, part = mb_block_part__standard_cutout(block_obj));
+    
     
 }
 
@@ -100,6 +100,11 @@ module mb_base(
             }
 
             /*
+            * Standard Cutout
+            */
+            mb_block_part(block_obj, part = mb_block_part__standard_cutout(block_obj));
+
+            /*
             * Grille
             */
             mb_block_part(block_obj, part = mb_block_part__grille(block_obj), debug = debug);
@@ -125,18 +130,23 @@ module mb_base(
             if(connectors != false){
                 for (con = [ 0 : 1 : len(connectors)-1 ]){
                     if(connectors[con][1] == 1){
-                        mb_connectors(side = connectors[con][0],
-                                grid = grid,
-                                padding = connectorPadding,
-                                height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
-                                baseHeight = height,
-                                inverse=true,
-                                size = connectorSize,
-                                depth = connectorDepth,
-                                gs = gridSizeXY);
+                        mb_connectors(
+                            block_obj = block_obj,
+                            side = connectors[con][0],
+                            grid = grid,
+                            padding = connectorPadding,
+                            height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
+                            baseHeight = height,
+                            inverse=true,
+                            size = connectorSize,
+                            depth = connectorDepth,
+                            gs = gridSizeXY
+                        );
                     }
                     else if(connectors[con][1] > 1){
-                        mb_connector_grooves(side = connectors[con][0],
+                        mb_connector_grooves(
+                            block_obj = block_obj,
+                            side = connectors[con][0],
                             grid = grid,
                             padding = connectorPadding,
                             depth = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
@@ -144,7 +154,8 @@ module mb_base(
                             inverse=connectors[con][1]==3,
                             size = connectorSize,
                             height = connectorDepth,
-                            gs = gridSizeXY);
+                            gs = gridSizeXY
+                        );
                     }
                 }
             }
@@ -164,15 +175,18 @@ module mb_base(
         if(connectors != false){
             for (con = [ 0 : 1 : len(connectors)-1 ]){
                 if(connectors[con][1] == 0){
-                    mb_connectors(side = connectors[con][0],
-                            grid = grid,
-                            padding = connectorPadding,
-                            height = (connectorHeight == "auto" ? height : connectorHeight),
-                            baseHeight = height,
-                            inverse=connectors[con][1]==1,
-                            size = connectorSize - 2*connectorSideTolerance,
-                            depth = connectorDepth - connectorSideTolerance,
-                            gs = gridSizeXY);
+                    mb_connectors(
+                        block_obj = block_obj,
+                        side = connectors[con][0],
+                        grid = grid,
+                        padding = connectorPadding,
+                        height = (connectorHeight == "auto" ? height : connectorHeight),
+                        baseHeight = height,
+                        inverse=false,  //connectors[con][1]==1,
+                        size = connectorSize - 2*connectorSideTolerance,
+                        depth = connectorDepth - connectorSideTolerance,
+                        gs = gridSizeXY
+                    );
                 }
             }
         }

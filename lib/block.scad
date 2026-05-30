@@ -884,7 +884,7 @@ module mb_block(
                                                     */
                                                     difference(){
                                                         union(){
-                                                            mb_base_cutout(
+                                                            *mb_base_cutout(
                                                                 block_obj = block_obj,
                                                                 debug = debug
                                                             );
@@ -1206,7 +1206,7 @@ module mb_block(
                                     /*
                                     * SVG Cutout
                                     */
-                                    if(!mb_is_empty_string(svg) && svgDepth < 0){
+                                    *if(!mb_is_empty_string(svg) && svgDepth < 0){
                                         color(svgColor == "inherit" ? baseColor : svgColor){
                                             translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                                                 rotate(decoratorRotations[svgSide])
@@ -1449,7 +1449,7 @@ module mb_block(
                             /*
                             * SVG
                             */
-                            if(!mb_is_empty_string(svg) && svgDepth > 0){
+                            *if(!mb_is_empty_string(svg) && svgDepth > 0){
                                 color(svgColor == "inherit" ? baseColor : svgColor)
                                     translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
                                         rotate(decoratorRotations[svgSide])

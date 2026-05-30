@@ -1,5 +1,4 @@
-module
-mb_connector_prism(side, height, size)
+module mb_connector_prism(side, height, size)
 {
   zRots = [ 315, 135, 45, 225 ];
   rotate([ 90, 90, zRots[side] ])
@@ -22,8 +21,8 @@ mb_connector_prism(side, height, size)
                  ]);
 }
 
-module
-mb_connectors(
+module mb_connectors(
+  block_obj,
   side, 
   grid, 
   padding, 
@@ -39,8 +38,8 @@ mb_connectors(
   gX = [ 0, 0, 1, 1 ];
   gY = [ 1, 1, 0, 0 ];
 
-rotate(inverse ? [0,0,180]:[0,0,0])
-  for (i = [max(0, padding[0]):1:grid[gY[side]] - padding[1] - 1]) {
+rotate(inverse ? [0, 0, 180] : [0, 0, 0])
+  for (i = [max(0, padding[0]) : 1 : grid[gY[side]] - padding[1] - 1]) {
     t0X = (0.5 * grid[gX[side]] * gs + (inverse ? -1 : 1) * depth);
     t0Y = (i + 0.5 - 0.5 * grid[gY[side]]) * gs;
 
@@ -55,30 +54,33 @@ rotate(inverse ? [0,0,180]:[0,0,0])
   }
 }
 
-module
-mb_connector_grooves(side,
-                     grid,
-                     padding,
-                     baseHeight,
-                     height,
-                     tolerance,
-                     size,
-                     depth,
-                     gs,
-                     inverse)
+module mb_connector_grooves(
+  block_obj,
+  side,
+  grid,
+  padding,
+  baseHeight,
+  height,
+  tolerance,
+  size,
+  depth,
+  gs,
+  inverse
+)
 {
   gX = [ 0, 0, 1, 1 ];
   gY = [ 1, 1, 0, 0 ];
   rot = [ 90, 90, 0, 0 ];
   
   sigs = [ 1, -1, -1, 1 ];
-  rotate([ 90, inverse ? 180 : 0, rot[side] ]) for (i =
-                                                      [max(0, padding[0]):1:grid[gY[side]] - padding[1] - 1])
-  {
-    translate([
-      (-(0.5 * grid[gY[side]] - 0.5) * gs + i * gs),
-      -0.5 * baseHeight + height,
-      sigs[side] * (-0.5 * grid[gX[side]] * gs + 0.5 * depth - 0.02)
-    ]) mb_connector_prism(3, depth + 0.02, size);
-  }
+  
+  rotate([ 90, inverse ? 180 : 0, rot[side] ]) 
+    for (i = [max(0, padding[0]):1:grid[gY[side]] - padding[1] - 1])
+      {
+        translate([
+          (-(0.5 * grid[gY[side]] - 0.5) * gs + i * gs),
+          -0.5 * baseHeight + height,
+          sigs[side] * (-0.5 * grid[gX[side]] * gs + 0.5 * depth - 0.02)
+        ]) mb_connector_prism(3, depth + 0.02, size);
+      }
 }

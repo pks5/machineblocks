@@ -208,6 +208,16 @@ function mb_block_obj(
         ],
 
         /*
+        * Connectors
+        */
+        connectorHeight = mb_param_connectorHeight(config, settings),
+        connector_height = connectorHeight == "auto" ? "auto" : connectorHeight * mbu2grd_z,
+        connector_depth = mb_param_connectorDepth(config, settings) * mbu2grd_z,
+        connector_size = mb_param_connectorWidth(config, settings) * mbu2grd_z,
+        connector_depth_tolerance = mb_param_connectorDepthTolerance(config, settings) * mm2grd_z,
+        connector_side_tolerance = mb_param_connectorSideTolerance(config, settings) * mm2grd_z,
+
+        /*
         * Masks
         */
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
@@ -336,7 +346,16 @@ function mb_block_obj(
                 mb_param_svgScale(config, settings),
                 mb_param_svgOffset(config, settings),
                 mb_param_svgColor(config, settings)
-            ] // 23 - SVG Decorator
+            ], // 23 - SVG Decorator
+            [
+                mb_param_connectors(config, settings),
+                mb_param_connectorPadding(config, settings),
+                connector_height,
+                connector_depth,
+                connector_size,
+                connector_depth_tolerance,
+                connector_side_tolerance
+            ], // 24 Connectors
         ];
 
 /*
@@ -465,6 +484,10 @@ function mb_block_get_tongue_clamp_offset(block_obj, groove) =      block_obj[13
 
 // Groove
 function mb_block_has_groove(block_obj) =                           block_obj[4][2] == "groove";
+
+// Connectors
+function mb_block_connectors(block_obj) =                           block_obj[24][0];
+function mb_block_connector_padding(block_obj) =                    block_obj[24][1];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
