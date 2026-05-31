@@ -16,9 +16,8 @@ function mb_block_part__svg_decorator(block_obj) =
         svg_face = mb_face_to_int(mb_block_get_svg_face(block_obj)),
         axis = mb_face_to_axis(svg_face),
         has_svg_decorator = !mb_is_empty_string(svg_decorator) && svg_decorator != "none" && svg_depth[0] != 0,
-        extruded = svg_depth[0] > 0,
-        min_size = mb_face_common(svg_face, "x") ? min(mod_size[1], mod_size[2] / 2.5) 
-            : mb_face_common(svg_face, "y") ? min(mod_size[0], mod_size[2] / 2.5) 
+        min_size = mb_face_has_common(svg_face, "x") ? min(mod_size[1], mod_size[2] / 2.5) 
+            : mb_face_has_common(svg_face, "y") ? min(mod_size[0], mod_size[2] / 2.5) 
             : min(mod_size[0], mod_size[1]),
         side_length = svg_scale * min_size,
         si = axis == 0 ?
@@ -40,7 +39,26 @@ function mb_block_part__svg_decorator(block_obj) =
             undef
         ],
 
-        expand = mb_face_has_common(svg_face, "x+") 
+        expand = mb_face_has_common(svg_face, "x-") 
+        ? [
+            mb_block_dim_face_edge_expand(
+                block_dim, 
+                exp = abs(svg_depth[0]), 
+                adjusted = true, 
+                face = "x-"
+            ),
+            mb_block_dim_opposite_offset(
+                block_dim, 
+                overlap = true, 
+                adjusted = true, 
+                face = "x+"
+            ),
+            0,
+            0,
+            0,
+            0
+        ] 
+        : mb_face_has_common(svg_face, "x+") 
         ? [
             mb_block_dim_opposite_offset(
                 block_dim, 

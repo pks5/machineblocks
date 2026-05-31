@@ -54,9 +54,9 @@ module mb_svg(
         si[2]
     ];
 
-    echo(face = face, size = size, offset = offset, dim = dim, si= si, tr = tr);
+    
 
-    rot = mb_face_common(face, "x") ? [0, 90, 0] : mb_face_common(face, "y") ? [90, 0, 0] : [0, 0, 0];
+    rot = mb_face_has_common(face, "x") ? [90, 0, 90] : mb_face_has_common(face, "y") ? [90, 0, 0] : [0, 0, 0];
 
     color(debug ? "green" : color)
         translate([
