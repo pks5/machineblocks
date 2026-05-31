@@ -73,7 +73,6 @@ module mb_base(
                 mb_block_part(block_obj, part = mb_block_part__surface_pattern(block_obj), debug = debug);
 
                 
-                
                 //Just for testing TO BE REMOVED
                 *mb_block_part(
                     block_obj, 
@@ -127,6 +126,12 @@ module mb_base(
             mb_block_part(block_obj, part = mb_block_part__tongue(block_obj, groove = true), debug = debug);
 
             /*
+            * SVG Decorator
+            */
+            mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = false), debug = debug);
+                
+
+            /*
             * Connectors
             */
             if(connectors != false){
@@ -169,7 +174,7 @@ module mb_base(
 
         mb_block_part(block_obj, part = mb_block_part__tongue(block_obj), debug = debug);
 
-        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj), debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = true), debug = debug);
 
         /*
         * Connectors

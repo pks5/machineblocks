@@ -281,7 +281,8 @@ function mb_block_dim_opposite_offset(block_dim, off = 0, adjusted = false, face
     )
     (adjusted ? -base_adj[face_opposite] : 0) - (mod_size[axis] - off) + mb_block_dim_overlap(block_dim, overlap = overlap);
 
-function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", overlap = false) =
+function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", overlap = false, opposite = false) =
+    opposite ? mb_block_dim_opposite_offset(block_dim, off = exp, adjusted = adjusted, face = face, overlap = overlap) :
     let(
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)

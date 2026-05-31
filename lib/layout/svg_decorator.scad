@@ -3,7 +3,10 @@ use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
-function mb_block_part__svg_decorator(block_obj) = 
+function mb_block_part__svg_decorator(block_obj, extrude = false) = 
+    let(svg_depth = mb_block_get_svg_depth(block_obj))
+    extrude && svg_depth[0] < 0 || !extrude && svg_depth[0] > 0 ? undef :
+
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
@@ -12,7 +15,7 @@ function mb_block_part__svg_decorator(block_obj) =
         svg_offset = mb_resolve_xyz(mb_block_get_svg_offset(block_obj), default = [0, 0, 0]),
         svg_color = mb_block_get_svg_color(block_obj),
         svg_scale = mb_block_get_svg_scale(block_obj),
-        svg_depth = mb_block_get_svg_depth(block_obj),
+        
         svg_face = mb_face_to_int(mb_block_get_svg_face(block_obj)),
         axis = mb_face_to_axis(svg_face),
         has_svg_decorator = !mb_is_empty_string(svg_decorator) && svg_decorator != "none" && svg_depth[0] != 0,
@@ -43,14 +46,16 @@ function mb_block_part__svg_decorator(block_obj) =
         ? [
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[0]), 
+                exp = extrude ? abs(svg_depth[0]) : 0, 
                 adjusted = true, 
                 face = "x-"
             ),
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[0]) : 0, 
+                opposite = true,
                 face = "x+"
             ),
             0,
@@ -60,15 +65,17 @@ function mb_block_part__svg_decorator(block_obj) =
         ] 
         : mb_face_has_common(svg_face, "x+") 
         ? [
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[0]) : 0, 
+                opposite = true,
                 face = "x-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[0]), 
+                exp = extrude ? abs(svg_depth[0]) : 0,
                 adjusted = true, 
                 face = "x+"
             ),
@@ -83,14 +90,16 @@ function mb_block_part__svg_decorator(block_obj) =
             0,
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[1]), 
+                exp = extrude ? abs(svg_depth[1]) : 0,
                 adjusted = true, 
                 face = "y-"
             ),
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[1]) : 0,
+                opposite = true,
                 face = "y+"
             ),
             
@@ -101,15 +110,17 @@ function mb_block_part__svg_decorator(block_obj) =
         ? [
             0,
             0,
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[1]) : 0,
+                opposite = true,
                 face = "y-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[1]), 
+                exp = extrude ? abs(svg_depth[1]) : 0,
                 adjusted = true, 
                 face = "y+"
             ),
@@ -124,14 +135,16 @@ function mb_block_part__svg_decorator(block_obj) =
             0,
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[2]), 
+                exp = extrude ? abs(svg_depth[2]) : 0, 
                 adjusted = true, 
                 face = "z-"
             ),
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[2]) : 0, 
+                opposite = true,
                 face = "z+"
             )
         ] 
@@ -140,15 +153,17 @@ function mb_block_part__svg_decorator(block_obj) =
             0,
             0,
             0,
-            mb_block_dim_opposite_offset(
+            mb_block_dim_face_edge_expand(
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
+                exp = !extrude ? abs(svg_depth[2]) : 0, 
+                opposite = true,
                 face = "z-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = abs(svg_depth[2]), 
+                exp = extrude ? abs(svg_depth[2]) : 0, 
                 adjusted = true, 
                 face = "z+"
             )
