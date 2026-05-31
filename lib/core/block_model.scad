@@ -342,7 +342,7 @@ function mb_block_obj(
                 mb_param_svg(config, settings),
                 mb_param_svgDimensions(config, settings),
                 mb_param_svgFace(config, settings),
-                mb_param_svgDepth(config, settings),
+                mb_array_mul(mul_mbu_to_grid, mb_param_svgDepth(config, settings)),
                 mb_param_svgScale(config, settings),
                 mb_param_svgOffset(config, settings),
                 mb_param_svgColor(config, settings)

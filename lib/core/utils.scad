@@ -930,6 +930,14 @@ function mb_face_split(face, splits) =
                 if(!is_undef(f)) f
     ];
 
+function mb_face_opposite(face) =
+    face == 5 ? 4 :
+    face == 4 ? 5 :
+    face == 3 ? 2 :
+    face == 2 ? 3 :
+    face == 1 ? 0 :
+    face == 0 ? 1 : undef;
+
 /*
 function mb_face_contains(face, cface) =
     let(

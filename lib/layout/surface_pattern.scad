@@ -37,6 +37,7 @@ function mb_block_part__surface_pattern(block_obj) =
         block_dim,
         surface_pattern,
         surface_pattern_dimensions,
+        "z+",
         size = si,
         expand = [
             0,

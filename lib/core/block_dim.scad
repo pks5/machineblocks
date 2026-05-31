@@ -269,15 +269,17 @@ function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    (adjusted ? base_adj[face == 5 ? 5 : 4] : 0) - off + mb_block_dim_overlap(block_dim, overlap = overlap);
+    (adjusted ? base_adj[face] : 0) - off + mb_block_dim_overlap(block_dim, overlap = overlap);
 
 function mb_block_dim_opposite_offset(block_dim, off = 0, adjusted = false, face = "z+", overlap = false) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
         base_adj = mb_block_dim_base_adj(block_dim),
-        face = mb_face_to_int(face = face)
+        face = mb_face_to_int(face = face),
+        axis = mb_face_to_axis(face),
+        face_opposite = mb_face_opposite(face)
     )
-    (adjusted ? -base_adj[face == 4 ? 5 : 4] : 0) - (mod_size[2] - off) + mb_block_dim_overlap(block_dim, overlap = overlap);
+    (adjusted ? -base_adj[face_opposite] : 0) - (mod_size[axis] - off) + mb_block_dim_overlap(block_dim, overlap = overlap);
 
 function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, face = "x-", overlap = false) =
     let(

@@ -36,6 +36,7 @@ function mb_block_part__stud_icon(block_obj, stud_render) =
         block_dim,
         stud_icon,
         stud_icon_dimensions,
+        "z+",
         size = si,
         expand = [
             0,

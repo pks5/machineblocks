@@ -45,6 +45,7 @@ function mb_block_part_svg(
     block_dim,
     svg_file,
     svg_size,
+    svg_face,
     size = undef,
     expand = undef,
     offset = undef,
@@ -55,6 +56,7 @@ mb_block_part_model(
     data = [
             svg_file,
             svg_size,
+            svg_face,
             mb_block_dim_size_expand(block_dim, size, expand),
             offset
     ], 
@@ -325,8 +327,9 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_svg(
                 svg_file = svg_data[0],
                 svg_size = svg_data[1],
-                size = svg_data[2],
-                offset = svg_data[3],
+                face = svg_data[2],
+                size = svg_data[3],
+                offset = svg_data[4],
                 mul = mul
             );
             
