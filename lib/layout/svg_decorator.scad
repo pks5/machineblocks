@@ -42,6 +42,25 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
             undef
         ],
 
+        off = axis == 0 ?
+        [
+            0,
+            svg_offset[0],
+            svg_offset[1]
+        ] :
+        axis == 1 ?
+        [
+            svg_offset[0],
+            undef,
+            svg_offset[1]
+            
+        ] :
+        [
+            svg_offset[0],
+            svg_offset[1],
+            undef
+        ],
+
         expand = mb_face_has_common(svg_face, "x-") 
         ? [
             mb_block_dim_face_edge_expand(
@@ -176,6 +195,6 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         svg_face,
         size = si,
         expand = expand,
-        offset = svg_offset,
+        offset = off,
         render = has_svg_decorator
     ); 
