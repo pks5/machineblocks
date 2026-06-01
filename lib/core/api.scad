@@ -182,7 +182,7 @@ function mb_param_recessStudShift(config, settings, default = undef) = mb_param(
 function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_array(mb_param(config, settings, "recessWallGaps", default != undef ? default : []));
 
 function mb_param_text(config, settings, default = undef) = mb_param(config, settings, "text", default != undef ? default : "");
-function mb_param_textSide(config, settings, default = undef) = mb_param(config, settings, "textSide", default != undef ? default : 0);
+function mb_param_textFace(config, settings, default = undef) = mb_param(config, settings, "textFace", default != undef ? default : 0);
 function mb_param_textDepth(config, settings, default = undef) = mb_param(config, settings, "textDepth", default != undef ? default : -0.25);
 function mb_param_textFont(config, settings, default = undef) = mb_param(config, settings, "textFont", default != undef ? default : "Liberation Sans");
 function mb_param_textSize(config, settings, default = undef) = mb_param(config, settings, "textSize", default != undef ? default : 4);

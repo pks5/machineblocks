@@ -27,31 +27,31 @@ module mb_svg(
         0.5 * (size[0][2] + size[1][2])
     ];
 
-    square_dim = axis == 0 ? 
+    si = [
+        dim[0] * mul[0], 
+        dim[1] * mul[1], 
+        dim[2] * mul[2]
+    ];
+
+    sid = axis == 0 ? 
             [
-                dim[2] / 2.5,
-                dim[1],
-                dim[0] * 2.5   
+                si[2],
+                si[1],
+                si[0]   
             ] : 
             axis == 1 ?
             [
-                dim[0],
-                dim[2] / 2.5,
-                dim[1] * 2.5    
+                si[0],
+                si[2],
+                si[1]    
             ] : 
             
-            dim;
-
-    si = [
-        square_dim[0] * mul[0], 
-        square_dim[1] * mul[1], 
-        square_dim[2] * mul[2]
-    ];
+            si;
 
     sc = [
-        si[0] / svg_size[0],
-        si[1] / svg_size[1],
-        si[2]
+        sid[0] / svg_size[0],
+        sid[1] / svg_size[1],
+        sid[2]
     ];
 
     

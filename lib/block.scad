@@ -231,7 +231,7 @@ module mb_block(
     recessWallGaps = mb_param_recessWallGaps(config, settings);
 
     text = mb_param_text(config, settings);
-    textSide = mb_param_textSide(config, settings);
+    textSide = mb_param_textFace(config, settings);
     textDepth = mb_param_textDepth(config, settings);
     textFont = mb_param_textFont(config, settings);
     textSize = mb_param_textSize(config, settings);

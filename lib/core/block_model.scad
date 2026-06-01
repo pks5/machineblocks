@@ -358,7 +358,15 @@ function mb_block_obj(
             ], // 24 Connectors
             [
                 mb_param_text(config, settings),
-                
+                mb_param_textFace(config, settings),
+                mb_array_mul(mul_mbu_to_grid, mb_param_textDepth(config, settings)),
+                mb_param_textFont(config, settings),
+                mb_param_textSize(config, settings),
+                mb_param_textSpacing(config, settings),
+                mb_param_textVerticalAlign(config, settings),
+                mb_param_textHorizontalAlign(config, settings),
+                mb_param_textOffset(config, settings),
+                mb_param_textColor(config, settings)
             ] // 25 Text
         ];
 
