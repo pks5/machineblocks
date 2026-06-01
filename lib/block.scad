@@ -236,8 +236,10 @@ module mb_block(
     textFont = mb_param_textFont(config, settings);
     textSize = mb_param_textSize(config, settings);
     textSpacing = mb_param_textSpacing(config, settings);
-    textVerticalAlign = mb_param_textVerticalAlign(config, settings);
-    textHorizontalAlign = mb_param_textHorizontalAlign(config, settings);
+    textAlign = mb_param_textAlign(config, settings);
+    
+    textHorizontalAlign = textAlign[0];
+    textVerticalAlign = textAlign[1];
     textOffset = mb_param_textOffset(config, settings);
     textColor = mb_param_textColor(config, settings);
 

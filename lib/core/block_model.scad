@@ -363,8 +363,7 @@ function mb_block_obj(
                 mb_param_textFont(config, settings),
                 mb_param_textSize(config, settings),
                 mb_param_textSpacing(config, settings),
-                mb_param_textVerticalAlign(config, settings),
-                mb_param_textHorizontalAlign(config, settings),
+                mb_param_textAlign(config, settings),
                 mb_param_textOffset(config, settings),
                 mb_param_textColor(config, settings)
             ] // 25 Text
@@ -514,6 +513,17 @@ function mb_block_get_svg_depth(block_obj) =                        block_obj[23
 function mb_block_get_svg_scale(block_obj) =                        block_obj[23][4];
 function mb_block_get_svg_offset(block_obj) =                       block_obj[23][5];
 function mb_block_get_svg_color(block_obj) =                        block_obj[23][6];
+
+// Text Decorator
+function mb_block_get_text(block_obj) =                             block_obj[25][0];
+function mb_block_get_text_face(block_obj) =                        block_obj[25][1];
+function mb_block_get_text_depth(block_obj) =                       block_obj[25][2];
+function mb_block_get_text_font(block_obj) =                        block_obj[25][3];
+function mb_block_get_text_size(block_obj) =                        block_obj[25][4];
+function mb_block_get_text_spacing(block_obj) =                     block_obj[25][5];
+function mb_block_get_text_align(block_obj) =                       block_obj[25][6];
+function mb_block_get_text_offset(block_obj) =                      block_obj[25][7];
+function mb_block_get_text_color(block_obj) =                       block_obj[25][8];
 
 /*
 * TODO Rename or delete

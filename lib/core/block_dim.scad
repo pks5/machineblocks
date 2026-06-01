@@ -218,6 +218,22 @@ function mb_block_dim_overlap(block_dim, overlap = false) =
 * METHODS
 * -------
 */
+function mb_block_dim_height_expand(block_dim, axis, height, expand) = 
+    let(
+        mod_size = mb_block_dim_mod_size(block_dim),
+        axis = mb_axis_to_int(axis),
+        h = mod_size[axis],
+        h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] 
+        ? [
+            -0.5 * (!is_undef(height) ? height : h), 
+            0.5 * (!is_undef(height) ? height : h)
+        ]
+        : [
+            expand[0] == "auto" ? 0.5 * h + expand[1] - (!is_undef(height) ? height : h) : -0.5 * h - expand[0], 
+            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(height) ? height : h) : 0.5 * h + expand[1]
+        ]
+    )
+    h_adj;
 
 function mb_block_dim_size_expand(block_dim, size, expand) = 
     let(

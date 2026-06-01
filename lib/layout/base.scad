@@ -22,6 +22,7 @@ use <surface_pattern.scad>;
 use <grille.scad>;
 
 use <svg_decorator.scad>;
+use <text_decorator.scad>;
 
 /*
 * Base Cutout
@@ -66,10 +67,19 @@ module mb_base(
         difference(){
             
             union(){
+                /*
+                * Base Outer
+                */
                 mb_block_part(block_obj, part = mb_block_part__base_outer(block_obj, adjusted = true), debug = true);
                 
+                /*
+                * Base Clamp Outer
+                */
                 mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
                 
+                /*
+                * Surface Pattern
+                */
                 mb_block_part(block_obj, part = mb_block_part__surface_pattern(block_obj), debug = debug);
 
                 
@@ -130,6 +140,10 @@ module mb_base(
             */
             mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = false), debug = debug);
                 
+            /*
+            * Text Decorator
+            */
+            mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, extrude = false), debug = debug);
 
             /*
             * Connectors
@@ -170,11 +184,26 @@ module mb_base(
             
         } // End difference
 
+        /*
+        * Studs
+        */
         mb_block_part(block_obj, part = mb_block_part__studs(block_obj), debug = debug);
 
+        /*
+        * Tongue
+        */
         mb_block_part(block_obj, part = mb_block_part__tongue(block_obj), debug = debug);
 
+        /*
+        * SVG Decorator
+        */
         mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = true), debug = debug);
+
+        /*
+        * Text Decorator
+        */
+        mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, extrude = true), debug = debug);
+
 
         /*
         * Connectors

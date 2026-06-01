@@ -54,29 +54,52 @@ function mb_block_part_svg(
 mb_block_part_model(
     type = "mb_svg",
     data = [
-            svg_file,
-            svg_size,
-            svg_face,
-            mb_block_dim_size_expand(block_dim, size, expand),
-            offset
+        svg_file,
+        svg_size,
+        svg_face,
+        mb_block_dim_size_expand(block_dim, size, expand),
+        offset
     ], 
     render = render
 );
 
 function mb_block_part_text(
     block_dim,
-    size = undef,
+    text,
+    text_size,
+    height,
+    font,
+    spacing,
+    align,
+    face = "z+",
     expand = undef,
-    offset = undef
+    offset = undef,
+    render = true
 ) = 
-[
-    "text",
-    [
-        [
-            
-        ]
-    ]
-];
+mb_block_part_model(
+    type = "mb_text",
+    data = [
+        text,
+        text_size,
+        mb_block_dim_height_expand(block_dim, mb_face_to_axis(face), height, expand),
+        font,
+        spacing,
+        align,
+        face,
+        offset
+    ], 
+    render = render
+);
+
+/*
+text = text_data[0],
+                text_size = text_data[1],
+                height = text_data[2],
+                font = text_data[3],
+                spacing = text_data[4],
+                align = text_data[5],
+                face = text_data[6],
+                offset = text_data[7],*/
 
 function mb_block_part_tube(
     block_dim,
@@ -117,7 +140,7 @@ function mb_block_part_tube(
             [
                 
                 radius,
-                h_adj,
+                mb_block_dim_height_expand(block_dim, axis, length, expand),
                 rounding_radius,
                 clamp_start,
                 clamp_end,
@@ -193,6 +216,7 @@ function mb_block_part_type_is_builtin(type) =
         type == "mb_tube" ||
         type == "mb_cube" ||
         type == "mb_svg" ||  
+        type == "mb_text" ||  
         type == "union" || 
         type == "difference" || 
         type == "intersection"  || 
@@ -330,6 +354,23 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 face = svg_data[2],
                 size = svg_data[3],
                 offset = svg_data[4],
+                mul = mul
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else if(part_type == "mb_text"){
+            text_data = mb_block_part_model_data_item(part, 0);
+
+            mb_text(
+                text = text_data[0],
+                text_size = text_data[1],
+                height = text_data[2],
+                font = text_data[3],
+                spacing = text_data[4],
+                align = text_data[5],
+                face = text_data[6],
+                offset = text_data[7],
                 mul = mul
             );
             

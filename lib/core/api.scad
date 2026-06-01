@@ -187,8 +187,7 @@ function mb_param_textDepth(config, settings, default = undef) = mb_param(config
 function mb_param_textFont(config, settings, default = undef) = mb_param(config, settings, "textFont", default != undef ? default : "Liberation Sans");
 function mb_param_textSize(config, settings, default = undef) = mb_param(config, settings, "textSize", default != undef ? default : 4);
 function mb_param_textSpacing(config, settings, default = undef) = mb_param(config, settings, "textSpacing", default != undef ? default : 1);
-function mb_param_textVerticalAlign(config, settings, default = undef) = mb_param(config, settings, "textVerticalAlign", default != undef ? default : "center");
-function mb_param_textHorizontalAlign(config, settings, default = undef) = mb_param(config, settings, "textHorizontalAlign", default != undef ? default : "center");
+function mb_param_textAlign(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "textAlign", default != undef ? default : "center"));
 function mb_param_textOffset(config, settings, default = undef) = mb_param(config, settings, "textOffset", default != undef ? default : [0, 0]);
 function mb_param_textColor(config, settings, default = undef) = mb_param(config, settings, "textColor", default != undef ? default : "#2c3e50");
 
