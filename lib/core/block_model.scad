@@ -356,6 +356,10 @@ function mb_block_obj(
                 connector_depth_tolerance,
                 connector_side_tolerance
             ], // 24 Connectors
+            [
+                mb_param_text(config, settings),
+                
+            ] // 25 Text
         ];
 
 /*

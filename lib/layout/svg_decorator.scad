@@ -4,13 +4,20 @@ use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
 function mb_block_part__svg_decorator(block_obj, extrude = false) = 
-    let(svg_depth = mb_block_get_svg_depth(block_obj))
-    extrude && svg_depth[0] < 0 || !extrude && svg_depth[0] > 0 ? undef :
+    let(svg_depth = mb_block_get_svg_depth(block_obj),
+        svg_decorator = mb_block_get_svg(block_obj))
+    
+    svg_decorator == false
+        || mb_is_empty_string(svg_decorator) 
+        || svg_decorator == "none"
+        || svg_depth[0] == 0
+        || (extrude && svg_depth[0] < 0) 
+        || (!extrude && svg_depth[0] > 0) ? undef :
 
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
-        svg_decorator = mb_block_get_svg(block_obj),
+        
         svg_dimensions = mb_block_get_svg_dimensions(block_obj),
         svg_offset = mb_resolve_xyz(mb_block_get_svg_offset(block_obj), default = [0, 0, 0]),
         svg_color = mb_block_get_svg_color(block_obj),
@@ -18,7 +25,6 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         
         svg_face = mb_face_to_int(mb_block_get_svg_face(block_obj)),
         axis = mb_face_to_axis(svg_face),
-        has_svg_decorator = !mb_is_empty_string(svg_decorator) && svg_decorator != "none" && svg_depth[0] != 0,
         min_size = mb_face_has_common(svg_face, "x") ? min(mod_size[1], mb_block_grd_z2xy(block_obj, mod_size[2])) 
             : mb_face_has_common(svg_face, "y") ? min(mod_size[0], mb_block_grd_z2xy(block_obj, mod_size[2])) 
             : min(mod_size[0], mod_size[1]),
@@ -195,6 +201,5 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         svg_face,
         size = si,
         expand = expand,
-        offset = off,
-        render = has_svg_decorator
+        offset = off
     ); 
