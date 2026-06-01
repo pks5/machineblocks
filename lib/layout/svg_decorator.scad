@@ -19,21 +19,21 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         svg_face = mb_face_to_int(mb_block_get_svg_face(block_obj)),
         axis = mb_face_to_axis(svg_face),
         has_svg_decorator = !mb_is_empty_string(svg_decorator) && svg_decorator != "none" && svg_depth[0] != 0,
-        min_size = mb_face_has_common(svg_face, "x") ? min(mod_size[1], mod_size[2] / 2.5) 
-            : mb_face_has_common(svg_face, "y") ? min(mod_size[0], mod_size[2] / 2.5) 
+        min_size = mb_face_has_common(svg_face, "x") ? min(mod_size[1], mb_block_grd_z2xy(block_obj, mod_size[2])) 
+            : mb_face_has_common(svg_face, "y") ? min(mod_size[0], mb_block_grd_z2xy(block_obj, mod_size[2])) 
             : min(mod_size[0], mod_size[1]),
         side_length = svg_scale * min_size,
         si = axis == 0 ?
         [
             undef,
             side_length,
-            side_length * 2.5
+            mb_block_grd_xy2z(block_obj, side_length)
         ] :
         axis == 1 ?
         [
             side_length,
             undef,
-            side_length * 2.5
+            mb_block_grd_xy2z(block_obj, side_length)
             
         ] :
         [

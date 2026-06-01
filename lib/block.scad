@@ -1203,23 +1203,7 @@ module mb_block(
                                         } // End color
                                     } // End if text
 
-                                    /*
-                                    * SVG Cutout
-                                    */
-                                    *if(!mb_is_empty_string(svg) && svgDepth < 0){
-                                        color(svgColor == "inherit" ? baseColor : svgColor){
-                                            translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
-                                                rotate(decoratorRotations[svgSide])
-                                                    mb_svg3d(
-                                                        file = svg,
-                                                        orgWidth = svgDimensions[0],
-                                                        orgHeight = svgDimensions[1],
-                                                        depth = 2 * abs(svgDepth),
-                                                        size = scale * svgScale,
-                                                        center = true
-                                                    );
-                                        } // End color
-                                    } // End if svg
+                                    
 
                                     /*
                                     * Surface Pattern Cutout
@@ -1446,22 +1430,7 @@ module mb_block(
                                             );
                             } // End if text
 
-                            /*
-                            * SVG
-                            */
-                            *if(!mb_is_empty_string(svg) && svgDepth > 0){
-                                color(svgColor == "inherit" ? baseColor : svgColor)
-                                    translate([decoratorX(svgSide, svgDepth, svgOffset[0]), decoratorY(svgSide, svgDepth, svgOffset[1]), decoratorZ(svgSide, svgDepth, svgOffset[1])])
-                                        rotate(decoratorRotations[svgSide])
-                                            mb_svg3d(
-                                                file = svg,
-                                                orgWidth = svgDimensions[0],
-                                                orgHeight = svgDimensions[1],
-                                                depth = svgDepth,
-                                                size = scale * svgScale,
-                                                center = true
-                                            );
-                            } // End if svg
+                            
                             
                         } // End pre_render
 

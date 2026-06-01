@@ -507,6 +507,14 @@ function mb_block_get_svg_color(block_obj) =                        block_obj[23
 * TODO Rename or delete
 */
 
+function mb_block_grd_z2xy(block_obj, grd_z) = 
+    let(grid_cfg = mb_block_get_grid_cfg(block_obj))
+        grd_z / (grid_cfg[1] / grid_cfg[2]);
+
+function mb_block_grd_xy2z(block_obj, grd_xy) = 
+    let(grid_cfg = mb_block_get_grid_cfg(block_obj))
+        grd_xy * (grid_cfg[1] / grid_cfg[2]);
+
 function mb_block_obj_size(block_obj, unit = "grd") = 
     mb_block_unit_convert(block_obj, mb_block_get_size(block_obj), from = "grd", to = unit);
 
