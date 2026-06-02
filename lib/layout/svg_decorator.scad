@@ -3,7 +3,7 @@ use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
-function mb_block_part__svg_decorator(block_obj, extrude = false) = 
+function mb_block_part__svg_decorator(block_obj, subtract = false) = 
     let(svg_depth = mb_block_get_svg_depth(block_obj),
         svg_decorator = mb_block_get_svg(block_obj))
     
@@ -11,8 +11,8 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         || mb_is_empty_string(svg_decorator) 
         || svg_decorator == "none"
         || svg_depth[0] == 0
-        || (extrude && svg_depth[0] < 0) 
-        || (!extrude && svg_depth[0] > 0) ? undef :
+        || (!subtract && svg_depth[0] < 0) 
+        || (subtract && svg_depth[0] > 0) ? undef :
 
     let(
         block_dim = mb_block_get_dim(block_obj),
@@ -71,7 +71,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
         ? [
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[0]) : 0, 
+                exp = !subtract ? abs(svg_depth[0]) : 0, 
                 adjusted = true, 
                 face = "x-"
             ),
@@ -79,7 +79,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[0]) : 0, 
+                exp = subtract ? abs(svg_depth[0]) : 0, 
                 opposite = true,
                 face = "x+"
             ),
@@ -94,13 +94,13 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[0]) : 0, 
+                exp = subtract ? abs(svg_depth[0]) : 0, 
                 opposite = true,
                 face = "x-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[0]) : 0,
+                exp = !subtract ? abs(svg_depth[0]) : 0,
                 adjusted = true, 
                 face = "x+"
             ),
@@ -115,7 +115,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
             0,
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[1]) : 0,
+                exp = !subtract ? abs(svg_depth[1]) : 0,
                 adjusted = true, 
                 face = "y-"
             ),
@@ -123,7 +123,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[1]) : 0,
+                exp = subtract ? abs(svg_depth[1]) : 0,
                 opposite = true,
                 face = "y+"
             ),
@@ -139,13 +139,13 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[1]) : 0,
+                exp = subtract ? abs(svg_depth[1]) : 0,
                 opposite = true,
                 face = "y-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[1]) : 0,
+                exp = !subtract ? abs(svg_depth[1]) : 0,
                 adjusted = true, 
                 face = "y+"
             ),
@@ -160,7 +160,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
             0,
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[2]) : 0, 
+                exp = !subtract ? abs(svg_depth[2]) : 0, 
                 adjusted = true, 
                 face = "z-"
             ),
@@ -168,7 +168,7 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[2]) : 0, 
+                exp = subtract ? abs(svg_depth[2]) : 0, 
                 opposite = true,
                 face = "z+"
             )
@@ -182,13 +182,13 @@ function mb_block_part__svg_decorator(block_obj, extrude = false) =
                 block_dim, 
                 overlap = true, 
                 adjusted = true, 
-                exp = !extrude ? abs(svg_depth[2]) : 0, 
+                exp = subtract ? abs(svg_depth[2]) : 0, 
                 opposite = true,
                 face = "z-"
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                exp = extrude ? abs(svg_depth[2]) : 0, 
+                exp = !subtract ? abs(svg_depth[2]) : 0, 
                 adjusted = true, 
                 face = "z+"
             )

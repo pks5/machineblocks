@@ -138,12 +138,12 @@ module mb_base(
             /*
             * SVG Decorator
             */
-            mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = false), debug = debug);
+            mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, subtract = true), debug = debug);
                 
             /*
             * Text Decorator
             */
-            mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, extrude = false), debug = debug);
+            mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, subtract = true), debug = debug);
 
             /*
             * Connectors
@@ -197,12 +197,12 @@ module mb_base(
         /*
         * SVG Decorator
         */
-        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, extrude = true), debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj), debug = debug);
 
         /*
         * Text Decorator
         */
-        mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, extrude = true), debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj), debug = debug);
 
 
         /*

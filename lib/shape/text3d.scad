@@ -1,3 +1,4 @@
+use <../core/utils.scad>;
 
 module mb_text(
     text,
@@ -34,7 +35,7 @@ module mb_text(
         ])
         rotate(rot)
             translate([0, 0, 0.5 * (start + end)])
-                linear_extrude(height = height, center = true) {
+                linear_extrude(height = end - start, center = true) {
                     text(
                         text, 
                         size = text_size, 

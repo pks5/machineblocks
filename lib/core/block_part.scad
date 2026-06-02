@@ -8,6 +8,7 @@ use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
 use <../shape/cube.scad>;
 use <../shape/svg3d.scad>;
+use <../shape/text3d.scad>;
 
 include <../custom.scad>;
 

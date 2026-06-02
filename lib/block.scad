@@ -1185,25 +1185,7 @@ module mb_block(
                                         } // End color
                                     } // End if holeZ
 
-                                    /*
-                                    * Text Cutout
-                                    */
-                                    if(text != false && !mb_is_empty_string(text) && txtDepth < 0){
-                                        color(textColor == "inherit" ? baseColor : textColor){
-                                            translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
-                                                rotate(decoratorRotations[textSide])
-                                                    mb_text3d(
-                                                        text = text,
-                                                        textDepth = 2 * abs(txtDepth),
-                                                        textSize = scale * textSize,
-                                                        textFont = textFont,
-                                                        textSpacing = textSpacing,
-                                                        textVerticalAlign = textVerticalAlign,
-                                                        textHorizontalAlign = textHorizontalAlign,
-                                                        center = true
-                                                    );
-                                        } // End color
-                                    } // End if text
+                                    
 
                                     
 
@@ -1413,24 +1395,7 @@ module mb_block(
                                 } // End color
                             } // End if pcb
                             
-                            /*
-                            * Text
-                            */
-                            if(text != false && !mb_is_empty_string(text) && txtDepth > 0){
-                                color(textColor == "inherit" ? baseColor : textColor)
-                                    translate([decoratorX(textSide, txtDepth, textOffset[0]), decoratorY(textSide, txtDepth, textOffset[1]), decoratorZ(textSide, txtDepth, textOffset[1])])
-                                        rotate(decoratorRotations[textSide])
-                                            mb_text3d(
-                                                text = text,
-                                                textDepth = txtDepth,
-                                                textSize = scale * textSize,
-                                                textFont = textFont,
-                                                textSpacing = textSpacing,
-                                                textVerticalAlign = textVerticalAlign,
-                                                textHorizontalAlign = textHorizontalAlign,
-                                                center = true
-                                            );
-                            } // End if text
+                            
 
                             
                             
