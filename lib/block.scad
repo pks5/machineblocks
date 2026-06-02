@@ -14,6 +14,7 @@ use <core/block_model.scad>;
 use <core/block_part.scad>;
 use <core/utils.scad>;
 use <core/quality.scad>;
+use <core/bevel.scad>;
 
 use <layout/base_outer.scad>;
 use <layout/base_cutout.scad>;
@@ -25,9 +26,6 @@ use <shape/svg3d.scad>;
 use <shape/pcb.scad>;
 use <shape/axis.scad>;
 use <shape/cube.scad>;
-
-use <bevel.scad>;
-use <rounded.scad>;
 
 include <core/api.scad>;
 

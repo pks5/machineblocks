@@ -1,7 +1,7 @@
 use <geometry.scad>;
 use <utils.scad>;
 use <block_dim.scad>;
-use <../bevel.scad>;
+use <bevel.scad>;
 use <poly_expand.scad>;
 use <api.scad>;
 
