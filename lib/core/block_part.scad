@@ -9,6 +9,7 @@ use <../shape/tube.scad>;
 use <../shape/cube.scad>;
 use <../shape/svg3d.scad>;
 use <../shape/text3d.scad>;
+use <../shape/pcb.scad>;
 
 include <../custom.scad>;
 
@@ -55,10 +56,13 @@ function mb_block_part_type_is_builtin(type) =
         type == "mb_cube" ||
         type == "mb_svg" ||  
         type == "mb_text" ||  
+        type == "mb_pcb" ||  
+        
         type == "union" || 
         type == "difference" || 
         type == "intersection"  || 
-        type == "list");
+        type == "list"
+    );
 
 /*
 * ---
@@ -264,6 +268,9 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
     part_data_length = mb_block_part_model_data_length(part);
 
     if(is_string(part_type) && part_data_length > 0){
+        /*
+        * Aggregations
+        */
         if(part_type == "list"){
             for(list_item = part_data){
                 mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
@@ -308,6 +315,10 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
             }
         }
+
+        /**
+        * Shapes
+        */
         else if(part_type == "mb_prismoid"){
             mb_prismoid(shape = mb_block_part_model_data_item(part, 0), mul = mul, debug = debug);
             
@@ -372,6 +383,20 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
+        else if(part_type == "mb_pcb"){
+            pcb_data = mb_block_part_model_data_item(part, 0);
+
+            mb_pcb(
+                
+                offset = pcb_data[0],
+                mul = mul
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        /*
+        * Custom
+        */
         else{
             mb_block_part__custom(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
         }
