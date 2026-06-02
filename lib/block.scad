@@ -28,7 +28,6 @@ use <shape/cube.scad>;
 
 use <bevel.scad>;
 use <rounded.scad>;
-use <quad.scad>;
 
 include <core/api.scad>;
 
@@ -458,43 +457,17 @@ module mb_block(
     beveled = true;
     cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
     bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
-    bevelCrop = mb_inset_quad_lrfh(bevelOuter, mb_array_mul(baseModRes, -1));
     
-    //bevelOuterAdjusted = mb_inset_quad_lrfh(bevelOuter, [-sideAdjustment[0], -sideAdjustment[1], -sideAdjustment[2], -sideAdjustment[3]]);
-    bevelOuterAdjusted =
-        mb_inset_quad_lrfh(
-            bevelOuter,
-            mb_array_mul(bsa, -1)
-        );
-    
-    bevelInner = mb_inset_quad_lrfh(bevelCrop, wallThickness);
-
     mul_grd_to_mm = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
     base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
     base_adjusted = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_outer(block_obj, adjusted = true), mul=mul_grd_to_mm)[1][0];
 
-    bevelInnerOrg = mb_inset_quad_lrfh(bevelCrop, wallThicknessOrg);
-    bevelTexture = mb_inset_quad_lrfh(bevelCrop, 0.5*wallThickness);
     
-    //corners = mb_resolve_bevel_horizontal([[0,0],[0,0],[0,0],[0,0]], size, gridSizeXY);
     
-    //cornersInner = mb_inset_quad_lrfh(corners, wallThickness);
-    cornersInnerOrg = mb_inset_quad_lrfh(cornersMod, wallThicknessOrg);
-
     // Pit
-    //pBevelPad =  [(recWallThickness[0] + recStudPaddingResolved[0]), (recWallThickness[1] + recStudPaddingResolved[1]), (recWallThickness[2] + recStudPaddingResolved[2]), (recWallThickness[3] + recStudPaddingResolved[3])];
-    //pitBevel = mb_inset_quad_lrfh(bevelOuter, [recWallThickness[0]+studMaxOverhang, recWallThickness[1]+studMaxOverhang, recWallThickness[2]+studMaxOverhang, recWallThickness[3]+studMaxOverhang]);
     pBevelPad = mb_array_add(recWallThickness, recStudPaddingResolved);
 
-    pitBevel = mb_inset_quad_lrfh(
-        bevelCrop,
-        mb_array_add(recWallThickness, studMaxOverhang)
-    );
-    
-    pitBevelPadding = mb_inset_quad_lrfh(bevelCrop, pBevelPad);
-    cornersPitPadding = mb_inset_quad_lrfh(cornersMod, pBevelPad);
-    
     pMinThickness = mb_array_min_pair_cycle_neg(recWallThickness);
     pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
@@ -512,8 +485,6 @@ module mb_block(
     
     //Knob Padding
     knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
-    bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
-    cornersKnobPadding = mb_inset_quad_lrfh(cornersMod, knobPaddingResolved);
     knobPaddingRadiusInv = mb_array_min_pair_cycle_neg(knobPaddingResolved);
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
@@ -755,7 +726,6 @@ module mb_block(
             xyScrewHolesZ = xyScrewHolesZ,
             pitFloorZ = pitFloorZ,
             bevel = bevelRes,
-            bevelOuterAdjusted = bevelOuterAdjusted,
             baseRoundingRadiusZ = baseRoundingRadiusZ,
             adjustedSizeRelation = adjustedSizeRelation,
             direction = direction,
@@ -1115,42 +1085,7 @@ module mb_block(
 
                                     
 
-                                    /*
-                                    * Surface Pattern Cutout
-                                    */
-                                    *if(!mb_is_empty_string(surfacePattern) && surfacePattern != "none" && surfacePatternDepth < 0){
-                                        textureRoundingRadiusQuality = mb_fn_even_for_radius(
-                                            textureRoundingRadius, 
-                                            2, 
-                                            qualitySegBase,
-                                            qualityFactor,
-                                            qualityResolutionMin,
-                                            qualityResolutionMax,
-                                            qualityResolutionMultiplier,
-                                            previewQuality
-                                        );
-
-                                        color(surfacePatternColor == "inherit" ? baseColor : surfacePatternColor){
-                                            translate([decoratorX(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[0]), decoratorY(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1]), decoratorZ(surfacePatternSide, surfacePatternDepth, surfacePatternOffset[1])])
-                                                rotate(decoratorRotations[surfacePatternSide])
-                                                    intersection(){
-                                                        mb_svg3d(
-                                                            file = surfacePattern,
-                                                            orgWidth = surfacePatternDimensions[0],
-                                                            orgHeight = surfacePatternDimensions[1],
-                                                            depth = 2 * abs(surfacePatternDepth),
-                                                            size = scale * surfacePatternScale,
-                                                            center = true
-                                                        );
-                                                        mb_prismoid(
-                                                            shape = [bevelTexture], 
-                                                            height = (2 + 0.1) * abs(surfacePatternDepth), 
-                                                            radius = mb_xyz_rad_convert(textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius]), 
-                                                            resolution = textureRoundingRadiusQuality
-                                                        );
-                                                    }
-                                        } // End color
-                                    } // End if surface pattern
+                                    
 
                                     
 
