@@ -432,16 +432,11 @@ module mb_block(
     baseRoundingRadiusResolved = mb_base_rounding_radius(baseRoundingRadius, gridSizeXY * min(adjustedSizeRelation[0], adjustedSizeRelation[1]), gridSizeZ * adjustedSizeRelation[2]);
     baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
     
-    textureRoundingRadius = mb_base_cutout_radius(-0.5 * wallThickness, baseRoundingRadiusZ, minObjectSide);
     cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
     
     minCutoutSide = min(objectSizeMod[0] - 2*wallThickness, objectSizeMod[0] - 2*wallThickness);
     cutoutClampRoundingRadius = baseClampThickness > 0 ? mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide) : cutoutRoundingRadius;
 
-    baseClampThicknessOuter = baseClampOuter ? baseClampThickness : 0;
-    bClampOffset = baseClampOffset * mbuToMm;
-    bClampHeight = baseClampHeight * mbuToMm;
-                                    
     //Calculate Z Positions
     floorZ = sideZ(0, false);
     baseCutoutZ = floorZ + 0.5 * baseCutoutDepth;        
@@ -449,11 +444,6 @@ module mb_block(
     xyScrewHolesZ = floorZ + 0.5 * gridSizeZ;
     pitFloorZ = floorZ  + baseCutoutDepth + resultingTopPlateHeight;
 
-    
-    //Bevel
-    beveled = true;
-    cornersMod = mb_resolve_bevel_horizontal(bevelMod, size, gridSizeXY);
-    bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
     
     mul_grd_to_mm = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
     
@@ -468,17 +458,6 @@ module mb_block(
     knobSize = knobSizeOrg + studDiameterAdjustment;
     knobHeightOrg = studHeight * mbuToMm;
     knobHeight = knobHeightOrg + studHeightAdjustment;
-
-    knobCutSize = knobSizeOrg + studCutoutDiameterAdjustment;
-    knobCutHeight = knobHeightOrg + studCutoutHeightAdjustment;
-    knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
-
-    knobSink = studSink * mbuToMm;
-    
-    //Knob Padding
-    knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
-    knobPaddingRadiusInv = mb_array_min_pair_cycle_neg(knobPaddingResolved);
-    knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
     // Tubes XYZ
     tubeDiameter = studDiameter + 2 * tubeWallThickness;
@@ -563,16 +542,6 @@ module mb_block(
 
     pillarStartY = min(holeZStartY, startY);
     pillarEndY = max(holeZEndY, ceil(endY) - 1);
-
-    /*
-    echo(startX = startX, 
-        endX = endX, 
-        startY = startY, 
-        endY = endY, 
-        pillarStartX = pillarStartX, 
-        pillarEndX = pillarEndX, 
-        pillarStartY =  pillarStartY, 
-        pillarEndY = pillarEndY);*/
 
     /*
     * START Functions
@@ -1210,21 +1179,13 @@ module mb_block(
                                     } // End main difference
                                 }
 
-                                /*
-                                * Final Addition AREA
-                                * Starting from here, everything affects both solid and cutout blocks
-                                */
-                                
                                 
 
-                                
-                                
-                                
 
-                                
-                                
+
                             } // End pre_render
 
+                            // Render Children
                             translate([translateXChildren, translateYChildren, translateZChildren]){
                                 children();
                             }
@@ -1234,7 +1195,7 @@ module mb_block(
                     } // End direction rotation
                 } // End rotation offset and alignment
             } // End rotation
-        } //End grid offset and rotation offset revert
+        } // End grid offset and rotation offset revert
 
         echo(str("Rendered ", blockId, " - Need Help? Join our Discord: MachineBlocks.com"));
     }
