@@ -19,33 +19,37 @@ module mb_text(
     offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]);
 
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
-    mul_radius = mul[0];
-    mul_length = mul[axis];
+    
 
-    start = (is_list(height) ? height[0] : is_num(height) ? -0.5 * height : 0) * mul_length; 
-    end = (is_list(height) ? height[1] : is_num(height) ? 0.5 * height : 0) * mul_length;
+    start = (is_list(height) ? height[0] : is_num(height) ? -0.5 * height : 0); 
+    end = (is_list(height) ? height[1] : is_num(height) ? 0.5 * height : 0);
 
-    rot = mb_face_has_common(face, "x") ? [90, 0, 90] : mb_face_has_common(face, "y") ? [90, 0, 0] : [0, 0, 0];
+    rot = mb_face_rotation(face);
+
+    tr = [
+        axis == 0 ? 0.5 * (start + end) : 0,
+        axis == 1 ? 0.5 * (start + end) : 0,
+        axis == 2 ? 0.5 * (start + end) : 0
+    ];
 
     color(debug ? "green" : color)
         translate([
-            offset[0] * mul[0], 
-            offset[1] * mul[1], 
-            offset[2] * mul[2]
+            (tr[0] + offset[0]) * mul[0], 
+            (tr[1] + offset[1]) * mul[1], 
+            (tr[2] + offset[2]) * mul[2]
         ])
         rotate(rot)
-            translate([0, 0, 0.5 * (start + end)])
-                linear_extrude(height = end - start, center = true) {
-                    text(
-                        text, 
-                        size = text_size, 
-                        font = font, 
-                        spacing = spacing, 
-                        halign = align[0], 
-                        valign = align[1], 
-                        $fn = rounding_resolution
-                    );
-                }
+            linear_extrude(height = end - start, center = true) {
+                text(
+                    text, 
+                    size = text_size, 
+                    font = font, 
+                    spacing = spacing, 
+                    halign = align[0], 
+                    valign = align[1], 
+                    $fn = rounding_resolution
+                );
+            }
 }
 
 

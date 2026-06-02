@@ -56,7 +56,7 @@ module mb_svg(
 
     
 
-    rot = mb_face_has_common(face, "x") ? [90, 0, 90] : mb_face_has_common(face, "y") ? [90, 0, 0] : [0, 0, 0];
+    rot = mb_face_rotation(face);
 
     color(debug ? "green" : color)
         translate([

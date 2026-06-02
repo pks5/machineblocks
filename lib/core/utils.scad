@@ -938,6 +938,19 @@ function mb_face_opposite(face) =
     face == 1 ? 0 :
     face == 0 ? 1 : undef;
 
+function mb_face_rotation(face) = 
+    mb_face_has_common(face, "x-") 
+        ? [90, 0, -90] 
+        : mb_face_has_common(face, "x+") 
+        ? [90, 0, 90] 
+        : mb_face_has_common(face, "y-") 
+        ? [90, 0, 0] 
+        : mb_face_has_common(face, "y+") 
+        ? [-90, 180, 0] 
+        : mb_face_has_common(face, "z-") 
+        ? [0, 180, 180] 
+        : [0, 0, 0];
+
 /*
 function mb_face_contains(face, cface) =
     let(
