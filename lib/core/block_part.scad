@@ -136,7 +136,8 @@ function mb_block_part_tube(
     length = undef,
     expand = undef,
     offset = undef,
-    overlap = undef
+    overlap = undef,
+    render = true
 ) = 
     let(
         offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
@@ -159,21 +160,19 @@ function mb_block_part_tube(
             ]*/
         
     )
-    [
-        "mb_tube",
-        [
-            [
-                
-                radius,
-                mb_block_dim_height_expand(block_dim, axis, length, expand),
-                rounding_radius,
-                clamp_start,
-                clamp_end,
-                axis,
-                offset
-            ]
-        ]
-    ];
+    mb_block_part_model(
+        type = "mb_tube",
+        data = [
+            radius,
+            mb_block_dim_height_expand(block_dim, axis, length, expand),
+            rounding_radius,
+            clamp_start,
+            clamp_end,
+            axis,
+            offset
+        ],
+        render = render
+    );
 
 /*
 * ----
@@ -184,17 +183,17 @@ function mb_block_part_cube(
     block_dim,
     size = undef,
     expand = undef,
-    offset = undef
+    offset = undef,
+    render = true
 ) = 
-    [
-        "mb_cube",
-        [
-            [
-                mb_block_dim_size_expand(block_dim, size, expand),
-                offset,
-            ]
-        ]
-    ];
+    mb_block_part_model(
+        type = "mb_cube",
+        data = [
+            mb_block_dim_size_expand(block_dim, size, expand),
+            offset,
+        ],
+        render = render
+    );
 
 /*
 * --------
@@ -207,7 +206,8 @@ function mb_block_part_prismoid(
     slope = undef, 
     socket = undef, 
     expand = undef, 
-    height = undef
+    height = undef,
+    render = true
 ) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
@@ -234,16 +234,20 @@ function mb_block_part_prismoid(
         slope_pos_inv = mb_slope_filter(slope, 1, -1),
         //socket = slope_inner ? [] : []
     )
-    [
-        "mb_prismoid",
-        [
+    mb_block_part_model(
+        type = "mb_prismoid",
+        data = [
+            mb_poly_expand(bevel_matrix, 0, slope_neg),
+            mb_poly_expand(bevel_matrix, 1, slope_pos_inv),
             [
-                mb_poly_expand(bevel_matrix, 0, slope_neg),
-                mb_poly_expand(bevel_matrix, 1, slope_pos_inv),
-                [h_exp, socket, undef, exp]
+                h_exp, 
+                socket, 
+                undef, 
+                exp
             ]
-        ] // Shape
-    ];
+        ],
+        render = render
+    );
 
 
 /*
