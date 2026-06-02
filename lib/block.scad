@@ -387,10 +387,6 @@ module mb_block(
     gridSizeY = mb_grid_size_y(size, slope);
 
     //Calculate Brick Align and Offset
-    //alignment = align;
-    //alignX = (alignment[0] == "center" || alignment[0] == "ccs") ? 0 : ((alignment[0] == "start" ? 1 : -1) * 0.5*objectSizeX);
-    //alignY = (alignment[1] == "center" || alignment[1] == "ccs") ? 0 : ((alignment[1] == "start" ? 1 : -1) * 0.5*objectSizeY);
-    //alignZ = alignment[2] == "center" ? 0 : ((alignment[2] == "start" || alignment[2] == "ccs") ? 0.5*objectSizeZ : -0.5*objectSizeZ);
     alignX = mb_align_offset(align[0], objectSizeX);
     alignY = mb_align_offset(align[1], objectSizeY);
     alignZ = mb_align_offset(align[2], objectSizeZ); 
@@ -410,11 +406,6 @@ module mb_block(
     gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0); 
 
     //Children alignment
-    //alignmentChildren = is_string(alignChildren) ? [alignChildren, alignChildren, alignChildren] : alignChildren;
-    //translateXChildren = ((alignmentChildren[0] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[0] == "start" ? -1 : 1) * 0.5*objectSizeX));
-    //translateYChildren = ((alignmentChildren[1] == "center" || alignmentChildren[0] == "ccs") ? 0 : ((alignmentChildren[1] == "start" ? -1 : 1) * 0.5*objectSizeY));
-    //translateZChildren = (alignmentChildren[2] == "center" ? 0 : ((alignmentChildren[2] == "start" || alignmentChildren[2] == "ccs")  ? -0.5*objectSizeZ : 0.5*objectSizeZ));
-    
     translateXChildren = mb_align_offset(alignChildren[0], objectSizeX, true);
     translateYChildren = mb_align_offset(alignChildren[1], objectSizeY, true);
     translateZChildren = mb_align_offset(alignChildren[2], objectSizeZ, true); 
@@ -508,12 +499,6 @@ module mb_block(
     pitBevelPadding = mb_inset_quad_lrfh(bevelCrop, pBevelPad);
     cornersPitPadding = mb_inset_quad_lrfh(cornersMod, pBevelPad);
     
-    //pMinThickness = [
-    //    -min(recWallThickness[2], recWallThickness[0]), 
-    //    -min(recWallThickness[0], recWallThickness[3]), 
-    //    -min(recWallThickness[3], recWallThickness[1]), 
-    //    -min(recWallThickness[1], recWallThickness[2])
-    //];
     pMinThickness = mb_array_min_pair_cycle_neg(recWallThickness);
     pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
     
@@ -527,20 +512,12 @@ module mb_block(
     knobCutHeight = knobHeightOrg + studCutoutHeightAdjustment;
     knobHoleSize = (studHoleDiameter == "auto" ? pDiameter : studHoleDiameter) * mbuToMm + studHoleDiameterAdjustment;
 
-    knobRounding = studRounding * mbuToMm;
     knobSink = studSink * mbuToMm;
-    knobPartsOverlap = 0.01;
-
+    
     //Knob Padding
     knobPaddingResolved = mb_resolve_side_quad(studPadding, gridSizeXY);
     bevelKnobPadding = mb_inset_quad_lrfh(bevelCrop, knobPaddingResolved);
     cornersKnobPadding = mb_inset_quad_lrfh(cornersMod, knobPaddingResolved);
-    //knobPaddingRadiusInv = [
-    //    -min(knobPaddingResolved[2], knobPaddingResolved[0]), 
-    //    -min(knobPaddingResolved[0], knobPaddingResolved[3]), 
-    //    -min(knobPaddingResolved[3], knobPaddingResolved[1]),
-    //    -min(knobPaddingResolved[1], knobPaddingResolved[2])
-    //];
     knobPaddingRadiusInv = mb_array_min_pair_cycle_neg(knobPaddingResolved);
     knobPaddingRoundingRadius = mb_base_rel_radius(knobPaddingRadiusInv, baseRoundingRadiusZ, minObjectSide, true);
 
@@ -588,16 +565,6 @@ module mb_block(
     sGridThickness = stabilizerGridThickness * mbuToMm;
     sGridHeight = stabilizerGridHeight * mbuToMm;
     
-    //Tongue
-    tonHeightCalc = tongueHeight * mbuToMm;
-    tonThicknessCalc = tongueThickness * mbuToMm;
-    tonOffsetCalc = tongueOffset * mbuToMm;
-    tonClampHeightCalc = tongueClampHeight * mbuToMm;
-    tonClampOffsetCalc = tongueClampOffset * mbuToMm;
-    tonGrooveDepthCalc = tongueGrooveDepth * mbuToMm;
-
-    txtDepth = textDepth * mbuToMm;
-
     grilleSmall = grilleDepth * mbuToMm < resultingTopPlateHeight;
 
     //Decorator Rotations
@@ -732,48 +699,11 @@ module mb_block(
 
     
     /*
-    * Pit
-    */
-    function onPitBorder(a, b) = mb_circle_in_convex_quad(bevelOuter, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                                && !mb_circle_in_convex_quad(pitBevel, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, touch=true, overhang=0);
-    
-    function inPit(a, b) = mb_circle_in_convex_quad(pitBevelPadding, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang)
-                        && mb_circle_in_rounded_rect(cornersPitPadding, pitRadius, [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang);
-    
-    function inPitWallGaps(a, b, mx, i) = (i < len(recessWallGaps)) && (inPitWallGap(a, b, mb_to_array(recessWallGaps[i]), mx) || inPitWallGaps(a, b, mx, i+1));
-    
-    function mxRound(v, mx) = mx ? floor(v) : ceil(v);
-    function inPitWallGap(a, b, gap, mx) = ((gap[0] == 0) && inPitWallGap0(a, b, gap, mx)) || ((gap[0] == 1) && inPitWallGap1(a, b, gap, mx)) || ((gap[0] == 2) && inPitWallGap2(a, b, gap, mx)) || ((gap[0] == 3) && inPitWallGap3(a, b, gap, mx));
-    function inPitWallGap0(a, b, gap, mx) = (floor(a) >= 0) && (ceil(a) < floor(pWallThickness[0])) && (floor(b) >= mxRound(pWallThickness[2] + mb_undef_to(gap[1]), mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + mb_undef_to(gap[2]), mx));                                
-    function inPitWallGap1(a, b, gap, mx) = (floor(a) >= size[0] - ceil(pWallThickness[1])) && (ceil(a) < size[0]) && (floor(b) >= mxRound(pWallThickness[2] + mb_undef_to(gap[1]), mx)) && (ceil(b) < size[1] - mxRound(pWallThickness[3] + mb_undef_to(gap[2]), mx));                                
-    function inPitWallGap2(a, b, gap, mx) = (floor(b) >= 0) && (ceil(b) < floor(pWallThickness[2])) && (floor(a) >= mxRound(pWallThickness[0] + mb_undef_to(gap[1]), mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + mb_undef_to(gap[2]), mx));                                
-    function inPitWallGap3(a, b, gap, mx) = (floor(b) >= size[1] - ceil(pWallThickness[3])) && (ceil(b) < size[1]) && (floor(a) >= mxRound(pWallThickness[0] + mb_undef_to(gap[1]), mx)) && (ceil(a) < size[0] - mxRound(pWallThickness[1] + mb_undef_to(gap[2]), mx));                                
-    
-    /*
-    * Knobs
-    */ 
-    function drawStud(a, b) = 
-            let(sType = getGridItem(studs, studType, a, b, 0, false))
-            (sType != false
-            && mb_circle_in_convex_quad(base_adjusted[1], [mb_grid_pos_x(a, size, gridSizeXY), mb_grid_pos_y(b, size, gridSizeXY)], 0.5*knobSizeOrg, overhang = studMaxOverhang))
-            ? sType : false;
-
-    function knobZ(a, b) = (recess && inPit(a, b) ? pitFloorZ : sideZ(1)) - knobSink;
-    function studType(ovStudType, a, b) = is_string(ovStudType) ? ovStudType : (recess && inPit(a, b) ? recessStudType : studType);
-
-    /*
     * XYZ Holes
     */
     function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false);
     function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false);
     function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false);
-
-    /*
-    * Wall Gaps
-    * /
-    function drawWallGapX(a, side, i) = (i < len(baseWallGapsX)) ? ((baseWallGapsX[i][0] == a && (side == baseWallGapsX[i][1] || baseWallGapsX[i][1] == 2)) ? (baseWallGapsX[i][2] == undef ? 1 : baseWallGapsX[i][2]) : drawWallGapX(a, side, i+1)) : 0; 
-    function drawWallGapY(a, side, i) = (i < len(baseWallGapsY)) ? ((baseWallGapsY[i][0] == a && (side == baseWallGapsY[i][1] || baseWallGapsY[i][1] == 2)) ? (baseWallGapsY[i][2] == undef ? 1 : baseWallGapsY[i][2]) : drawWallGapY(a, side, i+1)) : 0; 
-    */
 
     /*
     * Stabilizer Grid
