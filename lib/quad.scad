@@ -228,34 +228,3 @@ function mb_inset_ngon_edges_safe(p, dc, steps = 24, eps = 0.000001) =
         mb_inset_ngon_valid(p, q, eps)
             ? q
             : mb_inset_ngon_edges_safe_iter(p, dc, 0, 1, steps, eps);
-
-
-function mb_prismoid_plane_expand(pts, p, expand, mul = undef) =
-    is_undef(expand) || (expand == [0, 0, 0, 0, 0, 0]) ? pts :
-    let(
-        sext = mb_qc_resolve(qc = expand, mul = mul, cube = true),
-        // 0/1 links, 2/3 hinten, 4/5 rechts, 6/7 vorne
-        d_edge8 = [
-            -sext[0], -sext[0],
-            -sext[3], -sext[3],
-            -sext[1], -sext[1],
-            -sext[2], -sext[2]
-        ],
-
-        // nur vorhandene Punkte behalten
-        idx = [ for(i=[0:7]) if(pts[i] != undef) i ],
-        Pc  = [ for(i=idx) pts[i] ],
-
-        dc = [ for(i=idx) d_edge8[i] ],
-
-        Qc = len(Pc) >= 3 ? mb_inset_ngon_edges_safe(Pc, dc) : [],
-
-        Q8 = [
-            for(i=[0:7])
-                let(qqx = Qc[mb_array_index_of(idx, i)])
-                pts[i] == undef
-                    ? undef
-                    : [qqx[0], qqx[1], len(pts[i]) > 2 && !is_undef(pts[i][2]) ? (pts[i][2] + (p == 0 ? -1 : 1) * sext[4+p]) : undef, pts[i][3]]
-        ]
-    )
-    Q8;

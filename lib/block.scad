@@ -29,8 +29,6 @@ use <shape/cube.scad>;
 use <bevel.scad>;
 use <rounded.scad>;
 use <quad.scad>;
-use <tongue.scad>;
-use <stud.scad>;
 
 include <core/api.scad>;
 
@@ -91,8 +89,6 @@ module mb_block(
     
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
-    //baseWallGapsX = mb_param_baseWallGapsX(config, settings);
-    //baseWallGapsY = mb_param_baseWallGapsY(config, settings);
     baseWallGaps = mb_param_baseWallGaps(config, settings);
 
     topPlateHelpers = mb_param_topPlateHelpers(config, settings);
@@ -1152,16 +1148,6 @@ module mb_block(
                                                             radius = mb_xyz_rad_convert(textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius]), 
                                                             resolution = textureRoundingRadiusQuality
                                                         );
-
-                                                        /*
-                                                        mb_beveled_rounded_block(
-                                                            bevel = beveled ? bevelTexture : false,
-                                                            sizeX = objectSizeX - wallThickness,
-                                                            sizeY = objectSizeY - wallThickness,
-                                                            height = (2 + 0.1) * abs(surfacePatternDepth),
-                                                            roundingRadius = textureRoundingRadius == 0 ? 0 : [0, 0, textureRoundingRadius],
-                                                            roundingResolution = textureRoundingRadiusQuality
-                                                        );*/
                                                     }
                                         } // End color
                                     } // End if surface pattern
