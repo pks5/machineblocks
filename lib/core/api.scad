@@ -232,7 +232,6 @@ function mb_param_screwHoleYSize(config, settings, default = undef) = mb_param(c
 function mb_param_screwHoleYDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleYDepth", default != undef ? default : 4);
 
 function mb_param_pcb(config, settings, default = undef) = mb_param(config, settings, "pcb", default != undef ? default : false);
-function mb_param_pcbMountingType(config, settings, default = undef) = mb_param(config, settings, "pcbMountingType", default != undef ? default : "clips");
 function mb_param_pcbDimensions(config, settings, default = undef) = mb_param(config, settings, "pcbDimensions", default != undef ? default : [20, 30, 3]);
 function mb_param_pcbOffset(config, settings, default = undef) = mb_param(config, settings, "pcbOffset", default != undef ? default : [0, 0]);
 function mb_param_pcbScrewSocketSize(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketSize", default != undef ? default : 5);

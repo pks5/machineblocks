@@ -274,7 +274,6 @@ module mb_block(
     screwHoleYDepth = mb_param_screwHoleYDepth(config, settings);
 
     pcb = mb_param_pcb(config, settings);
-    pcbMountingType = mb_param_pcbMountingType(config, settings);
     pcbDimensions = mb_param_pcbDimensions(config, settings);
     pcbOffset = mb_param_pcbOffset(config, settings);
     pcbScrewSocketSize = mb_param_pcbScrewSocketSize(config, settings);
@@ -457,11 +456,6 @@ module mb_block(
     bevelOuter = mb_resolve_bevel_horizontal(bevelRes, size, gridSizeXY);
     
     mul_grd_to_mm = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
-    
-    base_cutout = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_cutout(block_obj), mul=mul_grd_to_mm)[1][0];
-    base_adjusted = mb_block_part_to_prismoid(block_obj, part=mb_block_part__base_outer(block_obj, adjusted = true), mul=mul_grd_to_mm)[1][0];
-
-    
     
     // Pit
     pBevelPad = mb_array_add(recWallThickness, recStudPaddingResolved);
@@ -1224,15 +1218,15 @@ module mb_block(
                                 
 
                                 //PCB
-                                if(pcb){
+                                if(pcb != false && pcb != "none"){
                                     color(baseColor){
                                         translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, pitFloorZ]){
-                                            if(pcbMountingType == "clips"){
+                                            if(pcb == "clips"){
                                                 mb_pcb_clips(
                                                     pcbDimensions = pcbDimensions
                                                 );
                                             }
-                                            if(pcbMountingType == "screws"){
+                                            if(pcb == "screws"){
                                                 mb_pcb_screw_sockets(
                                                     screwSockets = pcbScrewSockets,
                                                     screwSocketHeight = pcbScrewSocketHeight,

@@ -12,6 +12,12 @@ use <../shape/text3d.scad>;
 
 include <../custom.scad>;
 
+/*
+* ----------
+* PART MODEL
+* ----------
+*/
+
 function mb_block_part_model(type, items = undef, data = undef, render = true) =
     render ? [
         type,
@@ -42,6 +48,23 @@ function mb_block_part_model_data_length(part_model) =
 function mb_block_part_model_data_item(part_model, item) = 
     _mb_block_part_model_valid(part_model) && len(part_model[1]) > 0 ? part_model[1][item] : undef;
 
+function mb_block_part_type_is_builtin(type) = 
+    is_string(type) && (
+        type == "mb_prismoid" || 
+        type == "mb_tube" ||
+        type == "mb_cube" ||
+        type == "mb_svg" ||  
+        type == "mb_text" ||  
+        type == "union" || 
+        type == "difference" || 
+        type == "intersection"  || 
+        type == "list");
+
+/*
+* ---
+* SVG
+* ---
+*/
 function mb_block_part_svg(
     block_dim,
     svg_file,
@@ -64,6 +87,11 @@ mb_block_part_model(
     render = render
 );
 
+/*
+* ----
+* TEXT
+* ----
+*/
 function mb_block_part_text(
     block_dim,
     text,
@@ -92,16 +120,12 @@ mb_block_part_model(
     render = render
 );
 
-/*
-text = text_data[0],
-                text_size = text_data[1],
-                height = text_data[2],
-                font = text_data[3],
-                spacing = text_data[4],
-                align = text_data[5],
-                face = text_data[6],
-                offset = text_data[7],*/
 
+/*
+* ----
+* TUBE
+* ----
+*/
 function mb_block_part_tube(
     block_dim,
     radius,
@@ -151,6 +175,11 @@ function mb_block_part_tube(
         ]
     ];
 
+/*
+* ----
+* CUBE
+* ----
+*/
 function mb_block_part_cube(
     block_dim,
     size = undef,
@@ -167,6 +196,11 @@ function mb_block_part_cube(
         ]
     ];
 
+/*
+* --------
+* PRISMOID
+* --------
+*/
 function mb_block_part_prismoid(
     block_dim, 
     bevel = true, 
@@ -211,55 +245,12 @@ function mb_block_part_prismoid(
         ] // Shape
     ];
 
-function mb_block_part_type_is_builtin(type) = 
-    is_string(type) && (
-        type == "mb_prismoid" || 
-        type == "mb_tube" ||
-        type == "mb_cube" ||
-        type == "mb_svg" ||  
-        type == "mb_text" ||  
-        type == "union" || 
-        type == "difference" || 
-        type == "intersection"  || 
-        type == "list");
 
-function mb_block_part_to_prismoid(
-    block_obj,
-    part = undef,
-    part_params = undef,
-    radius = undef,
-    mul = undef, 
-    add = undef
-) =
-    let(part_type = mb_block_part_model_type(part), 
-        part_data = mb_block_part_model_data(part))
-        mb_block_part_type_is_builtin(part_type) ?
-        [
-            part_type,
-            [
-                for(list_item = part_data)
-                 
-                 mb_block_part_type_is_builtin(list_item[0]) ?
-
-                    mb_block_part_to_prismoid(
-                        block_obj,
-                        part = list_item,
-                        part_params = part_params,
-                        radius = radius,
-                        mul = mul, 
-                        add = add
-                    ) : 
-
-                    part_type == "prismoid" ?
-                    mb_prismoid_shape_resolve(
-                        shape = list_item, 
-                        radius = radius,
-                        mul = mul,
-                        add = add
-                    ) : undef
-
-            ]
-        ] : undef;
+/*
+* ---------
+* RENDERING
+* ---------
+*/
 
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
