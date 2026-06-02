@@ -234,10 +234,10 @@ function mb_param_screwHoleYDepth(config, settings, default = undef) = mb_param(
 function mb_param_pcb(config, settings, default = undef) = mb_param(config, settings, "pcb", default != undef ? default : false);
 function mb_param_pcbDimensions(config, settings, default = undef) = mb_param(config, settings, "pcbDimensions", default != undef ? default : [20, 30, 3]);
 function mb_param_pcbOffset(config, settings, default = undef) = mb_param(config, settings, "pcbOffset", default != undef ? default : [0, 0]);
-function mb_param_pcbScrewSocketSize(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketSize", default != undef ? default : 5);
-function mb_param_pcbScrewSocketHoleSize(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketHoleSize", default != undef ? default : 2.2);
-function mb_param_pcbScrewSocketHeight(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSocketHeight", default != undef ? default : 3);
-function mb_param_pcbScrewSockets(config, settings, default = undef) = mb_param(config, settings, "pcbScrewSockets", default != undef ? default : []);
+function mb_param_pcbSocketDiameter(config, settings, default = undef) = mb_param(config, settings, "pcbSocketDiameter", default != undef ? default : 5);
+function mb_param_pcbSocketHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "pcbSocketHoleDiameter", default != undef ? default : 2.2);
+function mb_param_pcbSocketHeight(config, settings, default = undef) = mb_param(config, settings, "pcbSocketHeight", default != undef ? default : 3);
+function mb_param_pcbSockets(config, settings, default = undef) = mb_param(config, settings, "pcbSockets", default != undef ? default : []);
 
 function mb_param_align(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "align", default != undef ? default : "start"));
 function mb_param_alignChildren(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "alignChildren", default != undef ? default : "start"));

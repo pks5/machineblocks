@@ -366,7 +366,16 @@ function mb_block_obj(
                 mb_param_textAlign(config, settings),
                 mb_param_textOffset(config, settings),
                 mb_param_textColor(config, settings)
-            ] // 25 Text
+            ], // 25 Text
+            [
+                mb_param_pcb(config, settings),
+                mb_param_pcbDimensions(config, settings),
+                mb_array_mul(mb_param_pcbOffset(config, settings), mm2grd_xy),
+                mb_param_pcbSocketDiameter(config, settings) * mm2grd_xy,
+                mb_param_pcbSocketHoleDiameter(config, settings) * mm2grd_xy,
+                mb_param_pcbSocketHeight(config, settings) * mm2grd_z,
+                mb_param_pcbSockets(config, settings)
+            ] // 26 PCB
         ];
 
 /*
@@ -525,6 +534,14 @@ function mb_block_get_text_align(block_obj) =                       block_obj[25
 function mb_block_get_text_offset(block_obj) =                      block_obj[25][7];
 function mb_block_get_text_color(block_obj) =                       block_obj[25][8];
 
+// PCB
+function mb_block_get_pcb(block_obj) =                             block_obj[26][0];
+function mb_block_get_pcb_dimensions(block_obj) =                  block_obj[26][1];
+function mb_block_get_pcb_offset(block_obj) =                      block_obj[26][2];
+function mb_block_get_pcb_socket_diameter(block_obj) =             block_obj[26][3];
+function mb_block_get_pcb_socket_hole_diameter(block_obj) =        block_obj[26][4];
+function mb_block_get_pcb_socket_height(block_obj) =               block_obj[26][5];
+function mb_block_get_pcb_sockets(block_obj) =                     block_obj[26][6];
 /*
 * TODO Rename or delete
 */
@@ -581,7 +598,7 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
     )
     face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
-function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
+function mb_block_recess_floor_offset(block_obj, face, off = 0, overlap = false) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(face),
@@ -590,7 +607,7 @@ function mb_block_recess_floor_offset(block_obj, face, off = 0, cut = false) =
             mb_block_get_recess_depth(block_obj)
         ]
     )
-    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = overlap) : undef;
 
 /**
 * -----

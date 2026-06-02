@@ -10,7 +10,7 @@ module mb_text(
     rounding_resolution = 100,
     face = "z+",
     offset = undef,
-    mul = [1, 1, 1],
+    mul = undef,
     color = "white",
     debug = false
 ){

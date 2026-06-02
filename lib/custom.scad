@@ -3,6 +3,9 @@ use <core/block_model.scad>;
 use <core/block_dim.scad>;
 use <core/utils.scad>;
 
+/**
+* Handler for custom parts
+*/
 module mb_block_part__custom(block_obj, part, part_params, debug, mul){
     part_type = mb_block_part_model_type(part);
     part_data = mb_block_part_model_data(part);
@@ -10,17 +13,35 @@ module mb_block_part__custom(block_obj, part, part_params, debug, mul){
 
     if(is_string(part_type) && part_data_length > 0){
         if(part_type == "my_cube"){
-            mb_block_part__my_cube(block_obj, part, part_params, debug, mul);
+            mb_block_part__my_cube(
+                block_obj = block_obj, 
+                part = part, 
+                part_params = part_params, 
+                debug = debug, 
+                mul = mul
+            );
+        }
+        else if(part_type == "something_else"){
+            // Call other module
         }
     }
 }
 
+/**
+* Demo custom part
+*/
 module mb_block_part__my_cube(block_obj, part, part_params, debug, mul){
     cube_data = mb_block_part_model_data_item(part, 0);
 
     // Render module
     cube(size = cube_data[0], center = true);
 
-    // Render children
-    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+    // Render children (optional)
+    mb_block_part(
+        block_obj, 
+        part = mb_block_part_model_data_item(part, 1), 
+        part_params = part_params, 
+        mul = mul, 
+        debug = debug
+    );
 }

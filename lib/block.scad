@@ -276,10 +276,10 @@ module mb_block(
     pcb = mb_param_pcb(config, settings);
     pcbDimensions = mb_param_pcbDimensions(config, settings);
     pcbOffset = mb_param_pcbOffset(config, settings);
-    pcbScrewSocketSize = mb_param_pcbScrewSocketSize(config, settings);
-    pcbScrewSocketHoleSize = mb_param_pcbScrewSocketHoleSize(config, settings);
-    pcbScrewSocketHeight = mb_param_pcbScrewSocketHeight(config, settings);
-    pcbScrewSockets = mb_param_pcbScrewSockets(config, settings);
+    pcbScrewSocketSize = mb_param_pcbSocketDiameter(config, settings);
+    pcbScrewSocketHoleSize = mb_param_pcbSocketHoleDiameter(config, settings);
+    pcbScrewSocketHeight = mb_param_pcbSocketHeight(config, settings);
+    pcbScrewSockets = mb_param_pcbSockets(config, settings);
 
     align = mb_param_align(config, settings);
     alignChildren = mb_param_alignChildren(config, settings);
@@ -1217,26 +1217,7 @@ module mb_block(
                                 
                                 
 
-                                //PCB
-                                if(pcb != false && pcb != "none"){
-                                    color(baseColor){
-                                        translate([pcbOffset[0]*gridSizeXY, pcbOffset[1]*gridSizeXY, pitFloorZ]){
-                                            if(pcb == "clips"){
-                                                mb_pcb_clips(
-                                                    pcbDimensions = pcbDimensions
-                                                );
-                                            }
-                                            if(pcb == "screws"){
-                                                mb_pcb_screw_sockets(
-                                                    screwSockets = pcbScrewSockets,
-                                                    screwSocketHeight = pcbScrewSocketHeight,
-                                                    screwSocketSize = pcbScrewSocketSize,
-                                                    screwSocketHoleSize = pcbScrewSocketHoleSize
-                                                );
-                                            }
-                                        }
-                                    } // End color
-                                } // End if pcb
+                                
                                 
                                 
 

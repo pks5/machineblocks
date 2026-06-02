@@ -66,6 +66,35 @@ function mb_block_part_type_is_builtin(type) =
 
 /*
 * ---
+* PCB
+* ---
+*/
+function mb_block_part_pcb(
+    pcb,
+    dimensions,
+    screw_sockets,
+    screw_socket_height,
+    screw_socket_size,
+    screw_socket_hole_size,
+    offset = undef,
+    render = true
+) = 
+mb_block_part_model(
+    type = "mb_pcb",
+    data = [
+        pcb,
+        dimensions,
+        screw_sockets,
+        screw_socket_height,
+        screw_socket_size,
+        screw_socket_hole_size,
+        offset,
+    ], 
+    render = render
+);
+
+/*
+* ---
 * SVG
 * ---
 */
@@ -387,11 +416,16 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             pcb_data = mb_block_part_model_data_item(part, 0);
 
             mb_pcb(
-                
-                offset = pcb_data[0],
+                pcb = pcb_data[0],
+                dimensions = pcb_data[1],
+                screw_sockets = pcb_data[2],
+                screw_socket_height = pcb_data[3],
+                screw_socket_size = pcb_data[4],
+                screw_socket_hole_size = pcb_data[5],
+                offset = pcb_data[6],
                 mul = mul
             );
-            
+
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
         /*

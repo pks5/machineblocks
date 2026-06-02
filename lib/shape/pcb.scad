@@ -1,3 +1,4 @@
+use <../core/utils.scad>;
 
 module mb_clip_prism(l, w, h) {
     translate([-0.5*l,0, -0.5*h])
@@ -121,4 +122,35 @@ module mb_pcb_clips(
             cube([pedestalSize, pedestalSize, pedestalHeight], center=true);
         }
     
+}
+
+module mb_pcb(
+    pcb,
+    dimensions,
+    screw_sockets,
+    screw_socket_height,
+    screw_socket_size,
+    screw_socket_hole_size,
+    offset = undef,
+    mul = undef,
+    color = "white",
+    debug = false
+){
+    offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]);
+    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
+    translate(mb_array_mul(offset, mul)){
+        if(pcb == "clips"){
+            mb_pcb_clips(
+                pcbDimensions = dimensions
+            );
+        }
+        else if(pcb == "sockets"){
+            mb_pcb_screw_sockets(
+                screwSockets = screw_sockets,
+                screwSocketHeight = screw_socket_height,
+                screwSocketSize = screw_socket_size,
+                screwSocketHoleSize = screw_socket_hole_size
+            );
+        }
+    }
 }

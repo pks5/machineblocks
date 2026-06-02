@@ -2,7 +2,6 @@ use <../core/block_dim.scad>;
 use <../core/block_model.scad>;
 use <../core/block_part.scad>;
 use <../core/utils.scad>;
-use <../quad.scad>;
 use <../core/quality.scad>;
 
 use <../shape/connectors.scad>;
@@ -24,6 +23,7 @@ use <grille.scad>;
 use <svg_decorator.scad>;
 use <text_decorator.scad>;
 
+use <pcb_holder.scad>;
 /*
 * Base Cutout
 */
@@ -204,6 +204,10 @@ module mb_base(
         */
         mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj), debug = debug);
 
+        /*
+        * PCB
+        */
+        mb_block_part(block_obj, part = mb_block_part__pcb_holder(block_obj), debug = debug);
 
         /*
         * Connectors
