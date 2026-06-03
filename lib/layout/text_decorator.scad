@@ -23,24 +23,7 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         text_align = mb_block_get_text_align(block_obj),
         text_offset = mb_block_get_text_offset(block_obj),
         text_color = mb_block_get_text_color(block_obj),
-        off = axis == 0 ?
-        [
-            undef,
-            text_offset[0],
-            text_offset[1]
-        ] :
-        axis == 1 ?
-        [
-            text_offset[0],
-            undef,
-            text_offset[1]
-            
-        ] :
-        [
-            text_offset[0],
-            text_offset[1],
-            undef
-        ],
+        
 
         expand = mb_face_has_common(text_face, "x-") 
         || mb_face_has_common(text_face, "y-") 
@@ -88,6 +71,6 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         text_align,
         face = text_face,
         expand = expand,
-        offset = off,
+        offset = mb_axis_offset2d(axis, text_offset),
         render = true
     );

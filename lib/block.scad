@@ -752,19 +752,10 @@ module mb_block(
 
                                                             
 
-                                                            *if(stabilizerGrid){
-                                                                
-                                                                difference(){
-                                                                    /*
-                                                                    * Stabilizer Grid
-                                                                    */
-                                                                    union(){
-                                                                        
-
-                                                                        if(grille == "none" || grilleSmall){
-                                                                            /*
-                                                                            * Screw Hole Helpers
-                                                                            */
+                                                            /*
+                                                            
+                                                                            * Screw Hole Helpers Z
+                                                                            
                                                                             for (a = [ startX : 1 : endX ]){
                                                                                 for (b = [ startY : 1 : endY ]){
                                                                                     if(drawScrewHoleZ(a, b, 0)){
@@ -778,15 +769,7 @@ module mb_block(
                                                                                             cube([screwHoleZHelperThickness, gridSizeXY - sGridThickness, screwHoleZHelperHeight], center = true);    
                                                                                     } 
                                                                                 }
-                                                                            }
-                                                                        }
-                                                                    } // End union stabilizer grid
-
-                                                                    
-                                                                } // End difference stabilizer Grid
-
-                                                                
-                                                            } // End stabilizer grid
+                                                                            }*/
 
                                                             
                                                             
@@ -1050,86 +1033,7 @@ module mb_block(
 
                                         
 
-                                        /*
-                                        * Screw Holes Z
-                                        */
-                                        if(stabilizerGrid || (baseCutoutType == "none") || (baseCutoutType == "groove")){
-                                            screwHoleZRoundingRadius = mb_fn_even_for_radius(
-                                                0.5 * screwHoleZSize, 
-                                                0, 
-                                                qualitySegBase,
-                                                qualityFactor,
-                                                qualityResolutionMin,
-                                                qualityResolutionMax,
-                                                qualityResolutionMultiplier,
-                                                previewQuality
-                                            );
-                                            color(baseColor){
-                                                for (a = [ startX : 1 : endX ]){
-                                                    for (b = [ startY : 1 : endY ]){
-                                                        if(drawScrewHoleZ(a, b, 0)){
-                                                            translate([posX(a), posY(b), 0.5*knobHeight])
-                                                                cylinder(h = (objectSizeZAdjusted + knobHeight)*cutMultiplier, r = 0.5*screwHoleZSize, center=true, $fn=screwHoleZRoundingRadius);
-                                                        } 
-                                                    }
-                                                }
-                                            } // End color
-                                        } // End if stabilizerGrid
-
-                                        /*
-                                        * Screw Holes X
-                                        */
-                                        if(screwHolesX != false && len(screwHolesX) > 0){
-                                            screwHoleXRoundingRadius = mb_fn_even_for_radius(
-                                                0.5 * screwHoleXSize, 
-                                                0, 
-                                                qualitySegBase,
-                                                qualityFactor,
-                                                qualityResolutionMin,
-                                                qualityResolutionMax,
-                                                qualityResolutionMultiplier,
-                                                previewQuality
-                                            );
-                                            for (b = [ 0 : 1 : len(screwHolesX) - 1]){
-                                                
-                                                color(baseColor){
-                                                    for (s = [ 0 : 1 : 1]){
-                                                        if(screwHolesX[b][2] == undef || screwHolesX[b][2] == s){
-                                                            translate([posX(screwHolesX[b][0]), sideY(s) + (0.5 - s)*(screwHoleXDepth - cutOffset), xyScrewHolesZ + screwHolesX[b][1] * gridSizeZ])
-                                                                rotate([90, 0, 0])
-                                                                    cylinder(h = screwHoleXDepth + cutOffset, r = 0.5*screwHoleXSize, center=true, $fn=screwHoleXRoundingRadius);
-                                                        }
-                                                    }
-                                                } // End color
-                                            } // End for screwHolesX
-                                        }
-
-                                        /*
-                                        * Screw Holes Y
-                                        */
-                                        if(screwHolesY != false && len(screwHolesY) > 0){
-                                            screwHoleYRoundingRadius = mb_fn_even_for_radius(
-                                                0.5 * screwHoleYSize, 
-                                                0, 
-                                                qualitySegBase,
-                                                qualityFactor,
-                                                qualityResolutionMin,
-                                                qualityResolutionMax,
-                                                qualityResolutionMultiplier,
-                                                previewQuality
-                                            );
-                                            for (b = [ 0 : 1 : len(screwHolesY) - 1]){
-                                                color(baseColor){
-                                                    for (s = [ 0 : 1 : 1]){
-                                                        if(screwHolesY[b][2] == undef || screwHolesY[b][2] == s){
-                                                            translate([sideX(s) + (0.5 - s)*(screwHoleYDepth - cutOffset), posY(screwHolesY[b][0]), xyScrewHolesZ + screwHolesY[b][1] * gridSizeZ])
-                                                                rotate([0, 90, 0])
-                                                                    cylinder(h = screwHoleYDepth + cutOffset, r = 0.5*screwHoleYSize, center=true, $fn=screwHoleYRoundingRadius);
-                                                        }
-                                                    }
-                                                } // End color
-                                            } // End for screwHolesY
-                                        }
+                                        
                                         
 
                                         
