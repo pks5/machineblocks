@@ -220,8 +220,8 @@ function mb_param_connectorSideTolerance(config, settings, default = undef) = mb
 function mb_param_screwHoles(config, settings, default = undef) = mb_param(config, settings, "screwHoles", default != undef ? default : []);
 function mb_param_screwHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "screwHoleDiameter", default != undef ? default : 2.1);
 function mb_param_screwHoleDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleDepth", default != undef ? default : 4);
-function mb_param_screwHoleInsetThickness(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetThickness", default != undef ? default : 0.2);
-function mb_param_screwHoleInsetDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetDepth", default != undef ? default : 0.2);
+function mb_param_screwHoleInsetThickness(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetThickness", default != undef ? default : 0.6);
+function mb_param_screwHoleInsetDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetDepth", default != undef ? default : 0.4);
 
 
 
