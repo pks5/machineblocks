@@ -1,12 +1,12 @@
-use <core/block_part.scad>;
-use <core/block_model.scad>;
-use <core/block_dim.scad>;
-use <core/utils.scad>;
+use <../core/block_part.scad>;
+use <../core/block_model.scad>;
+use <../core/block_dim.scad>;
+use <../core/utils.scad>;
 
 /**
 * Handler for custom parts
 */
-module mb_block_part__custom(block_obj, part, part_params, debug, mul){
+module mb_block_part__custom_shapes(block_obj, part, part_params, debug, mul){
     part_type = mb_block_part_model_type(part);
     part_data = mb_block_part_model_data(part);
     part_data_length = mb_block_part_model_data_length(part);

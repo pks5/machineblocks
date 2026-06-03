@@ -10,8 +10,7 @@ use <../shape/cube.scad>;
 use <../shape/svg3d.scad>;
 use <../shape/text3d.scad>;
 use <../shape/pcb.scad>;
-
-include <../custom.scad>;
+use <../shape/custom_shapes.scad>;
 
 /*
 * ----------
@@ -429,10 +428,10 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
         /*
-        * Custom
+        * Custom Shapes
         */
         else{
-            mb_block_part__custom(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
+            mb_block_part__custom_shapes(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
         }
         
     }

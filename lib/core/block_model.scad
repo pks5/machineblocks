@@ -746,7 +746,11 @@ function mb_block_stud_radius(block_obj, x, y) =
 * -----------
 */
 function mb_block_screw_hole_offset(block_obj, x, y, z) =
-    mb_block_pos_to_offset(block_obj, [x + 0.5, y + 0.5, z + 0.5]);
+    mb_block_pos_to_offset(block_obj, [
+        is_undef(x) ? undef : x + 0.5, 
+        is_undef(y) ? undef : y + 0.5,
+        is_undef(z) ? undef : z + 0.5
+    ]);
 
 /**
 * -----
