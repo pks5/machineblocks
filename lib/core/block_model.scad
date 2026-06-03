@@ -378,10 +378,10 @@ function mb_block_obj(
             ], // 26 PCB
             [
                 mb_param_screwHoles(config, settings),
-                mb_param_screwHoleDiameter(config, settings),
-                mb_param_screwHoleDepth(config, settings),
-                mb_param_screwHoleInsetThickness(config, settings),
-                mb_param_screwHoleInsetDepth(config, settings)
+                mb_array_mul(mul_mm_to_grid, mb_param_screwHoleDiameter(config, settings)),
+                mb_array_mul(mul_mm_to_grid, mb_param_screwHoleDepth(config, settings)),
+                mb_array_mul(mul_mm_to_grid, mb_param_screwHoleInsetThickness(config, settings)),
+                mb_array_mul(mul_mm_to_grid, mb_param_screwHoleInsetDepth(config, settings))
             ] // Screw Holes
         ];
 
@@ -745,12 +745,8 @@ function mb_block_stud_radius(block_obj, x, y) =
 * Screw Holes
 * -----------
 */
-function mb_block_screw_hole_offset(block_obj, x, y, z) =
-    mb_block_pos_to_offset(block_obj, [
-        is_undef(x) ? undef : x + 0.5, 
-        is_undef(y) ? undef : y + 0.5,
-        is_undef(z) ? undef : z + 0.5
-    ]);
+function mb_block_screw_hole_offset(block_obj, axis, off) =
+    mb_block_pos_to_offset(block_obj, mb_axis_offset2d(axis, off, shift = [0.5, 0.5, 0.5]));
 
 /**
 * -----

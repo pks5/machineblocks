@@ -13,22 +13,34 @@ function mb_block_part__screw_holes(block_obj) =
         screw_hole_inset_thickness = mb_block_get_screw_hole_inset_thickness(block_obj),
         screw_hole_inset_depth = mb_block_get_screw_hole_inset_depth(block_obj)
     )
+    screw_holes == false || screw_holes == "none" ? undef :
     mb_block_part_model(
         type = "list",
         items = [
             for(screw_hole = screw_holes)
                 let(
-                    axis = mb_face_to_axis(screw_hole[0])
+                    face = mb_face_to_int(screw_hole[0]),
+                    axis = mb_face_to_axis(face)
                 )
                 mb_block_part_tube(
                     block_dim = block_dim,
-                    radius = screw_hole_diameter,
+                    radius = screw_hole_diameter[0],
                     axis = axis,
                     expand = [
-                        0,
-                        base_cutout_ceiling_offset_with_cut
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            adjusted = true, 
+                            exp = screw_hole_depth[axis], 
+                            opposite = true,
+                            face = mb_face_opposite(face)
+                        ),
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            adjusted = true, 
+                            face = face
+                        ),
                     ],
-                    offset = mb_block_screw_hole_offset(block_obj, x, y, z)
+                    offset = mb_block_screw_hole_offset(block_obj, axis, screw_hole[1])
                 )
         ]
     );

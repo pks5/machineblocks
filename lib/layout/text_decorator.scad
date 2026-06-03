@@ -25,7 +25,7 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         text_color = mb_block_get_text_color(block_obj),
         off = axis == 0 ?
         [
-            0,
+            undef,
             text_offset[0],
             text_offset[1]
         ] :

@@ -24,6 +24,8 @@ use <svg_decorator.scad>;
 use <text_decorator.scad>;
 
 use <pcb_holder.scad>;
+use <screw_holes.scad>;
+
 /*
 * Base Cutout
 */
@@ -146,6 +148,11 @@ module mb_base(
             mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, subtract = true), debug = debug);
 
             /*
+            * Screw Holes
+            */
+            mb_block_part(block_obj, part = mb_block_part__screw_holes(block_obj), debug = debug);
+
+            /*
             * Connectors
             */
             if(connectors != false){
@@ -208,6 +215,8 @@ module mb_base(
         * PCB
         */
         mb_block_part(block_obj, part = mb_block_part__pcb_holder(block_obj), debug = debug);
+
+        
 
         /*
         * Connectors
