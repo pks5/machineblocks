@@ -375,7 +375,14 @@ function mb_block_obj(
                 mb_param_pcbSocketHoleDiameter(config, settings) * mm2grd_xy,
                 mb_param_pcbSocketHeight(config, settings) * mm2grd_z,
                 mb_param_pcbSockets(config, settings)
-            ] // 26 PCB
+            ], // 26 PCB
+            [
+                mb_param_screwHoles(config, settings),
+                mb_param_screwHoleDiameter(config, settings),
+                mb_param_screwHoleDepth(config, settings),
+                mb_param_screwHoleInsetThickness(config, settings),
+                mb_param_screwHoleInsetDepth(config, settings)
+            ] // Screw Holes
         ];
 
 /*
@@ -542,6 +549,14 @@ function mb_block_get_pcb_socket_diameter(block_obj) =             block_obj[26]
 function mb_block_get_pcb_socket_hole_diameter(block_obj) =        block_obj[26][4];
 function mb_block_get_pcb_socket_height(block_obj) =               block_obj[26][5];
 function mb_block_get_pcb_sockets(block_obj) =                     block_obj[26][6];
+
+// Screw Holes
+function mb_block_get_screw_holes(block_obj) =                     block_obj[27][0];
+function mb_block_get_screw_hole_diameter(block_obj) =             block_obj[27][1];
+function mb_block_get_screw_hole_depth(block_obj) =                block_obj[27][2];
+function mb_block_get_screw_hole_inset_thickness(block_obj) =      block_obj[27][3];
+function mb_block_get_screw_hole_inset_depth(block_obj) =          block_obj[27][4];
+
 /*
 * TODO Rename or delete
 */
@@ -725,6 +740,13 @@ function mb_block_stud_radius(block_obj, x, y) =
     )
        stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter];
 
+/*
+* -----------
+* Screw Holes
+* -----------
+*/
+function mb_block_screw_hole_offset(block_obj, x, y, z) =
+    mb_block_pos_to_offset(block_obj, [x + 0.5, y + 0.5, z + 0.5]);
 
 /**
 * -----

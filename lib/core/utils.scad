@@ -990,6 +990,9 @@ function mb_axis_to_int(axis) =
         undef
     ) : axis;
 
+function mb_axis_rotate(axis) =
+    axis == 0 ? [0, 90 , 0] : axis == 1 ? [-90, 0, 0] : [0, 0, 0];
+
 function mb_decorator_rotation(side) =
     let(rots = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]])
         rots[mb_side_to_int(side)];
