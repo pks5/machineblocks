@@ -749,21 +749,20 @@ function mb_block_screw_hole_offset(block_obj, axis, off) =
     mb_block_pos_to_offset(block_obj, mb_axis_offset2d(axis, off, shift = [0.5, 0.5, 0.5]));
 
 /**
-* -----
-* Tubes
-* -----
+* -------
+* Pillars
+* -------
 */
 
-function mb_block_tube_range(block_obj, axis) =
+function mb_block_pillar_range(block_obj) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        axis = mb_axis_to_int(axis),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1],
-        is_pin = mb_block_tube_is_pin(block_obj, axis),
+        is_pin = mb_block_pillar_is_pin(block_obj),
         range_offset_start = (is_pin[0] || is_pin[1]) && !(is_pin[0] && is_pin[1]) 
             ? [is_pin[0] ? 0 : 1, is_pin[1] ? 0 : 1] 
             : [1, 1],
@@ -774,19 +773,19 @@ function mb_block_tube_range(block_obj, axis) =
         [start_index_y + range_offset_start[1] : end_index_y + range_offset_end[1]]
     ];
 
-function mb_block_tube_render(block_obj, axis, x, y) =
+function mb_block_pillar_render(block_obj, x, y) =
     true;
 
-function mb_block_tube_offset(block_obj, axis, x, y) = //TODO
+function mb_block_pillar_offset(block_obj, x, y) = //TODO
     let(
-        is_pin = mb_block_tube_is_pin(block_obj, axis, x, y),
+        is_pin = mb_block_pillar_is_pin(block_obj, x, y),
         tube_offset = is_pin[0] || is_pin[1] 
             ? [is_pin[0] ? 0.5 : 0, is_pin[1] ? 0.5 : 0] 
             : [0, 0]
     )
     mb_block_pos_to_offset(block_obj, [x + tube_offset[0], y + tube_offset[1], undef]);
 
-function mb_block_tube_is_pin(block_obj, axis, x = undef, y = undef) =
+function mb_block_pillar_is_pin(block_obj, x = undef, y = undef) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
@@ -798,10 +797,9 @@ function mb_block_tube_is_pin(block_obj, axis, x = undef, y = undef) =
     )
     is_pin;
 
-function mb_block_tube_radius(block_obj, axis, x, y) =
+function mb_block_pillar_radius(block_obj, x, y) =
     let(
-        axis = mb_axis_to_int(axis),
-        is_pin = mb_block_tube_is_pin(block_obj, axis, x, y),
+        is_pin = mb_block_pillar_is_pin(block_obj, x, y),
 
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
         tube_z_hole_size = mb_block_get_tube_hole_size(block_obj, "z"),
@@ -861,7 +859,7 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         stabilizer_expansion = mb_block_get_stabilizer_expansion(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
         segment_height_expanded = max(base_cutout_depth - mb_block_get_stabilizer_expansion_offset(block_obj), 0),
-        is_pin = mb_block_tube_is_pin(block_obj, axis),
+        is_pin = mb_block_pillar_is_pin(block_obj, axis),
         expanded = axis == 1 ? 
             is_pin[1] || ((x % stabilizer_expansion) == 0 && ((end_index_x - start_index_x) > 2)): 
             is_pin[0] || ((y % stabilizer_expansion) == 0 && ((end_index_y - start_index_y) > 2)),
