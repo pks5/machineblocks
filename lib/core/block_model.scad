@@ -802,7 +802,7 @@ function mb_block_tube_range(block_obj, axis) =
     )
     [
         [(start_index_xy + range_offset_start) : (end_index_xy + range_offset_end)],
-        [0 : hole_max_rows]
+        [0 : hole_max_rows - 1]
     ];
 
 function mb_block_tube_render(block_obj, axis, xy, z) =
@@ -812,13 +812,13 @@ function mb_block_tube_render(block_obj, axis, xy, z) =
 function mb_block_tube_offset(block_obj, axis, xy, z) =
     let(
         axis = mb_axis_to_int(axis),
-        tube_offset = [0, 0],
+        tube_offset_xy = 0,
         tube_hole_grid_offset_z = mb_block_get_tube_hole_grid_offset_z(block_obj),
         tube_hole_grid_size_z = mb_block_get_tube_hole_grid_size_z(block_obj)
     )
     mb_block_pos_to_offset(block_obj, [
-        axis == 1 ? xy + tube_offset[0] : undef, 
-        axis == 0 ? xy + tube_offset[0] : undef, 
+        axis == 1 ? xy + tube_offset_xy : undef, 
+        axis == 0 ? xy + tube_offset_xy : undef, 
         tube_hole_grid_offset_z + z * tube_hole_grid_size_z
     ]);
 
