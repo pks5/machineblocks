@@ -259,20 +259,6 @@ module mb_block(
     connectorDepthTolerance = mb_param_connectorDepthTolerance(config, settings);
     connectorSideTolerance = mb_param_connectorSideTolerance(config, settings);
 
-    screwHolesZ = mb_param_screwHolesZ(config, settings);
-    screwHoleZSize = mb_param_screwHoleZSize(config, settings);
-    screwHoleZHelperThickness = mb_param_screwHoleZHelperThickness(config, settings);
-    screwHoleZHelperOffset = mb_param_screwHoleZHelperOffset(config, settings);
-    screwHoleZHelperHeight = mb_param_screwHoleZHelperHeight(config, settings);
-
-    screwHolesX = mb_param_screwHolesX(config, settings);
-    screwHoleXSize = mb_param_screwHoleXSize(config, settings);
-    screwHoleXDepth = mb_param_screwHoleXDepth(config, settings);
-
-    screwHolesY = mb_param_screwHolesY(config, settings);
-    screwHoleYSize = mb_param_screwHoleYSize(config, settings);
-    screwHoleYDepth = mb_param_screwHoleYDepth(config, settings);
-
     pcb = mb_param_pcb(config, settings);
     pcbDimensions = mb_param_pcbDimensions(config, settings);
     pcbOffset = mb_param_pcbOffset(config, settings);

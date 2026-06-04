@@ -280,6 +280,9 @@ function mb_block_dim_size_expand(block_dim, size, expand) =
             ])
     s_adj;
 
+/**
+* deprecated
+*/
 function mb_block_dim_this_offset(block_dim, off = 0, adjusted = false, face = "z-", overlap = false) =
     let(
         face = mb_face_to_int(face = face),
@@ -303,4 +306,4 @@ function mb_block_dim_face_edge_expand(block_dim, exp = 0, adjusted = false, fac
         face = mb_face_to_int(face = face),
         base_adj = mb_block_dim_base_adj(block_dim)
     )
-    (adjusted ? base_adj[face < 6 ? face : 0] : 0) + exp + mb_block_dim_overlap(block_dim, overlap = overlap);
+    face < 6 ? (adjusted ? base_adj[face] : 0) + exp + mb_block_dim_overlap(block_dim, overlap = overlap) : undef;
