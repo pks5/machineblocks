@@ -285,54 +285,6 @@ module mb_block(
     
     pWallThickness = mb_resolve_side_quad(recessWallThickness);
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
-    recStudPaddingResolved = mb_resolve_side_quad(recessStudPadding, gridSizeXY);
-
-    pitSizeX = objectSizeMod[0] - (recWallThickness[0] + recWallThickness[1]);
-    pitSizeY = objectSizeMod[1] - (recWallThickness[2] + recWallThickness[3]);
-
-    //Default diameter of pins and stud holes
-    //Default thickness of a base wall multiplied by 2
-    pDiameter = unitGrid[0] - studDiameter;
-
-    wallThicknessOrg = (baseWallThickness == "auto" ? 0.5 * pDiameter : baseWallThickness) * mbuToMm;
-    wallThickness = wallThicknessOrg + baseWallThicknessAdjustment;
-    baseClampWallThickness = wallThickness + baseClampThickness;
-
-    baseRoundingRadiusResolved = mb_base_rounding_radius(baseRoundingRadius, gridSizeXY * min(adjustedSizeRelation[0], adjustedSizeRelation[1]), gridSizeZ * adjustedSizeRelation[2]);
-    baseRoundingRadiusZ = baseRoundingRadiusResolved[2];
-    
-    cutoutRoundingRadius = mb_base_cutout_radius(baseCutoutRoundingRadius == "auto" ? -wallThickness : mb_rounding_radius(baseCutoutRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);
-    
-    minCutoutSide = min(objectSizeMod[0] - 2*wallThickness, objectSizeMod[0] - 2*wallThickness);
-    cutoutClampRoundingRadius = baseClampThickness > 0 ? mb_base_cutout_radius(-baseClampThickness, cutoutRoundingRadius, minCutoutSide) : cutoutRoundingRadius;
-
-    //Calculate Z Positions
-    floorZ = sideZ(0, false);
-    baseCutoutZ = floorZ + 0.5 * baseCutoutDepth;        
-    topPlateZ = floorZ + baseCutoutDepth + 0.5 * resultingTopPlateHeight;
-    xyScrewHolesZ = floorZ + 0.5 * gridSizeZ;
-    pitFloorZ = floorZ  + baseCutoutDepth + resultingTopPlateHeight;
-
-    
-    mul_grd_to_mm = mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
-    
-    // Pit
-    pBevelPad = mb_array_add(recWallThickness, recStudPaddingResolved);
-
-    pMinThickness = mb_array_min_pair_cycle_neg(recWallThickness);
-    pitRadius = mb_base_cutout_radius(recessRoundingRadius == "auto" ? pMinThickness : mb_rounding_radius(recessRoundingRadius, gridSizeXY), baseRoundingRadiusZ, minObjectSide);            
-    
-    // Studs
-    knobSizeOrg = studDiameter * mbuToMm;
-    knobSize = knobSizeOrg + studDiameterAdjustment;
-    knobHeightOrg = studHeight * mbuToMm;
-    knobHeight = knobHeightOrg + studHeightAdjustment;
-
-    // Tubes XYZ
-    tubeDiameter = studDiameter + 2 * tubeWallThickness;
-    tubeXSize = (tubeXDiameter == "auto" ? tubeDiameter : tubeXDiameter) * mbuToMm + tubeXDiameterAdjustment;
-    tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * mbuToMm + tubeYDiameterAdjustment;
-    tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * mbuToMm + tubeZDiameterAdjustment;
     
     //Stabilizer
     sGridThickness = stabilizerGridThickness * mbuToMm;
