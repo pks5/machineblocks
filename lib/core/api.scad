@@ -121,9 +121,12 @@ function mb_param_stabilizerExpansionOffset(config, settings, default = undef) =
 */
 
 function mb_param_pillars(config, settings, default = undef) = mb_param(config, settings, "pillars", default != undef ? default : true);
+function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
+function mb_param_pillarInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "pillarInnerClampThickness", default != undef ? default : 0.1);
+
+// TODO
 function mb_param_pillarGapCornerLength(config, settings, default = undef) = mb_param(config, settings, "pillarGapCornerLength", default != undef ? default : 2);
 function mb_param_pillarGapMiddle(config, settings, default = undef) = mb_param(config, settings, "pillarGapMiddle", default != undef ? default : 10);
-function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
 
 /*
 * Pins
@@ -136,14 +139,8 @@ function mb_param_pinDiameterAdjustment(config, settings, default = undef) = mb_
 * Tubes
 */ 
 
-
-function mb_param_tubeXDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameter", default != undef ? default : "auto");
-function mb_param_tubeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameterAdjustment", default != undef ? default : -0.1);
-function mb_param_tubeYDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeYDiameter", default != undef ? default : "auto");
-function mb_param_tubeYDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeYDiameterAdjustment", default != undef ? default : -0.1);
-function mb_param_tubeZDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeZDiameter", default != undef ? default : "auto");
-function mb_param_tubeZDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeZDiameterAdjustment", default != undef ? default : -0.1);
-function mb_param_tubeInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "tubeInnerClampThickness", default != undef ? default : 0.1);
+function mb_param_tubeDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeDiameter", default != undef ? default : "auto");
+function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeDiameterAdjustment", default != undef ? default : -0.1);
 
 /*
 * Slope
@@ -217,7 +214,6 @@ function mb_param_holeZDiameterAdjustment(config, settings, default = undef) = m
 function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
 function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
 function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);
-function mb_param_studMaxOverhang(config, settings, default = undef) = mb_param(config, settings, "studMaxOverhang", default != undef ? default : 0.3);
 function mb_param_studPadding(config, settings, default = undef) = mb_param(config, settings, "studPadding", default != undef ? default : 0);
 
 function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
@@ -228,18 +224,21 @@ function mb_param_studHoleDiameterAdjustment(config, settings, default = undef) 
 function mb_param_studHoleClampThickness(config, settings, default = undef) = mb_param(config, settings, "studHoleClampThickness", default != undef ? default : 0.1);
 
 function mb_param_studRounding(config, settings, default = undef) = mb_param(config, settings, "studRounding", default != undef ? default : 0.0625);
+
 function mb_param_studDiameter(config, settings, default = undef) = mb_param(config, settings, "studDiameter", default != undef ? default : 3);
 function mb_param_studDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studDiameterAdjustment", default != undef ? default : 0.2);
 function mb_param_studHeight(config, settings, default = undef) = mb_param(config, settings, "studHeight", default != undef ? default : 1);
 function mb_param_studHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "studHeightAdjustment", default != undef ? default : 0.0);
-function mb_param_studSink(config, settings, default = undef) = mb_param(config, settings, "studSink", default != undef ? default : 0.25);
+
 function mb_param_studCutoutDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutDiameterAdjustment", default != undef ? default : 0.2);
 function mb_param_studCutoutHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "studCutoutHeightAdjustment", default != undef ? default : 0.4);
 
+function mb_param_studBaseOverlap(config, settings, default = undef) = mb_param(config, settings, "studBaseOverlap", default != undef ? default : 0.25);
+function mb_param_studMaxOverhang(config, settings, default = undef) = mb_param(config, settings, "studMaxOverhang", default != undef ? default : 0.3);
+
+// Icon
 function mb_param_studIcon(config, settings, default = undef) = mb_param(config, settings, "studIcon", default != undef ? default : "../../pattern/bolt-solid-full.svg");
 function mb_param_studIconDimensions(config, settings, default = undef) = mb_param(config, settings, "studIconDimensions", default != undef ? default : [169.333, 169.333]);
-
-function mb_param_studIconSize(config, settings, default = undef) = mb_param(config, settings, "studIconSize", default != undef ? default : [0.5, 0.5, -0.0625]);
 function mb_param_studIconScale(config, settings, default = undef) = mb_param(config, settings, "studIconScale", default != undef ? default : 0.8);
 function mb_param_studIconDepth(config, settings, default = undef) = mb_param(config, settings, "studIconDepth", default != undef ? default : -0.2);
 function mb_param_studIconColor(config, settings, default = undef) = mb_param(config, settings, "studIconColor", default != undef ? default : "inherit");

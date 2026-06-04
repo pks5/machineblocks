@@ -120,7 +120,7 @@ function mb_block_obj(
 
         stud_diameter_final = stud_diameter_res + mb_param_studDiameterAdjustment(config, settings) * mm2grd_xy,
         stud_height_final = stud_height_res + mb_param_studHeightAdjustment(config, settings) * mm2grd_z,
-        stud_sink_final = mb_param_studSink(config, settings) * mbu2grd_z,
+        stud_sink_final = mb_param_studBaseOverlap(config, settings) * mbu2grd_z,
         stud_rounding_final = mb_param_studRounding(config, settings) * mbu2grd_xy,
         stud_max_overhang = mb_param_studMaxOverhang(config, settings) * mbu2grd_xy,
 
@@ -131,7 +131,6 @@ function mb_block_obj(
         
         stud_icon = mb_param_studIcon(config, settings),
         stud_icon_dimensions = mb_param_studIconDimensions(config, settings),
-        stud_icon_size = mb_param_studIconSize(config, settings),
         stud_icon_color = mb_param_studIconColor(config, settings),
         stud_icon_scale = mb_param_studIconScale(config, settings),
         stud_icon_depth = mb_param_studIconDepth(config, settings) * mbu2grd_z,
@@ -345,7 +344,7 @@ function mb_block_obj(
             [
                 stud_icon,
                 stud_icon_dimensions,
-                stud_icon_size,
+                undef,
                 stud_icon_color,
                 stud_icon_scale,
                 stud_icon_depth
@@ -508,7 +507,6 @@ function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14
 
 function mb_block_get_stud_icon(block_obj) =                        block_obj[21][0];
 function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
-function mb_block_get_stud_icon_size(block_obj) =                   block_obj[21][2];
 function mb_block_get_stud_icon_color(block_obj) =                  block_obj[21][3];
 function mb_block_get_stud_icon_scale(block_obj) =                  block_obj[21][4];
 function mb_block_get_stud_icon_depth(block_obj) =                  block_obj[21][5];

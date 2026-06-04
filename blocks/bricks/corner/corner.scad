@@ -140,7 +140,7 @@ module mb_block__mb__bricks__corner(config = undef, settings = undef){
     grilleCount = mb_param_grilleCount(config, settings);
     studs = mb_param_studs(config, settings);
     studShift = mb_param_studShift(config, settings);
-    studSink = mb_param_studSink(config, settings);
+    studSink = mb_param_studBaseOverlap(config, settings);
     studType = mb_param_studType(config, settings);
     studPadding = mb_param_studPadding(config, settings);
     baseColor = mb_param_baseColor(config, settings);

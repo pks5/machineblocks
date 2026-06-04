@@ -58,7 +58,7 @@ function mb_block_part__studs(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         stud_range = mb_block_stud_range(block_obj),
         stud_rounding = mb_block_get_stud_rounding(block_obj),
-        stud_icon_size = mb_block_get_stud_icon_size(block_obj)
+        stud_icon_depth = mb_block_get_stud_icon_depth(block_obj)
     )
     mb_block_part_model(
         render = mb_block_has_studs(block_obj),
@@ -69,7 +69,7 @@ function mb_block_part__studs(block_obj) =
                     let(render = mb_block_stud_render(block_obj, x, y))
                     if(render[0])
                         mb_block_part_model(
-                            type = stud_icon_size[2] > 0 ? "union" : "difference", 
+                            type = stud_icon_depth > 0 ? "union" : "difference", 
                             items = [
                                 mb_block_part_tube(
                                     block_dim = block_dim,
