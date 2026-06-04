@@ -89,18 +89,6 @@ module mb_block(
     pillarGapCornerLength = mb_param_pillarGapCornerLength(config, settings);
     pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
 
-    pinDiameter = mb_param_pinDiameter(config, settings);
-    pinDiameterAdjustment = mb_param_pinDiameterAdjustment(config, settings);
-
-    tubeWallThickness = mb_param_tubeWallThickness(config, settings);
-    tubeXDiameter = mb_param_tubeXDiameter(config, settings);
-    tubeXDiameterAdjustment = mb_param_tubeXDiameterAdjustment(config, settings);
-    tubeYDiameter = mb_param_tubeYDiameter(config, settings);
-    tubeYDiameterAdjustment = mb_param_tubeYDiameterAdjustment(config, settings);
-    tubeZDiameter = mb_param_tubeZDiameter(config, settings);
-    tubeZDiameterAdjustment = mb_param_tubeZDiameterAdjustment(config, settings);
-    tubeInnerClampThickness = mb_param_tubeInnerClampThickness(config, settings);
-
     slope = mb_param_slope(config, settings);
     slopeBaseHeightLower = mb_param_slopeBaseHeightBottom(config, settings);
     slopeBaseHeightLowerInner = mb_param_slopeBaseHeightInner(config, settings);
@@ -169,8 +157,6 @@ module mb_block(
     //END get parameters
 
     //Variables for cutouts        
-    cutOffset = 0.2;
-    cutMultiplier = 1.1;
     cutTolerance = 0.01;
 
     /*
@@ -205,9 +191,7 @@ module mb_block(
    
     baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
     baseModR = mb_qc_resolve(qc = baseMod, cube = true);
-    bevelMod = [[-baseModR[0], -baseModR[2]],[-baseModR[0], baseModR[3]], [baseModR[1],baseModR[3]],[baseModR[1],-baseModR[2]]];
-    bevelRes = mb_bevel_resolve(bevel, osm_mm);
-
+    
     objectSizeMod = [
         objectSizeX + baseModRes[0] + baseModRes[1],
         objectSizeY + baseModRes[2] + baseModRes[3],

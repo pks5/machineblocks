@@ -4,9 +4,25 @@ use <utils.scad>;
  * Native Gatters
  */
 
+/*
+* Units, Scale
+*/
 function mb_param_unitMbuToMm(config, settings, default = undef) = mb_param(config, settings, "unitMbuToMm", default != undef ? default : 1.6);
 function mb_param_unitGridToMbu(config, settings, default = undef) = mb_param(config, settings, "unitGridToMbu", default != undef ? default : [5, 2]);
 function mb_param_scale(config, settings, default = undef) = mb_param(config, settings, "scale", default != undef ? default : 1.0);
+
+/*
+* ID, Debug, Render
+*/
+function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
+function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
+function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
+
+/*
+* Alignment
+*/
+function mb_param_align(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "align", default != undef ? default : "start"));
+function mb_param_alignChildren(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "alignChildren", default != undef ? default : "start"));
 
 /*
 * Rotation
@@ -107,6 +123,7 @@ function mb_param_stabilizerExpansionOffset(config, settings, default = undef) =
 function mb_param_pillars(config, settings, default = undef) = mb_param(config, settings, "pillars", default != undef ? default : true);
 function mb_param_pillarGapCornerLength(config, settings, default = undef) = mb_param(config, settings, "pillarGapCornerLength", default != undef ? default : 2);
 function mb_param_pillarGapMiddle(config, settings, default = undef) = mb_param(config, settings, "pillarGapMiddle", default != undef ? default : 10);
+function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
 
 /*
 * Pins
@@ -119,7 +136,7 @@ function mb_param_pinDiameterAdjustment(config, settings, default = undef) = mb_
 * Tubes
 */ 
 
-function mb_param_tubeWallThickness(config, settings, default = undef) = mb_param(config, settings, "tubeWallThickness", default != undef ? default : 0.53125);
+
 function mb_param_tubeXDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameter", default != undef ? default : "auto");
 function mb_param_tubeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeXDiameterAdjustment", default != undef ? default : -0.1);
 function mb_param_tubeYDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeYDiameter", default != undef ? default : "auto");
@@ -159,40 +176,39 @@ function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_
 function mb_param_holeXYZInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetThicknessAdjustment", default != undef ? default : 0.0);
 function mb_param_holeXYZInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepth", default != undef ? default : 0.5);
 function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepthAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXYZAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThickness", default != undef ? default : 1);
+function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0);
 
-
+// X
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
+function mb_param_holeXPartial(config, settings, default = undef) = mb_param(config, settings, "holeXPartial", default != undef ? default : "none");
+
+// Y
+function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
+function mb_param_holeYPartial(config, settings, default = undef) = mb_param(config, settings, "holeYPartial", default != undef ? default : "none");
+
+// Z
+function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
+function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");
+function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
+
+
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
 function mb_param_holeXShift(config, settings, default = undef) = mb_param(config, settings, "holeXShift", default != undef ? default : true);
 function mb_param_holeXDiameter(config, settings, default = undef) = mb_param(config, settings, "holeXDiameter", default != undef ? default : "auto");
 function mb_param_holeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXDiameterAdjustment", default != undef ? default : 0.3);
 
-function mb_param_holeXPartial(config, settings, default = undef) = mb_param(config, settings, "holeXPartial", default != undef ? default : "none");
-
-
-
-
-
-function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
 function mb_param_holeYType(config, settings, default = undef) = mb_param(config, settings, "holeYType", default != undef ? default : "pin");
 function mb_param_holeYShift(config, settings, default = undef) = mb_param(config, settings, "holeYShift", default != undef ? default : true);
 function mb_param_holeYDiameter(config, settings, default = undef) = mb_param(config, settings, "holeYDiameter", default != undef ? default : "auto");
 function mb_param_holeYDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYDiameterAdjustment", default != undef ? default : 0.3);
 
-function mb_param_holeYPartial(config, settings, default = undef) = mb_param(config, settings, "holeYPartial", default != undef ? default : "none");
-
-
-
-function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
 function mb_param_holeZType(config, settings, default = undef) = mb_param(config, settings, "holeZType", default != undef ? default : "pin");
 function mb_param_holeZShift(config, settings, default = undef) = mb_param(config, settings, "holeZShift", default != undef ? default : true);
 function mb_param_holeZDiameter(config, settings, default = undef) = mb_param(config, settings, "holeZDiameter", default != undef ? default : "auto");
 function mb_param_holeZDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeZDiameterAdjustment", default != undef ? default : 0.3);
 
-function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");
-function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
 
-function mb_param_holeAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeAxleThickness", default != undef ? default : 1);
 
 /*
 * Studs
@@ -343,11 +359,6 @@ function mb_param_pcbSocketHoleDiameter(config, settings, default = undef) = mb_
 function mb_param_pcbSocketHeight(config, settings, default = undef) = mb_param(config, settings, "pcbSocketHeight", default != undef ? default : 3);
 function mb_param_pcbSockets(config, settings, default = undef) = mb_param(config, settings, "pcbSockets", default != undef ? default : []);
 
-/*
-* Alignment
-*/
-function mb_param_align(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "align", default != undef ? default : "start"));
-function mb_param_alignChildren(config, settings, default = undef) = mb_align_resolve(mb_param(config, settings, "alignChildren", default != undef ? default : "start"));
 
 /*
 * Render Quality
@@ -363,9 +374,6 @@ function mb_param_previewQuality(config, settings, default = undef) = mb_param(c
 function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
 function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
 
-function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
-function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
-function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
 
 /*
 * Composite Blocks Only Parameters

@@ -174,8 +174,8 @@ function mb_block_obj(
         /*
         * Tube / Pin
         */
-        tube_wall_thickness_res = mb_param_tubeWallThickness(config, settings) * mbu2grd_xy,  // TODO XYZ
-        default_tube_diameter = stud_diameter_res + 2 * tube_wall_thickness_res,  // TODO XYZ
+        pillar_org_wall_thickness = mb_param_pillarOriginalWallThickness(config, settings) * mbu2grd_xy,
+        default_tube_diameter = stud_diameter_res + 2 * pillar_org_wall_thickness,  // TODO XYZ
         tube_hole_size = stud_diameter_res,  // TODO XYZ
         pinDiameter = mb_param_pinDiameter(config, settings),
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy 
@@ -313,7 +313,7 @@ function mb_block_obj(
             [
                 default_tube_diameter, 
                 tube_hole_size, 
-                tube_wall_thickness_res, 
+                pillar_org_wall_thickness, 
                 pin_diameter,
                 tube_hole_inset_thickness,
                 tube_hole_inset_depth,
