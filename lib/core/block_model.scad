@@ -181,6 +181,11 @@ function mb_block_obj(
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy 
                         + mb_param_pinDiameterAdjustment(config, settings) * mm2grd_xy,
 
+        tube_hole_inset_thickness = mb_param_holeXInsetThickness(config, settings) * mbu2grd_xy
+                            + mb_param_holeXInsetThicknessAdjustment(config, settings) * mm2grd_xy,
+        tube_hole_inset_depth = mb_param_holeXInsetDepth(config, settings) * mbu2grd_xy
+                            + mb_param_holeXInsetDepthAdjustment(config, settings) * mm2grd_xy,
+
         /*
         * Tongue
         */
@@ -301,7 +306,9 @@ function mb_block_obj(
                 default_tube_diameter, 
                 tube_hole_size, 
                 tube_wall_thickness_res, 
-                pin_diameter
+                pin_diameter,
+                tube_hole_inset_thickness,
+                tube_hole_inset_depth
             ],  // 15 - 
             stabilizers_res,  // 16 - 
             [
@@ -465,6 +472,8 @@ function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15
 function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15][1];
 function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
+function mb_block_get_tube_hole_inset_thickness(block_obj) =        block_obj[15][4];
+function mb_block_get_tube_hole_inset_depth(block_obj) =            block_obj[15][5];
 
 // Studs
 function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
@@ -794,6 +803,13 @@ function mb_block_tube_radius(block_obj, axis, xy, z, hole = false) =
         
     )
     0.5 * (hole ? tube_hole_size : tube_diameter);
+
+function mb_block_tube_hole_inset(block_obj, axis, xy, z) =
+    let(
+        inset_thickness = mb_block_get_tube_hole_inset_thickness(block_obj),
+        inset_depth = mb_block_get_tube_hole_inset_depth(block_obj)
+    )
+    [inset_thickness, inset_depth];
 
 /**
 * -------

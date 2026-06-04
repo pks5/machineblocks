@@ -17,13 +17,19 @@ function mb_block_part__tubes(block_obj, hole = false) =
         "list",
         [
             for(axis = ["x", "y"])
-                let(tube_range = mb_block_tube_range(block_obj, axis))
+                let(
+                    tube_range = mb_block_tube_range(block_obj, axis)
+                )
                 for(xy = tube_range[0])
                     for(z = tube_range[1])
                         if(mb_block_tube_render(block_obj, axis, xy, z))
                             let(
-                                tube_clamp_end = undef,
-                                tube_clamp_start = undef
+                                clamp = mb_block_tube_hole_inset(block_obj, axis, xy, z),
+                                tube_clamp_start = [
+                                    clamp[0], 
+                                    clamp[1] + mb_block_dim_overlap(block_dim, overlap = true)
+                                ],
+                                tube_clamp_end = tube_clamp_start,
                             )
                             mb_block_part_tube(
                                 block_dim = block_dim,
@@ -32,8 +38,18 @@ function mb_block_part__tubes(block_obj, hole = false) =
                                 clamp_start = tube_clamp_start, 
                                 axis = axis,
                                 expand = [
-                                    0,
-                                    0
+                                    mb_block_dim_face_edge_expand(
+                                        block_dim, 
+                                        adjusted = true,
+                                        overlap = true,
+                                        face = "x-"
+                                    ),
+                                    mb_block_dim_face_edge_expand(
+                                        block_dim, 
+                                        adjusted = true,
+                                        overlap = true,
+                                        face = "x+"
+                                    ),
                                 ],
                                 offset = mb_block_tube_offset(block_obj, axis, xy, z)
                             )
