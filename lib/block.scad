@@ -110,46 +110,14 @@ module mb_block(
 
     holeX = mb_param_holeX(config, settings);
     holeXType = mb_param_holeXType(config, settings);
-    holeXShift = mb_param_holeXShift(config, settings);
-    holeXDiameter = mb_param_holeXDiameter(config, settings);
-    holeXDiameterAdjustment = mb_param_holeXDiameterAdjustment(config, settings);
-    holeXInsetThickness = mb_param_holeXInsetThickness(config, settings);
-    holeXInsetThicknessAdjustment = mb_param_holeXInsetThicknessAdjustment(config, settings);
-    holeXInsetDepth = mb_param_holeXInsetDepth(config, settings);
-    holeXInsetDepthAdjustment = mb_param_holeXInsetDepthAdjustment(config, settings);
-    holeXGridOffsetZ = mb_param_holeXGridOffsetZ(config, settings);
-    holeXGridOffsetZAdjustment = mb_param_holeXGridOffsetZAdjustment(config, settings);
-    holeXGridSizeZ = mb_param_holeXGridSizeZ(config, settings);
-    holeXGridSizeZAdjustment = mb_param_holeXGridSizeZAdjustment(config, settings);
-    holeXMinTopMargin = mb_param_holeXMinTopMargin(config, settings);
-    holeXPartial = mb_param_holeXPartial(config, settings);
+    
 
     holeY = mb_param_holeY(config, settings);
     holeYType = mb_param_holeYType(config, settings);
-    holeYShift = mb_param_holeYShift(config, settings);
-    holeYDiameter = mb_param_holeYDiameter(config, settings);
-    holeYDiameterAdjustment = mb_param_holeYDiameterAdjustment(config, settings);
-    holeYInsetThickness = mb_param_holeYInsetThickness(config, settings);
-    holeYInsetThicknessAdjustment = mb_param_holeYInsetThicknessAdjustment(config, settings);
-    holeYInsetDepth = mb_param_holeYInsetDepth(config, settings);
-    holeYInsetDepthAdjustment = mb_param_holeYInsetDepthAdjustment(config, settings);
-    holeYGridOffsetZ = mb_param_holeYGridOffsetZ(config, settings);
-    holeYGridOffsetZAdjustment = mb_param_holeYGridOffsetZAdjustment(config, settings);
-    holeYGridSizeZ = mb_param_holeYGridSizeZ(config, settings);
-    holeYGridSizeZAdjustment = mb_param_holeYGridSizeZAdjustment(config, settings);
-    holeYMinTopMargin = mb_param_holeYMinTopMargin(config, settings);
-    holeYPartial = mb_param_holeYPartial(config, settings);
+    
 
     holeZ = mb_param_holeZ(config, settings);
     holeZType = mb_param_holeZType(config, settings);
-    holeZShift = mb_param_holeZShift(config, settings);
-    holeZDiameter = mb_param_holeZDiameter(config, settings);
-    holeZDiameterAdjustment = mb_param_holeZDiameterAdjustment(config, settings);
-    
-    holeZPartialX = mb_param_holeZPartialX(config, settings);
-    holeZPartialY = mb_param_holeZPartialY(config, settings);
-
-    holeAxleThickness = mb_param_holeAxleThickness(config, settings);
 
     studs = mb_param_studs(config, settings);
     studType = mb_param_studType(config, settings);
@@ -366,40 +334,6 @@ module mb_block(
     tubeYSize = (tubeYDiameter == "auto" ? tubeDiameter : tubeYDiameter) * mbuToMm + tubeYDiameterAdjustment;
     tubeZSize = (tubeZDiameter == "auto" ? tubeDiameter : tubeZDiameter) * mbuToMm + tubeZDiameterAdjustment;
     
-    // Pin
-    pinSize = (pinDiameter == "auto" ? pDiameter : pinDiameter) * mbuToMm + pinDiameterAdjustment;
-    
-    //Holes XYZ
-    holeXDiameterResolved = (holeXDiameter == "auto" ? studDiameter : holeXDiameter) * mbuToMm;
-    holeXSize = holeXDiameterResolved + holeXDiameterAdjustment;
-
-    holeXInsetThicknessFinal = holeXInsetThickness * mbuToMm + holeXInsetThicknessAdjustment;
-    holeXMaxRows = mb_vertical_hole_count(
-        rect_height = objectSizeZ,
-        first_hole_center_from_bottom = holeXGridOffsetZ * mbuToMm,
-        hole_diameter = holeXDiameterResolved + holeXInsetThickness * mbuToMm,
-        hole_center_spacing = holeXGridSizeZ * mbuToMm,
-        min_top_margin = holeXMinTopMargin * mbuToMm
-    );
-
-    holeYDiameterResolved = (holeYDiameter == "auto" ? studDiameter : holeYDiameter) * mbuToMm;
-    holeYSize = holeYDiameterResolved + holeYDiameterAdjustment;
-
-    holeYInsetThicknessFinal = holeYInsetThickness * mbuToMm + holeYInsetThicknessAdjustment;
-    holeYMaxRows = mb_vertical_hole_count(
-        rect_height = objectSizeZ,
-        first_hole_center_from_bottom = holeYGridOffsetZ * mbuToMm,
-        hole_diameter = holeYDiameterResolved + holeYInsetThickness * mbuToMm,
-        hole_center_spacing = holeYGridSizeZ * mbuToMm,
-        min_top_margin = holeYMinTopMargin * mbuToMm
-    );
-
-    holeZDiameterResolved = (holeZDiameter == "auto" ? studDiameter : holeZDiameter) * mbuToMm;
-    holeZSize = holeZDiameterResolved + holeZDiameterAdjustment;
-
-    holeZCenteredX = (holeZShift == true || holeZShift == "x" || holeZShift == "xy");
-    holeZCenteredY = (holeZShift == true || holeZShift == "y" || holeZShift == "xy");
-    
     //Stabilizer
     sGridThickness = stabilizerGridThickness * mbuToMm;
     sGridHeight = stabilizerGridHeight * mbuToMm;
@@ -424,23 +358,8 @@ module mb_block(
     offsetX = 0.5 * (size[0] - 1);
     offsetY = 0.5 * (size[1] - 1);
 
-    holeXStart = holeXShift ? (holeXPartial == "start" || holeXPartial == "all" ? startX - 1 : startX) : startX;
-    holeXEnd = holeXShift ? (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) : round(endX) - 1) : (holeXPartial == "end" || holeXPartial == "all" ? floor(endX) + 1 : floor(endX));
-
-    holeYStart = holeYShift ? (holeYPartial == "start" || holeYPartial == "all" ? startY - 1 : startY) : startY;
-    holeYEnd = holeYShift ? (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) : round(endY) - 1) : (holeYPartial == "end" || holeYPartial == "all" ? floor(endY) + 1 : floor(endY));
-
-    holeZStartX = holeZCenteredX ? (holeZPartialX == "start" || holeZPartialX == "all" ? startX - 1 : startX) : startX;
-    holeZEndX = holeZCenteredX ? (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) : round(endX) - 1) : (holeZPartialX == "end" || holeZPartialX == "all" ? floor(endX) + 1 : floor(endX));
-
-    holeZStartY = holeZCenteredY ? (holeZPartialY == "start" || holeZPartialY == "all" ? startY - 1 : startY) : startY;
-    holeZEndY = holeZCenteredY ? (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) : round(endY) - 1) : (holeZPartialY == "end" || holeZPartialY == "all" ? floor(endY) + 1 : floor(endY));
-
-    pillarStartX = min(holeZStartX, startX);
-    pillarEndX = max(holeZEndX, ceil(endX) - 1);
-
-    pillarStartY = min(holeZStartY, startY);
-    pillarEndY = max(holeZEndY, ceil(endY) - 1);
+    
+    
 
     /*
     * START Functions
@@ -539,107 +458,6 @@ module mb_block(
     function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((size[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight, 0) : 0);
     
     /*
-    * END Functions
-    */
-    if(mb_param_render(config, settings)){
-        if(debug){
-            echo(
-                id = blockId,
-                debugSource = "block.scad",
-                preview= $preview,
-                previewQuality = previewQuality,
-                size = size,
-                objectSizeZAdjusted = objectSizeZAdjusted, 
-                heightWithKnobs = objectSizeZAdjusted + knobHeight,
-                objectSizeXY = [objectSizeX, objectSizeY],
-                objectSizeMod = objectSizeMod,
-                objectSizeXYAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted],
-                topPlateHeight = topPlateHeight,
-                resultingTopPlateHeight = resultingTopPlateHeight, 
-                baseCutoutDepth = baseCutoutDepth,
-                calcBaseCutoutDepth = calculatedBaseCutoutDepth,
-                baseCutoutMinDepth = baseCutoutMinDepth,
-                slopeBaseHeightLower = slopeBaseHeightLower * mbuToMm,
-                recessDepth = resultingPitDepth, 
-                knobSize = knobSize,
-                knobHeight = knobHeight,
-                wallThickness = wallThickness,
-                baseClampWallThickness = baseClampWallThickness,
-                baseCutoutZ = baseCutoutZ, 
-                topPlateZ = topPlateZ, 
-                tubeDiameter = tubeDiameter,
-                tubeXSize = tubeXSize,
-                tubeYSize = tubeYSize,
-                tubeZSize = tubeZSize,
-                xyScrewHolesZ = xyScrewHolesZ,
-                pitFloorZ = pitFloorZ,
-                bevel = bevelRes,
-                baseRoundingRadiusZ = baseRoundingRadiusZ,
-                adjustedSizeRelation = adjustedSizeRelation,
-                direction = direction,
-                directionRotationZ = directionRotationZ
-            );
-        }
-        /*
-        * START BLOCK
-        */
-        
-        translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
-            rotate(rotation){
-                translate(preRotationOffset){
-                    rotate([0, 0, directionRotationZ]){
-                        union(){ // Final union
-                            mb_pre_render(previewRender, previewRenderConvexity){
-                                
-                                if(base){
-                                    difference(){
-                                        //color(baseColor){
-                                            union(){
-                                                if(baseCutoutType == "standard"){
-                                                    difference() {
-                                                        /*
-                                                        * Base Block
-                                                        */
-                                                        mb_base(
-                                                            block_obj = block_obj,
-
-                                                            grid = size,
-                                                            gridSizeXY = gridSizeXY,
-                                                            gridSizeZ = gridSizeZ,
-                                                            
-                                                            objectSize = objectSize,
-                                                            objectSizeMod = objectSizeMod,
-                                                            objectSizeAdjusted = objectSizeAdjusted, 
-                                                            
-                                                            height = objectSizeZAdjusted,
-                                                            
-                                                            connectors = connectors,
-                                                            connectorPadding = connectorPadding,
-                                                            connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
-                                                            connectorDepth = connectorDepth * mbuToMm,
-                                                            connectorSize = connectorWidth * mbuToMm,
-                                                            connectorDepthTolerance = connectorDepthTolerance,
-                                                            connectorSideTolerance = connectorSideTolerance,
-
-                                                            blockId = blockId,
-                                                            debug = debug
-                                                        );
-
-                                                        /*
-                                                        * Subtract base cutout
-                                                        */
-                                                        difference(){
-                                                            union(){
-                                                                *mb_base_cutout(
-                                                                    block_obj = block_obj,
-                                                                    debug = debug
-                                                                );
-
-                                                            } // End union cutout
-
-                                                            
-
-                                                            /*
                                                             
                                                                             * Screw Hole Helpers Z
                                                                             
@@ -658,124 +476,105 @@ module mb_block(
                                                                                 }
                                                                             }*/
 
-                                                            
-                                                            
-                                                            
-                                                            
-                                                        } // End Difference (subtract from cutout)
-                                                    } // End difference (subtract cutout from base)
-                                                }
-                                                else{
-                                                    /*
-                                                    * Solid Base Block
-                                                    */
-                                                    
-                                                    mb_base(
-                                                        block_obj = block_obj,
+    /*
+    * END Functions
+    */
+    if(mb_param_render(config, settings)){
+        translate([gridOffsetX, gridOffsetY, gridOffsetZ]){
+            rotate(rotation){
+                translate(preRotationOffset){
+                    rotate([0, 0, directionRotationZ]){
+                        union(){ // Final union
+                            mb_pre_render(previewRender, previewRenderConvexity){
+                                
+                                difference(){
+                                    //color(baseColor){
+                                        union(){
+                                            /*
+                                            * Base Block
+                                            */
+                                            mb_base(
+                                                block_obj = block_obj,
 
-                                                        grid = size,
-                                                        gridSizeXY = gridSizeXY,
-                                                        gridSizeZ = gridSizeZ,
-                                                        
-                                                        objectSize = objectSize,
-                                                        objectSizeMod = objectSizeMod,
-                                                        objectSizeAdjusted = objectSizeAdjusted, 
-
-                                                        height = objectSizeZAdjusted,
-                                                        
-                                                        connectors = connectors,
-                                                        connectorPadding = connectorPadding,
-                                                        connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
-                                                        connectorDepth = connectorDepth * mbuToMm,
-                                                        connectorSize = connectorWidth * mbuToMm,
-                                                        connectorDepthTolerance = connectorDepthTolerance,
-                                                        connectorSideTolerance = connectorSideTolerance,
-
-                                                        blockId = blockId,
-                                                        debug = debug
-                                                    );
-                                                } //End baseCutoutType
+                                                grid = size,
+                                                gridSizeXY = gridSizeXY,
+                                                gridSizeZ = gridSizeZ,
                                                 
-                                                //Cutouts
-                                                if(is_list(cutouts)){
-                                                    translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
-                                                        for(i = [0 : len(cutouts)]){
-                                                            if(mb_map_get(cutouts[i], "cutoutWall", false)){
-                                                                intersection(){
-                                                                    mb_block(
-                                                                        config = config,
-                                                                        settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["baseMod", 0.2], ["studs", false]])
-                                                                    );
+                                                objectSize = objectSize,
+                                                objectSizeMod = objectSizeMod,
+                                                objectSizeAdjusted = objectSizeAdjusted, 
+                                                
+                                                height = objectSizeZAdjusted,
+                                                
+                                                connectors = connectors,
+                                                connectorPadding = connectorPadding,
+                                                connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
+                                                connectorDepth = connectorDepth * mbuToMm,
+                                                connectorSize = connectorWidth * mbuToMm,
+                                                connectorDepthTolerance = connectorDepthTolerance,
+                                                connectorSideTolerance = connectorSideTolerance,
 
-                                                                    mb_block(
-                                                                        config = config,
-                                                                        settings = mb_map_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
-                                                                    );
-                                                                }
+                                                blockId = blockId,
+                                                debug = debug
+                                            );
+                                            
+                                            //Cutouts
+                                            if(is_list(cutouts)){
+                                                translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
+                                                    for(i = [0 : len(cutouts)]){
+                                                        if(mb_map_get(cutouts[i], "cutoutWall", false)){
+                                                            intersection(){
+                                                                mb_block(
+                                                                    config = config,
+                                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["baseClampOuter", true], ["baseMod", 0.2], ["studs", false]])
+                                                                );
+
+                                                                mb_block(
+                                                                    config = config,
+                                                                    settings = mb_map_merge(settings, [["cutouts", undef], ["baseCutoutType", "none"], ["studs", false]])
+                                                                );
                                                             }
                                                         }
                                                     }
                                                 }
-                                            } //End base union
-                                        //} //End base color
-                                        
-                                        /*
-                                        * Final Subtraction
-                                        * Starting from here, everything applies to the final block
-                                        *
-                                        */
-
-                                        
-
-                                        
-
-                                        
-
-                                        
-
-                                        
-
-                                        
-
-                                        
-                                        
-
-                                        
-                                        if(is_list(cutouts)){
-                                            translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
-                                                for(i = [0 : len(cutouts)]){
-                                                    mb_block(
-                                                        config = config,
-                                                        settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["studs", false]])
-                                                    );
-                                                }
+                                            }
+                                        } //End base union
+                                    //} //End base color
+                                    
+                                    if(is_list(cutouts)){
+                                        translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
+                                            for(i = [0 : len(cutouts)]){
+                                                mb_block(
+                                                    config = config,
+                                                    settings = mb_map_merge(cutouts[i], [["baseCutoutType", "none"], ["studs", false]])
+                                                );
                                             }
                                         }
+                                    }
 
-                                        if(is_list(ports)){
+                                    if(is_list(ports)){
+                                        
+                                        for(p = [0 : len(ports) - 1]){
+                                            port = ports[p];
+                                            sideInt = mb_side_to_int(port[0]);
                                             
-                                            for(p = [0 : len(ports) - 1]){
-                                                port = ports[p];
-                                                sideInt = mb_side_to_int(port[0]);
-                                                
-                                                
-                                                portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : objectSize[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
-                                                shapes = port[4];
-                                                translate(portSideOffset(port[0], port[1], port[2])){
-                                                    rotate(portRotation(port[0], port[3])){
-                                                        for(s = [0 : len(shapes) - 1]){
-                                                            shape = shapes[s];
-                                                            translate(portOffset(port[0], shape[1])){
-                                                                rotate(portShapeRotation(port[0])){
-                                                                    rotate([0, 0, shape[2]]){
-                                                                        if(shape[0] == "circle"){
-                                                                            cylinder(h = portCutThickness, r=0.5*shape[3][0], center=true, $fn=20);
-                                                                        }
-                                                                        else if(shape[0] == "rect"){
-                                                                            mb_cube(
-                                                                                size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
-                                                                                radius = shape[3][1], rounding_resolution=20);
-                                                                        }
+                                            
+                                            portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : objectSize[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
+                                            shapes = port[4];
+                                            translate(portSideOffset(port[0], port[1], port[2])){
+                                                rotate(portRotation(port[0], port[3])){
+                                                    for(s = [0 : len(shapes) - 1]){
+                                                        shape = shapes[s];
+                                                        translate(portOffset(port[0], shape[1])){
+                                                            rotate(portShapeRotation(port[0])){
+                                                                rotate([0, 0, shape[2]]){
+                                                                    if(shape[0] == "circle"){
+                                                                        cylinder(h = portCutThickness, r=0.5*shape[3][0], center=true, $fn=20);
+                                                                    }
+                                                                    else if(shape[0] == "rect"){
+                                                                        mb_cube(
+                                                                            size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
+                                                                            radius = shape[3][1], rounding_resolution=20);
                                                                     }
                                                                 }
                                                             }
@@ -784,30 +583,26 @@ module mb_block(
                                                 }
                                             }
                                         }
-                                    } // End main difference
-                                }
-
+                                    }
+                                } // END main difference
                                 
-
-
-
-                            } // End pre_render
+                            } // END pre_render
 
                             // Render Children
                             translate([translateXChildren, translateYChildren, translateZChildren]){
                                 children();
                             }
                             
-                        } // End final union
+                        } // END final union
                     
-                    } // End direction rotation
-                } // End rotation offset and alignment
-            } // End rotation
-        } // End grid offset and rotation offset revert
+                    } // END direction rotation
+                } // END rotation offset and alignment
+            } // END rotation
+        } // END grid offset and rotation offset revert
 
         echo(str("Rendered ", blockId, " - Need Help? Join our Discord: MachineBlocks.com"));
-    }
+    } // END if render
     else{
         echo(str("Ignored ", blockId));
     }
-} // End module block
+} // END module block
