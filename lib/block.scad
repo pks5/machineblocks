@@ -73,16 +73,11 @@ module mb_block(
     baseCutoutRoundingRadius = mb_param_baseCutoutRoundingRadius(config, settings);
     
 
-    baseReliefCut = mb_param_reliefCut(config, settings);
-    baseReliefCutHeight = mb_param_reliefCutHeight(config, settings);
-    baseReliefCutThickness = mb_param_reliefCutThickness(config, settings);
-
     baseSideAdjustment = mb_param_baseAdjustment(config, settings);
     
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
-    baseWallGaps = mb_param_baseWallGaps(config, settings);
-
+    
     stabilizerGrid = mb_param_stabilizers(config, settings);
     stabilizerGridOffset = mb_param_stabilizerPrintOffset(config, settings);
     stabilizerGridHeight = mb_param_stabilizerHeight(config, settings);
@@ -162,25 +157,12 @@ module mb_block(
     studMaxOverhang = mb_param_studMaxOverhang(config, settings);
     studPadding = mb_param_studPadding(config, settings);
 
-    studClampHeight = mb_param_studClampHeight(config, settings);
-    studClampThickness = mb_param_studClampThickness(config, settings);
-
-    studHoleDiameter = mb_param_studHoleDiameter(config, settings);
-    studHoleDiameterAdjustment = mb_param_studHoleDiameterAdjustment(config, settings);
-    studHoleClampThickness = mb_param_studHoleClampThickness(config, settings);
-
-    studRounding = mb_param_studRounding(config, settings);
-
+    
     studDiameter = mb_param_studDiameter(config, settings);
     studDiameterAdjustment = mb_param_studDiameterAdjustment(config, settings);
 
     studHeight = mb_param_studHeight(config, settings);
     studHeightAdjustment = mb_param_studHeightAdjustment(config, settings);
-
-    studSink = mb_param_studSink(config, settings);
-
-    studCutoutDiameterAdjustment = mb_param_studCutoutDiameterAdjustment(config, settings);
-    studCutoutHeightAdjustment = mb_param_studCutoutHeightAdjustment(config, settings);
 
     recess = mb_param_recess(config, settings);
     recessRoundingRadius = mb_param_recessRoundingRadius(config, settings);
