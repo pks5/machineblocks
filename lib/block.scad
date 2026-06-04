@@ -20,11 +20,6 @@ use <layout/base_outer.scad>;
 use <layout/base_cutout.scad>;
 use <layout/base.scad>;
 
-use <shape/prismoid.scad>;
-use <shape/text3d.scad>;
-use <shape/svg3d.scad>;
-use <shape/pcb.scad>;
-use <shape/axis.scad>;
 use <shape/cube.scad>;
 
 include <core/api.scad>;
@@ -87,10 +82,6 @@ module mb_block(
     baseWallThickness = mb_param_baseWallThickness(config, settings);
     baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
     baseWallGaps = mb_param_baseWallGaps(config, settings);
-
-    topPlateHelpers = mb_param_topPlateHelpers(config, settings);
-    topPlateHelperHeight = mb_param_topPlateHelperHeight(config, settings);
-    topPlateHelperThickness = mb_param_topPlateHelperThickness(config, settings);
 
     stabilizerGrid = mb_param_stabilizers(config, settings);
     stabilizerGridOffset = mb_param_stabilizerPrintOffset(config, settings);
@@ -191,28 +182,6 @@ module mb_block(
     studCutoutDiameterAdjustment = mb_param_studCutoutDiameterAdjustment(config, settings);
     studCutoutHeightAdjustment = mb_param_studCutoutHeightAdjustment(config, settings);
 
-    studIcon = mb_param_studIcon(config, settings);
-    studIconDimensions = mb_param_studIconDimensions(config, settings);
-    studIconScale = mb_param_studIconScale(config, settings);
-    studIconDepth = mb_param_studIconDepth(config, settings);
-    studIconColor = mb_param_studIconColor(config, settings);
-
-    tongue = mb_param_tongue(config, settings);
-    tongueHeight = mb_param_tongueHeight(config, settings);
-    tongueGrooveDepth = mb_param_tongueGrooveDepth(config, settings);
-    tongueRoundingRadius = mb_param_tongueRoundingRadius(config, settings);
-    tongueThickness = mb_param_tongueThickness(config, settings);
-    tongueThicknessAdjustment = mb_param_tongueThicknessAdjustment(config, settings);
-    tongueOffset = mb_param_tongueOffset(config, settings);
-    tongueClampHeight = mb_param_tongueClampHeight(config, settings);
-    tongueClampOffset = mb_param_tongueClampOffset(config, settings);
-    tongueClampThickness = mb_param_tongueClampThickness(config, settings);
-
-    grille = mb_param_grille(config, settings);
-    grilleInverted = mb_param_grilleInverted(config, settings);
-    grilleDepth = mb_param_grilleDepth(config, settings);
-    grilleCount = mb_param_grilleCount(config, settings);
-
     recess = mb_param_recess(config, settings);
     recessRoundingRadius = mb_param_recessRoundingRadius(config, settings);
     recessDepth = mb_param_recessDepth(config, settings);
@@ -223,34 +192,6 @@ module mb_block(
     recessStudShift = mb_param_recessStudShift(config, settings);
     recessWallGaps = mb_param_recessWallGaps(config, settings);
 
-    text = mb_param_text(config, settings);
-    textSide = mb_param_textFace(config, settings);
-    textDepth = mb_param_textDepth(config, settings);
-    textFont = mb_param_textFont(config, settings);
-    textSize = mb_param_textSize(config, settings);
-    textSpacing = mb_param_textSpacing(config, settings);
-    textAlign = mb_param_textAlign(config, settings);
-    
-    textHorizontalAlign = textAlign[0];
-    textVerticalAlign = textAlign[1];
-    textOffset = mb_param_textOffset(config, settings);
-    textColor = mb_param_textColor(config, settings);
-
-    surfacePattern = mb_param_surfacePattern(config, settings);
-    surfacePatternDimensions = mb_param_surfacePatternDimensions(config, settings);
-    surfacePatternOffset = mb_param_surfacePatternOffset(config, settings);
-    surfacePatternScale = mb_param_surfacePatternScale(config, settings);
-    surfacePatternDepth = mb_param_surfacePatternDepth(config, settings);
-    surfacePatternColor = mb_param_surfacePatternColor(config, settings);
-
-    svg = mb_param_svg(config, settings);
-    svgSide = mb_param_svgFace(config, settings);
-    svgDepth = mb_param_svgDepth(config, settings);
-    svgDimensions = mb_param_svgDimensions(config, settings);
-    svgScale = mb_param_svgScale(config, settings);
-    svgOffset = mb_param_svgOffset(config, settings);
-    svgColor = mb_param_svgColor(config, settings);
-
     connectors = mb_param_connectors(config, settings);
     connectorPadding = mb_param_connectorPadding(config, settings);
     connectorHeight = mb_param_connectorHeight(config, settings);
@@ -258,14 +199,6 @@ module mb_block(
     connectorWidth = mb_param_connectorWidth(config, settings);
     connectorDepthTolerance = mb_param_connectorDepthTolerance(config, settings);
     connectorSideTolerance = mb_param_connectorSideTolerance(config, settings);
-
-    pcb = mb_param_pcb(config, settings);
-    pcbDimensions = mb_param_pcbDimensions(config, settings);
-    pcbOffset = mb_param_pcbOffset(config, settings);
-    pcbScrewSocketSize = mb_param_pcbSocketDiameter(config, settings);
-    pcbScrewSocketHoleSize = mb_param_pcbSocketHoleDiameter(config, settings);
-    pcbScrewSocketHeight = mb_param_pcbSocketHeight(config, settings);
-    pcbScrewSockets = mb_param_pcbSockets(config, settings);
 
     align = mb_param_align(config, settings);
     alignChildren = mb_param_alignChildren(config, settings);
@@ -489,8 +422,6 @@ module mb_block(
     sGridThickness = stabilizerGridThickness * mbuToMm;
     sGridHeight = stabilizerGridHeight * mbuToMm;
     
-    grilleSmall = grilleDepth * mbuToMm < resultingTopPlateHeight;
-
     //Decorator Rotations
     decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
 
