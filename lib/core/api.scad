@@ -144,8 +144,8 @@ function mb_param_pinDiameterAdjustment(config, settings, default = undef) = mb_
 * Tubes
 */ 
 
-function mb_param_tubeDiameter(config, settings, default = undef) = mb_param(config, settings, "tubeDiameter", default != undef ? default : "auto");
-function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "tubeDiameterAdjustment", default != undef ? default : -0.1);
+function mb_param_tubeDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "tubeDiameter", default != undef ? default : "auto"));
+function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "tubeDiameterAdjustment", default != undef ? default : -0.1));
 
 /*
 * Slope
@@ -398,6 +398,23 @@ function mb_param_renderGroups(config, settings, default = undef) = let (parts =
 /*
 * Parameter Helpers
 */
+
+function _mb_param_is_value(value) = is_num(value) || is_string(value);
+
+function mb_param_resolve_xyz(value) = 
+    _mb_param_is_value(value) ? [value, value, value] :
+    is_array(value) ? (
+        len(value) == 1 && _mb_param_is_value(value[0]) ? [value[0], value[0], value[0]] :
+        len(value) == 2 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1])? [value[0], value[0], value[1]] :
+        len(value) == 3 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1]) && _mb_param_is_value(value[2]) ? value : undef
+    ) : undef;
+
+function mb_param_resolve_xy(value) = 
+    _mb_param_is_value(value) ? [value, value] :
+    is_array(value) ? (
+        len(value) == 1 && _mb_param_is_value(value[0]) ? [value[0], value[0]] :
+        len(value) == 2 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1]) ? value : undef
+    ) : undef;
 
 function mb_param(config, settings, key, default=undef) =
     let(

@@ -173,8 +173,14 @@ function mb_block_obj(
         /*
         * Tube / Pin
         */
+        tube_diameter = mb_param_tubeDiameter(config, settings),
+        tube_diameter_adj = mb_param_tubeDiameterAdjustment(config, settings),
         pillar_org_wall_thickness = mb_param_pillarOriginalWallThickness(config, settings) * mbu2grd_xy,
-        default_tube_diameter = stud_diameter_res + 2 * pillar_org_wall_thickness,  // TODO XYZ
+        tube_diameter_original = stud_diameter_res + 2 * pillar_org_wall_thickness,  // TODO XYZ
+        tube_diameter_xyz = [
+            for(i = [0 : 2])
+            (tube_diameter[i] == "auto" ? tube_diameter_original : tube_diameter[i] * mbu2grd_xy) + tube_diameter_adj[i] * mm2grd_xy
+        ],
         tube_hole_size = stud_diameter_res,  // TODO XYZ
         pinDiameter = mb_param_pinDiameter(config, settings),
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy 
@@ -310,7 +316,7 @@ function mb_block_obj(
                 mb_param_recessStudShift(config, settings)
             ],  // 14 - 
             [
-                default_tube_diameter, 
+                tube_diameter_xyz, 
                 tube_hole_size, 
                 pillar_org_wall_thickness, 
                 pin_diameter,
@@ -478,7 +484,7 @@ function mb_block_get_stabilizer_expansion(block_obj) =             block_obj[16
 function mb_block_get_stabilizer_expansion_offset(block_obj) =      block_obj[16][5];
 
 // Tubes
-function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0];
+function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0][mb_axis_to_int(axis)];
 function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15][1];
 function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
