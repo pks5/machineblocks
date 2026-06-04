@@ -181,18 +181,19 @@ function mb_block_obj(
         pin_diameter = (pinDiameter == "auto" ? p_diameter : pinDiameter) * mbu2grd_xy 
                         + mb_param_pinDiameterAdjustment(config, settings) * mm2grd_xy,
 
-        tube_hole_inset_thickness = mb_param_holeXInsetThickness(config, settings) * mbu2grd_xy
-                            + mb_param_holeXInsetThicknessAdjustment(config, settings) * mm2grd_xy,
-        tube_hole_inset_depth = mb_param_holeXInsetDepth(config, settings) * mbu2grd_xy
-                            + mb_param_holeXInsetDepthAdjustment(config, settings) * mm2grd_xy,
+        tube_hole_inset_thickness = mb_param_holeXYZInsetThickness(config, settings) * mbu2grd_xy
+                            + mb_param_holeXYZInsetThicknessAdjustment(config, settings) * mm2grd_xy,
+        
+        tube_hole_inset_depth = mb_param_holeXYZInsetDepth(config, settings) * mbu2grd_xy
+                            + mb_param_holeXYZInsetDepthAdjustment(config, settings) * mm2grd_xy,
 
-        tube_hole_grid_offset_z = mb_param_holeXGridOffsetZ(config, settings) * mbu2grd_z
-                            + mb_param_holeXGridOffsetZAdjustment(config, settings) * mm2grd_z,
+        tube_hole_grid_offset_z = mb_param_holeXYGridOffsetZ(config, settings) * mbu2grd_z
+                            + mb_param_holeXYGridOffsetZAdjustment(config, settings) * mm2grd_z,
 
-        tube_hole_grid_size_z = mb_param_holeXGridSizeZ(config, settings) * mbu2grd_z
-                            + mb_param_holeXGridSizeZAdjustment(config, settings) * mm2grd_z,
+        tube_hole_grid_size_z = mb_param_holeXYGridSizeZ(config, settings) * mbu2grd_z
+                            + mb_param_holeXYGridSizeZAdjustment(config, settings) * mm2grd_z,
 
-        tube_hole_min_top_margin = mb_param_holeXMinTopMargin(config, settings) * mbu2grd_z,
+        tube_hole_min_top_margin = mb_param_holeXYMinTopMargin(config, settings) * mbu2grd_z,
         /*
         * Tongue
         */

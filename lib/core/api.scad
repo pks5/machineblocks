@@ -147,46 +147,48 @@ function mb_param_bevel(config, settings, default = undef) = mb_param(config, se
 * Holes
 */
 
+// XY
+function mb_param_holeXYGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625);
+function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXYGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6);
+function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5);
+
+// XYZ
+function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetThickness", default != undef ? default : 0.375);
+function mb_param_holeXYZInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetThicknessAdjustment", default != undef ? default : 0.0);
+function mb_param_holeXYZInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepth", default != undef ? default : 0.5);
+function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepthAdjustment", default != undef ? default : 0.0);
+
+
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
 function mb_param_holeXShift(config, settings, default = undef) = mb_param(config, settings, "holeXShift", default != undef ? default : true);
 function mb_param_holeXDiameter(config, settings, default = undef) = mb_param(config, settings, "holeXDiameter", default != undef ? default : "auto");
 function mb_param_holeXDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXDiameterAdjustment", default != undef ? default : 0.3);
 
-function mb_param_holeXInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeXInsetThickness", default != undef ? default : 0.375);
-function mb_param_holeXInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXInsetThicknessAdjustment", default != undef ? default : 0.0);
-function mb_param_holeXInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeXInsetDepth", default != undef ? default : 0.5);
-function mb_param_holeXInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXInsetDepthAdjustment", default != undef ? default : 0.0);
-
-function mb_param_holeXGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeXGridOffsetZ", default != undef ? default : 3.625);
-function mb_param_holeXGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXGridOffsetZAdjustment", default != undef ? default : 0.0);
-function mb_param_holeXGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeXGridSizeZ", default != undef ? default : 6);
-function mb_param_holeXGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXGridSizeZAdjustment", default != undef ? default : 0.0);
-function mb_param_holeXMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeXMinTopMargin", default != undef ? default : 0.5);
-
 function mb_param_holeXPartial(config, settings, default = undef) = mb_param(config, settings, "holeXPartial", default != undef ? default : "none");
+
+
+
+
 
 function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
 function mb_param_holeYType(config, settings, default = undef) = mb_param(config, settings, "holeYType", default != undef ? default : "pin");
 function mb_param_holeYShift(config, settings, default = undef) = mb_param(config, settings, "holeYShift", default != undef ? default : true);
 function mb_param_holeYDiameter(config, settings, default = undef) = mb_param(config, settings, "holeYDiameter", default != undef ? default : "auto");
 function mb_param_holeYDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYDiameterAdjustment", default != undef ? default : 0.3);
-function mb_param_holeYInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeYInsetThickness", default != undef ? default : 0.375);
-function mb_param_holeYInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYInsetThicknessAdjustment", default != undef ? default : 0.0);
-function mb_param_holeYInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeYInsetDepth", default != undef ? default : 0.5);
-function mb_param_holeYInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYInsetDepthAdjustment", default != undef ? default : 0.0);
-function mb_param_holeYGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeYGridOffsetZ", default != undef ? default : 3.625);
-function mb_param_holeYGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYGridOffsetZAdjustment", default != undef ? default : 0.0);
-function mb_param_holeYGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeYGridSizeZ", default != undef ? default : 6);
-function mb_param_holeYGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeYGridSizeZAdjustment", default != undef ? default : 0.0);
-function mb_param_holeYMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeYMinTopMargin", default != undef ? default : 0.5);
+
 function mb_param_holeYPartial(config, settings, default = undef) = mb_param(config, settings, "holeYPartial", default != undef ? default : "none");
+
+
 
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
 function mb_param_holeZType(config, settings, default = undef) = mb_param(config, settings, "holeZType", default != undef ? default : "pin");
 function mb_param_holeZShift(config, settings, default = undef) = mb_param(config, settings, "holeZShift", default != undef ? default : true);
 function mb_param_holeZDiameter(config, settings, default = undef) = mb_param(config, settings, "holeZDiameter", default != undef ? default : "auto");
 function mb_param_holeZDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeZDiameterAdjustment", default != undef ? default : 0.3);
+
 function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");
 function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
 
