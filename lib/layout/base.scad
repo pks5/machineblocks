@@ -26,6 +26,8 @@ use <text_decorator.scad>;
 use <pcb_holder.scad>;
 use <screw_holes.scad>;
 
+use <tubes.scad>;
+
 /*
 * Base Cutout
 */

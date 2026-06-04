@@ -12,7 +12,7 @@ use <shared.scad>;
 function mb_block_part__pillars(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        tube_range = mb_block_pillar_range(block_obj),
+        pillar_range = mb_block_pillar_range(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
@@ -23,8 +23,8 @@ function mb_block_part__pillars(block_obj) =
     [
         "list",
         [
-            for(x = tube_range[0])
-                for(y = tube_range[1])
+            for(x = pillar_range[0])
+                for(y = pillar_range[1])
                     if(mb_block_pillar_render(block_obj, x, y))
                         let(
                             tube_clamp_end = [

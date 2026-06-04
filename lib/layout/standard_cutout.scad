@@ -10,6 +10,7 @@ use <base_cutout_clamp.scad>;
 use <top_plate_helpers.scad>;
 use <stabilizers.scad>;
 use <pillars.scad>;
+use <tubes.scad>;
 use <stud_cutouts.scad>;
 
 function mb_block_part__standard_cutout(block_obj) =
@@ -37,6 +38,8 @@ function mb_block_part__standard_cutout(block_obj) =
                 ]
             ),
 
-            mb_block_part__pillars(block_obj)
+            mb_block_part__pillars(block_obj),
+
+            mb_block_part__tubes(block_obj)
         ]
     );
