@@ -990,6 +990,10 @@ function mb_axis_to_int(axis) =
         undef
     ) : axis;
 
+function mb_axis_faces(axis) = 
+    let(axis = mb_axis_to_int(axis))
+    axis >= 0 && axis <= 2 ? [axis * 2, axis * 2 + 1] : undef;
+
 function mb_axis_rotate(axis) =
     axis == 0 ? [0, 90 , 0] : axis == 1 ? [-90, 0, 0] : [0, 0, 0];
 

@@ -18,7 +18,8 @@ function mb_block_part__tubes(block_obj, hole = false) =
         [
             for(axis = ["x", "y"])
                 let(
-                    tube_range = mb_block_tube_range(block_obj, axis)
+                    tube_range = mb_block_tube_range(block_obj, axis),
+                    axis_faces = mb_axis_faces(axis)
                 )
                 for(xy = tube_range[0])
                     for(z = tube_range[1])
@@ -42,13 +43,13 @@ function mb_block_part__tubes(block_obj, hole = false) =
                                         block_dim, 
                                         adjusted = true,
                                         overlap = true,
-                                        face = "x-"
+                                        face = axis_faces[0]
                                     ),
                                     mb_block_dim_face_edge_expand(
                                         block_dim, 
                                         adjusted = true,
                                         overlap = true,
-                                        face = "x+"
+                                        face = axis_faces[1]
                                     ),
                                 ],
                                 offset = mb_block_tube_offset(block_obj, axis, xy, z)
