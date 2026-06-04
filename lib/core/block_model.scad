@@ -759,21 +759,21 @@ function mb_block_tube_range(block_obj, axis) =
         block_dim = mb_block_get_dim(block_obj),
         axis = mb_axis_to_int(axis),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        start_index_xy = min_max_index[0][axis],
+        start_index_xy = min_max_index[0][1 - axis],
         start_index_z = min_max_index[0][2],
-        end_index_xy = min_max_index[1][axis],
+        end_index_xy = min_max_index[1][1 - axis],
         end_index_z = min_max_index[1][2],
-        range_offset_start = [0, 1.5],
+        range_offset_start = [1, 1.5],
         range_offset_end = [0, 0]
     )
     [
-        [start_index_xy + range_offset_start[0] : end_index_xy + range_offset_end[0]],
+        [(start_index_xy + range_offset_start[0]) : (end_index_xy + range_offset_end[0])],
         [start_index_z + range_offset_start[1] : 3 : end_index_z + range_offset_end[1]]
     ];
 
 function mb_block_tube_render(block_obj, axis, xy, z) =
     let(axis = mb_axis_to_int(axis))
-    true;
+    axis == 0;
 
 function mb_block_tube_offset(block_obj, axis, xy, z) =
     let(
@@ -781,19 +781,19 @@ function mb_block_tube_offset(block_obj, axis, xy, z) =
         tube_offset = [0, 0]
     )
     mb_block_pos_to_offset(block_obj, [
-        axis == 0 ? xy + tube_offset[0] : undef, 
         axis == 1 ? xy + tube_offset[0] : undef, 
+        axis == 0 ? xy + tube_offset[0] : undef, 
         z + tube_offset[1]
     ]);
 
-function mb_block_tube_radius(block_obj, axis, xy, z) =
+function mb_block_tube_radius(block_obj, axis, xy, z, hole = false) =
     let(
         axis = mb_axis_to_int(axis),
         tube_diameter = mb_block_get_tube_diameter(block_obj, axis),
         tube_hole_size = mb_block_get_tube_hole_size(block_obj, axis)
         
     )
-    0.5 * tube_diameter;
+    0.5 * (hole ? tube_hole_size : tube_diameter);
 
 /**
 * -------

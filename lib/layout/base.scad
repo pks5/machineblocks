@@ -155,6 +155,11 @@ module mb_base(
             mb_block_part(block_obj, part = mb_block_part__screw_holes(block_obj), debug = debug);
 
             /*
+            * Tube Holes
+            */
+            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj, hole = true), debug = debug);
+
+            /*
             * Connectors
             */
             if(connectors != false){
