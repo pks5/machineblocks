@@ -67,7 +67,7 @@ module mb_base(
     debug
 ){
     union(){
-        
+        if(mb_block_has_base(block_obj))
         difference(){
             
             union(){

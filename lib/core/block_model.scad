@@ -199,6 +199,13 @@ function mb_block_obj(
                             + mb_param_holeXYGridSizeZAdjustment(config, settings) * mm2grd_z,
 
         tube_hole_min_top_margin = mb_param_holeXYMinTopMargin(config, settings) * mbu2grd_z,
+
+        has_holes = [
+            mb_param_holeX(config, settings),
+            mb_param_holeY(config, settings),
+            mb_param_holeZ(config, settings)
+        ],
+
         /*
         * Tongue
         */
@@ -262,7 +269,8 @@ function mb_block_obj(
                 baseCutoutType, 
                 wall_thickness_final, 
                 base_clamp, 
-                cutout_min_depth
+                cutout_min_depth,
+                mb_param_base(config, settings)
             ], // 4 - Top Plate Height
             [
                 mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z, 
@@ -405,7 +413,10 @@ function mb_block_obj(
                 mb_array_mul(mul_mm_to_grid, mb_param_screwHoleDepth(config, settings)),
                 mb_array_mul(mul_mm_to_grid, mb_param_screwHoleInsetThickness(config, settings)),
                 mb_array_mul(mul_mm_to_grid, mb_param_screwHoleInsetDepth(config, settings))
-            ] // Screw Holes
+            ], // 27 - Screw Holes
+            [
+                has_holes
+            ] // 28 - Pin Holes
         ];
 
 /*
@@ -424,7 +435,7 @@ function mb_block_get_id(block_obj) =                               block_obj[20
 function mb_block_get_bevel(block_obj) =                            block_obj[1][0];
 function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
 
-
+// Slope
 function mb_block_get_slope_socket(block_obj) =                     [block_obj[5][0], block_obj[5][1]];
 function mb_block_get_slope_base_height_bottom(block_obj) =          block_obj[5][0];
 function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5][2];
@@ -437,7 +448,9 @@ function mb_block_get_base_adj(block_obj) =                         block_obj[6]
 function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
 
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
+function mb_block_has_base(block_obj) =                             block_obj[4][6];
 
+// Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
 function mb_block_get_top_plate_height_pref(block_obj) =            block_obj[11][0];
 
@@ -445,6 +458,7 @@ function mb_block_has_top_plate_helpers(block_obj) =                block_obj[2]
 function mb_block_get_top_plate_helpers_thickness(block_obj) =      block_obj[2][1];
 function mb_block_get_top_plate_helpers_height(block_obj) =         block_obj[2][2];
 
+// Recess
 function mb_block_has_recess(block_obj) =                           block_obj[8][0];
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
 function mb_block_get_recess_depth(block_obj) =                     block_obj[8][2];
@@ -456,10 +470,12 @@ function mb_block_get_grid_cfg(block_obj) =                         block_obj[7]
 
 function mb_block_get_scale(block_obj) =                            block_obj[7][1];
 
+// Relief Cut
 function mb_block_has_relief_cut(block_obj) =                       block_obj[12][0];
 function mb_block_get_relief_cut_thickness(block_obj) =             block_obj[12][1];
 function mb_block_get_relief_cut_height(block_obj) =                block_obj[12][2];
 
+// Base Clamp
 function mb_block_get_base_clamp_thickness(block_obj) =             block_obj[4][4][0];
 function mb_block_get_base_clamp_height(block_obj) =                block_obj[4][4][1];
 function mb_block_get_base_clamp_offset(block_obj) =                block_obj[4][4][2];
@@ -486,13 +502,20 @@ function mb_block_get_stabilizer_expansion_offset(block_obj) =      block_obj[16
 // Tubes
 function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0][mb_axis_to_int(axis)];
 function mb_block_get_tube_hole_size(block_obj, axis) =             block_obj[15][1];
-function mb_block_get_tube_wall_thickness(block_obj, axis) =        block_obj[15][2];
-function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
+
+
 function mb_block_get_tube_hole_inset_thickness(block_obj) =        block_obj[15][4];
 function mb_block_get_tube_hole_inset_depth(block_obj) =            block_obj[15][5];
 function mb_block_get_tube_hole_grid_offset_z(block_obj) =          block_obj[15][6];
 function mb_block_get_tube_hole_grid_size_z(block_obj) =            block_obj[15][7];
 function mb_block_get_tube_hole_min_top_margin(block_obj) =         block_obj[15][8];
+
+// Pillars
+function mb_block_get_pillar_wall_thickness(block_obj) =            block_obj[15][2];
+function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
+
+// Holes
+function mb_block_has_holes(block_obj, axis) =                      block_obj[28][0][mb_axis_to_int(axis)];
 
 // Studs
 function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
@@ -812,7 +835,7 @@ function mb_block_tube_range(block_obj, axis) =
 
 function mb_block_tube_render(block_obj, axis, xy, z) =
     let(axis = mb_axis_to_int(axis))
-    axis == 0;
+    true;
 
 function mb_block_tube_offset(block_obj, axis, xy, z) =
     let(
@@ -948,8 +971,8 @@ function mb_block_stabilizer_segment_size(block_obj, axis, x, y) =
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
         tube_z_diameter = mb_block_get_tube_diameter(block_obj, "z"),
-        tube_wall_thickness = mb_block_get_tube_wall_thickness(block_obj, "z"),
-        default_segment_length = 1 - tube_z_diameter + tube_wall_thickness,
+        pillar_wall_thickness = mb_block_get_pillar_wall_thickness(block_obj),
+        default_segment_length = 1 - tube_z_diameter + pillar_wall_thickness,
         segment_thickness = mb_block_get_stabilizer_thickness(block_obj),
         stabilizer_expansion = mb_block_get_stabilizer_expansion(block_obj),
         base_cutout_depth = mb_block_get_base_cutout_depth(block_obj),
