@@ -5,7 +5,8 @@ use <../core/block_part.scad>;
 
 function mb_block_part__svg_decorator(block_obj, subtract = false) = 
     let(svg_depth = mb_block_get_svg_depth(block_obj),
-        svg_decorator = mb_block_get_svg(block_obj))
+        svg_decorator = mb_block_get_svg(block_obj)
+    )
     
     svg_decorator == false
         || mb_is_empty_string(svg_decorator) 
@@ -17,7 +18,7 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
-        
+        has_recess = mb_block_has_recess(block_obj),
         svg_dimensions = mb_block_get_svg_dimensions(block_obj),
         svg_offset = mb_resolve_xyz(mb_block_get_svg_offset(block_obj), default = [0, 0, 0]),
         svg_color = mb_block_get_svg_color(block_obj),
@@ -154,7 +155,26 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
                 face = "z+"
             )
         ] 
-        : [
+        : (has_recess ? [
+            
+            0,
+            0,
+            0,
+            0,
+            mb_block_recess_floor_offset(
+                block_obj, 
+                overlap = true, 
+                off = subtract ? abs(svg_depth[2]) : 0, 
+                face = "z-"
+            ),
+            mb_block_recess_floor_offset(
+                block_obj, 
+                off = !subtract ? abs(svg_depth[2]) : 0, 
+                face = "z+"
+            )
+            ]
+            
+            : [
             0,
             0,
             0,
@@ -173,7 +193,7 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
                 adjusted = true, 
                 face = "z+"
             )
-        ] 
+        ] )
     )   
     mb_block_part_svg(
         block_dim,
