@@ -53,9 +53,6 @@ module mb_block(
     cutouts = mb_param_cutouts(config, settings);
     ports = mb_param_ports(config, settings);
     
-    base = mb_param_base(config, settings);
-    baseColor = mb_param_baseColor(config, settings);
-    
     baseMod = mb_param_sizeMod(config, settings);
 
     baseTopPlateHeight = mb_param_topPlateHeight(config, settings);
@@ -64,19 +61,9 @@ module mb_block(
     baseCutoutType = mb_param_baseCutoutType(config, settings);
     baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings);
 
-    baseClampOffset = mb_param_baseClampOffset(config, settings);
-    baseClampHeight = mb_param_baseClampHeight(config, settings);
-    baseClampThickness = mb_param_baseClampThickness(config, settings);
     baseClampOuter = mb_param_baseClampOuter(config, settings);
 
-    baseRoundingRadius = mb_param_baseRoundingRadius(config, settings);
-    baseCutoutRoundingRadius = mb_param_baseCutoutRoundingRadius(config, settings);
-    
-
     baseSideAdjustment = mb_param_baseAdjustment(config, settings);
-    
-    baseWallThickness = mb_param_baseWallThickness(config, settings);
-    baseWallThicknessAdjustment = mb_param_baseWallThicknessAdjustment(config, settings);
     
     stabilizerGrid = mb_param_stabilizers(config, settings);
     stabilizerGridOffset = mb_param_stabilizerPrintOffset(config, settings);
@@ -90,25 +77,10 @@ module mb_block(
     pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
 
     slope = mb_param_slope(config, settings);
-    slopeBaseHeightLower = mb_param_slopeBaseHeightBottom(config, settings);
-    slopeBaseHeightLowerInner = mb_param_slopeBaseHeightInner(config, settings);
-    slopeBaseHeightUpper = mb_param_slopeBaseHeightTop(config, settings);
-
     bevel = mb_param_bevel(config, settings);
 
     studs = mb_param_studs(config, settings);
-    studType = mb_param_studType(config, settings);
-    studShift = mb_param_studShift(config, settings);
-    studMaxOverhang = mb_param_studMaxOverhang(config, settings);
-    studPadding = mb_param_studPadding(config, settings);
-
     
-    studDiameter = mb_param_studDiameter(config, settings);
-    studDiameterAdjustment = mb_param_studDiameterAdjustment(config, settings);
-
-    studHeight = mb_param_studHeight(config, settings);
-    studHeightAdjustment = mb_param_studHeightAdjustment(config, settings);
-
     recess = mb_param_recess(config, settings);
     recessRoundingRadius = mb_param_recessRoundingRadius(config, settings);
     recessDepth = mb_param_recessDepth(config, settings);
@@ -413,7 +385,7 @@ module mb_block(
                             mb_pre_render(previewRender, previewRenderConvexity){
                                 
                                 difference(){
-                                    //color(baseColor){
+                                    
                                         union(){
                                             /*
                                             * Base Block
@@ -464,7 +436,7 @@ module mb_block(
                                                 }
                                             }
                                         } //End base union
-                                    //} //End base color
+                                    
                                     
                                     if(is_list(cutouts)){
                                         translate([-rotationOffsetX - alignX, -rotationOffsetY - alignY, -rotationOffsetZ - alignZ]){
