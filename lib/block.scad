@@ -96,17 +96,6 @@ module mb_block(
 
     bevel = mb_param_bevel(config, settings);
 
-    holeX = mb_param_holeX(config, settings);
-    holeXType = mb_param_holeXType(config, settings);
-    
-
-    holeY = mb_param_holeY(config, settings);
-    holeYType = mb_param_holeYType(config, settings);
-    
-
-    holeZ = mb_param_holeZ(config, settings);
-    holeZType = mb_param_holeZType(config, settings);
-
     studs = mb_param_studs(config, settings);
     studType = mb_param_studType(config, settings);
     studShift = mb_param_studShift(config, settings);
