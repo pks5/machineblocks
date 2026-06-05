@@ -172,16 +172,11 @@ function mb_param_bevel(config, settings, default = undef) = mb_param(config, se
 */
 
 // XY
-// TODO implement xy
-function mb_param_holeXYGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625);
-// TODO implement xy
-function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0);
-// TODO implement xy
-function mb_param_holeXYGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6);
-// TODO implement xy
-function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0);
-// TODO implement xy
-function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5);
+function mb_param_holeXYGridOffsetZ(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625));
+function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYGridSizeZ(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6));
+function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_param_resolve_xy(mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5));
 
 // XYZ
 function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZInsetThickness", default != undef ? default : 0.375));
