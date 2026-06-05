@@ -45,8 +45,9 @@ function mb_param_sizeAdjustment(config, settings, default = undef) = mb_param(c
 function mb_param_sizeMod(config, settings, default = undef) = mb_param(config, settings, "sizeMod", default != undef ? default : []);
 
 /*
-*
+* Crop
 */
+// TODO implement
 function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : []);
 
 /*
@@ -58,12 +59,13 @@ function mb_param_offset(config, settings, default = undef) = mb_param(config, s
 /*
 * Cutouts
 */
-
+// TODO implement
 function mb_param_cutouts(config, settings, default = undef) = mb_param(config, settings, "cutouts", default != undef ? default : false);
 
 /*
 * Ports
 */
+// TODO implement
 function mb_param_ports(config, settings, default = undef) = mb_param(config, settings, "ports", default != undef ? default : false);
 
 /*
@@ -72,12 +74,15 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseAdjustment", default != undef ? default : undef);
+// TODO implement
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
+// TODO implement
 function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);
 
 // Cutoout
 function mb_param_baseCutoutType(config, settings, default = undef) = mb_param(config, settings, "baseCutoutType", default != undef ? default : "standard");
 function mb_param_baseCutoutMaxDepth(config, settings, default = undef) = mb_param(config, settings, "baseCutoutMaxDepth", default != undef ? default : 5);
+// TODO implement
 function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseCutoutRoundingRadius", default != undef ? default : "auto");
 
 // Clamp
@@ -129,7 +134,7 @@ function mb_param_pillars(config, settings, default = undef) = mb_param(config, 
 function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
 function mb_param_pillarInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "pillarInnerClampThickness", default != undef ? default : 0.1);
 
-// TODO
+// TODO implement & rename
 function mb_param_pillarGapCornerLength(config, settings, default = undef) = mb_param(config, settings, "pillarGapCornerLength", default != undef ? default : 2);
 function mb_param_pillarGapMiddle(config, settings, default = undef) = mb_param(config, settings, "pillarGapMiddle", default != undef ? default : 10);
 
@@ -167,39 +172,61 @@ function mb_param_bevel(config, settings, default = undef) = mb_param(config, se
 */
 
 // XY
+// TODO implement xy
 function mb_param_holeXYGridOffsetZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625);
+// TODO implement xy
 function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0);
+// TODO implement xy
 function mb_param_holeXYGridSizeZ(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6);
+// TODO implement xy
 function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0);
+// TODO implement xy
 function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5);
 
 // XYZ
+// TODO implement xyz
 function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetThickness", default != undef ? default : 0.375);
+// TODO implement xyz
 function mb_param_holeXYZInsetThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetThicknessAdjustment", default != undef ? default : 0.0);
+// TODO implement xyz
 function mb_param_holeXYZInsetDepth(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepth", default != undef ? default : 0.5);
+// TODO implement xyz
 function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZInsetDepthAdjustment", default != undef ? default : 0.0);
+// TODO implement
 function mb_param_holeXYZAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThickness", default != undef ? default : 1);
+// TODO implement
 function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0);
 
+// TODO implement
 function mb_param_holeXYZType(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
-function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : true));
+// TODO implement
+function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
 function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
 function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
 
 
 // X
+// TODO implement complex mode
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
+// TODO implement
 function mb_param_holeXPartialY(config, settings, default = undef) = mb_param(config, settings, "holeXPartialY", default != undef ? default : "none");
+// TODO implement
 function mb_param_holeXPartialZ(config, settings, default = undef) = mb_param(config, settings, "holeXPartialZ", default != undef ? default : "none");
 
 // Y
+// TODO implement complex mode
 function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
+// TODO implement
 function mb_param_holeYPartialX(config, settings, default = undef) = mb_param(config, settings, "holeYPartialX", default != undef ? default : "none");
+// TODO implement
 function mb_param_holeYPartialZ(config, settings, default = undef) = mb_param(config, settings, "holeYPartialZ", default != undef ? default : "none");
 
 // Z
+// TODO implement complex mode
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
+// TODO implement
 function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");
+// TODO implement
 function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
 
 
@@ -224,20 +251,24 @@ function mb_param_holeZDiameterAdjustment(config, settings, default = undef) = m
 /*
 * Studs
 */
-
+// TODO implement complex mode
 function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
 function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
+// TODO implement
 function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);
 function mb_param_studPadding(config, settings, default = undef) = mb_param(config, settings, "studPadding", default != undef ? default : 0);
 function mb_param_studRounding(config, settings, default = undef) = mb_param(config, settings, "studRounding", default != undef ? default : 0.0625);
 
 // Clamp
+// TODO implement
 function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
+// TODO implement
 function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0.0);
 
 // Hole
 function mb_param_studHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameter", default != undef ? default : "auto");
 function mb_param_studHoleDiameterAdjustment(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameterAdjustment", default != undef ? default : 0.3);
+// TODO implement
 function mb_param_studHoleClampThickness(config, settings, default = undef) = mb_param(config, settings, "studHoleClampThickness", default != undef ? default : 0.1);
 
 // Diameter
@@ -318,7 +349,7 @@ function mb_param_textColor(config, settings, default = undef) = mb_param(config
 /*
 * Surface Pattern
 */
-
+// TODO implement
 function mb_param_surfacePattern(config, settings, default = undef) = mb_param(config, settings, "surfacePattern", default != undef ? default : "none");
 function mb_param_surfacePatternDimensions(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDimensions", default != undef ? default : [451.556, 451.556]);
 function mb_param_surfacePatternOffset(config, settings, default = undef) = mb_param(config, settings, "surfacePatternOffset", default != undef ? default : [0, 0]);
@@ -346,6 +377,7 @@ function mb_param_svgColor(config, settings, default = undef) = mb_param(config,
 * Connectors
 */
 
+// TODO implement
 function mb_param_connectors(config, settings, default = undef) = mb_param(config, settings, "connectors", default != undef ? default : false);
 function mb_param_connectorPadding(config, settings, default = undef) = mb_param(config, settings, "connectorPadding", default != undef ? default : [0, 0]);
 function mb_param_connectorHeight(config, settings, default = undef) = mb_param(config, settings, "connectorHeight", default != undef ? default : "auto");
@@ -383,7 +415,7 @@ function mb_param_pcbSockets(config, settings, default = undef) = mb_param(confi
 /*
 * Render Quality
 */
-
+// TODO implement
 function mb_param_qualitySegBase(config, settings, default = undef) = mb_param(config, settings, "qualitySegBase", default != undef ? default : 1.2);
 function mb_param_qualityResolutionMax(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMax", default != undef ? default : 220);
 function mb_param_qualityFactor(config, settings, default = undef) = mb_param(config, settings, "qualityFactor", default != undef ? default : [0.6, 1.0, 1.6, 2.5]);
@@ -405,11 +437,11 @@ function mb_param_renderGroups(config, settings, default = undef) = let (parts =
 * Parameter Helpers
 */
 
-function _mb_param_is_value(value) = is_num(value) || is_string(value);
+function _mb_param_is_value(value) = is_bool(value) || is_num(value) || is_string(value);
 
 function mb_param_resolve_xyz(value) = 
     _mb_param_is_value(value) ? [value, value, value] :
-    is_array(value) ? (
+    is_list(value) ? (
         len(value) == 1 && _mb_param_is_value(value[0]) ? [value[0], value[0], value[0]] :
         len(value) == 2 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1])? [value[0], value[0], value[1]] :
         len(value) == 3 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1]) && _mb_param_is_value(value[2]) ? value : undef
@@ -417,7 +449,7 @@ function mb_param_resolve_xyz(value) =
 
 function mb_param_resolve_xy(value) = 
     _mb_param_is_value(value) ? [value, value] :
-    is_array(value) ? (
+    is_list(value) ? (
         len(value) == 1 && _mb_param_is_value(value[0]) ? [value[0], value[0]] :
         len(value) == 2 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1]) ? value : undef
     ) : undef;
