@@ -181,6 +181,12 @@ function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef)
 function mb_param_holeXYZAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThickness", default != undef ? default : 1);
 function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0);
 
+function mb_param_holeXYZType(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
+function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : true));
+function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
+function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
+
+
 // X
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 function mb_param_holeXPartialY(config, settings, default = undef) = mb_param(config, settings, "holeXPartialY", default != undef ? default : "none");
@@ -197,7 +203,7 @@ function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(co
 function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(config, settings, "holeZPartialY", default != undef ? default : "none");
 
 
-// TODO -> XYZ
+// TODO REMOVE
 function mb_param_holeXType(config, settings, default = undef) = mb_param(config, settings, "holeXType", default != undef ? default : "pin");
 function mb_param_holeXShift(config, settings, default = undef) = mb_param(config, settings, "holeXShift", default != undef ? default : true);
 function mb_param_holeXDiameter(config, settings, default = undef) = mb_param(config, settings, "holeXDiameter", default != undef ? default : "auto");
