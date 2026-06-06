@@ -164,6 +164,8 @@ module mb_base(
             /*
             * Connectors
             */
+            mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = true), debug = debug);
+
             *if(connectors != false){
                 for (con = [ 0 : 1 : len(connectors)-1 ]){
                     if(connectors[con][1] == 1){
