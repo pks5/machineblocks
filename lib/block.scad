@@ -66,7 +66,7 @@ module mb_block(
     baseSideAdjustment = mb_param_baseAdjustment(config, settings);
     
     stabilizerGrid = mb_param_stabilizers(config, settings);
-    stabilizerGridOffset = mb_param_stabilizerPrintOffset(config, settings);
+    stabilizerGridOffset = mb_param_stabilizerLayerOffset(config, settings);
     stabilizerGridHeight = mb_param_stabilizerHeight(config, settings);
     stabilizerGridThickness = mb_param_stabilizerThickness(config, settings);
     stabilizerExpansion = mb_param_stabilizerExpansion(config, settings);

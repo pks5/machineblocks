@@ -13,7 +13,6 @@ function mb_block_obj(
         id = mb_param_id(config, settings),
         debug = mb_param_debug(config, settings),
 
-        
         unitMbuToMm = mb_param_unitMbuToMm(config, settings),
         unitGridToMbu = mb_param_unitGridToMbu(config, settings),
         scale = mb_param_scale(config, settings),
@@ -22,9 +21,6 @@ function mb_block_obj(
         sizeMod = mb_param_sizeMod(config, settings),
         sizeAdjustment = mb_param_sizeAdjustment(config, settings),
 
-        inverted = false,
-        printerNozzleDiameter = 0.4,
-        printerLayerHeight = 0.2,
         grid_cfg = [unitMbuToMm, unitGridToMbu[0], unitGridToMbu[1]],
         mul_mbu_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mbu", to="grd"),
         mul_mm_to_grid = mb_unit_mul(grid_cfg, scale = scale, from="mm", to="grd"),
@@ -66,6 +62,11 @@ function mb_block_obj(
         
         
         adj_size = mb_block_dim_adj_size(block_dim),
+
+        inverted = false,
+        printerNozzleDiameter = mb_param_printerNozzleDiameter(config, settings) * mm2grd_xy,
+        printerLayerHeight = mb_param_printerLayerHeight(config, settings) * mm2grd_z,
+        
 
         /*
         * Top Plate, Recess Depth, Base Cutout
@@ -251,7 +252,7 @@ function mb_block_obj(
             mb_param_stabilizers(config, settings), // Has Stabilizers
             mb_param_stabilizerThickness(config, settings) * mbu2grd_xy, // Thickness (mbu)
             mb_param_stabilizerHeight(config, settings) * mbu2grd_z, // Height (mbu)
-            mb_param_stabilizerPrintOffset(config, settings) * mm2grd_z, // Offset (mm)
+            mb_param_stabilizerLayerOffset(config, settings) * mm2grd_z, // Offset (mm)
             mb_param_stabilizerExpansion(config, settings),                       // Expansion Each
             mb_param_stabilizerExpansionOffset(config, settings) * mbu2grd_z // Expansion Offset (mbu)
         ],

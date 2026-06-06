@@ -12,6 +12,13 @@ function mb_param_unitGridToMbu(config, settings, default = undef) = mb_param(co
 function mb_param_scale(config, settings, default = undef) = mb_param(config, settings, "scale", default != undef ? default : 1.0);
 
 /*
+* Printer
+*/
+function mb_param_printerNozzleDiameter(config, settings, default = undef) = mb_param(config, settings, "printerNozzleDiameter", default != undef ? default : 0.4);
+function mb_param_printerLayerHeight(config, settings, default = undef) = mb_param(config, settings, "printerLayerHeight", default != undef ? default : 0.2);
+
+
+/*
 * ID, Debug, Render
 */
 function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
@@ -120,7 +127,7 @@ function mb_param_topPlateHelperThickness(config, settings, default = undef) = m
 */
 
 function mb_param_stabilizers(config, settings, default = undef) = mb_param(config, settings, "stabilizers", default != undef ? default : true);
-function mb_param_stabilizerPrintOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerPrintOffset", default != undef ? default : 0.2);
+function mb_param_stabilizerLayerOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerLayerOffset", default != undef ? default : 0.2);
 function mb_param_stabilizerHeight(config, settings, default = undef) = mb_param(config, settings, "stabilizerHeight", default != undef ? default : 0.5);
 function mb_param_stabilizerThickness(config, settings, default = undef) = mb_param(config, settings, "stabilizerThickness", default != undef ? default : 0.5);
 function mb_param_stabilizerExpansion(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansion", default != undef ? default : 2);
@@ -226,7 +233,6 @@ function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(co
 // TODO implement complex mode
 function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
 function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
-// TODO implement
 function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);
 function mb_param_studPadding(config, settings, default = undef) = mb_param(config, settings, "studPadding", default != undef ? default : 0);
 function mb_param_studRounding(config, settings, default = undef) = mb_param(config, settings, "studRounding", default != undef ? default : 0.0625);
@@ -236,6 +242,8 @@ function mb_param_studRounding(config, settings, default = undef) = mb_param(con
 function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
 // TODO implement
 function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0.0);
+// TODO implement
+function mb_param_studClampOffset(config, settings, default = undef) = mb_param(config, settings, "studClampOffset", default != undef ? default : 0.0);
 
 // Hole
 function mb_param_studHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameter", default != undef ? default : "auto");
@@ -269,17 +277,21 @@ function mb_param_studIconColor(config, settings, default = undef) = mb_param(co
 /*
 * Tongue
 */
+//TODO Implement groove clearance parameters
 
 function mb_param_tongue(config, settings, default = undef) = mb_param(config, settings, "tongue", default != undef ? default : false);
 function mb_param_tongueHeight(config, settings, default = undef) = mb_param(config, settings, "tongueHeight", default != undef ? default : 1.25);
+// TODO remove, introduce tongueGrooveDepthClearance
 function mb_param_tongueGrooveDepth(config, settings, default = undef) = mb_param(config, settings, "tongueGrooveDepth", default != undef ? default : 1.5);
 function mb_param_tongueRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueRoundingRadius", default != undef ? default : "auto");
 function mb_param_tongueThickness(config, settings, default = undef) = mb_param(config, settings, "tongueThickness", default != undef ? default : 0.666);
 function mb_param_tongueThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "tongueThicknessAdjustment", default != undef ? default : 0);
+// TODO introduce togueGrooveThicknessClearance (default 0.1mm, apply also to clampThickness in the groove)
 function mb_param_tongueOffset(config, settings, default = undef) = mb_param(config, settings, "tongueOffset", default != undef ? default : 1);
 function mb_param_tongueClampHeight(config, settings, default = undef) = mb_param(config, settings, "tongueClampHeight", default != undef ? default : 0.5);
 function mb_param_tongueClampOffset(config, settings, default = undef) = mb_param(config, settings, "tongueClampOffset", default != undef ? default : 0.5);
 function mb_param_tongueClampThickness(config, settings, default = undef) = mb_param(config, settings, "tongueClampThickness", default != undef ? default : 0.1);
+// TODO introduce togueGrooveClampOffsetClearance (default 0, apply also to clampHeight in the groove)
 
 /*
 * Grille
@@ -349,7 +361,7 @@ function mb_param_svgColor(config, settings, default = undef) = mb_param(config,
 * Connectors
 */
 
-// TODO implement
+// TODO implement female_top / female_bottom
 function mb_param_connectors(config, settings, default = undef) = mb_param(config, settings, "connectors", default != undef ? default : false);
 
 // TODO remove
@@ -378,8 +390,9 @@ function mb_param_screwHoleDepth(config, settings, default = undef) = mb_param(c
 function mb_param_screwHoleInsetThickness(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetThickness", default != undef ? default : 0.6);
 function mb_param_screwHoleInsetDepth(config, settings, default = undef) = mb_param(config, settings, "screwHoleInsetDepth", default != undef ? default : 0.8);
 
+// TODO implement screwHoleZ Helpers
 function mb_param_screwHoleZHelperThickness(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperThickness", default != undef ? default : 0.8);
-function mb_param_screwHoleZHelperPrintOffset(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperPrintOffset", default != undef ? default : 0.2);
+function mb_param_screwHoleZHelperLayerOffset(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperLayerOffset", default != undef ? default : 0.2);
 function mb_param_screwHoleZHelperHeight(config, settings, default = undef) = mb_param(config, settings, "screwHoleZHelperHeight", default != undef ? default : 0.2);
 
 /*
