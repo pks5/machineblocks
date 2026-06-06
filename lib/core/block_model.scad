@@ -831,6 +831,36 @@ function mb_block_stud_radius(block_obj, x, y) =
        stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter];
 
 /*
+* ----------
+* Connectors
+* ----------
+*/
+function mb_block_connector_range(block_obj, connector) =
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        face = connector[0],
+        axis = mb_face_to_axis(face),
+        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
+        start_index_x = min_max_index[0][0],
+        start_index_y = min_max_index[0][1],
+        end_index_x = min_max_index[1][0],
+        end_index_y = min_max_index[1][1]
+    )
+    axis == 1 ?
+        [start_index_x : end_index_x] : 
+        [start_index_y : end_index_y];
+
+function mb_block_connector_offset(block_obj, face, x, y) =
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        face = mb_face_to_int(face),
+        axis = mb_face_to_axis(face),
+        face_sign = mb_face_sign(face),
+        mod_size = mb_block_dim_mod_size(block_dim)
+    )
+    mb_block_pos_to_offset(block_obj, [axis == 0 ? x : (x + 0.5), axis == 1 ? y : (y + 0.5), 5]);
+
+/*
 * -----------
 * Screw Holes
 * -----------

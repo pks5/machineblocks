@@ -20,7 +20,7 @@ module mb_wedge(
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
 
-    mul_length = mul[axis];
+    mul_length = mul[2];
 
     rot = face == 1 ? [0, 0, 180] :
         face == 2 ? [0, 0, 90] :
@@ -29,17 +29,19 @@ module mb_wedge(
 
     z0 = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
     z1 = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
+    w = (width * mul[0]);
+    d = (depth * mul[0]);
 
-    tri_h = width / 2;
+    tri_h = w / 2;
 
     //x0 = -tri_h / 2;
     //x1 =  tri_h / 2;
 
-    x0 = -depth;
+    x0 = -d;
     x1 = x0 + tri_h;
 
-    y0 = -width / 2;
-    y1 =  width / 2;
+    y0 = -w / 2;
+    y1 =  w / 2;
 
     points = [
         // z = -h/2
@@ -62,8 +64,9 @@ module mb_wedge(
         [2, 0, 3, 5]
     ];
 
-    rotate(rot)
-        polyhedron(points = points, faces = faces);
+    translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
+        rotate(rot)
+            polyhedron(points = points, faces = faces);
 }
 
 mb_wedge(depth = 4, width = 20, length = [-12, 28], face = 3);

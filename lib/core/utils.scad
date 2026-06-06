@@ -951,6 +951,10 @@ function mb_face_rotation(face) =
         ? [0, 180, 180] 
         : [0, 0, 0];
 
+function mb_face_sign(face) = 
+    let(face = mb_face_to_int(face))
+        face >= 0 && face <= 5 ? (face == 0 || face == 2 || face == 4 ? -1 : 1) : undef;
+
 /*
 function mb_face_contains(face, cface) =
     let(

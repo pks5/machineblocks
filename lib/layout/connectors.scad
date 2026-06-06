@@ -19,16 +19,18 @@ function mb_block_part__connectors(block_obj, female = false) =
                     face = connector[0],
                     axis = mb_face_to_axis(face),
                     connector_type = mb_connector_type_to_int(connector[1]),
+                    connector_range = mb_block_connector_range(block_obj, connector)
                 )
                 if((!female && connector_type == 0) || (female && connector_type > 0))
-                    mb_block_part_wedge(
-                        block_dim,
-                        connector_width[0],
-                        connector_depth[0],
-                        connector_length[2],
-                        face = face,
-                        expand = [0, 0],
-                        offset = [0, 0, 0]
-                    )
+                    for(xy = connector_range)
+                        mb_block_part_wedge(
+                            block_dim,
+                            connector_width[0],
+                            connector_depth[0],
+                            connector_length[2],
+                            face = face,
+                            expand = undef,
+                            offset = mb_block_connector_offset(block_obj, face, xy, 0)
+                        )
         ]
     );

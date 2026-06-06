@@ -230,7 +230,7 @@ module mb_base(
         /*
         * Connectors
         */
-        !mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = false), debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = false), debug = debug);
 
         connectors = mb_block_connectors(block_obj);
         connector_length = mb_block_connector_length(block_obj, female = false);
