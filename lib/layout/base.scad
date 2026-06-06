@@ -28,6 +28,8 @@ use <screw_holes.scad>;
 
 use <tubes.scad>;
 
+use <connectors.scad>;
+
 /*
 * Base Cutout
 */
@@ -228,6 +230,15 @@ module mb_base(
         /*
         * Connectors
         */
+        !mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = false), debug = debug);
+
+        connectors = mb_block_connectors(block_obj);
+        connector_length = mb_block_connector_length(block_obj, female = false);
+        connector_depth = mb_block_connector_depth(block_obj, female = false);
+        connector_width = mb_block_connector_width(block_obj, female = false);
+
+        echo(connectors = mb_block_part__connectors(block_obj, female = false));
+
         if(connectors != false){
             for (con = [ 0 : 1 : len(connectors)-1 ]){
                 if(connectors[con][1] == 0){

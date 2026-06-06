@@ -7,6 +7,7 @@ use <poly_expand.scad>;
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
 use <../shape/cube.scad>;
+use <../shape/wedge.scad>;
 use <../shape/svg3d.scad>;
 use <../shape/text3d.scad>;
 use <../shape/pcb.scad>;
@@ -53,6 +54,7 @@ function mb_block_part_type_is_builtin(type) =
         type == "mb_prismoid" || 
         type == "mb_tube" ||
         type == "mb_cube" ||
+        type == "mb_wedge" || 
         type == "mb_svg" ||  
         type == "mb_text" ||  
         type == "mb_pcb" ||  
@@ -172,16 +174,7 @@ function mb_block_part_tube(
     render = true
 ) = 
     let(
-        offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]),
-        mod_size = mb_block_dim_mod_size(block_dim),
-        
-        axis = mb_axis_to_int(axis),
-        h = mod_size[axis],
-        h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] ? [-0.5 * (!is_undef(length) ? length : h), 0.5 * (!is_undef(length) ? length : h)] :
-            [expand[0] == "auto" ? 0.5 * h + expand[1] - (!is_undef(length) ? length : h) : -0.5 * h - expand[0], 
-            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(length) ? length : h) : 0.5 * h + expand[1]],
-
-        /*
+       /*
         clamp_start = is_undef(clamp_start) 
             ? undef 
             : [
@@ -201,6 +194,36 @@ function mb_block_part_tube(
             clamp_start,
             clamp_end,
             axis,
+            offset
+        ],
+        render = render
+    );
+
+/*
+* ----
+* TUBE
+* ----
+*/
+function mb_block_part_wedge(
+    block_dim,
+    width,
+    depth,
+    length,
+    face = "x-",
+    expand = undef,
+    offset = undef,
+    render = true
+) = 
+    let(
+       
+    )
+    mb_block_part_model(
+        type = "mb_wedge",
+        data = [
+            width,
+            depth,
+            mb_block_dim_height_expand(block_dim, "z", length, expand),
+            face,
             offset
         ],
         render = render
@@ -375,6 +398,20 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_cube(
                 size = cube_data[0],
                 offset = cube_data[1],
+                mul = mul
+            );
+            
+            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+        }
+        else if(part_type == "mb_wedge"){
+            wedge_data = mb_block_part_model_data_item(part, 0);
+
+            mb_wedge(
+                width = wedge_data[0],
+                depth = wedge_data[1],
+                length = wedge_data[2],
+                face = wedge_data[3],
+                offset = wedge_data[4],
                 mul = mul
             );
             

@@ -1029,6 +1029,14 @@ function mb_array_min_pair_cycle_neg(a) =
         -min(a[1], a[2])
     ];
 
+function mb_connector_type_to_int(connector_type) =
+    is_string(connector_type) ?
+    (connector_type == "male" ? 0 :
+    connector_type == "female" ? 1 :
+    connector_type == "female_bottom" ? 2 :
+    connector_type == "female_top" ? 3 : undef) :
+    is_num(connector_type) && connector_type >= 0 && connector_type <= 3 ? connector_type : undef;
+
 module mb_pre_render(do_render, convexity){
     if(do_render){
         render(convexity)

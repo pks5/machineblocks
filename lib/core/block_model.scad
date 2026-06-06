@@ -259,13 +259,20 @@ function mb_block_obj(
         /*
         * Connectors
         */
-        connectorHeight = mb_param_connectorHeight(config, settings),
-        connector_height = connectorHeight == "auto" ? "auto" : connectorHeight * mbu2grd_z,
-        connector_depth = mb_param_connectorDepth(config, settings) * mbu2grd_z,
-        connector_size = mb_param_connectorWidth(config, settings) * mbu2grd_z,
-        connector_depth_tolerance = mb_param_connectorDepthTolerance(config, settings) * mm2grd_z,
-        connector_side_tolerance = mb_param_connectorSideTolerance(config, settings) * mm2grd_z,
+        connectorLength = mb_param_connectorLength(config, settings),
+        
+        mod_size_z_as_xy = mod_size[2] / (grid_cfg[1] / grid_cfg[2]),
+        connector_length_xyz_male = connectorLength == "auto" ? [mod_size_z_as_xy, mod_size_z_as_xy, mod_size[2]] : mb_array_mul(mul_mbu_to_grid, connectorLength),
+        connector_depth_xyz_male = mb_array_mul(mul_mbu_to_grid, mb_param_connectorDepth(config, settings)),
+        connector_width_xyz_male = mb_array_mul(mul_mbu_to_grid, mb_param_connectorWidth(config, settings)),
+        
+        connector_length_xyz_clearance = mb_array_mul(mul_mm_to_grid, mb_param_connectorLengthClearance(config, settings)),
+        connector_side_xyz_clearance = mb_array_mul(mul_mm_to_grid, mb_param_connectorSideClearance(config, settings)),
 
+        connector_length_xyz_female = mb_array_add(connector_length_xyz_male, connector_length_xyz_clearance),
+        connector_depth_xyz_female = mb_array_add(connector_depth_xyz_male, connector_side_xyz_clearance),
+        connector_width_xyz_female = mb_array_add(connector_width_xyz_male, connector_side_xyz_clearance),
+        
         /*
         * Masks
         */
@@ -399,12 +406,18 @@ function mb_block_obj(
             ], // 23 - SVG Decorator
             [
                 mb_param_connectors(config, settings),
-                mb_param_connectorPadding(config, settings),
-                connector_height,
-                connector_depth,
-                connector_size,
-                connector_depth_tolerance,
-                connector_side_tolerance
+                [
+                    connector_length_xyz_male,
+                    connector_length_xyz_female
+                ],
+                [
+                    connector_depth_xyz_male,
+                    connector_depth_xyz_female
+                ],
+                [
+                    connector_width_xyz_male,
+                    connector_width_xyz_female
+                ]
             ], // 24 Connectors
             [
                 mb_param_text(config, settings),
@@ -589,7 +602,9 @@ function mb_block_has_groove(block_obj) =                           block_obj[4]
 
 // Connectors
 function mb_block_connectors(block_obj) =                           block_obj[24][0];
-function mb_block_connector_padding(block_obj) =                    block_obj[24][1];
+function mb_block_connector_length(block_obj, female = false) =     block_obj[24][1][female ? 1 : 0];
+function mb_block_connector_depth(block_obj, female = false) =      block_obj[24][2][female ? 1 : 0];
+function mb_block_connector_width(block_obj, female = false) =      block_obj[24][3][female ? 1 : 0];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
