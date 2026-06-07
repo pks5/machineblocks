@@ -82,9 +82,9 @@ baseColor = "#EAC645"; // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald
 // Surface Pattern Scale
 surfacePatternScale = 0.2; // [0:0.001:1]
 // Surface Pattern
-surfacePattern = "none"; // [none:None, ../pattern/honeycombs.svg:Honeycombs, ../pattern/squares.svg:Squares, ../pattern/squares-diagonal.svg:Squares Diagonal, ../pattern/diamonds.svg:Diamonds, ../pattern/textile.svg:Textile, ../pattern/card-background.svg:Card Background, ../pattern/dots.svg:Dots, ../pattern/circuit-board.svg:Circuit Board]
+surfacePattern = "none"; // [none:None, ../../pattern/honeycombs.svg:Honeycombs, ../../pattern/squares.svg:Squares, ../../pattern/squares-diagonal.svg:Squares Diagonal, ../../pattern/diamonds.svg:Diamonds, ../../pattern/textile.svg:Textile, ../../pattern/card-background.svg:Card Background, ../../pattern/dots.svg:Dots, ../../pattern/circuit-board.svg:Circuit Board]
 // Icons on studs
-studIcon = "../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-solid-full.svg:Anchor, ../pattern/bell-solid-full.svg:Bell, ../pattern/bolt-solid-full.svg:Bolt, ../pattern/bomb-solid-full.svg:Bomb, ../pattern/bullhorn-solid-full.svg:Bullhorn, ../pattern/car-side-solid-full.svg:CarSide, ../pattern/car-solid-full.svg:Car, ../pattern/cat-solid-full.svg:Cat, ../pattern/certificate-solid-full.svg:Certificate, ../pattern/circle-radiation-solid-full.svg:CircleRadiation, ../pattern/circle-solid-full.svg:Circle, ../pattern/diamond-solid-full.svg:Diamond, ../pattern/dog-solid-full.svg:Dog, ../pattern/earth-americas-solid-full.svg:EarthAmericas, ../pattern/face-flushed-solid-full.svg:FaceFlushed, ../pattern/face-grin-hearts-solid-full.svg:FaceGrinHearts, ../pattern/face-laugh-solid-full.svg:FaceLaugh, ../pattern/face-smile-solid-full.svg:FaceSmile, ../pattern/fish-solid-full.svg:Fish, ../pattern/flag-solid-full.svg:Flag, ../pattern/flask-solid-full.svg:Flask, ../pattern/football-solid-full.svg:Football, ../pattern/frog-solid-full.svg:Frog, ../pattern/futbol-solid-full.svg:Futbol, ../pattern/ghost-solid-full.svg:Ghost, ../pattern/graduation-cap-solid-full.svg:GraduationCap, ../pattern/hand-middle-finger-solid-full.svg:HandMiddleFinger, ../pattern/hand-solid-full.svg:Hand, ../pattern/heart-solid-full.svg:Heart, ../pattern/horse-head-solid-full.svg:HorseHead, ../pattern/key-solid-full.svg:Key, ../pattern/leaf-solid-full.svg:Leaf, ../pattern/lightbulb-solid-full.svg:Lightbulb, ../pattern/microphone-solid-full.svg:Microphone, ../pattern/moon-solid-full.svg:Moon, ../pattern/plane-solid-full.svg:Plane, ../pattern/plug-solid-full.svg:Plug, ../pattern/poo-solid-full.svg:Poo, ../pattern/puzzle-piece-solid-full.svg:PuzzlePiece, ../pattern/robot-solid-full.svg:Robot, ../pattern/rocket-solid-full.svg:Rocket, ../pattern/sack-dollar-solid-full.svg:SackDollar, ../pattern/skull-solid-full.svg:Skull, ../pattern/square-solid-full.svg:Square, ../pattern/star-solid-full.svg:Star, ../pattern/thumbs-down-solid-full.svg:ThumbsDown, ../pattern/thumbs-up-solid-full.svg:ThumbsUp, ../pattern/tooth-solid-full.svg:Tooth, ../pattern/tree-solid-full.svg:Tree, ../pattern/trophy-solid-full.svg:Trophy]
+studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../../pattern/anchor-solid-full.svg:Anchor, ../../pattern/bell-solid-full.svg:Bell, ../../pattern/bolt-solid-full.svg:Bolt, ../../pattern/bomb-solid-full.svg:Bomb, ../../pattern/bullhorn-solid-full.svg:Bullhorn, ../../pattern/car-side-solid-full.svg:CarSide, ../../pattern/car-solid-full.svg:Car, ../../pattern/cat-solid-full.svg:Cat, ../../pattern/certificate-solid-full.svg:Certificate, ../../pattern/circle-radiation-solid-full.svg:CircleRadiation, ../../pattern/circle-solid-full.svg:Circle, ../../pattern/diamond-solid-full.svg:Diamond, ../../pattern/dog-solid-full.svg:Dog, ../../pattern/earth-americas-solid-full.svg:EarthAmericas, ../../pattern/face-flushed-solid-full.svg:FaceFlushed, ../../pattern/face-grin-hearts-solid-full.svg:FaceGrinHearts, ../../pattern/face-laugh-solid-full.svg:FaceLaugh, ../../pattern/face-smile-solid-full.svg:FaceSmile, ../../pattern/fish-solid-full.svg:Fish, ../../pattern/flag-solid-full.svg:Flag, ../../pattern/flask-solid-full.svg:Flask, ../../pattern/football-solid-full.svg:Football, ../../pattern/frog-solid-full.svg:Frog, ../../pattern/futbol-solid-full.svg:Futbol, ../../pattern/ghost-solid-full.svg:Ghost, ../../pattern/graduation-cap-solid-full.svg:GraduationCap, ../../pattern/hand-middle-finger-solid-full.svg:HandMiddleFinger, ../../pattern/hand-solid-full.svg:Hand, ../../pattern/heart-solid-full.svg:Heart, ../../pattern/horse-head-solid-full.svg:HorseHead, ../../pattern/key-solid-full.svg:Key, ../../pattern/leaf-solid-full.svg:Leaf, ../../pattern/lightbulb-solid-full.svg:Lightbulb, ../../pattern/microphone-solid-full.svg:Microphone, ../../pattern/moon-solid-full.svg:Moon, ../../pattern/plane-solid-full.svg:Plane, ../../pattern/plug-solid-full.svg:Plug, ../../pattern/poo-solid-full.svg:Poo, ../../pattern/puzzle-piece-solid-full.svg:PuzzlePiece, ../../pattern/robot-solid-full.svg:Robot, ../../pattern/rocket-solid-full.svg:Rocket, ../../pattern/sack-dollar-solid-full.svg:SackDollar, ../../pattern/skull-solid-full.svg:Skull, ../../pattern/square-solid-full.svg:Square, ../../pattern/star-solid-full.svg:Star, ../../pattern/thumbs-down-solid-full.svg:ThumbsDown, ../../pattern/thumbs-up-solid-full.svg:ThumbsUp, ../../pattern/tooth-solid-full.svg:Tooth, ../../pattern/tree-solid-full.svg:Tree, ../../pattern/trophy-solid-full.svg:Trophy]
 
 /* [Hidden] */
 
@@ -158,9 +158,9 @@ module mb_block__mb__bricks__corner(config = undef, settings = undef){
     sharedSettings = [
         ["baseCutoutType", baseCutoutType],
         ["pillars", pillars],
-        ["baseReliefCut", baseReliefCut],
-        ["baseReliefCutHeight", baseReliefCutHeight],
-        ["baseReliefCutThickness", baseReliefCutThickness],
+        ["reliefCut", baseReliefCut],
+        ["reliefCutHeight", baseReliefCutHeight],
+        ["reliefCutThickness", baseReliefCutThickness],
         ["grille", grille],
         ["grilleInverted", grilleInverted],
         ["grilleDepth", grilleDepth],
@@ -196,7 +196,7 @@ module mb_block__mb__bricks__corner(config = undef, settings = undef){
                 ["size", [size[0], brick1SizeY, size[2]]],
                 ["align", "ccs"],
                 ["offset", [0, brick1OffsetY - 0.5*(size[1] - brick1SizeY), 0]],
-                ["baseWallGapsX", [[brick2OffsetX, 2, brick2SizeX]]]
+                ["baseWallGaps", [["y", brick2OffsetX, brick2SizeX]]]
             ])
         );
 
@@ -207,7 +207,7 @@ module mb_block__mb__bricks__corner(config = undef, settings = undef){
                 ["size", [brick2SizeX, size[1], size[2]]],
                 ["align", "ccs"],
                 ["offset", [brick2OffsetX - 0.5*(size[0] - brick2SizeX), 0, 0]],
-                ["baseWallGapsY", [[brick1OffsetY, 2, brick1SizeY]]]
+                ["baseWallGaps", [["x", brick1OffsetY, brick1SizeY]]]
             ])
         );
     }

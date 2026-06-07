@@ -373,7 +373,7 @@ function mb_param_connectorHeight(config, settings, default = undef) = mb_param(
 
 function mb_param_connectorLength(config, settings, default = undef) = mb_param(config, settings, "connectorLength", default != undef ? default : "auto");
 function mb_param_connectorDepth(config, settings, default = undef) = mb_param(config, settings, "connectorDepth", default != undef ? default : 0.75);
-function mb_param_connectorWidth(config, settings, default = undef) = mb_param(config, settings, "connectorWidth", default != undef ? default : 2.5);
+function mb_param_connectorWidth(config, settings, default = undef) = mb_param(config, settings, "connectorWidth", default != undef ? default : 3);
 
 // TODO remove
 function mb_param_connectorDepthTolerance(config, settings, default = undef) = mb_param(config, settings, "connectorDepthTolerance", default != undef ? default : 0.2);

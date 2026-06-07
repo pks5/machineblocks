@@ -16,7 +16,8 @@ function mb_block_part__connectors(block_obj, female = false) =
         items = [
             for(connector = connectors)
                 let(
-                    face = female ? mb_face_opposite(connector[0]) : connector[0],
+                    f = mb_face_to_int(connector[0]),
+                    face = female ? mb_face_opposite(f) : f,
                     axis = mb_face_to_axis(face),
                     connector_type = mb_connector_type_to_int(connector[1]),
                     connector_range = mb_block_connector_range(block_obj, connector)
