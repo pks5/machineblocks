@@ -312,7 +312,7 @@ function mb_block_part_prismoid(
 */
 
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
-    mul = is_undef(mul) ? mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm") : mul;
+    mul = is_undef(mul) ? mb_block_default_multiplier(block_obj) : mul;
     
     part_type = mb_block_part_model_type(part);
     part_data = mb_block_part_model_data(part);

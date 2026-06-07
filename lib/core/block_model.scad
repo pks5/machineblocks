@@ -652,6 +652,9 @@ function mb_block_get_screw_hole_inset_depth(block_obj) =          block_obj[27]
 * TODO Rename or delete
 */
 
+function mb_block_default_multiplier(block_obj) =
+    mb_unit_mul(mb_block_get_grid_cfg(block_obj), scale = mb_block_get_scale(block_obj), from="grd", to="mm");
+
 function mb_block_grd_z2xy(block_obj, grd_z) = 
     let(grid_cfg = mb_block_get_grid_cfg(block_obj))
         grd_z / (grid_cfg[1] / grid_cfg[2]);

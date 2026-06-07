@@ -286,12 +286,12 @@ function mb_param_tongueGrooveDepth(config, settings, default = undef) = mb_para
 function mb_param_tongueRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "tongueRoundingRadius", default != undef ? default : "auto");
 function mb_param_tongueThickness(config, settings, default = undef) = mb_param(config, settings, "tongueThickness", default != undef ? default : 0.666);
 function mb_param_tongueThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "tongueThicknessAdjustment", default != undef ? default : 0);
-// TODO introduce togueGrooveThicknessClearance (default 0.1mm, apply also to clampThickness in the groove)
+// TODO introduce tongueGrooveThicknessClearance (default 0.1mm, apply also to clampThickness in the groove)
 function mb_param_tongueOffset(config, settings, default = undef) = mb_param(config, settings, "tongueOffset", default != undef ? default : 1);
 function mb_param_tongueClampHeight(config, settings, default = undef) = mb_param(config, settings, "tongueClampHeight", default != undef ? default : 0.5);
 function mb_param_tongueClampOffset(config, settings, default = undef) = mb_param(config, settings, "tongueClampOffset", default != undef ? default : 0.5);
 function mb_param_tongueClampThickness(config, settings, default = undef) = mb_param(config, settings, "tongueClampThickness", default != undef ? default : 0.1);
-// TODO introduce togueGrooveClampOffsetClearance (default 0, apply also to clampHeight in the groove)
+// TODO introduce tongueGrooveClampOffsetClearance (default 0, apply also to clampHeight in the groove)
 
 /*
 * Grille
@@ -315,6 +315,8 @@ function mb_param_recessStudPadding(config, settings, default = undef) = mb_para
 function mb_param_recessStudType(config, settings, default = undef) = mb_param(config, settings, "recessStudType", default != undef ? default : "solid");
 function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
 function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_array(mb_param(config, settings, "recessWallGaps", default != undef ? default : []));
+
+// TODO introduce mb_param_recessAdjustment
 
 /*
 * Text Decorator
