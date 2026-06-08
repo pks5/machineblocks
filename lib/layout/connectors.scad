@@ -21,7 +21,7 @@ function mb_block_part__connectors(block_obj, female = false) =
                     axis = mb_face_to_axis(face),
                     connector_type = mb_connector_type_to_int(connector[1]),
                     connector_range = mb_block_connector_range(block_obj, connector),
-                    wedge_tilt = connector_type < 2 ? 0 :
+                    connector_tilt = connector_type < 2 ? 0 :
                                 connector_type == 2 ? 1 :
                                 connector_type == 3 ? -1 : undef
                 )
@@ -30,12 +30,12 @@ function mb_block_part__connectors(block_obj, female = false) =
                         mb_block_part_wedge(
                             block_dim,
                             connector_width[0],
-                            connector_depth[wedge_tilt == 0 ? 0 : 2],
-                            connector_length[wedge_tilt == 0 ? 2 : 0],
+                            connector_depth[connector_tilt == 0 ? 0 : 2],
+                            connector_length[connector_tilt == 0 ? 2 : 0],
                             face = face,
-                            tilt = wedge_tilt,
+                            tilt = connector_tilt,
                             expand = [0, "auto"],
-                            offset = mb_block_connector_offset(block_obj, face, wedge_tilt, xy, female)
+                            offset = mb_block_connector_offset(block_obj, female, face, connector_tilt, xy)
                         )
         ]
     );

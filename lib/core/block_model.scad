@@ -854,7 +854,7 @@ function mb_block_connector_range(block_obj, connector) =
         [start_index_x : end_index_x] : 
         [start_index_y : end_index_y];
 
-function mb_block_connector_offset(block_obj, face, tilt, xy, female) =
+function mb_block_connector_offset(block_obj, female, face, tilt, xy) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(face),
