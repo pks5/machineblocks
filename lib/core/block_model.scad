@@ -854,7 +854,11 @@ function mb_block_connector_gender(block_obj, connector) =
     is_num(connector_gender) && connector_gender >= 0 && connector_gender <= 1 ? connector_gender : undef;
 
 function mb_block_connector_dir(block_obj, connector) =
-    mb_axis_to_int(connector[1]);
+    let(face = mb_block_connector_face(block_obj, connector, false))
+    face == 4 || face == 5 ? mb_axis_to_int(connector[1]) : 2;
+
+function mb_block_connector_align(block_obj, connector) =
+   mb_align_word_resolve(connector[3]);
 
 function mb_block_connector_render(block_obj, connector, subtract) =
     let(
@@ -865,7 +869,7 @@ function mb_block_connector_render(block_obj, connector, subtract) =
 function mb_block_connector_range(block_obj, connector) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        face = mb_face_to_int(connector[0]),
+        face = mb_block_connector_face(block_obj, connector, false),
         axis = mb_face_to_axis(face),
         dir = mb_block_connector_dir(block_obj, connector),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
