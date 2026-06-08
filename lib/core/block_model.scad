@@ -869,6 +869,8 @@ function mb_block_connector_render(block_obj, connector, subtract) =
 function mb_block_connector_range(block_obj, connector) =
     let(
         block_dim = mb_block_get_dim(block_obj),
+        padding_start = is_undef(connector[4]) ? 0 : connector[4],
+        padding_end = is_undef(connector[5]) ? 0 : connector[5],
         face = mb_block_connector_face(block_obj, connector, false),
         axis = mb_face_to_axis(face),
         dir = mb_block_connector_dir(block_obj, connector),
@@ -879,8 +881,8 @@ function mb_block_connector_range(block_obj, connector) =
         end_index_y = min_max_index[1][1]
     )
     axis == 1 || dir == 1 ?
-        [start_index_x : end_index_x] : 
-        [start_index_y : end_index_y];
+        [start_index_x + padding_start : end_index_x - padding_end] : 
+        [start_index_y + padding_start : end_index_y - padding_end];
 
 function mb_block_connector_offset(block_obj, connector, xy, subtract) =
     let(
