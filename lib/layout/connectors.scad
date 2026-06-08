@@ -30,7 +30,7 @@ function mb_block_part__connectors(block_obj, female = false) =
                             connector_depth[0],
                             connector_length[2],
                             face = face,
-                            expand = undef,
+                            expand = [0, "auto"],
                             offset = mb_block_connector_offset(block_obj, face, xy, female)
                         )
         ]

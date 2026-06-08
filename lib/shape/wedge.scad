@@ -5,7 +5,7 @@ module mb_wedge(
     length = 5,
     depth = 2,
     
-
+    tilt = 0,
     face = "x-",
     offset = undef,
     mul = undef,
@@ -26,6 +26,12 @@ module mb_wedge(
         face == 2 ? [0, 0, 90] :
         face == 3 ? [0, 0, -90] : 
         [0, 0, 0];
+
+    rot_tilt = face == 0 ? (tilt == -1 ? [0, -90, 180] : tilt == 1 ? [0, 90, 0] : [0, 0, 0]) :
+                face == 1 ? (tilt == -1 ? [0, 90, 0] : tilt == 1 ? [0, -90, 180] : [0, 0, 0]) :
+                face == 2 ? (tilt == -1 ? [90, 0, 180] : tilt == 1 ? [-90, 0, 0] : [0, 0, 0]) :
+                face == 3 ? (tilt == -1 ? [-90, 0, 0] : tilt == 1 ? [90, 0, 180] : [0, 0, 0]) :
+                [0, 0, 0];
 
     z0 = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
     z1 = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
@@ -65,8 +71,9 @@ module mb_wedge(
     ];
 
     translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
-        rotate(rot)
-            polyhedron(points = points, faces = faces);
+        rotate(rot_tilt)
+            rotate(rot)
+                polyhedron(points = points, faces = faces);
 }
 
-mb_wedge(depth = 4, width = 20, length = [-12, 28], face = 3);
+mb_wedge(depth = 4, width = 20, length = [-12, 28], face = "x-", tilt = -1);

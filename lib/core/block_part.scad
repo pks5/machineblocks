@@ -210,19 +210,20 @@ function mb_block_part_wedge(
     depth,
     length,
     face = "x-",
+    tilt = 0,
     expand = undef,
     offset = undef,
     render = true
 ) = 
     let(
-       
+       face_axis = mb_face_to_axis(mb_face_to_int(face))
     )
     mb_block_part_model(
         type = "mb_wedge",
         data = [
             width,
             depth,
-            mb_block_dim_height_expand(block_dim, "z", length, expand),
+            mb_block_dim_height_expand(block_dim, tilt != 0 ? face_axis : "z", length, expand),
             face,
             offset
         ],

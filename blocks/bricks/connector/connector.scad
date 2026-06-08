@@ -62,7 +62,6 @@ module mb_block__mb__bricks__connector(config = undef, settings = undef){
             ["direction", direction]
         ]
     ){
-        // Brick 1 — along X axis, narrow in Y
         mb_block(
             config = config,
             settings = [
@@ -79,7 +78,8 @@ module mb_block__mb__bricks__connector(config = undef, settings = undef){
             settings = [
                 ["size", [4, 2, 3]],
                 ["offset", [0, 2, 0]],
-                ["connectors", [[2, "female"]]]
+                ["connectors", [[2, "female"], [3, "male"]]],
+                ["studs", false]
             ]
         );
     }
