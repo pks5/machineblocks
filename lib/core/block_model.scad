@@ -602,9 +602,9 @@ function mb_block_has_groove(block_obj) =                           block_obj[4]
 
 // Connectors
 function mb_block_get_connectors(block_obj) =                       block_obj[24][0];
-function mb_block_get_connector_length(block_obj, tilt, subtract) = block_obj[24][1][subtract ? 1 : 0][tilt == 0 ? 2 : 0];
-function mb_block_get_connector_depth(block_obj, tilt, subtract) =  block_obj[24][2][subtract ? 1 : 0][tilt == 0 ? 0 : 2];
-function mb_block_get_connector_width(block_obj, tilt, subtract) =  block_obj[24][3][subtract ? 1 : 0][0];
+function mb_block_get_connector_length(block_obj, face, subtract) = block_obj[24][1][subtract ? 1 : 0][(face == 4 || face == 5) ? 0 : 2];
+function mb_block_get_connector_depth(block_obj, face, subtract) =  block_obj[24][2][subtract ? 1 : 0][(face == 4 || face == 5) ? 2 : 0];
+function mb_block_get_connector_width(block_obj, face, subtract) =  block_obj[24][3][subtract ? 1 : 0][0];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
@@ -839,62 +839,59 @@ function mb_block_stud_radius(block_obj, x, y) =
 * ----------
 */
 
-function mb_block_connector_face(block_obj, connector, subtract) =
+function mb_block_connector_face(block_obj, connector, subtract = false) =
     let(
         f = mb_face_to_int(connector[0]),
         face = subtract ? mb_face_opposite(f) : f
     )
     face;
 
-function mb_block_connector_type(block_obj, connector) =
-    let(connector_type = connector[1])
-    is_string(connector_type) ?
-    (connector_type == "male" ? 0 :
-    connector_type == "female" ? 1 :
-    connector_type == "female_bottom" ? 2 :
-    connector_type == "female_top" ? 3 : undef) :
-    is_num(connector_type) && connector_type >= 0 && connector_type <= 3 ? connector_type : undef;
+function mb_block_connector_gender(block_obj, connector) =
+    let(connector_gender = connector[2])
+    is_string(connector_gender) ?
+    (connector_gender == "male" ? 0 :
+    connector_gender == "female" ? 1 : undef) :
+    is_num(connector_gender) && connector_gender >= 0 && connector_gender <= 1 ? connector_gender : undef;
 
-function mb_block_connector_tilt(block_obj, connector) =
-    let(connector_type = mb_block_connector_type(block_obj, connector))
-    connector_type < 2 ? 0 :
-    connector_type == 2 ? 1 :
-    connector_type == 3 ? -1 : undef;
+function mb_block_connector_dir(block_obj, connector) =
+    mb_axis_to_int(connector[1]);
 
 function mb_block_connector_render(block_obj, connector, subtract) =
     let(
-        connector_type = mb_block_connector_type(block_obj, connector)
+        connector_gender = mb_block_connector_gender(block_obj, connector)
     )
-    (!subtract && connector_type == 0) || (subtract && connector_type > 0);
+    (!subtract && connector_gender == 0) || (subtract && connector_gender == 1);
 
 function mb_block_connector_range(block_obj, connector) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(connector[0]),
         axis = mb_face_to_axis(face),
+        dir = mb_block_connector_dir(block_obj, connector),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         start_index_x = min_max_index[0][0],
         start_index_y = min_max_index[0][1],
         end_index_x = min_max_index[1][0],
         end_index_y = min_max_index[1][1]
     )
-    axis == 1 ?
+    axis == 1 || dir == 1 ?
         [start_index_x : end_index_x] : 
         [start_index_y : end_index_y];
 
 function mb_block_connector_offset(block_obj, connector, xy, subtract) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        face = mb_block_connector_face(block_obj, connector, subtract),
-        tilt = mb_block_connector_tilt(block_obj, connector),
+        face = mb_block_connector_face(block_obj, connector, false),
+        dir = mb_block_connector_dir(block_obj, connector),
+        gender = mb_block_connector_gender(block_obj, connector),
         axis = mb_face_to_axis(face),
         face_sign = mb_face_sign(face),
        
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        off_xy = tilt != 0 ? undef : ((face_sign == -1 && !subtract) || (face_sign == 1 && subtract) ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
-        off_z = tilt == -1 ? (min_max_index[1][2] + 1) : tilt == 1 ? min_max_index[0][2] : undef
+        off_xy = (face == 4 || face == 5) ? undef : (face_sign == -1 ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
+        off_z = (face == 5) ? (min_max_index[1][2] + 1) : (face == 4) ? min_max_index[0][2] : undef
     )
-    mb_block_pos_to_offset(block_obj, [axis == 0 ? off_xy : (xy + 0.5), axis == 1 ? off_xy : (xy + 0.5), off_z]);
+    mb_block_pos_to_offset(block_obj, [(axis == 0 || dir == 0) ? off_xy : (xy + 0.5), (axis == 1 || dir == 1) ? off_xy : (xy + 0.5), off_z]);
 
 /*
 * -----------

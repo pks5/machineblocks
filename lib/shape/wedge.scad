@@ -5,7 +5,7 @@ module mb_wedge(
     length = 5,
     depth = 2,
     
-    tilt = 0,
+    dir = "z",
     face = "x-",
     offset = undef,
     mul = undef,
@@ -17,21 +17,28 @@ module mb_wedge(
 ) {
     face = mb_face_to_int(face);
     axis = mb_face_to_axis(face);
+    dir = mb_axis_to_int(dir);
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
+
+    // TODO: proper XYZ scale / mul
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
+    
+    tilt = dir == 2 ? 0 : face == 4 ? -1 : face == 5 ? 1 : 0;
+    
+    mul_length = mul[face <= 3 ? 2 : 0];
+    mul_depth = mul[face <= 3 ? 0 : 2];
 
-    mul_length = mul[tilt == 0 ? 2 : 0];
-    mul_depth = mul[tilt == 0 ? 0 : 2];
-
-    rot = face == 1 ? [0, 0, 180] :
-        face == 2 ? [0, 0, 90] :
-        face == 3 ? [0, 0, -90] : 
+    rot = (face == 1 || dir == 0) ? [0, 0, 180] :
+        (face == 2 || dir == 1) ? [0, 0, 90] :
+        (face == 3 || dir == 1) ? [0, 0, -90] : 
         [0, 0, 0];
 
-    rot_tilt = face == 0 ? (tilt == -1 ? [0, -90, 180] : tilt == 1 ? [0, 90, 0] : [0, 0, 0]) :
-                face == 1 ? (tilt == -1 ? [0, 90, 0] : tilt == 1 ? [0, -90, 180] : [0, 0, 0]) :
-                face == 2 ? (tilt == -1 ? [90, 0, 180] : tilt == 1 ? [-90, 0, 0] : [0, 0, 0]) :
-                face == 3 ? (tilt == -1 ? [-90, 0, 0] : tilt == 1 ? [90, 0, 180] : [0, 0, 0]) :
+    
+
+    rot_tilt = //dir == 0 ? (face == 4 ? [0, -90, 180] : face == 5 ? [0, 90, 0] : [0, 0, 0]) :
+                dir == 0 ? (face == 4 ? [0, 90, 0] : face == 5 ? [0, -90, 180] : [0, 0, 0]) :
+                dir == 1 ? (face == 4 ? [90, 0, 180] : face == 5 ? [-90, 0, 0] : [0, 0, 0]) :
+                //face == 3 ? (tilt == -1 ? [-90, 0, 0] : tilt == 1 ? [90, 0, 180] : [0, 0, 0]) :
                 [0, 0, 0];
 
     z0 = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
