@@ -854,8 +854,11 @@ function mb_block_connector_gender(block_obj, connector) =
     is_num(connector_gender) && connector_gender >= 0 && connector_gender <= 1 ? connector_gender : undef;
 
 function mb_block_connector_dir(block_obj, connector) =
-    let(face = mb_block_connector_face(block_obj, connector))
-    face == 4 || face == 5 ? mb_axis_to_int(connector[1]) : 2;
+    let(
+        face = mb_block_connector_face(block_obj, connector),
+        dir = mb_axis_to_int(connector[1])
+    )
+    face == 4 || face == 5 ? (dir < 0 || dir > 1 ? 0 : dir) : 2;
 
 function mb_block_connector_align(block_obj, connector) =
    mb_align_word_resolve(connector[3]);

@@ -22,22 +22,22 @@ module mb_wedge(
 
     // TODO: proper XYZ scale / mul
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
-    
-    tilt = dir == 2 ? 0 : face == 4 ? -1 : face == 5 ? 1 : 0;
+
+    dir_res = face <= 3 ? 2 : (dir < 0 || dir > 1 ? 0 : dir);
     
     mul_length = mul[face <= 3 ? 2 : 0];
     mul_depth = mul[face <= 3 ? 0 : 2];
 
-    rot = (face == 1 || dir == 0) ? [0, 0, 180] :
-        (face == 2 || dir == 1) ? [0, 0, 90] :
-        (face == 3 || dir == 1) ? [0, 0, -90] : 
+    rot = (face == 1 || dir_res == 0) ? [0, 0, 180] :
+        (face == 2 || dir_res == 1) ? [0, 0, 90] :
+        (face == 3 || dir_res == 1) ? [0, 0, -90] : 
         [0, 0, 0];
 
     
 
     rot_tilt = //dir == 0 ? (face == 4 ? [0, -90, 180] : face == 5 ? [0, 90, 0] : [0, 0, 0]) :
-                dir == 0 ? (face == 4 ? [0, 90, 0] : face == 5 ? [0, -90, 180] : [0, 0, 0]) :
-                dir == 1 ? (face == 4 ? [90, 0, 180] : face == 5 ? [-90, 0, 0] : [0, 0, 0]) :
+                dir_res == 0 ? (face == 4 ? [0, 90, 0] : face == 5 ? [0, -90, 180] : [0, 0, 0]) :
+                dir_res == 1 ? (face == 4 ? [90, 0, 180] : face == 5 ? [-90, 0, 0] : [0, 0, 0]) :
                 //face == 3 ? (tilt == -1 ? [-90, 0, 0] : tilt == 1 ? [90, 0, 180] : [0, 0, 0]) :
                 [0, 0, 0];
 
