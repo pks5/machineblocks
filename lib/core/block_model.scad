@@ -269,7 +269,7 @@ function mb_block_obj(
         connector_length_xyz_clearance = mb_array_mul(mul_mm_to_grid, mb_param_connectorLengthClearance(config, settings)),
         connector_side_xyz_clearance = mb_array_mul(mul_mm_to_grid, mb_param_connectorSideClearance(config, settings)),
 
-        connector_length_xyz_female = mb_array_add(connector_length_xyz_male, connector_length_xyz_clearance),
+        connector_length_xyz_female = connectorLength == "auto" ? mb_param_resolve_xyz(connectorLength) : mb_array_add(connector_length_xyz_male, connector_length_xyz_clearance),
         connector_depth_xyz_female = mb_array_add(connector_depth_xyz_male, connector_side_xyz_clearance),
         connector_width_xyz_female = mb_array_add(connector_width_xyz_male, mb_array_mul(connector_side_xyz_clearance, 4.82842712)),
         

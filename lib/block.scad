@@ -91,14 +91,6 @@ module mb_block(
     recessStudShift = mb_param_recessStudShift(config, settings);
     recessWallGaps = mb_param_recessWallGaps(config, settings);
 
-    connectors = mb_param_connectors(config, settings);
-    connectorPadding = mb_param_connectorPadding(config, settings);
-    connectorHeight = mb_param_connectorHeight(config, settings);
-    connectorDepth = mb_param_connectorDepth(config, settings);
-    connectorWidth = mb_param_connectorWidth(config, settings);
-    connectorDepthTolerance = mb_param_connectorDepthTolerance(config, settings);
-    connectorSideTolerance = mb_param_connectorSideTolerance(config, settings);
-
     align = mb_param_align(config, settings);
     alignChildren = mb_param_alignChildren(config, settings);
 
@@ -392,26 +384,6 @@ module mb_block(
                                             */
                                             mb_base(
                                                 block_obj = block_obj,
-
-                                                grid = size,
-                                                gridSizeXY = gridSizeXY,
-                                                gridSizeZ = gridSizeZ,
-                                                
-                                                objectSize = objectSize,
-                                                objectSizeMod = objectSizeMod,
-                                                objectSizeAdjusted = objectSizeAdjusted, 
-                                                
-                                                height = objectSizeZAdjusted,
-                                                
-                                                connectors = connectors,
-                                                connectorPadding = connectorPadding,
-                                                connectorHeight = connectorHeight == "auto" ? "auto" : connectorHeight * mbuToMm,
-                                                connectorDepth = connectorDepth * mbuToMm,
-                                                connectorSize = connectorWidth * mbuToMm,
-                                                connectorDepthTolerance = connectorDepthTolerance,
-                                                connectorSideTolerance = connectorSideTolerance,
-
-                                                blockId = blockId,
                                                 debug = debug
                                             );
                                             

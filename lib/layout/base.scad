@@ -46,26 +46,6 @@ module mb_base_cutout(
 */
 module mb_base(
     block_obj,
-
-    grid,
-    gridSizeXY,
-    gridSizeZ,
-    
-    objectSize, 
-    objectSizeMod,
-    objectSizeAdjusted,
-
-    height, 
-    
-    connectors = [],
-    connectorPadding,
-    connectorHeight,
-    connectorDepth,
-    connectorSize,
-    connectorDepthTolerance,
-    connectorSideTolerance,
-
-    blockId,
     debug
 ){
     union(){
@@ -166,38 +146,7 @@ module mb_base(
             */
             mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, subtract = true), debug = debug);
 
-            *if(connectors != false){
-                for (con = [ 0 : 1 : len(connectors)-1 ]){
-                    if(connectors[con][1] == 1){
-                        mb_connectors(
-                            block_obj = block_obj,
-                            side = connectors[con][0],
-                            grid = grid,
-                            padding = connectorPadding,
-                            height = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
-                            baseHeight = height,
-                            inverse=true,
-                            size = connectorSize,
-                            depth = connectorDepth,
-                            gs = gridSizeXY
-                        );
-                    }
-                    else if(connectors[con][1] > 1){
-                        mb_connector_grooves(
-                            block_obj = block_obj,
-                            side = connectors[con][0],
-                            grid = grid,
-                            padding = connectorPadding,
-                            depth = (connectorHeight == "auto" ? height : connectorHeight) + connectorDepthTolerance,
-                            baseHeight = height,
-                            inverse=connectors[con][1]==3,
-                            size = connectorSize,
-                            height = connectorDepth,
-                            gs = gridSizeXY
-                        );
-                    }
-                }
-            }
+            
 
             
         } // End difference
@@ -227,30 +176,10 @@ module mb_base(
         */
         mb_block_part(block_obj, part = mb_block_part__pcb_holder(block_obj), debug = debug);
 
-        
-
         /*
         * Connectors
         */
         mb_block_part(block_obj, part = mb_block_part__connectors(block_obj), debug = debug);
-
-        *if(connectors != false){
-            for (con = [ 0 : 1 : len(connectors)-1 ]){
-                if(connectors[con][1] == 0){
-                    mb_connectors(
-                        block_obj = block_obj,
-                        side = connectors[con][0],
-                        grid = grid,
-                        padding = connectorPadding,
-                        height = (connectorHeight == "auto" ? height : connectorHeight),
-                        baseHeight = height,
-                        inverse=false,  //connectors[con][1]==1,
-                        size = connectorSize - 2*connectorSideTolerance,
-                        depth = connectorDepth - connectorSideTolerance,
-                        gs = gridSizeXY
-                    );
-                }
-            }
-        }
+        
     } // End union
 } // End mb_base
