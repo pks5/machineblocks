@@ -603,9 +603,9 @@ function mb_block_has_groove(block_obj) =                           block_obj[4]
 
 // Connectors
 function mb_block_connectors(block_obj) =                           block_obj[24][0];
-function mb_block_connector_length(block_obj, subtract = false) =     block_obj[24][1][subtract ? 1 : 0];
-function mb_block_connector_depth(block_obj, subtract = false) =      block_obj[24][2][subtract ? 1 : 0];
-function mb_block_connector_width(block_obj, subtract = false) =      block_obj[24][3][subtract ? 1 : 0];
+function mb_block_connector_length(block_obj, tilt, subtract) =     block_obj[24][1][subtract ? 1 : 0][tilt == 0 ? 2 : 0];
+function mb_block_connector_depth(block_obj, tilt, subtract) =      block_obj[24][2][subtract ? 1 : 0][tilt == 0 ? 0 : 2];
+function mb_block_connector_width(block_obj, tilt, subtract) =      block_obj[24][3][subtract ? 1 : 0][0];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
