@@ -20,7 +20,8 @@ module mb_wedge(
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
 
-    mul_length = mul[2];
+    mul_length = mul[tilt == 0 ? 2 : 0];
+    mul_depth = mul[tilt == 0 ? 0 : 2];
 
     rot = face == 1 ? [0, 0, 180] :
         face == 2 ? [0, 0, 90] :
@@ -36,7 +37,7 @@ module mb_wedge(
     z0 = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
     z1 = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
     w = (width * mul[0]);
-    d = (depth * mul[0]);
+    d = (depth * mul_depth);
 
     tri_h = w / 2;
 

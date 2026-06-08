@@ -225,6 +225,7 @@ function mb_block_part_wedge(
             depth,
             mb_block_dim_height_expand(block_dim, tilt != 0 ? face_axis : "z", length, expand),
             face,
+            tilt,
             offset
         ],
         render = render
@@ -412,7 +413,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 depth = wedge_data[1],
                 length = wedge_data[2],
                 face = wedge_data[3],
-                offset = wedge_data[4],
+                tilt = wedge_data[4],
+                offset = wedge_data[5],
                 mul = mul
             );
             

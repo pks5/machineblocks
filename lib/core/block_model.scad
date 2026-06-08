@@ -854,7 +854,7 @@ function mb_block_connector_range(block_obj, connector) =
         [start_index_x : end_index_x] : 
         [start_index_y : end_index_y];
 
-function mb_block_connector_offset(block_obj, face, xy, female) =
+function mb_block_connector_offset(block_obj, face, tilt, xy, female) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         face = mb_face_to_int(face),
@@ -862,9 +862,10 @@ function mb_block_connector_offset(block_obj, face, xy, female) =
         face_sign = mb_face_sign(face),
        
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        off = (face_sign == -1 && !female) || (face_sign == 1 && female) ? min_max_index[0][axis] : min_max_index[1][axis] + 1,
+        off_xy = tilt != 0 ? undef : ((face_sign == -1 && !female) || (face_sign == 1 && female) ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
+        off_z = tilt == -1 ? min_max_index[1][2] : tilt == 1 ? min_max_index[0][2] : undef
     )
-    mb_block_pos_to_offset(block_obj, [axis == 0 ? off : (xy + 0.5), axis == 1 ? off : (xy + 0.5), undef]);
+    mb_block_pos_to_offset(block_obj, [axis == 0 ? off_xy : (xy + 0.5), axis == 1 ? off_xy : (xy + 0.5), off_z]);
 
 /*
 * -----------
