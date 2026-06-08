@@ -870,7 +870,7 @@ function mb_block_connector_render(block_obj, connector, subtract) =
 function mb_block_connector_range(block_obj, connector) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        face = connector[0],
+        face = mb_face_to_int(connector[0]),
         axis = mb_face_to_axis(face),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         start_index_x = min_max_index[0][0],

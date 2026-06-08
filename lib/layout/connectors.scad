@@ -14,10 +14,26 @@ function mb_block_part__connectors(block_obj, subtract = false) =
             for(connector = connectors)
                 let(
                     connector_face = mb_block_connector_face(block_obj, connector, subtract),
+                    axis_faces = mb_axis_faces(mb_face_to_axis(connector_face)),
                     connector_range = mb_block_connector_range(block_obj, connector),
                     connector_tilt = mb_block_connector_tilt(block_obj, connector),
                     connector_length = mb_block_get_connector_length(block_obj, connector_tilt, subtract),
-                    connector_expand = connector_length == "auto" ? [0, 0] : [0, "auto"]
+                    connector_expand = connector_length == "auto" 
+                        ? [
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                face = connector_tilt == 0 ? "z-" : axis_faces[0], 
+                                adjusted = true, 
+                                overlap = true
+                            ), 
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                face = connector_tilt == 0 ? "z+" : axis_faces[1], 
+                                adjusted = true, 
+                                overlap = true
+                            ),
+                        ] 
+                        : [0, "auto"]
                 )
                 if(mb_block_connector_render(block_obj, connector, subtract))
                     for(xy = connector_range)
