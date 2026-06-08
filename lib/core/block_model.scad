@@ -848,10 +848,10 @@ function mb_block_connector_face(block_obj, connector, opposite = false) =
 
 function mb_block_connector_gender(block_obj, connector) =
     let(connector_gender = connector[2])
+    is_bool(connector_gender) ? connector_gender :
     is_string(connector_gender) ?
-    (connector_gender == "male" ? 0 :
-    connector_gender == "female" ? 1 : undef) :
-    is_num(connector_gender) && connector_gender >= 0 && connector_gender <= 1 ? connector_gender : undef;
+    (connector_gender != "female") :
+    is_num(connector_gender) ? (connector_gender != 0) : true;
 
 function mb_block_connector_dir(block_obj, connector) =
     let(
@@ -867,7 +867,7 @@ function mb_block_connector_render(block_obj, connector, subtract) =
     let(
         connector_gender = mb_block_connector_gender(block_obj, connector)
     )
-    (!subtract && connector_gender == 0) || (subtract && connector_gender == 1);
+    (!subtract && connector_gender) || (subtract && !connector_gender);
 
 function mb_block_connector_range(block_obj, connector) =
     let(
@@ -892,7 +892,6 @@ function mb_block_connector_offset(block_obj, connector, xy) =
         block_dim = mb_block_get_dim(block_obj),
         face = mb_block_connector_face(block_obj, connector),
         dir = mb_block_connector_dir(block_obj, connector),
-        gender = mb_block_connector_gender(block_obj, connector),
         axis = mb_face_to_axis(face),
         face_sign = mb_face_sign(face),
        
