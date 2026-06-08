@@ -892,7 +892,7 @@ function mb_block_connector_offset(block_obj, connector, xy, subtract) =
        
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
         off_xy = tilt != 0 ? undef : ((face_sign == -1 && !subtract) || (face_sign == 1 && subtract) ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
-        off_z = tilt == -1 ? min_max_index[1][2] : tilt == 1 ? min_max_index[0][2] : undef
+        off_z = tilt == -1 ? (min_max_index[1][2] + 1) : tilt == 1 ? min_max_index[0][2] : undef
     )
     mb_block_pos_to_offset(block_obj, [axis == 0 ? off_xy : (xy + 0.5), axis == 1 ? off_xy : (xy + 0.5), off_z]);
 
