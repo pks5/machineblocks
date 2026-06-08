@@ -382,10 +382,13 @@ module mb_block(
                                             /*
                                             * Base Block
                                             */
+                                            /*
                                             mb_base(
                                                 block_obj = block_obj,
                                                 debug = debug
                                             );
+                                            */
+                                            mb_block_part(block_obj, part = mb_block_part__base(block_obj), debug = debug);
                                             
                                             //Cutouts
                                             if(is_list(cutouts)){

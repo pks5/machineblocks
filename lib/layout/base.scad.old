@@ -1,0 +1,143 @@
+/*
+* Base Block
+*/
+
+module mb_base(
+    block_obj,
+    debug
+){
+    union(){
+        if(mb_block_has_base(block_obj))
+        difference(){
+            
+            union(){
+                /*
+                * Base Outer
+                */
+                mb_block_part(block_obj, part = mb_block_part__base_outer(block_obj, adjusted = true), debug = true);
+                
+                /*
+                * Base Clamp Outer
+                */
+                mb_block_part(block_obj, part = mb_block_part__base_clamp_outer(block_obj), debug = debug);
+                
+                /*
+                * Surface Pattern
+                */
+                mb_block_part(block_obj, part = mb_block_part__surface_pattern(block_obj), debug = debug);
+
+                
+                //Just for testing TO BE REMOVED
+                *mb_block_part(
+                    block_obj, 
+                    part= mb_block_part_custom(
+                        type = "my_cube", 
+                        items = [
+                            [
+                                [10, 40, 40],
+                            ],
+                            mb_block_part_model(
+                                type = "list",
+                                items = [
+                                    mb_block_part_custom(
+                                        type = "my_cube", 
+                                        data = [
+                                            [34, 14, 44]
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    ), 
+                    debug = debug
+                );
+
+            }
+
+            /*
+            * Standard Cutout
+            */
+            mb_block_part(block_obj, part = mb_block_part__standard_cutout(block_obj));
+
+            /*
+            * Grille
+            */
+            mb_block_part(block_obj, part = mb_block_part__grille(block_obj), debug = debug);
+
+            /*
+            * Relief Cut
+            */
+            mb_block_part(block_obj, part = mb_block_part__relief_cut(block_obj), debug = debug);
+            
+            /*
+            * Recess
+            */
+            mb_block_part(block_obj, part = mb_block_part__recess(block_obj), debug = debug);
+            
+            /*
+            * Groove
+            */
+            mb_block_part(block_obj, part = mb_block_part__tongue(block_obj, groove = true), debug = debug);
+
+            /*
+            * SVG Decorator
+            */
+            mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj, subtract = true), debug = debug);
+                
+            /*
+            * Text Decorator
+            */
+            mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj, subtract = true), debug = debug);
+
+            /*
+            * Screw Holes
+            */
+            mb_block_part(block_obj, part = mb_block_part__screw_holes(block_obj), debug = debug);
+
+            /*
+            * Tube Holes
+            */
+            mb_block_part(block_obj, part = mb_block_part__tubes(block_obj, hole = true), debug = debug);
+
+            /*
+            * Connectors
+            */
+            mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, subtract = true), debug = debug);
+
+            
+
+            
+        } // End difference
+
+        /*
+        * Studs
+        */
+        mb_block_part(block_obj, part = mb_block_part__studs(block_obj), debug = debug);
+
+        /*
+        * Tongue
+        */
+        mb_block_part(block_obj, part = mb_block_part__tongue(block_obj), debug = debug);
+
+        /*
+        * SVG Decorator
+        */
+        mb_block_part(block_obj, part = mb_block_part__svg_decorator(block_obj), debug = debug);
+
+        /*
+        * Text Decorator
+        */
+        mb_block_part(block_obj, part = mb_block_part__text_decorator(block_obj), debug = debug);
+
+        /*
+        * PCB
+        */
+        mb_block_part(block_obj, part = mb_block_part__pcb_holder(block_obj), debug = debug);
+
+        /*
+        * Connectors
+        */
+        mb_block_part(block_obj, part = mb_block_part__connectors(block_obj), debug = debug);
+
+    } // End union
+} // End mb_base
