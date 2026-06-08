@@ -61,10 +61,10 @@ function mb_block_part__connectors(block_obj, subtract = false) =
                             mb_block_get_connector_width(block_obj, connector_face, subtract),
                             mb_block_get_connector_depth(block_obj, connector_face, subtract),
                             connector_length == "auto" ? undef : connector_length,
-                            face = mb_block_connector_face(block_obj, connector, subtract),
+                            face = mb_block_connector_face(block_obj, connector, opposite = subtract),
                             dir = connector_dir,
                             expand = connector_expand,
-                            offset = mb_block_connector_offset(block_obj, connector, xy, subtract)
+                            offset = mb_block_connector_offset(block_obj, connector, xy)
                         )
         ]
     );

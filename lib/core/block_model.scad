@@ -839,10 +839,10 @@ function mb_block_stud_radius(block_obj, x, y) =
 * ----------
 */
 
-function mb_block_connector_face(block_obj, connector, subtract = false) =
+function mb_block_connector_face(block_obj, connector, opposite = false) =
     let(
         f = mb_face_to_int(connector[0]),
-        face = subtract ? mb_face_opposite(f) : f
+        face = opposite ? mb_face_opposite(f) : f
     )
     face;
 
@@ -854,7 +854,7 @@ function mb_block_connector_gender(block_obj, connector) =
     is_num(connector_gender) && connector_gender >= 0 && connector_gender <= 1 ? connector_gender : undef;
 
 function mb_block_connector_dir(block_obj, connector) =
-    let(face = mb_block_connector_face(block_obj, connector, false))
+    let(face = mb_block_connector_face(block_obj, connector))
     face == 4 || face == 5 ? mb_axis_to_int(connector[1]) : 2;
 
 function mb_block_connector_align(block_obj, connector) =
@@ -871,7 +871,7 @@ function mb_block_connector_range(block_obj, connector) =
         block_dim = mb_block_get_dim(block_obj),
         padding_start = is_undef(connector[4]) ? 0 : connector[4],
         padding_end = is_undef(connector[5]) ? 0 : connector[5],
-        face = mb_block_connector_face(block_obj, connector, false),
+        face = mb_block_connector_face(block_obj, connector),
         axis = mb_face_to_axis(face),
         dir = mb_block_connector_dir(block_obj, connector),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
@@ -884,10 +884,10 @@ function mb_block_connector_range(block_obj, connector) =
         [start_index_x + padding_start : end_index_x - padding_end] : 
         [start_index_y + padding_start : end_index_y - padding_end];
 
-function mb_block_connector_offset(block_obj, connector, xy, subtract) =
+function mb_block_connector_offset(block_obj, connector, xy) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        face = mb_block_connector_face(block_obj, connector, false),
+        face = mb_block_connector_face(block_obj, connector),
         dir = mb_block_connector_dir(block_obj, connector),
         gender = mb_block_connector_gender(block_obj, connector),
         axis = mb_face_to_axis(face),
