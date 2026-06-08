@@ -55,12 +55,7 @@ module mb_block(
     
     baseMod = mb_param_sizeMod(config, settings);
 
-    baseTopPlateHeight = mb_param_topPlateHeight(config, settings);
-    baseTopPlateHeightAdjustment = mb_param_topPlateHeightAdjustment(config, settings);
-
     baseCutoutType = mb_param_baseCutoutType(config, settings);
-    baseCutoutMaxDepth = mb_param_baseCutoutMaxDepth(config, settings);
-
     baseClampOuter = mb_param_baseClampOuter(config, settings);
 
     baseSideAdjustment = mb_param_baseAdjustment(config, settings);
@@ -76,7 +71,6 @@ module mb_block(
     pillarGapCornerLength = mb_param_pillarGapCornerLength(config, settings);
     pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
 
-    slope = mb_param_slope(config, settings);
     bevel = mb_param_bevel(config, settings);
 
     studs = mb_param_studs(config, settings);
@@ -178,12 +172,6 @@ module mb_block(
     * End measurements
     */
 
-    minObjectSide = min(objectSizeXAdjusted, objectSizeYAdjusted);
-    adjustedSizeRelation = [objectSizeXAdjusted / objectSizeMod[0], objectSizeYAdjusted / objectSizeMod[1], objectSizeZAdjusted / objectSizeMod[2]];
-
-    gridSizeX = mb_grid_size_x(size, slope);
-    gridSizeY = mb_grid_size_y(size, slope);
-
     //Calculate Brick Align and Offset
     alignX = mb_align_offset(align[0], objectSizeX);
     alignY = mb_align_offset(align[1], objectSizeY);
@@ -208,30 +196,11 @@ module mb_block(
     translateYChildren = mb_align_offset(alignChildren[1], objectSizeY, true);
     translateZChildren = mb_align_offset(alignChildren[2], objectSizeZ, true); 
 
-    //Base Cutout and Pit Depth
-    topPlateHeight = baseTopPlateHeight * mbuToMm + baseTopPlateHeightAdjustment;
-    baseCutoutMinDepth = gridSizeZ - topPlateHeight; // mm -- 1 plate minus topPlateHeight
-    maxBaseCutoutDepth = baseCutoutMaxDepth * mbuToMm;  
-    maxRecessDepth = objectSizeMod[2] - topPlateHeight - (baseCutoutType == "none" ? 0 : baseCutoutMinDepth);
-    
-    resultingPitDepth = recess ? (recessDepth != "auto" ? min(recessDepth * gridSizeZ, maxRecessDepth) : maxRecessDepth) : 0;
-    
-    calculatedBaseCutoutDepth = max(0, min(maxBaseCutoutDepth, objectSizeMod[2] - topPlateHeight - resultingPitDepth));  
-    resultingTopPlateHeight = objectSizeMod[2] - resultingPitDepth - calculatedBaseCutoutDepth; //topPlateHeight + ((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? (calculatedBaseCutoutDepth - maxBaseCutoutDepth) : 0);
-    baseCutoutDepth = baseCutoutType == "none" ? 0 : calculatedBaseCutoutDepth; //((maxBaseCutoutDepth > 0 && (calculatedBaseCutoutDepth > maxBaseCutoutDepth)) ? maxBaseCutoutDepth : calculatedBaseCutoutDepth);
-    
-    pWallThickness = mb_resolve_side_quad(recessWallThickness);
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
     
     //Stabilizer
     sGridThickness = stabilizerGridThickness * mbuToMm;
     sGridHeight = stabilizerGridHeight * mbuToMm;
-    
-    //Decorator Rotations
-    decoratorRotations = [[90, 0, -90], [90, 0, 90], [90, 0, 0], [90, 0, 180], [0, 180, 180], [0, 0, 0]];
-
-    //Surface Pattern
-    surfacePatternSide = 5;
     
     //Grid
     startX = floor(- baseModR[0]);
