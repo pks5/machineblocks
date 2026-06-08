@@ -603,9 +603,9 @@ function mb_block_has_groove(block_obj) =                           block_obj[4]
 
 // Connectors
 function mb_block_connectors(block_obj) =                           block_obj[24][0];
-function mb_block_connector_length(block_obj, female = false) =     block_obj[24][1][female ? 1 : 0];
-function mb_block_connector_depth(block_obj, female = false) =      block_obj[24][2][female ? 1 : 0];
-function mb_block_connector_width(block_obj, female = false) =      block_obj[24][3][female ? 1 : 0];
+function mb_block_connector_length(block_obj, subtract = false) =     block_obj[24][1][subtract ? 1 : 0];
+function mb_block_connector_depth(block_obj, subtract = false) =      block_obj[24][2][subtract ? 1 : 0];
+function mb_block_connector_width(block_obj, subtract = false) =      block_obj[24][3][subtract ? 1 : 0];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
@@ -839,6 +839,35 @@ function mb_block_stud_radius(block_obj, x, y) =
 * Connectors
 * ----------
 */
+
+function mb_block_connector_face(block_obj, connector, subtract) =
+    let(
+        f = mb_face_to_int(connector[0]),
+        face = subtract ? mb_face_opposite(f) : f
+    )
+    face;
+
+function mb_block_connector_type(block_obj, connector) =
+    let(connector_type = connector[1])
+    is_string(connector_type) ?
+    (connector_type == "male" ? 0 :
+    connector_type == "female" ? 1 :
+    connector_type == "female_bottom" ? 2 :
+    connector_type == "female_top" ? 3 : undef) :
+    is_num(connector_type) && connector_type >= 0 && connector_type <= 3 ? connector_type : undef;
+
+function mb_block_connector_tilt(block_obj, connector) =
+    let(connector_type = mb_block_connector_type(block_obj, connector))
+    connector_type < 2 ? 0 :
+    connector_type == 2 ? 1 :
+    connector_type == 3 ? -1 : undef;
+
+function mb_block_connector_render(block_obj, connector, subtract) =
+    let(
+        connector_type = mb_block_connector_type(block_obj, connector)
+    )
+    (!subtract && connector_type == 0) || (subtract && connector_type > 0);
+
 function mb_block_connector_range(block_obj, connector) =
     let(
         block_dim = mb_block_get_dim(block_obj),
@@ -854,15 +883,16 @@ function mb_block_connector_range(block_obj, connector) =
         [start_index_x : end_index_x] : 
         [start_index_y : end_index_y];
 
-function mb_block_connector_offset(block_obj, female, face, tilt, xy) =
+function mb_block_connector_offset(block_obj, connector, xy, subtract) =
     let(
         block_dim = mb_block_get_dim(block_obj),
-        face = mb_face_to_int(face),
+        face = mb_block_connector_face(block_obj, connector, subtract),
+        tilt = mb_block_connector_tilt(block_obj, connector),
         axis = mb_face_to_axis(face),
         face_sign = mb_face_sign(face),
        
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        off_xy = tilt != 0 ? undef : ((face_sign == -1 && !female) || (face_sign == 1 && female) ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
+        off_xy = tilt != 0 ? undef : ((face_sign == -1 && !subtract) || (face_sign == 1 && subtract) ? min_max_index[0][axis] : min_max_index[1][axis] + 1),
         off_z = tilt == -1 ? min_max_index[1][2] : tilt == 1 ? min_max_index[0][2] : undef
     )
     mb_block_pos_to_offset(block_obj, [axis == 0 ? off_xy : (xy + 0.5), axis == 1 ? off_xy : (xy + 0.5), off_z]);

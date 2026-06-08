@@ -2,13 +2,13 @@ use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 use <../core/utils.scad>;
-function mb_block_part__connectors(block_obj, female = false) = 
+function mb_block_part__connectors(block_obj, subtract = false) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         connectors = mb_block_connectors(block_obj),
-        connector_length = mb_block_connector_length(block_obj, female = female),
-        connector_depth = mb_block_connector_depth(block_obj, female = female),
-        connector_width = mb_block_connector_width(block_obj, female = female)
+        connector_length = mb_block_connector_length(block_obj, subtract),
+        connector_depth = mb_block_connector_depth(block_obj, subtract),
+        connector_width = mb_block_connector_width(block_obj, subtract)
     )
     !is_list(connectors) ? undef :
     mb_block_part_model(
@@ -16,16 +16,12 @@ function mb_block_part__connectors(block_obj, female = false) =
         items = [
             for(connector = connectors)
                 let(
-                    f = mb_face_to_int(connector[0]),
-                    face = female ? mb_face_opposite(f) : f,
-                    axis = mb_face_to_axis(face),
-                    connector_type = mb_connector_type_to_int(connector[1]),
+                    face = mb_block_connector_face(block_obj, connector, subtract),
+                    connector_type = mb_block_connector_type(block_obj, connector),
                     connector_range = mb_block_connector_range(block_obj, connector),
-                    connector_tilt = connector_type < 2 ? 0 :
-                                connector_type == 2 ? 1 :
-                                connector_type == 3 ? -1 : undef
+                    connector_tilt = mb_block_connector_tilt(block_obj, connector)
                 )
-                if((!female && connector_type == 0) || (female && connector_type > 0))
+                if(mb_block_connector_render(block_obj, connector, subtract))
                     for(xy = connector_range)
                         mb_block_part_wedge(
                             block_dim,
@@ -35,7 +31,7 @@ function mb_block_part__connectors(block_obj, female = false) =
                             face = face,
                             tilt = connector_tilt,
                             expand = [0, "auto"],
-                            offset = mb_block_connector_offset(block_obj, female, face, connector_tilt, xy)
+                            offset = mb_block_connector_offset(block_obj, connector, xy, subtract)
                         )
         ]
     );

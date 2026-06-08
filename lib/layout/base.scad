@@ -164,7 +164,7 @@ module mb_base(
             /*
             * Connectors
             */
-            mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = true), debug = debug);
+            mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, subtract = true), debug = debug);
 
             *if(connectors != false){
                 for (con = [ 0 : 1 : len(connectors)-1 ]){
@@ -232,7 +232,7 @@ module mb_base(
         /*
         * Connectors
         */
-        mb_block_part(block_obj, part = mb_block_part__connectors(block_obj, female = false), debug = debug);
+        mb_block_part(block_obj, part = mb_block_part__connectors(block_obj), debug = debug);
 
         *if(connectors != false){
             for (con = [ 0 : 1 : len(connectors)-1 ]){
