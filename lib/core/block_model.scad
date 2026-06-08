@@ -262,8 +262,7 @@ function mb_block_obj(
         */
         connectorLength = mb_param_connectorLength(config, settings),
         
-        mod_size_z_as_xy = mod_size[2] / (grid_cfg[1] / grid_cfg[2]),
-        connector_length_xyz_male = connectorLength == "auto" ? [mod_size_z_as_xy, mod_size_z_as_xy, mod_size[2]] : mb_array_mul(mul_mbu_to_grid, connectorLength),
+        connector_length_xyz_male = connectorLength == "auto" ? mb_param_resolve_xyz(connectorLength) : mb_array_mul(mul_mbu_to_grid, connectorLength),
         connector_depth_xyz_male = mb_array_mul(mul_mbu_to_grid, mb_param_connectorDepth(config, settings)),
         connector_width_xyz_male = mb_array_mul(mul_mbu_to_grid, mb_param_connectorWidth(config, settings)),
         
@@ -602,10 +601,10 @@ function mb_block_get_tongue_clamp_offset(block_obj, groove) =      block_obj[13
 function mb_block_has_groove(block_obj) =                           block_obj[4][2] == "groove";
 
 // Connectors
-function mb_block_connectors(block_obj) =                           block_obj[24][0];
-function mb_block_connector_length(block_obj, tilt, subtract) =     block_obj[24][1][subtract ? 1 : 0][tilt == 0 ? 2 : 0];
-function mb_block_connector_depth(block_obj, tilt, subtract) =      block_obj[24][2][subtract ? 1 : 0][tilt == 0 ? 0 : 2];
-function mb_block_connector_width(block_obj, tilt, subtract) =      block_obj[24][3][subtract ? 1 : 0][0];
+function mb_block_get_connectors(block_obj) =                       block_obj[24][0];
+function mb_block_get_connector_length(block_obj, tilt, subtract) = block_obj[24][1][subtract ? 1 : 0][tilt == 0 ? 2 : 0];
+function mb_block_get_connector_depth(block_obj, tilt, subtract) =  block_obj[24][2][subtract ? 1 : 0][tilt == 0 ? 0 : 2];
+function mb_block_get_connector_width(block_obj, tilt, subtract) =  block_obj[24][3][subtract ? 1 : 0][0];
 
 // Shapes
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
