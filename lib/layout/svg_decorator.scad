@@ -202,5 +202,6 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
         svg_face,
         size = si,
         expand = expand,
-        offset = mb_axis_offset2d(axis, svg_offset)
+        offset = mb_axis_offset2d(axis, svg_offset),
+        color = svg_color
     ); 

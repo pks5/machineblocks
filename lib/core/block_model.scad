@@ -301,7 +301,8 @@ function mb_block_obj(
                 wall_thickness_final, 
                 base_clamp, 
                 cutout_min_depth,
-                mb_param_base(config, settings)
+                mb_param_base(config, settings),
+                mb_param_baseColor(config, settings)
             ], // 4 - Top Plate Height
             [
                 mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z, 
@@ -488,6 +489,7 @@ function mb_block_get_size_mod(block_obj) =                         block_obj[6]
 
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 function mb_block_has_base(block_obj) =                             block_obj[4][6];
+function mb_block_get_base_color(block_obj) =                       block_obj[4][7];
 
 // Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];

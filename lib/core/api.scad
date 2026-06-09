@@ -81,7 +81,6 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseAdjustment", default != undef ? default : undef);
-// TODO implement
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
 // TODO implement
 function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);
@@ -365,20 +364,9 @@ function mb_param_svgColor(config, settings, default = undef) = mb_param(config,
 
 // TODO implement female_top / female_bottom
 function mb_param_connectors(config, settings, default = undef) = mb_param(config, settings, "connectors", default != undef ? default : false);
-
-// TODO remove
-function mb_param_connectorPadding(config, settings, default = undef) = mb_param(config, settings, "connectorPadding", default != undef ? default : [0, 0]);
-// TODO remove
-function mb_param_connectorHeight(config, settings, default = undef) = mb_param(config, settings, "connectorHeight", default != undef ? default : "auto");
-
 function mb_param_connectorLength(config, settings, default = undef) = mb_param(config, settings, "connectorLength", default != undef ? default : "auto");
 function mb_param_connectorDepth(config, settings, default = undef) = mb_param(config, settings, "connectorDepth", default != undef ? default : 0.75);
 function mb_param_connectorWidth(config, settings, default = undef) = mb_param(config, settings, "connectorWidth", default != undef ? default : 3);
-
-// TODO remove
-function mb_param_connectorDepthTolerance(config, settings, default = undef) = mb_param(config, settings, "connectorDepthTolerance", default != undef ? default : 0.2);
-function mb_param_connectorSideTolerance(config, settings, default = undef) = mb_param(config, settings, "connectorSideTolerance", default != undef ? default : 0.1);
-
 function mb_param_connectorSideClearance(config, settings, default = undef) = mb_param(config, settings, "connectorSideClearance", default != undef ? default : 0.1);
 function mb_param_connectorLengthClearance(config, settings, default = undef) = mb_param(config, settings, "connectorLengthClearance", default != undef ? default : 0.2);
 

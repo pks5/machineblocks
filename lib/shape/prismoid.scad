@@ -598,7 +598,8 @@ module mb_prismoid(
     align = "sticky", 
     resolution = 80, 
     resolve = undef, 
-    debug = false
+    debug = false,
+    color = "white"
 ){
     shape = resolve == true || (len(shape) < 4) || is_undef(shape[3]) ? 
         mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand)
@@ -634,7 +635,7 @@ module mb_prismoid(
             center ? [-cx, -cy, -cz] : off;
 
         
-
+        color(debug ? "yellow" : color)
         translate(t){
             hull(){
                 for(i = [0 : 1 : 1]){

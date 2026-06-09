@@ -107,6 +107,7 @@ function mb_block_part_svg(
     size = undef,
     expand = undef,
     offset = undef,
+    color = undef,
     render = true
 ) = 
 mb_block_part_model(
@@ -116,7 +117,8 @@ mb_block_part_model(
         svg_size,
         svg_face,
         mb_block_dim_size_expand(block_dim, size, expand),
-        offset
+        offset,
+        color
     ], 
     render = render
 );
@@ -137,6 +139,7 @@ function mb_block_part_text(
     face = "z+",
     expand = undef,
     offset = undef,
+    color = undef,
     render = true
 ) = 
 mb_block_part_model(
@@ -149,7 +152,8 @@ mb_block_part_model(
         spacing,
         align,
         face,
-        offset
+        offset,
+        color
     ], 
     render = render
 );
@@ -315,6 +319,7 @@ function mb_block_part_prismoid(
 
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_block_default_multiplier(block_obj) : mul;
+    base_color = mb_block_get_base_color(block_obj);
     
     part_type = mb_block_part_model_type(part);
     part_data = mb_block_part_model_data(part);
@@ -373,7 +378,12 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
         * Shapes
         */
         else if(part_type == "mb_prismoid"){
-            mb_prismoid(shape = mb_block_part_model_data_item(part, 0), mul = mul, debug = debug);
+            mb_prismoid(
+                shape = mb_block_part_model_data_item(part, 0), 
+                mul = mul, 
+                debug = debug,
+                color = base_color
+            );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
         }
@@ -389,7 +399,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 axis = tube_data[5],
                 offset = tube_data[6],
                 mul = mul,
-                debug = debug
+                debug = debug,
+                color = base_color
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
@@ -400,7 +411,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_cube(
                 size = cube_data[0],
                 offset = cube_data[1],
-                mul = mul
+                mul = mul,
+                color = base_color
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
@@ -415,7 +427,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 face = wedge_data[3],
                 dir = wedge_data[4],
                 offset = wedge_data[5],
-                mul = mul
+                mul = mul,
+                color = base_color
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
@@ -429,6 +442,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 face = svg_data[2],
                 size = svg_data[3],
                 offset = svg_data[4],
+                color = is_undef(svg_data[5]) ? base_color : svg_data[5],
                 mul = mul
             );
             
@@ -446,6 +460,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 align = text_data[5],
                 face = text_data[6],
                 offset = text_data[7],
+                color = is_undef(text_data[8]) ? base_color : text_data[8],
                 mul = mul
             );
             
@@ -462,7 +477,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 screw_socket_size = pcb_data[4],
                 screw_socket_hole_size = pcb_data[5],
                 offset = pcb_data[6],
-                mul = mul
+                mul = mul,
+                color = base_color
             );
 
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);

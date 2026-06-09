@@ -78,6 +78,7 @@ module mb_wedge(
         [2, 0, 3, 5]
     ];
 
+    color(debug ? "yellow" : color)
     translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
         rotate(rot_tilt)
             rotate(rot)
