@@ -237,12 +237,13 @@ function mb_param_studPadding(config, settings, default = undef) = mb_param(conf
 function mb_param_studRounding(config, settings, default = undef) = mb_param(config, settings, "studRounding", default != undef ? default : 0.0625);
 
 // Clamp
-// TODO implement
+// TODO validate
 function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
-// TODO implement
-function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0.0);
-// TODO implement
-function mb_param_studClampOffset(config, settings, default = undef) = mb_param(config, settings, "studClampOffset", default != undef ? default : 0.0);
+function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0);
+function mb_param_studClampOffset(config, settings, default = undef) = mb_param(config, settings, "studClampOffset", default != undef ? default : "auto");
+
+// TODO introduce?
+//function mb_param_studClampOffsetClearance(config, settings, default = undef) = mb_param(config, settings, "studClampOffsetClearance", default != undef ? default : 0.0);
 
 // Hole
 function mb_param_studHoleDiameter(config, settings, default = undef) = mb_param(config, settings, "studHoleDiameter", default != undef ? default : "auto");
@@ -362,7 +363,6 @@ function mb_param_svgColor(config, settings, default = undef) = mb_param(config,
 * Connectors
 */
 
-// TODO implement female_top / female_bottom
 function mb_param_connectors(config, settings, default = undef) = mb_param(config, settings, "connectors", default != undef ? default : false);
 function mb_param_connectorLength(config, settings, default = undef) = mb_param(config, settings, "connectorLength", default != undef ? default : "auto");
 function mb_param_connectorDepth(config, settings, default = undef) = mb_param(config, settings, "connectorDepth", default != undef ? default : 0.75);

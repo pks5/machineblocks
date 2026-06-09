@@ -139,6 +139,15 @@ function mb_block_obj(
         stud_cutout_diameter = stud_diameter_res + mb_param_studCutoutDiameterAdjustment(config, settings) * mm2grd_xy,
         stud_cutout_height = stud_height_res + mb_param_studCutoutHeightAdjustment(config, settings) * mm2grd_z,
 
+        //studClampOffsetClearance = mb_param_studClampOffsetClearance(config, settings) * mm2grd_z,
+        studClampHeight = mb_param_studClampHeight(config, settings) * mbu2grd_z,
+        
+        studClampOffset = mb_param_studClampOffset(config, settings),
+        
+        stud_clamp_offset = studClampOffset == "auto" ? stud_height_res - studClampHeight : studClampOffset * mbu2grd_z,
+        stud_clamp_height = min(studClampHeight, stud_height_res - stud_clamp_offset),
+        stud_clamp_thickness = mb_param_studClampThickness(config, settings) * mbu2grd_xy,
+
         /*
         * Surface Pattern
         */
@@ -353,7 +362,10 @@ function mb_block_obj(
                 mb_param_studType(config, settings),
                 mb_param_recessStuds(config, settings),
                 mb_param_recessStudType(config, settings),
-                mb_param_recessStudShift(config, settings)
+                mb_param_recessStudShift(config, settings),
+                stud_clamp_thickness,
+                stud_clamp_height,
+                stud_clamp_offset
             ],  // 14 - 
             [
                 tube_diameter_xyz, 
@@ -574,6 +586,12 @@ function mb_block_get_recess_studs(block_obj) =                     block_obj[14
 function mb_block_get_recess_stud_type(block_obj) =                 block_obj[14][14];
 function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14][15];
 
+// Stud Clamp
+function mb_block_get_stud_clamp_thickness(block_obj) =             block_obj[14][16];
+function mb_block_get_stud_clamp_height(block_obj) =                block_obj[14][17];
+function mb_block_get_stud_clamp_offset(block_obj) =                block_obj[14][18];
+
+// Stud Icon
 function mb_block_get_stud_icon(block_obj) =                        block_obj[21][0];
 function mb_block_get_stud_icon_dimensions(block_obj) =             block_obj[21][1];
 function mb_block_get_stud_icon_color(block_obj) =                  block_obj[21][3];
