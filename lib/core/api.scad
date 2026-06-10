@@ -229,7 +229,6 @@ function mb_param_holeZPartialY(config, settings, default = undef) = mb_param(co
 /*
 * Studs
 */
-// TODO implement complex mode
 function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
 function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
 function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);

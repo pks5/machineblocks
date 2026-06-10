@@ -79,7 +79,7 @@ function mb_block_part__studs(block_obj) =
                             items = [
                                 mb_block_part_tube(
                                     block_dim = block_dim,
-                                    radius = mb_block_stud_radius(block_obj, x, y),
+                                    radius = render[3],
                                     rounding_radius = stud_rounding,
                                     axis = "z",
                                     expand = render[2],

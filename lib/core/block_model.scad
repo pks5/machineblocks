@@ -780,11 +780,18 @@ function mb_block_stud_range(block_obj) =
 
 function mb_block_stud_render(block_obj, x, y) =
     let(
+        has_studs = mb_block_has_studs(block_obj),
+        item = get_grid_item(has_studs, true, x, y)
+    )
+    item == false ? false : 
+    let(
         block_dim = mb_block_get_dim(block_obj),
         surface_shape = mb_block_get_surface_shape(block_obj),
         recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
         recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
+        stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
+        stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
         stud_height = mb_block_get_stud_height(block_obj),
         stud_sink = mb_block_get_stud_sink(block_obj),
         has_recess = mb_block_has_recess(block_obj),
@@ -836,7 +843,8 @@ function mb_block_stud_render(block_obj, x, y) =
     [
         render_stud && (!has_recess || in_recess || on_recess_wall),
         in_recess ? recess_stud_offset : stud_offset,
-        [bottom, top]  
+        [bottom, top],
+        stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter]
     ];
 
 function mb_block_stud_cutout_offset(block_obj, x, y) =
@@ -845,13 +853,7 @@ function mb_block_stud_cutout_offset(block_obj, x, y) =
     )
     mb_block_pos_to_offset(block_obj, [x + 0.5, y + 0.5, undef]);
 
-function mb_block_stud_radius(block_obj, x, y) =
-    let(
-        stud_diameter = mb_block_get_stud_diameter(block_obj),
-        stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
-        stud_type = mb_block_get_stud_type(block_obj)
-    )
-       stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter];
+
 
 /*
 * ----------
@@ -1326,6 +1328,35 @@ function mb_block_pos_to_offset(block_obj, pos) =
 * Private Helpers
 * ---------------
 */ 
+
+ /*
+* Grid
+*/
+function in_grid_area(a, b, rect) = (a >= rect[0]) && (a <= rect[1]) && (b >= rect[2]) && (b <= rect[3]); //[xy-, xy+, yz-, yz+]
+
+function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) = 
+    (is_bool(items) 
+        ? (items == false ? false : defaultValue) 
+        : (
+            (i >= len(items)) 
+                ? prev 
+                : get_grid_item(
+                    items, 
+                    defaultValue, 
+                    a, 
+                    b, 
+                    i + 1, 
+                    is_bool(items[i]) 
+                        ? (items[i] == false ? false : defaultValue) 
+                        : (
+                            in_grid_area(a, b, items[i][0]) 
+                            ? (items[i][1] == undef ? defaultValue : items[i][1]) 
+                            : prev
+                        )
+                )
+        )
+    );
+    
 
 function _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding) =
     let(
