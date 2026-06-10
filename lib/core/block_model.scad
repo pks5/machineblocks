@@ -972,8 +972,13 @@ function mb_block_tube_range(block_obj, axis) =
     ];
 
 function mb_block_tube_render(block_obj, axis, xy, z) =
-    let(axis = mb_axis_to_int(axis))
-    true;
+    let(
+        axis = mb_axis_to_int(axis),
+        hole_axis = mb_axis_inverse(axis),
+        has_holes = mb_block_has_holes(block_obj, hole_axis),
+        item = get_grid_item(has_holes, true, xy, z)
+    )
+    item == true;
 
 function mb_block_tube_offset(block_obj, axis, xy, z) =
     let(
