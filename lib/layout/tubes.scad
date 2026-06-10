@@ -19,10 +19,11 @@ function mb_block_part__tubes(block_obj, hole = false) =
             for(a = ["x", "y"])
                 let(
                     axis = mb_axis_to_int(a),
+                    hole_axis = mb_axis_inverse(axis),
                     tube_range = mb_block_tube_range(block_obj, axis),
                     axis_faces = mb_axis_faces(axis)
                 )
-                if(mb_block_has_holes(block_obj, 1 - axis))
+                if(mb_block_has_holes(block_obj, hole_axis) != false)
                 for(xy = tube_range[0])
                     for(z = tube_range[1])
                         if(mb_block_tube_render(block_obj, axis, xy, z))

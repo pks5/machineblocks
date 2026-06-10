@@ -994,6 +994,8 @@ function mb_axis_to_int(axis) =
         undef
     ) : axis;
 
+function mb_axis_inverse(axis) = axis == 2 ? 2 : 1 - axis;
+
 function mb_axis_faces(axis) = 
     let(axis = mb_axis_to_int(axis))
     axis >= 0 && axis <= 2 ? [axis * 2, axis * 2 + 1] : undef;

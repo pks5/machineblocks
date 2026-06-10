@@ -369,7 +369,7 @@ function mb_block_obj(
             ],  // 14 - 
             [
                 tube_diameter_xyz, 
-                undef, 
+                mb_param_pillars(config, settings), 
                 pillar_org_wall_thickness, 
                 pin_diameter
             ],  // 15 - 
@@ -556,6 +556,7 @@ function mb_block_get_stabilizer_expansion_offset(block_obj) =      block_obj[16
 function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15][0][mb_axis_to_int(axis)];
 
 // Pillars
+function mb_block_has_pillars(block_obj) =                          block_obj[15][1];
 function mb_block_get_pillar_wall_thickness(block_obj) =            block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
 
@@ -942,17 +943,18 @@ function mb_block_tube_range(block_obj, axis) =
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
         axis = mb_axis_to_int(axis),
+        hole_axis = mb_axis_inverse(axis),
         min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
-        start_index_xy = min_max_index[0][1 - axis],
-        end_index_xy = min_max_index[1][1 - axis],
+        start_index_xy = min_max_index[0][hole_axis],
+        end_index_xy = min_max_index[1][hole_axis],
         
 
-        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, 1 - axis),
-        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, 1 - axis),
-        tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, 1 - axis),
-        tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, 1 - axis),
-        tube_hole_min_top_margin = mb_block_get_hole_xy_min_top_margin(block_obj, 1 - axis),
-        tube_shift = mb_block_get_hole_xyz_shift(block_obj, 1 - axis),
+        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, hole_axis),
+        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, hole_axis),
+        tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, hole_axis),
+        tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, hole_axis),
+        tube_hole_min_top_margin = mb_block_get_hole_xy_min_top_margin(block_obj, hole_axis),
+        tube_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
 
         hole_max_rows = mb_vertical_hole_count(
             rect_height = mod_size[2],
@@ -976,10 +978,10 @@ function mb_block_tube_render(block_obj, axis, xy, z) =
 function mb_block_tube_offset(block_obj, axis, xy, z) =
     let(
         axis = mb_axis_to_int(axis),
-        
-        tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, 1 - axis),
-        tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, 1 - axis),
-        tube_shift = mb_block_get_hole_xyz_shift(block_obj, 1 - axis),
+        hole_axis = mb_axis_inverse(axis),
+        tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, hole_axis),
+        tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, hole_axis),
+        tube_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
         tube_offset_xy = tube_shift ? 0.5 : 1,
     )
     mb_block_pos_to_offset(block_obj, [
@@ -991,16 +993,18 @@ function mb_block_tube_offset(block_obj, axis, xy, z) =
 function mb_block_tube_radius(block_obj, axis, xy, z, hole = false) =
     let(
         axis = mb_axis_to_int(axis),
+        hole_axis = mb_axis_inverse(axis),
         tube_diameter = mb_block_get_tube_diameter(block_obj, axis),
-        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, 1 - axis)
+        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, hole_axis)
         
     )
     0.5 * (hole ? hole_xyz_diameter : tube_diameter);
 
 function mb_block_tube_hole_inset(block_obj, axis, xy, z) =
     let(
-        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, 1 - axis),
-        inset_depth = mb_block_get_hole_xyz_inset_depth(block_obj, 1 - axis)
+        hole_axis = mb_axis_inverse(axis),
+        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, hole_axis),
+        inset_depth = mb_block_get_hole_xyz_inset_depth(block_obj, hole_axis)
     )
     [inset_thickness, inset_depth];
 
@@ -1030,7 +1034,10 @@ function mb_block_pillar_range(block_obj) =
     ];
 
 function mb_block_pillar_render(block_obj, x, y) =
-    true;
+    let(
+        item = get_grid_item(mb_block_has_pillars(block_obj), true, x, y)
+    )
+    item == true;
 
 function mb_block_pillar_offset(block_obj, x, y) = //TODO
     let(
@@ -1195,20 +1202,23 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
     )
     [
         for(face = faces)
-            let(axis = mb_face_to_axis(face),
-            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            max_gap_length = mod_size[1 - axis] - gap_start_pos,
-            gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
-            gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
-            gap_end_offset = mod_size[1 - axis] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3])
+            let(
+                axis = mb_face_to_axis(face),
+                axis_inverse = mb_axis_inverse(axis),
+                gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
+                max_gap_length = mod_size[axis_inverse] - gap_start_pos,
+                gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
+                gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
+                gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3]
+            )
             [
                 face,
                 gap_start_pos,
                 gap_length,
                 gap_start_offset,
                 gap_end_offset,
-                min_max_index[0][1 - axis] + gap_start_offset,
-                min_max_index[1][1 - axis] + 1 - gap_end_offset,
+                min_max_index[0][axis_inverse] + gap_start_offset,
+                min_max_index[1][axis_inverse] + 1 - gap_end_offset,
             ]
     ];
 
@@ -1244,10 +1254,11 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = false) =
         
         let(
             axis = mb_face_to_axis(face),
+            axis_inverse = mb_axis_inverse(axis),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[1 - axis] - gap_start_pos, gap[2]),
+            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis_inverse] - gap_start_pos, gap[2]),
             gap_start_offset = gap_start_pos + wall_thickness,
-            gap_end_offset = mod_size[1 - axis] - gap_length - gap_start_pos + wall_thickness
+            gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + wall_thickness
         )
         [
             face,
@@ -1255,8 +1266,8 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = false) =
             gap_length,
             gap_start_offset,
             gap_end_offset,
-            min_max_index[0][1 - axis] + gap_start_offset,
-            min_max_index[1][1 - axis] + 1 - gap_end_offset
+            min_max_index[0][axis_inverse] + gap_start_offset,
+            min_max_index[1][axis_inverse] + 1 - gap_end_offset
         ]
     ];
 
@@ -1282,6 +1293,7 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false,
         
         let(
             axis = mb_face_to_axis(face),
+            axis_inverse = mb_axis_inverse(axis),
             gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
             max_gap_length = mod_size[1-axis] - gap_start_pos,
             gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
@@ -1294,8 +1306,8 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false,
             gap_length,
             gap_start_offset,
             gap_end_offset,
-            min_max_index[0][1 - axis] + gap_start_offset,
-            min_max_index[1][1 - axis] + 1 - gap_end_offset
+            min_max_index[0][axis_inverse] + gap_start_offset,
+            min_max_index[1][axis_inverse] + 1 - gap_end_offset
         ]
     ];
 

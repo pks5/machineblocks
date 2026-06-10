@@ -303,13 +303,6 @@ module mb_block(
 
     
     /*
-    * XYZ Holes
-    */
-    function drawHoleX(a, b) = getGridItem(holeX, holeXType, a, b, 0, false);
-    function drawHoleY(a, b) = getGridItem(holeY, holeYType, a, b, 0, false);
-    function drawHoleZ(a, b) = getGridItem(holeZ, holeZType, a, b, 0, false);
-
-    /*
     * Stabilizer Grid
     */
     function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((size[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight - stabilizerGridOffset, 0) : 0);
