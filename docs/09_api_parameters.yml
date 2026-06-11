@@ -13,7 +13,7 @@
 #
 # ============================================================================
 
-version: "3.0.1"
+version: "3.0.2"
 
 # ============================================================================
 # GLOBAL RULES
@@ -73,7 +73,7 @@ global_rules:
       mb_param_direction() returns int:
         "west" → 0, "north" → 1, "east" → 2, "south" → 3
 
-      mb_param_baseSideAdjustment() returns the pseudo-map as-is:
+      mb_param_baseAdjustment() returns the pseudo-map as-is:
         [["x-", -0.1], ["z+", 0.1]] → [["x-", -0.1], ["z+", 0.1]]
         mb_block() interprets only standard sides x-, x+, y-, y+, z-, z+
 
@@ -86,7 +86,7 @@ global_rules:
 
       unitGrid parameters:
         step: 0.25, min: 0, max: 32
-        Exception — size: min is 1 (not 0)
+        Exception — size: min is 1 (not 0), integer values only
 
       mbu parameters (XY context):
         step: 0.125, min: 0, max: 160
@@ -109,8 +109,8 @@ global_rules:
         Used as the reference for size, offset, crop, and many other parameters.
     mm:
       description: |
-        Millimeters. Used exclusively for Adjustment/calibration parameters
-        and certain absolute values (baseHeight, pcb*, screwHole*, topPlateHelper*,
+        Millimeters. Used exclusively for Adjustment/Clearance calibration parameters
+        and certain absolute values (pcb*, screwHole*, topPlateHelper*,
         clamp thicknesses). mm values do NOT scale with the scale parameter.
     pt:
       description: |
@@ -298,6 +298,13 @@ parameters:
       Base unit of the MachineBlocks system in millimeters.
       All grid-based size values are multiples of this unit.
       Adjustment parameters are exempt (always in mm).
+    deleted_in_v3: false
+    renamed_from_v2: unitMbuToMm
+    version_history:
+      - version: "2"
+        description: "Named unitMbuToMm in V2."
+      - version: "3.0"
+        description: "Renamed to unitMbu."
 
   - name: unitGrid
     group: system
@@ -312,6 +319,11 @@ parameters:
       Grid size in mbu, representing a 1x1 plate.
       X and Y share the first value, Z uses the second.
       A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
+    version_history:
+      - version: "2"
+        description: "Named unitGridToMbu in V2."
+      - version: "3.0"
+        description: "Renamed to unitGrid."
 
   - name: scale
     group: system
@@ -327,8 +339,45 @@ parameters:
       physical dimensions change. Adjustments (mm) do NOT scale.
     example: "scale = 2 produces a brick twice the physical size"
 
-  - name: id
+  - name: printerNozzleDiameter
     group: system
+    type: float
+    unit: mm
+    default: 0.4
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Nozzle diameter of the 3D printer in mm. Typically set once in the
+      global config. Used as the default value for other parameters when
+      those parameters are set to "auto".
+
+      Current auto-resolution rules:
+        topPlateHelperThickness = "auto"  →  0.5 * printerNozzleDiameter (min 0.1 mm)
+        tongueGrooveThicknessClearance = "auto"  →  0.25 * printerNozzleDiameter (min 0.1 mm)
+        Any future *NozzleDiameter-based "auto" parameter follows the same min 0.1 mm rule.
+
+  - name: printerLayerHeight
+    group: system
+    type: float
+    unit: mm
+    default: 0.2
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Layer height of the 3D printer in mm. Typically set once in the
+      global config. Used as the default value for other parameters when
+      those parameters are set to "auto".
+
+      Current auto-resolution rules:
+        topPlateHelperHeight = "auto"  →  printerLayerHeight
+        stabilizerLayerOffset = "auto"  →  printerLayerHeight
+        screwHoleZHelperLayerOffset = "auto"  →  printerLayerHeight
+        tongueGrooveDepthClearance = "auto"  →  printerLayerHeight
+        tongueGrooveClampOffsetClearance = "auto"  →  printerLayerHeight
+
+
     type: string
     unit: dimensionless
     default: ""
@@ -394,13 +443,45 @@ parameters:
     format: "[x, y, z]"
     unit: unitGrid (multiples of a 1x1 plate)
     default: [1, 1, 1]
-    customizer_range: "[1:0.25:32]"
+    customizer_range: "[1:1:32]"
     ai_usage: yes
     description: |
       Size of the bounding box in grid units. Defines the brick body;
       studs are excluded from the bounding box. For simple bricks the
       bounding box matches the body exactly.
       X/Y count in studs, Z counts in plates.
+      Must contain integer values only. Fractional values are not permitted.
+    version_history:
+      - version: "3.0"
+        description: "size values are restricted to integers. Fractional values were accepted in V2."
+
+  - name: sizeMod
+    group: core_geometry
+    type: array
+    format: "[x-, x+, y-, y+, z-, z+] — per-side modification in unitGrid"
+    unit: unitGrid
+    default: [0, 0, 0, 0, 0, 0]
+    since: "3.0"
+    status: stable
+    ai_usage: yes
+    description: |
+      Semantic size modification per side, in grid units. Adjusts the
+      brick geometry while keeping it structurally intact (walls, studs,
+      connectors remain consistent). Unlike crop, sizeMod does not brutally
+      cut geometry — it semantically shifts where the brick starts/ends on
+      each side.
+
+      Example: sizeMod = [0.5, 0, 0, 0, 0, 0] shifts the x- side inward
+      by 0.5 grid units, producing a half-brick that starts at 0.5 grid
+      units from the original x- edge.
+
+      z- behaviour: negative z- values shift the brick downward by the
+      same amount (like a downward offset), independent of the regular
+      offset parameter. The z+ side is extended correspondingly.
+
+      Difference to baseAdjustment: sizeMod is a semantic geometry change
+      (half-bricks, partial bricks). baseAdjustment is for printer
+      calibration and gap closing in composite blocks.
 
   - name: slope
     group: core_geometry
@@ -411,17 +492,14 @@ parameters:
     ai_usage: yes
     description: |
       Defines slopes per side (0-3).
-      Positive values: slope on top surface (z+), starting at slopeBaseHeightLower
+      Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
       and going the specified number of plates toward the center upward.
       Negative values: inverted slope on bottom surface (z-), starting at
-      blockHeight - slopeBaseHeightUpper going down to the floor.
-    constraints:
-      conflicts_with:
-        - parameter: bevel
-          reason: "Combined slope and bevel geometry is not supported."
+      blockHeight - slopeBaseHeightTop going down to the floor.
+      Slope and bevel can be used together.
     example: "[1,0,0,0] creates a slope on side 0 (x-), 1 plate wide"
 
-  - name: slopeBaseHeightLower
+  - name: slopeBaseHeightBottom
     group: core_geometry
     type: float
     unit: mbu
@@ -434,8 +512,13 @@ parameters:
       requires:
         - parameter: slope
           condition: "slope is not false"
+    version_history:
+      - version: "2"
+        description: "Named slopeBaseHeightLower in V2."
+      - version: "3.0"
+        description: "Renamed to slopeBaseHeightBottom."
 
-  - name: slopeBaseHeightLowerInner
+  - name: slopeBaseHeightInner
     group: core_geometry
     type: float
     unit: mbu
@@ -448,8 +531,13 @@ parameters:
       requires:
         - parameter: slope
           condition: "slope is not false"
+    version_history:
+      - version: "2"
+        description: "Named slopeBaseHeightLowerInner in V2."
+      - version: "3.0"
+        description: "Renamed to slopeBaseHeightInner."
 
-  - name: slopeBaseHeightUpper
+  - name: slopeBaseHeightTop
     group: core_geometry
     type: float
     unit: mbu
@@ -462,6 +550,11 @@ parameters:
       requires:
         - parameter: slope
           condition: "slope contains negative values"
+    version_history:
+      - version: "2"
+        description: "Named slopeBaseHeightUpper in V2."
+      - version: "3.0"
+        description: "Renamed to slopeBaseHeightTop."
 
   - name: bevel
     group: core_geometry
@@ -474,10 +567,7 @@ parameters:
       Creates wedges by shifting Z-axis corners (0-3) in XY space.
       Each corner gets an [x,y] displacement value.
       The resulting shape is intersected with the bounding box.
-    constraints:
-      conflicts_with:
-        - parameter: slope
-          reason: "Combined slope and bevel geometry is not supported."
+      Can be used together with slope.
     example: |
       [[0,3],[0,0],[2,0],[0,0]] shifts corner 0 by 3 plates in y+
       and corner 2 by 2 plates in x+.
@@ -494,12 +584,22 @@ parameters:
     customizer_range: "[-32:0.25:32]"
     ai_usage: yes
     description: |
-      Hard cuts or extensions per side (0-3 only, no Z-axis crop).
+      Hard cut or extension per side (0-3 only, no Z-axis crop).
       Positive = cut geometry, negative = extend geometry.
+      The cut is applied brutally — without regard to grid compatibility,
+      walls, tubes, or other structural features.
       Does NOT affect bounding box or positioning.
-      Can break grid compatibility, especially with negative values.
-      Intended for cross-sections, screenshots, or helper bricks — not
-      for normal size adjustment.
+      For semantic size modification that keeps the brick structurally intact,
+      use sizeMod instead. crop is intended for cross-sections, screenshots,
+      or helper bricks — not for normal size adjustment.
+    version_history:
+      - version: "2"
+        description: "crop attempted to preserve grid compatibility in some cases."
+      - version: "3.0"
+        description: |
+          crop is now a hard cut in all cases, with no regard for grid
+          compatibility, walls, or structure. Use sizeMod for semantic
+          size changes that preserve brick integrity.
 
   - name: cutouts
     group: core_geometry
@@ -686,23 +786,13 @@ parameters:
       Color of the brick body, studs, and all other parts.
       Does NOT apply to text (use textColor separately).
 
-  - name: baseHeight
-    group: body
-    type: float_or_auto
-    unit: mm
-    default: "auto"
-    ai_usage: rarely
-    description: |
-      Absolute height of the base body in mm. Overrides the height
-      calculated from size[2]. Only for exceptional cases and primitives.
-      Normal size definition should use size.
-    warning: "Should generally not be used for brick sizing."
+  # baseHeight removed in V3 — see removed_in_v3 section.
 
   # --------------------------------------------------------------------------
   # GROUP: Top Plate
   # --------------------------------------------------------------------------
 
-  - name: baseTopPlateHeight
+  - name: topPlateHeight
     group: top_plate
     type: float
     unit: mbu
@@ -712,16 +802,26 @@ parameters:
       Preferred height of the top plate (upper ceiling of the base body).
       Actual height may differ depending on baseCutoutMaxDepth and
       recess depth. Usually does not need adjustment.
+    version_history:
+      - version: "2"
+        description: "Named baseTopPlateHeight in V2."
+      - version: "3.0"
+        description: "Renamed to topPlateHeight."
 
-  - name: baseTopPlateHeightAdjustment
+  - name: topPlateHeightAdjustment
     group: top_plate
     type: float
     unit: mm
     default: -0.6
     ai_usage: config_only
     description: |
-      Calibration adjustment for baseTopPlateHeight.
+      Calibration adjustment for topPlateHeight.
       Only for calibration/printer compensation.
+    version_history:
+      - version: "2"
+        description: "Named baseTopPlateHeightAdjustment in V2."
+      - version: "3.0"
+        description: "Renamed to topPlateHeightAdjustment."
 
   # --------------------------------------------------------------------------
   # GROUP: Underside / Base Cutout
@@ -900,7 +1000,7 @@ parameters:
   # GROUP: Relief Cut
   # --------------------------------------------------------------------------
 
-  - name: baseReliefCut
+  - name: reliefCut
     group: relief_cut
     type: bool
     unit: dimensionless
@@ -910,8 +1010,13 @@ parameters:
       Whether a relief cut is applied at the outer bottom edge of the block.
       Cuts a portion of the outer wall, resulting in a thinner outer wall
       in the lower area. The inner wall is not affected (baseCutoutType=standard).
+    version_history:
+      - version: "2"
+        description: "Named baseReliefCut in V2."
+      - version: "3.0"
+        description: "Renamed to reliefCut."
 
-  - name: baseReliefCutHeight
+  - name: reliefCutHeight
     group: relief_cut
     type: float
     unit: mbu
@@ -921,10 +1026,15 @@ parameters:
       Height of the relief cut.
     constraints:
       requires:
-        - parameter: baseReliefCut
-          condition: "baseReliefCut = true"
+        - parameter: reliefCut
+          condition: "reliefCut = true"
+    version_history:
+      - version: "2"
+        description: "Named baseReliefCutHeight in V2."
+      - version: "3.0"
+        description: "Renamed to reliefCutHeight."
 
-  - name: baseReliefCutThickness
+  - name: reliefCutThickness
     group: relief_cut
     type: float
     unit: mbu
@@ -934,14 +1044,19 @@ parameters:
       Thickness of the cut-away portion.
     constraints:
       requires:
-        - parameter: baseReliefCut
-          condition: "baseReliefCut = true"
+        - parameter: reliefCut
+          condition: "reliefCut = true"
+    version_history:
+      - version: "2"
+        description: "Named baseReliefCutThickness in V2."
+      - version: "3.0"
+        description: "Renamed to reliefCutThickness."
 
   # --------------------------------------------------------------------------
   # GROUP: Side / Height Adjustment (Calibration)
   # --------------------------------------------------------------------------
 
-  - name: baseSideAdjustment
+  - name: baseAdjustment
     group: calibration
     type: array
     format: |
@@ -964,9 +1079,18 @@ parameters:
       of a block. Never scales with the scale parameter.
 
       PRIMARY PURPOSE — Per-side fine-tuning:
-      While sizeAdjustment provides global calibration, baseSideAdjustment
+      While sizeAdjustment provides global calibration, baseAdjustment
       allows per-side overrides including z- and z+ (which sizeAdjustment
       cannot address individually).
+
+      z- SPECIAL BEHAVIOUR: A z- value does not reduce block height from below.
+      Instead it shifts the brick downward by the z- amount (independent of
+      offset), and extends z+ by the same amount. This means the brick gains
+      a downward protrusion while the top side expands correspondingly.
+      Same applies to sizeMod z-.
+
+      Difference to sizeMod: baseAdjustment is for printer calibration and
+      gap closing in composite blocks. sizeMod is a semantic geometry change.
 
       IN CONFIG — typically empty or used for global z+/z- adjustments.
 
@@ -974,9 +1098,9 @@ parameters:
       adjustments to child composite blocks. The child uses mb_params_filter()
       to extract its namespace:
         // In outer block:
-        ["baseSideAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
+        ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
         // In inner composite block (pbx part):
-        ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, "pbx")]
+        ["baseAdjustment", mb_params_filter(baseAdjustment, "pbx")]
         // Result: [["x+", 0.01]]
 
       mb_params_filter(param, namespace, overrides?):
@@ -984,11 +1108,20 @@ parameters:
         Ignores entries without a namespace and entries with numeric keys.
         Optional third argument applies fixed overrides after filtering.
         Universal — can be applied to any [[string, value]] pseudo-map parameter.
+    version_history:
+      - version: "2"
+        description: "Named baseSideAdjustment in V2. Supported x-, x+, y-, y+, z+. Format changed from float/2-element/4-element array to pseudo-map."
+      - version: "3.0"
+        description: |
+          Renamed to baseAdjustment. Now supports z- with special downward-shift
+          behaviour. Default changed from -0.1 to [] (empty).
 
   - name: sizeAdjustment
     group: calibration
-    type: array
-    format: "[sideXYAdj, heightAdj] — always a 2-element array in mm"
+    type: array_or_number
+    format: |
+      Number: applies to all four horizontal sides (x-, x+, y-, y+). Z is 0.
+      2-element array [sideXYAdj, heightAdj]: first value for x-, x+, y-, y+; second for z+.
     unit: mm
     default: [-0.1, 0]
     since: "3.0"
@@ -1000,11 +1133,46 @@ parameters:
       heightAdj is applied to the top face (z+) only.
 
       Typically set once in the global config and applies to all blocks.
-      For per-block or per-side overrides, use baseSideAdjustment.
+      For per-block or per-side overrides, use baseAdjustment.
 
       Example: [-0.1, 0] reduces x-, x+, y-, y+ by 0.1mm each, no height change.
 
       Never scales with the scale parameter.
+    version_history:
+      - version: "3.0"
+        description: |
+          New in V3. Now accepts a single number (applies to XY only, Z = 0)
+          or a 2-element array [XYAdj, ZAdj].
+
+  - name: recessAdjustment
+    group: calibration
+    type: array_or_auto
+    format: |
+      "auto": uses baseAdjustment values (except z+) automatically.
+      Pseudo-map: array of [side, value_mm] pairs, same format as baseAdjustment.
+    unit: mm
+    default: "auto"
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Per-side calibration adjustment for the inner recess walls and floor.
+      Applied to the interior surfaces of the recess (the inner box).
+
+      At "auto", uses the same values as baseAdjustment (except z+, which
+      is not applicable to the recess).
+
+      IMPORTANT — z- behaviour differs from baseAdjustment:
+      The z- value is applied to the recess floor height (moves the floor).
+      No downward shift or z+ extension occurs — it is a direct floor adjustment.
+
+      Sign convention: negative values enlarge the recess (shrink the inner
+      walls inward in x/y, and lower the floor in z-). Positive values
+      shrink the recess.
+    constraints:
+      requires:
+        - parameter: recess
+          condition: "recess = true"
 
   # --------------------------------------------------------------------------
   # GROUP: Top Plate Helpers
@@ -1029,14 +1197,15 @@ parameters:
 
   - name: topPlateHelperHeight
     group: print_helpers
-    type: float
+    type: float_or_auto
     unit: mm
-    default: 0.2
+    default: "auto"
     ai_usage: rarely
     description: |
       Height of one top plate helper layer. Typically matches the 3D print
       layer height. The horizontal layer is effectively 2× this value as
       it is printed first.
+      "auto" uses printerLayerHeight.
     constraints:
       requires:
         - parameter: topPlateHelpers
@@ -1044,12 +1213,13 @@ parameters:
 
   - name: topPlateHelperThickness
     group: print_helpers
-    type: float
+    type: float_or_auto
     unit: mm
-    default: 0.4
+    default: "auto"
     ai_usage: rarely
     description: |
       Thickness of the top plate helpers in X/Y direction.
+      "auto" uses 0.5 * printerNozzleDiameter (minimum 0.1 mm).
     constraints:
       requires:
         - parameter: topPlateHelpers
@@ -1059,7 +1229,7 @@ parameters:
   # GROUP: Stabilizer Grid
   # --------------------------------------------------------------------------
 
-  - name: stabilizerGrid
+  - name: stabilizers
     group: print_helpers
     type: bool
     unit: dimensionless
@@ -1073,22 +1243,33 @@ parameters:
       requires:
         - parameter: baseCutoutType
           condition: "baseCutoutType = 'standard'"
+    version_history:
+      - version: "2"
+        description: "Named stabilizerGrid in V2."
+      - version: "3.0"
+        description: "Renamed to stabilizers."
 
-  - name: stabilizerGridOffset
+  - name: stabilizerLayerOffset
     group: print_helpers
-    type: float
+    type: float_or_auto
     unit: mm
-    default: 0.2
+    default: "auto"
     ai_usage: rarely
     description: |
       Offset between the first and subsequent grid layers.
       Ensures subsequent layers have a surface to print on.
+      "auto" uses printerLayerHeight.
     constraints:
       requires:
-        - parameter: stabilizerGrid
-          condition: "stabilizerGrid = true"
+        - parameter: stabilizers
+          condition: "stabilizers = true"
+    version_history:
+      - version: "2"
+        description: "Named stabilizerGridOffset in V2."
+      - version: "3.0"
+        description: "Renamed to stabilizerLayerOffset. Supports 'auto' (uses printerLayerHeight)."
 
-  - name: stabilizerGridHeight
+  - name: stabilizerHeight
     group: print_helpers
     type: float
     unit: mbu
@@ -1098,10 +1279,15 @@ parameters:
       Height of the stabilizer grid.
     constraints:
       requires:
-        - parameter: stabilizerGrid
-          condition: "stabilizerGrid = true"
+        - parameter: stabilizers
+          condition: "stabilizers = true"
+    version_history:
+      - version: "2"
+        description: "Named stabilizerGridHeight in V2."
+      - version: "3.0"
+        description: "Renamed to stabilizerHeight."
 
-  - name: stabilizerGridThickness
+  - name: stabilizerThickness
     group: print_helpers
     type: float
     unit: mbu
@@ -1111,8 +1297,13 @@ parameters:
       Width of a single grid strut.
     constraints:
       requires:
-        - parameter: stabilizerGrid
-          condition: "stabilizerGrid = true"
+        - parameter: stabilizers
+          condition: "stabilizers = true"
+    version_history:
+      - version: "2"
+        description: "Named stabilizerGridThickness in V2."
+      - version: "3.0"
+        description: "Renamed to stabilizerThickness."
 
   - name: stabilizerExpansion
     group: print_helpers
@@ -1125,8 +1316,8 @@ parameters:
       stabilizerExpansionOffset from the bottom edge.
     constraints:
       requires:
-        - parameter: stabilizerGrid
-          condition: "stabilizerGrid = true"
+        - parameter: stabilizers
+          condition: "stabilizers = true"
 
   - name: stabilizerExpansionOffset
     group: print_helpers
@@ -1192,7 +1383,7 @@ parameters:
   # GROUP: Tubes
   # --------------------------------------------------------------------------
 
-  - name: tubeWallThickness
+  - name: pillarOriginalWallThickness
     group: tubes
     type: float
     unit: mbu
@@ -1201,66 +1392,51 @@ parameters:
     description: |
       Fixed constant used for automatic tube diameter calculation.
       Do not modify.
+    version_history:
+      - version: "2"
+        description: "Named tubeWallThickness in V2."
+      - version: "3.0"
+        description: "Renamed to pillarOriginalWallThickness."
 
-  - name: tubeXDiameter
+  - name: tubeDiameter
     group: tubes
-    type: float_or_auto
+    type: float_or_auto_or_array
+    format: |
+      "auto": automatically calculated for all axes.
+      Number: applies to x, y, and z axes equally.
+      2-element array [xy, z]: first value for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mbu
     default: "auto"
     ai_usage: never
     description: |
-      Diameter of outer tubes for LEGO Technic holes along the X-axis.
-      Automatically calculated.
+      Diameter of outer tubes for LEGO Technic holes.
+      Automatically calculated per axis.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: tubeXDiameter, tubeYDiameter, tubeZDiameter."
+      - version: "3.0"
+        description: "Consolidated into tubeDiameter with 1/2/3-value array rule."
 
-  - name: tubeXDiameterAdjustment
+  - name: tubeDiameterAdjustment
     group: tubes
-    type: float
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z axes equally.
+      2-element array [xy, z]: first value for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mm
     default: -0.1
     ai_usage: config_only
     description: |
-      Calibration adjustment for tubeXDiameter.
+      Calibration adjustment for tubeDiameter.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: tubeXDiameterAdjustment, tubeYDiameterAdjustment, tubeZDiameterAdjustment."
+      - version: "3.0"
+        description: "Consolidated into tubeDiameterAdjustment with 1/2/3-value array rule."
 
-  - name: tubeYDiameter
-    group: tubes
-    type: float_or_auto
-    unit: mbu
-    default: "auto"
-    ai_usage: never
-    description: |
-      Diameter of outer tubes for LEGO Technic holes along the Y-axis.
-      Automatically calculated.
-
-  - name: tubeYDiameterAdjustment
-    group: tubes
-    type: float
-    unit: mm
-    default: -0.1
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for tubeYDiameter.
-
-  - name: tubeZDiameter
-    group: tubes
-    type: float_or_auto
-    unit: mbu
-    default: "auto"
-    ai_usage: never
-    description: |
-      Diameter of tubes in Z-direction. Applies to classic underside
-      pillars (baseCutoutType=standard) with or without Technic holes
-      on top. Automatically calculated.
-
-  - name: tubeZDiameterAdjustment
-    group: tubes
-    type: float
-    unit: mm
-    default: -0.1
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for tubeZDiameter.
-
-  - name: tubeInnerClampThickness
+  - name: pillarInnerClampThickness
     group: tubes
     type: float
     unit: mm
@@ -1270,6 +1446,11 @@ parameters:
       Thickness of the clamp inside Z-direction tubes.
       A constriction of the inner hole so studs grip inside the tube.
       Usually does not need adjustment.
+    version_history:
+      - version: "2"
+        description: "Named tubeInnerClampThickness in V2."
+      - version: "3.0"
+        description: "Renamed to pillarInnerClampThickness."
 
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes X
@@ -1288,181 +1469,295 @@ parameters:
       Whether LEGO Technic holes are drawn along the X-axis.
       Multiple rows possible depending on block height.
 
-  - name: holeXType
-    group: technic_holes_x
-    type: enum
+  - name: holeXYZType
+    group: technic_holes
+    type: enum_or_array
     values: ["pin", "axle"]
+    format: |
+      String: applies to x, y, and z axes equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: dimensionless
     default: "pin"
     ai_usage: yes
     description: |
-      Type of Technic holes in X-direction.
+      Type of Technic holes per axis.
       pin: round holes. axle: cross-shaped holes.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: holeXType, holeYType, holeZType."
+      - version: "3.0"
+        description: "Consolidated into holeXYZType with 1/2/3-value array rule."
 
-  - name: holeXShift
-    group: technic_holes_x
-    type: bool
+  - name: holeXYZShift
+    group: technic_holes
+    type: bool_or_array
+    format: |
+      Bool: applies to x, y, and z axes equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: dimensionless
     default: true
     ai_usage: yes
     description: |
-      Whether Technic holes in X-direction are shifted by 1/2 stud.
-      true: holes align with studs.
-      false: holes sit between two studs.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Whether Technic holes per axis are shifted by 1/2 stud.
+      true: holes align with studs. false: holes sit between two studs.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: holeXShift, holeYShift, holeZShift."
+      - version: "3.0"
+        description: "Consolidated into holeXYZShift with 1/2/3-value array rule."
 
-  - name: holeXDiameter
-    group: technic_holes_x
-    type: float_or_auto
+  - name: holeXYZDiameter
+    group: technic_holes
+    type: float_or_auto_or_array
+    format: |
+      "auto": automatically calculated for all axes.
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mbu
     default: "auto"
     ai_usage: rarely
     description: |
-      Diameter of Technic holes in X-direction.
-      Automatically calculated.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Diameter of Technic holes per axis. Automatically calculated.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: holeXDiameter, holeYDiameter, holeZDiameter."
+      - version: "3.0"
+        description: "Consolidated into holeXYZDiameter with 1/2/3-value array rule."
 
-  - name: holeXDiameterAdjustment
-    group: technic_holes_x
-    type: float
+  - name: holeXYZDiameterAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mm
     default: 0.3
     ai_usage: config_only
     description: |
-      Calibration adjustment for holeXDiameter.
+      Calibration adjustment for holeXYZDiameter per axis.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Three separate parameters: holeXDiameterAdjustment, holeYDiameterAdjustment, holeZDiameterAdjustment."
+      - version: "3.0"
+        description: "Consolidated into holeXYZDiameterAdjustment with 1/2/3-value array rule."
 
-  - name: holeXInsetThickness
-    group: technic_holes_x
-    type: float
+  - name: holeXYZInsetThickness
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mbu
     default: 0.375
     ai_usage: rarely
     description: |
-      Width of the inset ring around Technic holes in X-direction.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Width of the inset ring around Technic holes, per axis.
+      In V2, insets existed only for x and y holes. Z holes now also
+      support insets.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Named holeXInsetThickness and holeYInsetThickness (no Z inset)."
+      - version: "3.0"
+        description: "Consolidated into holeXYZInsetThickness. Z axis now also supports inset."
 
-  - name: holeXInsetThicknessAdjustment
-    group: technic_holes_x
-    type: float
+  - name: holeXYZInsetThicknessAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mm
     default: 0.0
     ai_usage: config_only
     description: |
-      Calibration adjustment for holeXInsetThickness.
+      Calibration adjustment for holeXYZInsetThickness per axis.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Named holeXInsetThicknessAdjustment and holeYInsetThicknessAdjustment."
+      - version: "3.0"
+        description: "Consolidated into holeXYZInsetThicknessAdjustment."
 
-  - name: holeXInsetDepth
-    group: technic_holes_x
-    type: float
+  - name: holeXYZInsetDepth
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mbu
     default: 0.5
     ai_usage: rarely
     description: |
-      Depth of the inset ring around Technic holes in X-direction.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Depth of the inset ring around Technic holes, per axis.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Named holeXInsetDepth and holeYInsetDepth (no Z inset)."
+      - version: "3.0"
+        description: "Consolidated into holeXYZInsetDepth. Z axis now also supports inset."
 
-  - name: holeXInsetDepthAdjustment
-    group: technic_holes_x
-    type: float
+  - name: holeXYZInsetDepthAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mm
     default: 0.0
     ai_usage: config_only
     description: |
-      Calibration adjustment for holeXInsetDepth.
+      Calibration adjustment for holeXYZInsetDepth per axis.
+      Follows the 1/2/3-value array rule.
+    version_history:
+      - version: "2"
+        description: "Named holeXInsetDepthAdjustment and holeYInsetDepthAdjustment."
+      - version: "3.0"
+        description: "Consolidated into holeXYZInsetDepthAdjustment."
 
-  - name: holeXGridOffsetZ
-    group: technic_holes_x
-    type: float
+  - name: holeXYGridOffsetZ
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to both x and y holes equally.
+      2-element array [x, y]: first for x holes, second for y holes.
     unit: mbu
     default: 3.625
     ai_usage: rarely
     description: |
       Distance from the block bottom to the center of the first row
-      of Technic holes in X-direction.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      of Technic holes in X- and Y-direction.
+      Each parameter can independently be a single value or a 2-element array.
+    version_history:
+      - version: "2"
+        description: "Two separate parameters: holeXGridOffsetZ and holeYGridOffsetZ."
+      - version: "3.0"
+        description: "Consolidated into holeXYGridOffsetZ with optional [x, y] array."
 
-  - name: holeXGridOffsetZAdjustment
-    group: technic_holes_x
-    type: float
+  - name: holeXYGridOffsetZAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to both x and y holes equally.
+      2-element array [x, y]: first for x holes, second for y holes.
     unit: mm
     default: 0.0
     ai_usage: config_only
     description: |
-      Calibration adjustment for holeXGridOffsetZ.
+      Calibration adjustment for holeXYGridOffsetZ.
+    version_history:
+      - version: "2"
+        description: "Named holeXGridOffsetZAdjustment and holeYGridOffsetZAdjustment."
+      - version: "3.0"
+        description: "Consolidated into holeXYGridOffsetZAdjustment."
 
-  - name: holeXGridSizeZ
-    group: technic_holes_x
-    type: float
+  - name: holeXYGridSizeZ
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to both x and y holes equally.
+      2-element array [x, y]: first for x holes, second for y holes.
     unit: mbu
     default: 6
     ai_usage: rarely
     description: |
       Center-to-center distance between two rows of Technic holes
-      in X-direction.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      in X- and Y-direction.
+    version_history:
+      - version: "2"
+        description: "Named holeXGridSizeZ and holeYGridSizeZ."
+      - version: "3.0"
+        description: "Consolidated into holeXYGridSizeZ."
 
-  - name: holeXGridSizeZAdjustment
-    group: technic_holes_x
-    type: float
+  - name: holeXYGridSizeZAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to both x and y holes equally.
+      2-element array [x, y]: first for x holes, second for y holes.
     unit: mm
     default: 0.0
     ai_usage: config_only
     description: |
-      Calibration adjustment for holeXGridSizeZ.
+      Calibration adjustment for holeXYGridSizeZ.
+    version_history:
+      - version: "2"
+        description: "Named holeXGridSizeZAdjustment and holeYGridSizeZAdjustment."
+      - version: "3.0"
+        description: "Consolidated into holeXYGridSizeZAdjustment."
 
-  - name: holeXMinTopMargin
-    group: technic_holes_x
-    type: float
+  - name: holeXYMinTopMargin
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to both x and y holes equally.
+      2-element array [x, y]: first for x holes, second for y holes.
     unit: mbu
     default: 0.5
     ai_usage: rarely
     description: |
       Minimum distance between the block top and the topmost row of
-      Technic holes in X-direction. Determines whether a row is drawn.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
+      Technic holes in X- and Y-direction. Determines whether a row is drawn.
+    version_history:
+      - version: "2"
+        description: "Named holeXMinTopMargin and holeYMinTopMargin."
+      - version: "3.0"
+        description: "Consolidated into holeXYMinTopMargin."
 
-  - name: holeXPartial
+  - name: holeXPartialY
     group: technic_holes_x
     type: enum
-    values: ["none", "start", "end", "all"]
+    values: ["none", "start", "end"]
     unit: dimensionless
     default: "none"
     ai_usage: yes
     description: |
-      Whether partial (half) Technic holes are drawn in X-direction.
-      Only relevant when holeXShift=false.
-      start: half hole before the first stud.
-      end: half hole after the last stud.
-      all: both sides.
-      Also relevant for odd size.x where the last hole may be partial.
+      Whether partial (half) Technic holes are drawn at the Y-axis edges
+      for X-direction holes.
+      start: half hole at the y- edge.
+      end: half hole at the y+ edge.
     constraints:
       requires:
         - parameter: holeX
           condition: "holeX is not false"
+    version_history:
+      - version: "2"
+        description: "Was part of holeXPartial which combined both Y and Z partial behavior."
+      - version: "3.0"
+        description: "Split from holeXPartial. Controls Y-axis partial holes for X-direction holes."
+
+  - name: holeXPartialZ
+    group: technic_holes_x
+    type: enum
+    values: ["none", "end"]
+    unit: dimensionless
+    default: "none"
+    ai_usage: yes
+    description: |
+      Whether partial (half) Technic holes are drawn at the top (z+) edge
+      for X-direction holes, creating open grooves/channels.
+      end: open groove at the top edge.
+    constraints:
+      requires:
+        - parameter: holeX
+          condition: "holeX is not false"
+    version_history:
+      - version: "2"
+        description: "Was part of holeXPartial."
+      - version: "3.0"
+        description: "Split from holeXPartial. Controls Z-axis (top) partial holes for X-direction holes."
 
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes Y
@@ -1480,182 +1775,51 @@ parameters:
     description: |
       Whether LEGO Technic holes are drawn along the Y-axis.
       Multiple rows possible depending on block height.
+      Type, shift, diameter, inset, and grid parameters are shared with
+      holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
 
-  - name: holeYType
+  - name: holeYPartialX
     group: technic_holes_y
     type: enum
-    values: ["pin", "axle"]
-    unit: dimensionless
-    default: "pin"
-    ai_usage: yes
-    description: |
-      Type of Technic holes in Y-direction.
-      pin: round holes. axle: cross-shaped holes.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYShift
-    group: technic_holes_y
-    type: bool
-    unit: dimensionless
-    default: true
-    ai_usage: yes
-    description: |
-      Whether Technic holes in Y-direction are shifted by 1/2 stud.
-      true: holes align with studs.
-      false: holes sit between two studs.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYDiameter
-    group: technic_holes_y
-    type: float_or_auto
-    unit: mbu
-    default: "auto"
-    ai_usage: rarely
-    description: |
-      Diameter of Technic holes in Y-direction.
-      Automatically calculated.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYDiameterAdjustment
-    group: technic_holes_y
-    type: float
-    unit: mm
-    default: 0.3
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeYDiameter.
-
-  - name: holeYInsetThickness
-    group: technic_holes_y
-    type: float
-    unit: mbu
-    default: 0.375
-    ai_usage: rarely
-    description: |
-      Width of the inset ring around Technic holes in Y-direction.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYInsetThicknessAdjustment
-    group: technic_holes_y
-    type: float
-    unit: mm
-    default: 0.0
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeYInsetThickness.
-
-  - name: holeYInsetDepth
-    group: technic_holes_y
-    type: float
-    unit: mbu
-    default: 0.5
-    ai_usage: rarely
-    description: |
-      Depth of the inset ring around Technic holes in Y-direction.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYInsetDepthAdjustment
-    group: technic_holes_y
-    type: float
-    unit: mm
-    default: 0.0
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeYInsetDepth.
-
-  - name: holeYGridOffsetZ
-    group: technic_holes_y
-    type: float
-    unit: mbu
-    default: 3.625
-    ai_usage: rarely
-    description: |
-      Distance from the block bottom to the center of the first row
-      of Technic holes in Y-direction.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYGridOffsetZAdjustment
-    group: technic_holes_y
-    type: float
-    unit: mm
-    default: 0.0
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeYGridOffsetZ.
-
-  - name: holeYGridSizeZ
-    group: technic_holes_y
-    type: float
-    unit: mbu
-    default: 6
-    ai_usage: rarely
-    description: |
-      Center-to-center distance between two rows of Technic holes
-      in Y-direction.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYGridSizeZAdjustment
-    group: technic_holes_y
-    type: float
-    unit: mm
-    default: 0.0
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeYGridSizeZ.
-
-  - name: holeYMinTopMargin
-    group: technic_holes_y
-    type: float
-    unit: mbu
-    default: 0.5
-    ai_usage: rarely
-    description: |
-      Minimum distance between the block top and the topmost row of
-      Technic holes in Y-direction. Determines whether a row is drawn.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-
-  - name: holeYPartial
-    group: technic_holes_y
-    type: enum
-    values: ["none", "start", "end", "all"]
+    values: ["none", "start", "end"]
     unit: dimensionless
     default: "none"
     ai_usage: yes
     description: |
-      Whether partial (half) Technic holes are drawn in Y-direction.
-      Only relevant when holeYShift=false.
-      start: half hole before the first stud.
-      end: half hole after the last stud.
-      all: both sides.
-      Also relevant for odd size.y where the last hole may be partial.
+      Whether partial (half) Technic holes are drawn at the X-axis edges
+      for Y-direction holes.
+      start: half hole at the x- edge.
+      end: half hole at the x+ edge.
     constraints:
       requires:
         - parameter: holeY
           condition: "holeY is not false"
+    version_history:
+      - version: "2"
+        description: "Was part of holeYPartial."
+      - version: "3.0"
+        description: "Split from holeYPartial. Controls X-axis partial holes for Y-direction holes."
+
+  - name: holeYPartialZ
+    group: technic_holes_y
+    type: enum
+    values: ["none", "end"]
+    unit: dimensionless
+    default: "none"
+    ai_usage: yes
+    description: |
+      Whether partial (half) Technic holes are drawn at the top (z+) edge
+      for Y-direction holes, creating open grooves/channels.
+      end: open groove at the top edge.
+    constraints:
+      requires:
+        - parameter: holeY
+          condition: "holeY is not false"
+    version_history:
+      - version: "2"
+        description: "Was part of holeYPartial."
+      - version: "3.0"
+        description: "Split from holeYPartial. Controls Z-axis (top) partial holes for Y-direction holes."
 
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes Z
@@ -1672,60 +1836,9 @@ parameters:
     ai_usage: yes
     description: |
       Whether LEGO Technic holes are drawn along the Z-axis.
-      No grid parameters (grid is fixed for Z). No inset for Z holes.
-
-  - name: holeZType
-    group: technic_holes_z
-    type: enum
-    values: ["pin", "axle"]
-    unit: dimensionless
-    default: "pin"
-    ai_usage: yes
-    description: |
-      Type of Technic holes in Z-direction.
-      pin: round holes. axle: cross-shaped holes.
-    constraints:
-      requires:
-        - parameter: holeZ
-          condition: "holeZ is not false"
-
-  - name: holeZShift
-    group: technic_holes_z
-    type: bool
-    unit: dimensionless
-    default: true
-    ai_usage: yes
-    description: |
-      Whether Technic holes in Z-direction are shifted by 1/2 stud.
-      true: holes align with studs.
-      false: holes sit between two studs.
-    constraints:
-      requires:
-        - parameter: holeZ
-          condition: "holeZ is not false"
-
-  - name: holeZDiameter
-    group: technic_holes_z
-    type: float_or_auto
-    unit: mbu
-    default: "auto"
-    ai_usage: rarely
-    description: |
-      Diameter of Technic holes in Z-direction.
-      Automatically calculated.
-    constraints:
-      requires:
-        - parameter: holeZ
-          condition: "holeZ is not false"
-
-  - name: holeZDiameterAdjustment
-    group: technic_holes_z
-    type: float
-    unit: mm
-    default: 0.3
-    ai_usage: config_only
-    description: |
-      Calibration adjustment for holeZDiameter.
+      Type, shift, diameter, and inset parameters are shared with holeX
+      and holeY via the holeXYZ* unified parameters.
+      Z holes now also support insets (holeXYZInsetThickness/Depth).
 
   - name: holeZPartialX
     group: technic_holes_z
@@ -1765,18 +1878,44 @@ parameters:
   # GROUP: Hole Axle
   # --------------------------------------------------------------------------
 
-  - name: holeAxleThickness
+  - name: holeXYZAxleThickness
     group: technic_holes
-    type: float
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
     unit: mbu
     default: 1
     ai_usage: rarely
     description: |
-      Thickness of one strut of the cross axle for hole*Type="axle".
-      Applies to all axes (X, Y, Z).
+      Thickness of one strut of the cross axle for holeXYZType="axle".
+      Follows the 1/2/3-value array rule.
     constraints:
       requires:
-        - condition: "Any of holeXType, holeYType, or holeZType = 'axle'"
+        - condition: "Any of holeXYZType contains 'axle'"
+    version_history:
+      - version: "2"
+        description: "Named holeAxleThickness in V2. Applied to all axes (X, Y, Z)."
+      - version: "3.0"
+        description: "Renamed to holeXYZAxleThickness with 1/2/3-value array rule."
+
+  - name: holeXYZAxleThicknessAdjustment
+    group: technic_holes
+    type: float_or_array
+    format: |
+      Number: applies to x, y, and z equally.
+      2-element array [xy, z]: first for x and y, second for z.
+      3-element array [x, y, z]: each axis individually.
+    unit: mm
+    default: 0.0
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Calibration adjustment for holeXYZAxleThickness, in mm.
+      Follows the 1/2/3-value array rule.
+      Analog to other Adjustment parameters for printer compensation.
 
   # --------------------------------------------------------------------------
   # GROUP: Studs
@@ -1947,7 +2086,7 @@ parameters:
     description: |
       Calibration adjustment for studHeight.
 
-  - name: studSink
+  - name: studBaseOverlap
     group: studs
     type: float
     unit: mbu
@@ -1955,23 +2094,48 @@ parameters:
     customizer_range: "[0:0.125:64]"
     ai_usage: yes
     description: |
-      How deeply the stud is sunk into the block body.
+      How deeply the stud is sunk into the block body (overlap with base).
       Ensures the stud is geometrically connected to the body (no floating geometry).
       Also prevents gaps when grille or surfacePattern is active.
       Can be set to 0 when a block has base=false but still renders studs
       (e.g. stud-only decorative layers in composite blocks).
+    version_history:
+      - version: "2"
+        description: "Named studSink in V2."
+      - version: "3.0"
+        description: "Renamed to studBaseOverlap."
 
-  - name: studCutoutAdjustment
+  - name: studCutoutDiameterAdjustment
     group: studs
-    type: array
-    format: "[width, height]"
+    type: float
     unit: mm
-    default: [0.2, 0.4]
+    default: 0.2
     ai_usage: config_only
     description: |
-      Calibration of stud cutout dimensions (width and height).
+      Calibration adjustment for stud cutout diameter.
       Affects cutouts for studs in baseCutoutType=studs and outer wall
       cutouts in round bricks for grid compatibility. Calibration only.
+    version_history:
+      - version: "2"
+        description: "Was first element of studCutoutAdjustment [width, height]."
+      - version: "3.0"
+        description: "Split from studCutoutAdjustment into studCutoutDiameterAdjustment."
+
+  - name: studCutoutHeightAdjustment
+    group: studs
+    type: float
+    unit: mm
+    default: 0.4
+    ai_usage: config_only
+    description: |
+      Calibration adjustment for stud cutout height.
+      Affects cutouts for studs in baseCutoutType=studs and outer wall
+      cutouts in round bricks for grid compatibility. Calibration only.
+    version_history:
+      - version: "2"
+        description: "Was second element of studCutoutAdjustment [width, height]."
+      - version: "3.0"
+        description: "Split from studCutoutAdjustment into studCutoutHeightAdjustment."
 
   # --------------------------------------------------------------------------
   # GROUP: Stud Icon
@@ -2057,19 +2221,8 @@ parameters:
         - parameter: tongue
           condition: "tongue = true"
 
-  - name: tongueGrooveDepth
-    group: tongue_groove
-    type: float
-    unit: mbu
-    default: 1.5
-    ai_usage: rarely
-    description: |
-      Depth of the groove. Typically slightly deeper than the tongue height
-      to allow for tolerances.
-    constraints:
-      requires:
-        - parameter: baseCutoutType
-          condition: "baseCutoutType = 'groove'"
+  # tongueGrooveDepth removed in V3 — see removed_in_v3 section.
+  # Replaced by tongueGrooveDepthClearance.
 
   - name: tongueRoundingRadius
     group: tongue_groove
@@ -2085,19 +2238,7 @@ parameters:
         - parameter: tongue
           condition: "tongue = true"
 
-  - name: tongueInnerRoundingRadius
-    group: tongue_groove
-    type: float_or_auto
-    unit: unitGrid
-    default: "auto"
-    ai_usage: rarely
-    description: |
-      Rounding radius of the inner side of the tongue. Derived from
-      tongueRoundingRadius. Usually does not need adjustment.
-    constraints:
-      requires:
-        - parameter: tongue
-          condition: "tongue = true"
+  # tongueInnerRoundingRadius removed in V3 — see removed_in_v3 section.
 
   - name: tongueThickness
     group: tongue_groove
@@ -2119,8 +2260,10 @@ parameters:
     default: 0
     ai_usage: config_only
     description: |
-      Calibration adjustment for tongue thickness. Used to adjust tolerance
-      between tongue and groove if connection is too tight.
+      Calibration adjustment for tongue thickness. Adjusts the thickness
+      of the tongue only (not the groove). Used when using a tongue with
+      a non-groove partner brick. Does not affect tongueClampThickness.
+      For groove clearance, use tongueGrooveThicknessClearance instead.
 
   - name: tongueOffset
     group: tongue_groove
@@ -2157,12 +2300,20 @@ parameters:
     default: 0.25
     ai_usage: rarely
     description: |
-      Distance of the clamp lip from the upper edge of the tongue.
-      Also affects the position of the matching recess in the groove.
+      Distance from the lower edge of the tongue to the lower edge of
+      the tongue clamp lip. Also affects the groove's clamp recess position.
     constraints:
       requires:
         - parameter: tongue
           condition: "tongue = true"
+    version_history:
+      - version: "2"
+        description: "Measured from the upper edge of the tongue to the upper edge of the clamp lip."
+      - version: "3.0"
+        description: |
+          Now measured from the lower edge of the tongue to the lower edge of
+          the clamp lip. Changed so that groove users do not need to account
+          for the difference in groove depth vs. tongue height.
 
   - name: tongueClampThickness
     group: tongue_groove
@@ -2176,6 +2327,62 @@ parameters:
       requires:
         - parameter: tongue
           condition: "tongue = true"
+
+  - name: tongueGrooveDepthClearance
+    group: tongue_groove
+    type: float_or_auto
+    unit: mbu
+    default: 0.2
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Additional depth clearance above the tongue inside the groove.
+      The effective groove depth = tongueHeight + tongueGrooveDepthClearance.
+      Replaces the old tongueGrooveDepth parameter.
+      "auto" uses printerLayerHeight.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'groove'"
+
+  - name: tongueGrooveThicknessClearance
+    group: tongue_groove
+    type: float_or_auto
+    unit: mm
+    default: 0.1
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Clearance added to the groove width to allow the tongue to fit.
+      Applied to both the groove wall thickness and tongueClampThickness
+      inside the groove. Unlike tongueThicknessAdjustment (which only adjusts
+      the tongue itself and not the clamp), this parameter adjusts the groove side
+      including the clamp recess.
+      "auto" uses 0.25 * printerNozzleDiameter (minimum 0.1 mm).
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'groove'"
+
+  - name: tongueGrooveClampOffsetClearance
+    group: tongue_groove
+    type: float_or_auto
+    unit: mbu
+    default: 0
+    since: "3.0"
+    status: stable
+    ai_usage: config_only
+    description: |
+      Extra clearance in the groove before the clamp recess. In the groove,
+      both tongueClampOffset and tongueClampHeight are increased by this value,
+      so the clamp snaps more easily into the groove recess.
+      "auto" uses printerLayerHeight.
+    constraints:
+      requires:
+        - parameter: baseCutoutType
+          condition: "baseCutoutType = 'groove'"
 
   # --------------------------------------------------------------------------
   # GROUP: Grille
@@ -2419,19 +2626,24 @@ parameters:
       Text to draw on the brick. If not empty, rendered on the side
       specified by textSide.
 
-  - name: textSide
+  - name: textFace
     group: text
-    type: int
+    type: int_or_string
     values: [0, 1, 2, 3, 4, 5]
     unit: dimensionless
     default: 0
     ai_usage: yes
     description: |
-      Side of the brick on which text is displayed (0-5).
+      Side of the brick on which text is displayed (0-5 or string "x-" etc.).
     constraints:
       requires:
         - parameter: text
           condition: "text is not empty"
+    version_history:
+      - version: "2"
+        description: "Named textSide in V2."
+      - version: "3.0"
+        description: "Renamed to textFace."
 
   - name: textDepth
     group: text
@@ -2485,33 +2697,37 @@ parameters:
         - parameter: text
           condition: "text is not empty"
 
-  - name: textVerticalAlign
+  - name: textAlign
     group: text
-    type: enum
-    values: ["left", "right", "center"]
+    type: enum_or_array
+    values: ["start", "center", "end"]
+    format: |
+      Same syntax as align and alignChildren.
+      String: "start" → ["start","start","start"]
+      Shortcut string "ccs" → ["center","center","start"]
+        Valid characters: c=center, s=start, e=end (any 3-char combination)
+      Full array: ["start","center","end"]
+      Invalid values are silently replaced with "start".
+      X = horizontal alignment on the face surface.
+      Y = vertical alignment on the face surface.
+      Z = ignored for text.
     unit: dimensionless
-    default: "center"
+    default: "ccc"
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
-      Vertical alignment of the text on the brick surface.
+      Alignment of the text on the brick surface, using the same
+      format as align and alignChildren.
     constraints:
       requires:
         - parameter: text
           condition: "text is not empty"
-
-  - name: textHorizontalAlign
-    group: text
-    type: enum
-    values: ["left", "right", "center"]
-    unit: dimensionless
-    default: "center"
-    ai_usage: yes
-    description: |
-      Horizontal alignment of the text on the brick surface.
-    constraints:
-      requires:
-        - parameter: text
-          condition: "text is not empty"
+    version_history:
+      - version: "2"
+        description: "Two separate parameters: textVerticalAlign and textHorizontalAlign (values: left/right/center)."
+      - version: "3.0"
+        description: "Merged into textAlign using start/center/end convention, same format as align."
 
   - name: textOffset
     group: text
@@ -2635,21 +2851,26 @@ parameters:
     ai_usage: yes
     description: |
       SVG file to draw on a brick side. Placed on the side specified
-      by svgSide.
+      by svgFace.
 
-  - name: svgSide
+  - name: svgFace
     group: svg
-    type: int
+    type: int_or_string
     values: [0, 1, 2, 3, 4, 5]
     unit: dimensionless
     default: 5
     ai_usage: yes
     description: |
-      Side on which the SVG is drawn (0-5).
+      Side on which the SVG is drawn (0-5 or string "x-" etc.).
     constraints:
       requires:
         - parameter: svg
           condition: "svg is not empty"
+    version_history:
+      - version: "2"
+        description: "Named svgSide in V2."
+      - version: "3.0"
+        description: "Renamed to svgFace."
 
   - name: svgDepth
     group: svg
@@ -2728,49 +2949,78 @@ parameters:
     type: bool_or_array
     format: |
       false: no connectors.
-      Array of 2-element arrays: [[side, arrangement], ...]
-      - side: side number (0-3)
-      - arrangement:
-        0: protruding triangles, tip at wall, wide side outward, full brick height
-        1: recess, wide side inward, tip outward — counterpart to 0 for
-           connecting two bricks side by side (0°)
-        2: recess, wide side up, tip down — for 90° downward connection
-        3: recess, wide side down, tip up — for 90° upward connection
+      Array of connector definition arrays:
+        [ [face, direction, gender, align?, paddingStart?, paddingEnd?], ... ]
+
+      Inner array fields:
+        0 face (required): brick side where connectors are placed.
+             "x-" | "x+" | "y-" | "y+" | "z-" | "z+" (or int 0-5)
+        1 direction (required): orientation of the connectors.
+             "z" for faces x- to y+ (runs along height)
+             "x" or "y" for z- and z+ faces
+        2 gender (required): shape type.
+             "male" | 1 | true  — protruding triangles
+             "female" | 0 | false — recesses (counterpart to male, 0°)
+             "female_bottom" (2) — recess on underside, for 90° downward connection
+             "female_top" (3)    — recess on topside, for 90° upward connection
+        3 align (optional, default "start"): alignment along the face.
+             Only relevant when connectorLength != "auto".
+             "start" — aligned toward x-/y-/z- end of the face
+             "center" — centered on the face
+             "end" — aligned toward x+/y+/z+ end of the face
+             For faces x-/x+/y-/y+: align is along z-axis.
+             For faces z-/z+: align is along x (direction="x") or y (direction="y").
+        4 paddingStart (optional, default 0): number of connectors to skip at start.
+        5 paddingEnd (optional, default 0): number of connectors to skip at end.
+
+      connectorLength = "auto": length equals available space.
+        For faces x- to y+: available space = brick height.
+        For z- and z+: available space = brick width (x) or depth (y) per direction.
+
     unit: dimensionless
     default: false
     ai_usage: yes
     description: |
-      Side connection system using triangles. Alternative to tongue/groove
-      which connects vertically. Connectors enable side-by-side and
-      angled (90°) connections.
+      Side connection system using triangular wedges. Alternative to tongue/groove.
+      Enables side-by-side (0°) and angled (90°) connections.
+      Padding skips connectors at start/end — important when connecting
+      bricks of different sizes.
+    example: |
+      [ ["y+", "z", "female", "start", 1, 1],
+        ["z+", "x", "male", "end"],
+        ["z-", "y", "male"] ]
+    version_history:
+      - version: "2"
+        description: |
+          Format was [[side, arrangement], ...] with arrangement 0-3.
+          Padding was a separate connectorPadding parameter [start, end].
+      - version: "3.0"
+        description: |
+          New format: [face, direction, gender, align?, paddingStart?, paddingEnd?].
+          Padding is now per-connector inside the array.
+          connectorPadding parameter removed.
+          gender encoding: male=1=true, female=0=false, female_bottom=2, female_top=3.
 
-  - name: connectorPadding
-    group: connectors
-    type: array
-    format: "[start, end]"
-    unit: "number of triangles"
-    default: [0, 0]
-    ai_usage: yes
-    description: |
-      How many triangles to skip at the start and end of a side.
-      Important when connecting bricks of different sizes.
-    constraints:
-      requires:
-        - parameter: connectors
-          condition: "connectors is not false"
+  # connectorPadding removed in V3 — padding is now per-connector inside the connectors array.
 
-  - name: connectorHeight
+  - name: connectorLength
     group: connectors
     type: float_or_auto
     unit: mbu
     default: "auto"
     ai_usage: yes
     description: |
-      Height of the connector triangles. At "auto" equals the brick height.
+      Length of the connector run on the face. At "auto" equals the
+      available space (brick height for x/y faces, width/depth for z faces).
     constraints:
       requires:
         - parameter: connectors
           condition: "connectors is not false"
+    version_history:
+      - version: "2"
+        description: "Named connectorHeight in V2."
+      - version: "3.0"
+        description: "Renamed to connectorLength."
 
   - name: connectorDepth
     group: connectors
@@ -2798,140 +3048,144 @@ parameters:
         - parameter: connectors
           condition: "connectors is not false"
 
-  - name: connectorDepthTolerance
+  - name: connectorLengthClearance
     group: connectors
     type: float
     unit: mm
     default: 0.2
     ai_usage: rarely
     description: |
-      Tolerance of the recess depth relative to the triangle depth.
+      Clearance of the recess depth relative to the triangle depth.
+      Ensures male and female connectors fit together.
     constraints:
       requires:
         - parameter: connectors
           condition: "connectors is not false"
+    version_history:
+      - version: "2"
+        description: "Named connectorDepthTolerance in V2."
+      - version: "3.0"
+        description: "Renamed to connectorLengthClearance."
 
-  - name: connectorSideTolerance
+  - name: connectorSideClearance
     group: connectors
     type: float
     unit: mm
     default: 0.1
     ai_usage: rarely
     description: |
-      Tolerance of the recess width relative to the triangle width.
+      Clearance of the recess width relative to the triangle width.
+      Ensures male and female connectors fit together.
     constraints:
       requires:
         - parameter: connectors
           condition: "connectors is not false"
+    version_history:
+      - version: "2"
+        description: "Named connectorSideTolerance in V2."
+      - version: "3.0"
+        description: "Renamed to connectorSideClearance."
 
   # --------------------------------------------------------------------------
-  # GROUP: Screw Holes X / Y
+  # GROUP: Screw Holes
   # --------------------------------------------------------------------------
 
-  - name: screwHolesX
+  - name: screwHoles
     group: screw_holes
     type: array
-    format: "[[x, z], ...] or [[x, z, side], ...]"
-    unit: unitGrid
+    format: |
+      Array of hole definition arrays:
+        [ [face, position, diameter?, depth?, insetThickness?, insetDepth?], ... ]
+
+      Inner array fields:
+        0 face (required): face the hole is drilled from.
+             "x-" | "x+" | "y-" | "y+" | "z-" | "z+" (or int 0-5)
+        1 position (required): grid position of the hole center.
+             For face z: [x, y] grid position
+             For face y: [x, z] grid position
+             For face x: [y, z] grid position
+        2 diameter (optional): hole diameter in mm. Defaults to screwHoleDiameter.
+        3 depth (optional): hole depth in mm. Defaults to screwHoleDepth.
+        4 insetThickness (optional): inset ring thickness in mm. Defaults to screwHoleInsetThickness.
+        5 insetDepth (optional): inset ring depth in mm. Defaults to screwHoleInsetDepth.
+
+    unit: "position in unitGrid, sizes in mm"
     default: []
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
-      Mounting holes along the X-axis.
-      - x, z: position in unitGrid
-      - side: 0 = x- side, 1 = x+ side, undef = both sides
+      Mounting screw holes on any face of the brick. Each entry defines one hole
+      with a face, a grid position, and optional per-hole size overrides.
+      Global defaults for diameter, depth, and inset are set via the
+      screwHoleDiameter, screwHoleDepth, screwHoleInsetThickness, screwHoleInsetDepth
+      parameters.
+    example: |
+      [ ["z+", [0,0]],
+        ["y+", [2,2]],
+        ["y+", [2,2], 1, 1.2, 0.5, 0.6] ]
+    version_history:
+      - version: "2"
+        description: |
+          Three separate parameters: screwHolesX ([[x,z],...]), screwHolesY ([[y,z],...]),
+          screwHolesZ ([[x,y],...]). Size/depth specified per axis via screwHoleXSize,
+          screwHoleXDepth, screwHoleYSize, screwHoleYDepth, screwHoleZSize.
+      - version: "3.0"
+        description: |
+          Consolidated into screwHoles with unified face+position format.
+          Per-hole overrides possible. Global defaults via screwHole* parameters.
 
-  - name: screwHoleXSize
+  - name: screwHoleDiameter
     group: screw_holes
     type: float
     unit: mm
     default: 2.1
     ai_usage: yes
     description: |
-      Diameter of X-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesX
-          condition: "screwHolesX is not empty"
+      Default diameter of screw holes. Can be overridden per hole in screwHoles.
+    version_history:
+      - version: "2"
+        description: "screwHoleXSize (2.1mm), screwHoleYSize (2.1mm), screwHoleZSize (2.3mm) were separate."
+      - version: "3.0"
+        description: "Unified default via screwHoleDiameter. Per-hole override possible."
 
-  - name: screwHoleXDepth
+  - name: screwHoleDepth
     group: screw_holes
     type: float
     unit: mm
     default: 4
     ai_usage: yes
     description: |
-      Depth of X-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesX
-          condition: "screwHolesX is not empty"
+      Default depth of screw holes. Can be overridden per hole in screwHoles.
+    version_history:
+      - version: "2"
+        description: "screwHoleXDepth and screwHoleYDepth were separate (no depth for Z holes)."
+      - version: "3.0"
+        description: "Unified default via screwHoleDepth."
 
-  - name: screwHolesY
-    group: screw_holes
-    type: array
-    format: "[[y, z], ...] or [[y, z, side], ...]"
-    unit: unitGrid
-    default: []
-    ai_usage: yes
-    description: |
-      Mounting holes along the Y-axis.
-      - y, z: position in unitGrid
-      - side: 0 = y- side, 1 = y+ side, undef = both sides
-
-  - name: screwHoleYSize
+  - name: screwHoleInsetThickness
     group: screw_holes
     type: float
     unit: mm
-    default: 2.1
+    default: 0
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
-      Diameter of Y-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesY
-          condition: "screwHolesY is not empty"
+      Default inset ring thickness around screw holes. 0 = no inset.
+      Can be overridden per hole in screwHoles.
 
-  - name: screwHoleYDepth
+  - name: screwHoleInsetDepth
     group: screw_holes
     type: float
     unit: mm
-    default: 4
+    default: 0
+    since: "3.0"
+    status: stable
     ai_usage: yes
     description: |
-      Depth of Y-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesY
-          condition: "screwHolesY is not empty"
-
-  # --------------------------------------------------------------------------
-  # GROUP: Screw Holes Z
-  # --------------------------------------------------------------------------
-
-  - name: screwHolesZ
-    group: screw_holes
-    type: array
-    format: "[[x, y], ...]"
-    unit: unitGrid
-    default: []
-    ai_usage: yes
-    description: |
-      Mounting holes in Z-direction on the top plate (baseCutoutType=standard)
-      or solid brick (baseCutoutType=none). Positions correspond to where
-      studs are or would be.
-
-  - name: screwHoleZSize
-    group: screw_holes
-    type: float
-    unit: mm
-    default: 2.3
-    ai_usage: yes
-    description: |
-      Diameter of Z-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesZ
-          condition: "screwHolesZ is not empty"
+      Default inset ring depth for screw holes. 0 = no inset.
+      Can be overridden per hole in screwHoles.
 
   - name: screwHoleZHelperThickness
     group: screw_holes
@@ -2940,25 +3194,23 @@ parameters:
     default: 0.8
     ai_usage: rarely
     description: |
-      Thickness of helpers for Z-axis mounting holes on the underside.
+      Thickness of print helpers for Z-face screw holes on the underside.
       Required for baseCutoutType=standard to avoid needing print support.
-    constraints:
-      requires:
-        - parameter: screwHolesZ
-          condition: "screwHolesZ is not empty"
 
-  - name: screwHoleZHelperOffset
+  - name: screwHoleZHelperLayerOffset
     group: screw_holes
-    type: float
+    type: float_or_auto
     unit: mm
-    default: 0.2
+    default: "auto"
     ai_usage: rarely
     description: |
-      Offset between the two helper layers for Z-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesZ
-          condition: "screwHolesZ is not empty"
+      Offset between the two helper layers for Z-face screw holes.
+      "auto" uses printerLayerHeight.
+    version_history:
+      - version: "2"
+        description: "Named screwHoleZHelperOffset in V2."
+      - version: "3.0"
+        description: "Renamed to screwHoleZHelperLayerOffset. Supports 'auto' (uses printerLayerHeight)."
 
   - name: screwHoleZHelperHeight
     group: screw_holes
@@ -2967,11 +3219,7 @@ parameters:
     default: 0.2
     ai_usage: rarely
     description: |
-      Height of the helper layers for Z-axis mounting holes.
-    constraints:
-      requires:
-        - parameter: screwHolesZ
-          condition: "screwHolesZ is not empty"
+      Height of the helper layers for Z-face screw holes.
 
   # --------------------------------------------------------------------------
   # GROUP: PCB
@@ -2979,28 +3227,27 @@ parameters:
 
   - name: pcb
     group: pcb
-    type: bool
+    type: enum_or_false
+    values: [false, "none", "clips", "sockets"]
     unit: dimensionless
     default: false
     ai_usage: yes
     description: |
-      Whether the brick includes PCB mounting features.
+      PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
+      false or "none": no PCB mounting features.
+      "clips": frame for clipping in the PCB.
+      "sockets": screw sockets for socket/screw mounting.
+    version_history:
+      - version: "2"
+        description: |
+          Two separate parameters: pcb (bool, whether PCB mounting is active) and
+          pcbMountingType ("clips" | "screws" for mounting type).
+      - version: "3.0"
+        description: |
+          Merged into pcb. false/"none" = off, "clips" = clip mounting,
+          "sockets" = socket mounting (formerly "screws"). pcbMountingType removed.
 
-  - name: pcbMountingType
-    group: pcb
-    type: enum
-    values: ["clips", "screws"]
-    unit: dimensionless
-    default: "clips"
-    ai_usage: yes
-    description: |
-      Type of PCB mounting.
-      clips: frame for clipping in the PCB.
-      screws: screw sockets for screw mounting.
-    constraints:
-      requires:
-        - parameter: pcb
-          condition: "pcb = true"
+  # pcbMountingType removed in V3 — merged into pcb parameter.
 
   - name: pcbDimensions
     group: pcb
@@ -3011,11 +3258,11 @@ parameters:
     ai_usage: yes
     description: |
       Dimensions of the PCB in mm. Refers to the board size,
-      especially relevant for pcbMountingType=clips.
+      especially relevant for pcb="clips".
     constraints:
       requires:
         - parameter: pcb
-          condition: "pcb = true"
+          condition: "pcb is not false and pcb is not 'none'"
 
   - name: pcbOffset
     group: pcb
@@ -3029,9 +3276,9 @@ parameters:
     constraints:
       requires:
         - parameter: pcb
-          condition: "pcb = true"
+          condition: "pcb is not false and pcb is not 'none'"
 
-  - name: pcbScrewSocketSize
+  - name: pcbSocketDiameter
     group: pcb
     type: float
     unit: mm
@@ -3041,10 +3288,15 @@ parameters:
       Diameter of screw sockets.
     constraints:
       requires:
-        - parameter: pcbMountingType
-          condition: "pcbMountingType = 'screws'"
+        - parameter: pcb
+          condition: "pcb = 'sockets'"
+    version_history:
+      - version: "2"
+        description: "Named pcbScrewSocketSize in V2."
+      - version: "3.0"
+        description: "Renamed to pcbSocketDiameter."
 
-  - name: pcbScrewSocketHoleSize
+  - name: pcbSocketHoleDiameter
     group: pcb
     type: float
     unit: mm
@@ -3054,10 +3306,15 @@ parameters:
       Diameter of the screw hole inside the socket.
     constraints:
       requires:
-        - parameter: pcbMountingType
-          condition: "pcbMountingType = 'screws'"
+        - parameter: pcb
+          condition: "pcb = 'sockets'"
+    version_history:
+      - version: "2"
+        description: "Named pcbScrewSocketHoleSize in V2."
+      - version: "3.0"
+        description: "Renamed to pcbSocketHoleDiameter."
 
-  - name: pcbScrewSocketHeight
+  - name: pcbSocketHeight
     group: pcb
     type: float
     unit: mm
@@ -3067,10 +3324,15 @@ parameters:
       Height of the screw sockets.
     constraints:
       requires:
-        - parameter: pcbMountingType
-          condition: "pcbMountingType = 'screws'"
+        - parameter: pcb
+          condition: "pcb = 'sockets'"
+    version_history:
+      - version: "2"
+        description: "Named pcbScrewSocketHeight in V2."
+      - version: "3.0"
+        description: "Renamed to pcbSocketHeight."
 
-  - name: pcbScrewSockets
+  - name: pcbSockets
     group: pcb
     type: array
     format: "[[x, y], ...]"
@@ -3082,8 +3344,13 @@ parameters:
       socket center from the brick center in mm.
     constraints:
       requires:
-        - parameter: pcbMountingType
-          condition: "pcbMountingType = 'screws'"
+        - parameter: pcb
+          condition: "pcb = 'sockets'"
+    version_history:
+      - version: "2"
+        description: "Named pcbScrewSockets in V2."
+      - version: "3.0"
+        description: "Renamed to pcbSockets."
 
   # --------------------------------------------------------------------------
   # GROUP: Quality / Rendering
@@ -3314,12 +3581,433 @@ removed_in_v3:
 
   - name: baseHeightAdjustment
     removed_in: "3.0"
-    use_instead: "baseSideAdjustment with z+ and/or z-"
+    use_instead: "baseAdjustment with z+ and/or z-"
     reason: |
       In V2, baseHeightAdjustment was a single float that adjusted only z+ (block height).
-      In V3, baseSideAdjustment supports all six sides including z- and z+,
-      making baseHeightAdjustment redundant. Use baseSideAdjustment with
+      In V3, baseAdjustment supports all six sides including z- and z+,
+      making baseHeightAdjustment redundant. Use baseAdjustment with
       ["z+", value] or ["z-", value] entries instead.
+
+  - name: baseHeight
+    removed_in: "3.0"
+    use_instead: "size[2] for block height"
+    reason: "Removed. Block height is defined exclusively via size[2]."
+
+  - name: tongueInnerRoundingRadius
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. Inner tongue rounding is derived automatically."
+
+  - name: tongueGrooveDepth
+    removed_in: "3.0"
+    use_instead: "tongueGrooveDepthClearance"
+    reason: |
+      In V2, tongueGrooveDepth specified the full groove depth.
+      In V3, use tongueGrooveDepthClearance to specify only the extra clearance
+      above the tongue. Effective groove depth = tongueHeight + tongueGrooveDepthClearance.
+
+  - name: connectorPadding
+    removed_in: "3.0"
+    use_instead: "paddingStart and paddingEnd fields inside the connectors array"
+    reason: "Padding is now specified per-connector inside the connectors array."
+
+  - name: connectorHeight
+    removed_in: "3.0"
+    use_instead: "connectorLength"
+    reason: "Renamed to connectorLength for clarity."
+
+  - name: connectorDepthTolerance
+    removed_in: "3.0"
+    use_instead: "connectorLengthClearance"
+    reason: "Renamed to connectorLengthClearance."
+
+  - name: connectorSideTolerance
+    removed_in: "3.0"
+    use_instead: "connectorSideClearance"
+    reason: "Renamed to connectorSideClearance."
+
+  - name: screwHolesX
+    removed_in: "3.0"
+    use_instead: "screwHoles with face 'x-' or 'x+'"
+    reason: "Replaced by the unified screwHoles parameter."
+
+  - name: screwHoleXSize
+    removed_in: "3.0"
+    use_instead: "screwHoleDiameter (global default) or per-hole override in screwHoles"
+    reason: "Replaced by screwHoleDiameter."
+
+  - name: screwHoleXDepth
+    removed_in: "3.0"
+    use_instead: "screwHoleDepth (global default) or per-hole override in screwHoles"
+    reason: "Replaced by screwHoleDepth."
+
+  - name: screwHolesY
+    removed_in: "3.0"
+    use_instead: "screwHoles with face 'y-' or 'y+'"
+    reason: "Replaced by the unified screwHoles parameter."
+
+  - name: screwHoleYSize
+    removed_in: "3.0"
+    use_instead: "screwHoleDiameter"
+    reason: "Replaced by screwHoleDiameter."
+
+  - name: screwHoleYDepth
+    removed_in: "3.0"
+    use_instead: "screwHoleDepth"
+    reason: "Replaced by screwHoleDepth."
+
+  - name: screwHolesZ
+    removed_in: "3.0"
+    use_instead: "screwHoles with face 'z+' or 'z-'"
+    reason: "Replaced by the unified screwHoles parameter."
+
+  - name: screwHoleZSize
+    removed_in: "3.0"
+    use_instead: "screwHoleDiameter"
+    reason: "Replaced by screwHoleDiameter."
+
+  - name: screwHoleZHelperOffset
+    removed_in: "3.0"
+    use_instead: "screwHoleZHelperLayerOffset"
+    reason: "Renamed to screwHoleZHelperLayerOffset."
+
+  - name: pcbMountingType
+    removed_in: "3.0"
+    use_instead: "pcb parameter (now accepts 'clips' | 'sockets' | false | 'none')"
+    reason: "Merged into the pcb parameter."
+
+  - name: pcbScrewSocketSize
+    removed_in: "3.0"
+    use_instead: "pcbSocketDiameter"
+    reason: "Renamed to pcbSocketDiameter."
+
+  - name: pcbScrewSocketHoleSize
+    removed_in: "3.0"
+    use_instead: "pcbSocketHoleDiameter"
+    reason: "Renamed to pcbSocketHoleDiameter."
+
+  - name: pcbScrewSocketHeight
+    removed_in: "3.0"
+    use_instead: "pcbSocketHeight"
+    reason: "Renamed to pcbSocketHeight."
+
+  - name: pcbScrewSockets
+    removed_in: "3.0"
+    use_instead: "pcbSockets"
+    reason: "Renamed to pcbSockets."
+
+  - name: baseSideAdjustment
+    removed_in: "3.0"
+    use_instead: "baseAdjustment"
+    reason: |
+      Renamed to baseAdjustment. Now also supports z- with special downward-shift
+      behaviour. Format changed from float/2-element/4-element array to pseudo-map
+      [[side, value]] in V3.
+
+  - name: baseTopPlateHeight
+    removed_in: "3.0"
+    use_instead: "topPlateHeight"
+    reason: "Renamed to topPlateHeight."
+
+  - name: baseTopPlateHeightAdjustment
+    removed_in: "3.0"
+    use_instead: "topPlateHeightAdjustment"
+    reason: "Renamed to topPlateHeightAdjustment."
+
+  - name: baseReliefCut
+    removed_in: "3.0"
+    use_instead: "reliefCut"
+    reason: "Renamed to reliefCut."
+
+  - name: baseReliefCutHeight
+    removed_in: "3.0"
+    use_instead: "reliefCutHeight"
+    reason: "Renamed to reliefCutHeight."
+
+  - name: baseReliefCutThickness
+    removed_in: "3.0"
+    use_instead: "reliefCutThickness"
+    reason: "Renamed to reliefCutThickness."
+
+  - name: stabilizerGrid
+    removed_in: "3.0"
+    use_instead: "stabilizers"
+    reason: "Renamed to stabilizers."
+
+  - name: stabilizerGridOffset
+    removed_in: "3.0"
+    use_instead: "stabilizerLayerOffset"
+    reason: "Renamed to stabilizerLayerOffset."
+
+  - name: stabilizerGridHeight
+    removed_in: "3.0"
+    use_instead: "stabilizerHeight"
+    reason: "Renamed to stabilizerHeight."
+
+  - name: stabilizerGridThickness
+    removed_in: "3.0"
+    use_instead: "stabilizerThickness"
+    reason: "Renamed to stabilizerThickness."
+
+  - name: tubeWallThickness
+    removed_in: "3.0"
+    use_instead: "pillarOriginalWallThickness"
+    reason: "Renamed to pillarOriginalWallThickness."
+
+  - name: tubeXDiameter
+    removed_in: "3.0"
+    use_instead: "tubeDiameter"
+    reason: "Consolidated into tubeDiameter with 1/2/3-value array rule."
+
+  - name: tubeYDiameter
+    removed_in: "3.0"
+    use_instead: "tubeDiameter"
+    reason: "Consolidated into tubeDiameter with 1/2/3-value array rule."
+
+  - name: tubeZDiameter
+    removed_in: "3.0"
+    use_instead: "tubeDiameter"
+    reason: "Consolidated into tubeDiameter with 1/2/3-value array rule."
+
+  - name: tubeXDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "tubeDiameterAdjustment"
+    reason: "Consolidated into tubeDiameterAdjustment."
+
+  - name: tubeYDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "tubeDiameterAdjustment"
+    reason: "Consolidated into tubeDiameterAdjustment."
+
+  - name: tubeZDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "tubeDiameterAdjustment"
+    reason: "Consolidated into tubeDiameterAdjustment."
+
+  - name: tubeInnerClampThickness
+    removed_in: "3.0"
+    use_instead: "pillarInnerClampThickness"
+    reason: "Renamed to pillarInnerClampThickness."
+
+  - name: holeXType
+    removed_in: "3.0"
+    use_instead: "holeXYZType"
+    reason: "Consolidated into holeXYZType with 1/2/3-value array rule."
+
+  - name: holeYType
+    removed_in: "3.0"
+    use_instead: "holeXYZType"
+    reason: "Consolidated into holeXYZType."
+
+  - name: holeZType
+    removed_in: "3.0"
+    use_instead: "holeXYZType"
+    reason: "Consolidated into holeXYZType."
+
+  - name: holeXShift
+    removed_in: "3.0"
+    use_instead: "holeXYZShift"
+    reason: "Consolidated into holeXYZShift."
+
+  - name: holeYShift
+    removed_in: "3.0"
+    use_instead: "holeXYZShift"
+    reason: "Consolidated into holeXYZShift."
+
+  - name: holeZShift
+    removed_in: "3.0"
+    use_instead: "holeXYZShift"
+    reason: "Consolidated into holeXYZShift."
+
+  - name: holeXDiameter
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameter"
+    reason: "Consolidated into holeXYZDiameter."
+
+  - name: holeYDiameter
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameter"
+    reason: "Consolidated into holeXYZDiameter."
+
+  - name: holeZDiameter
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameter"
+    reason: "Consolidated into holeXYZDiameter."
+
+  - name: holeXDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameterAdjustment"
+    reason: "Consolidated into holeXYZDiameterAdjustment."
+
+  - name: holeYDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameterAdjustment"
+    reason: "Consolidated into holeXYZDiameterAdjustment."
+
+  - name: holeZDiameterAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZDiameterAdjustment"
+    reason: "Consolidated into holeXYZDiameterAdjustment."
+
+  - name: holeXInsetThickness
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetThickness"
+    reason: "Consolidated into holeXYZInsetThickness."
+
+  - name: holeYInsetThickness
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetThickness"
+    reason: "Consolidated into holeXYZInsetThickness."
+
+  - name: holeXInsetThicknessAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetThicknessAdjustment"
+    reason: "Consolidated into holeXYZInsetThicknessAdjustment."
+
+  - name: holeYInsetThicknessAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetThicknessAdjustment"
+    reason: "Consolidated into holeXYZInsetThicknessAdjustment."
+
+  - name: holeXInsetDepth
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetDepth"
+    reason: "Consolidated into holeXYZInsetDepth."
+
+  - name: holeYInsetDepth
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetDepth"
+    reason: "Consolidated into holeXYZInsetDepth."
+
+  - name: holeXInsetDepthAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetDepthAdjustment"
+    reason: "Consolidated into holeXYZInsetDepthAdjustment."
+
+  - name: holeYInsetDepthAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYZInsetDepthAdjustment"
+    reason: "Consolidated into holeXYZInsetDepthAdjustment."
+
+  - name: holeXGridOffsetZ
+    removed_in: "3.0"
+    use_instead: "holeXYGridOffsetZ"
+    reason: "Consolidated into holeXYGridOffsetZ."
+
+  - name: holeYGridOffsetZ
+    removed_in: "3.0"
+    use_instead: "holeXYGridOffsetZ"
+    reason: "Consolidated into holeXYGridOffsetZ."
+
+  - name: holeXGridOffsetZAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYGridOffsetZAdjustment"
+    reason: "Consolidated into holeXYGridOffsetZAdjustment."
+
+  - name: holeYGridOffsetZAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYGridOffsetZAdjustment"
+    reason: "Consolidated into holeXYGridOffsetZAdjustment."
+
+  - name: holeXGridSizeZ
+    removed_in: "3.0"
+    use_instead: "holeXYGridSizeZ"
+    reason: "Consolidated into holeXYGridSizeZ."
+
+  - name: holeYGridSizeZ
+    removed_in: "3.0"
+    use_instead: "holeXYGridSizeZ"
+    reason: "Consolidated into holeXYGridSizeZ."
+
+  - name: holeXGridSizeZAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYGridSizeZAdjustment"
+    reason: "Consolidated into holeXYGridSizeZAdjustment."
+
+  - name: holeYGridSizeZAdjustment
+    removed_in: "3.0"
+    use_instead: "holeXYGridSizeZAdjustment"
+    reason: "Consolidated into holeXYGridSizeZAdjustment."
+
+  - name: holeXMinTopMargin
+    removed_in: "3.0"
+    use_instead: "holeXYMinTopMargin"
+    reason: "Consolidated into holeXYMinTopMargin."
+
+  - name: holeYMinTopMargin
+    removed_in: "3.0"
+    use_instead: "holeXYMinTopMargin"
+    reason: "Consolidated into holeXYMinTopMargin."
+
+  - name: holeXPartial
+    removed_in: "3.0"
+    use_instead: "holeXPartialY and holeXPartialZ"
+    reason: "Split into holeXPartialY (Y-axis partial) and holeXPartialZ (Z-axis/top partial)."
+
+  - name: holeYPartial
+    removed_in: "3.0"
+    use_instead: "holeYPartialX and holeYPartialZ"
+    reason: "Split into holeYPartialX (X-axis partial) and holeYPartialZ (Z-axis/top partial)."
+
+  - name: holeAxleThickness
+    removed_in: "3.0"
+    use_instead: "holeXYZAxleThickness"
+    reason: "Renamed to holeXYZAxleThickness with 1/2/3-value array rule."
+
+  - name: studSink
+    removed_in: "3.0"
+    use_instead: "studBaseOverlap"
+    reason: "Renamed to studBaseOverlap."
+
+  - name: studCutoutAdjustment
+    removed_in: "3.0"
+    use_instead: "studCutoutDiameterAdjustment and studCutoutHeightAdjustment"
+    reason: "Split into separate studCutoutDiameterAdjustment and studCutoutHeightAdjustment."
+
+  - name: textSide
+    removed_in: "3.0"
+    use_instead: "textFace"
+    reason: "Renamed to textFace."
+
+  - name: textVerticalAlign
+    removed_in: "3.0"
+    use_instead: "textAlign"
+    reason: "Merged into textAlign (same format as align/alignChildren)."
+
+  - name: textHorizontalAlign
+    removed_in: "3.0"
+    use_instead: "textAlign"
+    reason: "Merged into textAlign (same format as align/alignChildren)."
+
+  - name: svgSide
+    removed_in: "3.0"
+    use_instead: "svgFace"
+    reason: "Renamed to svgFace."
+
+  - name: slopeBaseHeightLower
+    removed_in: "3.0"
+    use_instead: "slopeBaseHeightBottom"
+    reason: "Renamed to slopeBaseHeightBottom."
+
+  - name: slopeBaseHeightUpper
+    removed_in: "3.0"
+    use_instead: "slopeBaseHeightTop"
+    reason: "Renamed to slopeBaseHeightTop."
+
+  - name: slopeBaseHeightLowerInner
+    removed_in: "3.0"
+    use_instead: "slopeBaseHeightInner"
+    reason: "Renamed to slopeBaseHeightInner."
+
+  - name: unitMbuToMm
+    removed_in: "3.0"
+    use_instead: "unitMbu"
+    reason: "Renamed to unitMbu."
+
+  - name: unitGridToMbu
+    removed_in: "3.0"
+    use_instead: "unitGrid"
+    reason: "Renamed to unitGrid."
 
 # ============================================================================
 # CHANGELOG — PARAMETERS CHANGED IN V3
@@ -3330,12 +4018,13 @@ removed_in_v3:
 
 changed_in_v3:
 
-  - name: baseSideAdjustment
+  - name: baseAdjustment
     changed_in: "3.0"
     summary: |
-      Format changed from float/2-element/4-element array to pseudo-map
-      [[side, value]] format. Now supports all 6 sides (including z-, z+)
-      and namespace-prefixed keys for composite-of-composite block patterns.
+      Renamed from baseSideAdjustment. Format changed from float/2-element/
+      4-element array to pseudo-map [[side, value]] format. Now supports all
+      6 sides (including z-) and namespace-prefixed keys for composite patterns.
+      z- now has a special downward-shift behaviour (not a plain height reduction).
       Default changed from -0.1 to [] (empty).
 
   - name: recessDepth
@@ -3353,6 +4042,49 @@ changed_in_v3:
   - name: alignChildren
     changed_in: "3.0"
     summary: "mb_param_alignChildren() now always resolves to a 3-element array."
+
+  - name: size
+    changed_in: "3.0"
+    summary: "Values must be integers. Fractional values are no longer permitted."
+
+  - name: crop
+    changed_in: "3.0"
+    summary: |
+      Now a hard cut in all cases, with no regard for grid compatibility,
+      walls, or structural features. Use sizeMod for semantic size changes.
+
+  - name: slope
+    changed_in: "3.0"
+    summary: "Can now be combined with bevel. The conflicts_with constraint has been removed."
+
+  - name: bevel
+    changed_in: "3.0"
+    summary: "Can now be combined with slope."
+
+  - name: tongueClampOffset
+    changed_in: "3.0"
+    summary: |
+      Measurement changed from upper-edge-to-upper-edge to lower-edge-to-lower-edge.
+      This avoids needing to calculate groove depth when positioning the clamp.
+
+  - name: sizeAdjustment
+    changed_in: "3.0"
+    summary: |
+      Now also accepts a single number (applies to XY only, Z = 0), in addition
+      to the previous 2-element array [XYAdj, ZAdj].
+
+  - name: connectors
+    changed_in: "3.0"
+    summary: |
+      Completely new format: [face, direction, gender, align?, paddingStart?, paddingEnd?]
+      per connector. The old [[side, arrangement]] format is no longer valid.
+      Padding is now per-connector; the separate connectorPadding parameter is removed.
+
+  - name: pcb
+    changed_in: "3.0"
+    summary: |
+      Now accepts mounting type values directly: false/"none", "clips", "sockets".
+      Merges the former pcb (bool) and pcbMountingType ("clips"|"screws") parameters.
 
 # ============================================================================
 # CHANGELOG — PARAMETERS ADDED IN V3
@@ -3392,9 +4124,249 @@ added_in_v3:
     added_in: "3.0"
     summary: "Defines void volumes subtracted from the block body (experimental)."
 
-  - name: studSink
+  - name: studBaseOverlap
     added_in: "3.0"
-    summary: "Controls how deeply studs are sunk into the block body."
+    summary: "Renamed from studSink. Controls how deeply studs overlap with the block body."
+
+  - name: sizeMod
+    added_in: "3.0"
+    summary: "Semantic per-side size modification that keeps the brick structurally intact."
+
+  - name: printerNozzleDiameter
+    added_in: "3.0"
+    summary: "Nozzle diameter of the 3D printer. Used as default for 'auto' parameters."
+
+  - name: printerLayerHeight
+    added_in: "3.0"
+    summary: "Layer height of the 3D printer. Used as default for all *LayerOffset 'auto' parameters."
+
+  - name: recessAdjustment
+    added_in: "3.0"
+    summary: "Per-side calibration adjustment for recess inner walls and floor."
+
+  - name: tongueGrooveDepthClearance
+    added_in: "3.0"
+    summary: "Clearance above tongue in groove. Replaces tongueGrooveDepth."
+
+  - name: tongueGrooveThicknessClearance
+    added_in: "3.0"
+    summary: "Clearance for tongue thickness in groove, applied to groove side and clamp."
+
+  - name: tongueGrooveClampOffsetClearance
+    added_in: "3.0"
+    summary: "Extra clearance before groove clamp recess for easier snapping."
+
+  - name: holeXPartialY
+    added_in: "3.0"
+    summary: "Y-axis partial holes for X-direction technic holes. Split from holeXPartial."
+
+  - name: holeXPartialZ
+    added_in: "3.0"
+    summary: "Z-axis (top) partial/groove holes for X-direction technic holes. Split from holeXPartial."
+
+  - name: holeYPartialX
+    added_in: "3.0"
+    summary: "X-axis partial holes for Y-direction technic holes. Split from holeYPartial."
+
+  - name: holeYPartialZ
+    added_in: "3.0"
+    summary: "Z-axis (top) partial/groove holes for Y-direction technic holes. Split from holeYPartial."
+
+  - name: holeXYZAxleThicknessAdjustment
+    added_in: "3.0"
+    summary: "Calibration adjustment for axle strut thickness, in mm. With 1/2/3-value array rule."
+
+  - name: screwHoles
+    added_in: "3.0"
+    summary: "Unified screw hole definition for all faces. Replaces screwHolesX/Y/Z."
+
+  - name: screwHoleDiameter
+    added_in: "3.0"
+    summary: "Default screw hole diameter for all faces."
+
+  - name: screwHoleDepth
+    added_in: "3.0"
+    summary: "Default screw hole depth for all faces."
+
+  - name: screwHoleInsetThickness
+    added_in: "3.0"
+    summary: "Default inset ring thickness for screw holes."
+
+  - name: screwHoleInsetDepth
+    added_in: "3.0"
+    summary: "Default inset ring depth for screw holes."
+
+  - name: holeXYZType
+    added_in: "3.0"
+    summary: "Unified hole type (pin/axle) for all axes. Replaces holeXType/holeYType/holeZType."
+
+  - name: holeXYZShift
+    added_in: "3.0"
+    summary: "Unified hole shift for all axes. Replaces holeXShift/holeYShift/holeZShift."
+
+  - name: holeXYZDiameter
+    added_in: "3.0"
+    summary: "Unified hole diameter for all axes. Replaces holeXDiameter/holeYDiameter/holeZDiameter."
+
+  - name: holeXYZDiameterAdjustment
+    added_in: "3.0"
+    summary: "Unified hole diameter adjustment. Replaces holeXDiameterAdjustment etc."
+
+  - name: holeXYZInsetThickness
+    added_in: "3.0"
+    summary: "Unified inset thickness for all axes. Now also applies to Z holes."
+
+  - name: holeXYZInsetThicknessAdjustment
+    added_in: "3.0"
+    summary: "Unified inset thickness adjustment for all axes."
+
+  - name: holeXYZInsetDepth
+    added_in: "3.0"
+    summary: "Unified inset depth for all axes. Now also applies to Z holes."
+
+  - name: holeXYZInsetDepthAdjustment
+    added_in: "3.0"
+    summary: "Unified inset depth adjustment for all axes."
+
+  - name: holeXYZAxleThickness
+    added_in: "3.0"
+    summary: "Renamed from holeAxleThickness, with 1/2/3-value array rule."
+
+  - name: holeXYGridOffsetZ
+    added_in: "3.0"
+    summary: "Unified grid offset Z for X and Y holes. Replaces holeXGridOffsetZ/holeYGridOffsetZ."
+
+  - name: holeXYGridOffsetZAdjustment
+    added_in: "3.0"
+    summary: "Unified grid offset Z adjustment. Replaces per-axis parameters."
+
+  - name: holeXYGridSizeZ
+    added_in: "3.0"
+    summary: "Unified grid size Z for X and Y holes."
+
+  - name: holeXYGridSizeZAdjustment
+    added_in: "3.0"
+    summary: "Unified grid size Z adjustment."
+
+  - name: holeXYMinTopMargin
+    added_in: "3.0"
+    summary: "Unified minimum top margin for X and Y holes."
+
+  - name: tubeDiameter
+    added_in: "3.0"
+    summary: "Unified tube diameter for all axes. Replaces tubeXDiameter/tubeYDiameter/tubeZDiameter."
+
+  - name: tubeDiameterAdjustment
+    added_in: "3.0"
+    summary: "Unified tube diameter adjustment."
+
+  - name: studCutoutDiameterAdjustment
+    added_in: "3.0"
+    summary: "Split from studCutoutAdjustment[0]. Stud cutout diameter calibration."
+
+  - name: studCutoutHeightAdjustment
+    added_in: "3.0"
+    summary: "Split from studCutoutAdjustment[1]. Stud cutout height calibration."
+
+  - name: pcbSocketDiameter
+    added_in: "3.0"
+    summary: "Renamed from pcbScrewSocketSize."
+
+  - name: pcbSocketHoleDiameter
+    added_in: "3.0"
+    summary: "Renamed from pcbScrewSocketHoleSize."
+
+  - name: pcbSocketHeight
+    added_in: "3.0"
+    summary: "Renamed from pcbScrewSocketHeight."
+
+  - name: pcbSockets
+    added_in: "3.0"
+    summary: "Renamed from pcbScrewSockets."
+
+  - name: connectorLength
+    added_in: "3.0"
+    summary: "Renamed from connectorHeight."
+
+  - name: connectorLengthClearance
+    added_in: "3.0"
+    summary: "Renamed from connectorDepthTolerance."
+
+  - name: connectorSideClearance
+    added_in: "3.0"
+    summary: "Renamed from connectorSideTolerance."
+
+  - name: textFace
+    added_in: "3.0"
+    summary: "Renamed from textSide."
+
+  - name: textAlign
+    added_in: "3.0"
+    summary: "Merges textVerticalAlign and textHorizontalAlign. Same format as align."
+
+  - name: svgFace
+    added_in: "3.0"
+    summary: "Renamed from svgSide."
+
+  - name: topPlateHeight
+    added_in: "3.0"
+    summary: "Renamed from baseTopPlateHeight."
+
+  - name: topPlateHeightAdjustment
+    added_in: "3.0"
+    summary: "Renamed from baseTopPlateHeightAdjustment."
+
+  - name: reliefCut
+    added_in: "3.0"
+    summary: "Renamed from baseReliefCut."
+
+  - name: reliefCutHeight
+    added_in: "3.0"
+    summary: "Renamed from baseReliefCutHeight."
+
+  - name: reliefCutThickness
+    added_in: "3.0"
+    summary: "Renamed from baseReliefCutThickness."
+
+  - name: stabilizers
+    added_in: "3.0"
+    summary: "Renamed from stabilizerGrid."
+
+  - name: stabilizerLayerOffset
+    added_in: "3.0"
+    summary: "Renamed from stabilizerGridOffset. Supports 'auto' (uses printerLayerHeight)."
+
+  - name: stabilizerHeight
+    added_in: "3.0"
+    summary: "Renamed from stabilizerGridHeight."
+
+  - name: stabilizerThickness
+    added_in: "3.0"
+    summary: "Renamed from stabilizerGridThickness."
+
+  - name: pillarOriginalWallThickness
+    added_in: "3.0"
+    summary: "Renamed from tubeWallThickness."
+
+  - name: pillarInnerClampThickness
+    added_in: "3.0"
+    summary: "Renamed from tubeInnerClampThickness."
+
+  - name: slopeBaseHeightBottom
+    added_in: "3.0"
+    summary: "Renamed from slopeBaseHeightLower."
+
+  - name: slopeBaseHeightTop
+    added_in: "3.0"
+    summary: "Renamed from slopeBaseHeightUpper."
+
+  - name: slopeBaseHeightInner
+    added_in: "3.0"
+    summary: "Renamed from slopeBaseHeightLowerInner."
+
+  - name: screwHoleZHelperLayerOffset
+    added_in: "3.0"
+    summary: "Renamed from screwHoleZHelperOffset. Supports 'auto' (uses printerLayerHeight)."
 
 # ============================================================================
 # EXPERIMENTAL PARAMETERS

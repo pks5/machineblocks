@@ -138,6 +138,8 @@ module mb_pcb(
 ){
     offset = mb_resolve_xyz(xyz = offset, default = [0, 0, 0]);
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
+    
+    color(debug ? "yellow" : color)
     translate(mb_array_mul(offset, mul)){
         if(pcb == "clips"){
             mb_pcb_clips(
@@ -147,9 +149,9 @@ module mb_pcb(
         else if(pcb == "sockets"){
             mb_pcb_screw_sockets(
                 screwSockets = screw_sockets,
-                screwSocketHeight = screw_socket_height,
-                screwSocketSize = screw_socket_size,
-                screwSocketHoleSize = screw_socket_hole_size
+                screwSocketHeight = screw_socket_height * mul[2],
+                screwSocketSize = screw_socket_size * mul[0],
+                screwSocketHoleSize = screw_socket_hole_size * mul[0]
             );
         }
     }

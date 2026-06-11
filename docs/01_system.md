@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 3.0.1
+version: 3.0.2
 
 ## Purpose
 
@@ -91,7 +91,7 @@ There are two kinds of parameters in MachineBlocks:
 
 ```scad
 size = mb_param_size(config, settings);
-baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+baseAdjustment = mb_param_baseAdjustment(config, settings);
 ```
 
 **Custom parameters** are parameters defined by individual block modules. They are accessed via the generic getter:
@@ -111,7 +111,7 @@ Native parameter getters automatically resolve external formats to internal form
 ```text
 direction:            "west" → 0,  "north" → 1,  "east" → 2,  "south" → 3
 
-baseSideAdjustment:   pseudo-map format: [["x-", 0.1], ["z+", 0.1]]
+baseAdjustment:   pseudo-map format: [["x-", 0.1], ["z+", 0.1]]
                       mb_block() interprets only the standard sides x-, x+, y-, y+, z-, z+
 
 align / alignChildren:
@@ -174,19 +174,19 @@ mb_params_filter(param, namespace, overrides?)
 An optional third argument `overrides` applies fixed key-value pairs to the result after filtering, unconditionally overriding any matching values.
 
 ```scad
-// Filter baseSideAdjustment for namespace "pbx"
-mb_params_filter(baseSideAdjustment, "pbx")
+// Filter baseAdjustment for namespace "pbx"
+mb_params_filter(baseAdjustment, "pbx")
 // [["pbx.x+", 0.01]] → [["x+", 0.01]]
 
 // With fixed override: x+ is always 0.1 regardless of input
-mb_params_filter(baseSideAdjustment, "pbx", [["x+", 0.1]])
+mb_params_filter(baseAdjustment, "pbx", [["x+", 0.1]])
 
 // Numeric keys and entries without namespace are ignored:
 mb_params_filter([["x+", 0.1], [1, -0.1], ["pbx.z+", 0.1]], "pbx")
 // → [["pbx.z+", 0.1]]
 ```
 
-`mb_params_filter` is universal and can be applied to any parameter that uses the `[[string, value]]` pseudo-map format, such as `baseSideAdjustment` or `baseWallGaps`.
+`mb_params_filter` is universal and can be applied to any parameter that uses the `[[string, value]]` pseudo-map format, such as `baseAdjustment` or `baseWallGaps`.
 
 To read a raw value from a single parameter array without resolution, use `mb_params_get`:
 
@@ -629,11 +629,11 @@ Native parameter getters (`mb_param_*()`) must NEVER be called in the Hidden Sec
 ```scad
 /* WRONG — getter called in Hidden Section, config/settings not available here */
 /* [Hidden] */
-bSideAdjustment = mb_param_baseSideAdjustment_default();
+bAdjustment = mb_param_baseAdjustment_default();
 
 /* CORRECT — getter called inside the module body */
 module mb_block__x__y__z(config = undef, settings = undef){
-    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseAdjustment = mb_param_baseAdjustment(config, settings);
     ...
 }
 ```

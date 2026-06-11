@@ -95,6 +95,7 @@ function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = 
 function mb_param_baseClampOffset(config, settings, default = undef) = mb_param(config, settings, "baseClampOffset", default != undef ? default : 0.25);
 function mb_param_baseClampHeight(config, settings, default = undef) = mb_param(config, settings, "baseClampHeight", default != undef ? default : 0.5);
 function mb_param_baseClampThickness(config, settings, default = undef) = mb_param(config, settings, "baseClampThickness", default != undef ? default : 0.1);
+//TODO clearify?
 function mb_param_baseClampOuter(config, settings, default = undef) = mb_param(config, settings, "baseClampOuter", default != undef ? default : false);
 
 // Base Wall
@@ -203,7 +204,6 @@ function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) =
 
 
 // X
-// TODO implement complex mode
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
 // TODO implement
 function mb_param_holeXPartialY(config, settings, default = undef) = mb_param(config, settings, "holeXPartialY", default != undef ? default : "none");
@@ -211,7 +211,6 @@ function mb_param_holeXPartialY(config, settings, default = undef) = mb_param(co
 function mb_param_holeXPartialZ(config, settings, default = undef) = mb_param(config, settings, "holeXPartialZ", default != undef ? default : "none");
 
 // Y
-// TODO implement complex mode
 function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
 // TODO implement
 function mb_param_holeYPartialX(config, settings, default = undef) = mb_param(config, settings, "holeYPartialX", default != undef ? default : "none");
@@ -219,7 +218,6 @@ function mb_param_holeYPartialX(config, settings, default = undef) = mb_param(co
 function mb_param_holeYPartialZ(config, settings, default = undef) = mb_param(config, settings, "holeYPartialZ", default != undef ? default : "none");
 
 // Z
-// TODO implement complex mode
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
 // TODO implement
 function mb_param_holeZPartialX(config, settings, default = undef) = mb_param(config, settings, "holeZPartialX", default != undef ? default : "none");

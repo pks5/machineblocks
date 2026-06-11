@@ -1,6 +1,6 @@
 # MachineBlocks — Geometry, Transformation & Structure Concepts
 
-version: 3.0.1
+version: 3.0.2
 
 ## Purpose of this Document
 
@@ -28,11 +28,11 @@ To produce a cube, the Z value must be 2.5 times the XY value. Since `size` valu
 
 Core geometry parameters modify the block shape within the bounding box in distinct ways:
 
-`size` defines space. `slope` modifies height per side — positive values slope the top surface, negative values create inverted slopes on the bottom. `bevel` modifies the footprint by shifting top corners in XY space, producing wedge shapes. `crop` applies hard cuts or extensions to the geometry.
+`size` defines space (integer values only). `sizeMod` provides semantic per-side modification while keeping the brick structurally intact. `slope` modifies height per side — positive values slope the top surface, negative values create inverted slopes on the bottom. `bevel` modifies the footprint by shifting top corners in XY space, producing wedge shapes. `crop` applies hard cuts or extensions to the geometry.
 
 ### Key Relationships
 
-Slope modifies height, not footprint. Bevel modifies footprint, not height. Slope and bevel cannot be combined — this is a hard constraint. Crop does not affect bounding box or positioning. Corner rounding is applied after cropping.
+Slope modifies height, not footprint. Bevel modifies footprint, not height. Slope and bevel can be combined. `crop` is a hard cut — it does not preserve grid compatibility, walls, or structural features. Use `sizeMod` for semantic size changes that keep the brick intact. Crop does not affect bounding box or positioning. Corner rounding is applied after cropping.
 
 > Wedges are not a primitive — they emerge from bevel transformations.
 
@@ -260,7 +260,7 @@ The size in the assembly parameter must already be direction-resolved (X and Y s
 
 ### The Problem
 
-Consumer-grade 3D printers typically print slightly too wide, causing adjacent blocks not to fit together. `sizeAdjustment` and `baseSideAdjustment` compensate for this. In a simple primitive this works directly. In a composite block whose parts do not overlap at their contact faces, a negative side adjustment creates a visible gap or zero-thickness wall between adjacent parts. OpenSCAD's `union()` only fuses geometry that actually overlaps — touching faces alone are not sufficient.
+Consumer-grade 3D printers typically print slightly too wide, causing adjacent blocks not to fit together. `sizeAdjustment` and `baseAdjustment` compensate for this. In a simple primitive this works directly. In a composite block whose parts do not overlap at their contact faces, a negative side adjustment creates a visible gap or zero-thickness wall between adjacent parts. OpenSCAD's `union()` only fuses geometry that actually overlaps — touching faces alone are not sufficient.
 
 The fix is to ensure a small positive overlap (typically 0.01mm) at every internal contact face, while all outer faces still use the calibration value.
 
@@ -275,28 +275,32 @@ The fix is to ensure a small positive overlap (typically 0.01mm) at every intern
 
 `mb_block()` applies `sideXYAdj` to all four horizontal sides (x-, x+, y-, y+) and `heightAdj` to the top face (z+) only. Default: `[-0.1, 0]`.
 
-### baseSideAdjustment — Per-Block Fine-Tuning
+### baseAdjustment — Per-Block Fine-Tuning
 
-`baseSideAdjustment` is a pseudo-map in the format `[["side", value], ...]`. It is always empty by default. `mb_block()` interprets only the standard sides: `"x-"`, `"x+"`, `"y-"`, `"y+"`, `"z-"`, `"z+"`. Sides may also be referenced by integer index (0–5), but string identifiers are preferred.
+`baseAdjustment` is a pseudo-map in the format `[["side", value], ...]`. It is always empty by default. `mb_block()` interprets only the standard sides: `"x-"`, `"x+"`, `"y-"`, `"y+"`, `"z-"`, `"z+"`. Sides may also be referenced by integer index (0–5), but string identifiers are preferred.
 
 ```scad
-["baseSideAdjustment", [["x-", 0], ["z+", 0.1]]]
+["baseAdjustment", [["x-", 0], ["z+", 0.1]]]
 ```
 
-Unlike `sizeAdjustment`, `baseSideAdjustment` allows individual control over all six sides including `z-` and `z+`. This replaces the V2 `baseHeightAdjustment` parameter, which only controlled `z+`.
+Unlike `sizeAdjustment`, `baseAdjustment` allows individual control over all six sides including `z-` and `z+`. This replaces the V2 `baseHeightAdjustment` parameter.
 
-### Namespace Support in baseSideAdjustment
+**z- special behaviour:** A `z-` value does not reduce block height from below. Instead it shifts the brick downward by the z- amount (independent of `offset`) and extends `z+` correspondingly. This is useful for closing gaps in composite blocks.
 
-`baseSideAdjustment` supports namespaced keys for passing adjustments into child composite blocks. Namespace and side are separated by a dot:
+The same `z-` special behaviour applies to `sizeMod`. The difference is semantic: `baseAdjustment` is for printer calibration and composite block gap closing; `sizeMod` is for intentional geometry changes (e.g. half-bricks).
+
+### Namespace Support in baseAdjustment
+
+`baseAdjustment` supports namespaced keys for passing adjustments into child composite blocks. Namespace and side are separated by a dot:
 
 ```scad
-["baseSideAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
+["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```
 
 Inside the child composite block, `mb_params_filter()` extracts the values for a specific namespace, removing the prefix:
 
 ```scad
-["baseSideAdjustment", mb_params_filter(baseSideAdjustment, "pbx")]
+["baseAdjustment", mb_params_filter(baseAdjustment, "pbx")]
 // [["pbx.x+", 0.01]] → [["x+", 0.01]]
 ```
 
@@ -311,7 +315,7 @@ mb_params_filter(param, namespace, overrides?)
 Filters any `[[string, value]]` pseudo-map by namespace prefix. Entries without a namespace and entries with numeric keys are ignored. An optional third argument applies fixed overrides after filtering:
 
 ```scad
-mb_params_filter(baseSideAdjustment, "pbx", [["x+", 0.1]])
+mb_params_filter(baseAdjustment, "pbx", [["x+", 0.1]])
 // x+ is always 0.1 in the result, regardless of input
 ```
 
@@ -319,11 +323,11 @@ mb_params_filter(baseSideAdjustment, "pbx", [["x+", 0.1]])
 
 ### Pattern Summary
 
-**Simple primitive:** Use `sizeAdjustment` in config for global calibration. Use `baseSideAdjustment` for per-side fine-tuning where needed.
+**Simple primitive:** Use `sizeAdjustment` in config for global calibration. Use `baseAdjustment` for per-side fine-tuning where needed.
 
-**Composite block:** Read `baseSideAdjustment` once at the top of the module. For each part, use `mb_params_filter(baseSideAdjustment, namespace)` to extract the relevant values. For internal contact faces, ensure a small positive overlap (0.01mm) by using fixed overrides in `mb_params_filter` or by including the contact-side explicitly.
+**Composite block:** Read `baseAdjustment` once at the top of the module. For each part, use `mb_params_filter(baseAdjustment, namespace)` to extract the relevant values. For internal contact faces, ensure a small positive overlap (0.01mm) by using fixed overrides in `mb_params_filter` or by including the contact-side explicitly.
 
-**Composite-of-composite:** The outer block passes namespaced `baseSideAdjustment` entries to each child composite block. The child uses `mb_params_filter` to extract its values per namespace.
+**Composite-of-composite:** The outer block passes namespaced `baseAdjustment` entries to each child composite block. The child uses `mb_params_filter` to extract its values per namespace.
 
 ## Parts and Total Size
 
@@ -344,11 +348,11 @@ Each entry in `parts` is `[size, direction, offset]`. The function computes the 
 
 # Common Pitfalls
 
-**`sizeAdjustment` is the global calibration entry point.** Set it once in config. Use `baseSideAdjustment` only for per-block or per-side overrides.
+**`sizeAdjustment` is the global calibration entry point.** Set it once in config. Use `baseAdjustment` only for per-block or per-side overrides.
 
-**`baseSideAdjustment` is a pseudo-map, not a scalar or 4-element array.** Always use the `[[side, value]]` format. `mb_block()` interprets only standard sides (x-, x+, y-, y+, z-, z+).
+**`baseAdjustment` is a pseudo-map, not a scalar or 4-element array.** Always use the `[[side, value]]` format. `mb_block()` interprets only standard sides (x-, x+, y-, y+, z-, z+).
 
-**Never pass differing namespaced `baseSideAdjustment` values to a composite block without using `mb_params_filter`.** The child composite block uses `mb_params_filter` to extract its namespace.
+**Never pass differing namespaced `baseAdjustment` values to a composite block without using `mb_params_filter`.** The child composite block uses `mb_params_filter` to extract its namespace.
 
 **`mb_params_filter` ignores entries without a namespace and entries with numeric keys.** Only `["namespace.side", value]` entries are accepted.
 
