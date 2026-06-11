@@ -541,7 +541,7 @@ module mb_block__mm__examples__simple_text_plate(config = undef, settings = unde
             ["size", sizeMode == "small" ? [4, 2, 1] : [8, 4, 1]],
             ["studs", false],
             ["text", str(mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(speedMph))],
-            ["textSide", 5],
+            ["textFace", 5],
             ["textSize", 12]
         ]
     );

@@ -854,7 +854,7 @@ parameters:
       Default 5 mbu ≈ 8 mm. Limits underside depth; if the limit applies,
       the topPlateHeight grows accordingly. When recess is defined, the
       baseCutoutDepth shrinks to the minimum (1 mbu) and topPlateHeight
-      shrinks to topPlateHeight.
+      shrinks to its minimum value.
     constraints:
       requires:
         - parameter: baseCutoutType
@@ -2624,7 +2624,7 @@ parameters:
     ai_usage: yes
     description: |
       Text to draw on the brick. If not empty, rendered on the side
-      specified by textSide.
+      specified by textFace.
 
   - name: textFace
     group: text

@@ -184,15 +184,15 @@ Structure parameters form four distinct systems, each with a clear responsibilit
 
 > Choose `tongue` for continuous connections. Choose `connectors` for angled or modular connections.
 
-## Studs and studSink
+## Studs and studBaseOverlap
 
-`studSink` defines how deeply the stud is sunk into the block body (unit: mbu, default: 0.25). This is important for:
+`studBaseOverlap` defines how deeply the stud overlaps with the block body (unit: mbu, default: 0.25). This is important for:
 
 - Ensuring the model is geometrically connected (no floating stud)
 - Preventing gaps when `grille` or `surfacePattern` is active
 - Allowing body-less stud-only configurations in composite blocks (set to 0)
 
-> `studSink = 0` is valid and intentional when a block has `base = false` but still renders studs.
+> `studBaseOverlap = 0` is valid and intentional when a block has `base = false` but still renders studs.
 
 ## Geometry vs Structure
 
