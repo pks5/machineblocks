@@ -1,6 +1,6 @@
 # MachineBlocks — Patterns and Examples
 
-version: 3.0.1
+version: 3.0.2
 
 ## Purpose of this Document
 
@@ -566,7 +566,7 @@ function mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(mph) = 1.6 
 
 ## Pattern 3 — Composite Block
 
-Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = false` and `studs = false`. Composite blocks must implement `mb_assembly()` when parts support assembly modes. When parts are adjacent without overlap, the module must handle `baseSideAdjustment` (with namespace support via `mb_params_filter`) to ensure correct contact face overlap. See the Side and Size Adjustments section in `02_geometry_and_transformation.md` for the full pattern.
+Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = false` and `studs = false`. Composite blocks must implement `mb_assembly()` when parts support assembly modes. When parts are adjacent without overlap, the module must handle `baseAdjustment` (with namespace support via `mb_params_filter`) to ensure correct contact face overlap. See the Side and Size Adjustments section in `02_geometry_and_transformation.md` for the full pattern.
 
 ### Example — Wall Panel (Tongue + Groove)
 
@@ -637,7 +637,7 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
     baseColor = mb_param_baseColor(config, settings);
 
     // Resolve Base Side Adjustments
-    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseAdjustment = mb_param_baseAdjustment(config, settings);
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
@@ -671,7 +671,7 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
                 ["tongue", mb_assembly_tongue(assembly, renderGroups, group_bottom)],
                 ["recessWallGaps", "x+"],
                 ["baseColor", baseColor],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_bottom)]
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_bottom)]
             ]
         );
 
@@ -690,7 +690,7 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
                 ["recessWallGaps", "x+"],
                 ["baseCutoutType", mb_assembly_groove(assembly, renderGroups, group_top)],
                 ["baseColor", baseColor],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_top)]
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_top)]
             ]
         );
     }
@@ -774,7 +774,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
     wallThickness = mb_param(config, settings, "wallThickness", 1);
 
     // Resolve Base Side Adjustments
-    baseSideAdjustment = mb_param_baseSideAdjustment(config, settings);
+    baseAdjustment = mb_param_baseAdjustment(config, settings);
 
     // Resolve assembly
     assembly = mb_assembly(config, settings, size, direction);
@@ -813,7 +813,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
                 ["tongue", mb_assembly_tongue(assembly, renderGroups, group_bottom)],
                 ["recessWallGaps", "y+"],
                 ["tongueClampThickness", 0.1],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_pbx)],
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_pbx)],
                 ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
                 ["baseColor", baseColor]
             ]
@@ -833,7 +833,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
                 ["recessWallGaps", "y+"],
                 ["tongueClampThickness", 0.1],
                 ["baseCutoutType", mb_assembly_groove(assembly, renderGroups, group_top)],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_ptx)],
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_ptx)],
                 ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
                 ["baseColor", baseColor]
             ]
@@ -856,7 +856,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
                 ["tongue", mb_assembly_tongue(assembly, renderGroups, group_bottom)],
                 ["recessWallGaps", "x+"],
                 ["tongueClampThickness", 0.1],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_pby)],
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_pby)],
                 ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
                 ["baseColor", baseColor]
             ]
@@ -876,7 +876,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
                 ["recessWallGaps", "x+"],
                 ["tongueClampThickness", 0.1],
                 ["baseCutoutType", mb_assembly_groove(assembly, renderGroups, group_top)],
-                ["baseSideAdjustment", mb_params_filter(baseSideAdjustment, ns_pty)],
+                ["baseAdjustment", mb_params_filter(baseAdjustment, ns_pty)],
                 ["baseRoundingRadius", [0, 0, [cornerRounding, 0, 0, 0]]],
                 ["baseColor", baseColor]
             ]
@@ -888,7 +888,7 @@ module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
 
 ### Example — Combined Wall (Composite of Composite Blocks)
 
-Demonstrates `mb_parts_total_size()`, passing `assembly` through a tree of composite blocks, and passing namespaced `baseSideAdjustment` to child composite blocks.
+Demonstrates `mb_parts_total_size()`, passing `assembly` through a tree of composite blocks, and passing namespaced `baseAdjustment` to child composite blocks.
 
 ```scad
 /**
@@ -987,7 +987,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
                 ["size", parts[0][0]],
                 ["direction", parts[0][1]],
                 ["offset", parts[0][2]],
-                ["baseSideAdjustment", [["pby.y+", 0.01], ["pty.y+", 0.01]]],
+                ["baseAdjustment", [["pby.y+", 0.01], ["pty.y+", 0.01]]],
                 ["baseColor", baseColor],
                 ["assembly", assembly]
             ]
@@ -1003,7 +1003,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
                 ["size", parts[1][0]],
                 ["direction", parts[1][1]],
                 ["offset", parts[1][2]],
-                ["baseSideAdjustment", [["bottom.y-", 0.01], ["bottom.y+", 0.01], ["top.y-", 0.01], ["top.y+", 0.01]]],
+                ["baseAdjustment", [["bottom.y-", 0.01], ["bottom.y+", 0.01], ["top.y-", 0.01], ["top.y+", 0.01]]],
                 ["baseColor", baseColor],
                 ["assembly", assembly]
             ]
@@ -1019,7 +1019,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
                 ["size", parts[2][0]],
                 ["direction", parts[2][1]],
                 ["offset", parts[2][2]],
-                ["baseSideAdjustment", [["pbx.x+", 0.01], ["ptx.x+", 0.01]]],
+                ["baseAdjustment", [["pbx.x+", 0.01], ["ptx.x+", 0.01]]],
                 ["baseColor", baseColor],
                 ["assembly", assembly]
             ]
@@ -1093,4 +1093,4 @@ A set file supports four rendering modes: `total` (fully assembled), `print` (in
 
 **Parameter Access:** Always use `mb_param_*()` for native parameters and `mb_param()` for custom parameters. Never access arrays directly.
 
-**studSink:** Set to 0 only when a sub-block has `base = false` but still renders studs (e.g. stud-only decorative layers in composite blocks).
+**studBaseOverlap:** Set to 0 only when a sub-block has `base = false` but still renders studs (e.g. stud-only decorative layers in composite blocks).

@@ -1,6 +1,6 @@
 # MachineBlocks — Decision System
 
-version: 3.0.1
+version: 3.0.2
 
 ## Purpose of this Document
 
@@ -109,7 +109,7 @@ studs = false
 size defines bounding box
 ```
 
-Must implement `mb_assembly()` if parts support assembly. Must implement `baseSideAdjustment` namespace filtering via `mb_params_filter()` if parts are adjacent without overlap. Must implement `renderGroups` via `mb_param_renderGroups()` and `mb_group_render()`.
+Must implement `mb_assembly()` if parts support assembly. Must implement `baseAdjustment` namespace filtering via `mb_params_filter()` if parts are adjacent without overlap. Must implement `renderGroups` via `mb_param_renderGroups()` and `mb_group_render()`.
 
 ## Pattern 4 — Helper / Form Module
 
