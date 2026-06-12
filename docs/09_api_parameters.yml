@@ -11,9 +11,23 @@
 # If a conflict exists between this file and any other document,
 # this file is authoritative for parameter definitions.
 #
+# ----------------------------------------------------------------------------
+# MBOM / SCAD RENDER TARGET CONTEXT
+# ----------------------------------------------------------------------------
+#
+# This document describes parameters at the SCAD render target level.
+# In the MBML/MBOM workflow, parameters are typed using the canonical MBOM
+# type system defined in 05_types_and_mapping.md. The mbom_type field on
+# each parameter references the canonical MBOM type. The SCAD compiler
+# serializes MBOM values to SCAD format following the rules in
+# 05_types_and_mapping.md.
+#
+# Parameters without an mbom_type field use primitive types (Boolean, Float,
+# Integer, String, Enum) which map directly without special serialization rules.
+#
 # ============================================================================
 
-version: "3.0.2"
+version: "3.0.3"
 
 # ============================================================================
 # GLOBAL RULES
@@ -309,6 +323,7 @@ parameters:
   - name: unitGrid
     group: system
     type: array
+    mbom_type: "UnitGridToMbu"
     format: "[xy_mbu, z_mbu]"
     unit: mbu
     default: [5, 2]
@@ -440,6 +455,7 @@ parameters:
   - name: size
     group: core_geometry
     type: array
+    mbom_type: "Size3D"
     format: "[x, y, z]"
     unit: unitGrid (multiples of a 1x1 plate)
     default: [1, 1, 1]
@@ -458,6 +474,7 @@ parameters:
   - name: sizeMod
     group: core_geometry
     type: array
+    mbom_type: "FaceVector6<FloatUnitGrid>"
     format: "[x-, x+, y-, y+, z-, z+] — per-side modification in unitGrid"
     unit: unitGrid
     default: [0, 0, 0, 0, 0, 0]
@@ -575,6 +592,8 @@ parameters:
   - name: crop
     group: core_geometry
     type: float_or_array
+    mbom_type: "FaceVector6<FloatUnitGrid>"
+    mbom_note: "crop values must be <= 0. SCAD accepts shorthand forms; canonical MBOM is always full FaceVector6."
     format: |
       Float: all 4 sides equal.
       2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
@@ -650,6 +669,7 @@ parameters:
   - name: align
     group: positioning
     type: enum_or_array
+    mbom_type: "AxisXYZ<AlignValue>"
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]
@@ -682,6 +702,7 @@ parameters:
   - name: alignChildren
     group: positioning
     type: enum_or_array
+    mbom_type: "AxisXYZ<AlignValue>"
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]
@@ -706,6 +727,7 @@ parameters:
   - name: offset
     group: positioning
     type: array
+    mbom_type: "AxisXYZ<FloatUnitGrid>"
     format: "[x, y, z]"
     unit: unitGrid
     default: [0, 0, 0]
@@ -718,6 +740,7 @@ parameters:
   - name: rotation
     group: positioning
     type: array
+    mbom_type: "AxisXYZ<FloatDeg>"
     format: "[x, y, z]"
     unit: degrees
     default: [0, 0, 0]
@@ -778,6 +801,7 @@ parameters:
   - name: baseColor
     group: body
     type: color
+    mbom_type: "Color"
     format: "Hex RGB '#ff00ff', Hex RGBA '#ff00ffaa', or RGBA float array [0..1, 0..1, 0..1, 0..1]"
     unit: dimensionless
     default: "#EAC645"
@@ -887,6 +911,7 @@ parameters:
   - name: baseWallGaps
     group: underside
     type: array
+    mbom_type: "WallGapList"
     format: |
       Array of [side, position, length] entries.
       - side: side string ("x-", "x+", "y-", "y+") or int (0-3).
@@ -970,6 +995,8 @@ parameters:
   - name: baseRoundingRadius
     group: rounding
     type: float_or_array
+    mbom_type: "RoundingRadius"
+    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
     format: |
       Float: all corners all axes.
       3-element array [x, y, z]: per axis, all 4 corners.
@@ -983,6 +1010,8 @@ parameters:
   - name: baseCutoutRoundingRadius
     group: rounding
     type: float_or_array
+    mbom_type: "AutoOr<RoundingRadius>"
+    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
     format: "Float (all 4 Z-corners) or 4-element array (each Z-corner individually)"
     unit: unitGrid
     default: "auto"
@@ -1059,6 +1088,7 @@ parameters:
   - name: baseAdjustment
     group: calibration
     type: array
+    mbom_type: "FaceMap<FloatMm>"
     format: |
       Pseudo-map: array of [side, value_mm] pairs.
         [["x-", 0], ["z+", 0.1]]
@@ -1339,6 +1369,7 @@ parameters:
   - name: pillars
     group: pillars
     type: bool_or_array
+    mbom_type: "SelectiveGrid<Boolean>"
     format: |
       Boolean: true (all on) or false (all off).
       Selective array: [default_bool, [x1,y1,x2,y2,bool], ...]
@@ -1459,6 +1490,7 @@ parameters:
   - name: holeX
     group: technic_holes_x
     type: bool_or_array
+    mbom_type: "SelectiveGrid<BooleanOr<HoleType>>"
     format: |
       Boolean or selective array (same format as pillars/studs).
       Last value in selective array can be "pin"|"axle"|true|false.
@@ -1513,6 +1545,7 @@ parameters:
   - name: holeXYZDiameter
     group: technic_holes
     type: float_or_auto_or_array
+    mbom_type: "AutoOr<AxisXYZ<FloatMbu>>"
     format: |
       "auto": automatically calculated for all axes.
       Number: applies to x, y, and z equally.
@@ -1630,6 +1663,7 @@ parameters:
   - name: holeXYGridOffsetZ
     group: technic_holes
     type: float_or_array
+    mbom_type: "AxisXY<FloatMbu>"
     format: |
       Number: applies to both x and y holes equally.
       2-element array [x, y]: first for x holes, second for y holes.
@@ -1766,6 +1800,7 @@ parameters:
   - name: holeY
     group: technic_holes_y
     type: bool_or_array
+    mbom_type: "SelectiveGrid<BooleanOr<HoleType>>"
     format: |
       Boolean or selective array (same format as pillars/studs).
       Last value in selective array can be "pin"|"axle"|true|false.
@@ -1828,6 +1863,7 @@ parameters:
   - name: holeZ
     group: technic_holes_z
     type: bool_or_array
+    mbom_type: "SelectiveGrid<BooleanOr<HoleType>>"
     format: |
       Boolean or selective array (same format as pillars/studs).
       Last value in selective array can be "pin"|"axle"|true|false.
@@ -1924,6 +1960,7 @@ parameters:
   - name: studs
     group: studs
     type: bool_or_array
+    mbom_type: "SelectiveGrid<BooleanOr<StudType>>"
     format: |
       Boolean or selective array (same format as pillars).
       Last value in selective array can be "hollow"|"solid"|true|false.
@@ -1968,6 +2005,7 @@ parameters:
   - name: studPadding
     group: studs
     type: float_or_array
+    mbom_type: "PerSide4<FloatUnitGrid>"
     format: |
       Float: all 4 sides equal.
       2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
@@ -2227,6 +2265,8 @@ parameters:
   - name: tongueRoundingRadius
     group: tongue_groove
     type: float_or_auto
+    mbom_type: "AutoOr<RoundingRadius>"
+    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
     unit: unitGrid
     default: "auto"
     ai_usage: rarely
@@ -2456,6 +2496,8 @@ parameters:
   - name: recessRoundingRadius
     group: recess
     type: float_or_auto
+    mbom_type: "AutoOr<RoundingRadius>"
+    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
     unit: unitGrid
     default: "auto"
     ai_usage: rarely
@@ -2492,6 +2534,7 @@ parameters:
   - name: recessWallThickness
     group: recess
     type: float_or_array
+    mbom_type: "PerSide4<FloatUnitGrid>"
     format: |
       Float: all 4 sides equal.
       2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
@@ -2524,6 +2567,7 @@ parameters:
   - name: recessStudPadding
     group: recess
     type: float_or_array
+    mbom_type: "PerSide4<FloatUnitGrid>"
     format: |
       Float: all 4 sides equal.
       2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
@@ -2573,6 +2617,7 @@ parameters:
   - name: recessWallGaps
     group: recess
     type: array
+    mbom_type: "WallGapList"
     format: |
       Short form — single side, full opening:
         Integer:      recessWallGaps = 0  (side 0 fully open)
@@ -2947,6 +2992,7 @@ parameters:
   - name: connectors
     group: connectors
     type: bool_or_array
+    mbom_type: "FalseOr<ConnectorList>"
     format: |
       false: no connectors.
       Array of connector definition arrays:
@@ -3093,6 +3139,7 @@ parameters:
   - name: screwHoles
     group: screw_holes
     type: array
+    mbom_type: "ScrewHoleList"
     format: |
       Array of hole definition arrays:
         [ [face, position, diameter?, depth?, insetThickness?, insetDepth?], ... ]
