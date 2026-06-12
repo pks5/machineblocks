@@ -1,10 +1,16 @@
 # MachineBlocks — Decision System
 
-version: 3.0.2
+version: 3.0.3
 
 ## Purpose of this Document
 
 This document defines the decision framework the AI must use when working with MachineBlocks. It constrains and guides AI behavior for generating valid block modules, making consistent architectural decisions, and respecting physical constraints.
+
+---
+
+## SCAD Renderer Context
+
+This document defines the decision framework for direct SCAD generation — either manually or via AI. In the MBML/MBOM workflow, these decisions are made by the MBOM compiler; direct SCAD authoring is a legacy and advanced path. The decision rules and patterns described here remain valid for direct SCAD generation. The conceptual layers — semantic intent, pattern selection, parameter realization — are structurally similar to how MBML composition works, but MBML authoring is a separate context and outside the scope of this document. What is unambiguously legacy in the MBML world is custom SCAD block modules containing hand-authored SCAD geometry code.
 
 ---
 

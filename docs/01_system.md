@@ -1,12 +1,58 @@
 # MachineBlocks — System
 
-version: 3.0.2
+version: 3.0.3
 
 ## Purpose
 
-MachineBlocks is an OpenSCAD-based system for generating parametric, LEGO-compatible 3D blocks. Its primary use case is 3D printing, but it can also be used for general 3D modeling (e.g. Unity or CAD workflows).
+MachineBlocks is a parametric system for generating LEGO-compatible 3D blocks, primarily for 3D printing but also applicable to general 3D modeling workflows (e.g. Unity or CAD).
+
+This documentation describes the MachineBlocks V3 SCAD Library — the reference SCAD Render Target of the MachineBlocks ecosystem. OpenSCAD is not the canonical representation of blocks; it is the render target that produces STL and 3MF output for 3D printing. The canonical representation is MBOM (MachineBlocks Object Model), which is compiled from MBML (MachineBlocks Markup Language) source files.
+
+Generating SCAD files directly — either manually or via AI — remains fully supported and is the current primary workflow. It is expected to become the exception as the MBML/MBOM toolchain matures.
 
 The system is designed as a foundation for generating real-world machines composed of modular, printable blocks. The MachineBlocks Online Editor allows users to store, publish, share, remix blocks, generate sets, and build functional electronic devices composed of blocks containing electronic components.
+
+---
+
+## Architecture & Ecosystem
+
+MachineBlocks follows a layered architecture:
+
+```text
+MBML (MachineBlocks Markup Language)
+  ↓
+MBOM (MachineBlocks Object Model)
+  ↓
+SCAD Render Target  ←  this documentation
+  ↓
+STL / 3MF
+```
+
+**MBML** is a declarative markup language for describing blocks, sets, and devices. It is the authoring format — the equivalent of HTML or SAPUI5 XML views. Blocks are described as typed, parameterized elements without any knowledge of SCAD.
+
+**MBOM** is the renderer-independent object model. It is the canonical representation of all block data. The MBML compiler parses MBML and produces MBOM. MBOM defines all parameter types canonically — for type definitions and MBOM-to-SCAD mappings see `05_types_and_mapping.md`.
+
+**SCAD** is the render target. The SCAD compiler serializes MBOM into OpenSCAD files, which are then rendered to STL or 3MF by OpenSCAD. This documentation is the complete specification of the SCAD render target — it defines all parameters, their SCAD formats, and their MBOM mappings.
+
+**The Editor** is built entirely on MBOM. It has no knowledge of SCAD except for triggering the render pipeline. Block authoring, validation, snapping, layout, and all editor logic operate on MBOM exclusively.
+
+**Direct SCAD generation** — writing or AI-generating `.scad` Block Files directly — is fully supported and is the current primary workflow for existing users. It bypasses MBML and MBOM entirely. This is expected to become a legacy/advanced path as the MBML toolchain matures.
+
+---
+
+## Documentation Status Convention
+
+This documentation covers a system that is actively being finalized. The V3 SCAD library is approximately 90–95% complete. The MBOM type system is defined but not yet fully validated against the SCAD implementation. Discrepancies between SCAD and MBOM are expected during this phase and are tracked explicitly.
+
+Each parameter and mapping may carry one of three status annotations:
+
+**Stable** — Implemented, tested, and MBOM mapping complete. Behavior is reliable.
+
+**Draft** — V3 definition exists. Implementation or MBOM mapping is incomplete or untested. May change.
+
+**WIP** — Known gap. SCAD implementation and MBOM target are currently misaligned. An explicit note describes what is missing or different. The `roundingRadius` parameters are the primary example: the MBOM target format is defined in `05_types_and_mapping.md`, but the current SCAD implementation still reflects V2 behavior.
+
+Status annotations apply independently to the SCAD implementation and to the MBOM mapping. A parameter can be `Stable` on the SCAD side and `Draft` on the MBOM mapping side.
 
 ---
 
@@ -207,6 +253,8 @@ Block Files are typically developed on a local PC using OpenSCAD Desktop for pre
 ### Online Editor
 
 The Online Editor stores blocks, manages config profiles, and provides rendering. Block Files uploaded to the Online Editor are functionally identical to local files with one exception: import paths are automatically converted during upload.
+
+In the MBML/MBOM workflow, the Online Editor will accept MBML source files instead of SCAD Block Files. SCAD is then generated internally by the compiler and is not exposed to the user.
 
 ### Path Conversion
 
@@ -678,18 +726,21 @@ This rule applies whenever these three variable names appear in a legacy file wi
 
 ## Documentation Architecture
 
-This documentation is a formal, machine-readable specification of the system. Its purpose is to enable deterministic generation of valid block modules, correct interpretation of parameters and rules, and automated construction of complex structures.
+This documentation is a formal, machine-readable specification of the system. Its purpose is to enable deterministic generation of valid block modules, correct interpretation of parameters and rules, automated construction of complex structures, and implementation of the MBOM-to-SCAD compiler.
 
 The documentation consists of:
 
 ```text
-01_system.md                      — this document (architecture, units, execution model, terminology)
-02_geometry_and_transformation.md  — concepts for geometry, positioning, and structure
+01_system.md                       — this document (architecture, ecosystem, units, execution model, terminology)
+02_geometry_and_transformation.md  — geometry concepts, positioning, and structure
 03_patterns_and_examples.md        — block file structure, module patterns, and concrete examples
-04_decision_system.md              — AI decision framework and rules
-09_api_parameters.yml        — Single Source of Truth for all parameter definitions
+04_decision_system.md              — AI decision framework for direct SCAD generation
+05_types_and_mapping.md            — MBOM type system and MBOM-to-SCAD serialization mappings
+09_api_parameters.yml              — single source of truth for all parameter definitions
 10_set_example.scad                — reference implementation of the Set file format
 ```
+
+`05_types_and_mapping.md` defines the canonical MBOM types for all parameters and the serialization rules for mapping MBOM values to SCAD format. It is the interface specification between the MBOM compiler and the SCAD render target. Parameter entries in `09_api_parameters.yml` reference their MBOM type from this document.
 
 The YAML file is authoritative for all parameter definitions (types, defaults, formats, constraints). The Markdown documents explain concepts, relationships, and decision logic — they do not duplicate parameter definitions.
 
@@ -703,6 +754,8 @@ Example: The MartianMicro library (`mm`) defines enclosure-specific patterns and
 
 ## System Role
 
-MachineBlocks is not just a library. It is a parametric geometry system, a generation system for block modules, and a foundation for automated hardware creation.
+MachineBlocks is a parametric geometry system, a generation system for block modules, and a foundation for automated hardware creation.
 
-The MachineBlocks editor acts as both human interface and AI interface. It generates block modules, uses them as executable artifacts, and functions as a 3D parameter interface.
+In the MBML/MBOM workflow, the MachineBlocks editor operates exclusively on MBOM. It functions as both human interface and AI interface for block authoring, validation, and layout. SCAD is invoked only for rendering — the editor has no knowledge of SCAD syntax or parameters.
+
+In the direct SCAD workflow, the editor accepts hand-authored or AI-generated Block Files. This remains the current primary workflow and is fully supported.
