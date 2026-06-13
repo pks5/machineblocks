@@ -1,9 +1,9 @@
 /**
  * MachineBlocks.com Block File
  *
- * Name: Standard Brick
- * Filename: standard.scad
- * Package: mb.bricks.standard
+ * Name: MachineBlock Standard Brick
+ * Filename: Standard.scad
+ * FQN: com.machineblocks.bricks.Standard
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -18,9 +18,9 @@
  * Imports
  */
 // MachineBlocks Library
-use <../../../lib/block.scad>;
+use <../../../../lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -168,7 +168,7 @@ recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 /*
  * Main Module Call
  */
-mb_block__mb__bricks__standard(
+mb_block__com__machineblocks__bricks__Standard(
     config = mb_config,
     settings = [
         ["size", size],
@@ -223,7 +223,7 @@ mb_block__mb__bricks__standard(
 /*
  * Main Module Definition
  */
-module mb_block__mb__bricks__standard(config = undef, settings = undef){
+module mb_block__com__machineblocks__bricks__Standard(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings

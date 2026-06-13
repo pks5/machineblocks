@@ -1,6 +1,6 @@
 # MachineBlocks — Patterns and Examples
 
-version: 3.0.3
+version: 3.0.4
 
 ## Purpose of this Document
 
@@ -43,15 +43,15 @@ Every Block File follows a mandatory structure. The sections must appear in this
 
 ## Mandatory Header
 
-The header comment is mandatory. The first line inside the header must be exactly `MachineBlocks.com Block File`. The following fields are required: `Name:`, `Filename:`, `Package:`. Copyright, license, and visit lines are optional.
+The header comment is mandatory. The first line inside the header must be exactly `MachineBlocks.com Block File`. The following fields are required: `Name:`, `Filename:`, `FQN:`. Copyright, license, and visit lines are optional.
 
 ```scad
 /**
  * MachineBlocks.com Block File
  *
  * Name: My Block
- * Filename: mb_block__my__package__my_block.scad
- * Package: my.package.my_block
+ * Filename: MyBlock.scad
+ * FQN: my.package.MyBlock
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -70,8 +70,8 @@ The header comment is mandatory. The first line inside the header must be exactl
  * MachineBlocks.com Block File
  *
  * Name: My Block
- * Filename: mb_block__my__package__my_block.scad
- * Package: my.package.my_block
+ * Filename: MyBlock.scad
+ * FQN: my.package.MyBlock
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -86,9 +86,9 @@ The header comment is mandatory. The first line inside the header must be exactl
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -114,7 +114,7 @@ baseColor = "#EAC645";
 /*
  * Main Module Call
  */
-mb_block__my__package__my_block(
+mb_block__my__package__MyBlock(
     config = mb_config,
     settings = [
         ["size", size],
@@ -126,7 +126,7 @@ mb_block__my__package__my_block(
 /*
  * Main Module Definition
  */
-module mb_block__my__package__my_block(config = undef, settings = undef){
+module mb_block__my__package__MyBlock(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
@@ -143,13 +143,13 @@ Every Block File must have two imports.
 **Library import** using `use` (loads only module definitions):
 
 ```scad
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 ```
 
 **Config import** using `include` (executes the file, making `mb_config` available):
 
 ```scad
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 ```
 
 Paths are relative to the block file's location. The path depth depends on how many package segments the block has. The AI calculates paths based on the assumption that `machineblocks/` is a sibling library. See `01_system.md` for the library structure and path rules.
@@ -157,8 +157,8 @@ Paths are relative to the block file's location. The path depth depends on how m
 The Online Editor converts paths on upload:
 
 ```text
-use <../../../../machineblocks/lib/block.scad>  →  use <machineblocks/lib/block.scad>
-include <../../../config/mb_config.scad>        →  include </mb_config.scad>
+use <../../../../../machineblocks/lib/block.scad>  →  use <machineblocks/lib/block.scad>
+include <../../../../config/mb_config.scad>        →  include </mb_config.scad>
 ```
 
 ---
@@ -181,7 +181,7 @@ mb_block__my__package__my_block(
 Inside the module definition, the `config` parameter (not `mb_config`) is passed to all `mb_block()` calls and all `mb_block__*()` sub-module calls:
 
 ```scad
-module mb_block__my__package__my_block(config = undef, settings = undef){
+module mb_block__my__package__MyBlock(config = undef, settings = undef){
     mb_block(
         config = config,  // always the config parameter, never mb_config
         settings = [...]
@@ -315,8 +315,8 @@ A pass-through wrapper around `mb_block()`. No own logic, no parameter mapping �
  * MachineBlocks.com Block File
  *
  * Name: My Primitive Wrapper
- * Filename: mb_block__mm__examples__primitive_wrapper.scad
- * Package: mm.examples.primitive_wrapper
+ * Filename: PrimitiveWrapper.scad
+ * FQN: com.martianmicro.examples.PrimitiveWrapper
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -331,9 +331,9 @@ A pass-through wrapper around `mb_block()`. No own logic, no parameter mapping �
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -354,7 +354,7 @@ studs = true;
 /*
  * Main Module Call
  */
-mb_block__mm__examples__primitive_wrapper(
+mb_block__com__martianmicro__examples__PrimitiveWrapper(
     config = mb_config,
     settings = [
         ["size", size],
@@ -367,7 +367,7 @@ mb_block__mm__examples__primitive_wrapper(
 /*
  * Main Module Definition
  */
-module mb_block__mm__examples__primitive_wrapper(config = undef, settings = undef){
+module mb_block__com__martianmicro__examples__PrimitiveWrapper(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
@@ -378,18 +378,18 @@ module mb_block__mm__examples__primitive_wrapper(config = undef, settings = unde
  * Optional Sub Modules (not used in this example)
  * Sub modules are independent mb_block modules with the same (config, settings) signature.
  * Sub module names must NOT use 'func' or 'help'.
- * Package: mm.examples.primitive_wrapper.sub_module
+ * FQN: com.martianmicro.examples.PrimitiveWrapper.SubModule
  */
 
 /*
  * Optional Helper Modules (not used in this example)
  * Helper modules may have any signature.
- * Package: mm.examples.primitive_wrapper.help.helper_name
+ * FQN: com.martianmicro.examples.PrimitiveWrapper.help.helperName
  */
 
 /*
  * Optional Global Functions (not used in this example)
- * Package: mm.examples.primitive_wrapper.func.func_name
+ * FQN: com.martianmicro.examples.PrimitiveWrapper.func.funcName
  */
 ```
 
@@ -404,8 +404,8 @@ Own customizer variables, own parameter mapping, optional logic inside the modul
  * MachineBlocks.com Block File
  *
  * Name: Simple Round Brick
- * Filename: mb_block__mm__examples__simple_round_brick.scad
- * Package: mm.examples.simple_round_brick
+ * Filename: SimpleRoundBrick.scad
+ * FQN: com.martianmicro.examples.SimpleRoundBrick
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -420,9 +420,9 @@ Own customizer variables, own parameter mapping, optional logic inside the modul
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -437,7 +437,7 @@ roundingRadiusZ = 0.5; // [0:0.25:2]
 /*
  * Main Module Call
  */
-mb_block__mm__examples__simple_round_brick(
+mb_block__com__martianmicro__examples__SimpleRoundBrick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -448,7 +448,7 @@ mb_block__mm__examples__simple_round_brick(
 /*
  * Main Module Definition
  */
-module mb_block__mm__examples__simple_round_brick(config = undef, settings = undef){
+module mb_block__com__martianmicro__examples__SimpleRoundBrick(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings, [4, 2, 3]);
     // Custom Parameters
@@ -464,10 +464,10 @@ module mb_block__mm__examples__simple_round_brick(config = undef, settings = und
 }
 
 /*
- * Sub Module "alt"
- * mm.examples.simple_round_brick.alt
+ * Sub Module "Alt"
+ * com.martianmicro.examples.SimpleRoundBrick.Alt
  */
-module mb_block__mm__examples__simple_round_brick__alt(config = undef, settings = undef){
+module mb_block__com__martianmicro__examples__SimpleRoundBrick__Alt(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings, [4, 2, 3]);
     // Custom Parameters
@@ -490,8 +490,8 @@ module mb_block__mm__examples__simple_round_brick__alt(config = undef, settings 
  * MachineBlocks.com Block File
  *
  * Name: Simple Text Plate
- * Filename: mb_block__mm__examples__simple_text_plate.scad
- * Package: mm.examples.simple_text_plate
+ * Filename: SimpleTextPlate.scad
+ * FQN: com.martianmicro.examples.SimpleTextPlate
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -506,9 +506,9 @@ module mb_block__mm__examples__simple_round_brick__alt(config = undef, settings 
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -523,7 +523,7 @@ speedMph = 50; // [0:1:160]
 /*
  * Main Module Call
  */
-mb_block__mm__examples__simple_text_plate(
+mb_block__com__martianmicro__examples__SimpleTextPlate(
     config = mb_config,
     settings = [
         ["sizeMode", sizeMode],
@@ -534,19 +534,19 @@ mb_block__mm__examples__simple_text_plate(
 /*
  * Main Module Definition
  */
-module mb_block__mm__examples__simple_text_plate(config = undef, settings = undef){
+module mb_block__com__martianmicro__examples__SimpleTextPlate(config = undef, settings = undef){
     // Custom Parameters
     sizeMode = mb_param(config, settings, "sizeMode", "small");
     speedMph = mb_param(config, settings, "speedMph", 0);
 
-    mb_block__mm__examples__simple_text_plate__help__doit(10);
+    mb_block__com__martianmicro__examples__SimpleTextPlate__help__doIt(10);
 
     mb_block(
         config = config,
         settings = [
             ["size", sizeMode == "small" ? [4, 2, 1] : [8, 4, 1]],
             ["studs", false],
-            ["text", str(mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(speedMph))],
+            ["text", str(mb_block__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(speedMph))],
             ["textFace", 5],
             ["textSize", 12]
         ]
@@ -554,20 +554,20 @@ module mb_block__mm__examples__simple_text_plate(config = undef, settings = unde
 }
 
 /*
- * Helper Module "doit"
- * mm.examples.simple_text_plate.help.doit
+ * Helper Module "doIt"
+ * com.martianmicro.examples.SimpleTextPlate.help.doIt
  */
-module mb_block__mm__examples__simple_text_plate__help__doit(my_var = 5){
+module mb_block__com__martianmicro__examples__SimpleTextPlate__help__doIt(my_var = 5){
     echo(concat("My var: ", my_var));
 }
 
 /**
- * Global function "mph_to_kmh"
- * mm.examples.simple_text_plate.func.mph_to_kmh
+ * Global function "mphToKmh"
+ * com.martianmicro.examples.SimpleTextPlate.func.mphToKmh
  *
  * Converts MPH to KMH
  */
-function mb_block__mm__examples__simple_text_plate__func__mph_to_kmh(mph) = 1.6 * mph;
+function mb_block__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(mph) = 1.6 * mph;
 ```
 
 ## Pattern 3 — Composite Block
@@ -581,8 +581,8 @@ Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = fal
  * MachineBlocks.com Block File
  *
  * Name: AnyClosure Wall
- * Filename: mb_block__mm__anyclosure__wall.scad
- * Package: mm.anyclosure.wall
+ * Filename: Wall.scad
+ * FQN: com.martianmicro.anyclosure.Wall
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -593,9 +593,9 @@ Multiple `mb_block()` calls inside a wrapper block. The wrapper uses `base = fal
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -619,7 +619,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__mm__anyclosure__wall(
+mb_block__com__martianmicro__anyclosure__Wall(
     config = mb_config,
     settings = [
         ["size", size],
@@ -633,9 +633,9 @@ mb_block__mm__anyclosure__wall(
 /*
  * Main Module Definition
  */
-module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
+module mb_block__com__martianmicro__anyclosure__Wall(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
-    blockId = mb_param_id(config, settings, "mm.anyclosure.wall");
+    blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.Wall");
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
     direction = mb_param_direction(config, settings);
@@ -710,8 +710,8 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
  * MachineBlocks.com Block File
  *
  * Name: AnyClosure Corner
- * Filename: mb_block__mm__anyclosure__corner.scad
- * Package: mm.anyclosure.corner
+ * Filename: Corner.scad
+ * FQN: com.martianmicro.anyclosure.Corner
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -722,9 +722,9 @@ module mb_block__mm__anyclosure__wall(config = undef, settings = undef){
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -751,7 +751,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__mm__anyclosure__corner(
+mb_block__com__martianmicro__anyclosure__Corner(
     config = mb_config,
     settings = [
         ["size", size],
@@ -766,9 +766,9 @@ mb_block__mm__anyclosure__corner(
 /*
  * Main Module Definition
  */
-module mb_block__mm__anyclosure__corner(config = undef, settings = undef){
+module mb_block__com__martianmicro__anyclosure__Corner(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
-    blockId = mb_param_id(config, settings, "mm.anyclosure.corner");
+    blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.Corner");
     size = mb_param_size(config, settings, [4, 4, 9]);
     offset = mb_param_offset(config, settings);
     direction = mb_param_direction(config, settings);
@@ -901,8 +901,8 @@ Demonstrates `mb_parts_total_size()`, passing `assembly` through a tree of compo
  * MachineBlocks.com Block File
  *
  * Name: AnyClosure Combined Wall
- * Filename: mb_block__mm__anyclosure__combined_wall.scad
- * Package: mm.anyclosure.combined_wall
+ * Filename: CombinedWall.scad
+ * FQN: com.martianmicro.anyclosure.CombinedWall
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -913,12 +913,12 @@ Demonstrates `mb_parts_total_size()`, passing `assembly` through a tree of compo
  * Imports
  */
 // MachineBlocks Library
-use <../../../../machineblocks/lib/block.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 // Block Parts
-use <../corner/mb_block__mm__anyclosure__corner.scad>;
-use <../wall/mb_block__mm__anyclosure__wall.scad>;
+use <./Corner.scad>;
+use <./Wall.scad>;
 
 /*
  * Customization
@@ -936,7 +936,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__mm__anyclosure__combined_wall(
+mb_block__com__martianmicro__anyclosure__CombinedWall(
     config = mb_config,
     settings = [
         ["direction", direction],
@@ -949,9 +949,9 @@ mb_block__mm__anyclosure__combined_wall(
 /*
  * Main Module Definition
  */
-module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef){
+module mb_block__com__martianmicro__anyclosure__CombinedWall(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
-    blockId = mb_param_id(config, settings, "mm.anyclosure.combined_wall");
+    blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.CombinedWall");
     direction = mb_param_direction(config, settings);
     align = mb_param_align(config, settings);
     offset = mb_param_offset(config, settings);
@@ -986,7 +986,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
         //Part 1: Corner Front Left
         part_corner_fl = "corner_fl";
 
-        mb_block__mm__anyclosure__corner(
+        mb_block__com__martianmicro__anyclosure__Corner(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_corner_fl)],
@@ -1002,7 +1002,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
         //Part 2: Wall Left
         part_wall_l = "wall_l";
 
-        mb_block__mm__anyclosure__wall(
+        mb_block__com__martianmicro__anyclosure__Wall(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_wall_l)],
@@ -1018,7 +1018,7 @@ module mb_block__mm__anyclosure__combined_wall(config = undef, settings = undef)
         //Part 3: Corner Rear Left
         part_corner_rr = "corner_rr";
 
-        mb_block__mm__anyclosure__corner(
+        mb_block__com__martianmicro__anyclosure__Corner(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_corner_rr)],

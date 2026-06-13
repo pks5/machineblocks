@@ -1,6 +1,6 @@
 # MachineBlocks — Decision System
 
-version: 3.0.3
+version: 3.0.4
 
 ## Purpose of this Document
 
@@ -185,13 +185,13 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 9 — Use mb_param_*() for native parameters.** Never access settings arrays directly. Always use the dedicated getter for native parameters and `mb_param()` for custom parameters.
 
-**Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{block_name}`. Always end the response with the output summary (Package, Module, Filename, Location).
+**Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{ClassName}`. Always end the response with the output summary (Package, Module, Filename, Location).
 
-**Rule 11 — Block file naming and location (V3).** The filename is only the last package segment:
-- Package `mb.bricks.standard` → filename `standard.scad`
-- Module name: `mb_block__mb__bricks__standard` (all segments, unchanged)
-- Location: `machineblocks/blocks/{segments after library prefix}/{last_segment}/{last_segment}.scad`
-- Example: `mb.bricks.standard` → `machineblocks/blocks/bricks/standard/standard.scad`
+**Rule 11 — Block file naming and location (V3).** The filename is the class name (PascalCase) as a `.scad` file. The class is placed in a folder named after the parent package segment. The module name uses all FQN segments with `__` separators:
+- FQN `com.machineblocks.bricks.Standard` → filename `Standard.scad`
+- Module name: `mb_block__com__machineblocks__bricks__Standard`
+- Location: `scad/com/machineblocks/bricks/Standard.scad`
+- FQN `com.martianmicro.anyclosure.Corner` → `scad/com/martianmicro/anyclosure/Corner.scad`
 
 **Rule 12 — Side references (V3).** Always use string side identifiers ("x-", "x+", "y-", "y+", "z-", "z+") in generated code. Integer indices (0-5) are valid but not preferred.
 

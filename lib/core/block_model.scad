@@ -1349,7 +1349,7 @@ function mb_block_pos_to_offset(block_obj, pos) =
  /*
 * Grid
 */
-function in_grid_area(a, b, rect) = (a >= rect[0]) && (a <= rect[1]) && (b >= rect[2]) && (b <= rect[3]); //[xy-, xy+, yz-, yz+]
+function in_grid_area(a, b, rect) = (a >= rect[0]) && (a <= rect[2]) && (b >= rect[1]) && (b <= rect[3]); //[xy-, xy+, yz-, yz+]
 
 function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) = 
     (is_bool(items) 

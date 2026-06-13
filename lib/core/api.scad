@@ -525,15 +525,15 @@ function _mb_vec3_max(a, b) = [
 // entry = [size, direction, offset]
 function _mb_part_min(entry) =
     let(
-        offset = entry[2]
+        offset = entry[3]
     )
     offset;
 
 function _mb_part_max(entry) =
     let(
-        size = entry[0],
-        direction = entry[1],
-        offset = entry[2],
+        size = entry[1],
+        direction = entry[2],
+        offset = entry[3],
         size_resolved = mb_size_resolve(size, mb_direction_to_int(direction))
     )
     [

@@ -1,6 +1,6 @@
 # MachineBlocks — System
 
-version: 3.0.3
+version: 3.0.4
 
 ## Purpose
 
@@ -69,7 +69,7 @@ MachineBlocks follows a single-module architecture. There is one core module —
 An OpenSCAD module that uses `mb_block()` directly or indirectly. Follows the naming convention `mb_block__<package>` where package segments are separated by double underscores.
 
 ```text
-module mb_block__my__package__wall(config = undef, settings = undef){ ... }
+module mb_block__my__package__Wall(config = undef, settings = undef){ ... }
 ```
 
 The Block Module is the reusable code unit. It always has the signature `(config, settings)`.
@@ -79,7 +79,7 @@ The Block Module is the reusable code unit. It always has the signature `(config
 An OpenSCAD `.scad` file that contains a Block Module plus a customizer section with variable definitions and the module call. The file is named after the module it contains.
 
 ```text
-mb_block__my__package__wall.scad
+Wall.scad
 ```
 
 A Block File is always self-contained and executable — it works standalone in OpenSCAD Desktop and in the MachineBlocks Online Editor. When imported via `use <file.scad>`, only the module definition is loaded; the customizer section is ignored.
@@ -261,10 +261,10 @@ In the MBML/MBOM workflow, the Online Editor will accept MBML source files inste
 Local development uses relative paths that depend on the project structure. The Online Editor uses fixed virtual paths.
 
 ```text
-Local:   use <../../../../machineblocks/lib/block.scad>;
+Local:   use <../../../../../machineblocks/lib/block.scad>;
 Online:  use <machineblocks/lib/block.scad>;
 
-Local:   include <../../../config/mb_config.scad>;
+Local:   include <../../../../config/mb_config.scad>;
 Online:  include </mb_config.scad>;
 ```
 
@@ -434,17 +434,17 @@ They share the same signature `(config, settings)`, map parameters to `mb_block`
 
 Sub-modules (same signature as main module):
 ```text
-mb_block__<package>__<subname>
+mb_block__<package>__<SubName>
 ```
 
 Helper modules (own arbitrary signature, uses subpackage `help`):
 ```text
-mb_block__<package>__help__<helpername>
+mb_block__<package>__help__<helperName>
 ```
 
 Global functions (uses subpackage `func`):
 ```text
-mb_block__<package>__func__<funcname>
+mb_block__<package>__func__<funcName>
 ```
 
 The names `func` and `help` are reserved and cannot be used as regular sub-module names.
@@ -468,7 +468,7 @@ A MachineBlocks library has the following directory structure:
 
 ```text
 {lib}/
-    blocks/          ← required
+    scad/            ← required
         user/        ← AI default target for generated blocks
     config/          ← optional
     lib/             ← optional
@@ -476,25 +476,31 @@ A MachineBlocks library has the following directory structure:
 
 ### Root Package
 
-Every library has a root package, which may consist of multiple segments. Examples: `mb` (MachineBlocks), `mm` (MartianMicro), `my.package.abc`.
+Every library has a root package, which may consist of multiple segments. Examples: `com.machineblocks` (MachineBlocks), `com.martianmicro` (MartianMicro).
 
 ### Package to Path Mapping
 
-All package segments after the root package correspond to subdirectories under `/blocks/`:
+All package segments after the root package correspond to subdirectories under `/scad/`. The last segment is the class name (PascalCase) and maps to both the folder name and the filename:
 
 ```text
-Package:  mm.examples.primitive_wrapper
-Root:     mm
-Path:     /blocks/examples/primitive_wrapper/
-File:     mb_block__mm__examples__primitive_wrapper.scad
+Package:  com.martianmicro.anyclosure.Wall
+Root:     com.martianmicro
+Path:     scad/com/martianmicro/anyclosure/
+File:     Wall.scad
 ```
 
-### The /blocks/user/ Folder
-
-`/blocks/user/` is the default target folder for AI-generated blocks when the user does not specify an explicit package. The generated block's package is:
+The module name uses all package segments with `__` separators, and the class segment is PascalCase:
 
 ```text
-{root_package}.user.{block_name}
+Module:   mb_block__com__martianmicro__anyclosure__Wall
+```
+
+### The /scad/user/ Folder
+
+`/scad/user/` is the default target folder for AI-generated blocks when the user does not specify an explicit package. The generated block's package is:
+
+```text
+{root_package}.user.{ClassName}
 ```
 
 This folder is in `.gitignore` and can be freely modified by the user.
@@ -504,10 +510,10 @@ This folder is in `.gitignore` and can be freely modified by the user.
 When generating a block in chat (without an explicit package), the AI must always end its response with a summary:
 
 ```text
-Package:   mm.user.my_block
-Module:    mb_block__mm__user__my_block
-Filename:  mb_block__mm__user__my_block.scad
-Location:  mylib/blocks/user/my_block/mb_block__mm__user__my_block.scad
+Package:   com.martianmicro.user.MyBlock
+Module:    mb_block__com__martianmicro__user__MyBlock
+Filename:  MyBlock.scad
+Location:  mylib/scad/com/martianmicro/user/MyBlock.scad
 ```
 
 ### Path Assumptions
@@ -517,21 +523,22 @@ The AI assumes `machineblocks/` is always a sibling to other libraries:
 ```text
 mylib/
     config/
-    blocks/
-        user/
-            my_block/
-                mb_block__mylib__user__my_block.scad
+    scad/
+        com/
+            martianmicro/
+                user/
+                    MyBlock.scad
 machineblocks/
     config/
-    blocks/
+    scad/
     lib/
 ```
 
-Relative paths from a block file in `mylib/blocks/user/my_block/`:
+Relative paths from a block file in `mylib/scad/com/martianmicro/user/`:
 
 ```text
-use <../../../../machineblocks/lib/block.scad>;
-include <../../../config/mb_config.scad>;
+use <../../../../../machineblocks/lib/block.scad>;
+include <../../../../config/mb_config.scad>;
 ```
 
 Paths adjust accordingly for deeper package nesting.
@@ -622,7 +629,7 @@ Legacy files use direct OpenSCAD module parameters instead of the `config`/`sett
 
 **Step 1 — Create Block File Structure**
 
-Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<name>`.
+Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<ClassName>` where the class name is PascalCase.
 
 **Step 2 — Replace machineblock() with mb_block()**
 
@@ -666,7 +673,7 @@ Variables that are only computed and used internally by the module do NOT belong
 tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * mb_unit_grid()[0] * mb_unit_mbu();
 
 /* CORRECT — internal computation inside the module */
-module mb_block__x__y__z(config = undef, settings = undef){
+module mb_block__x__y__Z(config = undef, settings = undef){
     tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * unitGrid[0] * unitMbu;
     ...
 }
@@ -680,7 +687,7 @@ Native parameter getters (`mb_param_*()`) must NEVER be called in the Hidden Sec
 bAdjustment = mb_param_baseAdjustment_default();
 
 /* CORRECT — getter called inside the module body */
-module mb_block__x__y__z(config = undef, settings = undef){
+module mb_block__x__y__Z(config = undef, settings = undef){
     baseAdjustment = mb_param_baseAdjustment(config, settings);
     ...
 }
