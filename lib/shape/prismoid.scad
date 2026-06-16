@@ -2,6 +2,7 @@ use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
 use <ellioct.scad>;
+use <loft_poly.scad>;
 
 /*
 * --------------------
@@ -144,7 +145,7 @@ module mb_rounding_corner(
         precision = precision
     );
 
-    echo (s = s);
+    //echo (s = s);
     max_rad = mb_corner_radius_max_xyz(s);
 
     multmatrix(m = [ 
@@ -446,14 +447,27 @@ function mb_prismoid_min_points(a) =
     || (a[0] != undef && a[4] != undef && a[6] != undef)
     || (a[2] != undef && a[4] != undef && a[6] != undef);
 
-function mb_prismoid_validate(shape) = 
+function mb_prismoid_complexity(shape, static) =
+    static[0][0] != 0 || static[0][1] != 0 ? "complex" :
+    let(
+        rads = [
+            for (i = [0:1])
+                for (j = [0:7])
+                    if(!mb_corner_radius_is_none(shape[i][j][3]))
+                        1
+        ]
+    )
+    len(rads) > 0 ? "complex" : "simple";
+
+
+function mb_prismoid_validate(shape, static) = 
     len(shape) != 2 ? ["invalid_shape", len(shape)] :
     len(shape[0]) != 8 ? ["invalid_plane_length", 0, len(shape[0])] :
     len(shape[1]) != 8 ? ["invalid_plane_length", 1, len(shape[1])] :
     //!mb_prismoid_min_points(shape[0])  ? ["point_missing", 0] :
     //!mb_prismoid_min_points(shape[1])  ? ["point_missing", 1] :
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
-    ["ok"];
+    ["ok", mb_prismoid_complexity(shape, static)];
 
 function mb_prismoid_process(planes, static, skip_validate = false) = 
     let(min_max = mb_min_max_points(planes),
@@ -469,7 +483,7 @@ function mb_prismoid_process(planes, static, skip_validate = false) =
         [sx, sy, sz],                             //size
         [cx, cy, cz],   //center
         static, // static data                            
-        skip_validate ? ["ok"] : mb_prismoid_validate(planes) //validation
+        skip_validate ? ["ok"] : mb_prismoid_validate(planes, static) //validation
     ];
 
 function mb_prismoid_rplane_resolve(v) =
@@ -655,57 +669,66 @@ module mb_prismoid(
         
         color(debug ? "yellow" : color)
         translate(t){
-            hull(){
-                for(i = [0 : 1 : 1]){
-                    plane = mb_prismoid_plane(shape, i);
-                    for(j = [0 : 1 : len(plane) - 1]){
-                        point = mb_point(shape, i, j);
-                        if(point != undef){
+            if(false && shape[3][5][1] == "simple"){
+                echo("SIMPLE");
+                mb_loft_polyhedron([
+                    mb_prismoid_plane(shape, 0),
+                    mb_prismoid_plane(shape, 1)
+                ]);
+            }
+            else{
+                hull(){
+                    for(i = [0 : 1 : 1]){
+                        plane = mb_prismoid_plane(shape, i);
+                        for(j = [0 : 1 : len(plane) - 1]){
+                            point = mb_point(shape, i, j);
+                            if(point != undef){
 
-                            corner = mb_point_corner(shape, i, j);
+                                corner = mb_point_corner(shape, i, j);
 
-                            if(corner != undef){
-                                
-                                rad = mb_point_radius(shape, i, j);
-                                prev_point = mb_prev_point(shape, i, j);
-                                next_point = mb_next_point(shape, i, j);
-                                inv_point = mb_inv_point(shape, i, j);
-                                inv_dis = mb_point_distance(point, inv_point);
+                                if(corner != undef){
+                                    
+                                    rad = mb_point_radius(shape, i, j);
+                                    prev_point = mb_prev_point(shape, i, j);
+                                    next_point = mb_next_point(shape, i, j);
+                                    inv_point = mb_inv_point(shape, i, j);
+                                    inv_dis = mb_point_distance(point, inv_point);
 
-                                slope = [(corner[0] == 0 ? 1 : -1) * (corner[1] < 4 ? 1 : -1) * mb_round_prec(inv_dis[0], 0.001), (corner[0] == 0 ? 1 : -1) * (corner[1] == 0 || corner[1] == 1  || corner[1] == 6 || corner[1] == 7 ? 1 : -1) * mb_round_prec(inv_dis[1], 0.001)];
-                                
-                                socket_point_bottom = mb_socket_point_bottom(point, inv_point, sck, corner, slope);
-                                socket_point_top = mb_socket_point_top(point, inv_point, sck, corner, slope);
+                                    slope = [(corner[0] == 0 ? 1 : -1) * (corner[1] < 4 ? 1 : -1) * mb_round_prec(inv_dis[0], 0.001), (corner[0] == 0 ? 1 : -1) * (corner[1] == 0 || corner[1] == 1  || corner[1] == 6 || corner[1] == 7 ? 1 : -1) * mb_round_prec(inv_dis[1], 0.001)];
+                                    
+                                    socket_point_bottom = mb_socket_point_bottom(point, inv_point, sck, corner, slope);
+                                    socket_point_top = mb_socket_point_top(point, inv_point, sck, corner, slope);
 
-                                angle = mb_corner_angle(corner, prev_point, point, next_point, (socket_point_bottom != undef && socket_point_top != undef) ? inv_point : (socket_point_bottom != undef ? socket_point_bottom : (socket_point_top != undef ? socket_point_top : inv_point)));
+                                    angle = mb_corner_angle(corner, prev_point, point, next_point, (socket_point_bottom != undef && socket_point_top != undef) ? inv_point : (socket_point_bottom != undef ? socket_point_bottom : (socket_point_top != undef ? socket_point_top : inv_point)));
 
-                                if(debug){
-                                    echo(corner = corner, 
-                                        ang = angle, 
-                                        pp = prev_point, 
-                                        p = point, 
-                                        np = next_point, 
-                                        ip = inv_point, 
-                                        inv_dis = inv_dis,
-                                        slope = slope,
-                                        spt = socket_point_top,
-                                        sptb = socket_point_bottom);
+                                    if(debug){
+                                        echo(corner = corner, 
+                                            ang = angle, 
+                                            pp = prev_point, 
+                                            p = point, 
+                                            np = next_point, 
+                                            ip = inv_point, 
+                                            inv_dis = inv_dis,
+                                            slope = slope,
+                                            spt = socket_point_top,
+                                            sptb = socket_point_bottom);
+                                    }
+
+                                    translate(point) 
+                                        mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
+
+                                    if(i == 0 && socket_point_bottom != undef){
+                                        translate(socket_point_bottom) 
+                                            mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                    }
+                                    if(i == 1 && socket_point_top != undef){
+                                        translate(socket_point_top) 
+                                            mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                    }
                                 }
-
-                                translate(point) 
-                                    mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
-
-                                if(i == 0 && socket_point_bottom != undef){
-                                    translate(socket_point_bottom) 
-                                        mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                else{
+                                    echo(str("Could not resolve point: [", i, ", ", j, "]"));
                                 }
-                                if(i == 1 && socket_point_top != undef){
-                                    translate(socket_point_top) 
-                                        mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
-                                }
-                            }
-                            else{
-                                echo(str("Could not resolve point: [", i, ", ", j, "]"));
                             }
                         }
                     }
@@ -766,8 +789,14 @@ mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [10, 20], radius = 8, debug=true);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-20, -50, undef, [0, [20,5], 0]], undef, [-20, 50, undef, [0, [20,5], 0]], undef, [20, 50, undef, [0, 0, 0]], undef, [20, -50, undef, [0, 0, 0]], undef]
 ], height = 40,  debug=true);
+
+mb_prismoid(shape = [
+    [[-10, -50], undef, [-40, 50], undef, [60, 60], undef, [20, -50], undef],
+    
+    [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef]
+], height = 40, socket = [0, 0],  debug=true);
