@@ -1,4 +1,3 @@
-use <../core/utils.scad>;
 
 function mb_ellibox_inset_cap(z, rz_total, rz_axis, r_axis) =
     z < -rz_total + rz_axis
@@ -46,7 +45,7 @@ module mb_ellibox_octant(
     corner_index,
     n_z = 24,
     n_a = 12,
-    shell = true
+    shell = "hull"
 ){
     rz = max(z_x, z_y);
 
@@ -76,7 +75,74 @@ module mb_ellibox_octant(
     center_base = outer_count;
     function center_idx(i) = center_base + i;
 
-    if(shell){
+    inner_base = outer_count;
+        inner_scale = 0.95;
+
+        function inner_idx(i, j) = inner_base + outer_idx(i, j);
+        function inner_point(p) = [p[0] * inner_scale, p[1] * inner_scale, p[2] * inner_scale];
+
+
+    if(shell == "hull"){
+        
+        points_outer = [
+            for(i = [0 : n_z])
+                let(z = z0 + (z1 - z0) * i / n_z)
+                    for(j = [0 : n_a])
+                        let(theta = theta0 + (theta1 - theta0) * j / n_a)
+                            ring_point(z, theta)
+        ];
+
+        points = concat(
+            points_outer,
+            [for(p = points_outer) inner_point(p)]
+        );
+
+        outer_faces = [
+            for(i = [0 : n_z - 1])
+                for(j = [0 : n_a - 1])
+                    [outer_idx(i,j), outer_idx(i,j+1), outer_idx(i+1,j+1), outer_idx(i+1,j)]
+        ];
+
+        inner_faces = [
+            for(i = [0 : n_z - 1])
+                for(j = [0 : n_a - 1])
+                    [inner_idx(i,j), inner_idx(i+1,j), inner_idx(i+1,j+1), inner_idx(i,j+1)]
+        ];
+
+        edge_bottom = [
+            for(j = [0 : n_a - 1])
+                [outer_idx(0,j), inner_idx(0,j), inner_idx(0,j+1), outer_idx(0,j+1)]
+        ];
+
+        edge_top = [
+            for(j = [0 : n_a - 1])
+                [outer_idx(n_z,j+1), inner_idx(n_z,j+1), inner_idx(n_z,j), outer_idx(n_z,j)]
+        ];
+
+        edge_start = [
+            for(i = [0 : n_z - 1])
+                [outer_idx(i+1,0), inner_idx(i+1,0), inner_idx(i,0), outer_idx(i,0)]
+        ];
+
+        edge_end = [
+            for(i = [0 : n_z - 1])
+                [outer_idx(i,n_a), inner_idx(i,n_a), inner_idx(i+1,n_a), outer_idx(i+1,n_a)]
+        ];
+
+        polyhedron(
+            points = points,
+            faces = concat(
+                outer_faces,
+                inner_faces,
+                edge_bottom,
+                edge_top,
+                edge_start,
+                edge_end
+            ),
+            convexity = 10
+        );
+    }
+    else if(shell){
         fill_center = outer_count;
 
         p00 = ring_point(z0, theta0);
@@ -222,37 +288,11 @@ module mb_ellibox(
 * --------------
 */
 
-*color("white")
-mb_ellibox(
-    x_y = 8,
-    y_x = 8,
 
-    x_z = 8,
-    z_x = 8,
-
-    y_z = 0.001,
-    z_y = 0.001,
-
-    n_z = 64,
-    n_a = 64,
-
-    corner = [1, 6] // oben, ne
-);
-
-function mb_corner_offset_N(c, r, f = 0.5) = [
-    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
-    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
-    (c[0] == 0 ? 1 : -1) * f * r[2]
-];
 
 c = [0, 6];
-rad = [[10,10], [20,20], [30,30]];
+rad = [[2,2], [3,3], [4,4]];
 
-
-max_rad = mb_corner_radius_max_xyz(rad);
-off = mb_corner_offset_N(c, max_rad, f = 1);
-
-translate(off)
 mb_ellibox(
     x_y = rad[0][0],
     y_x = rad[0][1],

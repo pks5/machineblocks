@@ -87,11 +87,7 @@ module mb_corner_cut(size, c = [0, 0]){
 /**
 * ROUNDING CORNER
 */
-function mb_corner_offset_N(c, r, f = 0.5) = [
-    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
-    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
-    (c[0] == 0 ? 1 : -1) * f * r[2]
-];
+
 
 module mb_rounding_corner(
         corner = [0, 0], 
@@ -148,6 +144,7 @@ module mb_rounding_corner(
             precision = precision
         );
 
+        echo (s = s);
         max_rad = mb_corner_radius_max_xyz(s);
 off = mb_corner_offset_N(corner, max_rad, f = 1);
 
@@ -156,7 +153,7 @@ off = mb_corner_offset_N(corner, max_rad, f = 1);
                     [1,             angle[1] / 45, angle[2] / 45, 0],
                     [angle[0] / 45, 1,             angle[3] / 45, 0],
                     [0,             0,             1,             0]
-                   ]) 
+                   ])
     translate(off)
         mb_ellibox(
             x_y = s[0][0],
@@ -171,85 +168,7 @@ off = mb_corner_offset_N(corner, max_rad, f = 1);
         );
 }
 
-module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
-    rz = max(zx, zy);
-    h = 2 * rz;
 
-    module ellipse_cylinder(rx, ry, height) {
-        if ((x >= zx) && (y >= zy)) {
-            scale([rx, ry, 1])
-                cylinder(h = height, r = 1, center = false, $fn = resolution);
-        } else {
-            min_r = 0.01;
-
-            rx2 = max(rx, min_r);
-            ry2 = max(ry, min_r);
-
-            ix = x - rx2;
-            iy = y - ry2;
-
-            split_x = (zx == rz) && (zx > x);
-            split_y = (zy == rz) && (zy > y);
-
-            dx = split_x ? max(0, zx - ix) : 0;
-            dy = split_y ? max(0, zy - iy) : 0;
-
-            xs = split_x ? [-1, 1] : [0];
-            ys = split_y ? [-1, 1] : [0];
-
-            eps = 0.01;
-            big = max(x, y, zx, zy) * 4 + 10;
-
-            if (rx > min_r && ry > min_r && height > 0) {
-                for (sx = xs)
-                for (sy = ys) {
-                    translate([sx * dx, sy * dy, 0])
-                        intersection() {
-                            scale([rx2, ry2, 1])
-                                cylinder(h = height, r = 1, center = false, $fn = resolution);
-
-                            translate([
-                                sx < 0 ? -big : (sx > 0 ? -eps : -big),
-                                sy < 0 ? -big : (sy > 0 ? -eps : -big),
-                                -eps
-                            ])
-                                cube([
-                                    sx == 0 ? 2 * big : big + eps,
-                                    sy == 0 ? 2 * big : big + eps,
-                                    height + 2 * eps
-                                ], center = false);
-                        }
-                }
-            }
-        }
-    }
-
-    function inset_at(zpos, r) =
-        let(d = abs(zpos))
-        r == rz
-            // großer Radius: durchgehend über volle Höhe
-            ? r - sqrt(max(0, r*r - d*d))
-
-            // kleiner Radius: nur oben/unten, konvex
-            : d >= (rz - r)
-                ? r - sqrt(max(0, r*r - pow(rz - d - r, 2)))
-                : 0;
-
-    for (i = [0 : 2*n - 1]) {
-        z0 = -rz + i     * h / (2*n);
-        z1 = -rz + (i+1) * h / (2*n);
-
-        ix = inset_at(z0, zx);
-        iy = inset_at(z0, zy);
-
-        translate([0, 0, z0])
-            ellipse_cylinder(
-                x - ix,
-                y - iy,
-                hs*max(z1 - z0, zero)
-            );
-    }
-}
 
 /**
 * PSEUDO ELLIPSE RING
@@ -311,8 +230,6 @@ module mb_corner_ellibox(
             n_z = resolution,
             n_a = resolution
         );
-        //echo(s = s);
-        //mb_rounded_ellipse_disk_xyz(s[0], s[1], s[2], (len(s) < 4) || is_undef(s[3]) ? s[2] : s[3], resolution = resolution);
     }
 }
 
@@ -336,6 +253,12 @@ function mb_corner_offset(c, r, f = 0.5) = [
     (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? -1 : 1) * f * r[0],
     (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? -1 : 1) * f * r[1],
     (c[0] == 0 ? -1 : 1) * f * r[2]
+];
+
+function mb_corner_offset_N(c, r, f = 0.5) = [
+    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
+    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
+    (c[0] == 0 ? 1 : -1) * f * r[2]
 ];
 
 function mb_angle_from_x(p0, p1) =
@@ -806,22 +729,22 @@ module mb_prismoid(
 sr = [80, 10.1, 10];
 corner = [1,3];
 
-*mb_rounding_corner(corner = corner, radius = [[10, 10],[10, 10],[0, 0]], angle = [0, 0, 0, 0]);
+*mb_rounding_corner(corner = corner, radius = [[0.1,0.1], [0.1,0.1], [0.1,0.1]], angle = [0, 0, 0, 0]);
 
 
-*translate([0, -300, 0])
+*translate([0, -53, -60])
 mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
-], height = 120, socket = [20, 0], socket_top = undef, radius = 0);
+], height = 120, socket = [20, 10.4], radius = 0, debug = true);
 
 *translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [15, 14, 4], debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [15, 14.3, 4], debug=true, align="sticky");
 
 
 *mb_prismoid(shape = [
@@ -832,9 +755,14 @@ mb_prismoid(shape = [
 
 
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [10, 20], radius = 8, debug=true);
 
+mb_prismoid(shape = [
+    [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
+    
+    [[-20, -50, undef, [0, [20,5], 0]], undef, [-20, 50, undef, [0, [20,5], 0]], undef, [20, 50, undef, [0, 0, 0]], undef, [20, -50, undef, [0, 0, 0]], undef]
+], height = 40,  debug=true);
