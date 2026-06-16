@@ -138,34 +138,39 @@ module mb_rounding_corner(
             );
         }*/
 
-        s = mb_corner_radius_resolve(
-            corner_radius = radius, 
-            min_value = zero, 
-            precision = precision
-        );
+    s = mb_corner_radius_resolve(
+        corner_radius = radius, 
+        min_value = zero, 
+        precision = precision
+    );
 
-        echo (s = s);
-        max_rad = mb_corner_radius_max_xyz(s);
-off = mb_corner_offset_N(corner, max_rad, f = 1);
+    echo (s = s);
+    max_rad = mb_corner_radius_max_xyz(s);
 
-    
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
                     [angle[0] / 45, 1,             angle[3] / 45, 0],
                     [0,             0,             1,             0]
-                   ])
-    translate(off)
-        mb_ellibox(
-            x_y = s[0][0],
-            y_x = s[0][1],
-            x_z = s[1][0],
-            z_x = s[1][1],
-            y_z = s[2][0],
-            z_y = s[2][1],
-            corner = corner,
-            n_z = resolution,
-            n_a = resolution
-        );
+                   ]){ 
+        if(mb_corner_radius_is_none(s, min_value = zero)){
+            translate(mb_corner_offset_N(corner, max_rad, f = 0.5))
+                cube(size = [zero, zero, zero], center=true);
+        }
+        else{
+            translate(mb_corner_offset_N(corner, max_rad, f = 1))
+                mb_ellibox(
+                    x_y = s[0][0],
+                    y_x = s[0][1],
+                    x_z = s[1][0],
+                    z_x = s[1][1],
+                    y_z = s[2][0],
+                    z_y = s[2][1],
+                    corner = corner,
+                    n_z = resolution,
+                    n_a = resolution
+                );
+        }
+    }
 }
 
 
@@ -727,9 +732,9 @@ module mb_prismoid(
 
 
 sr = [80, 10.1, 10];
-corner = [1,3];
+corner = [1,2];
 
-*mb_rounding_corner(corner = corner, radius = [[0.1,0.1], [0.1,0.1], [0.1,0.1]], angle = [0, 0, 0, 0]);
+*mb_rounding_corner(corner = corner, radius = [[0,0], [0,0], [0,0]], angle = [0, 0, 0, 0]);
 
 
 *translate([0, -53, -60])
