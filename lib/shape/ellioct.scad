@@ -1,3 +1,5 @@
+use <../core/utils.scad>;
+
 function mb_ellibox_inset_cap(z, rz_total, rz_axis, r_axis) =
     z < -rz_total + rz_axis
         ? let(t = (z + rz_total) / rz_axis)
@@ -30,9 +32,9 @@ function mb_ellibox_rr_point(theta, hx, hy, rx, ry) =
 // 2 = ne = x+, y+
 // 3 = se = x+, y-
 function mb_ellibox_corner_theta0(corner_index) =
-    corner_index == 0 ? 180 :
-    corner_index == 1 ? 90  :
-    corner_index == 2 ? 0   :
+    corner_index == 0 || corner_index == 1 ? 180 :
+    corner_index == 2 || corner_index == 3 ? 90  :
+    corner_index == 4 || corner_index == 5 ? 0   :
                         270;
 
 
@@ -43,7 +45,8 @@ module mb_ellibox_octant(
     z_plane,
     corner_index,
     n_z = 24,
-    n_a = 12
+    n_a = 12,
+    shell = true
 ){
     rz = max(z_x, z_y);
 
@@ -66,73 +69,120 @@ module mb_ellibox_octant(
         )
         concat(mb_ellibox_rr_point(theta, hx, hy, rx, ry), [z]);
 
-            outer_count = (n_z + 1) * (n_a + 1);
-    fill_center = outer_count;
-
     function outer_idx(i, j) = i * (n_a + 1) + j;
 
-    p00 = ring_point(z0, theta0);
-    p01 = ring_point(z0, theta1);
-    p10 = ring_point(z1, theta0);
-    p11 = ring_point(z1, theta1);
+    outer_count = (n_z + 1) * (n_a + 1);
 
-    fc = [
-        (p00[0] + p01[0] + p10[0] + p11[0]) / 4,
-        (p00[1] + p01[1] + p10[1] + p11[1]) / 4,
-        (p00[2] + p01[2] + p10[2] + p11[2]) / 4
-    ];
+    center_base = outer_count;
+    function center_idx(i) = center_base + i;
 
-    points = concat(
-        [
-            for(i = [0 : n_z])
-                let(z = z0 + (z1 - z0) * i / n_z)
-                    for(j = [0 : n_a])
-                        let(theta = theta0 + (theta1 - theta0) * j / n_a)
-                            ring_point(z, theta)
-        ],
-        [fc]
-    );
+    if(shell){
+        fill_center = outer_count;
 
-    curved_faces = [
-        for(i = [0 : n_z - 1])
+        p00 = ring_point(z0, theta0);
+        p01 = ring_point(z0, theta1);
+        p10 = ring_point(z1, theta0);
+        p11 = ring_point(z1, theta1);
+
+        fc = [
+            (p00[0] + p01[0] + p10[0] + p11[0]) / 4,
+            (p00[1] + p01[1] + p10[1] + p11[1]) / 4,
+            (p00[2] + p01[2] + p10[2] + p11[2]) / 4
+        ];
+
+        points = concat(
+            [
+                for(i = [0 : n_z])
+                    let(z = z0 + (z1 - z0) * i / n_z)
+                        for(j = [0 : n_a])
+                            let(theta = theta0 + (theta1 - theta0) * j / n_a)
+                                ring_point(z, theta)
+            ],
+            [fc]
+        );
+
+        curved_faces = [
+            for(i = [0 : n_z - 1])
+                for(j = [0 : n_a - 1])
+                    [outer_idx(i,j), outer_idx(i,j+1), outer_idx(i+1,j+1), outer_idx(i+1,j)]
+        ];
+
+        fill_bottom = [
             for(j = [0 : n_a - 1])
-                [
-                    outer_idx(i, j),
-                    outer_idx(i, j + 1),
-                    outer_idx(i + 1, j + 1),
-                    outer_idx(i + 1, j)
-                ]
-    ];
+                [fill_center, outer_idx(0,j), outer_idx(0,j+1)]
+        ];
 
-    fill_bottom = [
-        for(j = [0 : n_a - 1])
-            [fill_center, outer_idx(0, j), outer_idx(0, j + 1)]
-    ];
+        fill_end = [
+            for(i = [0 : n_z - 1])
+                [fill_center, outer_idx(i,n_a), outer_idx(i+1,n_a)]
+        ];
 
-    fill_end = [
-        for(i = [0 : n_z - 1])
-            [fill_center, outer_idx(i, n_a), outer_idx(i + 1, n_a)]
-    ];
+        fill_top = [
+            for(j = [0 : n_a - 1])
+                [fill_center, outer_idx(n_z,j+1), outer_idx(n_z,j)]
+        ];
 
-    fill_top = [
-        for(j = [0 : n_a - 1])
-            [fill_center, outer_idx(n_z, j + 1), outer_idx(n_z, j)]
-    ];
+        fill_start = [
+            for(i = [0 : n_z - 1])
+                [fill_center, outer_idx(i+1,0), outer_idx(i,0)]
+        ];
 
-    fill_start = [
-        for(i = [0 : n_z - 1])
-            [fill_center, outer_idx(i + 1, 0), outer_idx(i, 0)]
-    ];
+        polyhedron(
+            points = points,
+            faces = concat(curved_faces, fill_bottom, fill_end, fill_top, fill_start),
+            convexity = 10
+        );
+    }
+    else {
+        
 
-    faces = concat(
-        curved_faces,
-        fill_bottom,
-        fill_end,
-        fill_top,
-        fill_start
-    );
+        points = concat(
+            [
+                for(i = [0 : n_z])
+                    let(z = z0 + (z1 - z0) * i / n_z)
+                        for(j = [0 : n_a])
+                            let(theta = theta0 + (theta1 - theta0) * j / n_a)
+                                ring_point(z, theta)
+            ],
+            [
+                for(i = [0 : n_z])
+                    let(z = z0 + (z1 - z0) * i / n_z)
+                        [0, 0, z]
+            ]
+        );
 
-    polyhedron(points = points, faces = faces, convexity = 10);
+        curved_faces = [
+            for(i = [0 : n_z - 1])
+                for(j = [0 : n_a - 1])
+                    [outer_idx(i,j), outer_idx(i,j+1), outer_idx(i+1,j+1), outer_idx(i+1,j)]
+        ];
+
+        cut_start = [
+            for(i = [0 : n_z - 1])
+                [center_idx(i), center_idx(i+1), outer_idx(i+1,0), outer_idx(i,0)]
+        ];
+
+        cut_end = [
+            for(i = [0 : n_z - 1])
+                [center_idx(i), outer_idx(i,n_a), outer_idx(i+1,n_a), center_idx(i+1)]
+        ];
+
+        cap_bottom = [
+            for(j = [0 : n_a - 1])
+                [center_idx(0), outer_idx(0,j+1), outer_idx(0,j)]
+        ];
+
+        cap_top = [
+            for(j = [0 : n_a - 1])
+                [center_idx(n_z), outer_idx(n_z,j), outer_idx(n_z,j+1)]
+        ];
+
+        polyhedron(
+            points = points,
+            faces = concat(curved_faces, cut_start, cut_end, cap_bottom, cap_top),
+            convexity = 10
+        );
+    }
 }
 
 
@@ -172,7 +222,7 @@ module mb_ellibox(
 * --------------
 */
 
-color("white")
+*color("white")
 mb_ellibox(
     x_y = 8,
     y_x = 8,
@@ -186,5 +236,35 @@ mb_ellibox(
     n_z = 64,
     n_a = 64,
 
-    corner = [0, 1] // oben, ne
+    corner = [1, 6] // oben, ne
+);
+
+function mb_corner_offset_N(c, r, f = 0.5) = [
+    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
+    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
+    (c[0] == 0 ? 1 : -1) * f * r[2]
+];
+
+c = [0, 6];
+rad = [[10,10], [20,20], [30,30]];
+
+
+max_rad = mb_corner_radius_max_xyz(rad);
+off = mb_corner_offset_N(c, max_rad, f = 1);
+
+translate(off)
+mb_ellibox(
+    x_y = rad[0][0],
+    y_x = rad[0][1],
+
+    x_z = rad[1][0],
+    z_x = rad[1][1],
+
+    y_z = rad[2][0],
+    z_y = rad[2][1],
+
+    n_z = 64,
+    n_a = 64,
+
+    corner = c // oben, ne
 );

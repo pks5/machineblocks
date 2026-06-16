@@ -87,6 +87,12 @@ module mb_corner_cut(size, c = [0, 0]){
 /**
 * ROUNDING CORNER
 */
+function mb_corner_offset_N(c, r, f = 0.5) = [
+    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
+    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
+    (c[0] == 0 ? 1 : -1) * f * r[2]
+];
+
 module mb_rounding_corner(
         corner = [0, 0], 
         radius = 0, 
@@ -96,6 +102,7 @@ module mb_rounding_corner(
         resolution = 80, 
         debug = false
 ){
+    /*
     radius = mb_corner_radius_resolve(
         corner_radius = radius, 
         min_value = zero
@@ -113,12 +120,15 @@ module mb_rounding_corner(
         off = off
     );
     
+    
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
                     [angle[0] / 45, 1,             angle[3] / 45, 0],
                     [0,             0,             1,             0]
                    ]) 
-    translate(off)
+    
+    
+    *translate(off)
         intersection(){
             translate(off_corner)
                 mb_corner_cut(max_rad, corner);
@@ -130,21 +140,35 @@ module mb_rounding_corner(
                 zero = zero,
                 precision = precision
             );
-        }
+        }*/
 
-    /*
+        s = mb_corner_radius_resolve(
+            corner_radius = radius, 
+            min_value = zero, 
+            precision = precision
+        );
+
+        max_rad = mb_corner_radius_max_xyz(s);
+off = mb_corner_offset_N(corner, max_rad, f = 1);
+
+    
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
                     [angle[0] / 45, 1,             angle[3] / 45, 0],
                     [0,             0,             1,             0]
                    ]) 
-    mb_corner_ellibox(
-        //corner = corner,
-        radius=radius,
-        resolution=resolution,
-        zero = zero,
-        precision = precision
-    );*/
+    translate(off)
+        mb_ellibox(
+            x_y = s[0][0],
+            y_x = s[0][1],
+            x_z = s[1][0],
+            z_x = s[1][1],
+            y_z = s[2][0],
+            z_y = s[2][1],
+            corner = corner,
+            n_z = resolution,
+            n_a = resolution
+        );
 }
 
 module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
@@ -276,7 +300,7 @@ module mb_corner_ellibox(
     }
     else{
         echo(elli = s);
-       // hull()
+       
         mb_ellibox(
             x_y = s[0][0],
             y_x = s[0][1],
@@ -780,11 +804,9 @@ module mb_prismoid(
 
 
 sr = [80, 10.1, 10];
-corner = [1,0];
+corner = [1,3];
 
-*hull()
-color("#ffffff55")
-mb_rounding_corner(corner = corner, radius = [[10, 10],[10, 10],[0, 0]], angle = [0, 0, 0, 0]);
+*mb_rounding_corner(corner = corner, radius = [[10, 10],[10, 10],[0, 0]], angle = [0, 0, 0, 0]);
 
 
 *translate([0, -300, 0])
@@ -800,7 +822,6 @@ mb_prismoid(shape = [
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
 ], height = 120, socket = [20, 0], radius = [15, 14, 4], debug=true, align="sticky");
-
 
 
 *mb_prismoid(shape = [
