@@ -25,6 +25,119 @@ function mb_resolve_quad(xyz, default = [0, 0, 0, undef], mul = undef, min_value
         p = is_undef(r1) ? undef : (is_undef(precision) ? r1 : [mb_round_prec(r1[0], precision), mb_round_prec(r1[1], precision), mb_round_prec(r1[2], precision), is_undef(r1[3]) ? undef : mb_round_prec(r1[3], precision)]))
     is_undef(p) ? undef : (is_undef(min_value) ? p : [max(min_value, p[0]), max(min_value, p[1]), max(min_value, p[2]), is_undef(p[3]) ? undef : max(min_value, p[3])]);
 
+ /*
+* -------------------
+* START CORNER RADIUS
+* -------------------
+*/
+
+function mb_radius_pair_resolve(v, default = [0, 0], mul = 1, min_value = undef, precision = undef) =
+    let(
+        p0 =
+            is_num(v) ? [v, v] :
+            is_list(v) ? [
+                len(v) > 0 && is_num(v[0]) ? v[0] : default[0],
+                len(v) > 1 && is_num(v[1]) ? v[1] : default[1]
+            ] :
+            default,
+
+        p1 = [
+            p0[0] * mul,
+            p0[1] * mul
+        ],
+
+        p2 = is_undef(min_value) ? p1 : [
+            max(min_value, p1[0]),
+            max(min_value, p1[1])
+        ],
+
+        p3 = is_undef(precision) ? p2 : [
+            mb_round_prec(p2[0], precision),
+            mb_round_prec(p2[1], precision)
+        ]
+    )
+    (p3[0] > 0 && p3[1] > 0) ? p3 : is_undef(min_value) ? [0,0] : [min_value, min_value];
+
+
+function mb_corner_radius_resolve(
+    corner_radius,
+    default = [[0, 0], [0, 0], [0, 0]],
+    mul = undef,
+    min_value = undef,
+    precision = undef
+) =
+    let(
+        m = is_undef(mul) ? [1, 1, 1] : mb_resolve_xyz(mul, default = [1, 1, 1]),
+
+        // normalize input to 3 raw pair values
+        r =
+            is_num(corner_radius) ? [
+                corner_radius,
+                corner_radius,
+                corner_radius
+            ] :
+            is_list(corner_radius) ? [
+                len(corner_radius) > 0 ? corner_radius[0] : default[0],
+                len(corner_radius) > 1 ? corner_radius[1] : default[1],
+                len(corner_radius) > 2 ? corner_radius[2] : default[2]
+            ] :
+            default
+    )
+    [
+        mb_radius_pair_resolve(r[0], default[0], m[0], min_value, precision), // [xy, yx]
+        mb_radius_pair_resolve(r[1], default[1], m[1], min_value, precision), // [xz, zx]
+        mb_radius_pair_resolve(r[2], default[2], m[2], min_value, precision)  // [yz, zy]
+    ];
+
+// true = this pair is inactive / no usable radius
+function mb_radius_pair_is_none(pair, min_value = 0) =
+    !is_list(pair) || len(pair) < 2 ||
+    pair[0] <= min_value || pair[1] <= min_value;
+
+
+// true = all 3 radius pairs are inactive
+function mb_corner_radius_is_none(corner_radius, min_value = 0) =
+    mb_radius_pair_is_none(corner_radius[0], min_value) &&
+    mb_radius_pair_is_none(corner_radius[1], min_value) &&
+    mb_radius_pair_is_none(corner_radius[2], min_value);
+
+
+// true = exactly 2 pairs are inactive
+// means: only one radius pair remains active => ellipse disk case
+function mb_corner_radius_is_ellipse_disk(corner_radius, min_value = 0) =
+    (
+        (mb_radius_pair_is_none(corner_radius[0], min_value) ? 1 : 0) +
+        (mb_radius_pair_is_none(corner_radius[1], min_value) ? 1 : 0) +
+        (mb_radius_pair_is_none(corner_radius[2], min_value) ? 1 : 0)
+    ) == 2;
+
+function mb_corner_radius_active_pair_index(r, min_value = 0) =
+    !mb_radius_pair_is_none(r[0], min_value) ? 0 :
+    !mb_radius_pair_is_none(r[1], min_value) ? 1 :
+    !mb_radius_pair_is_none(r[2], min_value) ? 2 :
+    undef;
+
+function mb_corner_radius_is_sphere(r) =
+    let(v = r[0][0])
+    r == [
+        [v,v],
+        [v,v],
+        [v,v]
+    ];
+
+function mb_corner_radius_max_xyz(corner_radius) =
+[
+    max(corner_radius[0][0], corner_radius[1][0]), // max(xy, xz)
+    max(corner_radius[0][1], corner_radius[2][0]), // max(yx, yz)
+    max(corner_radius[1][1], corner_radius[2][1])  // max(zx, zy)
+];
+
+/*
+* ---------------
+* START CUBE SIZE
+* ---------------
+*/
+
 function mb_cube_size_resolve(size) = is_num(size) || (is_list(size) && (is_undef(size[0]) || is_num(size[0])) && (is_undef(size[1]) || is_num(size[1])) && (is_undef(size[2]) || is_num(size[2]))) ?
         [
             mb_resolve_xyz(size, mul = -0.5),
@@ -51,11 +164,7 @@ function mb_cube_radius_resolve(radius) = is_num(radius) ?
         is_list(radius) && len(radius) == 1 && is_list(radius[0]) && is_num(radius[0][0]) && is_num(radius[0][1]) ?
         [radius[0], radius[0], radius[0], radius[0]] :
         radius;
- /*
-* ---------------
-* START BLOCK OBJ
-* ---------------
-*/
+
 
 
 function mb_bounding_box(size) = [ceil(size[0]), ceil(size[1]), ceil(size[2])];
@@ -379,7 +488,7 @@ function _mb_radius_resolve_pair(a, b, max_size) =
         bb * scale
     ];
 
-function mb_corner_radius_resolve(radius, mod_size) =
+function mb_bevel_radius_resolve(radius, mod_size) =
     let(
         r = [
             _mb_radius_pair(radius[0]),
@@ -528,7 +637,7 @@ function _mb_bevel_reduce(arr, i=0, acc=[undef, undef, undef, undef]) =
 function _mb_bevel_all(p) = [p,p,p,p];
 
 function mb_bevel_resolve(bevel, mod_size) =
-    mb_corner_radius_resolve(_mb_bevel_resolve(bevel), mod_size);
+    mb_bevel_radius_resolve(_mb_bevel_resolve(bevel), mod_size);
 
 // --- main ---
 function _mb_bevel_resolve(bevel) =

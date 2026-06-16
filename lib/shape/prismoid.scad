@@ -1,6 +1,7 @@
 use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
+use <ellibox.scad>;
 
 /*
 * --------------------
@@ -14,7 +15,7 @@ use <../core/geometry.scad>;
 module mb_corner_cut(size, c = [0, 0]){
     sx = size[0];
     sy = size[1];
-    sz = max(size[2], is_undef(size[3]) ? 0 : size[3]);
+    sz = size[2];
 
     x0 = -sx / 2; x1 = sx / 2;
     y0 = -sy / 2; y1 = sy / 2;
@@ -95,10 +96,22 @@ module mb_rounding_corner(
         resolution = 80, 
         debug = false
 ){
-    radius = mb_resolve_quad(xyz = radius, min_value = zero);
+    radius = mb_corner_radius_resolve(
+        corner_radius = radius, 
+        min_value = zero
+    );
+
+    max_rad = mb_corner_radius_max_xyz(radius);
     
-    off_corner = mb_corner_offset(corner, radius);
-    off = mb_corner_offset(corner, radius, -1);
+    off_corner = mb_corner_offset(corner, max_rad);
+    off = mb_corner_offset(corner, max_rad, -1);
+
+    echo(
+        radius = radius,
+        max_rad = max_rad,
+        off_corner = off_corner,
+        off = off
+    );
     
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
@@ -108,9 +121,9 @@ module mb_rounding_corner(
     translate(off)
         intersection(){
             translate(off_corner)
-                mb_corner_cut(radius, corner);
+                mb_corner_cut(max_rad, corner);
                 
-            mb_pseudo_ellipse_ring(
+            mb_corner_ellibox(
                 //corner = corner,
                 radius=radius,
                 resolution=resolution,
@@ -203,31 +216,65 @@ module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001,
 /**
 * PSEUDO ELLIPSE RING
 */
-module mb_pseudo_ellipse_ring(
+module mb_corner_ellibox(
     radius=[40, 25, 3],
     zero = 0.001,
     precision = 0.01,
     resolution = 32
 ) {
-    s = mb_resolve_quad(xyz = radius, min_value = zero, precision = precision);
+    s = mb_corner_radius_resolve(
+            corner_radius = radius, 
+            min_value = zero, 
+            precision = precision
+        );
     
-    if((s[0] <= zero && s[1] <= zero) 
-        || (s[0] <= zero && s[2] <= zero) 
-        || (s[1] <= zero && s[2] <= zero)){
+    if(mb_corner_radius_is_none(s, min_value = zero)){
+        echo(none = s);
         // At least 2 rad are zero
-        cube(size=[zero, zero, zero], center = true);
+        cube(size = [zero, zero, zero], center = true);
     }
-    else if((s[0] <= zero || s[1] <= zero || s[2] <= zero)
-        || (s[0] == s[1]) && (s[0] == s[2]) && (s[1] == s[2])){
-        // One rad zero or all rad are same
-        max_rad = max(s[0], s[1], s[2]);
-        rad_rel = [s[0] / max_rad, s[1] / max_rad, s[2] / max_rad];
-        scale(rad_rel)
-            sphere(r = max_rad, $fn = resolution);    
+    else if(mb_corner_radius_is_sphere(s)){
+        echo(sphere = s);
+        sphere(
+            r = s[0][0],
+            $fn = resolution
+        );
+    }
+    else if(mb_corner_radius_is_ellipse_disk(s, min_value = zero)){
+        echo(disk = s);
+        active = mb_corner_radius_active_pair_index(raw, min_value = zero);
+
+        if(active == 0) {
+            // XY disk: [xy, yx]
+            scale([s[0][0], s[0][1], zero])
+                sphere(r = 1, $fn = resolution);
+        }
+        else if(active == 1) {
+            // XZ disk: [xz, zx]
+            scale([s[1][0], zero, s[1][1]])
+                sphere(r = 1, $fn = resolution);
+        }
+        else if(active == 2) {
+            // YZ disk: [yz, zy]
+            scale([zero, s[2][0], s[2][1]])
+                sphere(r = 1, $fn = resolution);
+        }
     }
     else{
-        echo(s = s);
-        mb_rounded_ellipse_disk_xyz(s[0], s[1], s[2], (len(s) < 4) || is_undef(s[3]) ? s[2] : s[3], resolution = resolution);
+        echo(elli = s);
+       // hull()
+        mb_ellibox(
+            x_y = s[0][0],
+            y_x = s[0][1],
+            x_z = s[1][0],
+            z_x = s[1][1],
+            y_z = s[2][0],
+            z_y = s[2][1],
+            n_z = resolution,
+            n_a = resolution
+        );
+        //echo(s = s);
+        //mb_rounded_ellipse_disk_xyz(s[0], s[1], s[2], (len(s) < 4) || is_undef(s[3]) ? s[2] : s[3], resolution = resolution);
     }
 }
 
@@ -250,7 +297,7 @@ module mb_pseudo_ellipse_ring(
 function mb_corner_offset(c, r, f = 0.5) = [
     (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? -1 : 1) * f * r[0],
     (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? -1 : 1) * f * r[1],
-    (c[0] == 0 ? -1 : 1) * f * max(r[2], is_undef(r[3]) ? 0 : r[3])
+    (c[0] == 0 ? -1 : 1) * f * r[2]
 ];
 
 function mb_angle_from_x(p0, p1) =
@@ -476,7 +523,9 @@ function mb_prismoid_rplane_resolve(v) =
         ls = l <= 4)
     [
         for (i = [0:7])
-            mb_resolve_quad(ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i], default = undef) //TODO check length v
+            mb_corner_radius_resolve(
+                corner_radius = ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i]
+            ) //TODO check length v
     ];
 
 function mb_prismoid_aplane_resolve(v) =
@@ -502,12 +551,15 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
     let(a = shape[i],
         h = is_undef(height) ? 1 : height,
         az = is_list(h) ? h[i] : (i == 0 ? -1 : 1) * 0.5 * h,
-        mul = mb_resolve_quad(mul, default = [1, 1, 1, 1]))
+        mul = mb_resolve_xyz(mul, default = [1, 1, 1]))
     [
         for (j = [0:7])
             let(
                 ai = j < len(a) ? a[j] : undef,
-                bi = mb_resolve_quad(is_list(radius) && (j < len(radius)) ? radius[j] : undef, mul = mul, default = undef),
+                bi = mb_corner_radius_resolve(
+                    corner_radius = is_list(radius) && (j < len(radius)) ? radius[j] : undef, 
+                    mul = mul
+                ),
                 ad = mb_resolve_xyz(is_undef(add) ? undef : add[j])
             )
             is_undef(ai) ? 
@@ -518,7 +570,7 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
                 ((len(ai) < 3 || is_undef(ai[2])) ? az : ai[2]) * mul[2], 
                 (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? 
                     bi : 
-                    (len(ai) > 3 ? mb_resolve_quad(ai[3], mul = mul) : undef)
+                    (len(ai) > 3 ? mb_corner_radius_resolve(corner_radius = ai[3], mul = mul) : undef)
             ]
     ];
 
@@ -538,7 +590,7 @@ function mb_prismoid_shape_resolve(
         radius = is_undef(radius) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : radius,
         expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[3]) ? meta_data[3] : undef) : expand,
         
-        mul = mb_resolve_quad(mul, default=[1,1,1,1]),
+        mul = mb_resolve_xyz(mul, default=[1, 1, 1]),
         s = [
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 0)),
             mb_prismoid_plane_resolve(mb_prismoid_plane(shape, 1))
@@ -716,9 +768,9 @@ module mb_prismoid(
 sr = [80, 10.1, 10];
 corner = [1,0];
 
-
-*color("#ffffff55")
-mb_rounding_corner(corner = corner, radius = sr, angle = [0, 0, 0, 0]);
+*hull()
+color("#ffffff55")
+mb_rounding_corner(corner = corner, radius = [[10, 10],[10, 10],[0, 0]], angle = [0, 0, 0, 0]);
 
 
 *translate([0, -300, 0])
@@ -728,12 +780,12 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 0], socket_top = undef, radius = 0);
 
-translate([0, 300, 0])
+*translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [15, 14, 6, 12], debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [15, 14, 4], debug=true, align="sticky");
 
 
 
@@ -741,12 +793,13 @@ mb_prismoid(shape = [
     [[-20, -30, undef, [10,10,0]], [-20, 30, undef,[10,10,0]], [50, 30,undef, [10,10,0]], [50, -30,undef, [10,10,0]]],
     [[-20, -30, undef,[10,10,0]], [-20, 30,undef, [10,10,0]], [20, 30, undef,[10,10,0]], [20, -30, undef,[10,10,0]]]
     
-], height = 120, socket = [0, 20], radius = 0);
+], height = 120, socket = [10, 20]);
 
 
 
-*mb_prismoid(shape = [
+mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
     
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
-], height = 120, socket = [20, 20], radius = 0, debug=true);
+], height = 120, socket = [10, 20], radius = 8, debug=true);
+

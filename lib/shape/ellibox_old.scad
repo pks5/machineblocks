@@ -54,23 +54,15 @@ module mb_ellibox(
                     )
         ];
 
-    ring_count = n_z + 1;
-    bottom_center = ring_count * n_a;
-    top_center = bottom_center + 1;
+    // Punkte
+    points = [
+        for (i = [0 : n_z])
+            let(z = -rz + i * h / n_z)
+                each ring(z)
+    ];
 
-    points = concat(
-        [
-            for (i = [0 : n_z])
-                let(z = -rz + i * h / n_z)
-                    each ring(z)
-        ],
-        [
-            [0, 0, -rz],
-            [0, 0,  rz]
-        ]
-    );
-
-    side_faces = [
+    // Faces
+    faces = [
         for (i = [0 : n_z-1])
             for (j = [0 : n_a-1])
                 let(
@@ -81,22 +73,6 @@ module mb_ellibox(
                 )
                 [a,b,c,d]
     ];
-
-    bottom_faces = [
-        for (j = [0 : n_a-1])
-            [bottom_center, (j+1)%n_a, j]
-    ];
-
-    top_faces = [
-        for (j = [0 : n_a-1])
-            [
-                top_center,
-                n_z*n_a + j,
-                n_z*n_a + (j+1)%n_a
-            ]
-    ];
-
-    faces = concat(side_faces, bottom_faces, top_faces);
 
     polyhedron(points = points, faces = faces, convexity = 10);
 }
