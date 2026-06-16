@@ -1,7 +1,7 @@
 use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
-use <ellibox.scad>;
+use <ellioct.scad>;
 
 /*
 * --------------------
@@ -131,6 +131,20 @@ module mb_rounding_corner(
                 precision = precision
             );
         }
+
+    /*
+    multmatrix(m = [ 
+                    [1,             angle[1] / 45, angle[2] / 45, 0],
+                    [angle[0] / 45, 1,             angle[3] / 45, 0],
+                    [0,             0,             1,             0]
+                   ]) 
+    mb_corner_ellibox(
+        //corner = corner,
+        radius=radius,
+        resolution=resolution,
+        zero = zero,
+        precision = precision
+    );*/
 }
 
 module mb_rounded_ellipse_disk_xyz(x, y, zy, zx, hs = 0.5, n = 48, zero = 0.001, resolution = 96) {
