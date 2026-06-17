@@ -481,7 +481,7 @@ function mb_prismoid_validate(shape, static) =
     len(shape[1]) != 8 ? ["invalid_plane_length", 1, len(shape[1])] :
     //!mb_prismoid_min_points(shape[0])  ? ["point_missing", 0] :
     //!mb_prismoid_min_points(shape[1])  ? ["point_missing", 1] :
-    mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["point_mismatch"] :
+    mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["plane_mismatch"] :
     ["ok", mb_prismoid_complexity(shape, static)];
 
 function mb_prismoid_process(planes, static, skip_validate = false) = 
@@ -501,26 +501,39 @@ function mb_prismoid_process(planes, static, skip_validate = false) =
         skip_validate ? ["ok"] : mb_prismoid_validate(planes, static) //validation
     ];
 
+/**
+* Resolve radius parameter plane from simple formats
+*/
 function mb_prismoid_rplane_resolve(v) =
     is_undef(v) || is_string(v) ? 
         [for (i = [0:7]) undef] :
 
+    // Single number: r
     is_num(v) ?
         [for (i = [0:7]) [v, v, v]] :
 
+    // [rxy, rxz, ryz]
     len(v) == 3 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) ?
         [for (i = [0:7]) v] :
 
-    len(v) == 4 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) && is_num(v[3]) ?
-        [for (i = [0:7]) v] :
+    // [[xy, yx], [xz, zx], [yz, zy]]
+    len(v) == 3 
+        && is_list(v[0]) && len(v[0]) == 2 && is_num(v[0][0]) && is_num(v[0][1]) 
+        && is_list(v[1]) && len(v[1]) == 2 && is_num(v[1][0]) && is_num(v[1][1])   
+        && is_list(v[2]) && len(v[2]) == 2 && is_num(v[2][0]) && is_num(v[2][1])
+        ? [for (i = [0:7]) v] : undef;
 
-    let(l = len(v),
-        ls = l <= 4)
+
+/**
+* Resolve radius parameter to planes
+*/
+function mb_prismoid_radius_resolve(radius) =
+    let(
+        rplane = mb_prismoid_rplane_resolve(radius)
+    )
     [
-        for (i = [0:7])
-            mb_corner_radius_resolve(
-                corner_radius = ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i]
-            ) //TODO check length v
+        mb_prismoid_plane_resolve(is_undef(rplane) ? mb_prismoid_plane(radius, 0) : rplane),
+        mb_prismoid_plane_resolve(is_undef(rplane) ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
 function mb_prismoid_aplane_resolve(v) =
@@ -532,14 +545,6 @@ function mb_prismoid_aplane_resolve(v) =
     [
         for (i = [0:7])
             mb_resolve_xyz(ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i], default = undef) //TODO check length v
-    ];
-
-function mb_prismoid_radius_resolve(radius) =
-    let(full_radius = is_list(radius) && is_list(radius[0]),
-        rplane = full_radius ? undef : mb_prismoid_rplane_resolve(radius))
-    [
-        mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 0) : rplane),
-        mb_prismoid_rplane_resolve(full_radius ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
 function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, height = undef, radius = undef) =
@@ -560,9 +565,9 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
             is_undef(ai) ? 
                 undef :
             [
-                (ai[0] + ad[0]) * mul[0], 
-                (ai[1] + ad[1]) * mul[1], 
-                ((len(ai) < 3 || is_undef(ai[2])) ? az : ai[2]) * mul[2], 
+                (ai[0] + ad[0]) * mul[0], // p.x
+                (ai[1] + ad[1]) * mul[1], // p.y
+                ((len(ai) < 3 || is_undef(ai[2])) ? az : ai[2]) * mul[2], // p.z
                 (len(ai) < 4 || is_undef(ai[3])) && !is_undef(bi) ? 
                     bi : 
                     (len(ai) > 3 ? mb_corner_radius_resolve(corner_radius = ai[3], mul = mul) : undef)
