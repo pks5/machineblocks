@@ -484,7 +484,7 @@ function mb_prismoid_validate(shape, static) =
     mb_prismoid_plane_checksum(shape[0]) != mb_prismoid_plane_checksum(shape[1]) ? ["plane_mismatch"] :
     ["ok", mb_prismoid_complexity(shape, static)];
 
-function mb_prismoid_process(planes, static, skip_validate = false) = 
+function mb_prismoid_process(planes, static) = 
     let(min_max = mb_min_max_points(planes),
         sx = min_max[3] - min_max[0],
         sy = min_max[4] - min_max[1],
@@ -493,18 +493,18 @@ function mb_prismoid_process(planes, static, skip_validate = false) =
         cy = 0.5 * (min_max[4] + min_max[1]),
         cz = 0.5 * (min_max[5] + min_max[2]))
     [
-        [min_max[0], min_max[1], min_max[2]], //min
-        [min_max[3], min_max[4], min_max[5]], //max
-        [sx, sy, sz],                             //size
-        [cx, cy, cz],   //center
-        static, // static data                            
-        skip_validate ? ["ok"] : mb_prismoid_validate(planes, static) //validation
+        [min_max[0], min_max[1], min_max[2]], // 0 - min
+        [min_max[3], min_max[4], min_max[5]], // 1 - max
+        [sx, sy, sz],                         // 2 - size
+        [cx, cy, cz],                         // 3 - center
+        static,                               // 4 - static data                            
+        mb_prismoid_validate(planes, static)  // 5 - validation
     ];
 
 /**
 * Resolve radius parameter plane from simple formats
 */
-function mb_prismoid_rplane_resolve(v) =
+function mb_prismoid_simple_rad_resolve(v) =
     is_undef(v) || is_string(v) ? 
         [for (i = [0:7]) undef] :
 
@@ -525,13 +525,17 @@ function mb_prismoid_rplane_resolve(v) =
 */
 function mb_prismoid_radius_resolve(radius) =
     let(
-        rplane = mb_prismoid_rplane_resolve(radius)
+        rplane = mb_prismoid_simple_rad_resolve(radius)
     )
     [
         mb_prismoid_plane_resolve(is_undef(rplane) ? mb_prismoid_plane(radius, 0) : rplane),
         mb_prismoid_plane_resolve(is_undef(rplane) ? mb_prismoid_plane(radius, 1) : rplane)
     ];
 
+/**
+* Resolve add parameter plane
+* TODO use mb_prismoid_plane_resolve
+*/
 function mb_prismoid_aplane_resolve(v) =
     is_undef(v) || is_string(v) ? 
         [for (i = [0:7]) undef] :
@@ -543,6 +547,9 @@ function mb_prismoid_aplane_resolve(v) =
             mb_resolve_xyz(ls ? (i % 2 == 0 ? v[i / 2] : undef) : v[i], default = undef) //TODO check length v
     ];
 
+/**
+* Builds the final shape
+*/
 function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, height = undef, radius = undef) =
     let(a = shape[i],
         h = is_undef(height) ? 1 : height,
@@ -603,13 +610,15 @@ function mb_prismoid_shape_resolve(
         ex = is_undef(expand) ? ar : [
            mb_poly_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
            mb_poly_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
-        ]
+        ],
+        socket = is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]],
+        static = [socket]
     )
     [
         ex[0],
         ex[1],
         undef,
-        mb_prismoid_process(ex, [is_undef(sck) ? [0, 0] : [sck[0] * mul[2], sck[1] * mul[2]]])
+        mb_prismoid_process(ex, static)
     ];
 
 
