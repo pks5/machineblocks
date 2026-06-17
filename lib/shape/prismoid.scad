@@ -300,6 +300,21 @@ function mb_corner_angle(corner, prev, point, next, top) =
 * POINT UTILS
 */
 
+function mb_prev_index(shape, i = 0, j = 0) =
+    let(
+        plane = mb_prismoid_plane(shape, i),
+        prev_index = (j - 1 + 8) % 8,
+        p = plane[prev_index]
+    )
+    p != undef ? prev_index : mb_prev_index(shape, i, prev_index); 
+
+function mb_next_index(shape, i = 0, j = 0) =
+    let(
+        plane = mb_prismoid_plane(shape, i),
+        next_index = (j + 1) % 8,
+        p = plane[next_index]
+    )
+    p != undef ? next_index : mb_next_index(shape, i, next_index); 
    
 function mb_point(shape, i = 0, j = 0) = 
     let(plane = mb_prismoid_plane(shape, i))
@@ -671,7 +686,7 @@ module mb_prismoid(
         translate(t){
             if(false && shape[3][5][1] == "simple"){
                 echo("SIMPLE");
-                mb_loft_polyhedron([
+                %mb_loft_polyhedron([
                     mb_prismoid_plane(shape, 0),
                     mb_prismoid_plane(shape, 1)
                 ]);
@@ -689,8 +704,19 @@ module mb_prismoid(
                                 if(corner != undef){
                                     
                                     rad = mb_point_radius(shape, i, j);
-                                    prev_point = mb_prev_point(shape, i, j);
-                                    next_point = mb_next_point(shape, i, j);
+                                    
+                                    prev_index = mb_prev_index(shape, i, j);
+                                    next_index = mb_next_index(shape, i, j);
+                                    
+                                    
+                                    prev_point = mb_point(shape, i, prev_index);
+                                    next_point = mb_point(shape, i, next_index);
+                                    
+                                    prev_rad = mb_point_radius(shape, i, prev_index);
+                                    next_rad = mb_point_radius(shape, i, next_index);
+                                    
+                                    //prev_point = mb_prev_point(shape, i, j);
+                                    //next_point = mb_next_point(shape, i, j);
                                     inv_point = mb_inv_point(shape, i, j);
                                     inv_dis = mb_point_distance(point, inv_point);
 
@@ -704,9 +730,14 @@ module mb_prismoid(
                                     if(debug){
                                         echo(corner = corner, 
                                             ang = angle, 
+                                            pi = prev_index,
                                             pp = prev_point, 
+                                            ppr = prev_rad,
                                             p = point, 
+                                            pr = rad,
+                                            ni = next_index,
                                             np = next_point, 
+                                            npr = next_rad,
                                             ip = inv_point, 
                                             inv_dis = inv_dis,
                                             slope = slope,
@@ -719,11 +750,11 @@ module mb_prismoid(
 
                                     if(i == 0 && socket_point_bottom != undef){
                                         translate(socket_point_bottom) 
-                                            mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_rounding_corner(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
                                     }
                                     if(i == 1 && socket_point_top != undef){
                                         translate(socket_point_top) 
-                                            mb_rounding_corner(corner = corner, radius = [rad[0], rad[1], 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_rounding_corner(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
                                     }
                                 }
                                 else{
@@ -767,7 +798,7 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 10.4], radius = 0, debug = true);
 
-*translate([0, 300, 0])
+translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
@@ -789,13 +820,31 @@ mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [10, 20], radius = 8, debug=true);
 
-*mb_prismoid(shape = [
-    [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef],
+mb_prismoid(shape = [
+    [
+        [-20, -50], 
+        [-40, -30], 
+        [-20, 50], 
+        undef, 
+        [20, 50], 
+        undef, 
+        [20, -50], 
+        undef
+    ],
     
-    [[-20, -50, undef, [0, [20,5], 0]], undef, [-20, 50, undef, [0, [20,5], 0]], undef, [20, 50, undef, [0, 0, 0]], undef, [20, -50, undef, [0, 0, 0]], undef]
+    [
+        [-20, -50, undef, [[4,5], 0, 0]], 
+        [-40, -30, undef, [[4,12], 0, 0]], 
+        [-20, 50, undef, [[10,2], 0, 0]], 
+        undef, 
+        [20, 50, undef, [[10,5], 0, 0]], 
+        undef, 
+        [20, -50, undef, [[10,5], 0, 0]], 
+        undef
+    ]
 ], height = 40,  debug=true);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [[-10, -50], undef, [-40, 50], undef, [60, 60], undef, [20, -50], undef],
     
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef]
