@@ -508,19 +508,15 @@ function mb_prismoid_rplane_resolve(v) =
     is_undef(v) || is_string(v) ? 
         [for (i = [0:7]) undef] :
 
-    // Single number: r
-    is_num(v) ?
-        [for (i = [0:7]) [v, v, v]] :
-
-    // [rxy, rxz, ryz]
-    len(v) == 3 && is_num(v[0]) && is_num(v[1]) && is_num(v[2]) ?
-        [for (i = [0:7]) v] :
-
-    // [[xy, yx], [xz, zx], [yz, zy]]
-    len(v) == 3 
-        && is_list(v[0]) && len(v[0]) == 2 && is_num(v[0][0]) && is_num(v[0][1]) 
-        && is_list(v[1]) && len(v[1]) == 2 && is_num(v[1][0]) && is_num(v[1][1])   
-        && is_list(v[2]) && len(v[2]) == 2 && is_num(v[2][0]) && is_num(v[2][1])
+    // r or [rxy, rxz, ryz] or [[xy, yx], [xz, zx], [yz, zy]]
+    is_num(v) ||
+    (
+        is_list(v) 
+        && len(v) == 3 
+        && (is_num(v[0]) || (is_list(v[0]) && len(v[0]) == 2 && is_num(v[0][0]) && is_num(v[0][1])))
+        && (is_num(v[1]) || (is_list(v[1]) && len(v[1]) == 2 && is_num(v[1][0]) && is_num(v[1][1])))   
+        && (is_num(v[2]) || (is_list(v[2]) && len(v[2]) == 2 && is_num(v[2][0]) && is_num(v[2][1])))
+    )
         ? [for (i = [0:7]) v] : undef;
 
 
@@ -808,7 +804,7 @@ mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [15, 14.3, 4], debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [[10, 15], 14.3, 4], debug=true, align="sticky");
 
 
 *mb_prismoid(shape = [
