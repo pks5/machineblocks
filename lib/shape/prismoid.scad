@@ -584,7 +584,7 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
             ]
     ];
 
-function mb_prismoid_prev_rad_x(prev_index) =
+function mb_prismoid_is_x_rad_front(prev_index) =
     prev_index == 2 || prev_index == 3 || prev_index == 6 || prev_index == 7;
 
 function mb_prismoid_norm_rad(
@@ -621,9 +621,9 @@ function mb_prismoid_norm_rad(
         n_y_z = prev_rad[2][0],
         n_z_y = prev_rad[2][1],
 
-        is_x_front = mb_prismoid_prev_rad_x(idx),
-        is_next_x = !mb_prismoid_prev_rad_x(next_index),
-        is_prev_x = mb_prismoid_prev_rad_x(prev_index),
+        is_x_front = mb_prismoid_is_x_rad_front(idx),
+        is_next_x = !mb_prismoid_is_x_rad_front(next_index),
+        is_prev_x = mb_prismoid_is_x_rad_front(prev_index),
         
         len_x_y = x_y + (is_x_front ? (is_next_x ? n_x_y : n_y_x) : (is_prev_x ? p_x_y : p_y_x)),
         len_y_x = y_x + (is_x_front ? (is_prev_x ? p_x_y : p_y_x) : (is_next_x ? n_x_y : n_y_x)),
@@ -985,13 +985,13 @@ mb_prismoid(shape = [
     ],
     
     [
-        [-20, -50, undef, [[80,50], 0, 0]], 
+        [-20, -50, undef, [[30,150], 0, 0]], 
         undef, //[-40, -30, undef, [[4,12], 0, 0]], 
-        [-20, 50, undef, [[80,50], 0, 0]], 
+        [-20, 50, undef, [[30,50], 0, 0]], 
         undef, 
-        [20, 50, undef, [[80,50], 0, 0]], 
+        [20, 50, undef, [[30,50], 0, 0]], 
         undef, 
-        [20, -50, undef, [[80,50], 0, 0]], 
+        [20, -50, undef, [[30,50], 0, 0]], 
         undef
     ]
 ], height = 40,  debug=true);
