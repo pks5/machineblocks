@@ -335,6 +335,13 @@ function mb_inv_point(shape, i = 0, j = 0) =
 function mb_point_distance(p1, p2, ab = false) = 
     is_undef(p1) || is_undef(p2) ? undef : ab ? [abs(p2.x - p1.x), abs(p2.y - p1.y), abs(p2.z - p1.z)] : [p2.x - p1.x, p2.y - p1.y, p2.z - p1.z];
 
+function mb_point_distance_length(p1, p2) =
+    norm([
+        p2[0] - p1[0],
+        p2[1] - p1[1],
+        p2[2] - p1[2]
+    ]);
+
 function mb_point_add(p1, p2) = 
     is_undef(p1) || is_undef(p2) ? undef : [p1.x + p2.x, p1.y + p2.y, p1.z + p2.z];
 
@@ -577,12 +584,109 @@ function mb_prismoid_plane_resolve_points(shape, i, mul = undef, add = undef, he
             ]
     ];
 
+function mb_prismoid_prev_rad_x(prev_index) =
+    prev_index == 2 || prev_index == 3 || prev_index == 6 || prev_index == 7;
+
+function mb_prismoid_norm_rad(
+    idx,
+    point, 
+    rad, 
+    prev_index, 
+    prev_rad, 
+    prev_dis_len, 
+    next_index, 
+    next_rad, 
+    next_dis_len,
+    inv_dis_len
+) =
+    let(
+        x_y = rad[0][0],
+        y_x = rad[0][1],
+        x_z = rad[1][0],
+        z_x = rad[1][1],
+        y_z = rad[2][0],
+        z_y = rad[2][1],
+
+        p_x_y = prev_rad[0][0],
+        p_y_x = prev_rad[0][1],
+        p_x_z = prev_rad[1][0],
+        p_z_x = prev_rad[1][1],
+        p_y_z = prev_rad[2][0],
+        p_z_y = prev_rad[2][1],
+
+        n_x_y = prev_rad[0][0],
+        n_y_x = prev_rad[0][1],
+        n_x_z = prev_rad[1][0],
+        n_z_x = prev_rad[1][1],
+        n_y_z = prev_rad[2][0],
+        n_z_y = prev_rad[2][1],
+
+        is_x_front = mb_prismoid_prev_rad_x(idx),
+        is_next_x = !mb_prismoid_prev_rad_x(next_index),
+        is_prev_x = mb_prismoid_prev_rad_x(prev_index),
+        
+        len_x_y = x_y + (is_x_front ? (is_next_x ? n_x_y : n_y_x) : (is_prev_x ? p_x_y : p_y_x)),
+        len_y_x = y_x + (is_x_front ? (is_prev_x ? p_x_y : p_y_x) : (is_next_x ? n_x_y : n_y_x)),
+
+        len_x_z = x_z + (is_x_front ? (is_next_x ? n_x_z : n_y_z) : (is_prev_x ? p_x_z : p_y_z)),
+        len_y_z = y_z + (is_x_front ? (is_prev_x ? p_x_z : p_y_z) : (is_next_x ? n_x_z : n_y_z)),
+
+        x_y_rel = (is_x_front ? next_dis_len : prev_dis_len) / len_x_y,
+        y_x_rel = (is_x_front ? prev_dis_len : next_dis_len) / len_y_x,
+
+        x_z_rel = (is_x_front ? next_dis_len : prev_dis_len) / len_x_z,
+        y_z_rel = (is_x_front ? prev_dis_len : next_dis_len) / len_y_z,
+
+        x_y_new = x_y_rel >= 1 ? x_y : x_y * x_y_rel,
+        y_x_new = y_x_rel >= 1 ? y_x : y_x * y_x_rel,
+        x_z_new = x_z_rel >= 1 ? x_z : x_z * x_z_rel,
+        y_z_new = y_z_rel >= 1 ? y_z : y_z * y_z_rel,
+
+        new_rad = [[x_y_new, y_x_new], [x_z_new, z_x], [y_z_new, z_y]]
+    )
+    [point[0], point[1], point[2], new_rad];
+
 /**
 * Normalizes the radius
 * TODO implement
 */
 function mb_prismoid_normalize_radius(shape) =
-    shape;
+    [
+        for(i = [0 : 1 : 1])
+            let(plane = mb_prismoid_plane(shape, i))
+                [ 
+                for(j = [0 : 1 : len(plane) - 1])
+                    is_undef(plane[j]) ? undef :
+                    (
+                        let(
+                            point = mb_point(shape, i, j),
+                            rad = mb_point_radius(shape, i, j),
+                            prev_index = mb_prev_index(shape, i, j),
+                            prev_rad = mb_point_radius(shape, i, prev_index),
+                            prev_point = mb_point(shape, i, prev_index),
+                            prev_dis_len = mb_point_distance_length(point, prev_point),
+                            next_index = mb_next_index(shape, i, j),
+                            next_rad = mb_point_radius(shape, i, next_index),
+                            next_point = mb_point(shape, i, next_index),
+                            next_dis_len = mb_point_distance_length(point, next_point),
+                            inv_point = mb_inv_point(shape, i, j),
+                            inv_dis_len = mb_point_distance_length(point, inv_point)
+                        )
+                        mb_prismoid_norm_rad(
+                            idx = j,
+                            point = point, 
+                            rad = rad, 
+                            prev_index = prev_index, 
+                            prev_rad = prev_rad, 
+                            prev_dis_len = prev_dis_len,
+                            next_index = next_index, 
+                            next_rad = next_rad,
+                            next_dis_len = next_dis_len,
+                            inv_dis_len = inv_dis_len
+                        )
+                    )
+                ]
+    ];
 
 /**
 * Recalculates the radius after expand
@@ -871,7 +975,7 @@ mb_prismoid(shape = [
 mb_prismoid(shape = [
     [
         [-20, -50], 
-        [-40, -30], 
+        undef, //[-40, -30], 
         [-20, 50], 
         undef, 
         [20, 50], 
@@ -881,13 +985,13 @@ mb_prismoid(shape = [
     ],
     
     [
-        [-20, -50, undef, [[4,5], 0, 0]], 
-        [-40, -30, undef, [[4,12], 0, 0]], 
-        [-20, 50, undef, [[10,2], 0, 0]], 
+        [-20, -50, undef, [[80,50], 0, 0]], 
+        undef, //[-40, -30, undef, [[4,12], 0, 0]], 
+        [-20, 50, undef, [[80,50], 0, 0]], 
         undef, 
-        [20, 50, undef, [[10,5], 0, 0]], 
+        [20, 50, undef, [[80,50], 0, 0]], 
         undef, 
-        [20, -50, undef, [[10,5], 0, 0]], 
+        [20, -50, undef, [[80,50], 0, 0]], 
         undef
     ]
 ], height = 40,  debug=true);
@@ -897,3 +1001,27 @@ mb_prismoid(shape = [
     
     [[-20, -50], undef, [-20, 50], undef, [20, 50], undef, [20, -50], undef]
 ], height = 40, socket = [0, 0],  debug=true);
+
+*mb_prismoid(shape = [
+    [
+        [-20, -50], 
+        undef, 
+        [-20, 50], 
+        undef, 
+        [20, 50], 
+        undef, 
+        [20, -50], 
+        undef
+    ],
+    
+    [
+        [-20, -50, undef, [0, 0, [100,15]]], 
+        undef, 
+        [-20, 50, undef, [0, 0,0 ]], 
+        undef, 
+        [20, 50, undef, [0, 0, 0]], 
+        undef, 
+        [20, -50, undef, [0, 0, [100,15]]], 
+        undef
+    ]
+], height = 40,  debug=true);
