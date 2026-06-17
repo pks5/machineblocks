@@ -614,12 +614,12 @@ function mb_prismoid_norm_rad(
         p_y_z = prev_rad[2][0],
         p_z_y = prev_rad[2][1],
 
-        n_x_y = prev_rad[0][0],
-        n_y_x = prev_rad[0][1],
-        n_x_z = prev_rad[1][0],
-        n_z_x = prev_rad[1][1],
-        n_y_z = prev_rad[2][0],
-        n_z_y = prev_rad[2][1],
+        n_x_y = next_rad[0][0],
+        n_y_x = next_rad[0][1],
+        n_x_z = next_rad[1][0],
+        n_z_x = next_rad[1][1],
+        n_y_z = next_rad[2][0],
+        n_z_y = next_rad[2][1],
 
         is_x_front = mb_prismoid_is_x_rad_front(idx),
         is_next_x = !mb_prismoid_is_x_rad_front(next_index),
@@ -631,11 +631,11 @@ function mb_prismoid_norm_rad(
         len_x_z = x_z + (is_x_front ? (is_next_x ? n_x_z : n_y_z) : (is_prev_x ? p_x_z : p_y_z)),
         len_y_z = y_z + (is_x_front ? (is_prev_x ? p_x_z : p_y_z) : (is_next_x ? n_x_z : n_y_z)),
 
-        x_y_rel = (is_x_front ? next_dis_len : prev_dis_len) / len_x_y,
-        y_x_rel = (is_x_front ? prev_dis_len : next_dis_len) / len_y_x,
+        x_y_rel = len_x_y <= 0 ? 1 : (is_x_front ? next_dis_len : prev_dis_len) / len_x_y,
+        y_x_rel = len_y_x <= 0 ? 1 : (is_x_front ? prev_dis_len : next_dis_len) / len_y_x,
 
-        x_z_rel = (is_x_front ? next_dis_len : prev_dis_len) / len_x_z,
-        y_z_rel = (is_x_front ? prev_dis_len : next_dis_len) / len_y_z,
+        x_z_rel = len_x_z <= 0 ? 1 : (is_x_front ? next_dis_len : prev_dis_len) / len_x_z,
+        y_z_rel = len_y_z <= 0 ? 1 : (is_x_front ? prev_dis_len : next_dis_len) / len_y_z,
 
         x_y_new = x_y_rel >= 1 ? x_y : x_y * x_y_rel,
         y_x_new = y_x_rel >= 1 ? y_x : y_x * y_x_rel,
