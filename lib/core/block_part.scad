@@ -268,6 +268,7 @@ function mb_block_part_prismoid(
     socket = undef, 
     expand = undef, 
     height = undef,
+    radius = undef,
     render = true
 ) =
     let(
@@ -302,8 +303,8 @@ function mb_block_part_prismoid(
             mb_poly_expand(bevel_matrix, 1, slope_pos_inv),
             [
                 h_exp, 
-                socket, 
-                undef, 
+                socket,
+                radius, 
                 exp
             ]
         ],
