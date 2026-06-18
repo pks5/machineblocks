@@ -58,17 +58,25 @@ function mb_corner_radius_from_side_views(r) =
         // lower z plane: sw-, nw-, ne-, se-
         [
             [ z_sw, y_b0, x_b0 ], // sw-: [[xy,yx], [xz,zx], [yz,zy]]
+            [ z_sw, y_b0, x_b0 ],
             [ z_nw, y_b0, x_b1 ], // nw-
+            [ z_nw, y_b0, x_b1 ],
             [ z_ne, y_b1, x_b1 ], // ne-
-            [ z_se, y_b1, x_b0 ]  // se-
+            [ z_ne, y_b1, x_b1 ],
+            [ z_se, y_b1, x_b0 ], // se-
+            [ z_se, y_b1, x_b0 ]
         ],
 
         // upper z plane: sw+, nw+, ne+, se+
         [
             [ z_sw, y_t0, x_t0 ], // sw+
+            [ z_sw, y_t0, x_t0 ],
             [ z_nw, y_t0, x_t1 ], // nw+
+            [ z_nw, y_t0, x_t1 ],
             [ z_ne, y_t1, x_t1 ], // ne+
-            [ z_se, y_t1, x_t0 ]  // se+
+            [ z_ne, y_t1, x_t1 ],
+            [ z_se, y_t1, x_t0 ], // se+
+            [ z_se, y_t1, x_t0 ]
         ]
     ];
 

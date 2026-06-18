@@ -1333,15 +1333,24 @@ function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) =
     )
     len(found) > 0;
 
-function mb_block_base_rounding_radius_z(block_obj) =
+function mb_block_base_rounding_omit(face, corner_j) =
+    face == 0 ? corner_j == 0 || corner_j == 1 || corner_j == 2 || corner_j == 3 :
+    face == 1 ? corner_j == 4 || corner_j == 5 || corner_j == 6 || corner_j == 7 :
+    face == 2 ? corner_j == 0 || corner_j == 1 || corner_j == 6 || corner_j == 7 :
+    face == 3 ? corner_j == 2 || corner_j == 3 || corner_j == 4 || corner_j == 5 :
+    false;
+
+function mb_block_base_rounding_radius_z(block_obj, omit_face = undef) =
     let(
-        base_rounding_radius = mb_block_get_base_rounding_radius(block_obj)
+        base_rounding_radius = mb_block_get_base_rounding_radius(block_obj),
+        face = is_undef(omit_face) ? undef : mb_face_to_int(omit_face)
     )
     [
         for(i = [0 : len(base_rounding_radius) - 1])
             [
             for(j = [0 : len(base_rounding_radius[i]) - 1])
-                [base_rounding_radius[i][j][0], 0, 0]
+                is_undef(base_rounding_radius[i][j]) ? undef 
+                : mb_block_base_rounding_omit(face, j) ? undef : [base_rounding_radius[i][j][0], 0, 0]
             ]
     ];
 
