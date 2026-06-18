@@ -74,8 +74,6 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                                 ) : 
                                                 slope_neg[f] + 
                                                     - wall_thickness - (planes == "all" && slope_pos[face] > 0 ? 0 : max(mb_block_slope_partial(block_obj, top_offset, f), 0))
-                                                    //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
-                                                    //- wall_thickness
                                                     + inner_adj,
                                         bottom,
                                         planes == "all" && slope_pos[face] > 0 ? mb_block_dim_opposite_offset(
@@ -85,10 +83,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     ]
                                 )
                             ],
-                            /*slope = _mb_layout_plane_value(
-                                planes = planes, 
-                                value = mb_array_mul(slope_pos, slope_partial)
-                            ),*/
+                            radius = mb_block_get_base_rounding_radius(block_obj),
                             socket = _mb_layout_plane_value(
                                 planes = planes, 
                                 value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]
