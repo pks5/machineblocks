@@ -161,6 +161,7 @@ module mb_rounding_corner(
                 cube(size = [zero, zero, zero], center=true);
         }
         else{
+            echo ( rad = s);
             translate(mb_corner_offset_N(corner, max_rad, f = 1))
                 mb_ellibox(
                     x_y = s[0][0],
@@ -725,6 +726,12 @@ function mb_prismoid_normalize_radius(shape, socket = undef) =
                 ]
     ];
 
+/*
+function mb_prismoid_recalc_rad_component(r, old_len, new_len) =
+    old_len == 0
+        ? r
+        : max(0, r + (new_len - old_len) * (r / old_len));
+
 function mb_prismoid_recalc_rad(
     corner,
     point, 
@@ -738,7 +745,6 @@ function mb_prismoid_recalc_rad(
     bef_inv_dis_len
 ) =
 let(
-
     x_y = rad[0][0],
     y_x = rad[0][1],
     x_z = rad[1][0],
@@ -748,26 +754,43 @@ let(
 
     is_x_front = mb_prismoid_is_x_rad_front(corner[1]),
 
-    prev_rel = bef_prev_dis_len == 0 ? 1 : prev_dis_len / bef_prev_dis_len,
-    next_rel = bef_next_dis_len == 0 ? 1 : next_dis_len / bef_next_dis_len,
-    z_rel = bef_inv_dis_len == 0 ? 1 : inv_dis_len / bef_inv_dis_len,
+    prev_old = bef_prev_dis_len,
+    prev_new = prev_dis_len,
+    next_old = bef_next_dis_len,
+    next_new = next_dis_len,
+    z_old = bef_inv_dis_len,
+    z_new = inv_dis_len,
 
-    x_y_new = x_y * (is_x_front ? next_rel : prev_rel),
-    y_x_new = y_x * (is_x_front ? prev_rel : next_rel),
-    x_z_new = x_z * (is_x_front ? next_rel : prev_rel),
-    y_z_new = y_z * (is_x_front ? prev_rel : next_rel),
-    z_x_new = z_x * z_rel,
-    z_y_new = z_y * z_rel,
+    x_side_old = is_x_front ? next_old : prev_old,
+    x_side_new = is_x_front ? next_new : prev_new,
 
-    new_rad = [[x_y_new, y_x_new], [x_z_new, z_x_new], [y_z_new, z_y_new]]
+    y_side_old = is_x_front ? prev_old : next_old,
+    y_side_new = is_x_front ? prev_new : next_new,
 
+    x_y_new = mb_prismoid_recalc_rad_component(x_y, x_side_old, x_side_new),
+    y_x_new = mb_prismoid_recalc_rad_component(y_x, y_side_old, y_side_new),
+
+    x_z_new = mb_prismoid_recalc_rad_component(x_z, x_side_old, x_side_new),
+    y_z_new = mb_prismoid_recalc_rad_component(y_z, y_side_old, y_side_new),
+
+    z_x_new = mb_prismoid_recalc_rad_component(z_x, z_old, z_new),
+    z_y_new = mb_prismoid_recalc_rad_component(z_y, z_old, z_new),
+
+    new_rad = [
+        [x_y_new, y_x_new],
+        [x_z_new, z_x_new],
+        [y_z_new, z_y_new]
+    ]
 )
 [point[0], point[1], point[2], new_rad];
+
+*/
 
 /**
 * Recalculates the radius after expand
 * TODO implement
 */
+/*
 function mb_prismoid_recalc_radius(shape_before, shape) =
     [
         for(i = [0 : 1 : 1])
@@ -813,6 +836,156 @@ function mb_prismoid_recalc_radius(shape_before, shape) =
                     )
                 ]
     ];
+*/
+
+function mb_prismoid_recalc_rad_component(r, expand) =
+    max(0, r + expand);
+
+function mb_sum(v, i = 0, acc = 0) =
+    i >= len(v) ? acc : mb_sum(v, i + 1, acc + v[i]);
+
+function mb_prismoid_plane_signed_area(shape, i) =
+    mb_sum([
+        for(j = [0 : 1 : len(mb_prismoid_plane(shape, i)) - 1])
+            let(
+                p = mb_point(shape, i, j),
+                n = mb_point(shape, i, mb_next_index(shape, i, j))
+            )
+            is_undef(p) || is_undef(n)
+                ? 0
+                : (p[0] * n[1] - n[0] * p[1])
+    ]) / 2;
+
+function mb_prismoid_edge_expand_2d(
+    old_a,
+    old_b,
+    new_a,
+    new_b,
+    winding
+) =
+let(
+    dx = old_b[0] - old_a[0],
+    dy = old_b[1] - old_a[1],
+    l = sqrt(dx * dx + dy * dy),
+
+    // CCW polygon: inside is left, outside is right
+    // CW polygon: inside is right, outside is left
+    nx = l == 0 ? 0 : (winding >= 0 ?  dy / l : -dy / l),
+    ny = l == 0 ? 0 : (winding >= 0 ? -dx / l :  dx / l),
+
+    da = [new_a[0] - old_a[0], new_a[1] - old_a[1]],
+    db = [new_b[0] - old_b[0], new_b[1] - old_b[1]],
+
+    ea = da[0] * nx + da[1] * ny,
+    eb = db[0] * nx + db[1] * ny
+)
+    l == 0 ? 0 : (ea + eb) / 2;
+
+function mb_prismoid_z_expand(point, bef_point, plane_index) =
+    plane_index == 0
+        ? bef_point[2] - point[2]   // bottom: downward expand is positive
+        : point[2] - bef_point[2];  // top: upward expand is positive
+
+function mb_prismoid_recalc_rad(
+    corner,
+    point, 
+    bef_point,
+    rad, 
+    prev_expand,
+    next_expand,
+    z_expand
+) =
+let(
+    x_y = rad[0][0],
+    y_x = rad[0][1],
+    x_z = rad[1][0],
+    z_x = rad[1][1],
+    y_z = rad[2][0],
+    z_y = rad[2][1],
+
+    is_x_front = mb_prismoid_is_x_rad_front(corner[1]),
+
+    x_expand = is_x_front ? next_expand : prev_expand,
+    y_expand = is_x_front ? prev_expand : next_expand,
+
+    x_y_new = mb_prismoid_recalc_rad_component(x_y, x_expand),
+    y_x_new = mb_prismoid_recalc_rad_component(y_x, y_expand),
+
+    x_z_new = mb_prismoid_recalc_rad_component(x_z, x_expand),
+    y_z_new = mb_prismoid_recalc_rad_component(y_z, y_expand),
+
+    z_x_new = mb_prismoid_recalc_rad_component(z_x, z_expand),
+    z_y_new = mb_prismoid_recalc_rad_component(z_y, z_expand),
+
+    new_rad = [
+        [x_y_new, y_x_new],
+        [x_z_new, z_x_new],
+        [y_z_new, z_y_new]
+    ]
+)
+[point[0], point[1], point[2], new_rad];
+
+
+/**
+* Recalculates the radius after expand
+*/
+function mb_prismoid_recalc_radius(shape_before, shape) =
+    [
+        for(i = [0 : 1 : 1])
+            let(
+                plane = mb_prismoid_plane(shape, i),
+                winding = mb_prismoid_plane_signed_area(shape_before, i)
+            )
+            [ 
+                for(j = [0 : 1 : len(plane) - 1])
+                    is_undef(plane[j]) ? undef : 
+                    (
+                        let(
+                            point = mb_point(shape, i, j),
+                            bef_point = mb_point(shape_before, i, j),
+                            rad = mb_point_radius(shape, i, j),
+
+                            prev_index = mb_prev_index(shape, i, j),
+                            prev_point = mb_point(shape, i, prev_index),
+                            bef_prev_point = mb_point(shape_before, i, prev_index),
+
+                            next_index = mb_next_index(shape, i, j),
+                            next_point = mb_point(shape, i, next_index),
+                            bef_next_point = mb_point(shape_before, i, next_index),
+
+                            prev_expand = mb_prismoid_edge_expand_2d(
+                                old_a = bef_prev_point,
+                                old_b = bef_point,
+                                new_a = prev_point,
+                                new_b = point,
+                                winding = winding
+                            ),
+
+                            next_expand = mb_prismoid_edge_expand_2d(
+                                old_a = bef_point,
+                                old_b = bef_next_point,
+                                new_a = point,
+                                new_b = next_point,
+                                winding = winding
+                            ),
+
+                            z_expand = mb_prismoid_z_expand(point, bef_point, i),
+
+                            corner = mb_point_corner(shape, i, j)
+                        )
+                        mb_prismoid_recalc_rad(
+                            corner = corner,
+                            point = point, 
+                            bef_point = bef_point,
+                            rad = rad, 
+                            prev_expand = prev_expand,
+                            next_expand = next_expand,
+                            z_expand = z_expand
+                        )
+                    )
+            ]
+    ];
+
 
 /**
 * Resolves the shape
