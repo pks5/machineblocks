@@ -1,6 +1,7 @@
 use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
+use <../core/corner_radius.scad>;
 use <ellioct.scad>;
 use <loft_poly.scad>;
 
@@ -884,9 +885,6 @@ function mb_prismoid_shape_resolve(
 
 
 
-
-
-
 /*
 * ---------
 * END UTILS
@@ -1156,24 +1154,24 @@ mb_prismoid(shape = [
 
 mb_prismoid(shape = [
     [
-        [-20, -50, undef, [0, [20, 30], 0]], 
+        [-20, -50], 
         undef, //[-40, -30], 
-        [-20, 50, undef, [0, [20, 30], 0]], 
+        [-20, 50], 
         undef, 
-        [20, 50, undef, [0, [20, 30], 0]], 
+        [20, 50], 
         undef, 
-        [20, -50, undef, [0, [20, 30], 0]], 
+        [20, -50], 
         undef
     ],
     
     [
-        [-20, -50, undef, [[20, 20], 0, 0]], 
+        [-20, -50], 
         undef, //[-40, -30, undef, [[4,12], 0, 0]], 
-        [-20, 50, undef, [[20, 20], 0, 0]], 
+        [-20, 50], 
         undef, 
-        [20, 50, undef, [[20, 20], 0, 0]], 
+        [20, 50], 
         undef, 
-        [20, -50, undef, [[20, 20], 0, 0]], 
+        [20, -50], 
         undef
     ]
-], expand = [[10,10,10,10,10,10]], height = 40,  debug=true);
+], expand = [[-10,-10,-10,-10,-10,-10]], radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
