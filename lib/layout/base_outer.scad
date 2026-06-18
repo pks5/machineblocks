@@ -2,7 +2,6 @@ use <../core/utils.scad>;
 use <../core/block_model.scad>;
 use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
-use <../core/corner_radius.scad>;
 use <shared.scad>;
 
 /**
@@ -19,6 +18,6 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
         expand = adjusted ? [mb_block_get_base_adj(block_obj)] : undef,
         socket = mb_block_get_slope_socket(block_obj),
         slope = mb_block_dim_slope(block_dim),
-        radius = mb_corner_radius_from_side_views(mb_block_get_base_rounding_radius(block_obj))
+        radius = mb_block_get_base_rounding_radius(block_obj)
     ); 
 

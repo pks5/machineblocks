@@ -1,5 +1,6 @@
 use <geometry.scad>;
 use <utils.scad>;
+use <corner_radius.scad>;
 use <block_dim.scad>;
 use <bevel.scad>;
 use <poly_expand.scad>;
@@ -503,7 +504,8 @@ function mb_block_get_size_mod(block_obj) =                         block_obj[6]
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 function mb_block_has_base(block_obj) =                             block_obj[4][6];
 function mb_block_get_base_color(block_obj) =                       block_obj[4][7];
-function mb_block_get_base_rounding_radius(block_obj) =             block_obj[4][8];
+function mb_block_get_base_rounding_radius(block_obj) =             
+                                   mb_corner_radius_from_side_views(block_obj[4][8]);
 
 // Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];

@@ -59,18 +59,13 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                             for(f = [0 : 3])
                                 slope_neg[f] 
                                 -wall_thickness - max(mb_block_slope_partial(block_obj, top_offset, f), 0)
-                                //+ _mb_layout_plane_value(planes = planes, plane = "top", value = - slope_partial * slope_pos[f], else_value = 0, all = false) 
-                                //- wall_thickness 
                                 + inner_adj,
                             bottom,
                             top
                         ]
                     )
                 ],
-                /*slope = _mb_layout_plane_value(
-                    planes = planes, 
-                    value = mb_array_mul(slope_pos, slope_partial)
-                ),*/
+                radius = mb_block_get_base_rounding_radius(block_obj),
                 socket = _mb_layout_plane_value(
                     planes = planes, 
                     value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]
