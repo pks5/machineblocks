@@ -83,7 +83,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                     ]
                                 )
                             ],
-                            radius = mb_block_get_base_rounding_radius(block_obj),
+                            radius = mb_block_base_rounding_radius_z(block_obj),
                             socket = _mb_layout_plane_value(
                                 planes = planes, 
                                 value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]

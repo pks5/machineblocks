@@ -156,7 +156,8 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                         -slope_pos[f] - tongue_offset,
                                     tongue_bottom,
                                     tongue_top
-                                ]]
+                                ]],
+                                radius = mb_block_base_rounding_radius_z(block_obj)
                             ),
 
                             // Base Wall Gaps
@@ -214,7 +215,8 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                 -slope_pos[f] - tongue_offset - tongue_thickness,
                             tongue_bottom_cut,
                             tongue_top_cut
-                        ]]
+                        ]],
+                        radius = mb_block_base_rounding_radius_z(block_obj)
                     ),
                     
                     // Recess Gaps
@@ -276,7 +278,8 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                         -slope_pos[f] - tongue_offset + tongue_clamp_thickness,
                                     tongue_clamp_bottom,
                                     tongue_clamp_top
-                                ]]
+                                ]],
+                                radius = mb_block_base_rounding_radius_z(block_obj)
                             ),
 
                             // Base Wall Gaps
@@ -333,7 +336,8 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                 -slope_pos[f] - tongue_offset - tongue_thickness - tongue_clamp_thickness,
                             tongue_clamp_bottom_cut,
                             tongue_clamp_top_cut
-                        ]]
+                        ]],
+                        radius = mb_block_base_rounding_radius_z(block_obj)
                     ),
                     
                     // Recess Wall Gaps

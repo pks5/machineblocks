@@ -1333,6 +1333,18 @@ function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) =
     )
     len(found) > 0;
 
+function mb_block_base_rounding_radius_z(block_obj) =
+    let(
+        base_rounding_radius = mb_block_get_base_rounding_radius(block_obj)
+    )
+    [
+        for(i = [0 : len(base_rounding_radius) - 1])
+            [
+            for(j = [0 : len(base_rounding_radius[i]) - 1])
+                [base_rounding_radius[i][j][0], 0, 0]
+            ]
+    ];
+
 /**
 * ----
 * Misc
