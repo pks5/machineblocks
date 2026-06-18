@@ -663,7 +663,13 @@ function mb_prismoid_norm_rad(
         z_x_new = z_x_rel >= 1 ? z_x : z_x * z_x_rel,
         z_y_new = z_y_rel >= 1 ? z_y : z_y * z_y_rel,
 
-        new_rad = [[x_y_new, y_x_new], [x_z_new, z_x_new], [y_z_new, z_y_new]]
+        spb_z_x = is_undef(spb_dis) ? z_x_new : spb_dis,
+        spb_z_y = is_undef(spb_dis) ? z_y_new : spb_dis,
+
+        spt_z_x = is_undef(spt_dis) ? z_x_new : spt_dis,
+        spt_z_y = is_undef(spt_dis) ? z_y_new : spt_dis,
+
+        new_rad = [[x_y_new, y_x_new], [x_z_new, min(z_x_new, spb_z_x, spt_z_x) ], [y_z_new, min(z_y_new, spb_z_y, spt_z_y)]]
     )
     [point[0], point[1], point[2], new_rad];
 
@@ -995,7 +1001,7 @@ mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
     [[-20, -30], [-70, 0], [-20, 30], undef, [20, 40], undef, [50, -40], undef]
-], height = 120, socket = [20, 0], radius = [[10, 15], 14.3, 4], debug=true, align="sticky");
+], height = 120, socket = [20, 0], radius = [[10, 15], 10, 4], debug=true, align="sticky");
 
 
 *mb_prismoid(shape = [
