@@ -677,7 +677,7 @@ function mb_prismoid_norm_rad(
 * Normalizes the radius
 * TODO implement
 */
-function mb_prismoid_normalize_radius(shape, socket) =
+function mb_prismoid_normalize_radius(shape, socket = undef) =
     [
         for(i = [0 : 1 : 1])
             let(plane = mb_prismoid_plane(shape, i))
@@ -702,8 +702,8 @@ function mb_prismoid_normalize_radius(shape, socket) =
                             inv_rad = mb_point_radius(shape, i == 0 ? 1 : 0, j),
                             corner = mb_point_corner(shape, i, j),
                             slope = mb_inv_point_slope(corner, inv_dis),
-                            socket_point_bottom = mb_socket_point_bottom(point, inv_point, socket, corner, slope),
-                            socket_point_top = mb_socket_point_top(point, inv_point, socket, corner, slope),
+                            socket_point_bottom = is_undef(socket) ? undef : mb_socket_point_bottom(point, inv_point, socket, corner, slope),
+                            socket_point_top = is_undef(socket) ? undef : mb_socket_point_top(point, inv_point, socket, corner, slope),
                             spb_dis = is_undef(socket_point_bottom) ? undef : mb_point_distance_length(point, socket_point_bottom),
                             spt_dis = is_undef(socket_point_top) ? undef : mb_point_distance_length(point, socket_point_top),
                         )
@@ -726,12 +726,94 @@ function mb_prismoid_normalize_radius(shape, socket) =
                 ]
     ];
 
+function mb_prismoid_recalc_rad(
+    corner,
+    point, 
+    bef_point,
+    rad, 
+    prev_dis_len, 
+    bef_prev_dis_len,
+    next_dis_len,
+    bef_next_dis_len,
+    inv_dis_len,
+    bef_inv_dis_len
+) =
+let(
+
+    x_y = rad[0][0],
+    y_x = rad[0][1],
+    x_z = rad[1][0],
+    z_x = rad[1][1],
+    y_z = rad[2][0],
+    z_y = rad[2][1],
+
+    is_x_front = mb_prismoid_is_x_rad_front(corner[1]),
+
+    prev_rel = bef_prev_dis_len == 0 ? 1 : prev_dis_len / bef_prev_dis_len,
+    next_rel = bef_next_dis_len == 0 ? 1 : next_dis_len / bef_next_dis_len,
+    z_rel = bef_inv_dis_len == 0 ? 1 : inv_dis_len / bef_inv_dis_len,
+
+    x_y_new = x_y * (is_x_front ? next_rel : prev_rel),
+    y_x_new = y_x * (is_x_front ? prev_rel : next_rel),
+    x_z_new = x_z * (is_x_front ? next_rel : prev_rel),
+    y_z_new = y_z * (is_x_front ? prev_rel : next_rel),
+    z_x_new = z_x * z_rel,
+    z_y_new = z_y * z_rel,
+
+    new_rad = [[x_y_new, y_x_new], [x_z_new, z_x_new], [y_z_new, z_y_new]]
+
+)
+[point[0], point[1], point[2], new_rad];
+
 /**
 * Recalculates the radius after expand
 * TODO implement
 */
-function mb_prismoid_recalc_radius(shape_before, shape_after) =
-    shape_after;
+function mb_prismoid_recalc_radius(shape_before, shape) =
+    [
+        for(i = [0 : 1 : 1])
+            let(plane = mb_prismoid_plane(shape, i))
+                [ 
+                for(j = [0 : 1 : len(plane) - 1])
+                    is_undef(plane[j]) ? undef : 
+                    (
+                        let(
+
+                            point = mb_point(shape, i, j),
+                            bef_point = mb_point(shape_before, i, j),
+                            rad = mb_point_radius(shape, i, j),
+                            prev_index = mb_prev_index(shape, i, j),
+                            prev_point = mb_point(shape, i, prev_index),
+                            prev_dis_len = mb_point_distance_length(point, prev_point),
+                            bef_prev_point = mb_point(shape_before, i, prev_index),
+                            bef_prev_dis_len = mb_point_distance_length(bef_point, bef_prev_point),
+                            next_index = mb_next_index(shape, i, j),
+                            next_point = mb_point(shape, i, next_index),
+                            next_dis_len = mb_point_distance_length(point, next_point),
+                            bef_next_point = mb_point(shape_before, i, next_index),
+                            bef_next_dis_len = mb_point_distance_length(bef_point, bef_next_point),
+                            inv_point = mb_inv_point(shape, i, j),
+                            bef_inv_point = mb_inv_point(shape_before, i, j),
+                            inv_dis = mb_point_distance(point, inv_point),
+                            inv_dis_len = mb_point_distance_length(point, inv_point),
+                            bef_inv_dis_len = mb_point_distance_length(bef_point, bef_inv_point),
+                            corner = mb_point_corner(shape, i, j)
+                        )
+                        mb_prismoid_recalc_rad(
+                            corner = corner,
+                            point = point, 
+                            bef_point = bef_point,
+                            rad = rad, 
+                            prev_dis_len = prev_dis_len,
+                            bef_prev_dis_len = bef_prev_dis_len,
+                            next_dis_len = next_dis_len,
+                            bef_next_dis_len = bef_next_dis_len,
+                            inv_dis_len = inv_dis_len,
+                            bef_inv_dis_len = bef_inv_dis_len
+                        )
+                    )
+                ]
+    ];
 
 /**
 * Resolves the shape
@@ -779,7 +861,7 @@ function mb_prismoid_shape_resolve(
             mb_prismoid_plane_resolve_points(s, 0, mul = mul, add = a[0], height = height, radius = rr[0]),
             mb_prismoid_plane_resolve_points(s, 1, mul = mul, add = a[1], height = height, radius = rr[1])
         ],
-        ar = mb_prismoid_normalize_radius(rp, socket),
+        ar = mb_prismoid_normalize_radius(rp, is_undef(expand) ? socket : undef),
 
         // Calc Expand
         // TODO make function
@@ -787,7 +869,7 @@ function mb_prismoid_shape_resolve(
            mb_poly_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
            mb_poly_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
         ],
-        rc = is_undef(expand) ? ar : mb_prismoid_recalc_radius(ar, ex),
+        rc = is_undef(expand) ? ar : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
         
         // Static data
         static = [socket]
@@ -1018,7 +1100,7 @@ mb_prismoid(shape = [
     [[-20, -50], undef, [-20, 50], undef, [40, 40], undef, [20, -50], undef]
 ], height = 120, socket = [10, 20], radius = 8, debug=true);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [
         [-20, -50, undef, [0, [20, 30], 0]], 
         undef, //[-40, -30], 
@@ -1071,3 +1153,27 @@ mb_prismoid(shape = [
         undef
     ]
 ], height = 40,  debug=true);
+
+mb_prismoid(shape = [
+    [
+        [-20, -50, undef, [0, [20, 30], 0]], 
+        undef, //[-40, -30], 
+        [-20, 50, undef, [0, [20, 30], 0]], 
+        undef, 
+        [20, 50, undef, [0, [20, 30], 0]], 
+        undef, 
+        [20, -50, undef, [0, [20, 30], 0]], 
+        undef
+    ],
+    
+    [
+        [-20, -50, undef, [[20, 20], 0, 0]], 
+        undef, //[-40, -30, undef, [[4,12], 0, 0]], 
+        [-20, 50, undef, [[20, 20], 0, 0]], 
+        undef, 
+        [20, 50, undef, [[20, 20], 0, 0]], 
+        undef, 
+        [20, -50, undef, [[20, 20], 0, 0]], 
+        undef
+    ]
+], expand = [[10,10,10,10,10,10]], height = 40,  debug=true);
