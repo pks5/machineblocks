@@ -597,6 +597,7 @@ function mb_prismoid_norm_rad(
     next_index, 
     next_rad, 
     next_dis_len,
+    inv_rad,
     inv_dis_len
 ) =
     let(
@@ -621,6 +622,9 @@ function mb_prismoid_norm_rad(
         n_y_z = next_rad[2][0],
         n_z_y = next_rad[2][1],
 
+        i_z_x = inv_rad[1][1],
+        i_z_y = inv_rad[2][1],
+
         is_x_front = mb_prismoid_is_x_rad_front(idx),
         is_next_x = !mb_prismoid_is_x_rad_front(next_index),
         is_prev_x = mb_prismoid_is_x_rad_front(prev_index),
@@ -631,18 +635,26 @@ function mb_prismoid_norm_rad(
         len_x_z = x_z + (is_x_front ? (is_next_x ? n_x_z : n_y_z) : (is_prev_x ? p_x_z : p_y_z)),
         len_y_z = y_z + (is_x_front ? (is_prev_x ? p_x_z : p_y_z) : (is_next_x ? n_x_z : n_y_z)),
 
+        len_z_x = z_x + i_z_x,
+        len_z_y = z_y + i_z_y,
+
         x_y_rel = len_x_y <= 0 ? 1 : (is_x_front ? next_dis_len : prev_dis_len) / len_x_y,
         y_x_rel = len_y_x <= 0 ? 1 : (is_x_front ? prev_dis_len : next_dis_len) / len_y_x,
 
         x_z_rel = len_x_z <= 0 ? 1 : (is_x_front ? next_dis_len : prev_dis_len) / len_x_z,
         y_z_rel = len_y_z <= 0 ? 1 : (is_x_front ? prev_dis_len : next_dis_len) / len_y_z,
 
+        z_x_rel = len_z_x <= 0 ? 1 : inv_dis_len / len_z_x,
+        z_y_rel = len_z_y <= 0 ? 1 : inv_dis_len / len_z_y,
+
         x_y_new = x_y_rel >= 1 ? x_y : x_y * x_y_rel,
         y_x_new = y_x_rel >= 1 ? y_x : y_x * y_x_rel,
         x_z_new = x_z_rel >= 1 ? x_z : x_z * x_z_rel,
         y_z_new = y_z_rel >= 1 ? y_z : y_z * y_z_rel,
+        z_x_new = z_x_rel >= 1 ? z_x : z_x * z_x_rel,
+        z_y_new = z_y_rel >= 1 ? z_y : z_y * z_y_rel,
 
-        new_rad = [[x_y_new, y_x_new], [x_z_new, z_x], [y_z_new, z_y]]
+        new_rad = [[x_y_new, y_x_new], [x_z_new, z_x_new], [y_z_new, z_y_new]]
     )
     [point[0], point[1], point[2], new_rad];
 
@@ -670,7 +682,8 @@ function mb_prismoid_normalize_radius(shape) =
                             next_point = mb_point(shape, i, next_index),
                             next_dis_len = mb_point_distance_length(point, next_point),
                             inv_point = mb_inv_point(shape, i, j),
-                            inv_dis_len = mb_point_distance_length(point, inv_point)
+                            inv_dis_len = mb_point_distance_length(point, inv_point),
+                            inv_rad = mb_point_radius(shape, i == 0 ? 1 : 0, j)
                         )
                         mb_prismoid_norm_rad(
                             idx = j,
@@ -682,6 +695,7 @@ function mb_prismoid_normalize_radius(shape) =
                             next_index = next_index, 
                             next_rad = next_rad,
                             next_dis_len = next_dis_len,
+                            inv_rad = inv_rad,
                             inv_dis_len = inv_dis_len
                         )
                     )
@@ -974,24 +988,24 @@ mb_prismoid(shape = [
 
 mb_prismoid(shape = [
     [
-        [-20, -50], 
+        [-20, -50, undef, [0, [20, 30], 0]], 
         undef, //[-40, -30], 
-        [-20, 50], 
+        [-20, 50, undef, [0, [20, 30], 0]], 
         undef, 
-        [20, 50], 
+        [20, 50, undef, [0, [20, 30], 0]], 
         undef, 
-        [20, -50], 
+        [20, -50, undef, [0, [20, 30], 0]], 
         undef
     ],
     
     [
-        [-20, -50, undef, [[30,150], 0, 0]], 
+        [-20, -50, undef, [0, [20, 20], 0]], 
         undef, //[-40, -30, undef, [[4,12], 0, 0]], 
-        [-20, 50, undef, [[30,50], 0, 0]], 
+        [-20, 50, undef, [0, [20, 20], 0]], 
         undef, 
-        [20, 50, undef, [[30,50], 0, 0]], 
+        [20, 50, undef, [0, [20, 20], 0]], 
         undef, 
-        [20, -50, undef, [[30,50], 0, 0]], 
+        [20, -50, undef, [0, [20, 20], 0]], 
         undef
     ]
 ], height = 40,  debug=true);
