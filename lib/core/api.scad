@@ -82,7 +82,6 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
 function mb_param_baseAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseAdjustment", default != undef ? default : undef);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
-// TODO implement
 function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);
 
 // Cutoout

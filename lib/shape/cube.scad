@@ -1,4 +1,5 @@
 use <../core/utils.scad>;
+use <../core/corner_radius.scad>;
 use <prismoid.scad>;
 
 function _mb_rcube_ellipse_arc_points(cx, cy, rx, ry, a0, a1, segments = 8) =
@@ -255,7 +256,7 @@ module mb_cube(
     }
 
     if(!is_simple_cube || draw_together){
-        rad = xyz_rad ? mb_xyz_rad_convert(radius) : radius;
+        rad = xyz_rad ? mb_corner_radius_from_side_views(radius) : radius;
 
         prismoid_shape = [
             [ // Plane 0

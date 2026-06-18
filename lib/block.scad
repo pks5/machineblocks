@@ -408,7 +408,10 @@ module mb_block(
                                                                     else if(shape[0] == "rect"){
                                                                         mb_cube(
                                                                             size = portShapeRectSize(port[0], shape[3][0], portCutThickness), 
-                                                                            radius = shape[3][1], rounding_resolution=20);
+                                                                            radius = [0, 0, shape[3][1]], 
+                                                                            xyz_rad = true,
+                                                                            rounding_resolution=20
+                                                                        );
                                                                     }
                                                                 }
                                                             }
