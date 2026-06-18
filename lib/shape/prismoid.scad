@@ -14,6 +14,8 @@ use <loft_poly.scad>;
 /**
 * CORNER CUT
 */
+
+/*
 module mb_corner_cut(size, c = [0, 0]){
     sx = size[0];
     sy = size[1];
@@ -84,7 +86,7 @@ module mb_corner_cut(size, c = [0, 0]){
         [];
 
     polyhedron(points = pts, faces = faces, convexity = 4);
-}
+} */
 
 /**
 * ROUNDING CORNER
@@ -180,6 +182,7 @@ module mb_rounding_corner(
 /**
 * PSEUDO ELLIPSE RING
 */
+/*
 module mb_corner_ellibox(
     radius=[40, 25, 3],
     zero = 0.001,
@@ -238,7 +241,7 @@ module mb_corner_ellibox(
             n_a = resolution
         );
     }
-}
+}*/
 
 /*
 * ------------------
@@ -255,12 +258,12 @@ module mb_corner_ellibox(
 /*
 * CORNER UTILS
 */
-
+/*
 function mb_corner_offset(c, r, f = 0.5) = [
     (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? -1 : 1) * f * r[0],
     (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? -1 : 1) * f * r[1],
     (c[0] == 0 ? -1 : 1) * f * r[2]
-];
+];*/
 
 function mb_corner_offset_N(c, r, f = 0.5) = [
     (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
@@ -378,12 +381,6 @@ function mb_inv_point_slope(corner, inv_dis) =
 
 function mb_point_corner(shape, i, j) = 
     [i, j];
-    /*
-    let(plane = mb_prismoid_plane(shape, i),
-        sl = len(plane))
-    sl == 4 ? 
-    [i, 2 * j] : 
-    (sl == 8 ? [i, j] : undef);*/
 
 function mb_min_max_points(shape, i = 0, j = 0, min_max = [0, 0, 0, 0, 0, 0]) =
     let ( p = mb_point(shape, i, j))
@@ -471,11 +468,12 @@ function mb_prismoid_plane_checksum(a, i = 0) =
         );
 
 //TODO - 
+/*
 function mb_prismoid_min_points(a) =
     (a[0] != undef && a[2] != undef && a[4] != undef)
     || (a[0] != undef && a[2] != undef && a[6] != undef)
     || (a[0] != undef && a[4] != undef && a[6] != undef)
-    || (a[2] != undef && a[4] != undef && a[6] != undef);
+    || (a[2] != undef && a[4] != undef && a[6] != undef); */
 
 function mb_prismoid_complexity(shape, static) =
     static[0][0] != 0 || static[0][1] != 0 ? "complex" :
