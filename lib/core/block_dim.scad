@@ -221,16 +221,18 @@ function mb_block_dim_overlap(block_dim, overlap = false) =
 function mb_block_dim_height_expand(block_dim, axis, height, expand) = 
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
+        min_max_pos = mb_block_dim_min_max_pos(block_dim),
         axis = mb_axis_to_int(axis),
-        h = mod_size[axis],
+        start = min_max_pos[0][axis],
+        end = min_max_pos[1][axis],
         h_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto"] 
         ? [
-            -0.5 * (!is_undef(height) ? height : h), 
-            0.5 * (!is_undef(height) ? height : h)
+            !is_undef(height) ? -0.5 * height : start,
+            !is_undef(height) ? 0.5 * height : end
         ]
         : [
-            expand[0] == "auto" ? 0.5 * h + expand[1] - (!is_undef(height) ? height : h) : -0.5 * h - expand[0], 
-            expand[1] == "auto" ? -0.5 * h - expand[0] + (!is_undef(height) ? height : h) : 0.5 * h + expand[1]
+            expand[0] == "auto" ? end + expand[1] - (!is_undef(height) ? height : mod_size[axis]) : start - expand[0], 
+            expand[1] == "auto" ? start - expand[0] + (!is_undef(height) ? height : mod_size[axis]) : end + expand[1]
         ]
     )
     h_adj;
@@ -238,12 +240,25 @@ function mb_block_dim_height_expand(block_dim, axis, height, expand) =
 function mb_block_dim_size_expand(block_dim, size, expand) = 
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
+        min_max_pos = mb_block_dim_min_max_pos(block_dim),
+
+        size_min_max = [
+            [
+                is_undef(size[0]) ? min_max_pos[0][0] : -0.5 * size[0],
+                is_undef(size[1]) ? min_max_pos[0][1] : -0.5 * size[1],
+                is_undef(size[2]) ? min_max_pos[0][2] : -0.5 * size[2]
+            ],
+            [
+                is_undef(size[0]) ? min_max_pos[1][0] : 0.5 * size[0],
+                is_undef(size[1]) ? min_max_pos[1][1] : 0.5 * size[1],
+                is_undef(size[2]) ? min_max_pos[1][2] : 0.5 * size[2]
+            ]
+        ],
         
-        si = is_undef(size) ? mod_size : size,
         si2 = [
-            (is_undef(si[0]) ? mod_size[0] : si[0]), 
-            (is_undef(si[1]) ? mod_size[1] : si[1]), 
-            (is_undef(si[2]) ? mod_size[2] : si[2])
+            (is_undef(size[0]) ? mod_size[0] : size[0]), 
+            (is_undef(size[1]) ? mod_size[1] : size[1]), 
+            (is_undef(size[2]) ? mod_size[2] : size[2])
         ],
         s_adj = is_undef(expand) || expand == "auto" || expand == ["auto", "auto", "auto"] ? 
             si2 :
@@ -251,31 +266,31 @@ function mb_block_dim_size_expand(block_dim, size, expand) =
             [
                 [
                     expand[0] == "auto" && expand[1] == "auto" ? 
-                        -0.5 * si2[0] : expand[0] == "auto" ? 
-                        (0.5 * mod_size[0] + expand[1] - si2[0]) : 
-                        -0.5 * (expand[1] == "auto" ? mod_size[0] : si2[0]) - expand[0],
+                        size_min_max[0][0] : expand[0] == "auto" ? 
+                        (min_max_pos[1][0] + expand[1] - si2[0]) : 
+                        (expand[1] == "auto" ? min_max_pos[0][0] : size_min_max[0][0]) - expand[0],
                     expand[2] == "auto" && expand[3] == "auto" ? 
-                        -0.5 * si2[1] : expand[2] == "auto" ? 
-                        (0.5 * mod_size[1] + expand[3] - si2[1]) : 
-                        -0.5 * (expand[3] == "auto" ? mod_size[1] : si2[1]) - expand[2],
+                        size_min_max[0][1] : expand[2] == "auto" ? 
+                        (min_max_pos[1][1] + expand[3] - si2[1]) : 
+                        (expand[3] == "auto" ? min_max_pos[0][1] : size_min_max[0][1]) - expand[2],
                     expand[4] == "auto" && expand[5] == "auto" ? 
-                        -0.5 * si2[2] : expand[4] == "auto" ? 
-                        (0.5 * mod_size[2] + expand[5] - si2[2]) : 
-                        -0.5 * (expand[5] == "auto" ? mod_size[2] : si2[2]) - expand[4]
+                        size_min_max[0][2] : expand[4] == "auto" ? 
+                        (min_max_pos[1][2] + expand[5] - si2[2]) : 
+                        (expand[5] == "auto" ? min_max_pos[0][2] : size_min_max[0][2]) - expand[4]
                 ],
                 [
                     expand[0] == "auto" && expand[1] == "auto" ? 
-                        0.5 * si2[0] : expand[1] == "auto" ? 
-                        (-0.5 * mod_size[0] - expand[0] + si2[0]) : 
-                        0.5 * (expand[0] == "auto" ? mod_size[0] : si2[0]) + expand[1],
+                        size_min_max[1][0] : expand[1] == "auto" ? 
+                        (min_max_pos[0][0] - expand[0] + si2[0]) : 
+                        (expand[0] == "auto" ? min_max_pos[1][0] : size_min_max[1][0]) + expand[1],
                     expand[2] == "auto" && expand[3] == "auto" ? 
-                        0.5 * si2[1] : expand[3] == "auto" ? 
-                        (-0.5 * mod_size[1] - expand[2] + si2[1]) : 
-                        0.5 * (expand[2] == "auto" ? mod_size[1] : si2[1]) + expand[3],
+                        size_min_max[1][1] : expand[3] == "auto" ? 
+                        (min_max_pos[0][1] - expand[2] + si2[1]) : 
+                        (expand[2] == "auto" ? min_max_pos[1][1] : size_min_max[1][1]) + expand[3],
                     expand[4] == "auto" && expand[5] == "auto" ? 
-                        0.5 * si2[2] : expand[5] == "auto" ? 
-                        (-0.5 * mod_size[2] - expand[4] + si2[2]) : 
-                        0.5 * (expand[4] == "auto" ? mod_size[2] : si2[2]) + expand[5]
+                        size_min_max[1][2] : expand[5] == "auto" ? 
+                        (min_max_pos[0][2] - expand[4] + si2[2]) : 
+                        (expand[4] == "auto" ? min_max_pos[1][2] : size_min_max[1][2]) + expand[5]
                 ]
             ])
     s_adj;

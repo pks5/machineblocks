@@ -11,6 +11,7 @@
 */
 
 use <core/block_model.scad>;
+use <core/block_dim.scad>;
 use <core/block_part.scad>;
 use <core/utils.scad>;
 use <core/quality.scad>;
@@ -132,7 +133,20 @@ module mb_block(
     osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
     osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
     
-    
+    block_dim = mb_block_get_dim(block_obj);
+
+    ss = mb_block_dim_opposite_offset(
+            block_dim, 
+            off = mb_block_get_stud_sink(block_obj), 
+            adjusted = true, 
+            face = "z-"
+        );
+
+    echo(
+        mod_size = mb_block_dim_mod_size(block_dim),
+        min_max_pos = mb_block_dim_min_max_pos(block_dim),
+        ss = ss
+    );
 
     //Side Adjustment
    
@@ -184,12 +198,16 @@ module mb_block(
     rotationOffsetY = rotationOffset[1] * gridSizeXY;
     rotationOffsetZ = rotationOffset[2] * gridSizeZ;
 
-    preRotationOffset = [rotationOffsetX + (direction % 2 == 0 ? alignX : alignY), rotationOffsetY + (direction % 2 == 0 ? alignY : alignX), rotationOffsetZ + alignZ];
-
+    //preRotationOffset = [rotationOffsetX + (direction % 2 == 0 ? alignX : alignY), rotationOffsetY + (direction % 2 == 0 ? alignY : alignX), rotationOffsetZ + alignZ];
+preRotationOffset = [0,0,0];
     //Grid offset
     gridOffsetX = offset[0] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetX : 0);
     gridOffsetY = offset[1] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetY : 0);
     gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0); 
+
+//gridOffsetX = 0;
+//gridOffsetY = 0;
+//gridOffsetZ = 0;
 
     //Children alignment
     translateXChildren = mb_align_offset(alignChildren[0], objectSizeX, true);

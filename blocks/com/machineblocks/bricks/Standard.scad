@@ -29,7 +29,7 @@ include <../../../../config/mb_config.scad>;
 /* [Size] */
 
 // Brick size (grid)
-size = [4, 2, 3]; // [1:0.25:32]
+size = [4, 2, 3]; // [1:1:32]
 
 /* [Base] */
 
@@ -172,6 +172,7 @@ mb_block__com__machineblocks__bricks__Standard(
     config = mb_config,
     settings = [
         ["size", size],
+        ["sizeMod", [["x-", 0], ["z+", -1]]],
         ["baseRoundingRadius", baseRoundingRadius],
         ["baseCutoutType", baseCutoutType],
         ["pillars", pillars],
