@@ -245,6 +245,8 @@ function mb_block_part_cube(
     size = undef,
     expand = undef,
     offset = undef,
+    radius = undef,
+    xyz_rad = true,
     render = true
 ) = 
     mb_block_part_model(
@@ -252,6 +254,8 @@ function mb_block_part_cube(
         data = [
             mb_block_dim_size_expand(block_dim, size, expand),
             offset,
+            radius,
+            xyz_rad
         ],
         render = render
     );
@@ -412,6 +416,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             mb_cube(
                 size = cube_data[0],
                 offset = cube_data[1],
+                radius = cube_data[2],
+                xyz_rad = cube_data[3],
                 mul = mul,
                 color = base_color
             );

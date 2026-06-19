@@ -94,7 +94,7 @@ function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = 
 function mb_param_baseClampOffset(config, settings, default = undef) = mb_param(config, settings, "baseClampOffset", default != undef ? default : 0.25);
 function mb_param_baseClampHeight(config, settings, default = undef) = mb_param(config, settings, "baseClampHeight", default != undef ? default : 0.5);
 function mb_param_baseClampThickness(config, settings, default = undef) = mb_param(config, settings, "baseClampThickness", default != undef ? default : 0.1);
-//TODO clearify?
+//TODO either delete (base clamp outer in cutouts only, or make xyz configurable for standalone use in composite blocks)
 function mb_param_baseClampOuter(config, settings, default = undef) = mb_param(config, settings, "baseClampOuter", default != undef ? default : false);
 
 // Base Wall
@@ -200,6 +200,7 @@ function mb_param_holeXYZType(config, settings, default = undef) = mb_param_reso
 function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
 function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
 function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
+// TODO Implement Z Modes
 function mb_param_holeXYZEdgeMode(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZEdgeMode", default != undef ? default : "none"), use_list = true);
 
 // X
@@ -207,6 +208,7 @@ function mb_param_holeX(config, settings, default = undef) = mb_param(config, se
 // Y
 function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
 // Z
+// TODO Implement Z-Hole
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
 
 /*
@@ -298,7 +300,7 @@ function mb_param_recessStudType(config, settings, default = undef) = mb_param(c
 function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
 function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_array(mb_param(config, settings, "recessWallGaps", default != undef ? default : []));
 
-// TODO introduce mb_param_recessAdjustment
+// TODO introduce mb_param_recessAdjustment (incl auto mode, derive from baseAdjustment)
 
 /*
 * Text Decorator
