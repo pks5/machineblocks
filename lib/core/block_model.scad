@@ -743,6 +743,36 @@ function mb_block_recess_floor_offset(block_obj, face, off = 0, overlap = false)
     face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = overlap) : undef;
 
 /**
+* -----------------------
+* Positioning / Alignment
+* -----------------------
+*/
+
+function mb_block_align_offset(block_obj, align, invert = false) = 
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_pos = mb_block_dim_min_max_pos(block_dim),
+        mod_size = mb_block_dim_mod_size(block_dim),
+        size = mb_block_dim_size(block_dim),
+        align = mb_align_resolve(align),
+        sgn = invert ? -1 : 1
+    )
+    [
+        align[0] == "start" ? sgn * 0.5 * size[0] :
+        align[0] == "end" ? sgn * -0.5 * size[0] : 
+        0,
+
+        align[1] == "start" ? sgn * 0.5 * size[1] :
+        align[1] == "end" ? sgn * -0.5 * size[1] : 
+        0,
+
+        align[2] == "start" ? sgn * 0.5 * size[2] :
+        align[2] == "end" ? sgn * -0.5 * size[2] : 
+        0
+    ];
+
+
+/**
 * -----
 * Studs
 * -----

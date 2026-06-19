@@ -2,15 +2,15 @@ use <utils.scad>;
 
 function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, slope = undef) =
     let(
-        size = mb_resolve_xyz(xyz = size, default = [1, 1, 1]),
+        size = mb_bounding_box(mb_resolve_xyz(xyz = size, default = [1, 1, 1])),
         mod = mb_qc_resolve(qc = size_mod, cube = true),
         bsa = mb_qc_resolve(qc = base_adj, cube = true),
         
-        bb = mb_bounding_box(size),
+        bb = size, // Legacy - TODO remove
         c = [
-            0.5 * bb[0], 
-            0.5 * bb[1], 
-            0.5 * bb[2]
+            0.5 * size[0], 
+            0.5 * size[1], 
+            0.5 * size[2]
         ],
         
         
@@ -147,7 +147,7 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
     [
         [
             size, 
-            bb, 
+            bb, // Legacy - remove
             c, 
             mod
         ], // 0
@@ -189,7 +189,7 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
 */
 
 function mb_block_dim_size(block_dim) =                          block_dim[0][0];
-function mb_block_dim_size_bounding_box(block_dim) =             block_dim[0][1];
+
 function mb_block_dim_center(block_dim) =                        block_dim[0][2];
 function mb_block_dim_size_mod(block_dim) =                      block_dim[0][3];
 

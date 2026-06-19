@@ -45,8 +45,7 @@ module mb_block(
     rotationOffsetRevert = mb_param_rotationOffsetRevert(config, settings);
     direction = mb_param_direction(config, settings);
 
-    size = mb_param_size(config, settings);
-    sizeAdjustment = mb_param_sizeAdjustment(config, settings);
+    
 
     offset = mb_param_offset(config, settings);
     
@@ -116,6 +115,14 @@ module mb_block(
         config = config,
         settings = settings
     );
+
+    size = mb_block_get_size(block_obj);
+    sizeAdjustment = mb_param_sizeAdjustment(config, settings);
+
+    os_mm = mb_block_obj_size(block_obj, unit="mm");
+    osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
+    osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
+
     
     mbuToMm = scale * unitMbu;
 
@@ -123,15 +130,13 @@ module mb_block(
     gridSizeZ = unitGrid[1] * mbuToMm;
 
     //Object Size     
-    objectSizeX = gridSizeXY * size[0];
-    objectSizeY = gridSizeXY * size[1];
-    objectSizeZ = size[2] * gridSizeZ;
+    objectSizeX = os_mm[0];
+    objectSizeY = os_mm[1];
+    objectSizeZ = os_mm[2];
 
-    objectSize = [objectSizeX, objectSizeY, objectSizeZ];
+    objectSize = os_mm;
 
-    os_mm = mb_block_obj_size(block_obj, unit="mm");
-    osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
-    osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
+    
     
     block_dim = mb_block_get_dim(block_obj);
 
@@ -153,27 +158,20 @@ module mb_block(
     baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
     baseModR = mb_qc_resolve(qc = baseMod, cube = true);
     
-    objectSizeMod = [
-        objectSizeX + baseModRes[0] + baseModRes[1],
-        objectSizeY + baseModRes[2] + baseModRes[3],
-        objectSizeZ + baseModRes[4] + baseModRes[5]
-    ];
-    
     bsa =  mb_qc_resolve(qc = baseSideAdjustment, cube = true, default = [sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], 0, sizeAdjustment[1]]); 
     sideAdjustment = mb_array_add(bsa, baseModRes);
 
     // Object Size Fully Adjusted
-    objectSizeXAdjusted = objectSizeX + sideAdjustment[0] + sideAdjustment[1];
-    objectSizeYAdjusted = objectSizeY + sideAdjustment[2] + sideAdjustment[3];
-    objectSizeZAdjusted = objectSizeZ + sideAdjustment[4] + sideAdjustment[5];
+    objectSizeXAdjusted = osa_mm[0];
+    objectSizeYAdjusted = osa_mm[1];
+    objectSizeZAdjusted = osa_mm[2];
 
-    objectSizeAdjusted = [objectSizeXAdjusted, objectSizeYAdjusted, objectSizeZAdjusted];
+    objectSizeAdjusted = osa_mm;
 
 
     echo(
         objectSize = objectSize, 
         os_mm = os_mm, 
-        objectSizeMod = objectSizeMod,
         osm_mm = osm_mm, 
         objectSizeAdjusted = objectSizeAdjusted,
         osa_mm = osa_mm, 
@@ -186,10 +184,12 @@ module mb_block(
     * End measurements
     */
 
+    align_offset = mb_block_align_offset(block_obj, align);
+echo(align_offset = align_offset);
     //Calculate Brick Align and Offset
-    alignX = mb_align_offset(align[0], objectSizeX);
-    alignY = mb_align_offset(align[1], objectSizeY);
-    alignZ = mb_align_offset(align[2], objectSizeZ); 
+    alignX = align_offset[0];
+    alignY = align_offset[1];
+    alignZ = align_offset[2]; 
     
     directionRotationZ = direction * -90;
 
@@ -198,8 +198,12 @@ module mb_block(
     rotationOffsetY = rotationOffset[1] * gridSizeXY;
     rotationOffsetZ = rotationOffset[2] * gridSizeZ;
 
-    //preRotationOffset = [rotationOffsetX + (direction % 2 == 0 ? alignX : alignY), rotationOffsetY + (direction % 2 == 0 ? alignY : alignX), rotationOffsetZ + alignZ];
-preRotationOffset = [0,0,0];
+    preRotationOffset = [
+        rotationOffsetX + (direction % 2 == 0 ? alignX : alignY) * gridSizeXY, 
+        rotationOffsetY + (direction % 2 == 0 ? alignY : alignX) * gridSizeXY, 
+        rotationOffsetZ + alignZ * gridSizeZ
+    ];
+//preRotationOffset = [0,0,0];
     //Grid offset
     gridOffsetX = offset[0] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetX : 0);
     gridOffsetY = offset[1] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetY : 0);
@@ -221,15 +225,7 @@ preRotationOffset = [0,0,0];
     sGridHeight = stabilizerGridHeight * mbuToMm;
     
     //Grid
-    startX = floor(- baseModR[0]);
-    midX = floor(0.5 * size[0] - 1);
-    endX = ceil(size[0] - 1 + baseModR[1]);
     
-    startY = floor(- baseModR[2]);
-    midY = floor(0.5 * size[1] - 1);
-    endY = ceil(size[1] - 1 + baseModR[3]);
-            
-    mid = [midX, midY];
     
     offsetX = 0.5 * (size[0] - 1);
     offsetY = 0.5 * (size[1] - 1);
