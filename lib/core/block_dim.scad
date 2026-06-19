@@ -66,6 +66,18 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             ma[1] - slope_neg[3],
             ma[2]
         ],
+
+        mi_full = [
+            max(mi_top[0], mi_bottom[0]),
+            max(mi_top[1], mi_bottom[1]),
+            max(mi_top[2], mi_bottom[2])
+        ],
+
+        ma_full = [
+            min(ma_top[0], ma_bottom[0]),
+            min(ma_top[1], ma_bottom[1]),
+            min(ma_top[2], ma_bottom[2])
+        ],
         
         min_max_pos = [
             [
@@ -106,6 +118,7 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             ] // max from org center
         ],
 
+
         min_index = [
             floor(mi[0]), 
             floor(mi[1]), 
@@ -137,6 +150,18 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             ceil(ma_bottom[0] - 1), 
             ceil(ma_bottom[1] - 1), 
             ceil(ma_bottom[2] - 1)
+        ],
+
+        min_index_full = [
+            ceil(mi_full[0]),
+            ceil(mi_full[1]),
+            ceil(mi_full[2])
+        ],
+
+        max_index_full = [
+            floor(ma_full[0] - 1),
+            floor(ma_full[1] - 1),
+            floor(ma_full[2] - 1)
         ],
 
         bevel_matrix = mb_bevel_matrix(bevel, mod_size, min_max_pos),
@@ -175,7 +200,10 @@ function mb_block_dim(size, size_mod = undef, base_adj = undef, bevel = undef, s
             min_index_bottom, // Min Index Bottom
             max_index_bottom // Max Index Bottom
         ], // 5
-        undef, // 6
+        [ 
+            min_index_full, // Min Index Full
+            max_index_full // Max Index Full
+        ], // 6
         undef, // 7
         [adj_size, bsa],  // 8
         [bevel, bevel_matrix, slope], // 9
@@ -201,6 +229,7 @@ function mb_block_dim_min_max_pos(block_dim) =                   block_dim[1][2]
 function mb_block_dim_min_max_index(block_dim) =                 block_dim[3];
 function mb_block_dim_min_max_index_top(block_dim) =             block_dim[4];
 function mb_block_dim_min_max_index_bottom(block_dim) =          block_dim[5];
+function mb_block_dim_min_max_index_full(block_dim) =            block_dim[6];
 
 function mb_block_dim_adj_size(block_dim) =                      block_dim[8][0];
 function mb_block_dim_base_adj(block_dim) =                      block_dim[8][1];

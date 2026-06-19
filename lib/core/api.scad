@@ -200,7 +200,7 @@ function mb_param_holeXYZType(config, settings, default = undef) = mb_param_reso
 function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
 function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
 function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
-
+function mb_param_holeXYZPartial(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZPartial", default != undef ? default : false));
 
 // X
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);

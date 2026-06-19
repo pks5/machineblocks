@@ -171,9 +171,7 @@ recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 mb_block__com__machineblocks__bricks__Standard(
     config = mb_config,
     settings = [
-        //["align", "ccs"],
-        //["size", size],
-        ["size", [4,2,2.5]],
+        ["size", size],
         ["sizeMod", [["x-", 1], ["z+", -1]]],
         ["baseRoundingRadius", baseRoundingRadius],
         ["baseCutoutType", baseCutoutType],

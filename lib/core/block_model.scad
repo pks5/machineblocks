@@ -469,7 +469,8 @@ function mb_block_obj(
                 tube_hole_inset_depth,
                 tube_hole_grid_offset_z,
                 tube_hole_grid_size_z,
-                tube_hole_min_top_margin
+                tube_hole_min_top_margin,
+                mb_param_holeYPartialX(config, settings)
             ] // 28 - Pin Holes
         ];
 
@@ -948,7 +949,7 @@ function mb_block_tube_range(block_obj, axis) =
         mod_size = mb_block_dim_mod_size(block_dim),
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
-        min_max_index = mb_block_dim_min_max_index_bottom(block_dim),
+        min_max_index = mb_block_dim_min_max_index_full(block_dim),
         start_index_xy = min_max_index[0][hole_axis],
         end_index_xy = min_max_index[1][hole_axis],
         
