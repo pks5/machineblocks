@@ -68,7 +68,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 radius = _mb_layout_plane_value(
                     planes = planes, 
                     value = mb_block_get_base_rounding_radius(block_obj),
-                    else_value = mb_block_base_rounding_radius_z(block_obj)
+                    else_value = mb_block_base_rounding_radius(block_obj, xy = true, xz = false, yz = false)
                 ),
                 socket = _mb_layout_plane_value(
                     planes = planes, 

@@ -1340,7 +1340,7 @@ function mb_block_base_rounding_omit(face, corner_j) =
     face == 3 ? corner_j == 2 || corner_j == 3 || corner_j == 4 || corner_j == 5 :
     false;
 
-function mb_block_base_rounding_radius_z(block_obj, omit_face = undef) =
+function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = true, omit_face = undef) =
     let(
         base_rounding_radius = mb_block_get_base_rounding_radius(block_obj),
         face = is_undef(omit_face) ? undef : mb_face_to_int(omit_face)
@@ -1350,7 +1350,12 @@ function mb_block_base_rounding_radius_z(block_obj, omit_face = undef) =
             [
             for(j = [0 : len(base_rounding_radius[i]) - 1])
                 is_undef(base_rounding_radius[i][j]) ? undef 
-                : mb_block_base_rounding_omit(face, j) ? undef : [base_rounding_radius[i][j][0], 0, 0]
+                : mb_block_base_rounding_omit(face, j) ? undef 
+                : [
+                    xy ? base_rounding_radius[i][j][0] : 0, 
+                    xz ? base_rounding_radius[i][j][1] : 0, 
+                    yz ? base_rounding_radius[i][j][2] : 0,
+                ]
             ]
     ];
 
