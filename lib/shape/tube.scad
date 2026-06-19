@@ -239,7 +239,7 @@ module mb_tube(
 
     start = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
     end = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
-echo(start = start, end = end);
+
     radius_inner = (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius;
     radius_outer = (is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius) * mul_radius; 
 

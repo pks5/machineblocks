@@ -470,7 +470,7 @@ function mb_block_obj(
                 tube_hole_grid_offset_z,
                 tube_hole_grid_size_z,
                 tube_hole_min_top_margin,
-                mb_param_holeYPartialX(config, settings)
+                mb_param_holeXYZEdgeMode(config, settings)
             ] // 28 - Pin Holes
         ];
 
@@ -574,6 +574,7 @@ function mb_block_get_hole_xyz_inset_depth(block_obj, axis) =       block_obj[28
 function mb_block_get_hole_xy_grid_offset_z(block_obj, axis) =      block_obj[28][5][mb_axis_to_int(axis)];
 function mb_block_get_hole_xy_grid_size_z(block_obj, axis) =        block_obj[28][6][mb_axis_to_int(axis)];
 function mb_block_get_hole_xy_min_top_margin(block_obj, axis) =     block_obj[28][7][mb_axis_to_int(axis)];
+function mb_block_get_hole_xyz_edge_mode(block_obj, axis) =         block_obj[28][8][mb_axis_to_int(axis)];
 
 // Studs
 function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
@@ -949,11 +950,11 @@ function mb_block_tube_range(block_obj, axis) =
         mod_size = mb_block_dim_mod_size(block_dim),
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
-        min_max_index = mb_block_dim_min_max_index_full(block_dim),
-        start_index_xy = min_max_index[0][hole_axis],
-        end_index_xy = min_max_index[1][hole_axis],
+        min_max_index_full = mb_block_dim_min_max_index_full(block_dim),
+        min_max_index_all = mb_block_dim_min_max_index(block_dim),
         
-
+        
+        hole_xyz_edge_mode = mb_block_get_hole_xyz_edge_mode(block_obj, hole_axis),
         hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, hole_axis),
         inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, hole_axis),
         tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, hole_axis),
@@ -968,6 +969,12 @@ function mb_block_tube_range(block_obj, axis) =
             hole_center_spacing = tube_hole_grid_size_z,
             min_top_margin = tube_hole_min_top_margin
         ),
+
+        start_index_xy = hole_xyz_edge_mode[0] == "start" || hole_xyz_edge_mode[0] == "all" 
+            ? min_max_index_all[0][hole_axis] - 1 : min_max_index_full[0][hole_axis],
+        end_index_xy = hole_xyz_edge_mode[0] == "end" || hole_xyz_edge_mode[0] == "all" 
+            ? min_max_index_all[1][hole_axis] + 1 : min_max_index_full[1][hole_axis],
+
         range_offset_start = 0,
         range_offset_end = tube_shift ? 0 : -1
     )
