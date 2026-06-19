@@ -11,7 +11,7 @@ use <shared.scad>;
 * ----.
 */
 
-function mb_block_part__stud_icon(block_obj, stud_render) =
+function mb_block_part__stud_icon(block_obj, off, top) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         stud_diameter = mb_block_get_stud_diameter(block_obj, adjusted = false),
@@ -45,11 +45,11 @@ function mb_block_part__stud_icon(block_obj, stud_render) =
             0,
             mb_block_dim_opposite_offset(
                     block_dim,
-                    off = -stud_render[2][1] + (extruded ? overlap : height)
+                    off = -top + (extruded ? overlap : height)
             ),
-            stud_render[2][1] + (extruded ? height : overlap)
+            top + (extruded ? height : overlap)
         ],
-        offset = stud_render[1],
+        offset = off,
         render = has_stud_icon
     );
 
@@ -63,7 +63,9 @@ function mb_block_part__studs(block_obj) =
         stud_clamp_height = mb_block_get_stud_clamp_height(block_obj),
         stud_clamp_offset = mb_block_get_stud_clamp_offset(block_obj),
         stud_height = mb_block_get_stud_height(block_obj),
+        stud_base_overlap = mb_block_get_stud_base_overlap(block_obj),
         clamp_offset = stud_height - stud_clamp_height - stud_clamp_offset
+        
     )
     mb_block_part_model(
         render = mb_block_has_studs(block_obj),
@@ -71,8 +73,36 @@ function mb_block_part__studs(block_obj) =
         items = [
             for(x = stud_range[0])
                 for(y = stud_range[1])
-                    let(render = mb_block_stud_render(block_obj, x, y),
-                        )
+                    let(
+                        render = mb_block_stud_render(block_obj, x, y),
+                        in_recess = render[2],
+                        exp = [
+                            in_recess 
+                            ? mb_block_recess_floor_offset(
+                                block_obj,
+                                off = stud_base_overlap,
+                                face = "z-"
+                            )
+                            : mb_block_dim_opposite_offset(
+                                block_dim, 
+                                off = stud_base_overlap, 
+                                adjusted = true, 
+                                face = "z-"
+                            ),
+                            in_recess ? 
+                            mb_block_recess_floor_offset(
+                                block_obj,
+                                off = stud_height,
+                                face = "z+"
+                            )
+                            : mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                exp = stud_height, 
+                                adjusted = true, 
+                                face = "z+"
+                            )
+                        ]
+                    )
                     if(render[0])
                         mb_block_part_model(
                             type = stud_icon_depth > 0 ? "union" : "difference", 
@@ -82,7 +112,7 @@ function mb_block_part__studs(block_obj) =
                                     radius = render[3],
                                     rounding_radius = stud_rounding,
                                     axis = "z",
-                                    expand = render[2],
+                                    expand = exp,
                                     offset = render[1],
                                     clamp_end = stud_clamp_thickness > 0 && stud_clamp_height > 0 ? [
                                         stud_clamp_thickness,
@@ -90,7 +120,7 @@ function mb_block_part__studs(block_obj) =
                                         clamp_offset
                                     ] : undef
                                 ),
-                                mb_block_part__stud_icon(block_obj, render) 
+                                mb_block_part__stud_icon(block_obj, render[1], exp[1]) 
                             ]
                         )
         ]

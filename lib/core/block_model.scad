@@ -577,7 +577,7 @@ function mb_block_get_hole_xy_min_top_margin(block_obj, axis) =     block_obj[28
 // Studs
 function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
 function mb_block_get_stud_height(block_obj) =                      block_obj[14][1];
-function mb_block_get_stud_sink(block_obj) =                        block_obj[14][2];
+function mb_block_get_stud_base_overlap(block_obj) =                block_obj[14][2];
 function mb_block_get_stud_rounding(block_obj) =                    block_obj[14][3];
 function mb_block_get_stud_max_overhang(block_obj) =                block_obj[14][5];
 function mb_block_has_studs(block_obj) =                            block_obj[14][6];
@@ -827,8 +827,7 @@ function mb_block_stud_render(block_obj, x, y) =
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
         stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
-        stud_height = mb_block_get_stud_height(block_obj),
-        stud_sink = mb_block_get_stud_sink(block_obj),
+        
         has_recess = mb_block_has_recess(block_obj),
         stud_max_overhang = mb_block_get_stud_max_overhang(block_obj),
         
@@ -842,43 +841,14 @@ function mb_block_stud_render(block_obj, x, y) =
 
         in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
-
         render_stud = mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
         on_recess_wall = has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
-        
-        
-        
-        bottom = in_recess 
-        ? mb_block_recess_floor_offset(
-            block_obj,
-            off = stud_sink,
-            face = "z-"
-        )
-        : mb_block_dim_opposite_offset(
-            block_dim, 
-            off = stud_sink, 
-            adjusted = true, 
-            face = "z-"
-        ),
-        top = in_recess ? 
-        mb_block_recess_floor_offset(
-            block_obj,
-            off = stud_height,
-            face = "z+"
-        )
-        : mb_block_dim_face_edge_expand(
-            block_dim, 
-            exp = stud_height, 
-            adjusted = true, 
-            face = "z+"
-        )
-        
     )
     [
         render_stud && (!has_recess || in_recess || on_recess_wall),
         in_recess ? recess_stud_offset : stud_offset,
-        [bottom, top],
+        in_recess,
         stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter]
     ];
 

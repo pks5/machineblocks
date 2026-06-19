@@ -142,7 +142,7 @@ module mb_block(
 
     ss = mb_block_dim_opposite_offset(
             block_dim, 
-            off = mb_block_get_stud_sink(block_obj), 
+            off = mb_block_get_stud_base_overlap(block_obj), 
             adjusted = true, 
             face = "z-"
         );
@@ -185,7 +185,7 @@ module mb_block(
     */
 
     align_offset = mb_block_align_offset(block_obj, align);
-echo(align_offset = align_offset);
+
     //Calculate Brick Align and Offset
     alignX = align_offset[0];
     alignY = align_offset[1];
@@ -207,16 +207,13 @@ echo(align_offset = align_offset);
     //Grid offset
     gridOffsetX = offset[0] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetX : 0);
     gridOffsetY = offset[1] * gridSizeXY - (rotationOffsetRevert ? rotationOffsetY : 0);
-    gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0); 
-
-//gridOffsetX = 0;
-//gridOffsetY = 0;
-//gridOffsetZ = 0;
+    gridOffsetZ = offset[2] * gridSizeZ - (rotationOffsetRevert ? rotationOffsetZ : 0);
 
     //Children alignment
-    translateXChildren = mb_align_offset(alignChildren[0], objectSizeX, true);
-    translateYChildren = mb_align_offset(alignChildren[1], objectSizeY, true);
-    translateZChildren = mb_align_offset(alignChildren[2], objectSizeZ, true); 
+    children_align_offset = mb_block_align_offset(block_obj, alignChildren, true);
+    translateXChildren = children_align_offset[0] * gridSizeXY;
+    translateYChildren = children_align_offset[1] * gridSizeXY;
+    translateZChildren = children_align_offset[2] * gridSizeZ; 
 
     recWallThickness = mb_resolve_side_quad(recessWallThickness, gridSizeXY);
     

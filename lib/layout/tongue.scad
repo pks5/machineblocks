@@ -25,7 +25,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
         base_wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         tongue_rounding_radius = mb_block_base_rounding_radius(block_obj, xy = true, xz = false, yz = false),
 
-        stud_sink = mb_block_get_stud_sink(block_obj),
+        stud_base_overlap = mb_block_get_stud_base_overlap(block_obj),
         // Bottom
         tongue_bottom = groove
         ? mb_block_dim_this_offset(
@@ -35,7 +35,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
         )
         : mb_block_dim_opposite_offset(
             block_dim, 
-            off = stud_sink, 
+            off = stud_base_overlap, 
             adjusted = true, 
             face = "z-"
         ),
@@ -48,7 +48,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
         )
         : mb_block_dim_opposite_offset(
             block_dim, 
-            off = stud_sink, 
+            off = stud_base_overlap, 
             adjusted = true, 
             face = "z-",
             overlap = true
