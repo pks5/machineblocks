@@ -263,7 +263,7 @@ module mb_ellibox_octant(
     }
 }
 
-
+/*
 module mb_ellibox_oct(
     x_y, x_z,
     y_x, y_z,
@@ -292,7 +292,7 @@ module mb_ellibox_oct(
         n_a = na_oct
     );
 }
-
+*/
 
 
 
@@ -331,6 +331,9 @@ module mb_fillet(
     n_a = xy_lg ? resolution : n_other;
     n_z = xy_lg ? n_other : resolution;
 
+    n_z_oct = max(1, floor(n_z / 2));
+    n_a_oct = max(1, floor(n_a / 4));
+
     echo(n_a = n_a, n_z = n_z);
 
     multmatrix(m = [ 
@@ -345,16 +348,17 @@ module mb_fillet(
         else{
             echo ( rad = s);
             translate(mb_corner_offset_N(corner, max_rad, f = 1))
-                mb_ellibox_oct(
+                mb_ellibox_octant(
                     x_y = s[0][0],
                     y_x = s[0][1],
                     x_z = s[1][0],
                     z_x = s[1][1],
                     y_z = s[2][0],
                     z_y = s[2][1],
-                    corner = corner,
-                    n_z = n_z,
-                    n_a = n_a
+                    z_plane = corner[0],
+                    corner_index = corner[1],
+                    n_z = n_z_oct,
+                    n_a = n_a_oct
                 );
         }
     }
