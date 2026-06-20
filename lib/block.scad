@@ -88,15 +88,8 @@ module mb_block(
     align = mb_param_align(config, settings);
     alignChildren = mb_param_alignChildren(config, settings);
 
-    qualitySegBase = mb_param_qualitySegBase(config, settings);
-    qualityResolutionMax = mb_param_qualityResolutionMax(config, settings);
-    qualityFactor = mb_param_qualityFactor(config, settings);
-    qualityResolutionMin = mb_param_qualityResolutionMin(config, settings);
-    qualityResolutionMultiplier = mb_param_qualityResolutionMultiplier(config, settings);
-
-    previewQuality = mb_param_previewQuality(config, settings);
-    previewRender = mb_param_previewRender(config, settings);
-    previewRenderConvexity = mb_param_previewRenderConvexity(config, settings);
+    previewRender = mb_param_scadPreviewPreRender(config, settings);
+    previewRenderConvexity = mb_param_scadPreviewPreRenderConvexity(config, settings);
 
     blockId = mb_param_id(config, settings);
     debug = mb_param_debug(config, settings);

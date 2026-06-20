@@ -384,16 +384,41 @@ function mb_param_pcbSockets(config, settings, default = undef) = mb_param(confi
 /*
 * Render Quality
 */
-// TODO implement
-function mb_param_qualitySegBase(config, settings, default = undef) = mb_param(config, settings, "qualitySegBase", default != undef ? default : 1.2);
-function mb_param_qualityResolutionMax(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMax", default != undef ? default : 220);
-function mb_param_qualityFactor(config, settings, default = undef) = mb_param(config, settings, "qualityFactor", default != undef ? default : [0.6, 1.0, 1.6, 2.5]);
-function mb_param_qualityResolutionMin(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMin", default != undef ? default : [24, 18, 12, 8]);
-function mb_param_qualityResolutionMultiplier(config, settings, default = undef) = mb_param(config, settings, "qualityResolutionMultiplier", default != undef ? default : 0.25);
+function mb_param_quality(config, settings, default = undef) = mb_param(config, settings, "quality", default != undef ? default : "normal");
 
-function mb_param_previewQuality(config, settings, default = undef) = mb_param(config, settings, "previewQuality", default != undef ? default : 0.5);
-function mb_param_previewRender(config, settings, default = undef) = mb_param(config, settings, "previewRender", default != undef ? default : true);
-function mb_param_previewRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "previewRenderConvexity", default != undef ? default : 25);
+function mb_param_scadQualityProfile(config, settings, default = undef) = mb_param(config, settings, "scadQualityProfile", 
+    default != undef ? default : [
+        [0.55, 32],
+        [0.38, 48],
+        [0.28, 64],
+        [0.16, 120]
+    ]);
+
+function mb_param_scadQualityClassFactors(config, settings, default = undef) = mb_param(config, settings, "scadQualityClassFactors", 
+    default != undef ? default : [
+        1.00,
+        1.35,
+        2.25
+    ]);
+
+function mb_param_scadQualityClassMinSegments(config, settings, default = undef) = mb_param(config, settings, "scadQualityClassMinSegments", 
+    default != undef ? default : [
+        16,
+        12,
+        8
+    ]);
+
+function mb_param_scadQualitySegmentMultiplier(config, settings, default = undef) = mb_param(config, settings, "scadQualitySegmentMultiplier", 
+    default != undef ? default : 1);
+
+function mb_param_scadPreviewQuality(config, settings, default = undef) = mb_param(config, settings, "scadPreviewQuality", 
+    default != undef ? default : 1);
+
+function mb_param_scadPreviewMaxMult(config, settings, default = undef) = mb_param(config, settings, "scadPreviewMaxMult", 
+    default != undef ? default : 2.5);
+
+function mb_param_scadPreviewPreRender(config, settings, default = undef) = mb_param(config, settings, "scadPreviewPreRender", default != undef ? default : true);
+function mb_param_scadPreviewPreRenderConvexity(config, settings, default = undef) = mb_param(config, settings, "scadPreviewPreRenderConvexity", default != undef ? default : 25);
 
 
 /*
