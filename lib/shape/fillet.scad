@@ -1,4 +1,7 @@
 
+use <../core/utils.scad>;
+use <../core/corner_radius.scad>;
+
 function mb_ellibox_inset_cap(z, rz_total, rz_axis, r_axis) =
     z < -rz_total + rz_axis
         ? let(t = (z + rz_total) / rz_axis)
@@ -36,6 +39,11 @@ function mb_ellibox_corner_theta0(corner_index) =
     corner_index == 4 || corner_index == 5 ? 0   :
                         270;
 
+function mb_corner_offset_N(c, r, f = 0.5) = [
+    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
+    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
+    (c[0] == 0 ? 1 : -1) * f * r[2]
+];
 
 module mb_ellibox_octant(
     x_y, x_z,
@@ -308,3 +316,88 @@ mb_ellibox(
 
     corner = c // oben, ne
 );
+
+module mb_rounding_corner(
+        corner = [0, 0], 
+        radius = 0, 
+        angle = [0, 0, 0, 0], 
+        zero = 0.001, 
+        precision = 0.01, 
+        resolution = 80, 
+        debug = false
+){
+    /*
+    radius = mb_corner_radius_resolve(
+        corner_radius = radius, 
+        min_value = zero
+    );
+
+    max_rad = mb_corner_radius_max_xyz(radius);
+    
+    off_corner = mb_corner_offset(corner, max_rad);
+    off = mb_corner_offset(corner, max_rad, -1);
+
+    echo(
+        radius = radius,
+        max_rad = max_rad,
+        off_corner = off_corner,
+        off = off
+    );
+    
+    
+    multmatrix(m = [ 
+                    [1,             angle[1] / 45, angle[2] / 45, 0],
+                    [angle[0] / 45, 1,             angle[3] / 45, 0],
+                    [0,             0,             1,             0]
+                   ]) 
+    
+    
+    *translate(off)
+        intersection(){
+            translate(off_corner)
+                mb_corner_cut(max_rad, corner);
+                
+            mb_corner_ellibox(
+                //corner = corner,
+                radius=radius,
+                resolution=resolution,
+                zero = zero,
+                precision = precision
+            );
+        }*/
+
+    s = mb_corner_radius_resolve(
+        corner_radius = radius, 
+        min_value = zero, 
+        precision = precision
+    );
+
+    echo (s = s);
+    max_rad = mb_corner_radius_max_xyz(s);
+
+    multmatrix(m = [ 
+                    [1,             angle[1] / 45, angle[2] / 45, 0],
+                    [angle[0] / 45, 1,             angle[3] / 45, 0],
+                    [0,             0,             1,             0]
+                   ]){ 
+        if(mb_corner_radius_is_none(s, min_value = zero)){
+            translate(mb_corner_offset_N(corner, max_rad, f = 0.5))
+                cube(size = [zero, zero, zero], center=true);
+        }
+        else{
+            echo ( rad = s);
+            translate(mb_corner_offset_N(corner, max_rad, f = 1))
+                mb_ellibox(
+                    x_y = s[0][0],
+                    y_x = s[0][1],
+                    x_z = s[1][0],
+                    z_x = s[1][1],
+                    y_z = s[2][0],
+                    z_y = s[2][1],
+                    corner = corner,
+                    n_z = resolution,
+                    n_a = resolution
+                );
+        }
+    }
+}

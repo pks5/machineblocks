@@ -2,7 +2,7 @@ use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
 use <../core/corner_radius.scad>;
-use <ellioct.scad>;
+use <fillet.scad>;
 use <loft_poly.scad>;
 
 /*
@@ -93,90 +93,6 @@ module mb_corner_cut(size, c = [0, 0]){
 */
 
 
-module mb_rounding_corner(
-        corner = [0, 0], 
-        radius = 0, 
-        angle = [0, 0, 0, 0], 
-        zero = 0.001, 
-        precision = 0.01, 
-        resolution = 80, 
-        debug = false
-){
-    /*
-    radius = mb_corner_radius_resolve(
-        corner_radius = radius, 
-        min_value = zero
-    );
-
-    max_rad = mb_corner_radius_max_xyz(radius);
-    
-    off_corner = mb_corner_offset(corner, max_rad);
-    off = mb_corner_offset(corner, max_rad, -1);
-
-    echo(
-        radius = radius,
-        max_rad = max_rad,
-        off_corner = off_corner,
-        off = off
-    );
-    
-    
-    multmatrix(m = [ 
-                    [1,             angle[1] / 45, angle[2] / 45, 0],
-                    [angle[0] / 45, 1,             angle[3] / 45, 0],
-                    [0,             0,             1,             0]
-                   ]) 
-    
-    
-    *translate(off)
-        intersection(){
-            translate(off_corner)
-                mb_corner_cut(max_rad, corner);
-                
-            mb_corner_ellibox(
-                //corner = corner,
-                radius=radius,
-                resolution=resolution,
-                zero = zero,
-                precision = precision
-            );
-        }*/
-
-    s = mb_corner_radius_resolve(
-        corner_radius = radius, 
-        min_value = zero, 
-        precision = precision
-    );
-
-    //echo (s = s);
-    max_rad = mb_corner_radius_max_xyz(s);
-
-    multmatrix(m = [ 
-                    [1,             angle[1] / 45, angle[2] / 45, 0],
-                    [angle[0] / 45, 1,             angle[3] / 45, 0],
-                    [0,             0,             1,             0]
-                   ]){ 
-        if(mb_corner_radius_is_none(s, min_value = zero)){
-            translate(mb_corner_offset_N(corner, max_rad, f = 0.5))
-                cube(size = [zero, zero, zero], center=true);
-        }
-        else{
-            echo ( rad = s);
-            translate(mb_corner_offset_N(corner, max_rad, f = 1))
-                mb_ellibox(
-                    x_y = s[0][0],
-                    y_x = s[0][1],
-                    x_z = s[1][0],
-                    z_x = s[1][1],
-                    y_z = s[2][0],
-                    z_y = s[2][1],
-                    corner = corner,
-                    n_z = resolution,
-                    n_a = resolution
-                );
-        }
-    }
-}
 
 
 
@@ -266,11 +182,7 @@ function mb_corner_offset(c, r, f = 0.5) = [
     (c[0] == 0 ? -1 : 1) * f * r[2]
 ];*/
 
-function mb_corner_offset_N(c, r, f = 0.5) = [
-    (c[1] == 0 || c[1] == 1 || c[1] == 2 || c[1] == 3 ? 1 : -1) * f * r[0],
-    (c[1] == 0 || c[1] == 1 || c[1] == 6 || c[1] == 7 ? 1 : -1) * f * r[1],
-    (c[0] == 0 ? 1 : -1) * f * r[2]
-];
+
 
 function mb_angle_from_x(p0, p1) =
     atan2(p1[1] - p0[1], p1[0] - p0[0]);
@@ -881,14 +793,14 @@ let(
     x_expand = is_x_front ? next_expand : prev_expand,
     y_expand = is_x_front ? prev_expand : next_expand,
 
-    x_y_new = mb_prismoid_recalc_rad_component(x_y, x_expand),
-    y_x_new = mb_prismoid_recalc_rad_component(y_x, y_expand),
+    x_y_new = x_y == 0 ? 0 : mb_prismoid_recalc_rad_component(x_y, x_expand),
+    y_x_new = y_x == 0 ? 0 : mb_prismoid_recalc_rad_component(y_x, y_expand),
 
-    x_z_new = mb_prismoid_recalc_rad_component(x_z, x_expand),
-    y_z_new = mb_prismoid_recalc_rad_component(y_z, y_expand),
+    x_z_new = x_z == 0 ? 0 : mb_prismoid_recalc_rad_component(x_z, x_expand),
+    y_z_new = y_z == 0 ? 0 : mb_prismoid_recalc_rad_component(y_z, y_expand),
 
-    z_x_new = mb_prismoid_recalc_rad_component(z_x, z_expand),
-    z_y_new = mb_prismoid_recalc_rad_component(z_y, z_expand),
+    z_x_new = z_x == 0 ? 0 : mb_prismoid_recalc_rad_component(z_x, z_expand),
+    z_y_new = z_y == 0 ? 0 : mb_prismoid_recalc_rad_component(z_y, z_expand),
 
     new_rad = [
         [x_y_new, y_x_new],
@@ -1220,7 +1132,7 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 10.4], radius = 0, debug = true);
 
-translate([0, 300, 0])
+*translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
@@ -1318,4 +1230,6 @@ mb_prismoid(shape = [
         [20, -50], 
         undef
     ]
-], expand = [[-10,-10,-10,-10,-10,-10]], radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
+], expand = [[10,10,10,10,10,10]], radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
+
+echo(c = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]));
