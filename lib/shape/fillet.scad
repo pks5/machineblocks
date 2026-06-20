@@ -302,7 +302,7 @@ module mb_fillet(
         angle = [0, 0, 0, 0], 
         zero = 0.001, 
         precision = 0.01, 
-        resolution = 80, 
+        resolution = 120, 
         debug = false
 ){
     s = mb_corner_radius_resolve(
@@ -312,6 +312,13 @@ module mb_fillet(
     );
 
     max_rad = mb_corner_radius_max_xyz(s);
+    max_rad_xy = max(max_rad[0], max_rad[1]);
+
+    xy_lg = max_rad_xy >= max_rad[2];
+
+    n_other = ceil((resolution / (xy_lg ? max_rad_xy : max_rad[2])) * (xy_lg ? max_rad[2] : max_rad_xy));
+    n_a = xy_lg ? resolution : n_other;
+    n_z = xy_lg ? n_other : resolution;
 
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
@@ -333,8 +340,8 @@ module mb_fillet(
                     y_z = s[2][0],
                     z_y = s[2][1],
                     corner = corner,
-                    n_z = resolution,
-                    n_a = resolution
+                    n_z = n_z,
+                    n_a = n_a
                 );
         }
     }

@@ -560,7 +560,6 @@ function mb_prismoid_norm_rad(
 
 /**
 * Normalizes the radius
-* TODO implement
 */
 function mb_prismoid_normalize_radius(shape, socket = undef) =
     [
@@ -1229,4 +1228,3 @@ mb_prismoid(shape = [
     ]
 ], expand = [[10,10,10,10,10,10]], radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
 
-echo(c = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]));
