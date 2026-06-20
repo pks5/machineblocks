@@ -1077,18 +1077,18 @@ module mb_prismoid(
 
                                     // Draw point
                                     translate(point) 
-                                        mb_rounding_corner(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
+                                        mb_fillet(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
 
                                     // Draw bottom socket point
                                     if(i == 0 && socket_point_bottom != undef){
                                         translate(socket_point_bottom) 
-                                            mb_rounding_corner(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_fillet(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
                                     }
 
                                     // Draw top socket point
                                     if(i == 1 && socket_point_top != undef){
                                         translate(socket_point_top) 
-                                            mb_rounding_corner(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_fillet(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
                                     }
                                 }
                                 else{
@@ -1119,10 +1119,7 @@ module mb_prismoid(
 */
 
 
-sr = [80, 10.1, 10];
-corner = [1,2];
 
-*mb_rounding_corner(corner = corner, radius = [[0,0], [0,0], [0,0]], angle = [0, 0, 0, 0]);
 
 
 *translate([0, -53, -60])
