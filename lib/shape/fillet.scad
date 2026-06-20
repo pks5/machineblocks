@@ -45,6 +45,10 @@ function mb_corner_offset_N(c, r, f = 0.5) = [
     (c[0] == 0 ? 1 : -1) * f * r[2]
 ];
 
+function mb_fillet_scaled_resolution(resolution, small, large, min_res=6) =
+    large <= 0 ? min_res :
+    max(min_res, ceil(resolution * sqrt(small / large)));
+
 module mb_ellibox_octant(
     x_y, x_z,
     y_x, y_z,
@@ -316,9 +320,18 @@ module mb_fillet(
 
     xy_lg = max_rad_xy >= max_rad[2];
 
-    n_other = ceil((resolution / (xy_lg ? max_rad_xy : max_rad[2])) * (xy_lg ? max_rad[2] : max_rad_xy));
+    n_other = mb_fillet_scaled_resolution(
+        resolution,
+        xy_lg ? max_rad[2] : max_rad_xy,
+        xy_lg ? max_rad_xy : max_rad[2],
+        2
+    );
+
+    //n_other = ceil((resolution / (xy_lg ? max_rad_xy : max_rad[2])) * (xy_lg ? max_rad[2] : max_rad_xy));
     n_a = xy_lg ? resolution : n_other;
     n_z = xy_lg ? n_other : resolution;
+
+    echo(n_a = n_a, n_z = n_z);
 
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
