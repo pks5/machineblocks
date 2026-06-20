@@ -5,6 +5,7 @@ use <block_dim.scad>;
 use <bevel.scad>;
 use <poly_expand.scad>;
 use <api.scad>;
+use <quality.scad>;
 
 function mb_block_obj(
     config,
@@ -301,7 +302,15 @@ function mb_block_obj(
                 adj_size,
                 center
             ], // 0 - Original Size / Mod Size
-            [], // 1 - 
+            [
+                mb_q_preset_from_quality(mb_param_quality(config, settings)),
+                mb_param_scadQualityProfile(config, settings),
+                mb_param_scadQualityClassFactors(config, settings),
+                mb_param_scadQualityClassMinSegments(config, settings),
+                mb_param_scadQualitySegmentMultiplier(config, settings),
+                mb_param_scadPreviewQuality(config, settings),
+                mb_param_scadPreviewMaxMult(config, settings)
+            ], // 1 - 
             top_plate_helpers_final, // 2 - 
             block_dim, // 3 - 
             [
@@ -487,8 +496,17 @@ function mb_block_get_center(block_obj) =                           block_obj[0]
 
 function mb_block_get_id(block_obj) =                               block_obj[20][0];
 
-function mb_block_get_bevel(block_obj) =                            block_obj[1][0];
 function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
+
+// Quality
+
+function mb_block_get_quality(block_obj) =                          block_obj[1][0];
+function mb_block_get_scad_quality_profile(block_obj) =             block_obj[1][1];
+function mb_block_get_scad_quality_class_factors(block_obj) =       block_obj[1][2];
+function mb_block_get_scad_quality_class_min_segments(block_obj) =  block_obj[1][3];
+function mb_block_get_scad_quality_segment_multiplier(block_obj) =  block_obj[1][4];
+function mb_block_get_scad_preview_quality(block_obj)            =  block_obj[1][5];
+function mb_block_get_scad_preview_max_mult(block_obj)           =  block_obj[1][6];
 
 // Slope
 function mb_block_get_slope_socket(block_obj) =                     [block_obj[5][0], block_obj[5][1]];

@@ -431,6 +431,8 @@ function mb_param_renderGroups(config, settings, default = undef) = let (parts =
 * Parameter Helpers
 */
 
+
+
 function _mb_param_is_value(value, use_list = false) = 
     is_bool(value) || is_num(value) || is_string(value)
     || (use_list && is_list(value) && len(value) == 2 && _mb_param_is_value(value[0], false) && _mb_param_is_value(value[1], false));

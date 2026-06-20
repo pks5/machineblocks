@@ -3,6 +3,7 @@ use <block_model.scad>;
 use <block_dim.scad>;
 use <utils.scad>;
 use <poly_expand.scad>;
+use <quality.scad>;
 
 use <../shape/prismoid.scad>;
 use <../shape/tube.scad>;
@@ -174,7 +175,7 @@ function mb_block_part_tube(
     length = undef,
     expand = undef,
     offset = undef,
-    overlap = undef,
+    quality_class = [mb_q_functional(), mb_q_visual()],
     render = true
 ) = 
     let(
@@ -198,7 +199,8 @@ function mb_block_part_tube(
             clamp_start,
             clamp_end,
             axis,
-            offset
+            offset,
+            quality_class
         ],
         render = render
     );
@@ -325,6 +327,14 @@ function mb_block_part_prismoid(
 module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
     mul = is_undef(mul) ? mb_block_default_multiplier(block_obj) : mul;
     base_color = mb_block_get_base_color(block_obj);
+
+    quality = mb_block_get_quality(block_obj);
+    scad_quality_profile = mb_block_get_scad_quality_profile(block_obj);
+    scad_quality_class_factors = mb_block_get_scad_quality_class_factors(block_obj);
+    scad_quality_class_min_segments = mb_block_get_scad_quality_class_min_segments(block_obj);
+    scad_quality_segment_multiplier = mb_block_get_scad_quality_segment_multiplier(block_obj);
+    scad_preview_quality = mb_block_get_scad_preview_quality(block_obj);
+    scad_preview_max_mult = mb_block_get_scad_preview_max_mult(block_obj);
     
     part_type = mb_block_part_model_type(part);
     part_data = mb_block_part_model_data(part);
@@ -394,18 +404,37 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
         }
         else if(part_type == "mb_tube"){
             tube_data = mb_block_part_model_data_item(part, 0);
+            radius = tube_data[0];
+            rounding_radius = tube_data[2];
+            quality_class = tube_data[7]; // [tube, edge]
+
+            tube_resolution = mb_q_fn_even_for_radius(
+                r = (is_list(radius) ? radius[1] : radius) * mul[0],
+                q = quality_class[0],
+                preset = quality,
+                profile = scad_quality_profile,
+                class_factors = scad_quality_class_factors,
+                class_min_fn = scad_quality_class_min_segments,
+                fn_mult = scad_quality_segment_multiplier,
+                previewQuality = scad_preview_quality,
+                previewMaxMult = scad_preview_max_mult
+            );
+
+            echo(q = quality, r=is_list(radius) ? radius[1] : radius, qc = quality_class[0], t_r = tube_resolution);
 
             mb_tube(
-                radius = tube_data[0],
+                radius = radius,
                 length = tube_data[1],
-                rounding_radius = tube_data[2],
+                rounding_radius = rounding_radius,
                 clamp_start = tube_data[3],
                 clamp_end = tube_data[4],
                 axis = tube_data[5],
                 offset = tube_data[6],
                 mul = mul,
                 debug = debug,
-                color = base_color
+                color = base_color,
+                rounding_resolution_tube = tube_resolution,
+                rounding_resolution_edge = 8
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);

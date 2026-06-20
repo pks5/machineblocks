@@ -18,6 +18,13 @@ function mb_q_normal()  = 1;
 function mb_q_print()   = 2;
 function mb_q_render()  = 3;
 
+function mb_q_preset_from_quality(quality) =
+    quality == "preview" ? mb_q_preview() :
+    quality == "normal"  ? mb_q_normal()  :
+    quality == "print"   ? mb_q_print()   :
+    quality == "render"  ? mb_q_render()  :
+                           mb_q_normal();
+
 // ----------------------------------------------------------------------------
 // Default mappings
 //
