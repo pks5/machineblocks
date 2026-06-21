@@ -292,7 +292,7 @@ function mb_poly_expand(pts, p, expand, mul = undef) =
                                 q[0],
                                 q[1],
                                 len(pts[i]) > 2 && !is_undef(pts[i][2])
-                                    ? pts[i][2] + (p == 0 ? -1 : 1) * sext[4 + p]
+                                    ? pts[i][2] + ((p == 0 ? -1 : 1) * sext[4 + p])
                                     : undef,
                                 pts[i][3]
                             ]

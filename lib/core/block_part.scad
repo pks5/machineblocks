@@ -289,7 +289,7 @@ function mb_block_part_prismoid(
             mb_prismoid_plane(expand, 0),
             mb_prismoid_plane(expand, 1)
         ],
-        exp_h = exp_planes[0],
+       
 
         /*
         exp_sin = is_list(expand) && (len(expand) == 2) && is_list(expand[0]) && is_list(expand[1]),
@@ -300,17 +300,19 @@ function mb_block_part_prismoid(
         */
 
         
-
-        h_exp = is_undef(exp_h) || (exp_h[4] == "auto" && exp_h[5] == "auto") 
+        /*
+        h_exp = is_undef(expand) 
+                    || is_undef(exp_planes[0]) && is_undef(exp_planes[1]) 
+                    || (exp_planes[0][4] == "auto" && exp_planes[1][5] == "auto") 
             ? h_d 
             : [
-                exp_h[4] == "auto" 
+                exp_planes[0][4] == "auto" 
                     ? min_max[1][2] - h_r 
-                    : h_d[0] - exp_h[4], 
-                exp_h[5] == "auto" 
+                    : h_d[0] - exp_planes[0][4], 
+                exp_planes[1][5] == "auto" 
                     ? min_max[0][2] + h_r 
-                    : h_d[1] + exp_h[5]
-            ],
+                    : h_d[1] + exp_planes[1][5]
+            ],*/
         
         
         /*h_exp = is_undef(exp_h) 
@@ -321,9 +323,23 @@ function mb_block_part_prismoid(
             ],*/
         //exp = is_undef(expand) ? undef : exp_sin ? [ is_undef(expand[0]) ? undef : [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], is_undef(expand[1]) ? undef : [expand[1][0], expand[1][1], expand[1][2], expand[1][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
         
-        exp = [
-            [exp_planes[0][0], exp_planes[0][1], exp_planes[0][2], exp_planes[0][3], 0, 0],
-            [exp_planes[1][0], exp_planes[1][1], exp_planes[1][2], exp_planes[1][3], 0, 0]
+        exp = is_undef(expand) ? undef : [
+            [
+                exp_planes[0][0], 
+                exp_planes[0][1], 
+                exp_planes[0][2], 
+                exp_planes[0][3], 
+                exp_planes[0][4] == "auto" ? -mod_size[2] + h_r : exp_planes[0][4], 
+                0 // z+ on bottom plane is ignored
+            ],
+            [
+                exp_planes[1][0], 
+                exp_planes[1][1], 
+                exp_planes[1][2], 
+                exp_planes[1][3], 
+                0, // z- on top plane is ignored
+                exp_planes[1][5] == "auto" ? -mod_size[2] + h_r : exp_planes[1][5], 
+            ]
         ],
 
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
@@ -340,7 +356,7 @@ function mb_block_part_prismoid(
             mb_poly_expand(bevel_matrix, 0, slope_neg),
             mb_poly_expand(bevel_matrix, 1, slope_pos_inv),
             [
-                h_exp, 
+                h_d, 
                 socket,
                 radius, 
                 exp,
