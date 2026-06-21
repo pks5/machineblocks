@@ -16,6 +16,8 @@ function mb_block_part__recess(block_obj) =
         slope = mb_block_dim_slope(block_dim),
         rwt = mb_block_get_recess_wall_thickness(block_obj),
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
+
+        rad_expand = mb_block_get_recess_rounding_radius(block_obj) == "auto",
         
         bottom = mb_block_recess_floor_offset(block_obj, "z-"),
         exp_top = mb_block_dim_face_edge_expand(
@@ -41,6 +43,7 @@ function mb_block_part__recess(block_obj) =
                             exp_top,
                         ]],
                         radius = mb_block_recess_rounding_radius(block_obj),
+                        rad_expand = rad_expand,
                         slope = slope,
                         socket = socket
                     ),
@@ -87,6 +90,7 @@ function mb_block_part__recess(block_obj) =
                                     exp_top
                                 ]],
                                 radius = mb_block_recess_rounding_radius(block_obj, omit_face = face),
+                                rad_expand = rad_expand,
                                 slope = slope,
                                 socket = socket
                             ),

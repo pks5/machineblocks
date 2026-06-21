@@ -273,6 +273,7 @@ function mb_block_part_prismoid(
     slope = undef, 
     socket = undef, 
     expand = undef, 
+    rad_expand = true,
     height = undef,
     radius = undef,
     render = true
@@ -281,19 +282,50 @@ function mb_block_part_prismoid(
         mod_size = mb_block_dim_mod_size(block_dim),
         min_max = mb_block_dim_min_max_pos(block_dim),
         
-        h_d = is_undef(height) ? [min_max[0][2], min_max[1][2]] : [-0.5 * height, 0.5 * height],
+        h_d = is_num(height) ? [-0.5 * height, 0.5 * height] : [min_max[0][2], min_max[1][2]],
+        h_r = is_num(height) ? height : mod_size[2],
 
+        exp_planes = [
+            mb_prismoid_plane(expand, 0),
+            mb_prismoid_plane(expand, 1)
+        ],
+        exp_h = exp_planes[0],
+
+        /*
         exp_sin = is_list(expand) && (len(expand) == 2) && is_list(expand[0]) && is_list(expand[1]),
         exp_1 = is_list(expand) && (((len(expand) == 1) && is_list(expand[0])) 
             || (len(expand) == 2 && is_undef(expand[0]) && !is_undef(expand[1])) 
             || (len(expand) == 2 && !is_undef(expand[0]) && is_undef(expand[1]))),
         exp_h = is_undef(expand) ? undef : (!is_undef(expand[0]) ? expand[0] : (!is_undef(expand[1]) ? expand[1] : undef)),
+        */
 
-        h = is_undef(exp_h) || (exp_h[4] == "auto" && exp_h[5] == "auto") ? h_d : [exp_h[4] == "auto" ? min_max[1][2] - height : h_d[0], exp_h[5] == "auto" ? min_max[0][2] + height : h_d[1] ],
-        h_exp = is_undef(exp_h) ? h : [h[0] - (exp_h[4] == "auto" ? 0 : exp_h[4]), h[1] + (exp_h[5] == "auto" ? 0 : exp_h[5])],
-        exp = is_undef(expand) ? undef : exp_sin ? [ is_undef(expand[0]) ? undef : [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], is_undef(expand[1]) ? undef : [expand[1][0], expand[1][1], expand[1][2], expand[1][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
+        
+
+        h_exp = is_undef(exp_h) || (exp_h[4] == "auto" && exp_h[5] == "auto") 
+            ? h_d 
+            : [
+                exp_h[4] == "auto" 
+                    ? min_max[1][2] - h_r 
+                    : h_d[0] - exp_h[4], 
+                exp_h[5] == "auto" 
+                    ? min_max[0][2] + h_r 
+                    : h_d[1] + exp_h[5]
+            ],
         
         
+        /*h_exp = is_undef(exp_h) 
+            ? h 
+            : [
+                h[0] - (exp_h[4] == "auto" ? 0 : exp_h[4]), 
+                h[1] + (exp_h[5] == "auto" ? 0 : exp_h[5])
+            ],*/
+        //exp = is_undef(expand) ? undef : exp_sin ? [ is_undef(expand[0]) ? undef : [expand[0][0], expand[0][1], expand[0][2], expand[0][3], 0, 0], is_undef(expand[1]) ? undef : [expand[1][0], expand[1][1], expand[1][2], expand[1][3], 0, 0]] : exp_1 ? [[exp_h[0], exp_h[1], exp_h[2], exp_h[3], 0, 0]] : undef,
+        
+        exp = [
+            [exp_planes[0][0], exp_planes[0][1], exp_planes[0][2], exp_planes[0][3], 0, 0],
+            [exp_planes[1][0], exp_planes[1][1], exp_planes[1][2], exp_planes[1][3], 0, 0]
+        ],
+
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         
         slope = is_undef(slope) ? mb_qc_resolve(0, false) : slope,
@@ -311,7 +343,8 @@ function mb_block_part_prismoid(
                 h_exp, 
                 socket,
                 radius, 
-                exp
+                exp,
+                rad_expand
             ]
         ],
         render = render

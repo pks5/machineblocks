@@ -87,7 +87,7 @@ function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_par
 // Cutoout
 function mb_param_baseCutoutType(config, settings, default = undef) = mb_param(config, settings, "baseCutoutType", default != undef ? default : "standard");
 function mb_param_baseCutoutMaxDepth(config, settings, default = undef) = mb_param(config, settings, "baseCutoutMaxDepth", default != undef ? default : 5);
-// TODO implement
+// TODO implement or remove
 function mb_param_baseCutoutRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseCutoutRoundingRadius", default != undef ? default : "auto");
 
 // Clamp
