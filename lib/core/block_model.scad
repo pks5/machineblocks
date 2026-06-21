@@ -246,6 +246,8 @@ function mb_block_obj(
         * Tongue
         */
         tongue_thickness_adj = mb_param_tongueThicknessAdjustment(config, settings) * mm2grd_xy,
+        tongue_rr = mb_param_tongueRoundingRadius(config, settings),
+        
         tongue_final = [
             mb_param_tongue(config, settings),
             mb_param_tongueThickness(config, settings) * mbu2grd_xy + tongue_thickness_adj,
@@ -253,7 +255,8 @@ function mb_block_obj(
             mb_param_tongueOffset(config, settings) * mbu2grd_xy - 0.5 * tongue_thickness_adj,
             mb_param_tongueClampThickness(config, settings) * mbu2grd_xy,
             mb_param_tongueClampHeight(config, settings) * mbu2grd_z,
-            mb_param_tongueClampOffset(config, settings) * mbu2grd_z
+            mb_param_tongueClampOffset(config, settings) * mbu2grd_z,
+            tongue_rr == "auto" ? "auto" : mb_corner_radius_from_side_views([0, 0, tongue_rr])
         ],
 
         /*
@@ -641,6 +644,7 @@ function mb_block_get_tongue_offset(block_obj, groove) =            block_obj[13
 function mb_block_get_tongue_clamp_thickness(block_obj, groove) =   block_obj[13][4];
 function mb_block_get_tongue_clamp_height(block_obj, groove) =      block_obj[13][5];
 function mb_block_get_tongue_clamp_offset(block_obj, groove) =      block_obj[13][6];
+function mb_block_get_tongue_rounding_radius(block_obj, groove) =   block_obj[13][7];
 
 // Groove
 function mb_block_has_groove(block_obj) =                           block_obj[4][2] == "groove";
@@ -1366,9 +1370,8 @@ function mb_block_base_rounding_omit(face, corner_j) =
     face == 3 ? corner_j == 2 || corner_j == 3 || corner_j == 4 || corner_j == 5 :
     false;
 
-function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = true, omit_face = undef) =
+function _mb_block_base_rounding_radius(base_rounding_radius, xy = true, xz = true, yz = true, omit_face = undef) =
     let(
-        base_rounding_radius = mb_block_get_base_rounding_radius(block_obj),
         face = is_undef(omit_face) ? undef : mb_face_to_int(omit_face)
     )
     [
@@ -1384,6 +1387,20 @@ function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = tru
                 ]
             ]
     ];
+
+function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = true, omit_face = undef) =
+    _mb_block_base_rounding_radius(mb_block_get_base_rounding_radius(block_obj), xy = xy, xz = xz, yz = yz, omit_face = omit_face);
+
+
+
+function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
+    let(
+        tongue_rr = mb_block_get_tongue_rounding_radius(block_obj, groove),
+        tongue_rounding_radius = tongue_rr == "auto" 
+        ? mb_block_get_base_rounding_radius(block_obj)
+        : tongue_rr
+    )
+    _mb_block_base_rounding_radius(tongue_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
 
 /**
 * ----

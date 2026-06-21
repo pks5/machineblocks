@@ -881,7 +881,8 @@ function mb_prismoid_shape_resolve(
     radius = undef, 
     mul = undef, 
     add = undef, 
-    expand = undef
+    expand = undef,
+    rad_expand = undef
 ) =
     let(
         // Metadata from shape input
@@ -890,7 +891,8 @@ function mb_prismoid_shape_resolve(
         sck = is_undef(socket) ? (!is_undef(meta_data) && !is_undef(meta_data[1]) ? meta_data[1] : undef) : socket,
         radius = is_undef(radius) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : radius,
         expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[3]) ? meta_data[3] : undef) : expand,
-        
+        rad_expand = is_bool(rad_expand) ? rad_expand : (!is_undef(meta_data) && is_bool(meta_data[4]) ? meta_data[4] : true),
+
         // Multiplier
         mul = mb_resolve_xyz(mul, default=[1, 1, 1]),
 
@@ -917,7 +919,7 @@ function mb_prismoid_shape_resolve(
             mb_prismoid_plane_resolve_points(s, 0, mul = mul, add = a[0], height = height, radius = rr[0]),
             mb_prismoid_plane_resolve_points(s, 1, mul = mul, add = a[1], height = height, radius = rr[1])
         ],
-        ar = mb_prismoid_normalize_radius(rp, is_undef(expand) ? socket : undef),
+        ar = mb_prismoid_normalize_radius(rp, is_undef(expand) || !rad_expand ? socket : undef),
 
         // Calc Expand
         // TODO make function
@@ -925,7 +927,7 @@ function mb_prismoid_shape_resolve(
            mb_poly_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
            mb_poly_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
         ],
-        rc = is_undef(expand) ? ar : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
+        rc = is_undef(expand) || !rad_expand ? ar : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
         
         // Static data
         static = [socket]
@@ -964,6 +966,7 @@ module mb_prismoid(
     add = undef,
     mul = undef, 
     expand = undef,
+    rad_expand = undef,
     socket = undef, 
     align = "sticky", 
     resolution = 80, 
@@ -972,7 +975,7 @@ module mb_prismoid(
     color = "white"
 ){
     shape = resolve == true || (len(shape) < 4) || is_undef(shape[3]) ? 
-        mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand)
+        mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand, rad_expand = rad_expand)
         : shape;
     
     if(debug){
@@ -1226,5 +1229,5 @@ mb_prismoid(shape = [
         [20, -50], 
         undef
     ]
-], expand = [[10,10,10,10,10,10]], radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
+], expand = [[10,10,10,10,10,10]], rad_expand = true, radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
 

@@ -23,7 +23,8 @@ function mb_block_part__tongue(block_obj, groove = false) =
         tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj, groove),
         recess_wall_gaps = mb_block_get_recess_wall_gaps(block_obj),
         base_wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        tongue_rounding_radius = mb_block_base_rounding_radius(block_obj, xy = true, xz = false, yz = false),
+        
+        tongue_rounding_radius = mb_block_tongue_rounding_radius(block_obj, groove),
 
         stud_base_overlap = mb_block_get_stud_base_overlap(block_obj),
         // Bottom
@@ -189,7 +190,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                                     tongue_bottom,
                                                     tongue_top
                                                 ]],
-                                                radius = mb_block_base_rounding_radius(block_obj, omit_face = face, xy = true, xz = false, yz = false)
+                                                radius = mb_block_tongue_rounding_radius(block_obj, groove, omit_face = face)
                                             ),
 
                                             mb_block_part_cube(
@@ -248,7 +249,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                             tongue_bottom_cut,
                                             tongue_top_cut
                                         ]],
-                                        radius = mb_block_base_rounding_radius(block_obj, omit_face = face, xy = true, xz = false, yz = false)
+                                        radius = mb_block_tongue_rounding_radius(block_obj, groove, omit_face = face)
                                     ),
 
                                     mb_block_part_cube(
@@ -313,7 +314,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                                     tongue_clamp_bottom,
                                                     tongue_clamp_top
                                                 ]],
-                                                radius = mb_block_base_rounding_radius(block_obj, omit_face = face, xy = true, xz = false, yz = false)
+                                                radius = mb_block_tongue_rounding_radius(block_obj, groove, omit_face = face)
                                             ),
 
                                             mb_block_part_cube(
@@ -371,7 +372,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
                                             tongue_clamp_bottom_cut,
                                             tongue_clamp_top_cut
                                         ]],
-                                        radius = mb_block_base_rounding_radius(block_obj, omit_face = face, xy = true, xz = false, yz = false)
+                                        radius = mb_block_tongue_rounding_radius(block_obj, groove, omit_face = face)
                                     ),
 
                                     mb_block_part_cube(
