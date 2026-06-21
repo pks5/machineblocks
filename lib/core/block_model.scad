@@ -94,6 +94,9 @@ function mb_block_obj(
         recessStudPadding =  mb_param_recessStudPadding(config, settings),
         recessWallGaps = mb_to_array(mb_param_recessWallGaps(config, settings)),
 
+        recessRoundingRadius = mb_param_recessRoundingRadius(config, settings),
+        recess_rounding_radius = recessRoundingRadius == "auto" ? "auto" : mb_corner_radius_from_side_views([0, 0, recessRoundingRadius]),
+
         /*
         * Base Wall Thickness
         */
@@ -344,7 +347,8 @@ function mb_block_obj(
                 recess, 
                 recess_walls, 
                 recess_depth_final, 
-                recessWallGaps
+                recessWallGaps,
+                recess_rounding_radius
             ], // 8 - Recesss & Relief Cut
             [
                 top_plate_height_final
@@ -542,6 +546,7 @@ function mb_block_has_recess(block_obj) =                           block_obj[8]
 function mb_block_get_recess_wall_thickness(block_obj) =            block_obj[8][1];
 function mb_block_get_recess_depth(block_obj) =                     block_obj[8][2];
 function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][3];
+function mb_block_get_recess_rounding_radius(block_obj) =           block_obj[8][4];
 
 function mb_block_get_base_wall_gaps(block_obj) =                   block_obj[17][0];
 
@@ -1401,6 +1406,15 @@ function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
         : tongue_rr
     )
     _mb_block_base_rounding_radius(tongue_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
+
+function mb_block_recess_rounding_radius(block_obj, omit_face = undef) =
+    let(
+        recess_rr = mb_block_get_recess_rounding_radius(block_obj),
+        recess_rounding_radius = recess_rr == "auto" 
+        ? mb_block_get_base_rounding_radius(block_obj)
+        : recess_rr
+    )
+    _mb_block_base_rounding_radius(recess_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
 
 /**
 * ----

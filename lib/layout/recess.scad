@@ -40,7 +40,7 @@ function mb_block_part__recess(block_obj) =
                             0,
                             exp_top,
                         ]],
-                        radius = mb_block_base_rounding_radius(block_obj, xy = true, xz = false, yz = false),
+                        radius = mb_block_recess_rounding_radius(block_obj),
                         slope = slope,
                         socket = socket
                     ),
@@ -86,7 +86,7 @@ function mb_block_part__recess(block_obj) =
                                     0,
                                     exp_top
                                 ]],
-                                radius = mb_block_base_rounding_radius(block_obj, omit_face = face, xy = true, xz = false, yz = false),
+                                radius = mb_block_recess_rounding_radius(block_obj, omit_face = face),
                                 slope = slope,
                                 socket = socket
                             ),
