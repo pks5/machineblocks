@@ -358,7 +358,8 @@ function mb_round_prec(x, p) = round(x / p) * p;
 
 function mb_undef_to(v, to = 0) = is_undef(v) ? to : v;
 
-
+function mb_sum(v, i = 0, acc = 0) =
+    i >= len(v) ? acc : mb_sum(v, i + 1, acc + v[i]);
 
 /*
 * -----------

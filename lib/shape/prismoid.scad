@@ -2,6 +2,7 @@ use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
 use <../core/geometry.scad>;
 use <../core/corner_radius.scad>;
+use <../core/prismoid_contains.scad>;
 use <fillet.scad>;
 use <loft_poly.scad>;
 
@@ -725,8 +726,7 @@ function mb_prismoid_recalc_radius(shape_before, shape) =
 function mb_prismoid_recalc_rad_component(r, expand) =
     max(0, r + expand);
 
-function mb_sum(v, i = 0, acc = 0) =
-    i >= len(v) ? acc : mb_sum(v, i + 1, acc + v[i]);
+
 
 function mb_prismoid_plane_signed_area(shape, i) =
     mb_sum([
@@ -938,8 +938,6 @@ function mb_prismoid_shape_resolve(
         undef,
         mb_prismoid_process(rc, static)
     ];
-
-
 
 
 /*
@@ -1207,7 +1205,7 @@ mb_prismoid(shape = [
     ]
 ], height = 40,  debug=true);
 
-mb_prismoid(shape = [
+*mb_prismoid(shape = [
     [
         [-20, -50], 
         undef, //[-40, -30], 
@@ -1231,3 +1229,50 @@ mb_prismoid(shape = [
     ]
 ], expand = [[10,10,10,10,10,10]], rad_expand = true, radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
 
+prism = mb_prismoid_shape_resolve(
+
+    shape = [
+    [
+        [-20, -50], 
+        undef, //[-40, -30], 
+        [-20, 50], 
+        undef, 
+        [20, 50], 
+        undef, 
+        [20, -50], 
+        undef
+    ],
+    
+    [
+        [-10, -50], 
+        undef, //[-40, -30, undef, [[4,12], 0, 0]], 
+        [-10, 50], 
+        undef, 
+        [10, 50], 
+        undef, 
+        [10, -50], 
+        undef
+    ]
+], expand = [[10,10,10,10,10,10]], rad_expand = true, radius = mb_corner_radius_from_side_views([0, [[6, 5], [7, 5], [5, 4], [3, 5]], [[30, 15], [30, 5], [10, 25], [10, 5]]]), height = 40
+);
+
+cylinder_pos = [7, 40];
+cylinder_r = 12;
+overhang = 1;
+avr = true;
+
+mb_prismoid(prism);
+
+translate([cylinder_pos[0], cylinder_pos[1], 0])
+    cylinder(h = 120, r = cylinder_r, center = true);
+
+contains = mb_prismoid_contains(
+        prism,
+        1,              // obere Plane
+        cylinder_pos,
+        cylinder_r,
+        overhang = overhang,
+        avoid_vertical_rounding = avr
+    );
+
+echo(prism = prism, contains = contains, cylinder_pos = cylinder_pos, cylinder_r = cylinder_r, overhang = overhang, avr=avr);

@@ -334,7 +334,7 @@ module mb_fillet(
     n_z_oct = max(1, floor(n_z / 2));
     n_a_oct = max(1, floor(n_a / 4));
 
-    echo(n_a = n_a, n_z = n_z);
+    //echo(n_a = n_a, n_z = n_z);
 
     multmatrix(m = [ 
                     [1,             angle[1] / 45, angle[2] / 45, 0],
