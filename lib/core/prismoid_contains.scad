@@ -166,7 +166,7 @@ function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 12) =
 // ============================================================
 // Radius helpers
 // ============================================================
-
+/*
 function mb_prismoid_c_xy_radius_for_edge(point, idx, edge) =
     let(
         rr = len(point) > 3 ? point[3] : undef,
@@ -196,7 +196,32 @@ function mb_prismoid_c_xy_radius_for_edge(point, idx, edge) =
         ? (mirror ? yx : xy)
         : (mirror ? xy : yx);
 
+*/
 
+function mb_prismoid_c_xy_radius_for_edge(point, idx, edge) =
+    let(
+        rr = len(point) > 3 ? point[3] : undef,
+        zrad = rr != undef && is_list(rr) && len(rr) > 0 ? rr[0] : undef,
+
+        xy = zrad != undef &&
+             is_list(zrad) &&
+             len(zrad) > 0 &&
+             zrad[0] != undef
+                ? zrad[0]
+                : 0,
+
+        yx = zrad != undef &&
+             is_list(zrad) &&
+             len(zrad) > 1 &&
+             zrad[1] != undef
+                ? zrad[1]
+                : xy,
+
+        ax = abs(edge[0]),
+        ay = abs(edge[1])
+    )
+    ax >= ay ? xy : yx;
+    
 // ============================================================
 // Vertical rounding guard
 // ============================================================

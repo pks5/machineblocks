@@ -908,7 +908,7 @@ function mb_block_stud_render(block_obj, x, y) =
             overhang = stud_max_overhang,
             avoid_vertical_rounding = true
         ),
-        _ = echo(prism = prism_base_outer, p = stud_offset, r =  0.5 * stud_diameter, c = render_stud),
+        _ = echo(prism = prism_base_outer, p = stud_offset, r =  0.5 * stud_diameter, c = render_stud, x = x, y = y),
         
         //mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         

@@ -11,12 +11,17 @@ function mb_crfsv_axis(v) =
 
 function mb_crfsv_quad(v) =
     is_list(v) 
-        ? [
+        ? (
+        len(v) == 2 && is_num(v[0]) && is_num(v[1]) ? 
+        [
+            v, v, v, v
+        ]
+        : [
             len(v) > 0 ? (is_list(v[0]) || is_num(v[0]) ? v[0] : 0) : 0, 
             len(v) > 1 ? (is_list(v[1]) || is_num(v[1]) ? v[1] : 0) : 0, 
             len(v) > 2 ? (is_list(v[2]) || is_num(v[2]) ? v[2] : 0) : 0, 
             len(v) > 3 ? (is_list(v[3]) || is_num(v[3]) ? v[3] : 0) : 0
-        ] 
+        ]) 
         : is_num(v) ? [v, v, v, v] : [0, 0, 0, 0];
 
 function mb_crfsv_pair(v) =
