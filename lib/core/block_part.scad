@@ -47,7 +47,7 @@ function mb_block_part_model_data(part_model) =
 function mb_block_part_model_data_length(part_model) = 
     _mb_block_part_model_valid(part_model) ? len(part_model[1]) : undef;
 
-function mb_block_part_model_data_item(part_model, item) = 
+function mb_block_part_model_data_item(part_model, item = 0) = 
     _mb_block_part_model_valid(part_model) && len(part_model[1]) > 0 ? part_model[1][item] : undef;
 
 function mb_block_part_type_is_builtin(type) = 
@@ -285,7 +285,7 @@ function mb_block_part_prismoid(
         h_d = is_num(height) ? [-0.5 * height, 0.5 * height] : [min_max[0][2], min_max[1][2]],
         h_r = is_num(height) ? height : mod_size[2],
 
-        exp_planes = [
+        exp_planes = is_undef(expand) ? undef : [
             mb_prismoid_plane(expand, 0),
             mb_prismoid_plane(expand, 1)
         ],

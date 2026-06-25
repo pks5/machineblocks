@@ -2,10 +2,13 @@ use <geometry.scad>;
 use <utils.scad>;
 use <corner_radius.scad>;
 use <block_dim.scad>;
+use <block_part.scad>;
 use <bevel.scad>;
 use <poly_expand.scad>;
 use <api.scad>;
 use <quality.scad>;
+use <prismoid_contains.scad>;
+use <../shape/prismoid.scad>;
 
 function mb_block_obj(
     config,
@@ -117,6 +120,8 @@ function mb_block_obj(
             mb_param_baseClampOffset(config, settings) * mbu2grd_z // Offset
         ],
 
+        base_rounding_radius = mb_corner_radius_from_side_views(mb_param_baseRoundingRadius(config, settings)),
+
         /*
         * Studs
         */
@@ -165,7 +170,11 @@ function mb_block_obj(
         surface_pattern_scale = mb_param_surfacePatternScale(config, settings),
         surface_pattern_depth = mb_param_surfacePatternDepth(config, settings),
 
-        
+        /*
+        * Slope
+        */
+        slope_base_height_bottom = mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z,
+        slope_base_height_top = mb_param_slopeBaseHeightTop(config, settings) * mbu2grd_z,
 
         /*
         * Relief Cut
@@ -299,7 +308,25 @@ function mb_block_obj(
         base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
         surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
         recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recessStudPadding),
-        recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang)
+        recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang),
+
+        /*
+        * Prismoids
+        */
+        
+        prism_base_outer = mb_prismoid_shape_resolve(
+            shape = mb_block_part_model_data_item(
+                mb_block_part_prismoid(
+                    block_dim = block_dim, 
+                    socket = [
+                        slope_base_height_bottom, 
+                        slope_base_height_top
+                    ],
+                    slope = mb_block_dim_slope(block_dim),
+                    radius = base_rounding_radius
+                )
+            )
+        )
     )
         [
             [
@@ -328,11 +355,11 @@ function mb_block_obj(
                 cutout_min_depth,
                 mb_param_base(config, settings),
                 mb_param_baseColor(config, settings),
-                mb_param_baseRoundingRadius(config, settings)
+                base_rounding_radius
             ], // 4 - Top Plate Height
             [
-                mb_param_slopeBaseHeightBottom(config, settings) * mbu2grd_z, 
-                mb_param_slopeBaseHeightTop(config, settings) * mbu2grd_z, 
+                slope_base_height_bottom, 
+                slope_base_height_top, 
                 mb_param_slopeBaseHeightInner(config, settings) * mbu2grd_z
             ], // 5 - Slope Base 
             [
@@ -357,7 +384,8 @@ function mb_block_obj(
                 surface_shape, 
                 recess_surface_shape, 
                 recess_inverse_shape, 
-                base_cutout_mask
+                base_cutout_mask,
+                prism_base_outer
             ],  // 10 - 
             [
                 top_plate_height_pref
@@ -530,8 +558,7 @@ function mb_block_get_size_mod(block_obj) =                         block_obj[6]
 function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
 function mb_block_has_base(block_obj) =                             block_obj[4][6];
 function mb_block_get_base_color(block_obj) =                       block_obj[4][7];
-function mb_block_get_base_rounding_radius(block_obj) =             
-                                   mb_corner_radius_from_side_views(block_obj[4][8]);
+function mb_block_get_base_rounding_radius(block_obj) =             block_obj[4][8];
 
 // Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
@@ -664,6 +691,8 @@ function mb_block_get_connector_width(block_obj, face, subtract) =  block_obj[24
 function mb_block_get_surface_shape(block_obj) =                    block_obj[10][0];
 function mb_block_get_recess_surface_shape(block_obj) =             block_obj[10][1];
 function mb_block_get_recess_inverse_shape(block_obj) =             block_obj[10][2];
+
+function mb_block_get_prism_base_outer(block_obj) =                 block_obj[10][4];
 
 // SVG Decorator
 function mb_block_get_svg(block_obj) =                              block_obj[23][0];
@@ -853,6 +882,7 @@ function mb_block_stud_render(block_obj, x, y) =
         surface_shape = mb_block_get_surface_shape(block_obj),
         recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
         recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
+        prism_base_outer = mb_block_get_prism_base_outer(block_obj),
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
         stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
@@ -870,7 +900,17 @@ function mb_block_stud_render(block_obj, x, y) =
 
         in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
-        render_stud = mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        render_stud = mb_prismoid_contains(
+            prism_base_outer,
+            plane = 1,              // obere Plane
+            circle_pos = in_recess ? recess_stud_offset : stud_offset,
+            circle_radius = 0.5 * stud_diameter,
+            overhang = stud_max_overhang,
+            avoid_vertical_rounding = true
+        ),
+        _ = echo(prism = prism_base_outer, p = stud_offset, r =  0.5 * stud_diameter, c = render_stud),
+        
+        //mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
         on_recess_wall = has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
     )

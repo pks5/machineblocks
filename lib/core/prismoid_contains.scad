@@ -83,6 +83,7 @@ function mb_prismoid_c_valid_indexed_points_2d(plane) =
         [i, plane[i]]
     ];
 
+/*
 function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 8) =
     let(
         A = [Ai[1][0], Ai[1][1]],
@@ -117,7 +118,50 @@ function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 8) =
             let(t = s / steps)
             mb_prismoid_c_quad_bezier(Pin, B, Pout, t)
         ];
+*/
 
+function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 12) =
+    let(
+        A = [Ai[1][0], Ai[1][1]],
+        B = [Bi[1][0], Bi[1][1]],
+        C = [Ci[1][0], Ci[1][1]],
+        idx = Bi[0],
+
+        BA = [A[0] - B[0], A[1] - B[1]],
+        BC = [C[0] - B[0], C[1] - B[1]],
+
+        la = mb_prismoid_c_norm(BA),
+        lc = mb_prismoid_c_norm(BC),
+
+        rin0  = mb_prismoid_c_xy_radius_for_edge(Bi[1], idx, BA),
+        rout0 = mb_prismoid_c_xy_radius_for_edge(Bi[1], idx, BC),
+
+        rin  = min(rin0,  la * 0.49),
+        rout = min(rout0, lc * 0.49),
+
+        u = la <= 0 ? [0, 0] : [BA[0] / la, BA[1] / la],
+        v = lc <= 0 ? [0, 0] : [BC[0] / lc, BC[1] / lc],
+
+        // Ellipsenzentrum: vom Eckpunkt entlang beider Kanten hinein
+        O = [
+            B[0] + u[0] * rin + v[0] * rout,
+            B[1] + u[1] * rin + v[1] * rout
+        ]
+    )
+    (rin <= 0 && rout <= 0)
+        ? [B]
+        : [
+            for(s = [0 : steps])
+            let(
+                a = s / steps * 90,
+                ca = cos(a),
+                sa = sin(a)
+            )
+            [
+                O[0] - v[0] * rout * ca - u[0] * rin * sa,
+                O[1] - v[1] * rout * ca - u[1] * rin * sa
+            ]
+        ];
 
 // ============================================================
 // Radius helpers
