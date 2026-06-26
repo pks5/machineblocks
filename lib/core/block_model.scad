@@ -96,7 +96,7 @@ function mb_block_obj(
         cutout_depth = baseCutoutType == "none" ? 0 : cutout_depth_calc,
 
         recess_walls = mb_qc_resolve(mb_param_recessWallThickness(config, settings)),
-        recessStudPadding =  mb_param_recessStudPadding(config, settings),
+        recess_stud_padding =  mb_qc_resolve(mb_param_recessStudPadding(config, settings)),
         recessWallGaps = mb_to_array(mb_param_recessWallGaps(config, settings)),
 
         recessRoundingRadius = mb_param_recessRoundingRadius(config, settings),
@@ -315,7 +315,7 @@ function mb_block_obj(
         
         base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
         surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
-        recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recessStudPadding),
+        recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recess_stud_padding),
         recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang),
 
         /*
@@ -326,6 +326,12 @@ function mb_block_obj(
             shape = mb_block_part_model_data_item(
                 mb_block_part_prismoid(
                     block_dim = block_dim, 
+                    expand = [[
+                        for(f = [0 : 3])
+                            -stud_padding[f],
+                        0,
+                        0,
+                    ]],
                     socket = slope_socket,
                     slope = mb_block_dim_slope(block_dim),
                     radius = base_rounding_radius
@@ -339,7 +345,30 @@ function mb_block_obj(
                     block_dim = block_dim, 
                     expand = [[
                         for(f = [0 : 3])
-                            -recess_walls[f],
+                            -(recess_walls[f] + recess_stud_padding[f]),
+                        0,
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            adjusted = true, 
+                            face = "z+", 
+                            overlap = true
+                        ),
+                    ]],
+                    radius = recess_rr_base,
+                    rad_expand = recess_rounding_radius == "auto",
+                    slope = slope,
+                    socket = slope_socket
+                )
+            )
+        ),
+
+        prism_recess_inv = mb_prismoid_shape_resolve(
+            shape = mb_block_part_model_data_item(
+                mb_block_part_prismoid(
+                    block_dim = block_dim, 
+                    expand = [[
+                        for(f = [0 : 3])
+                            -(recess_walls[f] - stud_padding[f] + stud_max_overhang),
                         0,
                         mb_block_dim_face_edge_expand(
                             block_dim, 
@@ -413,7 +442,8 @@ function mb_block_obj(
                 recess_surface_shape, 
                 recess_inverse_shape, 
                 base_cutout_mask,
-                prism_base_outer
+                [prism_base_outer, prism_recess, prism_recess_inv]
+                
             ],  // 10 - 
             [
                 top_plate_height_pref
@@ -720,7 +750,7 @@ function mb_block_get_surface_shape(block_obj) =                    block_obj[10
 function mb_block_get_recess_surface_shape(block_obj) =             block_obj[10][1];
 function mb_block_get_recess_inverse_shape(block_obj) =             block_obj[10][2];
 
-function mb_block_get_prism_base_outer(block_obj) =                 block_obj[10][4];
+function mb_block_get_prism_masks(block_obj) =                 block_obj[10][4];
 
 // SVG Decorator
 function mb_block_get_svg(block_obj) =                              block_obj[23][0];
@@ -900,7 +930,10 @@ function mb_block_stud_render(block_obj, x, y) =
         surface_shape = mb_block_get_surface_shape(block_obj),
         recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
         recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
-        prism_base_outer = mb_block_get_prism_base_outer(block_obj),
+        prism_masks = mb_block_get_prism_masks(block_obj),
+        prism_base_outer = prism_masks[0],
+        prism_recess = prism_masks[1],
+        prism_recess_inv = prism_masks[2],
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
         stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
         stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
@@ -916,7 +949,16 @@ function mb_block_stud_render(block_obj, x, y) =
         r_off = recess_stud_shift ? 1 : 0.5,
         recess_stud_offset = mb_block_pos_to_offset(block_obj, [x + r_off, y + r_off, undef]),
 
-        in_recess = has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
+        in_recess = has_recess && mb_prismoid_contains(
+            prism_recess,
+            plane = 1,              // obere Plane
+            circle_pos = recess_stud_offset,
+            circle_radius = 0.5 * stud_diameter,
+            overhang = stud_max_overhang,
+            avoid_vertical_rounding = true
+        ),
+        
+        //has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
         render_stud = mb_prismoid_contains(
             prism_base_outer,
@@ -930,7 +972,17 @@ function mb_block_stud_render(block_obj, x, y) =
         
         //mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
-        on_recess_wall = has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
+        on_recess_wall = has_recess && !mb_prismoid_contains(
+            prism_recess_inv,
+            plane = 1,              // obere Plane
+            circle_pos = stud_offset,
+            circle_radius = 0.5 * stud_diameter,
+            overhang = 0,
+            touch = true,
+            avoid_vertical_rounding = true
+        ),
+        
+        //has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
     )
     [
         render_stud && (!has_recess || in_recess || on_recess_wall),
@@ -1293,14 +1345,14 @@ function mb_block_stabilizer_segment_render(block_obj, axis, x, y) =
 * ------
 */  
 
-function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) = 
+function mb_block_recess_wall_gap(block_obj, gap) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
         recess_wall_thickness = mb_block_get_recess_wall_thickness(block_obj),
         gap = mb_to_array(gap),
-        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+        faces = mb_face_split(gap[0], ["x-", "x+", "y-", "y+"])
     )
     [
         for(face = faces)
@@ -1371,13 +1423,13 @@ function mb_block_slope_partial(block_obj, top_offset, f) =
     )
     slope_pos[f] == 0 ? 0 : (base_cutout_depth - top_offset - slope_base_height_inner) * (slope_pos[f] / (mod_size[2] - slope_base_height_bottom));
 
-function mb_block_base_wall_gap(block_obj, gap, split_axis = false) = 
+function mb_block_base_wall_gap(block_obj, gap) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
         wall_thickness = mb_block_get_wall_thickness(block_obj),
-        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+        faces = mb_face_split(gap[0], ["x-", "x+", "y-", "y+"])
     )
     [
         for(face = faces)
@@ -1410,7 +1462,7 @@ function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) =
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         found = [
             for(wall_gap = wall_gaps)
-               let(gaps = mb_block_base_wall_gap(block_obj, wall_gap, split_axis = false))
+               let(gaps = mb_block_base_wall_gap(block_obj, wall_gap))
                for(g = gaps)
                 if(face == g[0] && ((pos_min > g[5] && pos_min < g[6]) || (pos_max > g[5] && pos_max < g[6]))) 1
         ]
@@ -1435,7 +1487,7 @@ function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = tru
 * ------
 */
 
-function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false, split_axis = false) = 
+function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
@@ -1450,7 +1502,7 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false,
         wall_thickness = groove
             ? tongue_offset - (clamp ? tongue_clamp_thickness : 0)
             : tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
-        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+        faces = mb_face_split(gap[0], ["x-", "x+", "y-", "y+"])
     )
     [
         for(face = faces)
