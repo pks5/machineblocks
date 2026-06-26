@@ -313,11 +313,6 @@ function mb_block_obj(
             slope_base_height_top
         ],
         
-        base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
-        surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
-        recess_surface_shape = _mb_block_model_recess_surface_shape(bevel_matrix, slope, recess_walls, recess_stud_padding),
-        recess_inverse_shape = _mb_block_model_recess_inverse_shape(bevel_matrix, slope, recess_walls, stud_padding, stud_max_overhang),
-
         /*
         * Prismoids
         */
@@ -329,6 +324,23 @@ function mb_block_obj(
                     expand = [[
                         for(f = [0 : 3])
                             -stud_padding[f],
+                        0,
+                        0,
+                    ]],
+                    socket = slope_socket,
+                    slope = mb_block_dim_slope(block_dim),
+                    radius = base_rounding_radius
+                )
+            )
+        ),
+
+        prism_base_cutout = mb_prismoid_shape_resolve(
+            shape = mb_block_part_model_data_item(
+                mb_block_part_prismoid(
+                    block_dim = block_dim, 
+                    expand = [[
+                        for(f = [0 : 3])
+                            -wall_thickness_final,
                         0,
                         0,
                     ]],
@@ -438,11 +450,11 @@ function mb_block_obj(
                 top_plate_height_final
             ],  // 9 - Top Plate
             [
-                surface_shape, 
-                recess_surface_shape, 
-                recess_inverse_shape, 
-                base_cutout_mask,
-                [prism_base_outer, prism_recess, prism_recess_inv]
+                undef, 
+                undef, 
+                undef, 
+                undef,
+                [prism_base_outer, prism_recess, prism_recess_inv, prism_base_cutout]
                 
             ],  // 10 - 
             [
@@ -607,8 +619,7 @@ function mb_block_get_slope_base_height_bottom(block_obj) =          block_obj[5
 function mb_block_get_slope_base_height_inner(block_obj) =          block_obj[5][2];
 
 function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4][0];
-function mb_block_in_base_cutout(block_obj, off, dia) =
-    mb_circle_in_convex_quad(block_obj[10][3], off, 0.5 * dia, overhang = 0);
+
 
 function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];
 function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
@@ -847,6 +858,19 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
     )
     face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
+function mb_block_in_base_cutout(block_obj, off, dia) =
+    let(
+        prism_masks = mb_block_get_prism_masks(block_obj)
+    )
+    mb_prismoid_contains(
+        prism_masks[3],
+        plane = 0,              // obere Plane
+        circle_pos = off,
+        circle_radius = 0.5 * dia,
+        overhang = 0,
+        avoid_vertical_rounding = true
+    );
+    //mb_circle_in_convex_quad(block_obj[10][3], off, 0.5 * dia, overhang = 0);
 
 /**
 * -----------------------
@@ -927,9 +951,6 @@ function mb_block_stud_render(block_obj, x, y) =
     item == false ? false : 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        surface_shape = mb_block_get_surface_shape(block_obj),
-        recess_surface_shape = mb_block_get_recess_surface_shape(block_obj),
-        recess_inverse_shape = mb_block_get_recess_inverse_shape(block_obj),
         prism_masks = mb_block_get_prism_masks(block_obj),
         prism_base_outer = prism_masks[0],
         prism_recess = prism_masks[1],
@@ -958,8 +979,6 @@ function mb_block_stud_render(block_obj, x, y) =
             avoid_vertical_rounding = true
         ),
         
-        //has_recess && mb_circle_in_convex_quad(recess_surface_shape, recess_stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
-        
         render_stud = mb_prismoid_contains(
             prism_base_outer,
             plane = 1,              // obere Plane
@@ -968,9 +987,6 @@ function mb_block_stud_render(block_obj, x, y) =
             overhang = stud_max_overhang,
             avoid_vertical_rounding = true
         ),
-        _ = echo(prism = prism_base_outer, p = stud_offset, r =  0.5 * stud_diameter, c = render_stud, x = x, y = y),
-        
-        //mb_circle_in_convex_quad(surface_shape, in_recess ? recess_stud_offset : stud_offset, 0.5 * stud_diameter, overhang = stud_max_overhang),
         
         on_recess_wall = has_recess && !mb_prismoid_contains(
             prism_recess_inv,
@@ -980,9 +996,7 @@ function mb_block_stud_render(block_obj, x, y) =
             overhang = 0,
             touch = true,
             avoid_vertical_rounding = true
-        ),
-        
-        //has_recess && !mb_circle_in_convex_quad(recess_inverse_shape, stud_offset, 0.5 * stud_diameter, touch = true, overhang = 0),
+        )
     )
     [
         render_stud && (!has_recess || in_recess || on_recess_wall),
