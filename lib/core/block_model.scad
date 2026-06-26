@@ -76,6 +76,8 @@ function mb_block_obj(
         /*
         * Top Plate, Recess Depth, Base Cutout
         */
+        base_rounding_radius = mb_corner_radius_from_side_views(mb_param_baseRoundingRadius(config, settings)),
+
         top_plate_height_pref = mb_param_topPlateHeight(config, settings) * mbu2grd_z 
                                 + mb_param_topPlateHeightAdjustment(config, settings) * mm2grd_z,
         
@@ -99,6 +101,9 @@ function mb_block_obj(
 
         recessRoundingRadius = mb_param_recessRoundingRadius(config, settings),
         recess_rounding_radius = recessRoundingRadius == "auto" ? "auto" : mb_corner_radius_from_side_views([0, 0, recessRoundingRadius]),
+        recess_rr_base = recess_rounding_radius == "auto" 
+        ? base_rounding_radius
+        : recess_rounding_radius,
 
         /*
         * Base Wall Thickness
@@ -120,8 +125,7 @@ function mb_block_obj(
             mb_param_baseClampOffset(config, settings) * mbu2grd_z // Offset
         ],
 
-        base_rounding_radius = mb_corner_radius_from_side_views(mb_param_baseRoundingRadius(config, settings)),
-
+        
         /*
         * Studs
         */
@@ -304,6 +308,10 @@ function mb_block_obj(
         */
         bevel_matrix = mb_block_dim_bevel_matrix(block_dim),
         slope = mb_block_dim_slope(block_dim),
+        slope_socket = [
+            slope_base_height_bottom, 
+            slope_base_height_top
+        ],
         
         base_cutout_mask = mb_poly_expand(bevel_matrix, 0, -wall_thickness_final),
         surface_shape = _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding),
@@ -318,12 +326,32 @@ function mb_block_obj(
             shape = mb_block_part_model_data_item(
                 mb_block_part_prismoid(
                     block_dim = block_dim, 
-                    socket = [
-                        slope_base_height_bottom, 
-                        slope_base_height_top
-                    ],
+                    socket = slope_socket,
                     slope = mb_block_dim_slope(block_dim),
                     radius = base_rounding_radius
+                )
+            )
+        ),
+
+        prism_recess = mb_prismoid_shape_resolve(
+            shape = mb_block_part_model_data_item(
+                mb_block_part_prismoid(
+                    block_dim = block_dim, 
+                    expand = [[
+                        for(f = [0 : 3])
+                            -recess_walls[f],
+                        0,
+                        mb_block_dim_face_edge_expand(
+                            block_dim, 
+                            adjusted = true, 
+                            face = "z+", 
+                            overlap = true
+                        ),
+                    ]],
+                    radius = recess_rr_base,
+                    rad_expand = recess_rounding_radius == "auto",
+                    slope = slope,
+                    socket = slope_socket
                 )
             )
         )
@@ -1303,7 +1331,13 @@ function mb_block_recess_rounding_radius(block_obj, omit_face = undef) =
         ? mb_block_get_base_rounding_radius(block_obj)
         : recess_rr
     )
-    _mb_block_base_rounding_radius(recess_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
+    _mb_block_rounding_radius(
+        recess_rounding_radius, 
+        xy = true, 
+        xz = false, 
+        yz = false, 
+        omit_face = omit_face
+    );
 
 
 function mb_block_recess_floor_offset(block_obj, face, off = 0, overlap = false) =
@@ -1383,33 +1417,16 @@ function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) =
     )
     len(found) > 0;
 
-function mb_block_base_rounding_omit(face, corner_j) =
-    face == 0 ? corner_j == 0 || corner_j == 1 || corner_j == 2 || corner_j == 3 :
-    face == 1 ? corner_j == 4 || corner_j == 5 || corner_j == 6 || corner_j == 7 :
-    face == 2 ? corner_j == 0 || corner_j == 1 || corner_j == 6 || corner_j == 7 :
-    face == 3 ? corner_j == 2 || corner_j == 3 || corner_j == 4 || corner_j == 5 :
-    false;
 
-function _mb_block_base_rounding_radius(base_rounding_radius, xy = true, xz = true, yz = true, omit_face = undef) =
-    let(
-        face = is_undef(omit_face) ? undef : mb_face_to_int(omit_face)
-    )
-    [
-        for(i = [0 : len(base_rounding_radius) - 1])
-            [
-            for(j = [0 : len(base_rounding_radius[i]) - 1])
-                is_undef(base_rounding_radius[i][j]) ? undef 
-                : mb_block_base_rounding_omit(face, j) ? undef 
-                : [
-                    xy ? base_rounding_radius[i][j][0] : 0, 
-                    xz ? base_rounding_radius[i][j][1] : 0, 
-                    yz ? base_rounding_radius[i][j][2] : 0,
-                ]
-            ]
-    ];
 
 function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = true, omit_face = undef) =
-    _mb_block_base_rounding_radius(mb_block_get_base_rounding_radius(block_obj), xy = xy, xz = xz, yz = yz, omit_face = omit_face);
+    _mb_block_rounding_radius(
+        mb_block_get_base_rounding_radius(block_obj), 
+        xy = xy, 
+        xz = xz, 
+        yz = yz, 
+        omit_face = omit_face
+    );
 
 
 /**
@@ -1465,7 +1482,13 @@ function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
         ? mb_block_get_base_rounding_radius(block_obj)
         : tongue_rr
     )
-    _mb_block_base_rounding_radius(tongue_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
+    _mb_block_rounding_radius(
+        tongue_rounding_radius, 
+        xy = true, 
+        xz = false, 
+        yz = false, 
+        omit_face = omit_face
+    );
 
 
 /**
@@ -1484,6 +1507,31 @@ function mb_block_pos_to_offset(block_obj, pos) =
 * Private Helpers
 * ---------------
 */ 
+
+function _mb_block_base_rounding_omit(face, corner_j) =
+    face == 0 ? corner_j == 0 || corner_j == 1 || corner_j == 2 || corner_j == 3 :
+    face == 1 ? corner_j == 4 || corner_j == 5 || corner_j == 6 || corner_j == 7 :
+    face == 2 ? corner_j == 0 || corner_j == 1 || corner_j == 6 || corner_j == 7 :
+    face == 3 ? corner_j == 2 || corner_j == 3 || corner_j == 4 || corner_j == 5 :
+    false;
+
+function _mb_block_rounding_radius(rounding_radius, xy = true, xz = true, yz = true, omit_face = undef) =
+    let(
+        face = is_undef(omit_face) ? undef : mb_face_to_int(omit_face)
+    )
+    [
+        for(i = [0 : len(rounding_radius) - 1])
+            [
+            for(j = [0 : len(rounding_radius[i]) - 1])
+                is_undef(rounding_radius[i][j]) ? undef 
+                : _mb_block_base_rounding_omit(face, j) ? undef 
+                : [
+                    xy ? rounding_radius[i][j][0] : 0, 
+                    xz ? rounding_radius[i][j][1] : 0, 
+                    yz ? rounding_radius[i][j][2] : 0,
+                ]
+            ]
+    ];
 
  /*
 * Grid
