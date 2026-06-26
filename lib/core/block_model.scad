@@ -789,16 +789,6 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
     )
     face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
-function mb_block_recess_floor_offset(block_obj, face, off = 0, overlap = false) =
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        face = mb_face_to_int(face),
-        offs = [
-            mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
-            mb_block_get_recess_depth(block_obj)
-        ]
-    )
-    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = overlap) : undef;
 
 /**
 * -----------------------
@@ -1306,6 +1296,28 @@ function mb_block_recess_wall_gap(block_obj, gap, split_axis = true) =
             ]
     ];
 
+function mb_block_recess_rounding_radius(block_obj, omit_face = undef) =
+    let(
+        recess_rr = mb_block_get_recess_rounding_radius(block_obj),
+        recess_rounding_radius = recess_rr == "auto" 
+        ? mb_block_get_base_rounding_radius(block_obj)
+        : recess_rr
+    )
+    _mb_block_base_rounding_radius(recess_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
+
+
+function mb_block_recess_floor_offset(block_obj, face, off = 0, overlap = false) =
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        face = mb_face_to_int(face),
+        offs = [
+            mb_block_get_base_cutout_depth(block_obj) + mb_block_get_top_plate_height(block_obj),
+            mb_block_get_recess_depth(block_obj)
+        ]
+    )
+    face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = overlap) : undef;
+
+
 /**
 * ---------
 * Base Wall
@@ -1355,45 +1367,8 @@ function mb_block_base_wall_gap(block_obj, gap, split_axis = false) =
         ]
     ];
 
-function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false, split_axis = false) = 
-    let(
-        block_dim = mb_block_get_dim(block_obj),
-        min_max_index = mb_block_dim_min_max_index(block_dim),
-        mod_size = mb_block_get_mod_size(block_obj),
-        gap = mb_to_array(gap),
-        tongue_offset = mb_block_get_tongue_offset(block_obj),
-        tongue_height = mb_block_get_tongue_height(block_obj),
-        tongue_thickness = mb_block_get_tongue_thickness(block_obj),
-        tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
-        tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
-        tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
-        wall_thickness = groove
-            ? tongue_offset - (clamp ? tongue_clamp_thickness : 0)
-            : tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
-        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
-    )
-    [
-        for(face = faces)
-        
-        let(
-            axis = mb_face_to_axis(face),
-            axis_inverse = mb_axis_inverse(axis),
-            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            max_gap_length = mod_size[1-axis] - gap_start_pos,
-            gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
-            gap_start_offset = gap_start_pos + wall_thickness,
-            gap_end_offset = mod_size[1-axis] - gap_length - gap_start_pos + wall_thickness
-        )
-        [
-            face,
-            gap_start_pos,
-            gap_length,
-            gap_start_offset,
-            gap_end_offset,
-            min_max_index[0][axis_inverse] + gap_start_offset,
-            min_max_index[1][axis_inverse] + 1 - gap_end_offset
-        ]
-    ];
+
+
 
 function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) = 
     let(
@@ -1437,6 +1412,51 @@ function mb_block_base_rounding_radius(block_obj, xy = true, xz = true, yz = tru
     _mb_block_base_rounding_radius(mb_block_get_base_rounding_radius(block_obj), xy = xy, xz = xz, yz = yz, omit_face = omit_face);
 
 
+/**
+* ------
+* Tongue
+* ------
+*/
+
+function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false, split_axis = false) = 
+    let(
+        block_dim = mb_block_get_dim(block_obj),
+        min_max_index = mb_block_dim_min_max_index(block_dim),
+        mod_size = mb_block_get_mod_size(block_obj),
+        gap = mb_to_array(gap),
+        tongue_offset = mb_block_get_tongue_offset(block_obj),
+        tongue_height = mb_block_get_tongue_height(block_obj),
+        tongue_thickness = mb_block_get_tongue_thickness(block_obj),
+        tongue_clamp_offset = mb_block_get_tongue_clamp_offset(block_obj),
+        tongue_clamp_height = mb_block_get_tongue_clamp_height(block_obj),
+        tongue_clamp_thickness = mb_block_get_tongue_clamp_thickness(block_obj),
+        wall_thickness = groove
+            ? tongue_offset - (clamp ? tongue_clamp_thickness : 0)
+            : tongue_offset + tongue_thickness + (clamp ? tongue_clamp_thickness : 0),
+        faces = mb_face_split(gap[0], split_axis ? ["x", "y"] : ["x-", "x+", "y-", "y+"])
+    )
+    [
+        for(face = faces)
+        
+        let(
+            axis = mb_face_to_axis(face),
+            axis_inverse = mb_axis_inverse(axis),
+            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
+            max_gap_length = mod_size[1-axis] - gap_start_pos,
+            gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
+            gap_start_offset = gap_start_pos + wall_thickness,
+            gap_end_offset = mod_size[1-axis] - gap_length - gap_start_pos + wall_thickness
+        )
+        [
+            face,
+            gap_start_pos,
+            gap_length,
+            gap_start_offset,
+            gap_end_offset,
+            min_max_index[0][axis_inverse] + gap_start_offset,
+            min_max_index[1][axis_inverse] + 1 - gap_end_offset
+        ]
+    ];
 
 function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
     let(
@@ -1447,14 +1467,6 @@ function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
     )
     _mb_block_base_rounding_radius(tongue_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
 
-function mb_block_recess_rounding_radius(block_obj, omit_face = undef) =
-    let(
-        recess_rr = mb_block_get_recess_rounding_radius(block_obj),
-        recess_rounding_radius = recess_rr == "auto" 
-        ? mb_block_get_base_rounding_radius(block_obj)
-        : recess_rr
-    )
-    _mb_block_base_rounding_radius(recess_rounding_radius, xy = true, xz = false, yz = false, omit_face = omit_face);
 
 /**
 * ----
