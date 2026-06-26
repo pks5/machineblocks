@@ -919,7 +919,7 @@ function mb_prismoid_shape_resolve(
             mb_prismoid_plane_resolve_points(s, 0, mul = mul, add = a[0], height = height, radius = rr[0]),
             mb_prismoid_plane_resolve_points(s, 1, mul = mul, add = a[1], height = height, radius = rr[1])
         ],
-        ar = mb_prismoid_normalize_radius(rp, is_undef(expand) || !rad_expand ? socket : undef),
+        ar = is_undef(expand) ? rp : mb_prismoid_normalize_radius(rp, undef),
 
         // Calc Expand
         // TODO make function
@@ -927,7 +927,9 @@ function mb_prismoid_shape_resolve(
            mb_poly_expand(ar[0], 0, mb_prismoid_plane(expand, 0), mul),
            mb_poly_expand(ar[1], 1, mb_prismoid_plane(expand, 1), mul)
         ],
-        rc = is_undef(expand) || !rad_expand ? ar : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
+        rc = (is_undef(expand) || !rad_expand) 
+            ? mb_prismoid_normalize_radius(ex, socket) 
+            : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
         
         // Static data
         static = [socket]

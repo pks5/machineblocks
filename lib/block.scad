@@ -76,7 +76,6 @@ module mb_block(
     studs = mb_param_studs(config, settings);
     
     recess = mb_param_recess(config, settings);
-    recessRoundingRadius = mb_param_recessRoundingRadius(config, settings);
     recessDepth = mb_param_recessDepth(config, settings);
     recessWallThickness = mb_param_recessWallThickness(config, settings);
     recessStuds = mb_param_recessStuds(config, settings);
