@@ -882,7 +882,8 @@ function mb_prismoid_shape_resolve(
     mul = undef, 
     add = undef, 
     expand = undef,
-    rad_expand = undef
+    rad_expand = undef,
+    quality_class = undef
 ) =
     let(
         // Metadata from shape input
@@ -892,7 +893,8 @@ function mb_prismoid_shape_resolve(
         radius = is_undef(radius) ? (!is_undef(meta_data) && !is_undef(meta_data[2]) ? meta_data[2] : undef) : radius,
         expand = is_undef(expand) ? (!is_undef(meta_data) && !is_undef(meta_data[3]) ? meta_data[3] : undef) : expand,
         rad_expand = is_bool(rad_expand) ? rad_expand : (!is_undef(meta_data) && is_bool(meta_data[4]) ? meta_data[4] : true),
-
+        quality_class = is_string(quality_class) ? quality_class : (!is_undef(meta_data) && is_bool(meta_data[5]) ? meta_data[5] : "visual"),
+        
         // Multiplier
         mul = mb_resolve_xyz(mul, default=[1, 1, 1]),
 
@@ -932,7 +934,7 @@ function mb_prismoid_shape_resolve(
             : mb_prismoid_normalize_radius(mb_prismoid_recalc_radius(ar, ex), socket),
         
         // Static data
-        static = [socket]
+        static = [socket, quality_class]
     )
     [
         rc[0],
@@ -988,7 +990,17 @@ module mb_prismoid(
     color = "white"
 ){
     shape = resolve == true || (len(shape) < 4) || is_undef(shape[3]) ? 
-        mb_prismoid_shape_resolve(shape = shape, socket = socket, height = height, radius = radius, mul = mul, add = add, expand = expand, rad_expand = rad_expand)
+        mb_prismoid_shape_resolve(
+            shape = shape, 
+            socket = socket, 
+            height = height, 
+            radius = radius, 
+            mul = mul, 
+            add = add, 
+            expand = expand, 
+            rad_expand = rad_expand,
+            quality_class = quality_class
+        )
         : shape;
     
     if(debug){
@@ -1000,6 +1012,7 @@ module mb_prismoid(
     }
     else{
         sck = shape[3][4][0];
+        qclass = shape[3][4][1];
 
         sx = shape[3][2][0];
         sy = shape[3][2][1];
@@ -1092,18 +1105,57 @@ module mb_prismoid(
 
                                     // Draw point
                                     translate(point) 
-                                        mb_fillet(corner = corner, radius = rad, angle = angle, resolution = resolution, debug = debug);
+                                        mb_fillet(
+                                            corner = corner, 
+                                            radius = rad, 
+                                            angle = angle, 
+                                            quality_class = qclass,
+                                            quality = quality,
+                                            q_profile = q_profile,
+                                            q_class_factors = q_class_factors,
+                                            q_class_min_segments = q_class_min_segments,
+                                            q_segment_multiplier = q_segment_multiplier,
+                                            q_preview_quality = q_preview_quality,
+                                            q_preview_max_mult = q_preview_max_mult,
+                                            debug = debug
+                                        );
 
                                     // Draw bottom socket point
                                     if(i == 0 && socket_point_bottom != undef){
                                         translate(socket_point_bottom) 
-                                            mb_fillet(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_fillet(
+                                                corner = corner, 
+                                                radius = [rad[0], 0, 0], 
+                                                angle = angle, 
+                                                quality_class = qclass,
+                                                quality = quality,
+                                                q_profile = q_profile,
+                                                q_class_factors = q_class_factors,
+                                                q_class_min_segments = q_class_min_segments,
+                                                q_segment_multiplier = q_segment_multiplier,
+                                                q_preview_quality = q_preview_quality,
+                                                q_preview_max_mult = q_preview_max_mult,
+                                                debug = debug
+                                            );
                                     }
 
                                     // Draw top socket point
                                     if(i == 1 && socket_point_top != undef){
                                         translate(socket_point_top) 
-                                            mb_fillet(corner = corner, radius = [rad[0], 0, 0], angle = angle, resolution = resolution, debug = debug);
+                                            mb_fillet(
+                                                corner = corner, 
+                                                radius = [rad[0], 0, 0], 
+                                                angle = angle, 
+                                                quality_class = qclass,
+                                                quality = quality,
+                                                q_profile = q_profile,
+                                                q_class_factors = q_class_factors,
+                                                q_class_min_segments = q_class_min_segments,
+                                                q_segment_multiplier = q_segment_multiplier,
+                                                q_preview_quality = q_preview_quality,
+                                                q_preview_max_mult = q_preview_max_mult,
+                                                debug = debug
+                                            );
                                     }
                                 }
                                 else{

@@ -1,6 +1,7 @@
 
 use <../core/utils.scad>;
 use <../core/corner_radius.scad>;
+use <../core/quality.scad>;
 
 function mb_ellibox_inset_cap(z, rz_total, rz_axis, r_axis) =
     z < -rz_total + rz_axis
@@ -306,7 +307,17 @@ module mb_fillet(
         angle = [0, 0, 0, 0], 
         zero = 0.001, 
         precision = 0.01, 
-        resolution = 120, 
+
+        quality_class = "visual",
+        quality = "normal",
+
+        q_profile = undef,
+        q_class_factors = undef,
+        q_class_min_segments = undef,
+        q_segment_multiplier = undef,
+        q_preview_quality = undef,
+        q_preview_max_mult = undef,
+        
         debug = false
 ){
     s = mb_corner_radius_resolve(
@@ -319,6 +330,19 @@ module mb_fillet(
     max_rad_xy = max(max_rad[0], max_rad[1]);
 
     xy_lg = max_rad_xy >= max_rad[2];
+    max_rad_xyz = max(max_rad[0], max_rad[1], max_rad[2]);
+
+    resolution = mb_q_fn_even_for_radius(
+        r = max_rad_xyz,
+        q = quality_class,
+        preset = quality,
+        profile = q_profile,
+        class_factors = q_class_factors,
+        class_min_segments = q_class_min_segments,
+        segment_multiplier = q_segment_multiplier,
+        preview_quality = q_preview_quality,
+        preview_max_mult = q_preview_max_mult
+    );
 
     n_other = mb_fillet_scaled_resolution(
         resolution,
@@ -327,7 +351,7 @@ module mb_fillet(
         2
     );
 
-    //n_other = ceil((resolution / (xy_lg ? max_rad_xy : max_rad[2])) * (xy_lg ? max_rad[2] : max_rad_xy));
+    
     n_a = xy_lg ? resolution : n_other;
     n_z = xy_lg ? n_other : resolution;
 

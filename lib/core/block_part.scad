@@ -276,6 +276,7 @@ function mb_block_part_prismoid(
     rad_expand = true,
     height = undef,
     radius = undef,
+    quality_class = "visual",
     render = true
 ) =
     let(
@@ -360,7 +361,8 @@ function mb_block_part_prismoid(
                 socket,
                 radius, 
                 exp,
-                rad_expand
+                rad_expand,
+                quality_class
             ]
         ],
         render = render
@@ -446,6 +448,14 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 shape = mb_block_part_model_data_item(part, 0), 
                 mul = mul, 
                 debug = debug,
+                quality = quality,
+
+                q_profile = scad_quality_profile,
+                q_class_factors = scad_quality_class_factors,
+                q_class_min_segments = scad_quality_class_min_segments,
+                q_segment_multiplier = scad_quality_segment_multiplier,
+                q_preview_quality = scad_preview_quality,
+                q_preview_max_mult = scad_preview_max_mult,
                 color = base_color
             );
             
