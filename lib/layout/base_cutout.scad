@@ -73,7 +73,8 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 socket = _mb_layout_plane_value(
                     planes = planes, 
                     value = [slope_base_height_inner + mb_block_dim_overlap(block_dim, overlap = true), 0]
-                )
+                ),
+                quality_class = "hidden"
             ),
             for(wall_gap = wall_gaps)
                 mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj, top_offset)
