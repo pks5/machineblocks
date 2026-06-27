@@ -457,6 +457,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
             rounding_radius = tube_data[2];
             quality_class = tube_data[7]; // [tube, edge]
 
+            /*
             tube_resolution = mb_q_fn_even_for_radius(
                 r = (is_list(radius) ? radius[1] : radius) * mul[0],
                 q = quality_class[0],
@@ -481,7 +482,7 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 preview_max_mult = scad_preview_max_mult
             ) : 8;
 
-            echo(q = quality, r=rounding_radius, qc = quality_class[1], t_r = edge_resolution);
+            echo(q = quality, r=rounding_radius, qc = quality_class[1], t_r = edge_resolution);*/
 
             mb_tube(
                 radius = radius,
@@ -494,8 +495,18 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 mul = mul,
                 debug = debug,
                 color = base_color,
-                rounding_resolution_tube = tube_resolution,
-                rounding_resolution_edge = edge_resolution
+                
+                quality_class_tube = quality_class[0],
+                quality_class_edge = quality_class[1],
+
+                quality = quality,
+
+                q_profile = scad_quality_profile,
+                q_class_factors = scad_quality_class_factors,
+                q_class_min_fn = scad_quality_class_min_segments,
+                q_fn_mult = scad_quality_segment_multiplier,
+                q_preview_quality = scad_preview_quality,
+                q_preview_max_mult = scad_preview_max_mult
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);

@@ -1,4 +1,5 @@
 use <../core/utils.scad>;
+use <../core/quality.scad>;
 
 function _mb_tube_arc_points(cx, cy, r, a0, a1, segments = 8) =
     [
@@ -227,6 +228,18 @@ module mb_tube(
     rounding_resolution_tube = 64,
     rounding_resolution_edge = 8,
 
+    quality_class_tube = "functional",
+    quality_class_edge = "visual",
+
+    quality = "normal",
+
+    q_profile = undef,
+    q_class_factors = undef,
+    q_class_min_fn = undef,
+    q_fn_mult = undef,
+    q_preview_quality = undef,
+    q_preview_max_mult = undef,
+
     color = "white",
     draw_together = false,
     debug = false
@@ -258,6 +271,30 @@ module mb_tube(
         clamp_end_height = !is_list(clamp_end) || is_undef(clamp_end[1]) ? 0 : clamp_end[1] * mul_length;
         clamp_end_offset = !is_list(clamp_end) || is_undef(clamp_end[2]) ? 0 : clamp_end[2] * mul_length;
         clamp_end_rounding_radius = !is_list(clamp_end) || is_undef(clamp_end[3]) ? 0 : clamp_end[3] * mul_radius;
+
+        rounding_resolution_tube = mb_q_fn_even_for_radius(
+            r = radius_outer,
+            q = quality_class_tube,
+            preset = quality,
+            profile = q_profile,
+            class_factors = q_class_factors,
+            class_min_fn = q_class_min_fn,
+            fn_mult = q_fn_mult,
+            preview_quality = q_preview_quality,
+            preview_max_mult = q_preview_max_mult
+        );
+
+        rounding_resolution_edge = mb_q_fn_even_for_radius(
+            r = max(clamp_start_rounding_radius, clamp_end_rounding_radius),
+            q = quality_class_edge,
+            preset = quality,
+            profile = q_profile,
+            class_factors = q_class_factors,
+            class_min_fn = q_class_min_fn,
+            fn_mult = q_fn_mult,
+            preview_quality = q_preview_quality,
+            preview_max_mult = q_preview_max_mult
+        );
 
         is_cylinder = radius_inner == 0 && 
             start_rounding_radius == 0 && 
