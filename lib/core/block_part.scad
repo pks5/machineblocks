@@ -175,7 +175,7 @@ function mb_block_part_tube(
     length = undef,
     expand = undef,
     offset = undef,
-    quality_class = [mb_q_functional(), mb_q_visual()],
+    quality_class = ["functional", "visual"],
     render = true
 ) = 
     let(

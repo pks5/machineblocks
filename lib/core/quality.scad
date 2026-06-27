@@ -10,6 +10,13 @@ function mb_q_functional() = 0; // fit-critical
 function mb_q_visual()     = 1; // visible
 function mb_q_hidden()     = 2; // internal / invisible
 
+function mb_q_class_from_string(quality) =
+    is_num(quality) ? quality :
+    quality == "functional" ? mb_q_functional() :
+    quality == "visual"     ? mb_q_visual()     :
+    quality == "hidden"     ? mb_q_hidden()     :
+                              mb_q_visual();
+
 // ----------------------------------------------------------------------------
 // User quality presets
 
@@ -18,7 +25,8 @@ function mb_q_normal()  = 1;
 function mb_q_print()   = 2;
 function mb_q_render()  = 3;
 
-function mb_q_preset_from_quality(quality) =
+function mb_q_preset_from_string(quality) =
+    is_num(quality) ? quality :
     quality == "preview" ? mb_q_preview() :
     quality == "normal"  ? mb_q_normal()  :
     quality == "print"   ? mb_q_print()   :
@@ -63,10 +71,10 @@ function mb_q_make_even(n) =
     (n % 2 == 0) ? n : (n + 1);
 
 function mb_q_safe_class(q) =
-    mb_q_clamp(q, mb_q_functional(), mb_q_hidden());
+    mb_q_clamp(mb_q_class_from_string(q), mb_q_functional(), mb_q_hidden());
 
 function mb_q_safe_preset(q) =
-    mb_q_clamp(q, mb_q_preview(), mb_q_render());
+    mb_q_clamp(mb_q_preset_from_string(q), mb_q_preview(), mb_q_render());
 
 function mb_q_max_radius(r) =
     is_list(r)

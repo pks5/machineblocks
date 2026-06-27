@@ -405,7 +405,7 @@ function mb_block_obj(
                 center
             ], // 0 - Original Size / Mod Size
             [
-                mb_q_preset_from_quality(mb_param_quality(config, settings)),
+                mb_param_quality(config, settings),
                 mb_param_scadQualityProfile(config, settings),
                 mb_param_scadQualityClassFactors(config, settings),
                 mb_param_scadQualityClassMinSegments(config, settings),
