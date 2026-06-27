@@ -465,8 +465,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 class_factors = scad_quality_class_factors,
                 class_min_fn = scad_quality_class_min_segments,
                 fn_mult = scad_quality_segment_multiplier,
-                previewQuality = scad_preview_quality,
-                previewMaxMult = scad_preview_max_mult
+                preview_quality = scad_preview_quality,
+                preview_max_mult = scad_preview_max_mult
             );
 
             edge_resolution = is_num(rounding_radius) ? mb_q_fn_even_for_radius(
@@ -477,8 +477,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 class_factors = scad_quality_class_factors,
                 class_min_fn = scad_quality_class_min_segments,
                 fn_mult = scad_quality_segment_multiplier,
-                previewQuality = scad_preview_quality,
-                previewMaxMult = scad_preview_max_mult
+                preview_quality = scad_preview_quality,
+                preview_max_mult = scad_preview_max_mult
             ) : 8;
 
             echo(q = quality, r=rounding_radius, qc = quality_class[1], t_r = edge_resolution);

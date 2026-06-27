@@ -80,15 +80,15 @@ function mb_q_max_radius(r) =
 // ----------------------------------------------------------------------------
 // Preview multiplier
 //
-// previewQuality:
+// preview_quality:
 //   1 = no preview reduction
 //   0 = strongest preview reduction
 //
-// previewMaxMult is applied to segment length, not directly to fn.
+// preview_max_mult is applied to segment length, not directly to fn.
 
-function mb_q_preview_mult(previewQuality, previewMaxMult) =
-    let(p = mb_q_clamp(previewQuality, 0, 1))
-    1 + (1 - p) * (previewMaxMult - 1);
+function mb_q_preview_mult(preview_quality, preview_max_mult) =
+    let(p = mb_q_clamp(preview_quality, 0, 1))
+    1 + (1 - p) * (preview_max_mult - 1);
 
 // ----------------------------------------------------------------------------
 // Full-circle fn resolver
@@ -110,10 +110,10 @@ function mb_q_fn_for_radius(
     class_factors = undef,
     class_min_fn = undef,
 
-    fn_mult = 1.0,
+    fn_mult = undef,
 
-    previewQuality = 1.0,
-    previewMaxMult = 2.5,
+    preview_quality = undef,
+    preview_max_mult = undef,
     is_preview = $preview
 ) =
     let(
@@ -141,11 +141,14 @@ function mb_q_fn_for_radius(
         fn_max   = prof[pp][1],
 
         pm = is_preview
-            ? mb_q_preview_mult(previewQuality, previewMaxMult)
+            ? mb_q_preview_mult(
+                is_undef(preview_quality) ? 1.0 : preview_quality, 
+                is_undef(preview_max_mult) ? 2.5 : preview_max_mult
+            )
             : 1.0,
 
         // Bigger segment length => fewer full-circle segments.
-        seg = seg_base * factors[qq] * fn_mult * pm,
+        seg = seg_base * factors[qq] * (is_undef(fn_mult) ? 1.0 : fn_mult) * pm,
 
         fn_raw = (2 * PI * rr) / seg,
         fn_rounded = ceil(fn_raw)
@@ -167,10 +170,10 @@ function mb_q_fn_even_for_radius(
     class_factors = undef,
     class_min_fn = undef,
 
-    fn_mult = 1.0,
+    fn_mult = undef,
 
-    previewQuality = 1.0,
-    previewMaxMult = 2.5,
+    preview_quality = undef,
+    preview_max_mult = undef,
     is_preview = $preview
 ) =
     mb_q_make_even(
@@ -182,8 +185,8 @@ function mb_q_fn_even_for_radius(
             class_factors = class_factors,
             class_min_fn = class_min_fn,
             fn_mult = fn_mult,
-            previewQuality = previewQuality,
-            previewMaxMult = previewMaxMult,
+            preview_quality = preview_quality,
+            preview_max_mult = preview_max_mult,
             is_preview = is_preview
         )
     );
