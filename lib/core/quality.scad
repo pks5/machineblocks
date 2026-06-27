@@ -54,7 +54,7 @@ function mb_q_default_class_factors() =
     2.25           // hidden
 ];
 
-function mb_q_default_class_min_fn() =
+function mb_q_default_class_min_segments() =
 [
     16,            // functional
     12,            // visual
@@ -110,9 +110,9 @@ function mb_q_fn_for_radius(
 
     profile = undef,
     class_factors = undef,
-    class_min_fn = undef,
+    class_min_segments = undef,
 
-    fn_mult = undef,
+    segment_multiplier = undef,
 
     preview_quality = undef,
     preview_max_mult = undef,
@@ -131,9 +131,9 @@ function mb_q_fn_for_radius(
             ? mb_q_default_class_factors()
             : class_factors,
 
-        min_fn = is_undef(class_min_fn)
-            ? mb_q_default_class_min_fn()
-            : class_min_fn,
+        min_fn = is_undef(class_min_segments)
+            ? mb_q_default_class_min_segments()
+            : class_min_segments,
 
         rr = max(0.01, mb_q_max_radius(r)),
 
@@ -148,7 +148,7 @@ function mb_q_fn_for_radius(
             : 1.0,
 
         // Bigger segment length => fewer full-circle segments.
-        seg = seg_base * factors[qq] * (is_undef(fn_mult) ? 1.0 : fn_mult) * pm,
+        seg = seg_base * factors[qq] * (is_undef(segment_multiplier) ? 1.0 : segment_multiplier) * pm,
 
         fn_raw = (2 * PI * rr) / seg,
         fn_rounded = ceil(fn_raw)
@@ -168,9 +168,9 @@ function mb_q_fn_even_for_radius(
 
     profile = undef,
     class_factors = undef,
-    class_min_fn = undef,
+    class_min_segments = undef,
 
-    fn_mult = undef,
+    segment_multiplier = undef,
 
     preview_quality = undef,
     preview_max_mult = undef,
@@ -183,8 +183,8 @@ function mb_q_fn_even_for_radius(
             preset = preset,
             profile = profile,
             class_factors = class_factors,
-            class_min_fn = class_min_fn,
-            fn_mult = fn_mult,
+            class_min_segments = class_min_segments,
+            segment_multiplier = segment_multiplier,
             preview_quality = preview_quality,
             preview_max_mult = preview_max_mult,
             is_preview = is_preview

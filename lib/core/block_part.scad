@@ -464,8 +464,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 preset = quality,
                 profile = scad_quality_profile,
                 class_factors = scad_quality_class_factors,
-                class_min_fn = scad_quality_class_min_segments,
-                fn_mult = scad_quality_segment_multiplier,
+                class_min_segments = scad_quality_class_min_segments,
+                segment_multiplier = scad_quality_segment_multiplier,
                 preview_quality = scad_preview_quality,
                 preview_max_mult = scad_preview_max_mult
             );
@@ -476,8 +476,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 preset = quality,
                 profile = scad_quality_profile,
                 class_factors = scad_quality_class_factors,
-                class_min_fn = scad_quality_class_min_segments,
-                fn_mult = scad_quality_segment_multiplier,
+                class_min_segments = scad_quality_class_min_segments,
+                segment_multiplier = scad_quality_segment_multiplier,
                 preview_quality = scad_preview_quality,
                 preview_max_mult = scad_preview_max_mult
             ) : 8;
@@ -503,8 +503,8 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
 
                 q_profile = scad_quality_profile,
                 q_class_factors = scad_quality_class_factors,
-                q_class_min_fn = scad_quality_class_min_segments,
-                q_fn_mult = scad_quality_segment_multiplier,
+                q_class_min_segments = scad_quality_class_min_segments,
+                q_segment_multiplier = scad_quality_segment_multiplier,
                 q_preview_quality = scad_preview_quality,
                 q_preview_max_mult = scad_preview_max_mult
             );

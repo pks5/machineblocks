@@ -235,8 +235,8 @@ module mb_tube(
 
     q_profile = undef,
     q_class_factors = undef,
-    q_class_min_fn = undef,
-    q_fn_mult = undef,
+    q_class_min_segments = undef,
+    q_segment_multiplier = undef,
     q_preview_quality = undef,
     q_preview_max_mult = undef,
 
@@ -278,8 +278,8 @@ module mb_tube(
             preset = quality,
             profile = q_profile,
             class_factors = q_class_factors,
-            class_min_fn = q_class_min_fn,
-            fn_mult = q_fn_mult,
+            class_min_segments = q_class_min_segments,
+            segment_multiplier = q_segment_multiplier,
             preview_quality = q_preview_quality,
             preview_max_mult = q_preview_max_mult
         );
@@ -290,8 +290,8 @@ module mb_tube(
             preset = quality,
             profile = q_profile,
             class_factors = q_class_factors,
-            class_min_fn = q_class_min_fn,
-            fn_mult = q_fn_mult,
+            class_min_segments = q_class_min_segments,
+            segment_multiplier = q_segment_multiplier,
             preview_quality = q_preview_quality,
             preview_max_mult = q_preview_max_mult
         );

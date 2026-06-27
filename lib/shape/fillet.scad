@@ -346,7 +346,7 @@ module mb_fillet(
                 cube(size = [zero, zero, zero], center=true);
         }
         else{
-            echo ( rad = s);
+            //echo ( rad = s);
             translate(mb_corner_offset_N(corner, max_rad, f = 1))
                 mb_ellibox_octant(
                     x_y = s[0][0],
