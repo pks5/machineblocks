@@ -1,6 +1,6 @@
 use <../core/utils.scad>;
 use <../core/poly_expand.scad>;
-use <../core/geometry.scad>;
+use <../core/quality.scad>;
 use <../core/corner_radius.scad>;
 use <../core/prismoid_contains.scad>;
 use <fillet.scad>;
@@ -970,7 +970,20 @@ module mb_prismoid(
     socket = undef, 
     align = "sticky", 
     resolution = 80, 
-    resolve = undef, 
+
+    quality_class = "visual",
+    
+
+    quality = "normal",
+
+    q_profile = undef,
+    q_class_factors = undef,
+    q_class_min_segments = undef,
+    q_segment_multiplier = undef,
+    q_preview_quality = undef,
+    q_preview_max_mult = undef,
+
+    resolve = false, 
     debug = false,
     color = "white"
 ){
