@@ -4,8 +4,9 @@ use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
 function mb_block_part__pcb_holder(block_obj) = 
+    let(pcb = mb_block_get_pcb(block_obj))
+    pcb == false || pcb == "none" ? undef :
     let(
-        pcb = mb_block_get_pcb(block_obj),
         pcb_dimensions = mb_block_get_pcb_dimensions(block_obj),
         pcb_offset = mb_block_get_pcb_offset(block_obj),
         pcb_socket_diameter = mb_block_get_pcb_socket_diameter(block_obj),
@@ -25,6 +26,5 @@ function mb_block_part__pcb_holder(block_obj) =
             pcb_offset[0],
             pcb_offset[1],
             recess_floor_offset_z
-        ],
-        render = pcb != false && pcb != "none"
+        ]
     );

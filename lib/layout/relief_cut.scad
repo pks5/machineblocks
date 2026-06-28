@@ -10,6 +10,9 @@ use <shared.scad>;
 * ----------
 */
 function mb_block_part__relief_cut(block_obj) =
+    
+    !mb_block_has_relief_cut(block_obj) ? undef :
+    
     let(
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -19,8 +22,7 @@ function mb_block_part__relief_cut(block_obj) =
         relief_cut_height = mb_block_get_relief_cut_height(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj)
     ) 
-    mb_block_has_relief_cut(block_obj) 
-    ? [
+    [
         "difference",
         [
             _mb_layout_mask_frame(
@@ -57,5 +59,4 @@ function mb_block_part__relief_cut(block_obj) =
                 ]]
             )
         ]
-    ]
-    : undef;
+    ];

@@ -6,18 +6,20 @@ use <../core/block_part.scad>;
 function mb_block_part__surface_pattern(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj),
-        mod_size = mb_block_dim_mod_size(block_dim),
         surface_pattern = mb_block_get_surface_pattern(block_obj),
+        surface_pattern_depth = mb_block_get_surface_pattern_depth(block_obj),
+        height = abs(surface_pattern_depth),
+    )
+    mb_is_empty_string(surface_pattern) || surface_pattern == "none" || height == 0 ? undef :
+    let(
+        mod_size = mb_block_dim_mod_size(block_dim),
         surface_pattern_dimensions = mb_block_get_surface_pattern_dimensions(block_obj),
         surface_pattern_size = mb_block_get_surface_pattern_size(block_obj),
         surface_pattern_offset = mb_resolve_xyz(mb_block_get_surface_pattern_offset(block_obj), default = [0, 0, 0]),
         surface_pattern_padding = mb_block_get_surface_pattern_padding(block_obj),
         surface_pattern_color = mb_block_get_surface_pattern_color(block_obj),
         surface_pattern_scale = mb_block_get_surface_pattern_scale(block_obj),
-        surface_pattern_depth = mb_block_get_surface_pattern_depth(block_obj),
-
-        height = abs(surface_pattern_depth),
-        has_surface_pattern = !mb_is_empty_string(surface_pattern) && surface_pattern != "none" && height != 0,
+        
         extruded = surface_pattern_depth > 0,
         side_length = surface_pattern_scale * max(mod_size[0] - surface_pattern_padding[0] - surface_pattern_padding[1], mod_size[1] - surface_pattern_padding[2] - surface_pattern_padding[3]),
         overlap = mb_block_dim_overlap(block_dim, overlap = true),
@@ -57,6 +59,5 @@ function mb_block_part__surface_pattern(block_obj) =
                 face = "z+"
             )
         ],
-        offset = surface_pattern_offset,
-        render = has_surface_pattern
+        offset = surface_pattern_offset
     ); 

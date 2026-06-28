@@ -7,7 +7,7 @@ function mb_block_part__connectors(block_obj, subtract = false) =
         block_dim = mb_block_get_dim(block_obj),
         connectors = mb_block_get_connectors(block_obj)
     )
-    !is_list(connectors) ? undef :
+    !is_list(connectors) || len(connectors) == 0 ? undef :
     mb_block_part_model(
         type = "list",
         items = [
