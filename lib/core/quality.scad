@@ -253,3 +253,28 @@ module example_q_shape_corner(radius = 1.0, resolution = 64) {
     echo(full_circle_resolution = resolution);
     echo(quarter_arc_segments = n_a);
 }
+
+function mb_q_fn_for_size(
+    size,
+    q,
+    preset = undef,
+    profile = undef,
+    class_factors = undef,
+    class_min_segments = undef,
+    segment_multiplier = undef,
+    preview_quality = undef,
+    preview_max_mult = undef,
+    is_preview = $preview
+) =
+    mb_q_fn_for_radius(
+        r = max(0.5, size / 2),
+        q = q,
+        preset = preset,
+        profile = profile,
+        class_factors = class_factors,
+        class_min_segments = class_min_segments,
+        segment_multiplier = segment_multiplier,
+        preview_quality = preview_quality,
+        preview_max_mult = preview_max_mult,
+        is_preview = is_preview
+    );

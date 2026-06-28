@@ -1,4 +1,5 @@
 use <../core/utils.scad>;
+use <../core/quality.scad>;
 
 module mb_text(
     text,
@@ -7,11 +8,21 @@ module mb_text(
     font,
     spacing,
     align = ["center", "center"],
-    rounding_resolution = 100,
+    
     face = "z+",
     offset = undef,
     mul = undef,
     color = "white",
+
+    quality = "normal",
+
+    q_profile = undef,
+    q_class_factors = undef,
+    q_class_min_segments = undef,
+    q_segment_multiplier = undef,
+    q_preview_quality = undef,
+    q_preview_max_mult = undef,
+
     debug = false
 ){
     face = mb_face_to_int(face);
@@ -31,6 +42,18 @@ module mb_text(
         axis == 1 ? 0.5 * (start + end) : 0,
         axis == 2 ? 0.5 * (start + end) : 0
     ];
+
+    rounding_resolution = mb_q_fn_for_size(
+        text_size,
+        "visual",
+        preset = quality,
+        profile = q_profile,
+        class_factors = q_class_factors,
+        class_min_segments = q_class_min_segments,
+        segment_multiplier = q_segment_multiplier,
+        preview_quality = q_preview_quality,
+        preview_max_mult = q_preview_max_mult
+    );
 
     color(debug ? "green" : color)
         translate([

@@ -1,4 +1,5 @@
 use <../core/utils.scad>;
+use <../core/quality.scad>;
 
 module mb_svg(
     svg_file,
@@ -8,6 +9,15 @@ module mb_svg(
     offset = undef,
     mul = [1, 1, 1],
     color = "white",
+    quality = "normal",
+
+    q_profile = undef,
+    q_class_factors = undef,
+    q_class_min_segments = undef,
+    q_segment_multiplier = undef,
+    q_preview_quality = undef,
+    q_preview_max_mult = undef,
+
     debug = false
 ){
     face = mb_face_to_int(face);
@@ -54,7 +64,19 @@ module mb_svg(
         sid[2]
     ];
 
-    
+    rounding_resolution = mb_q_fn_for_size(
+        max(sid[0], sid[1]),
+        "visual",
+        preset = quality,
+        profile = q_profile,
+        class_factors = q_class_factors,
+        class_min_segments = q_class_min_segments,
+        segment_multiplier = q_segment_multiplier,
+        preview_quality = q_preview_quality,
+        preview_max_mult = q_preview_max_mult
+    );
+
+    echo(rr = rounding_resolution);
 
     rot = mb_face_rotation(face);
 
@@ -68,7 +90,7 @@ module mb_svg(
             linear_extrude(height = sc[2], center = true) {
                 scale(sc)
                     translate([-0.5 * svg_size[0], -0.5 * svg_size[1], 0])
-                        import(svg_file);
+                        import(svg_file, $fn = rounding_resolution);
             }
 }
 

@@ -560,7 +560,15 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 size = svg_data[3],
                 offset = svg_data[4],
                 color = is_undef(svg_data[5]) ? base_color : svg_data[5],
-                mul = mul
+                mul = mul,
+                quality = quality,
+
+                q_profile = scad_quality_profile,
+                q_class_factors = scad_quality_class_factors,
+                q_class_min_segments = scad_quality_class_min_segments,
+                q_segment_multiplier = scad_quality_segment_multiplier,
+                q_preview_quality = scad_preview_quality,
+                q_preview_max_mult = scad_preview_max_mult
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
@@ -578,7 +586,15 @@ module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = 
                 face = text_data[6],
                 offset = text_data[7],
                 color = is_undef(text_data[8]) ? base_color : text_data[8],
-                mul = mul
+                mul = mul,
+                quality = quality,
+
+                q_profile = scad_quality_profile,
+                q_class_factors = scad_quality_class_factors,
+                q_class_min_segments = scad_quality_class_min_segments,
+                q_segment_multiplier = scad_quality_segment_multiplier,
+                q_preview_quality = scad_preview_quality,
+                q_preview_max_mult = scad_preview_max_mult
             );
             
             mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
