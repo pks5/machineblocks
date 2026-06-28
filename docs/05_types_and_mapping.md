@@ -1,6 +1,6 @@
 # MachineBlocks — MBOM Type System & SCAD Mapping
 
-version: 3.0.0
+version: 3.0.1
 
 ## Purpose of this Document
 
@@ -482,7 +482,7 @@ Example:
 
 ---
 
-### auto Derivation (tongueRoundingRadius, baseCutoutRoundingRadius)
+### auto Derivation (tongueRoundingRadius)
 
 ```text
 auto → derived from baseRoundingRadius
@@ -490,14 +490,14 @@ auto → derived from baseRoundingRadius
                      (= the two radii of the Z-face ellipse seen from above)
        formula: innerRadius.xy = outerRadius.xy - offset
                 innerRadius.yx = outerRadius.yx - offset
-                offset = tongue padding | baseWallThickness respectively
+                offset = tongue padding
                 both clamped to 0 if result is negative
 ```
 
-The `xy` and `yx` radii are used because tongue and baseCutout both sit on the
-Z-face of the block, offset inward. The inner radius must be smaller than the
-outer radius by exactly the offset amount to produce a constant-width border —
-the same principle as a rounded rect with a concentric inner rounded rect.
+The `xy` and `yx` radii are used because the tongue sits on the Z-face of the
+block, offset inward. The inner radius must be smaller than the outer radius by
+exactly the offset amount to produce a constant-width border — the same
+principle as a rounded rect with a concentric inner rounded rect.
 
 ---
 

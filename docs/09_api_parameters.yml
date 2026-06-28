@@ -27,7 +27,7 @@
 #
 # ============================================================================
 
-version: "3.0.3"
+version: "3.0.4"
 
 # ============================================================================
 # GLOBAL RULES
@@ -1007,23 +1007,6 @@ parameters:
     description: |
       Rounding radius of the block corners.
 
-  - name: baseCutoutRoundingRadius
-    group: rounding
-    type: float_or_array
-    mbom_type: "AutoOr<RoundingRadius>"
-    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
-    format: "Float (all 4 Z-corners) or 4-element array (each Z-corner individually)"
-    unit: unitGrid
-    default: "auto"
-    ai_usage: rarely
-    description: |
-      Rounding radius of the inner underside opening (baseCutoutType=standard).
-      Z-direction only. Automatically derived from baseRoundingRadius.
-      Usually does not need adjustment.
-    constraints:
-      requires:
-        - parameter: baseCutoutType
-          condition: "baseCutoutType = 'standard'"
 
   # --------------------------------------------------------------------------
   # GROUP: Relief Cut
@@ -1750,48 +1733,61 @@ parameters:
       - version: "3.0"
         description: "Consolidated into holeXYMinTopMargin."
 
-  - name: holeXPartialY
-    group: technic_holes_x
-    type: enum
-    values: ["none", "start", "end"]
+  - name: holeXYZEdgeMode
+    group: technic_holes
+    since: "V3"
+    type: string_or_array
+    mbom_type: "HoleXYZEdgeMode"
     unit: dimensionless
     default: "none"
     ai_usage: yes
     description: |
-      Whether partial (half) Technic holes are drawn at the Y-axis edges
-      for X-direction holes.
-      start: half hole at the y- edge.
-      end: half hole at the y+ edge.
-    constraints:
-      requires:
-        - parameter: holeX
-          condition: "holeX is not false"
-    version_history:
-      - version: "2"
-        description: "Was part of holeXPartial which combined both Y and Z partial behavior."
-      - version: "3.0"
-        description: "Split from holeXPartial. Controls Y-axis partial holes for X-direction holes."
+      Controls whether partial (half) Technic holes are drawn at the edges
+      of the block for X, Y, and Z direction holes.
 
-  - name: holeXPartialZ
-    group: technic_holes_x
-    type: enum
-    values: ["none", "end"]
-    unit: dimensionless
-    default: "none"
-    ai_usage: yes
-    description: |
-      Whether partial (half) Technic holes are drawn at the top (z+) edge
-      for X-direction holes, creating open grooves/channels.
-      end: open groove at the top edge.
+      Applies to all three hole axes (X, Y, Z) using the 3-value array rule.
+      Each axis entry resolves to an inner 2-element list [otherAxis1, otherAxis2]:
+        X-entry: [Y-edge, Z-edge]
+        Y-entry: [X-edge, Z-edge]
+        Z-entry: [X-edge, Y-edge]
+
+      Allowed values per position:
+        "none"  — no partial hole (default)
+        "start" — half hole at the negative-direction edge
+        "end"   — half hole at the positive-direction edge
+        "all"   — half holes at both edges
+
+      Restriction: The Z-edge position (2nd element) within X and Y inner
+      list entries does not support "start". Allowed: "none", "end", "all".
+
+    parse_rules: |
+      Scalar or 1/2/3-element outer list (3-value array rule), each element
+      either a scalar string or a 2-element inner list:
+
+      "none"                                         => [["none","none"],["none","none"],["none","none"]]
+      ["none"]                                       => [["none","none"],["none","none"],["none","none"]]
+      ["all", "none"]                                => [["all","all"], ["all","all"], ["none","none"]]
+      ["all", "none", "none"]                        => [["all","all"], ["none","none"],["none","none"]]
+      ["all", ["all","none"]]                        => [["all","all"], ["all","all"], ["all","none"]]
+      [["all","none"]]                               => [["all","none"],["all","none"],["all","none"]]
+      [["none","none"],["all","none"]]               => [["none","none"],["none","none"],["all","none"]]
+      [["none","none"],["all","all"],["all","none"]] => [["none","none"],["all","all"], ["all","none"]]
+
     constraints:
       requires:
         - parameter: holeX
-          condition: "holeX is not false"
+          condition: "holeX is not false (for X-axis effect)"
+        - parameter: holeY
+          condition: "holeY is not false (for Y-axis effect)"
+        - parameter: holeZ
+          condition: "holeZ is not false (for Z-axis effect)"
     version_history:
       - version: "2"
-        description: "Was part of holeXPartial."
+        description: "Controlled via holeXPartial and holeYPartial (combined per-axis booleans)."
       - version: "3.0"
-        description: "Split from holeXPartial. Controls Z-axis (top) partial holes for X-direction holes."
+        description: "Split into holeXPartialY, holeXPartialZ, holeYPartialX, holeYPartialZ, holeZPartialX, holeZPartialY."
+      - version: "3.0"
+        description: "Consolidated into holeXYZEdgeMode with 3-value array rule and 2D list parsing."
 
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes Y
@@ -1813,49 +1809,6 @@ parameters:
       Type, shift, diameter, inset, and grid parameters are shared with
       holeX and holeZ via the holeXYZ* and holeXY* unified parameters.
 
-  - name: holeYPartialX
-    group: technic_holes_y
-    type: enum
-    values: ["none", "start", "end"]
-    unit: dimensionless
-    default: "none"
-    ai_usage: yes
-    description: |
-      Whether partial (half) Technic holes are drawn at the X-axis edges
-      for Y-direction holes.
-      start: half hole at the x- edge.
-      end: half hole at the x+ edge.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-    version_history:
-      - version: "2"
-        description: "Was part of holeYPartial."
-      - version: "3.0"
-        description: "Split from holeYPartial. Controls X-axis partial holes for Y-direction holes."
-
-  - name: holeYPartialZ
-    group: technic_holes_y
-    type: enum
-    values: ["none", "end"]
-    unit: dimensionless
-    default: "none"
-    ai_usage: yes
-    description: |
-      Whether partial (half) Technic holes are drawn at the top (z+) edge
-      for Y-direction holes, creating open grooves/channels.
-      end: open groove at the top edge.
-    constraints:
-      requires:
-        - parameter: holeY
-          condition: "holeY is not false"
-    version_history:
-      - version: "2"
-        description: "Was part of holeYPartial."
-      - version: "3.0"
-        description: "Split from holeYPartial. Controls Z-axis (top) partial holes for Y-direction holes."
-
   # --------------------------------------------------------------------------
   # GROUP: Technic Holes Z
   # --------------------------------------------------------------------------
@@ -1875,40 +1828,6 @@ parameters:
       Type, shift, diameter, and inset parameters are shared with holeX
       and holeY via the holeXYZ* unified parameters.
       Z holes now also support insets (holeXYZInsetThickness/Depth).
-
-  - name: holeZPartialX
-    group: technic_holes_z
-    type: enum
-    values: ["none", "start", "end", "all"]
-    unit: dimensionless
-    default: "none"
-    ai_usage: yes
-    description: |
-      Whether partial (half) Z-holes are drawn in X-direction.
-      start: half hole at the x- edge.
-      end: half hole at the x+ edge.
-      all: both sides.
-    constraints:
-      requires:
-        - parameter: holeZ
-          condition: "holeZ is not false"
-
-  - name: holeZPartialY
-    group: technic_holes_z
-    type: enum
-    values: ["none", "start", "end", "all"]
-    unit: dimensionless
-    default: "none"
-    ai_usage: yes
-    description: |
-      Whether partial (half) Z-holes are drawn in Y-direction.
-      start: half hole at the y- edge.
-      end: half hole at the y+ edge.
-      all: both sides.
-    constraints:
-      requires:
-        - parameter: holeZ
-          condition: "holeZ is not false"
 
   # --------------------------------------------------------------------------
   # GROUP: Hole Axle
@@ -3403,66 +3322,109 @@ parameters:
   # GROUP: Quality / Rendering
   # --------------------------------------------------------------------------
 
-  - name: qualitySegBase
+  - name: quality
     group: quality
-    type: float
-    unit: mm
-    default: 1.2
-    ai_usage: rarely
+    since: "V3"
+    type: enum
+    mbom_type: "QualityPreset"
+    values: ["preview", "normal", "print", "render"]
+    unit: dimensionless
+    default: "normal"
+    ai_usage: yes
     description: |
-      Base mm per segment for quality calculation.
+      User-level quality preset. Controls overall rendering quality
+      independent of renderer implementation.
+      "preview"  — fast, reduced quality for interactive preview
+      "normal"   — balanced quality for general use
+      "print"    — high quality for 3D print export
+      "render"   — maximum quality for final renders
 
-  - name: qualityFactor
+  - name: scadQualityProfile
     group: quality
+    since: "V3"
     type: array
-    format: "[functional, visual, other, draft]"
+    scad_render_target: true
+    format: |
+      [[segmentLengthMm, maxSegments],  // preview
+       [segmentLengthMm, maxSegments],  // normal
+       [segmentLengthMm, maxSegments],  // print
+       [segmentLengthMm, maxSegments]]  // render
     unit: dimensionless
-    default: [0.6, 1.0, 1.6, 2.5]
     ai_usage: rarely
     description: |
-      Quality factors for 4 rounding groups: functional, visual, other, draft.
-      Basis for calculating rounding resolution from radius and group.
+      OpenSCAD quality profile mapping. Maps each quality preset to
+      segment length (mm) and maximum segment count.
+      Smaller segmentLengthMm increases quality.
+      maxSegments limits the maximum full-circle resolution.
 
-  - name: qualityResolutionMin
+  - name: scadQualityClassFactors
     group: quality
+    since: "V3"
     type: array
-    format: "[functional, visual, other, draft]"
+    scad_render_target: true
+    format: "[functional, visual, hidden]"
     unit: dimensionless
-    default: [24, 18, 12, 8]
     ai_usage: rarely
     description: |
-      Minimum resolution ($fn) per quality group.
+      Per quality-class segment length multipliers.
+      Higher values reduce quality and improve render performance.
 
-  - name: qualityResolutionMax
+  - name: scadQualityClassMinSegments
     group: quality
-    type: int
+    since: "V3"
+    type: array
+    scad_render_target: true
+    format: "[functional, visual, hidden]"
     unit: dimensionless
-    default: 220
     ai_usage: rarely
     description: |
-      Global maximum resolution ($fn).
+      Minimum full-circle segment count per quality class.
+      Prevents small radii from becoming overly coarse.
 
-  - name: qualityResolutionMultiplier
+  - name: scadQualitySegmentMultiplier
     group: quality
+    since: "V3"
     type: float
+    scad_render_target: true
     unit: dimensionless
-    default: 0.25
     ai_usage: rarely
     description: |
-      Global quality factor. Lower = higher quality.
+      Global segment length multiplier. Applied after quality preset
+      and class factor calculation.
+      > 1.0: lower quality, faster rendering.
+      < 1.0: higher quality, slower rendering.
+      Useful for global tuning without modifying quality profiles.
 
-  - name: previewQuality
+  - name: scadPreviewQuality
     group: quality
+    since: "V3"
     type: float
+    scad_render_target: true
     unit: dimensionless
-    default: 0.5
+    default: 1.0
     ai_usage: rarely
     description: |
-      Factor that reduces quality in OpenSCAD preview mode.
+      Additional OpenSCAD preview quality reduction factor.
+      1.0 = disabled. 0.0 = strongest preview reduction.
+      Only applied when $preview is true.
 
-  - name: previewRender
+  - name: scadPreviewMaxMult
     group: quality
+    since: "V3"
+    type: float
+    scad_render_target: true
+    unit: dimensionless
+    ai_usage: rarely
+    description: |
+      Maximum preview segment length multiplier.
+      Used together with scadPreviewQuality.
+      Higher values allow more aggressive quality reduction during preview.
+
+  - name: scadPreviewPreRender
+    group: quality
+    since: "V3"
     type: bool
+    scad_render_target: true
     unit: dimensionless
     default: false
     ai_usage: rarely
@@ -3470,14 +3432,17 @@ parameters:
       Whether the block is rendered as mesh in OpenSCAD preview mode
       instead of CSG.
 
-  - name: previewRenderConvexity
+  - name: scadPreviewPreRenderConvexity
     group: quality
+    since: "V3"
     type: int
+    scad_render_target: true
     unit: dimensionless
     default: 15
     ai_usage: rarely
     description: |
       Convexity parameter passed to OpenSCAD render() function.
+      Used with scadPreviewPreRender.
 
 # ============================================================================
 # COMPOSITE BLOCK PARAMETERS
@@ -3599,22 +3564,67 @@ removed_in_v3:
   - name: baseRoundingResolution
     removed_in: "3.0"
     use_instead: null
-    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+    reason: "Removed. Quality is now controlled via quality preset and scadQualityProfile."
 
   - name: pillarRoundingResolution
     removed_in: "3.0"
     use_instead: null
-    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+    reason: "Removed. Quality is now controlled via quality preset and scadQualityProfile."
 
   - name: holeRoundingResolution
     removed_in: "3.0"
     use_instead: null
-    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+    reason: "Removed. Quality is now controlled via quality preset and scadQualityProfile."
 
   - name: studRoundingResolution
     removed_in: "3.0"
     use_instead: null
-    reason: "Removed. Quality is now controlled via qualityFactor parameters."
+    reason: "Removed. Quality is now controlled via quality preset and scadQualityProfile."
+
+  - name: qualitySegBase
+    removed_in: "3.0"
+    use_instead: "scadQualityProfile"
+    reason: "Replaced by scadQualityProfile (per-preset segment length and max segments)."
+
+  - name: qualityFactor
+    removed_in: "3.0"
+    use_instead: "scadQualityClassFactors"
+    reason: "Replaced by scadQualityClassFactors (per quality-class segment length multipliers)."
+
+  - name: qualityResolutionMin
+    removed_in: "3.0"
+    use_instead: "scadQualityClassMinSegments"
+    reason: "Replaced by scadQualityClassMinSegments (minimum segments per quality class)."
+
+  - name: qualityResolutionMax
+    removed_in: "3.0"
+    use_instead: "scadQualityProfile"
+    reason: "Replaced by maxSegments field in scadQualityProfile."
+
+  - name: qualityResolutionMultiplier
+    removed_in: "3.0"
+    use_instead: "scadQualitySegmentMultiplier"
+    reason: "Renamed to scadQualitySegmentMultiplier."
+
+  - name: previewQuality
+    removed_in: "3.0"
+    use_instead: "scadPreviewQuality"
+    reason: "Renamed to scadPreviewQuality."
+
+  - name: previewRender
+    removed_in: "3.0"
+    use_instead: "scadPreviewPreRender"
+    reason: "Renamed to scadPreviewPreRender."
+
+  - name: previewRenderConvexity
+    removed_in: "3.0"
+    use_instead: "scadPreviewPreRenderConvexity"
+    reason: "Renamed to scadPreviewPreRenderConvexity."
+
+  - name: baseCutoutRoundingRadius
+    removed_in: "3.0"
+    use_instead: null
+    reason: "Removed. The inner cutout rounding is derived automatically and cannot be overridden."
 
   - name: baseWallGapsX
     removed_in: "3.0"
@@ -3988,13 +3998,13 @@ removed_in_v3:
 
   - name: holeXPartial
     removed_in: "3.0"
-    use_instead: "holeXPartialY and holeXPartialZ"
-    reason: "Split into holeXPartialY (Y-axis partial) and holeXPartialZ (Z-axis/top partial)."
+    use_instead: "holeXYZEdgeMode"
+    reason: "Consolidated into holeXYZEdgeMode (unified edge mode for all axes)."
 
   - name: holeYPartial
     removed_in: "3.0"
-    use_instead: "holeYPartialX and holeYPartialZ"
-    reason: "Split into holeYPartialX (X-axis partial) and holeYPartialZ (Z-axis/top partial)."
+    use_instead: "holeXYZEdgeMode"
+    reason: "Consolidated into holeXYZEdgeMode (unified edge mode for all axes)."
 
   - name: holeAxleThickness
     removed_in: "3.0"
@@ -4203,21 +4213,9 @@ added_in_v3:
     added_in: "3.0"
     summary: "Extra clearance before groove clamp recess for easier snapping."
 
-  - name: holeXPartialY
+  - name: holeXYZEdgeMode
     added_in: "3.0"
-    summary: "Y-axis partial holes for X-direction technic holes. Split from holeXPartial."
-
-  - name: holeXPartialZ
-    added_in: "3.0"
-    summary: "Z-axis (top) partial/groove holes for X-direction technic holes. Split from holeXPartial."
-
-  - name: holeYPartialX
-    added_in: "3.0"
-    summary: "X-axis partial holes for Y-direction technic holes. Split from holeYPartial."
-
-  - name: holeYPartialZ
-    added_in: "3.0"
-    summary: "Z-axis (top) partial/groove holes for Y-direction technic holes. Split from holeYPartial."
+    summary: "Unified edge mode for partial holes on all axes. Replaces holeXPartialY, holeXPartialZ, holeYPartialX, holeYPartialZ, holeZPartialX, holeZPartialY."
 
   - name: holeXYZAxleThicknessAdjustment
     added_in: "3.0"
