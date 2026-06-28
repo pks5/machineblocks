@@ -262,6 +262,7 @@ function mb_block_obj(
         */
         tongue_thickness_adj = mb_param_tongueThicknessAdjustment(config, settings) * mm2grd_xy,
         tongue_rr = mb_param_tongueRoundingRadius(config, settings),
+        tongue_groove_depth_clearance = mb_param_tongueGrooveDepthClearance(config, settings),
         
         tongue_final = [
             mb_param_tongue(config, settings),
@@ -271,7 +272,8 @@ function mb_block_obj(
             mb_param_tongueClampThickness(config, settings) * mbu2grd_xy,
             mb_param_tongueClampHeight(config, settings) * mbu2grd_z,
             mb_param_tongueClampOffset(config, settings) * mbu2grd_z,
-            tongue_rr == "auto" ? "auto" : mb_corner_radius_from_side_views([0, 0, tongue_rr])
+            tongue_rr == "auto" ? "auto" : mb_corner_radius_from_side_views([0, 0, tongue_rr]),
+            tongue_groove_depth_clearance == "auto" ? printerLayerHeight : tongue_groove_depth_clearance * mm2grd_z
         ],
 
         /*
@@ -739,12 +741,14 @@ function mb_block_get_surface_pattern_depth(block_obj) =            block_obj[18
 // Tongue
 function mb_block_has_tongue(block_obj) =                           block_obj[13][0];
 function mb_block_get_tongue_thickness(block_obj, groove) =         block_obj[13][1];
-function mb_block_get_tongue_height(block_obj, groove) =            block_obj[13][2];
+function mb_block_get_tongue_height(block_obj, groove) =            block_obj[13][2] + (groove ? block_obj[13][8] : 0);
 function mb_block_get_tongue_offset(block_obj, groove) =            block_obj[13][3];
 function mb_block_get_tongue_clamp_thickness(block_obj, groove) =   block_obj[13][4];
 function mb_block_get_tongue_clamp_height(block_obj, groove) =      block_obj[13][5];
 function mb_block_get_tongue_clamp_offset(block_obj, groove) =      block_obj[13][6];
 function mb_block_get_tongue_rounding_radius(block_obj, groove) =   block_obj[13][7];
+
+
 
 // Groove
 function mb_block_has_groove(block_obj) =                           block_obj[4][2] == "groove";
