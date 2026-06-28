@@ -1,9 +1,8 @@
-use <geometry.scad>;
 use <utils.scad>;
 use <corner_radius.scad>;
 use <block_dim.scad>;
 use <block_part.scad>;
-use <bevel.scad>;
+
 use <poly_expand.scad>;
 use <api.scad>;
 use <quality.scad>;
@@ -870,7 +869,6 @@ function mb_block_in_base_cutout(block_obj, off, dia) =
         overhang = 0,
         avoid_vertical_rounding = true
     );
-    //mb_circle_in_convex_quad(block_obj[10][3], off, 0.5 * dia, overhang = 0);
 
 /**
 * -----------------------

@@ -1,4 +1,3 @@
-use <geometry.scad>;
 use <block_model.scad>;
 use <block_dim.scad>;
 use <utils.scad>;

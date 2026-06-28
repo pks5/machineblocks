@@ -15,7 +15,7 @@ use <core/block_dim.scad>;
 use <core/block_part.scad>;
 use <core/utils.scad>;
 use <core/quality.scad>;
-use <core/bevel.scad>;
+
 
 use <layout/base_outer.scad>;
 use <layout/base_cutout.scad>;
