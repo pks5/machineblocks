@@ -55,9 +55,7 @@ module mb_block(
     
     baseMod = mb_param_sizeMod(config, settings);
 
-    baseCutoutType = mb_param_baseCutoutType(config, settings);
-    baseClampOuter = mb_param_baseClampOuter(config, settings);
-
+    
     baseSideAdjustment = mb_param_baseAdjustment(config, settings);
     
     stabilizerGrid = mb_param_stabilizers(config, settings);
@@ -71,18 +69,9 @@ module mb_block(
     pillarGapCornerLength = mb_param_pillarGapCornerLength(config, settings);
     pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
 
-    bevel = mb_param_bevel(config, settings);
-
-    studs = mb_param_studs(config, settings);
-    
     recess = mb_param_recess(config, settings);
-    recessDepth = mb_param_recessDepth(config, settings);
     recessWallThickness = mb_param_recessWallThickness(config, settings);
-    recessStuds = mb_param_recessStuds(config, settings);
-    recessStudPadding = mb_param_recessStudPadding(config, settings);
-    recessStudType = mb_param_recessStudType(config, settings);
-    recessStudShift = mb_param_recessStudShift(config, settings);
-    recessWallGaps = mb_param_recessWallGaps(config, settings);
+    
 
     align = mb_param_align(config, settings);
     alignChildren = mb_param_alignChildren(config, settings);
