@@ -19,6 +19,7 @@ function mb_block_part__top_plate_helpers(block_obj) =
     mb_block_has_top_plate_helpers(block_obj) 
         ? mb_block_part_model(
             type = "difference",
+            name = "top_plate_helpers",
             items = [
                 _mb_layout_mask_frame(
                     block_dim = block_dim, 

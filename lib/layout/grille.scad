@@ -29,6 +29,7 @@ function mb_block_part__grille(block_obj) =
     mb_block_part_model(
         render = grille != "none",
         type = "list",
+        name = "grille",
         items = [
             for(i = [min_index : max_index])
                 for(j = [0 : grille_count - 1])

@@ -19,6 +19,7 @@ function mb_block_part__standard_cutout(block_obj) =
     )
     mb_block_part_model(
         render = has_standard_cutout,
+        name = "standard_cutout",
         type = "difference",
         items = [
             mb_block_part_model(

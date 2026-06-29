@@ -10,6 +10,7 @@ function mb_block_part__connectors(block_obj, subtract = false) =
     !is_list(connectors) || len(connectors) == 0 ? undef :
     mb_block_part_model(
         type = "list",
+        name = "connectors",
         items = [
             for(connector = connectors)
                 let(

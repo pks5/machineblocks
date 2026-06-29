@@ -16,6 +16,7 @@ function mb_block_part__screw_holes(block_obj) =
     screw_holes == false || screw_holes == "none" ? undef :
     mb_block_part_model(
         type = "list",
+        name = "screw_holes",
         items = [
             for(screw_hole = screw_holes)
                 let(

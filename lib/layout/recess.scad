@@ -30,6 +30,7 @@ function mb_block_part__recess(block_obj) =
     mb_block_has_recess(block_obj) 
     ? mb_block_part_model(
         type = "list",
+        name = "recess",
         items = [
             mb_block_part_model(
                 type = "intersection",

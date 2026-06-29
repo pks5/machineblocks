@@ -22,6 +22,7 @@ function mb_block_part__pillars(block_obj) =
     )
     mb_block_part_model(
         type = "list",
+        name = "pillars",
         items = [
             for(x = pillar_range[0])
                 for(y = pillar_range[1])

@@ -28,6 +28,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
     )
     block_inverted ? 
         mb_block_part_prismoid(
+            name = "base_outer_clamp",
             block_dim = block_dim, 
             expand = [[
                 for(f = [0 : 3])

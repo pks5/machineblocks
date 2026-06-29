@@ -15,6 +15,7 @@ function mb_block_part__tubes(block_obj, hole = false) =
     )
     mb_block_part_model(
         type = "list",
+        name = "tubes",
         items = [
             for(a = ["x", "y"])
                 let(

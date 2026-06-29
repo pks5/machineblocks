@@ -24,6 +24,7 @@ function mb_block_part__relief_cut(block_obj) =
     ) 
     mb_block_part_model(
         type = "difference",
+        name = "relief_cut",
         items = [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 

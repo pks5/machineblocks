@@ -38,6 +38,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
 
     mb_block_part_model(
         type = "list",
+        name = "base_cutout",
         items = [
             mb_block_part_prismoid(
                 block_dim = block_dim, 

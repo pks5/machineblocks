@@ -59,5 +59,6 @@ function mb_block_part__surface_pattern(block_obj) =
                 face = "z+"
             )
         ],
-        offset = surface_pattern_offset
+        offset = surface_pattern_offset,
+        name = "surface_pattern"
     ); 

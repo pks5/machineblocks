@@ -73,5 +73,6 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         expand = expand,
         offset = mb_axis_offset2d(axis, text_offset),
         color = text_color,
-        render = true
+        render = true,
+        name = "text_decorator"
     );

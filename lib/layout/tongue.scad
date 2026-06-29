@@ -144,6 +144,7 @@ function mb_block_part__tongue(block_obj, groove = false) =
     mb_block_part_model(
         render = has_tongue,
         type = "list",
+        name = "tongue",
         items = [
             // Main Frame
             mb_block_part_model(

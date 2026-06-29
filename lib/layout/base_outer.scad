@@ -14,6 +14,7 @@ function mb_block_part__base_outer(block_obj, adjusted = true) =
         block_dim = mb_block_get_dim(block_obj)
     )
     mb_block_part_prismoid(
+        name = "base_outer",
         block_dim = block_dim, 
         expand = adjusted ? [mb_block_get_base_adj(block_obj)] : undef,
         socket = mb_block_get_slope_socket(block_obj),

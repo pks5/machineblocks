@@ -20,6 +20,7 @@ function mb_block_part__stabilizers(block_obj) =
     )
     mb_block_part_model(
         type = "list",
+        name = "stabilizers",
         items = [
             for(axis = ["x", "y"])
                 let(range = mb_block_stabilizer_range(block_obj, axis))

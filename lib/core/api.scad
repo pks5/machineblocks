@@ -295,6 +295,7 @@ function mb_param_recessStuds(config, settings, default = undef) = mb_param(conf
 function mb_param_recessStudPadding(config, settings, default = undef) = mb_param(config, settings, "recessStudPadding", default != undef ? default : 0.2);
 function mb_param_recessStudType(config, settings, default = undef) = mb_param(config, settings, "recessStudType", default != undef ? default : "solid");
 function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
+// TODO wall gaps must be able to define own wallthickness - in case you want to combine to blocks with different recess wall thickness - must also apply to tongue gaps
 function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_array(mb_param(config, settings, "recessWallGaps", default != undef ? default : []));
 
 // TODO introduce mb_param_recessAdjustment (incl auto mode, derive from baseAdjustment)

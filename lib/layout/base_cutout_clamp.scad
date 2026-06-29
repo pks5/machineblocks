@@ -28,6 +28,7 @@ function mb_block_part__base_cutout_clamp(block_obj) =
     )
     mb_block_part_model(
         type = "difference",
+        name = "base_cutout_clamp",
         items = [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 

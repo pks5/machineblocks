@@ -70,6 +70,7 @@ function mb_block_part__studs(block_obj) =
     mb_block_part_model(
         render = mb_block_has_studs(block_obj),
         type = "list",
+        name = "studs",
         items = [
             for(x = stud_range[0])
                 for(y = stud_range[1])

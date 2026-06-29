@@ -21,12 +21,13 @@ use <../shape/custom_shapes.scad>;
 
 function mb_block_part_model(
     type, 
+    name = undef,
     items = undef, 
     data = undef, 
     render = true
 ) =
     render ? [
-        type,
+        [type, is_undef(name) ? str(type, "_", rands(0,100000,1)[0]) : name],
         is_undef(data) ? items : [data]
     ] : undef;
 
@@ -40,10 +41,19 @@ function mb_block_part_custom(type, items = undef, data = undef, render = true) 
     );
 
 function _mb_block_part_model_valid(part_model) =
-    is_list(part_model) && len(part_model) == 2 && is_string(part_model[0]) && is_list(part_model[1]);
+    is_list(part_model) 
+    && len(part_model) == 2 
+    && is_list(part_model[0]) 
+    && len(part_model[0]) == 2
+    && is_string(part_model[0][0])
+    && is_string(part_model[0][1])
+    && is_list(part_model[1]);
 
 function mb_block_part_model_type(part_model) = 
-    _mb_block_part_model_valid(part_model) ? part_model[0] : undef;
+    _mb_block_part_model_valid(part_model) ? part_model[0][0] : undef;
+
+function mb_block_part_model_name(part_model) = 
+    _mb_block_part_model_valid(part_model) ? part_model[0][1] : undef;
 
 function mb_block_part_model_data(part_model) = 
     _mb_block_part_model_valid(part_model) ? part_model[1] : undef;
@@ -83,10 +93,12 @@ function mb_block_part_pcb(
     screw_socket_size,
     screw_socket_hole_size,
     offset = undef,
-    render = true
+    render = true,
+    name = undef
 ) = 
 mb_block_part_model(
     type = "mb_pcb",
+    name = name,
     data = [
         pcb,
         dimensions,
@@ -113,10 +125,12 @@ function mb_block_part_svg(
     expand = undef,
     offset = undef,
     color = undef,
-    render = true
+    render = true,
+    name = undef
 ) = 
 mb_block_part_model(
     type = "mb_svg",
+    name = name,
     data = [
         svg_file,
         svg_size,
@@ -145,10 +159,12 @@ function mb_block_part_text(
     expand = undef,
     offset = undef,
     color = undef,
-    render = true
+    render = true,
+    name = undef
 ) = 
 mb_block_part_model(
     type = "mb_text",
+    name = name,
     data = [
         text,
         text_size,
@@ -180,7 +196,8 @@ function mb_block_part_tube(
     expand = undef,
     offset = undef,
     quality_class = ["functional", "visual"],
-    render = true
+    render = true,
+    name = undef
 ) = 
     let(
        /*
@@ -196,6 +213,7 @@ function mb_block_part_tube(
     )
     mb_block_part_model(
         type = "mb_tube",
+        name = name,
         data = [
             radius,
             mb_block_dim_height_expand(block_dim, axis, length, expand),
@@ -223,13 +241,15 @@ function mb_block_part_wedge(
     dir = "z",
     expand = undef,
     offset = undef,
-    render = true
+    render = true,
+    name = undef
 ) = 
     let(
        dir = mb_axis_to_int(dir)
     )
     mb_block_part_model(
         type = "mb_wedge",
+        name = name,
         data = [
             width,
             depth,
@@ -253,10 +273,12 @@ function mb_block_part_cube(
     offset = undef,
     radius = undef,
     xyz_rad = true,
-    render = true
+    render = true,
+    name = undef
 ) = 
     mb_block_part_model(
         type = "mb_cube",
+        name = name,
         data = [
             mb_block_dim_size_expand(block_dim, size, expand),
             offset,
@@ -281,7 +303,8 @@ function mb_block_part_prismoid(
     height = undef,
     radius = undef,
     quality_class = "visual",
-    render = true
+    render = true,
+    name = undef
 ) =
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
@@ -357,6 +380,7 @@ function mb_block_part_prismoid(
     )
     mb_block_part_model(
         type = "mb_prismoid",
+        name = name,
         data = [
             mb_poly_expand(bevel_matrix, 0, slope_neg),
             mb_poly_expand(bevel_matrix, 1, slope_pos_inv),
@@ -379,7 +403,14 @@ function mb_block_part_prismoid(
 * ---------
 */
 
-module mb_block_part(block_obj, part, part_params = undef, debug = false, mul = undef){
+module mb_block_part(
+    block_obj, 
+    part, 
+    part_params = undef, 
+    debug = false, 
+    solo = undef,
+    mul = undef
+){
     mul = is_undef(mul) ? mb_block_default_multiplier(block_obj) : mul;
     base_color = mb_block_get_base_color(block_obj);
 

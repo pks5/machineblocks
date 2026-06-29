@@ -31,6 +31,7 @@ use <connectors.scad>;
 function mb_block_part__base(block_obj) =
     mb_block_part_model(
         type = "list",
+        name = "base",
         items = [
             mb_block_part_model(
                 type = "difference",

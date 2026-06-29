@@ -25,6 +25,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
     
     mb_block_part_model(
         type = "list",
+        name = "base_wall_gaps",
         items = [
             for(gap = base_wall_gap_res)
                 let(

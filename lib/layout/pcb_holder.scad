@@ -16,6 +16,7 @@ function mb_block_part__pcb_holder(block_obj) =
         recess_floor_offset_z = 0.5*mb_block_get_mod_size(block_obj)[2] + mb_block_recess_floor_offset(block_obj, "z+")
     )
     mb_block_part_pcb(
+        
         pcb,
         pcb_dimensions,
         pcb_sockets,
@@ -26,5 +27,6 @@ function mb_block_part__pcb_holder(block_obj) =
             pcb_offset[0],
             pcb_offset[1],
             recess_floor_offset_z
-        ]
+        ],
+        name = "pcb_holder"
     );

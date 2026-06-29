@@ -22,6 +22,7 @@ function mb_block_part__stud_cutouts(block_obj) =
     )
     mb_block_part_model(
         type = "list",
+        name = "stud_cutouts",
         items = [
             for(x = stud_range[0])
                 for(y = stud_range[1])
