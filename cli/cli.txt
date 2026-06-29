@@ -1,6 +1,0 @@
-# Uninstall
-pipx uninstall mbcli
-
-# Install
-pipx install .
-pipx runpip mbcli install -e . 
