@@ -1038,10 +1038,9 @@ module mb_prismoid(
         
         
         translate(t){
-            echo(t = shape_type, s = [shape[0],shape[1]])
+            //echo(t = shape_type, s = [shape[0],shape[1]])
             
             if(draw_together || shape_type == "simple"){
-                echo("sss");
                 color(draw_together || debug ? "yellow" : color)
                 mb_loft_polyhedron([
                     mb_prismoid_plane(shape, 0),

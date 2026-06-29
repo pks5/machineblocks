@@ -259,6 +259,15 @@ function mb_map_has_key(params, key) =
 function mb_map_get(params, key, default=undef) =
     let(found = [for (p = params) if (p[0] == key) p[1]])
     len(found) > 0 ? found[len(found)-1] : default;
+    
+/*
+function mb_map_get(params, key, default=undef, i=undef) =
+    let(idx = is_undef(i) ? len(params)-1 : i)
+    idx < 0
+        ? default
+        : params[idx][0] == key
+            ? params[idx][1]
+            : mb_map_get(params, key, default, idx-1);*/
 
 function mb_map_merge(a, b) =
     concat(

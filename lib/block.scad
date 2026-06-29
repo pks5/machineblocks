@@ -120,21 +120,6 @@ module mb_block(
 
     
     
-    block_dim = mb_block_get_dim(block_obj);
-
-    ss = mb_block_dim_opposite_offset(
-            block_dim, 
-            off = mb_block_get_stud_base_overlap(block_obj), 
-            adjusted = true, 
-            face = "z-"
-        );
-
-    echo(
-        mod_size = mb_block_dim_mod_size(block_dim),
-        min_max_pos = mb_block_dim_min_max_pos(block_dim),
-        ss = ss
-    );
-
     //Side Adjustment
    
     baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
@@ -150,18 +135,19 @@ module mb_block(
 
     objectSizeAdjusted = osa_mm;
 
-
-    echo(
-        objectSize = objectSize, 
-        os_mm = os_mm, 
-        osm_mm = osm_mm, 
-        objectSizeAdjusted = objectSizeAdjusted,
-        osa_mm = osa_mm, 
-        baseModRes = baseModRes,
-        size_mod = mb_block_size_mod(block_obj, unit="mm"), 
-        bsa = bsa,
-        base_adj = mb_block_base_adj(block_obj, unit="mm"));
-
+    if(debug){
+        echo(
+            objectSize = objectSize, 
+            os_mm = os_mm, 
+            osm_mm = osm_mm, 
+            objectSizeAdjusted = objectSizeAdjusted,
+            osa_mm = osa_mm, 
+            baseModRes = baseModRes,
+            size_mod = mb_block_size_mod(block_obj, unit="mm"), 
+            bsa = bsa,
+            base_adj = mb_block_base_adj(block_obj, unit="mm")
+        );
+    }
     /*
     * End measurements
     */

@@ -76,8 +76,6 @@ module mb_svg(
         preview_max_mult = q_preview_max_mult
     );
 
-    echo(rr = rounding_resolution);
-
     rot = mb_face_rotation(face);
 
     color(debug ? "green" : color)

@@ -429,8 +429,6 @@ module mb_block_part(
 
     solo_pass = !is_undef(solo) && part_name == solo ? undef : solo;
 
-    echo(solo = solo, part_name = part_name);
-
     if(is_string(part_type) && part_data_length > 0){
         /*
         * Aggregations
