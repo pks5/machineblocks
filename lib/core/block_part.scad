@@ -443,59 +443,88 @@ module mb_block_part(
                 && !is_undef(solo) && solo != part_name
         )){
             for(list_item = part_data){
-                mb_block_part(
-                    block_obj, 
-                    part = list_item, 
-                    part_params=part_params, 
-                    mul = mul, 
-                    debug = debug,
-                    solo = solo_pass
-                );
+                if(!is_undef(list_item)){
+                    mb_block_part(
+                        block_obj, 
+                        part = list_item, 
+                        part_params=part_params, 
+                        mul = mul, 
+                        debug = debug,
+                        solo = solo_pass
+                    );
+                }
             }
         }
         else if(part_type == "union"){
             if(part_data_length > 1){
-                union(){
-                    mb_block_part(
-                        block_obj, 
-                        part = mb_block_part_model_data_item(part, 0), 
-                        part_params=part_params, 
-                        mul = mul, 
-                        debug = debug
-                    );
-                    for(i = [1 : part_data_length - 1]){
-                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                master_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(master_item)){
+                    union(){
+                        mb_block_part(
+                            block_obj, 
+                            part = master_item, 
+                            part_params=part_params, 
+                            mul = mul, 
+                            debug = debug
+                        );
+                        for(i = [1 : part_data_length - 1]){
+                            list_item = mb_block_part_model_data_item(part, i);
+                            if(!is_undef(list_item)){
+                                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                            }
+                        }
                     }
                 }
             }
             else if(part_data_length > 0){
-                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                list_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(list_item)){
+                    mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                }
             }
         }
         else if(part_type == "difference"){
             if(part_data_length > 1){
-                difference(){
-                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
-                    for(i = [1 : part_data_length - 1]){
-                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                master_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(master_item)){
+                    difference(){
+                        mb_block_part(block_obj, part = master_item, part_params=part_params, mul = mul, debug = debug);
+                        for(i = [1 : part_data_length - 1]){
+                            list_item = mb_block_part_model_data_item(part, i);
+                            if(!is_undef(list_item)){
+                                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                            }
+                        }
                     }
                 }
             }
             else if(part_data_length > 0){
-                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                list_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(list_item)){
+                    mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                }
             }
         }
         else if(part_type == "intersection"){
             if(part_data_length > 1){
-                intersection(){
-                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
-                    for(i = [1 : part_data_length - 1]){
-                        mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
+                master_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(master_item)){
+                    intersection(){
+                        mb_block_part(block_obj, part = master_item, part_params=part_params, mul = mul, debug = debug);
+                        for(i = [1 : part_data_length - 1]){
+                            list_item = mb_block_part_model_data_item(part, i);
+                            if(!is_undef(list_item)){
+                                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                            }
+                        }
                     }
                 }
             }
             else if(part_data_length > 0){
-                mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                list_item = mb_block_part_model_data_item(part, 0);
+                if(!is_undef(list_item)){
+                    mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                }
             }
         }
 

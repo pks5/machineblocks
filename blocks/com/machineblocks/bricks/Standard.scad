@@ -217,7 +217,8 @@ mb_block__com__machineblocks__bricks__Standard(
         ["surfacePattern", surfacePattern],
         ["surfacePatternScale", surfacePatternScale],
         ["studIcon", studIcon],
-        ["studSink", studSink]
+        ["studSink", studSink],
+        ["debugShowOnly", undef]
     ]
 );
 

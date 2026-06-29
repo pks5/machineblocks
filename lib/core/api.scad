@@ -23,6 +23,8 @@ function mb_param_printerLayerHeight(config, settings, default = undef) = mb_par
 */
 function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
+function mb_param_debugShowOnly(config, settings, default = undef) = mb_param(config, settings, "debugShowOnly", default != undef ? default : undef);
+
 function mb_param_render(config, settings, default = undef) = mb_param(config, settings, "render", default != undef ? default : true);
 
 /*

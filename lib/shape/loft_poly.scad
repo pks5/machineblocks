@@ -15,31 +15,23 @@ function mb_loft_next(i, n) =
     (i + 1) % n;
 
 function mb_loft_bottom_faces(n) =
-    [for (i = [1 : n - 2]) [0, i, i + 1]];
+    [for (i = [1 : n - 2]) [0, i + 1, i]]; // reversed: normal z-
 
 function mb_loft_top_faces(n) =
-    [for (i = [1 : n - 2]) [n, n + i + 1, n + i]];
+    [for (i = [1 : n - 2]) [n, n + i, n + i + 1]]; // normal z+
 
-function mb_loft_side_faces_a(n) =
+function mb_loft_side_faces(n) =
     [
         for (i = [0 : n - 1])
-        let(j = mb_loft_next(i, n))
-        [i, n + i, n + j]
-    ];
-
-function mb_loft_side_faces_b(n) =
-    [
-        for (i = [0 : n - 1])
-        let(j = mb_loft_next(i, n))
-        [i, n + j, j]
+        let(j = (i + 1) % n)
+        [i, j, n + j, n + i]
     ];
 
 function mb_loft_faces(n) =
     concat(
         mb_loft_bottom_faces(n),
         mb_loft_top_faces(n),
-        mb_loft_side_faces_a(n),
-        mb_loft_side_faces_b(n)
+        mb_loft_side_faces(n)
     );
 
 module mb_loft_polyhedron(levels, convexity = 10) {

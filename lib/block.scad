@@ -81,6 +81,7 @@ module mb_block(
 
     blockId = mb_param_id(config, settings);
     debug = mb_param_debug(config, settings);
+    debugShowOnly = mb_param_debugShowOnly(config, settings);
 
     //END get parameters
 
@@ -340,7 +341,7 @@ module mb_block(
                                                 block_obj, 
                                                 part = mb_block_part__base(block_obj), 
                                                 debug = debug,
-                                                solo = "studs"
+                                                solo = debugShowOnly
                                             );
                                             
                                             //Cutouts
