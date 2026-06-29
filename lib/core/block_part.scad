@@ -19,7 +19,12 @@ use <../shape/custom_shapes.scad>;
 * ----------
 */
 
-function mb_block_part_model(type, items = undef, data = undef, render = true) =
+function mb_block_part_model(
+    type, 
+    items = undef, 
+    data = undef, 
+    render = true
+) =
     render ? [
         type,
         is_undef(data) ? items : [data]

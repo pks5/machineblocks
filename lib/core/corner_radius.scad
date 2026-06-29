@@ -151,9 +151,11 @@ function mb_radius_pair_is_none(pair, min_value = 0) =
 
 // true = all 3 radius pairs are inactive
 function mb_corner_radius_is_none(corner_radius, min_value = 0) =
-    mb_radius_pair_is_none(corner_radius[0], min_value) &&
+    
+    is_undef(corner_radius) || 
+    (mb_radius_pair_is_none(corner_radius[0], min_value) &&
     mb_radius_pair_is_none(corner_radius[1], min_value) &&
-    mb_radius_pair_is_none(corner_radius[2], min_value);
+    mb_radius_pair_is_none(corner_radius[2], min_value));
 
 
 // true = exactly 2 pairs are inactive

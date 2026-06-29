@@ -363,7 +363,7 @@ function mb_prismoid_min_points(a) =
     || (a[2] != undef && a[4] != undef && a[6] != undef); */
 
 function mb_prismoid_complexity(shape, static) =
-    static[0][0] != 0 || static[0][1] != 0 ? "complex" :
+    is_list(static[0]) && (static[0][0] != 0 || static[0][1] != 0) ? "complex" :
     let(
         rads = [
             for (i = [0:1])
@@ -986,6 +986,7 @@ module mb_prismoid(
     q_preview_max_mult = undef,
 
     resolve = false, 
+    draw_together = false,
     debug = false,
     color = "white"
 ){
@@ -1013,6 +1014,7 @@ module mb_prismoid(
     else{
         sck = shape[3][4][0];
         qclass = shape[3][4][1];
+        shape_type = shape[3][5][1];
 
         sx = shape[3][2][0];
         sy = shape[3][2][1];
@@ -1034,16 +1036,22 @@ module mb_prismoid(
             center ? [-cx, -cy, -cz] : off;
 
         
-        color(debug ? "yellow" : color)
+        
         translate(t){
-            if(false && shape[3][5][1] == "simple"){
-                echo("SIMPLE");
-                %mb_loft_polyhedron([
+            echo(t = shape_type, s = [shape[0],shape[1]])
+            
+            if(draw_together || shape_type == "simple"){
+                echo("sss");
+                color(draw_together || debug ? "yellow" : color)
+                mb_loft_polyhedron([
                     mb_prismoid_plane(shape, 0),
                     mb_prismoid_plane(shape, 1)
                 ]);
             }
-            else{
+
+            if(draw_together || shape_type != "simple"){
+                
+                color(draw_together || debug ? "red" : color)
                 hull(){
                     for(i = [0 : 1 : 1]){
                         plane = mb_prismoid_plane(shape, i);
@@ -1170,7 +1178,7 @@ module mb_prismoid(
     }
 }
 
-
+function mb_prismoid_complexity(shape, static) = "complex";
 
 /*
 * ----------
@@ -1196,7 +1204,7 @@ mb_prismoid(shape = [
     [[-0, -50], undef, [-0, 50], undef, [40, 50], undef, [40, -50], undef]
 ], height = 120, socket = [20, 10.4], radius = 0, debug = true);
 
-translate([0, 300, 0])
+*translate([0, 300, 0])
 mb_prismoid(shape = [
     [[-70, -50], [-140, 0], [-70, 50], undef, [50, 40], undef, [50, -40], undef],
     
@@ -1296,23 +1304,23 @@ mb_prismoid(shape = [
     ]
 ], expand = [[10,10,10,10,10,10]], rad_expand = true, radius = mb_corner_radius_from_side_views([[[10, 5], [10, 5], [10, 5], [10, 5]],0,0]), height = 40,  debug=true);
 
-prism = mb_prismoid_shape_resolve(
+mb_prismoid(
 
     shape = [
     [
-        [-20, -50], 
-        undef, //[-40, -30], 
-        [-20, 50], 
+        [-10, -50], 
+        undef,
+        [-10, 50], 
         undef, 
-        [20, 50], 
+        [10, 50], 
         undef, 
-        [20, -50], 
+        [10, -50], 
         undef
     ],
     
     [
         [-10, -50], 
-        undef, //[-40, -30, undef, [[4,12], 0, 0]], 
+        undef,
         [-10, 50], 
         undef, 
         [10, 50], 
@@ -1320,26 +1328,11 @@ prism = mb_prismoid_shape_resolve(
         [10, -50], 
         undef
     ]
-], expand = [[10,10,10,10,10,10]], rad_expand = true, radius = mb_corner_radius_from_side_views([0, [[6, 5], [7, 5], [5, 4], [3, 5]], [[30, 15], [30, 5], [10, 25], [10, 5]]]), height = 40
+], 
+//expand = [[10,10,10,10,10,10]], 
+//rad_expand = true, 
+//radius = mb_corner_radius_from_side_views([0, [[6, 5], [7, 5], [5, 4], [3, 5]], [[30, 15], [30, 5], [10, 25], [10, 5]]]), 
+height = 40,
+draw_together = true
 );
 
-cylinder_pos = [7, 40];
-cylinder_r = 12;
-overhang = 1;
-avr = true;
-
-mb_prismoid(prism);
-
-translate([cylinder_pos[0], cylinder_pos[1], 0])
-    cylinder(h = 120, r = cylinder_r, center = true);
-
-contains = mb_prismoid_contains(
-        prism,
-        1,              // obere Plane
-        cylinder_pos,
-        cylinder_r,
-        overhang = overhang,
-        avoid_vertical_rounding = avr
-    );
-
-echo(prism = prism, contains = contains, cylinder_pos = cylinder_pos, cylinder_r = cylinder_r, overhang = overhang, avr=avr);

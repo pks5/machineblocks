@@ -366,8 +366,10 @@ module mb_fillet(
                     [0,             0,             1,             0]
                    ]){ 
         if(mb_corner_radius_is_none(s, min_value = zero)){
-            translate(mb_corner_offset_N(corner, max_rad, f = 0.5))
-                cube(size = [zero, zero, zero], center=true);
+            cube_size = [zero, zero, zero];
+            //cube_size = [100, 100, 100];
+            translate(mb_corner_offset_N(corner, cube_size, f = 0.5))
+                cube(size = cube_size, center=true);
         }
         else{
             //echo ( rad = s);
