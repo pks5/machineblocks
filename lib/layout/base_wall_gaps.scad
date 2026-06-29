@@ -23,18 +23,18 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         outer_adj = block_inverted ? mb_block_get_base_clamp_thickness(block_obj) : 0
     )
     
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             for(gap = base_wall_gap_res)
                 let(
                     face = gap[0],
                     gap_start_offset = gap[3],
                     gap_end_offset = gap[4]
                 )
-                [
-                    "intersection",
-                    [
+                mb_block_part_model(
+                    type = "intersection",
+                    items = [
                         mb_block_part_prismoid(
                             block_dim = block_dim, 
                             expand = [
@@ -110,6 +110,6 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                             ]
                         )
                     ]
-                ]
+                )
         ]
-    ];
+    );

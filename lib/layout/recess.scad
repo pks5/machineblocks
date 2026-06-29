@@ -28,12 +28,12 @@ function mb_block_part__recess(block_obj) =
         )
     )
     mb_block_has_recess(block_obj) 
-    ? [
-        "list",
-        [
-            [
-                "intersection",
-                [
+    ? mb_block_part_model(
+        type = "list",
+        items = [
+            mb_block_part_model(
+                type = "intersection",
+                items = [
                     mb_block_part_prismoid(
                         block_dim = block_dim, 
                         expand = [[
@@ -60,7 +60,7 @@ function mb_block_part__recess(block_obj) =
                         ]
                     )
                 ]
-            ], 
+            ), 
             
             for(rwg = rwgs)
                 let(gap_data = mb_block_recess_wall_gap(block_obj, rwg))
@@ -70,10 +70,9 @@ function mb_block_part__recess(block_obj) =
                         gap_start_offset = gap[3],
                         gap_end_offset = gap[4]
                     )
-                    [
-                        
-                        "intersection",
-                        [
+                    mb_block_part_model(
+                        type = "intersection",
+                        items = [
                             mb_block_part_prismoid(
                                 block_dim = block_dim, 
                                 expand = [[
@@ -107,7 +106,7 @@ function mb_block_part__recess(block_obj) =
                                 ]
                             )
                         ]
-                    ]
+                    )
         ]
-    ]
+    )
     : undef;

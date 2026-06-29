@@ -17,9 +17,9 @@ function mb_block_part__top_plate_helpers(block_obj) =
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
     ) 
     mb_block_has_top_plate_helpers(block_obj) 
-        ? [
-            "difference",
-            [
+        ? mb_block_part_model(
+            type = "difference",
+            items = [
                 _mb_layout_mask_frame(
                     block_dim = block_dim, 
                     bottom = mb_block_base_cutout_ceiling_offset(
@@ -51,5 +51,5 @@ function mb_block_part__top_plate_helpers(block_obj) =
                     top_offset = 0, //top_plate_helpers_height
                 )
             ]
-        ] 
+        )
         : undef;

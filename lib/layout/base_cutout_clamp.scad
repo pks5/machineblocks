@@ -26,9 +26,9 @@ function mb_block_part__base_cutout_clamp(block_obj) =
             off = base_clamp_height + base_clamp_offset
         )
     )
-    [
-        "difference",
-        [
+    mb_block_part_model(
+        type = "difference",
+        items = [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 
                 bottom = bottom, 
@@ -51,4 +51,4 @@ function mb_block_part__base_cutout_clamp(block_obj) =
                 inner_adj = -base_clamp_thickness
             )
         ]
-    ];
+    );

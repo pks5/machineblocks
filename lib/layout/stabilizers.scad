@@ -18,15 +18,15 @@ function mb_block_part__stabilizers(block_obj) =
             cut = true
         )
     )
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             for(axis = ["x", "y"])
                 let(range = mb_block_stabilizer_range(block_obj, axis))
                 for(x = range[0])
-                [
-                    "list",
-                    [
+                mb_block_part_model(
+                    type = "list",
+                    items = [
                         for(y = range[1])
                             let(
                                 seg_offset = mb_block_stabilizer_segment_offset(block_obj, axis, x, y),
@@ -34,9 +34,9 @@ function mb_block_part__stabilizers(block_obj) =
                                 seg_expand = mb_block_stabilizer_segment_expand(block_obj, axis, x, y)
                             )
                             if(mb_block_stabilizer_segment_render(block_obj, axis, x, y))
-                            [
-                                "list",
-                                [
+                            mb_block_part_model(
+                                type = "list",
+                                items = [
                                     mb_block_part_cube(
                                         block_dim = block_dim,
                                         size = [
@@ -69,10 +69,10 @@ function mb_block_part__stabilizers(block_obj) =
                                             offset = seg_offset
                                         )
                                 ]
-                            ]
+                            )
                     ]
-                ]
+                )
 
             
         ]
-    ];
+    );

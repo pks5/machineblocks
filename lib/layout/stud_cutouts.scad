@@ -20,9 +20,9 @@ function mb_block_part__stud_cutouts(block_obj) =
         stud_range = mb_block_stud_cutouts_range(block_obj)
         
     )
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             for(x = stud_range[0])
                 for(y = stud_range[1])
                     if(mb_block_stud_cutout_render(block_obj, x, y))
@@ -48,4 +48,4 @@ function mb_block_part__stud_cutouts(block_obj) =
                             offset = mb_block_stud_cutout_offset(block_obj, x, y)
                         )
         ]
-    ];
+    );

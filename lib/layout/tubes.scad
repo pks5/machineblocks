@@ -13,9 +13,9 @@ function mb_block_part__tubes(block_obj, hole = false) =
     let(
         block_dim = mb_block_get_dim(block_obj)
     )
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             for(a = ["x", "y"])
                 let(
                     axis = mb_axis_to_int(a),
@@ -58,4 +58,4 @@ function mb_block_part__tubes(block_obj, hole = false) =
                                 offset = mb_block_tube_offset(block_obj, axis, xy, z)
                             )
         ]
-    ];
+    );

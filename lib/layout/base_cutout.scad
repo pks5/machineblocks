@@ -36,9 +36,9 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
 
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             mb_block_part_prismoid(
                 block_dim = block_dim, 
                 expand = [
@@ -79,7 +79,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
             for(wall_gap = wall_gaps)
                 mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap, inner_adj, top_offset)
         ]
-    ];
+    );
 
 
 

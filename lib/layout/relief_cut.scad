@@ -22,9 +22,9 @@ function mb_block_part__relief_cut(block_obj) =
         relief_cut_height = mb_block_get_relief_cut_height(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj)
     ) 
-    [
-        "difference",
-        [
+    mb_block_part_model(
+        type = "difference",
+        items = [
             _mb_layout_mask_frame(
                 block_dim = block_dim, 
                 bottom = mb_block_dim_this_offset(
@@ -59,4 +59,4 @@ function mb_block_part__relief_cut(block_obj) =
                 ]]
             )
         ]
-    ];
+    );

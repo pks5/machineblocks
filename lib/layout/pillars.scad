@@ -20,9 +20,9 @@ function mb_block_part__pillars(block_obj) =
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
         base_cutout_ceiling_offset_with_cut = mb_block_base_cutout_ceiling_offset(block_obj, face = "z+", cut = true)
     )
-    [
-        "list",
-        [
+    mb_block_part_model(
+        type = "list",
+        items = [
             for(x = pillar_range[0])
                 for(y = pillar_range[1])
                     if(mb_block_pillar_render(block_obj, x, y))
@@ -51,4 +51,4 @@ function mb_block_part__pillars(block_obj) =
                             offset = mb_block_pillar_offset(block_obj, x, y)
                         )
         ]
-    ];
+    );
