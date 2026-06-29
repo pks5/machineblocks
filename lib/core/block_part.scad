@@ -423,28 +423,52 @@ module mb_block_part(
     scad_preview_max_mult = mb_block_get_scad_preview_max_mult(block_obj);
     
     part_type = mb_block_part_model_type(part);
+    part_name = mb_block_part_model_name(part);
     part_data = mb_block_part_model_data(part);
     part_data_length = mb_block_part_model_data_length(part);
+
+    solo_pass = !is_undef(solo) && part_name == solo ? undef : solo;
+
+    echo(solo = solo, part_name = part_name);
 
     if(is_string(part_type) && part_data_length > 0){
         /*
         * Aggregations
         */
-        if(part_type == "list"){
+        if(part_type == "list" || ((
+                    part_type == "union" 
+                    || part_type == "difference" 
+                    || part_type == "intersection"
+                )
+                && !is_undef(solo) && solo != part_name
+        )){
             for(list_item = part_data){
-                mb_block_part(block_obj, part = list_item, part_params=part_params, mul = mul, debug = debug);
+                mb_block_part(
+                    block_obj, 
+                    part = list_item, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
             }
         }
         else if(part_type == "union"){
             if(part_data_length > 1){
                 union(){
-                    mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
+                    mb_block_part(
+                        block_obj, 
+                        part = mb_block_part_model_data_item(part, 0), 
+                        part_params=part_params, 
+                        mul = mul, 
+                        debug = debug
+                    );
                     for(i = [1 : part_data_length - 1]){
                         mb_block_part(block_obj, part = mb_block_part_model_data_item(part, i), part_params=part_params, mul = mul, debug = debug);
                     }
                 }
             }
-            else{
+            else if(part_data_length > 0){
                 mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
             }
         }
@@ -457,7 +481,7 @@ module mb_block_part(
                     }
                 }
             }
-            else{
+            else if(part_data_length > 0){
                 mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
             }
         }
@@ -470,7 +494,7 @@ module mb_block_part(
                     }
                 }
             }
-            else{
+            else if(part_data_length > 0){
                 mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 0), part_params=part_params, mul = mul, debug = debug);
             }
         }
@@ -479,178 +503,235 @@ module mb_block_part(
         * Shapes
         */
         else if(part_type == "mb_prismoid"){
-            mb_prismoid(
-                shape = mb_block_part_model_data_item(part, 0), 
-                mul = mul, 
-                debug = debug,
-                quality = quality,
+            if(is_undef(solo) || solo == part_name){
+                mb_prismoid(
+                    shape = mb_block_part_model_data_item(part, 0), 
+                    mul = mul, 
+                    debug = debug,
+                    quality = quality,
 
-                q_profile = scad_quality_profile,
-                q_class_factors = scad_quality_class_factors,
-                q_class_min_segments = scad_quality_class_min_segments,
-                q_segment_multiplier = scad_quality_segment_multiplier,
-                q_preview_quality = scad_preview_quality,
-                q_preview_max_mult = scad_preview_max_mult,
-                color = base_color
-            );
+                    q_profile = scad_quality_profile,
+                    q_class_factors = scad_quality_class_factors,
+                    q_class_min_segments = scad_quality_class_min_segments,
+                    q_segment_multiplier = scad_quality_segment_multiplier,
+                    q_preview_quality = scad_preview_quality,
+                    q_preview_max_mult = scad_preview_max_mult,
+                    color = base_color
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_tube"){
-            tube_data = mb_block_part_model_data_item(part, 0);
-            radius = tube_data[0];
-            rounding_radius = tube_data[2];
-            quality_class = tube_data[7]; // [tube, edge]
+            if(is_undef(solo) || solo == part_name){
+                tube_data = mb_block_part_model_data_item(part, 0);
+                radius = tube_data[0];
+                rounding_radius = tube_data[2];
+                quality_class = tube_data[7]; // [tube, edge]
 
-            /*
-            tube_resolution = mb_q_fn_even_for_radius(
-                r = (is_list(radius) ? radius[1] : radius) * mul[0],
-                q = quality_class[0],
-                preset = quality,
-                profile = scad_quality_profile,
-                class_factors = scad_quality_class_factors,
-                class_min_segments = scad_quality_class_min_segments,
-                segment_multiplier = scad_quality_segment_multiplier,
-                preview_quality = scad_preview_quality,
-                preview_max_mult = scad_preview_max_mult
-            );
+                mb_tube(
+                    radius = radius,
+                    length = tube_data[1],
+                    rounding_radius = rounding_radius,
+                    clamp_start = tube_data[3],
+                    clamp_end = tube_data[4],
+                    axis = tube_data[5],
+                    offset = tube_data[6],
+                    mul = mul,
+                    debug = debug,
+                    color = base_color,
+                    
+                    quality_class_tube = quality_class[0],
+                    quality_class_edge = quality_class[1],
 
-            edge_resolution = is_num(rounding_radius) ? mb_q_fn_even_for_radius(
-                r = rounding_radius * mul[0],
-                q = quality_class[1],
-                preset = quality,
-                profile = scad_quality_profile,
-                class_factors = scad_quality_class_factors,
-                class_min_segments = scad_quality_class_min_segments,
-                segment_multiplier = scad_quality_segment_multiplier,
-                preview_quality = scad_preview_quality,
-                preview_max_mult = scad_preview_max_mult
-            ) : 8;
+                    quality = quality,
 
-            echo(q = quality, r=rounding_radius, qc = quality_class[1], t_r = edge_resolution);*/
-
-            mb_tube(
-                radius = radius,
-                length = tube_data[1],
-                rounding_radius = rounding_radius,
-                clamp_start = tube_data[3],
-                clamp_end = tube_data[4],
-                axis = tube_data[5],
-                offset = tube_data[6],
-                mul = mul,
-                debug = debug,
-                color = base_color,
-                
-                quality_class_tube = quality_class[0],
-                quality_class_edge = quality_class[1],
-
-                quality = quality,
-
-                q_profile = scad_quality_profile,
-                q_class_factors = scad_quality_class_factors,
-                q_class_min_segments = scad_quality_class_min_segments,
-                q_segment_multiplier = scad_quality_segment_multiplier,
-                q_preview_quality = scad_preview_quality,
-                q_preview_max_mult = scad_preview_max_mult
-            );
+                    q_profile = scad_quality_profile,
+                    q_class_factors = scad_quality_class_factors,
+                    q_class_min_segments = scad_quality_class_min_segments,
+                    q_segment_multiplier = scad_quality_segment_multiplier,
+                    q_preview_quality = scad_preview_quality,
+                    q_preview_max_mult = scad_preview_max_mult
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_cube"){
-            cube_data = mb_block_part_model_data_item(part, 0);
+            if(is_undef(solo) || solo == part_name){
+                cube_data = mb_block_part_model_data_item(part, 0);
 
-            mb_cube(
-                size = cube_data[0],
-                offset = cube_data[1],
-                radius = cube_data[2],
-                xyz_rad = cube_data[3],
-                mul = mul,
-                color = base_color
-            );
+                mb_cube(
+                    size = cube_data[0],
+                    offset = cube_data[1],
+                    radius = cube_data[2],
+                    xyz_rad = cube_data[3],
+                    mul = mul,
+                    color = base_color
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_wedge"){
-            wedge_data = mb_block_part_model_data_item(part, 0);
+            if(is_undef(solo) || solo == part_name){
+                wedge_data = mb_block_part_model_data_item(part, 0);
 
-            mb_wedge(
-                width = wedge_data[0],
-                depth = wedge_data[1],
-                length = wedge_data[2],
-                face = wedge_data[3],
-                dir = wedge_data[4],
-                offset = wedge_data[5],
-                mul = mul,
-                color = base_color
-            );
+                mb_wedge(
+                    width = wedge_data[0],
+                    depth = wedge_data[1],
+                    length = wedge_data[2],
+                    face = wedge_data[3],
+                    dir = wedge_data[4],
+                    offset = wedge_data[5],
+                    mul = mul,
+                    color = base_color
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_svg"){
-            svg_data = mb_block_part_model_data_item(part, 0);
+            if(is_undef(solo) || solo == part_name){
+                svg_data = mb_block_part_model_data_item(part, 0);
 
-            mb_svg(
-                svg_file = svg_data[0],
-                svg_size = svg_data[1],
-                face = svg_data[2],
-                size = svg_data[3],
-                offset = svg_data[4],
-                color = is_undef(svg_data[5]) ? base_color : svg_data[5],
-                mul = mul,
-                quality = quality,
+                mb_svg(
+                    svg_file = svg_data[0],
+                    svg_size = svg_data[1],
+                    face = svg_data[2],
+                    size = svg_data[3],
+                    offset = svg_data[4],
+                    color = is_undef(svg_data[5]) ? base_color : svg_data[5],
+                    mul = mul,
+                    quality = quality,
 
-                q_profile = scad_quality_profile,
-                q_class_factors = scad_quality_class_factors,
-                q_class_min_segments = scad_quality_class_min_segments,
-                q_segment_multiplier = scad_quality_segment_multiplier,
-                q_preview_quality = scad_preview_quality,
-                q_preview_max_mult = scad_preview_max_mult
-            );
+                    q_profile = scad_quality_profile,
+                    q_class_factors = scad_quality_class_factors,
+                    q_class_min_segments = scad_quality_class_min_segments,
+                    q_segment_multiplier = scad_quality_segment_multiplier,
+                    q_preview_quality = scad_preview_quality,
+                    q_preview_max_mult = scad_preview_max_mult
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_text"){
-            text_data = mb_block_part_model_data_item(part, 0);
+            if(is_undef(solo) || solo == part_name){
+                text_data = mb_block_part_model_data_item(part, 0);
 
-            mb_text(
-                text = text_data[0],
-                text_size = text_data[1],
-                height = text_data[2],
-                font = text_data[3],
-                spacing = text_data[4],
-                align = text_data[5],
-                face = text_data[6],
-                offset = text_data[7],
-                color = is_undef(text_data[8]) ? base_color : text_data[8],
-                mul = mul,
-                quality = quality,
+                mb_text(
+                    text = text_data[0],
+                    text_size = text_data[1],
+                    height = text_data[2],
+                    font = text_data[3],
+                    spacing = text_data[4],
+                    align = text_data[5],
+                    face = text_data[6],
+                    offset = text_data[7],
+                    color = is_undef(text_data[8]) ? base_color : text_data[8],
+                    mul = mul,
+                    quality = quality,
 
-                q_profile = scad_quality_profile,
-                q_class_factors = scad_quality_class_factors,
-                q_class_min_segments = scad_quality_class_min_segments,
-                q_segment_multiplier = scad_quality_segment_multiplier,
-                q_preview_quality = scad_preview_quality,
-                q_preview_max_mult = scad_preview_max_mult
-            );
+                    q_profile = scad_quality_profile,
+                    q_class_factors = scad_quality_class_factors,
+                    q_class_min_segments = scad_quality_class_min_segments,
+                    q_segment_multiplier = scad_quality_segment_multiplier,
+                    q_preview_quality = scad_preview_quality,
+                    q_preview_max_mult = scad_preview_max_mult
+                );
+            }
             
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         else if(part_type == "mb_pcb"){
-            pcb_data = mb_block_part_model_data_item(part, 0);
+            if(is_undef(solo) || solo == part_name){
+                pcb_data = mb_block_part_model_data_item(part, 0);
 
-            mb_pcb(
-                pcb = pcb_data[0],
-                dimensions = pcb_data[1],
-                screw_sockets = pcb_data[2],
-                screw_socket_height = pcb_data[3],
-                screw_socket_size = pcb_data[4],
-                screw_socket_hole_size = pcb_data[5],
-                offset = pcb_data[6],
-                mul = mul,
-                color = base_color
-            );
+                mb_pcb(
+                    pcb = pcb_data[0],
+                    dimensions = pcb_data[1],
+                    screw_sockets = pcb_data[2],
+                    screw_socket_height = pcb_data[3],
+                    screw_socket_size = pcb_data[4],
+                    screw_socket_hole_size = pcb_data[5],
+                    offset = pcb_data[6],
+                    mul = mul,
+                    color = base_color
+                );
+            }
 
-            mb_block_part(block_obj, part = mb_block_part_model_data_item(part, 1), part_params=part_params, mul = mul, debug = debug);
+            nested = mb_block_part_model_data_item(part, 1);
+            if(!is_undef(nested)){
+                mb_block_part(
+                    block_obj, 
+                    part = nested, 
+                    part_params=part_params, 
+                    mul = mul, 
+                    debug = debug,
+                    solo = solo_pass
+                );
+            }
         }
         /*
         * Custom Shapes
