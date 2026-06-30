@@ -8,10 +8,12 @@ use <../core/block_part.scad>;
 * ------
 */
 function mb_block_part__grille(block_obj) = 
+    let(grille = mb_block_get_grille(block_obj))
+    grille == "none" ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
-        grille = mb_block_get_grille(block_obj),
+        
         is_grille_inverted = mb_block_is_grille_inverted(block_obj),
         grille_depth = mb_block_get_grille_depth(block_obj),
         grille_count = mb_block_get_grille_count(block_obj),
@@ -27,7 +29,6 @@ function mb_block_part__grille(block_obj) =
         )
     )
     mb_block_part_model(
-        render = grille != "none",
         type = "list",
         name = "grille",
         items = [

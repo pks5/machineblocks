@@ -14,7 +14,7 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
     let(
         block_dim = mb_block_get_dim(block_obj),
         slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        wall_thickness = mb_block_get_base_wall_thickness(block_obj),
         wall_gaps = mb_block_get_base_wall_gaps(block_obj),
         slope = mb_block_dim_slope(block_dim),
         slope_neg = mb_slope_filter(slope, -1),

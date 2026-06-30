@@ -10,6 +10,7 @@ use <shared.scad>;
 * -----------
 */
 function mb_block_part__stabilizers(block_obj) =
+    !mb_block_has_stabilizers(block_obj) ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
         top = mb_block_base_cutout_ceiling_offset(

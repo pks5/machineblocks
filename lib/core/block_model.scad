@@ -341,7 +341,7 @@ function mb_block_obj(
                     block_dim = block_dim, 
                     expand = [[
                         for(f = [0 : 3])
-                            -wall_thickness_final,
+                            -wall_thickness_pref,
                         0,
                         0,
                     ]],
@@ -425,7 +425,8 @@ function mb_block_obj(
                 cutout_min_depth,
                 mb_param_base(config, settings),
                 mb_param_baseColor(config, settings),
-                base_rounding_radius
+                base_rounding_radius,
+                wall_thickness_pref > 0
             ], // 4 - Top Plate Height
             [
                 slope_base_height_bottom, 
@@ -625,10 +626,11 @@ function mb_block_get_base_cutout_depth(block_obj) =                block_obj[4]
 function mb_block_get_base_adj(block_obj) =                         block_obj[6][1];
 function mb_block_get_size_mod(block_obj) =                         block_obj[6][0];
 
-function mb_block_get_wall_thickness(block_obj) =                   block_obj[4][3];
+function mb_block_get_base_wall_thickness(block_obj) =              block_obj[4][3];
 function mb_block_has_base(block_obj) =                             block_obj[4][6];
 function mb_block_get_base_color(block_obj) =                       block_obj[4][7];
 function mb_block_get_base_rounding_radius(block_obj) =             block_obj[4][8];
+function mb_block_has_base_walls(block_obj) =                       block_obj[4][9];
 
 // Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
@@ -863,14 +865,15 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
 
 function mb_block_in_base_cutout(block_obj, off, dia) =
     let(
-        prism_masks = mb_block_get_prism_masks(block_obj)
+        prism_masks = mb_block_get_prism_masks(block_obj),
+        stud_max_overhang = mb_block_get_stud_max_overhang(block_obj)
     )
     mb_prismoid_contains(
         prism_masks[3],
         plane = 0,              // obere Plane
         circle_pos = off,
         circle_radius = 0.5 * dia,
-        overhang = 0,
+        overhang = stud_max_overhang,
         avoid_vertical_rounding = true
     );
 
@@ -1444,7 +1447,7 @@ function mb_block_base_wall_gap(block_obj, gap) =
         block_dim = mb_block_get_dim(block_obj),
         min_max_index = mb_block_dim_min_max_index(block_dim),
         mod_size = mb_block_get_mod_size(block_obj),
-        wall_thickness = mb_block_get_wall_thickness(block_obj),
+        wall_thickness = mb_block_get_base_wall_thickness(block_obj),
         faces = mb_face_split(gap[0], ["x-", "x+", "y-", "y+"])
     )
     [

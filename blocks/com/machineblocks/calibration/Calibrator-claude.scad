@@ -182,7 +182,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["numberOfSamples", numberOfSamples],
                 ["valueStart",    baseWallThicknessAdjustmentValueStart],
                 ["valueStep",     baseWallThicknessAdjustmentValueStep],
-                ["offset",        [0, -3, 2]]
+                ["offset",        [0, -3, 0]]
             ]
         );
 
@@ -208,7 +208,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["numberOfSamples", numberOfSamples],
                 ["valueStart",    tubeDiameterAdjustmentValueStart],
                 ["valueStep",     tubeDiameterAdjustmentValueStep],
-                ["offset",        [0, -6, 2]]
+                ["offset",        [0, -6, 0]]
             ]
         );
 
@@ -234,7 +234,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["numberOfSamples", numberOfSamples],
                 ["valueStart",    pinDiameterAdjustmentValueStart],
                 ["valueStep",     pinDiameterAdjustmentValueStep],
-                ["offset",        [0, -9, 2]]
+                ["offset",        [0, -9, 0]]
             ]
         );
     }
@@ -260,8 +260,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
     fontSize      = mb_param(config, settings, "fontSize", 3);
     labelSize     = mb_param(config, settings, "labelSize", 5);
 
-    baseZ = 1; // 1 mbu ≈ 1.6 mm
-    baseZMod = -0.5;
+    baseZ = 0.5; // 1 mbu ≈ 1.6 mm
 
     // Base strip — centered, at row Y position
     mb_block(
@@ -269,12 +268,9 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
         settings = [
             ["id",            mb_block_id(blockId, "strip")],
             ["size",          [2 * numberOfSamples + 1, 1, baseZ]],
-            ["sizeMod", [["z+", baseZMod]]],
             ["baseCutoutType","none"],
             ["studs",         false],
-            ["offset",        rowOffset],
-            ["align",         "ccs"],
-            ["baseAdjustment", [["y", 0.11]]]
+            ["offset",        rowOffset]
         ]
     );
 
@@ -284,7 +280,6 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
         settings = [
             ["id",            mb_block_id(blockId, "label")],
             ["size",          [labelSize, 1, baseZ]],
-            ["sizeMod", [["z+", baseZMod]]],
             ["baseCutoutType","none"],
             ["studs",         false],
             ["offset",        [rowOffset[0], rowOffset[1] + 1, rowOffset[2]]],
@@ -292,9 +287,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
             ["textFont",      font],
             ["textSize",      fontSize],
             ["textFace",      5],
-            ["textDepth",     -0.25],
-            ["align",         "ccs"],
-            ["baseAdjustment", [["y", 0.11]]]
+            ["textDepth",     -0.25]
         ]
     );
 
@@ -305,7 +298,6 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
             settings = [
                 ["id",            mb_block_id(blockId, str("val_", i))],
                 ["size",          [1, 1, baseZ]],
-                ["sizeMod", [["z+", baseZMod]]],
                 ["baseCutoutType","none"],
                 ["studs",         false],
                 ["offset",        [
@@ -317,8 +309,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
                 ["textFont",      font],
                 ["textSize",      fontSize],
                 ["textFace",      5],
-                ["textDepth",     -0.25],
-                ["align",         "ccs"]
+                ["textDepth",     -0.25]
             ]
         );
     }
@@ -352,8 +343,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(confi
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
                     rowOffset[1],
                     rowOffset[2] + 0.5  // sits on top of base strip (0.5 unitGrid[1])
-                ]],
-                ["align",         "ccs"]
+                ]]
             ]
         );
     }
@@ -389,8 +379,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
                     rowOffset[1],
                     rowOffset[2] - 0.5  // sits below base strip after flip
-                ]],
-                ["align",         "ccs"]
+                ]]
             ]
         );
     }
@@ -428,8 +417,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(confi
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
                     rowOffset[1],
                     rowOffset[2] - 0.5
-                ]],
-                ["align",         "ccs"]
+                ]]
             ]
         );
     }
@@ -466,8 +454,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
                     rowOffset[1],
                     rowOffset[2] - 0.5
-                ]],
-                ["align",         "ccs"]
+                ]]
             ]
         );
     }
