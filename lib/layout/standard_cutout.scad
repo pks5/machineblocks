@@ -22,6 +22,10 @@ function mb_block_part__standard_cutout(block_obj) =
         name = "standard_cutout",
         type = "difference",
         items = [
+            !mb_block_has_base_walls(block_obj) ?
+
+            mb_block_part__base_cutout(block_obj) :
+            
             mb_block_part_model(
                 type = "union",
                 items = [

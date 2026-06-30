@@ -12,15 +12,9 @@ use <base_wall_gaps.scad>;
 */
 function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, top = undef, inner_adj = undef, top_offset = 0) = 
     let(
+        has_base_walls = mb_block_has_base_walls(block_obj),
+        base_adj = mb_block_get_base_adj(block_obj),
         block_dim = mb_block_get_dim(block_obj),
-        slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
-        wall_thickness = mb_block_get_base_wall_thickness(block_obj),
-        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
-        slope = mb_block_dim_slope(block_dim),
-        slope_neg = mb_slope_filter(slope, -1),
-        slope_pos = mb_slope_filter(slope, 1),
-        
-
         bottom = is_undef(bottom) 
             ? mb_block_dim_this_offset(
                 block_dim, 
@@ -32,7 +26,29 @@ function mb_block_part__base_cutout(block_obj, planes = "all", bottom = undef, t
                 block_obj, 
                 face = "z+"
             ) 
-            : top,
+            : top
+    )
+    !has_base_walls ?
+
+    mb_block_part_cube(
+        block_dim = block_dim,
+        expand = [
+            for(f = [0 : 3])
+                base_adj[f] + mb_block_dim_overlap(block_dim, overlap = true),
+            bottom,
+            top
+        ]
+    ) :
+
+
+    let(
+        slope_base_height_inner = mb_block_get_slope_base_height_inner(block_obj),
+        wall_thickness = mb_block_get_base_wall_thickness(block_obj),
+        wall_gaps = mb_block_get_base_wall_gaps(block_obj),
+        slope = mb_block_dim_slope(block_dim),
+        slope_neg = mb_slope_filter(slope, -1),
+        slope_pos = mb_slope_filter(slope, 1),
+        
         inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
 
