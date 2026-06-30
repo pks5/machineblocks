@@ -421,7 +421,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(confi
                 ["studs",                 false],
                 ["rotation",              [180, 0, 0]],  // CUSTOM SCAD: intentional flip
                 ["tubeDiameterAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
-                ["baseAdjustment",        [["x-", -4], ["x+", -4], ["y-", -4], ["y+", -4]]],
+                ["baseCrop",              [["xy", -0.5]]],
                 ["baseWallThickness",     0],
                 ["offset",                [
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
@@ -458,7 +458,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config
                 ["studs",               false],
                 ["rotation",            [180, 0, 0]],  // CUSTOM SCAD: intentional flip
                 ["pinDiameterAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
-                ["baseAdjustment",      [["x-", -2], ["x+", -2]]],
+                ["baseCrop",              [["x", -0.5]]],
                 ["baseWallThickness",     0],
                 ["offset",              [
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),

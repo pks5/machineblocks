@@ -54,12 +54,6 @@ function mb_param_sizeAdjustment(config, settings, default = undef) = mb_param(c
 function mb_param_sizeMod(config, settings, default = undef) = mb_param(config, settings, "sizeMod", default != undef ? default : []);
 
 /*
-* Crop
-*/
-// TODO implement
-function mb_param_crop(config, settings, default = undef) = mb_param(config, settings, "crop", default != undef ? default : []);
-
-/*
 * Offset
 */
 
@@ -82,6 +76,8 @@ function mb_param_ports(config, settings, default = undef) = mb_param(config, se
 */
 
 function mb_param_base(config, settings, default = undef) = mb_param(config, settings, "base", default != undef ? default : true);
+function mb_param_baseCrop(config, settings, default = undef) = mb_param(config, settings, "baseCrop", default != undef ? default : 0);
+
 function mb_param_baseAdjustment(config, settings, default = undef) = mb_param(config, settings, "baseAdjustment", default != undef ? default : undef);
 function mb_param_baseColor(config, settings, default = undef) = mb_param(config, settings, "baseColor", default != undef ? default : "#EAC645");
 function mb_param_baseRoundingRadius(config, settings, default = undef) = mb_param(config, settings, "baseRoundingRadius", default != undef ? default : 0.0);

@@ -426,7 +426,8 @@ function mb_block_obj(
                 mb_param_base(config, settings),
                 mb_param_baseColor(config, settings),
                 base_rounding_radius,
-                wall_thickness_pref > 0
+                wall_thickness_pref > 0,
+                mb_qc_resolve(mb_param_baseCrop(config, settings), true)
             ], // 4 - Top Plate Height
             [
                 slope_base_height_bottom, 
@@ -631,6 +632,7 @@ function mb_block_has_base(block_obj) =                             block_obj[4]
 function mb_block_get_base_color(block_obj) =                       block_obj[4][7];
 function mb_block_get_base_rounding_radius(block_obj) =             block_obj[4][8];
 function mb_block_has_base_walls(block_obj) =                       block_obj[4][9];
+function mb_block_get_base_crop(block_obj) =                        block_obj[4][10];
 
 // Top Plate
 function mb_block_get_top_plate_height(block_obj) =                 block_obj[4][1];
