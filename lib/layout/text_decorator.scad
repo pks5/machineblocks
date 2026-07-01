@@ -31,13 +31,14 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         ? [
             mb_block_dim_face_edge_expand(
                 block_dim, 
+                overlap = !subtract, 
                 exp = !subtract ? abs(text_depth[axis]) : 0, 
                 adjusted = true, 
                 face = text_face
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                overlap = true, 
+                overlap = subtract, 
                 adjusted = true, 
                 exp = subtract ? abs(text_depth[axis]) : 0, 
                 opposite = true,
@@ -47,7 +48,7 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
         : [
             mb_block_dim_face_edge_expand(
                 block_dim, 
-                overlap = true, 
+                overlap = !subtract, 
                 adjusted = true, 
                 exp = subtract ? abs(text_depth[axis]) : 0, 
                 opposite = true,
@@ -55,6 +56,7 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
             ),
             mb_block_dim_face_edge_expand(
                 block_dim, 
+                overlap = subtract,
                 exp = !subtract ? abs(text_depth[axis]) : 0,
                 adjusted = true, 
                 face = text_face

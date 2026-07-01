@@ -25,6 +25,7 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
         svg_scale = mb_block_get_svg_scale(block_obj),
         
         svg_face = mb_face_to_int(mb_block_get_svg_face(block_obj)),
+        opposite_face = mb_face_opposite(svg_face),
         axis = mb_face_to_axis(svg_face),
         min_size = mb_face_has_common(svg_face, "x") ? min(mod_size[1], mb_block_grd_z2xy(block_obj, mod_size[2])) 
             : mb_face_has_common(svg_face, "y") ? min(mod_size[0], mb_block_grd_z2xy(block_obj, mod_size[2])) 
@@ -49,151 +50,50 @@ function mb_block_part__svg_decorator(block_obj, subtract = false) =
             undef
         ],
 
+        exp_this = mb_block_dim_face_edge_expand(
+            block_dim, 
+            overlap = subtract,
+            exp = !subtract ? abs(svg_depth[axis]) : 0, 
+            adjusted = true, 
+            face = svg_face
+        ),
+        exp_opposite = mb_block_dim_face_edge_expand(
+            block_dim, 
+            overlap = !subtract, 
+            adjusted = true, 
+            exp = subtract ? abs(svg_depth[axis]) : 0, 
+            opposite = true,
+            face = opposite_face
+        ),
+
         expand = mb_face_has_common(svg_face, "x-") 
-        ? [
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[0]) : 0, 
-                adjusted = true, 
-                face = "x-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[0]) : 0, 
-                opposite = true,
-                face = "x+"
-            ),
-            0,
-            0,
-            0,
-            0
-        ] 
+        ? [exp_this, exp_opposite, 0, 0, 0, 0] 
         : mb_face_has_common(svg_face, "x+") 
-        ? [
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[0]) : 0, 
-                opposite = true,
-                face = "x-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[0]) : 0,
-                adjusted = true, 
-                face = "x+"
-            ),
-            0,
-            0,
-            0,
-            0
-        ] 
+        ? [exp_opposite, exp_this, 0, 0, 0, 0]
         : mb_face_has_common(svg_face, "y-") 
-        ? [
-            0,
-            0,
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[1]) : 0,
-                adjusted = true, 
-                face = "y-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[1]) : 0,
-                opposite = true,
-                face = "y+"
-            ),
-            
-            0,
-            0
-        ] 
+        ? [0, 0, exp_this, exp_opposite, 0, 0] 
         : mb_face_has_common(svg_face, "y+") 
-        ? [
-            0,
-            0,
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[1]) : 0,
-                opposite = true,
-                face = "y-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[1]) : 0,
-                adjusted = true, 
-                face = "y+"
-            ),
-            0,
-            0
-        ] 
+        ? [0, 0, exp_opposite, exp_this, 0, 0]
         : mb_face_has_common(svg_face, "z-") 
-        ? [
-            0,
-            0,
-            0,
-            0,
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[2]) : 0, 
-                adjusted = true, 
-                face = "z-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[2]) : 0, 
-                opposite = true,
-                face = "z+"
-            )
-        ] 
-        : (has_recess ? [
-            
-            0,
-            0,
-            0,
-            0,
-            mb_block_recess_floor_offset(
-                block_obj, 
-                overlap = true, 
-                off = subtract ? abs(svg_depth[2]) : 0, 
-                face = "z-"
-            ),
-            mb_block_recess_floor_offset(
-                block_obj, 
-                off = !subtract ? abs(svg_depth[2]) : 0, 
-                face = "z+"
-            )
+        ? [0, 0, 0, 0, exp_this, exp_opposite] 
+        : (
+            has_recess ? 
+            [ 0, 0, 0, 0,
+                mb_block_recess_floor_offset(
+                    block_obj, 
+                    overlap = !subtract, 
+                    off = subtract ? abs(svg_depth[2]) : 0, 
+                    face = opposite_face
+                ),
+                mb_block_recess_floor_offset(
+                    block_obj, 
+                    overlap = subtract,
+                    off = !subtract ? abs(svg_depth[2]) : 0, 
+                    face = svg_face
+                )
             ]
-            
-            : [
-            0,
-            0,
-            0,
-            0,
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                overlap = true, 
-                adjusted = true, 
-                exp = subtract ? abs(svg_depth[2]) : 0, 
-                opposite = true,
-                face = "z-"
-            ),
-            mb_block_dim_face_edge_expand(
-                block_dim, 
-                exp = !subtract ? abs(svg_depth[2]) : 0, 
-                adjusted = true, 
-                face = "z+"
-            )
-        ] )
+            : [0, 0, 0, 0, exp_opposite, exp_this]
+        )
     )   
     mb_block_part_svg(
         block_dim,

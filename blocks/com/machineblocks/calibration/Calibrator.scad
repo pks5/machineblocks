@@ -317,7 +317,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
                 ["textFont",      font],
                 ["textSize",      fontSize],
                 ["textFace",      5],
-                ["textDepth",     -0.25],
+                ["textDepth",     0.25],
                 ["align",         "ccs"]
             ]
         );
