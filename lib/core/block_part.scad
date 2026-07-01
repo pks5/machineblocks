@@ -26,10 +26,25 @@ function mb_block_part_model(
     data = undef, 
     render = true
 ) =
-    render ? [
+    !render ? undef :
+    let(
+        items_res = is_undef(data) ? items : [data]
+    )
+    type == "difference" && len(items) >= 1 && is_undef(items[0]) ? undef :
+    let(
+        is_container = type == "list" || type == "union" || type == "difference" || type == "intersection",
+        items_cleaned = is_container ? [
+            for(item = items)
+                if(!is_undef(item))
+                    item
+        ] : items_res
+    )
+    is_container && len(items_cleaned) == 0 ? undef :
+    is_container && len(items_cleaned) == 1 ? items_cleaned[0] :
+    [
         [type, is_undef(name) ? str(type, "_", rands(0,100000,1)[0]) : name],
-        is_undef(data) ? items : [data]
-    ] : undef;
+        items_cleaned
+    ];
 
 function mb_block_part_custom(type, items = undef, data = undef, render = true) =
     mb_block_part_type_is_builtin(type) ? undef 
