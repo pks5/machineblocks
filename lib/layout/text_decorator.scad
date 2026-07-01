@@ -61,7 +61,7 @@ function mb_block_part__text_decorator(block_obj, subtract = false) =
                 adjusted = true, 
                 face = text_face
             )
-        ] 
+        ]
     )
     mb_block_part_text(
         block_dim,

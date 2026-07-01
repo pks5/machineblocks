@@ -42,7 +42,7 @@ module mb_text(
         axis == 1 ? 0.5 * (start + end) : 0,
         axis == 2 ? 0.5 * (start + end) : 0
     ];
-
+    
     rounding_resolution = mb_q_fn_for_size(
         text_size,
         "visual",
@@ -62,7 +62,7 @@ module mb_text(
             (tr[2] + offset[2]) * mul[2]
         ])
         rotate(rot)
-            linear_extrude(height = end - start, center = true) {
+            linear_extrude(height = (end - start) * mul[axis], center = true) {
                 text(
                     text, 
                     size = text_size, 
