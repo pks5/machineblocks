@@ -15,9 +15,9 @@ function mb_block_part__stud_icon(block_obj, off, top) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         stud_diameter = mb_block_get_stud_diameter(block_obj, adjusted = false),
-        stud_icon = mb_block_get_stud_icon(block_obj),
-        stud_icon_dimensions = mb_block_get_stud_icon_dimensions(block_obj),
         
+        stud_icon_dimensions = mb_block_get_stud_icon_dimensions(block_obj),
+        stud_icon = mb_block_get_stud_icon(block_obj),
         stud_icon_scale = mb_block_get_stud_icon_scale(block_obj),
         stud_icon_depth = mb_block_get_stud_icon_depth(block_obj),
         height = abs(stud_icon_depth),
@@ -59,19 +59,16 @@ function mb_block_part__studs(block_obj) =
         block_dim = mb_block_get_dim(block_obj),
         stud_range = mb_block_stud_range(block_obj),
         stud_rounding = mb_block_get_stud_rounding(block_obj),
+        stud_icon = mb_block_get_stud_icon(block_obj),
+        has_stud_icon = !mb_is_empty_string(stud_icon) && stud_icon != "none",
         stud_icon_depth = mb_block_get_stud_icon_depth(block_obj),
         stud_clamp_thickness = mb_block_get_stud_clamp_thickness(block_obj),
         stud_clamp_height = mb_block_get_stud_clamp_height(block_obj),
         stud_clamp_offset = mb_block_get_stud_clamp_offset(block_obj),
         stud_height = mb_block_get_stud_height(block_obj),
         stud_base_overlap = mb_block_get_stud_base_overlap(block_obj),
-        clamp_offset = stud_height - stud_clamp_height - stud_clamp_offset
-        
-    )
-    mb_block_part_model(
-        type = "list",
-        name = "studs",
-        items = [
+        clamp_offset = stud_height - stud_clamp_height - stud_clamp_offset,
+        studs = [
             for(x = stud_range[0])
                 for(y = stud_range[1])
                     let(
@@ -105,24 +102,45 @@ function mb_block_part__studs(block_obj) =
                         ]
                     )
                     if(render[0])
-                        mb_block_part_model(
-                            type = stud_icon_depth > 0 ? "union" : "difference", 
-                            items = [
-                                mb_block_part_tube(
-                                    block_dim = block_dim,
-                                    radius = render[3],
-                                    rounding_radius = stud_rounding,
-                                    axis = "z",
-                                    expand = exp,
-                                    offset = render[1],
-                                    clamp_end = stud_clamp_thickness > 0 && stud_clamp_height > 0 ? [
-                                        stud_clamp_thickness,
-                                        stud_clamp_height,
-                                        clamp_offset
-                                    ] : undef
-                                ),
+                        [
+                            mb_block_part_tube(
+                                block_dim = block_dim,
+                                radius = render[3],
+                                rounding_radius = stud_rounding,
+                                axis = "z",
+                                expand = exp,
+                                offset = render[1],
+                                clamp_end = stud_clamp_thickness > 0 && stud_clamp_height > 0 ? [
+                                    stud_clamp_thickness,
+                                    stud_clamp_height,
+                                    clamp_offset
+                                ] : undef
+                            ),
+                            if(has_stud_icon)
                                 mb_block_part__stud_icon(block_obj, render[1], exp[1]) 
-                            ]
-                        )
+                        ]
+        ]
+    )
+    mb_block_part_model(
+        type = !has_stud_icon || stud_icon_depth > 0 ? "union" : "difference",
+        name = "studs",
+        items = [
+            mb_block_part_model(
+                type = "union",
+                name = "stud_tubes",
+                items = [
+                    for(stud = studs)
+                        stud[0]
+                ]
+            ),
+            if(has_stud_icon)
+                mb_block_part_model(
+                    type = "union",
+                    name = "stud_icons",
+                    items = [
+                        for(stud = studs)
+                            stud[1]
+                    ]
+                )
         ]
      );
