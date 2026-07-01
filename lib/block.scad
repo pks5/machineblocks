@@ -105,46 +105,17 @@ module mb_block(
     osm_mm = mb_block_obj_size_mod(block_obj, unit="mm");
     osa_mm = mb_block_obj_size_adj(block_obj, unit="mm");
 
-    
     mbuToMm = scale * unitMbu;
 
     gridSizeXY = unitGrid[0] * mbuToMm;
     gridSizeZ = unitGrid[1] * mbuToMm;
 
-    //Object Size     
-    objectSizeX = os_mm[0];
-    objectSizeY = os_mm[1];
-    objectSizeZ = os_mm[2];
-
-    objectSize = os_mm;
-
-    
-    
-    //Side Adjustment
-   
-    baseModRes = mb_qc_resolve(qc = baseMod, cube = true, mul = [gridSizeXY, gridSizeXY, gridSizeZ]);
-    baseModR = mb_qc_resolve(qc = baseMod, cube = true);
-    
-    bsa =  mb_qc_resolve(qc = baseSideAdjustment, cube = true, default = [sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], 0, sizeAdjustment[1]]); 
-    sideAdjustment = mb_array_add(bsa, baseModRes);
-
-    // Object Size Fully Adjusted
-    objectSizeXAdjusted = osa_mm[0];
-    objectSizeYAdjusted = osa_mm[1];
-    objectSizeZAdjusted = osa_mm[2];
-
-    objectSizeAdjusted = osa_mm;
-
     if(debug){
         echo(
-            objectSize = objectSize, 
             os_mm = os_mm, 
             osm_mm = osm_mm, 
-            objectSizeAdjusted = objectSizeAdjusted,
             osa_mm = osa_mm, 
-            baseModRes = baseModRes,
             size_mod = mb_block_size_mod(block_obj, unit="mm"), 
-            bsa = bsa,
             base_adj = mb_block_base_adj(block_obj, unit="mm")
         );
     }
@@ -204,13 +175,10 @@ module mb_block(
     
 
     
-    function sideX(side, adj = true) = adj ? 0.5 * (sideAdjustment[1] - sideAdjustment[0]) + (side - 0.5) * objectSizeXAdjusted : (side - 0.5) * objectSizeX;
-    function sideY(side, adj = true) = adj ? 0.5 * (sideAdjustment[3] - sideAdjustment[2]) + (side - 0.5) * objectSizeYAdjusted : (side - 0.5) * objectSizeY;
-    function sideZ(side, adj = true) = adj ? 0.5 * (sideAdjustment[5] - sideAdjustment[4]) + (side - 0.5) * objectSizeZAdjusted : (side - 0.5) * objectSizeZ;
+    function sideX(side, adj = true) = (side - 0.5) * os_mm[0];
+    function sideY(side, adj = true) = (side - 0.5) * os_mm[1];
+    function sideZ(side, adj = true) = (side - 0.5) * os_mm[2];
 
-    function posX(a) = (a - offsetX) * gridSizeXY;
-    function posY(b) = (b - offsetY) * gridSizeXY;
-    
     function sidePosX(c, axisFace = 0, offsetX = 0) = sideX(axisFace, false) + offsetX + c * gridSizeXY;
     function sidePosY(c, axisFace = 0, offsetY = 0) = sideY(axisFace, false) + offsetY + c * gridSizeXY;
     function sidePosZ(c, axisFace = 0, offsetZ = 0) = sideZ(axisFace, false) + offsetZ + c * gridSizeZ;
@@ -267,29 +235,11 @@ module mb_block(
     function isMiddleZone(value, i) = (size[i] >= pillarGapMiddle) && (value>=mid[i]-1) && (value<=mid[i]+1);
     function isMiddle(value, i) = (size[i] >= pillarGapMiddle) && (value == mid[i]);
     
-    function drawCornerPillar(a, b) = isCornerZone(a, 0) && isCornerZone(b, 1);
     
-    function drawMiddlePillar(a, b) = (isMiddle(a, 0) && (isMiddleZone(b, 1) || isCornerZone(b, 1)))
-                                        || (isMiddle(b, 1) && (isMiddleZone(a, 0) || isCornerZone(a, 0)));
     
-    function drawPillarAuto(a, b) = ((a % 2==0) && (b % 2 == 0)) || drawCornerPillar(a, b) || drawMiddlePillar(a, b); 
     
-    function drawPillar(a, b) = 
-        ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
-
-    function drawPin(a, b, isX) = 
-        ((pillars == "auto" && drawPillarAuto(a, b)) || (pillars != "auto" && getGridItem(pillars, true, a, b, 0, false)));
-
-    
-    /*
-    * Stabilizer Grid
-    */
-    function stabilizersXHeight(a) = sGridHeight + stabilizerGridOffset + (stabilizerExpansion > 0 && (holeX == false) && (((size[0] > stabilizerExpansion + 1) && ((a % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[1] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight - stabilizerGridOffset, 0) : 0);
-    function stabilizersYHeight(b) = sGridHeight + (stabilizerExpansion > 0 && (holeY == false) && (((size[1] > stabilizerExpansion + 1) && ((b % stabilizerExpansion) == (stabilizerExpansion - 1))) || (size[0] == 1)) ? max(baseCutoutDepth - (stabilizerExpansionOffset * mbuToMm) - sGridHeight, 0) : 0);
-    
-    /*
                                                             
-                                                                            * Screw Hole Helpers Z
+                                                                            /* Screw Hole Helpers Z
                                                                             
                                                                             for (a = [ startX : 1 : endX ]){
                                                                                 for (b = [ startY : 1 : endY ]){
@@ -371,7 +321,7 @@ module mb_block(
                                             sideInt = mb_side_to_int(port[0]);
                                             
                                             
-                                            portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : objectSize[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
+                                            portCutThickness = 2*((port[5] == undef || port[5] == "auto" ? (recess && sideInt < 4 ? recWallThickness[sideInt] : os_mm[mb_side_to_axis(port[0])]) : port[5] * (sideInt < 4 ? gridSizeXY : gridSizeZ)) + cutTolerance);
                                             shapes = port[4];
                                             translate(portSideOffset(port[0], port[1], port[2])){
                                                 rotate(portRotation(port[0], port[3])){
