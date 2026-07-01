@@ -318,84 +318,112 @@ function mb_block_obj(
         * Prismoids
         */
         
-        prism_base_outer = mb_prismoid_shape_resolve(
-            shape = mb_block_part_model_data_item(
-                mb_block_part_prismoid(
-                    block_dim = block_dim, 
-                    expand = [[
-                        for(f = [0 : 3])
-                            -stud_padding[f],
-                        0,
-                        0,
-                    ]],
-                    socket = slope_socket,
-                    slope = mb_block_dim_slope(block_dim),
-                    radius = base_rounding_radius
+        prism_base_outer = mb_prismoid_contains_prepare(
+            mb_prismoid_shape_resolve(
+                shape = mb_block_part_model_data_item(
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -stud_padding[f],
+                            0,
+                            0,
+                        ]],
+                        socket = slope_socket,
+                        slope = mb_block_dim_slope(block_dim),
+                        radius = base_rounding_radius
+                    )
                 )
-            )
+            ),
+            1,
+            0.5 * stud_diameter_res,
+            stud_max_overhang,
+            false,
+            true
         ),
 
-        prism_base_cutout = mb_prismoid_shape_resolve(
-            shape = mb_block_part_model_data_item(
-                mb_block_part_prismoid(
-                    block_dim = block_dim, 
-                    expand = [[
-                        for(f = [0 : 3])
-                            -wall_thickness_pref,
-                        0,
-                        0,
-                    ]],
-                    socket = slope_socket,
-                    slope = mb_block_dim_slope(block_dim),
-                    radius = base_rounding_radius
+        prism_base_cutout = mb_prismoid_contains_prepare(
+            mb_prismoid_shape_resolve(
+                shape = mb_block_part_model_data_item(
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -wall_thickness_pref,
+                            0,
+                            0,
+                        ]],
+                        socket = slope_socket,
+                        slope = mb_block_dim_slope(block_dim),
+                        radius = base_rounding_radius
+                    )
                 )
-            )
+            ),
+            0,
+            0.5 * stud_diameter_res,
+            0,
+            false,
+            true
         ),
 
-        prism_recess = mb_prismoid_shape_resolve(
-            shape = mb_block_part_model_data_item(
-                mb_block_part_prismoid(
-                    block_dim = block_dim, 
-                    expand = [[
-                        for(f = [0 : 3])
-                            -(recess_walls[f] + recess_stud_padding[f]),
-                        0,
-                        mb_block_dim_face_edge_expand(
-                            block_dim, 
-                            adjusted = true, 
-                            face = "z+", 
-                            overlap = true
-                        ),
-                    ]],
-                    radius = recess_rr_base,
-                    rad_expand = recess_rounding_radius == "auto",
-                    slope = slope,
-                    socket = slope_socket
+        prism_recess = mb_prismoid_contains_prepare(
+            mb_prismoid_shape_resolve(
+                shape = mb_block_part_model_data_item(
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -(recess_walls[f] + recess_stud_padding[f]),
+                            0,
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                adjusted = true, 
+                                face = "z+", 
+                                overlap = true
+                            ),
+                        ]],
+                        radius = recess_rr_base,
+                        rad_expand = recess_rounding_radius == "auto",
+                        slope = slope,
+                        socket = slope_socket
+                    )
                 )
-            )
+            ),
+            1,
+            0.5 * stud_diameter_res,
+            stud_max_overhang,
+            false,
+            true
         ),
 
-        prism_recess_inv = mb_prismoid_shape_resolve(
-            shape = mb_block_part_model_data_item(
-                mb_block_part_prismoid(
-                    block_dim = block_dim, 
-                    expand = [[
-                        for(f = [0 : 3])
-                            -(recess_walls[f] - stud_padding[f] + stud_max_overhang),
-                        0,
-                        mb_block_dim_face_edge_expand(
-                            block_dim, 
-                            adjusted = true, 
-                            face = "z+", 
-                            overlap = true
-                        ),
-                    ]],
-                    radius = recess_rr_base,
-                    rad_expand = recess_rounding_radius == "auto",
-                    slope = slope,
-                    socket = slope_socket
+        prism_recess_inv = mb_prismoid_contains_prepare(
+            mb_prismoid_shape_resolve(
+                shape = mb_block_part_model_data_item(
+                    mb_block_part_prismoid(
+                        block_dim = block_dim, 
+                        expand = [[
+                            for(f = [0 : 3])
+                                -(recess_walls[f] - stud_padding[f] + stud_max_overhang),
+                            0,
+                            mb_block_dim_face_edge_expand(
+                                block_dim, 
+                                adjusted = true, 
+                                face = "z+", 
+                                overlap = true
+                            ),
+                        ]],
+                        radius = recess_rr_base,
+                        rad_expand = recess_rounding_radius == "auto",
+                        slope = slope,
+                        socket = slope_socket
+                    )
                 )
-            )
+            ),
+            1,
+            0.5 * stud_diameter_res,
+            0,
+            true,
+            true
         )
     )
         [
@@ -865,18 +893,13 @@ function mb_block_base_cutout_ceiling_offset(block_obj, face, off = 0, cut = fal
     )
     face == 4 || face == 5 ? (face == 4 ? -(offs[0] - off) : -(offs[1] - off)) + mb_block_dim_overlap(block_dim, overlap = cut) : undef;
 
-function mb_block_in_base_cutout(block_obj, off, dia) =
+function mb_block_in_base_cutout(block_obj, off) =
     let(
-        prism_masks = mb_block_get_prism_masks(block_obj),
-        stud_max_overhang = mb_block_get_stud_max_overhang(block_obj)
+        prism_masks = mb_block_get_prism_masks(block_obj)
     )
-    mb_prismoid_contains(
+    mb_prismoid_contains_prepared(
         prism_masks[3],
-        plane = 0,              // obere Plane
-        circle_pos = off,
-        circle_radius = 0.5 * dia,
-        overhang = stud_max_overhang,
-        avoid_vertical_rounding = true
+        off
     );
 
 /**
@@ -931,10 +954,9 @@ function mb_block_stud_cutouts_range(block_obj) =
 
 function mb_block_stud_cutout_render(block_obj, x, y) =
     let(
-        stud_diameter = mb_block_get_stud_cutout_diameter(block_obj),
         stud_offset = mb_block_stud_cutout_offset(block_obj, x, y)
     )
-    !mb_block_in_base_cutout(block_obj, stud_offset, stud_diameter);
+    !mb_block_in_base_cutout(block_obj, stud_offset);
 
 function mb_block_stud_range(block_obj) =
     let(
@@ -977,32 +999,19 @@ function mb_block_stud_render(block_obj, x, y) =
         r_off = recess_stud_shift ? 1 : 0.5,
         recess_stud_offset = mb_block_pos_to_offset(block_obj, [x + r_off, y + r_off, undef]),
 
-        in_recess = has_recess && mb_prismoid_contains(
+        in_recess = has_recess && mb_prismoid_contains_prepared(
             prism_recess,
-            plane = 1,              // obere Plane
-            circle_pos = recess_stud_offset,
-            circle_radius = 0.5 * stud_diameter,
-            overhang = stud_max_overhang,
-            avoid_vertical_rounding = true
+            recess_stud_offset
         ),
-        
-        render_stud = mb_prismoid_contains(
+
+        render_stud = in_recess || mb_prismoid_contains_prepared(
             prism_base_outer,
-            plane = 1,              // obere Plane
-            circle_pos = in_recess ? recess_stud_offset : stud_offset,
-            circle_radius = 0.5 * stud_diameter,
-            overhang = stud_max_overhang,
-            avoid_vertical_rounding = true
+            stud_offset
         ),
-        
-        on_recess_wall = has_recess && !mb_prismoid_contains(
+
+        on_recess_wall = render_stud && has_recess && !in_recess && !mb_prismoid_contains_prepared(
             prism_recess_inv,
-            plane = 1,              // obere Plane
-            circle_pos = stud_offset,
-            circle_radius = 0.5 * stud_diameter,
-            overhang = 0,
-            touch = true,
-            avoid_vertical_rounding = true
+            stud_offset
         )
     )
     [
