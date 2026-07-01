@@ -67,7 +67,7 @@ module mb_block__mb__bricks__connector(config = undef, settings = undef){
             settings = [
                 ["size", [4, 2, 3]],
                 ["offset", [0, 0, 0]],
-                ["connectors", [[3, "male"]]]
+                ["connectors", [[3, "z", "male"]]]
             ]
         );
 
@@ -78,7 +78,7 @@ module mb_block__mb__bricks__connector(config = undef, settings = undef){
             settings = [
                 ["size", [4, 2, 3]],
                 ["offset", [0, 2, 0]],
-                ["connectors", [[2, "female"], [3, "male"]]],
+                ["connectors", [[2, "z", "female"], [3, "z", "male"]]],
                 ["studs", false]
             ]
         );
