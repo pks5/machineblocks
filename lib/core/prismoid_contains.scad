@@ -9,8 +9,34 @@ function mb_prismoid_contains(
     touch = false,
     avoid_vertical_rounding = false
 ) =
+    mb_prismoid_contains_prepared(
+        mb_prismoid_contains_prepare(
+            prismoid,
+            plane,
+            circle_radius,
+            overhang,
+            touch,
+            avoid_vertical_rounding
+        ),
+        circle_pos
+    );
+
+
+// ============================================================
+// Public prepare / calculate API
+// ============================================================
+
+function mb_prismoid_contains_prepare(
+    prismoid,
+    plane,
+    circle_radius,
+    overhang = 0,
+    touch = false,
+    avoid_vertical_rounding = false
+) =
     let(
         eps = 1e-6,
+
         p = (
             prismoid != undef &&
             is_list(prismoid) &&
@@ -20,20 +46,45 @@ function mb_prismoid_contains(
         ) ? prismoid[plane] : undef,
 
         contour = mb_prismoid_c_rounded_contour_2d(p),
-        ok = mb_prismoid_c_ok_point(circle_pos) &&
-             circle_radius != undef &&
-             circle_radius >= 0 &&
-             len(contour) >= 3,
+
+        ok_static =
+            circle_radius != undef &&
+            circle_radius >= 0 &&
+            len(contour) >= 3,
 
         oh = max(0, overhang),
 
-        r = ok
+        r = ok_static
             ? circle_radius + (
                 avoid_vertical_rounding
                     ? mb_prismoid_c_plane_vertical_rounding_max(p)
                     : 0
               )
-            : 0,
+            : 0
+    )
+    [
+        ok_static,  // 0
+        contour,    // 1
+        oh,         // 2
+        r,          // 3
+        touch,      // 4
+        eps         // 5
+    ];
+
+
+function mb_prismoid_contains_prepared(prepared, circle_pos) =
+    let(
+        ok_static = prepared != undef && is_list(prepared) && len(prepared) >= 6
+            ? prepared[0]
+            : false,
+
+        contour = ok_static ? prepared[1] : [],
+        oh      = ok_static ? prepared[2] : 0,
+        r       = ok_static ? prepared[3] : 0,
+        touch   = ok_static ? prepared[4] : false,
+        eps     = ok_static ? prepared[5] : 1e-6,
+
+        ok = ok_static && mb_prismoid_c_ok_point(circle_pos),
 
         inside = ok ? mb_prismoid_c_point_in_polygon(circle_pos, contour, eps) : false,
 
@@ -83,43 +134,6 @@ function mb_prismoid_c_valid_indexed_points_2d(plane) =
         [i, plane[i]]
     ];
 
-/*
-function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 8) =
-    let(
-        A = [Ai[1][0], Ai[1][1]],
-        B = [Bi[1][0], Bi[1][1]],
-        C = [Ci[1][0], Ci[1][1]],
-        idx = Bi[0],
-
-        BA = [A[0] - B[0], A[1] - B[1]],
-        BC = [C[0] - B[0], C[1] - B[1]],
-
-        la = mb_prismoid_c_norm(BA),
-        lc = mb_prismoid_c_norm(BC),
-
-        rin0  = mb_prismoid_c_xy_radius_for_edge(Bi[1], idx, BA),
-        rout0 = mb_prismoid_c_xy_radius_for_edge(Bi[1], idx, BC),
-
-        rin  = min(rin0,  la * 0.49),
-        rout = min(rout0, lc * 0.49),
-
-        Pin = la <= 0
-            ? B
-            : [B[0] + BA[0] / la * rin, B[1] + BA[1] / la * rin],
-
-        Pout = lc <= 0
-            ? B
-            : [B[0] + BC[0] / lc * rout, B[1] + BC[1] / lc * rout]
-    )
-    (rin <= 0 && rout <= 0)
-        ? [B]
-        : [
-            for(s = [0 : steps])
-            let(t = s / steps)
-            mb_prismoid_c_quad_bezier(Pin, B, Pout, t)
-        ];
-*/
-
 function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 12) =
     let(
         A = [Ai[1][0], Ai[1][1]],
@@ -166,37 +180,7 @@ function mb_prismoid_c_corner_curve_2d(Ai, Bi, Ci, steps = 12) =
 // ============================================================
 // Radius helpers
 // ============================================================
-/*
-function mb_prismoid_c_xy_radius_for_edge(point, idx, edge) =
-    let(
-        rr = len(point) > 3 ? point[3] : undef,
-        zrad = rr != undef && is_list(rr) && len(rr) > 0 ? rr[0] : undef,
 
-        xy = zrad != undef &&
-             is_list(zrad) &&
-             len(zrad) > 0 &&
-             zrad[0] != undef
-                ? zrad[0]
-                : 0,
-
-        yx = zrad != undef &&
-             is_list(zrad) &&
-             len(zrad) > 1 &&
-             zrad[1] != undef
-                ? zrad[1]
-                : xy,
-
-        ax = abs(edge[0]),
-        ay = abs(edge[1]),
-
-        corner_group = floor(idx / 2),
-        mirror = corner_group == 1 || corner_group == 3
-    )
-    ax >= ay
-        ? (mirror ? yx : xy)
-        : (mirror ? xy : yx);
-
-*/
 
 function mb_prismoid_c_xy_radius_for_edge(point, idx, edge) =
     let(
