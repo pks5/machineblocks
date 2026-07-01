@@ -6,14 +6,17 @@ use <shared.scad>;
 
 function mb_block_part__screw_holes(block_obj) =
     let(
+        screw_holes = mb_block_get_screw_holes(block_obj)
+    )
+    screw_holes == false || screw_holes == "none" ? undef :
+    let(
         block_dim = mb_block_get_dim(block_obj),
-        screw_holes = mb_block_get_screw_holes(block_obj),
         screw_hole_diameter = mb_block_get_screw_hole_diameter(block_obj),
         screw_hole_depth = mb_block_get_screw_hole_depth(block_obj),
         screw_hole_inset_thickness = mb_block_get_screw_hole_inset_thickness(block_obj),
         screw_hole_inset_depth = mb_block_get_screw_hole_inset_depth(block_obj)
     )
-    screw_holes == false || screw_holes == "none" ? undef :
+    
     mb_block_part_model(
         type = "list",
         name = "screw_holes",

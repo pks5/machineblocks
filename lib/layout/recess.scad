@@ -10,6 +10,7 @@ use <shared.scad>;
 * ------
 */
 function mb_block_part__recess(block_obj) = 
+    !mb_block_has_recess(block_obj) ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
         socket = mb_block_get_slope_socket(block_obj),
@@ -27,8 +28,7 @@ function mb_block_part__recess(block_obj) =
             overlap = true
         )
     )
-    mb_block_has_recess(block_obj) 
-    ? mb_block_part_model(
+    mb_block_part_model(
         type = "list",
         name = "recess",
         items = [
@@ -109,5 +109,4 @@ function mb_block_part__recess(block_obj) =
                         ]
                     )
         ]
-    )
-    : undef;
+    );

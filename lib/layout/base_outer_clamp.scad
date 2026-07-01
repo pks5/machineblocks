@@ -10,9 +10,9 @@ use <shared.scad>;
 * ----------------
 */
 function mb_block_part__base_clamp_outer(block_obj) = 
+    !mb_block_get_inverted(block_obj) ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
-        block_inverted = mb_block_get_inverted(block_obj),
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
@@ -26,7 +26,7 @@ function mb_block_part__base_clamp_outer(block_obj) =
             off = base_clamp_height + base_clamp_offset
         )
     )
-    block_inverted ? 
+    
         mb_block_part_prismoid(
             name = "base_outer_clamp",
             block_dim = block_dim, 
@@ -41,5 +41,4 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 bottom,
                 top
             ]]
-        )
-        : undef;
+        );

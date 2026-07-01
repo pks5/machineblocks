@@ -4,7 +4,9 @@ use <../core/block_dim.scad>;
 use <../core/block_part.scad>;
 
 function mb_block_part__pcb_holder(block_obj) = 
-    let(pcb = mb_block_get_pcb(block_obj))
+    let(
+        pcb = mb_block_get_pcb(block_obj)
+    )
     pcb == false || pcb == "none" ? undef :
     let(
         pcb_dimensions = mb_block_get_pcb_dimensions(block_obj),

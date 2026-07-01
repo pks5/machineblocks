@@ -11,13 +11,13 @@ use <base_cutout.scad>;
 * -----------------
 */
 function mb_block_part__top_plate_helpers(block_obj) =
+    !mb_block_has_top_plate_helpers(block_obj) ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj)
     ) 
-    mb_block_has_top_plate_helpers(block_obj) 
-        ? mb_block_part_model(
+    mb_block_part_model(
             type = "difference",
             name = "top_plate_helpers",
             items = [
@@ -52,5 +52,4 @@ function mb_block_part__top_plate_helpers(block_obj) =
                     top_offset = 0, //top_plate_helpers_height
                 )
             ]
-        )
-        : undef;
+        );

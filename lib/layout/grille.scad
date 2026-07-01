@@ -8,7 +8,9 @@ use <../core/block_part.scad>;
 * ------
 */
 function mb_block_part__grille(block_obj) = 
-    let(grille = mb_block_get_grille(block_obj))
+    let(
+        grille = mb_block_get_grille(block_obj)
+    )
     grille == "none" ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),

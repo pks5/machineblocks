@@ -12,7 +12,7 @@ use <standard_cutout.scad>;
 use <recess.scad>;
 use <relief_cut.scad>;
 
-use <studs_new.scad>;
+use <studs.scad>;
 use <tongue.scad>;
 
 use <surface_pattern.scad>;
