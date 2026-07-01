@@ -318,7 +318,7 @@ function mb_block_obj(
         * Prismoids
         */
         
-        prism_base_outer = mb_prismoid_contains_prepare(
+        prism_base_outer = has_studs == false ? undef : mb_prismoid_contains_prepare(
             mb_prismoid_shape_resolve(
                 shape = mb_block_part_model_data_item(
                     mb_block_part_prismoid(
@@ -366,7 +366,7 @@ function mb_block_obj(
             true
         ),
 
-        prism_recess = mb_prismoid_contains_prepare(
+        prism_recess = has_studs == false || !recess ? undef : mb_prismoid_contains_prepare(
             mb_prismoid_shape_resolve(
                 shape = mb_block_part_model_data_item(
                     mb_block_part_prismoid(
@@ -396,7 +396,7 @@ function mb_block_obj(
             true
         ),
 
-        prism_recess_inv = mb_prismoid_contains_prepare(
+        prism_recess_inv = has_studs == false || !recess ? undef : mb_prismoid_contains_prepare(
             mb_prismoid_shape_resolve(
                 shape = mb_block_part_model_data_item(
                     mb_block_part_prismoid(
