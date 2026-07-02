@@ -1393,9 +1393,10 @@ function mb_block_recess_wall_gap(block_obj, gap) =
                 gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
                 max_gap_length = mod_size[axis_inverse] - gap_start_pos,
                 gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
-                gap_wall_thickness = is_undef(gap[3]) || gap[3] == "auto" ? recess_wall_thickness[axis == 0 ? 0 : 2] : gap[3],
-                gap_start_offset = gap_start_pos + gap_wall_thickness,
-                gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + gap_wall_thickness
+                rwt = recess_wall_thickness[axis == 0 ? 0 : 2],
+                gap_wall_thickness = is_undef(gap[3]) || gap[3] == "auto" ? rwt : gap[3],
+                gap_start_offset = max(rwt, gap_start_pos + gap_wall_thickness),
+                gap_end_offset = max(rwt, mod_size[axis_inverse] - gap_length - gap_start_pos + gap_wall_thickness)
             )
             [
                 face,
