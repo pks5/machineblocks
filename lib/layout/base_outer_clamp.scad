@@ -10,10 +10,12 @@ use <shared.scad>;
 * ----------------
 */
 function mb_block_part__base_clamp_outer(block_obj) = 
-    !mb_block_get_inverted(block_obj) ? undef :
+    let(
+        base_clamp_outer = mb_block_get_base_clamp_outer(block_obj)
+    )
+    base_clamp_outer == [0, 0, 0, 0] ? undef :
     let(
         block_dim = mb_block_get_dim(block_obj),
-        base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
         
@@ -34,11 +36,12 @@ function mb_block_part__base_clamp_outer(block_obj) =
                 for(f = [0 : 3])
                     mb_block_dim_face_edge_expand(
                         block_dim, 
-                        exp = base_clamp_thickness, 
+                        exp = base_clamp_outer[f], 
                         adjusted = true, 
                         face = f
                     ),
                 bottom,
                 top
-            ]]
+            ]],
+            radius = mb_block_get_base_rounding_radius(block_obj)
         );

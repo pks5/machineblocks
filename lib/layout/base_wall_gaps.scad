@@ -18,9 +18,8 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
         slope_neg = mb_slope_filter(slope, -1),
         slope_pos = mb_slope_filter(slope, 1),
         base_wall_gap_res = mb_block_base_wall_gap(block_obj, wall_gap),
-        block_inverted = mb_block_get_inverted(block_obj),
-        inner_adj = is_undef(inner_adj) ? 0 : inner_adj,
-        outer_adj = block_inverted ? mb_block_get_base_clamp_thickness(block_obj) : 0
+        base_clamp_outer = mb_block_get_base_clamp_outer(block_obj),
+        inner_adj = is_undef(inner_adj) ? 0 : inner_adj
     )
     
     mb_block_part_model(
@@ -47,7 +46,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                             mb_face_has_common(face, f) ? 
                                                 mb_block_dim_face_edge_expand(
                                                     block_dim, 
-                                                    exp = outer_adj, 
+                                                    exp = base_clamp_outer[f], 
                                                     adjusted = true, 
                                                     face = f, 
                                                     overlap = true
@@ -68,7 +67,7 @@ function mb_block_part__base_wall_gaps(block_obj, planes, bottom, top, wall_gap,
                                             mb_face_has_common(face, f) ? 
                                                 mb_block_dim_face_edge_expand(
                                                     block_dim, 
-                                                    exp = outer_adj, 
+                                                    exp = base_clamp_outer[f], 
                                                     adjusted = true, 
                                                     face = f, 
                                                     overlap = true

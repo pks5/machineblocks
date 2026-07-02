@@ -90,7 +90,6 @@ function mb_param_baseCutoutMaxDepth(config, settings, default = undef) = mb_par
 function mb_param_baseClampOffset(config, settings, default = undef) = mb_param(config, settings, "baseClampOffset", default != undef ? default : 0.25);
 function mb_param_baseClampHeight(config, settings, default = undef) = mb_param(config, settings, "baseClampHeight", default != undef ? default : 0.5);
 function mb_param_baseClampThickness(config, settings, default = undef) = mb_param(config, settings, "baseClampThickness", default != undef ? default : 0.1);
-//TODO either delete (base clamp outer in cutouts only, or make xyz configurable for standalone use in composite blocks)
 function mb_param_baseClampOuter(config, settings, default = undef) = mb_param(config, settings, "baseClampOuter", default != undef ? default : false);
 
 // Base Wall

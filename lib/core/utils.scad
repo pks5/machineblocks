@@ -81,7 +81,25 @@ function mb_unit_mul(grid_cfg, scale = 1, from = "grd", to="mm") =
 
 
 
-
+function mb_bool4_value(mask, value) =
+    is_bool(mask)
+        ? [for (i = [0 : 3]) mask ? value : 0]
+        : let(n = len(mask))
+            n <= 1
+                ? [for (i = [0 : 3]) (n > 0 && mask[0] == true) ? value : 0]
+                : n == 2
+                    ? [
+                        mask[0] == true ? value : 0,
+                        mask[0] == true ? value : 0,
+                        mask[1] == true ? value : 0,
+                        mask[1] == true ? value : 0
+                    ]
+                    : [
+                        mask[0] == true ? value : 0,
+                        mask[1] == true ? value : 0,
+                        mask[2] == true ? value : 0,
+                        mask[3] == true ? value : 0
+                    ];
 
 
 

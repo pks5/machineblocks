@@ -67,7 +67,6 @@ function mb_block_obj(
         
         adj_size = mb_block_dim_adj_size(block_dim),
 
-        inverted = false,
         printerNozzleDiameter = mb_param_printerNozzleDiameter(config, settings) * mm2grd_xy,
         printerLayerHeight = mb_param_printerLayerHeight(config, settings) * mm2grd_z,
         
@@ -108,18 +107,20 @@ function mb_block_obj(
         * Base Wall Thickness
         */
         baseWallThickness = mb_param_baseWallThickness(config, settings),
-        baseClampThickness = mb_param_baseClampThickness(config, settings),
+        baseClampThickness = mb_param_baseClampThickness(config, settings) * mm2grd_xy,
+        base_clamp_outer = mb_bool4_value(mb_param_baseClampOuter(config, settings), baseClampThickness),
+        
         stud_diameter = mb_param_studDiameter(config, settings),
         p_diameter = grid_cfg[1] - stud_diameter,
         wall_thickness_pref = (baseWallThickness == "auto" ? 0.5 * p_diameter : baseWallThickness) * mbu2grd_xy,
         wall_thickness_final = wall_thickness_pref + mb_param_baseWallThicknessAdjustment(config, settings) * mm2grd_xy,
-        wall_thickness_clamp = wall_thickness_final + baseClampThickness * mm2grd_xy,
+        wall_thickness_clamp = wall_thickness_final + baseClampThickness,
         
         /*
         * Base Clamp
         */
         base_clamp = [
-            baseClampThickness * mm2grd_xy, // Thickness
+            baseClampThickness, // Thickness
             mb_param_baseClampHeight(config, settings) * mbu2grd_z, // Height
             mb_param_baseClampOffset(config, settings) * mbu2grd_z // Offset
         ],
@@ -535,7 +536,7 @@ function mb_block_obj(
                 surface_pattern_depth
             ],  // 18 - 
             [
-                inverted
+                base_clamp_outer
             ],  // 19 - Inverted
             [
                 id, 
@@ -632,7 +633,7 @@ function mb_block_get_center(block_obj) =                           block_obj[0]
 
 function mb_block_get_id(block_obj) =                               block_obj[20][0];
 
-function mb_block_get_inverted(block_obj) =                         block_obj[19][0];
+function mb_block_get_base_clamp_outer(block_obj) =                 block_obj[19][0];
 
 // Quality
 
@@ -1392,8 +1393,9 @@ function mb_block_recess_wall_gap(block_obj, gap) =
                 gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
                 max_gap_length = mod_size[axis_inverse] - gap_start_pos,
                 gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
-                gap_start_offset = gap_start_pos + recess_wall_thickness[axis == 0 ? 0 : 2],
-                gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + recess_wall_thickness[axis == 0 ? 1 : 3]
+                gap_wall_thickness = is_undef(gap[3]) || gap[3] == "auto" ? recess_wall_thickness[axis == 0 ? 0 : 2] : gap[3],
+                gap_start_offset = gap_start_pos + gap_wall_thickness,
+                gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + gap_wall_thickness
             )
             [
                 face,
