@@ -1003,10 +1003,10 @@ function mb_block_stud_render(block_obj, x, y) =
         stud_padding = mb_block_get_stud_padding(block_obj),
 
         stud_area = [
-            x + off - 0.5 * stud_diameter - stud_padding[0],
-            x + off + 0.5 * stud_diameter + stud_padding[1],
-            y + off - 0.5 * stud_diameter - stud_padding[2],
-            y + off + 0.5 * stud_diameter + stud_padding[3]
+            x + off - 0.5 * stud_diameter - stud_padding[0] + stud_max_overhang,
+            x + off + 0.5 * stud_diameter + stud_padding[1] - stud_max_overhang,
+            y + off - 0.5 * stud_diameter - stud_padding[2] + stud_max_overhang,
+            y + off + 0.5 * stud_diameter + stud_padding[3] - stud_max_overhang
         ],
         
         recess_stud_shift = mb_block_get_recess_stud_shift(block_obj),
@@ -1015,10 +1015,10 @@ function mb_block_stud_render(block_obj, x, y) =
         recess_stud_padding = mb_block_get_recess_stud_padding(block_obj),
         
         recess_stud_area = [
-            x + r_off - 0.5 * stud_diameter - recess_stud_padding[0],
-            x + r_off + 0.5 * stud_diameter + recess_stud_padding[1],
-            y + r_off - 0.5 * stud_diameter - recess_stud_padding[2],
-            y + r_off + 0.5 * stud_diameter + recess_stud_padding[3]
+            x + r_off - 0.5 * stud_diameter - recess_stud_padding[0] + stud_max_overhang,
+            x + r_off + 0.5 * stud_diameter + recess_stud_padding[1] - stud_max_overhang,
+            y + r_off - 0.5 * stud_diameter - recess_stud_padding[2] + stud_max_overhang,
+            y + r_off + 0.5 * stud_diameter + recess_stud_padding[3] - stud_max_overhang
         ],
 
         in_recess = has_recess && mb_prismoid_contains_prepared(
