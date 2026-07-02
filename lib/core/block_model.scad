@@ -513,7 +513,9 @@ function mb_block_obj(
                 mb_param_recessStudShift(config, settings),
                 stud_clamp_thickness,
                 stud_clamp_height,
-                stud_clamp_offset
+                stud_clamp_offset,
+                stud_padding,
+                recess_stud_padding
             ],  // 14 - 
             [
                 tube_diameter_xyz, 
@@ -678,6 +680,7 @@ function mb_block_get_recess_depth(block_obj) =                     block_obj[8]
 function mb_block_get_recess_wall_gaps(block_obj) =                 block_obj[8][3];
 function mb_block_get_recess_rounding_radius(block_obj) =           block_obj[8][4];
 
+
 function mb_block_get_base_wall_gaps(block_obj) =                   block_obj[17][0];
 
 function mb_block_get_grid_cfg(block_obj) =                         block_obj[7][0];
@@ -748,6 +751,8 @@ function mb_block_get_stud_type(block_obj) =                        block_obj[14
 function mb_block_get_recess_studs(block_obj) =                     block_obj[14][13];
 function mb_block_get_recess_stud_type(block_obj) =                 block_obj[14][14];
 function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14][15];
+function mb_block_get_stud_padding(block_obj) =                     block_obj[14][19];
+function mb_block_get_recess_stud_padding(block_obj) =              block_obj[14][20];
 
 // Stud Clamp
 function mb_block_get_stud_clamp_thickness(block_obj) =             block_obj[14][16];
@@ -995,30 +1000,104 @@ function mb_block_stud_render(block_obj, x, y) =
         stud_shift = mb_block_get_stud_shift(block_obj),
         off = stud_shift ? 1 : 0.5,
         stud_offset = mb_block_pos_to_offset(block_obj, [x + off, y + off, undef]),
+        stud_padding = mb_block_get_stud_padding(block_obj),
+
+        stud_area = [
+            x + off - 0.5 * stud_diameter - stud_padding[0],
+            x + off + 0.5 * stud_diameter + stud_padding[1],
+            y + off - 0.5 * stud_diameter - stud_padding[2],
+            y + off + 0.5 * stud_diameter + stud_padding[3]
+        ],
         
         recess_stud_shift = mb_block_get_recess_stud_shift(block_obj),
         r_off = recess_stud_shift ? 1 : 0.5,
         recess_stud_offset = mb_block_pos_to_offset(block_obj, [x + r_off, y + r_off, undef]),
+        recess_stud_padding = mb_block_get_recess_stud_padding(block_obj),
+        
+        recess_stud_area = [
+            x + r_off - 0.5 * stud_diameter - recess_stud_padding[0],
+            x + r_off + 0.5 * stud_diameter + recess_stud_padding[1],
+            y + r_off - 0.5 * stud_diameter - recess_stud_padding[2],
+            y + r_off + 0.5 * stud_diameter + recess_stud_padding[3]
+        ],
 
         in_recess = has_recess && mb_prismoid_contains_prepared(
             prism_recess,
             recess_stud_offset
         ),
 
+        rwgs = mb_block_get_recess_wall_gaps(block_obj),
+
+        found_rec = [
+            if(has_recess && !in_recess)
+                for(rwg = rwgs)
+                    let(
+                        gap_data = mb_block_recess_wall_gap(block_obj, rwg)
+                    )
+                    for(gap = gap_data)
+                        let(
+                            face = gap[0],
+                            axis = mb_face_to_axis(face),
+                            axis_op = mb_axis_inverse(axis),
+                            fc = mb_axis_faces(axis_op),
+                            gap_start_offset = gap[5],
+                            gap_end_offset = gap[6]
+                        )
+                        if(
+                            (recess_stud_area[fc[0]] >= gap_start_offset && recess_stud_area[fc[0]] <= gap_end_offset)
+                            && (recess_stud_area[fc[1]] >= gap_start_offset && recess_stud_area[fc[1]] <= gap_end_offset)
+                        )
+                        1
+        ],
+        
+
+        
+
+        
+
         render_stud = in_recess || mb_prismoid_contains_prepared(
             prism_base_outer,
-            stud_offset
+            len(found_rec) > 0 ? recess_stud_offset : stud_offset
         ),
 
         on_recess_wall = render_stud && has_recess && !in_recess && !mb_prismoid_contains_prepared(
             prism_recess_inv,
             stud_offset
-        )
+        ),
+
+        
+
+        
+        
+        found = [
+            if(has_recess && on_recess_wall)
+                for(rwg = rwgs)
+                    let(
+                        gap_data = mb_block_recess_wall_gap(block_obj, rwg)
+                    )
+                    for(gap = gap_data)
+                        let(
+                            face = gap[0],
+                            axis = mb_face_to_axis(face),
+                            axis_op = mb_axis_inverse(axis),
+                            fc = mb_axis_faces(axis_op),
+                            gap_start_offset = gap[5],
+                            gap_end_offset = gap[6]
+                        )
+                        if(
+                            (stud_area[fc[0]] >= gap_start_offset && stud_area[fc[0]] <= gap_end_offset)
+                            || (stud_area[fc[1]] >= gap_start_offset && stud_area[fc[1]] <= gap_end_offset)
+                        )
+                        1
+        ],
+         
+        in_rec = in_recess || len(found_rec) > 0,
+        
     )
     [
-        render_stud && (!has_recess || in_recess || on_recess_wall),
-        in_recess ? recess_stud_offset : stud_offset,
-        in_recess,
+        render_stud && (!has_recess || in_rec || (on_recess_wall && len(found) == 0)),
+        in_rec ? recess_stud_offset : stud_offset,
+        in_rec,
         stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter]
     ];
 
