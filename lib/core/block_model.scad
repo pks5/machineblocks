@@ -1550,10 +1550,12 @@ function mb_block_base_wall_gap(block_obj, gap) =
         let(
             axis = mb_face_to_axis(face),
             axis_inverse = mb_axis_inverse(axis),
-            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            gap_length = is_undef(gap[2]) ? 1 : min(mod_size[axis_inverse] - gap_start_pos, gap[2]),
-            gap_start_offset = gap_start_pos + wall_thickness,
-            gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_pos + wall_thickness
+            gap_start_pos = is_undef(gap[1]) ? min_max_index[0][axis_inverse] : max(min_max_index[0][axis_inverse], gap[1]),
+            gap_start_wall_length = gap_start_pos - min_max_index[0][axis_inverse],
+            max_gap_length = mod_size[axis_inverse] - gap_start_wall_length,
+            gap_length = is_undef(gap[2]) ? 1 : min(max_gap_length, gap[2]),
+            gap_start_offset = gap_start_wall_length + wall_thickness,
+            gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_wall_length + wall_thickness
         )
         [
             face,
@@ -1565,8 +1567,6 @@ function mb_block_base_wall_gap(block_obj, gap) =
             min_max_index[1][axis_inverse] + 1 - gap_end_offset
         ]
     ];
-
-
 
 
 function mb_block_in_base_wall_gap(block_obj, face, pos_min, pos_max) = 
@@ -1623,11 +1623,12 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false)
         let(
             axis = mb_face_to_axis(face),
             axis_inverse = mb_axis_inverse(axis),
-            gap_start_pos = is_undef(gap[1]) ? 0 : max(0, gap[1]),
-            max_gap_length = mod_size[1-axis] - gap_start_pos,
+            gap_start_pos = is_undef(gap[1]) ? min_max_index[0][axis_inverse] : max(min_max_index[0][axis_inverse], gap[1]),
+            gap_start_wall_length = gap_start_pos - min_max_index[0][axis_inverse],
+            max_gap_length = mod_size[axis_inverse] - gap_start_wall_length,
             gap_length = is_undef(gap[2]) ? max_gap_length : min(max_gap_length, gap[2]),
-            gap_start_offset = gap_start_pos + wall_thickness,
-            gap_end_offset = mod_size[1-axis] - gap_length - gap_start_pos + wall_thickness
+            gap_start_offset = gap_start_wall_length + wall_thickness,
+            gap_end_offset = mod_size[axis_inverse] - gap_length - gap_start_wall_length + wall_thickness
         )
         [
             face,
@@ -1639,6 +1640,8 @@ function mb_block_tongue_wall_gap(block_obj, gap, clamp = false, groove = false)
             min_max_index[1][axis_inverse] + 1 - gap_end_offset
         ]
     ];
+
+    
 
 function mb_block_tongue_rounding_radius(block_obj, groove, omit_face = undef) =
     let(
