@@ -1,0 +1,19 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "bottomCount": "5",
+            "brickSize": "[4, 2, 6]",
+            "colorA": "#55AB68",
+            "colorB": "#303D4E",
+            "seamOverlap": "0.01"
+        },
+        "New set 2": {
+            "bottomCount": "7",
+            "brickSize": "[4, 2, 3]",
+            "colorA": "#55AB68",
+            "colorB": "#303D4E",
+            "seamOverlap": "0.01"
+        }
+    }
+}

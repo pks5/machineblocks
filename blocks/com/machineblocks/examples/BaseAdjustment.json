@@ -1,0 +1,14 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "colorP1": "#BEC3C6",
+            "colorP2": "#8548A8",
+            "colorP3": "#925CB1",
+            "colorP4": "#D65745",
+            "direction": "west",
+            "seamOverlap": "0.01",
+            "size": "[8, 12, 2]"
+        }
+    }
+}

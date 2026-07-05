@@ -1,9 +1,9 @@
 /**
  * MachineBlocks.com Block File
  *
- * Name: Staple Pyramid
- * Filename: Staple.scad
- * FQN: com.machineblocks.examples.Staple
+ * Name: FlatPyramid
+ * Filename: FlatPyramid.scad
+ * FQN: com.machineblocks.examples.FlatPyramid
  */
 
 use <../../../../lib/block.scad>;
@@ -40,7 +40,7 @@ size = [
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Staple(
+mb__com__machineblocks__examples__FlatPyramid(
     config = mb_config,
     settings = [
         ["size", size],
@@ -55,7 +55,7 @@ mb__com__machineblocks__examples__Staple(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Staple(config = undef, settings = undef){
+module mb__com__machineblocks__examples__FlatPyramid(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.examples.staple_pyramid");
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
@@ -91,6 +91,7 @@ module mb__com__machineblocks__examples__Staple(config = undef, settings = undef
                     settings = [
                         ["id", mb_block_id(blockId, str("row_", row, "_brick_", i))],
                         ["size", brickSize],
+                        ["slope", [i == 0 ? 0.5 * brickSize[0] : 0, i == rowCount - 1 ? 0.5 * brickSize[0] : 0, 0, 0]],
                         ["offset", [
                             rowOffsetX + i * brickSize[0],
                             0,
