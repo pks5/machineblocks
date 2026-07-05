@@ -1,9 +1,9 @@
 /**
  * MachineBlocks.com Block File
  *
- * Name: Corner Brick
- * Filename: corner.scad
- * Package: mb.bricks.corner
+ * Name: Cross / Corner Brick
+ * Filename: Cross.scad
+ * FQN: com.machineblocks.examples.Cross
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -18,9 +18,9 @@
  * Imports
  */
 // MachineBlocks Library
-use <../../../lib/block.scad>;
+use <../../../../lib/block.scad>;
 // Global Config
-include <../../../config/mb_config.scad>;
+include <../../../../config/mb_config.scad>;
 
 /*
  * Customization
@@ -91,7 +91,7 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../../pattern/anc
 /*
  * Main Module Call
  */
-mb__mb__bricks__corner(
+mb__com__machineblocks__examples__Cross(
     config = mb_config,
     settings = [
         ["size", size],
@@ -123,7 +123,7 @@ mb__mb__bricks__corner(
 /*
  * Main Module Definition
  */
-module mb__mb__bricks__corner(config = undef, settings = undef){
+module mb__com__machineblocks__examples__Cross(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
@@ -176,6 +176,11 @@ module mb__mb__bricks__corner(config = undef, settings = undef){
         ["studIcon", studIcon]
     ];
 
+    brick1_size_y = min(size[1], brick1SizeY);
+    brick1_offset_y = min(size[1] - brick1_size_y, brick1OffsetY);
+    brick2_size_x = min(size[0], brick2SizeX);
+    brick2_offset_x = min(size[0] - brick2SizeX, brick2OffsetX);
+
     // Wrapper block
     mb_block(
         config = config,
@@ -184,7 +189,7 @@ module mb__mb__bricks__corner(config = undef, settings = undef){
             ["studs", false],
             ["size", size],
             ["align", align],
-            ["alignChildren", "ccs"],
+            
             ["offset", offset],
             ["direction", direction]
         ]
@@ -193,10 +198,9 @@ module mb__mb__bricks__corner(config = undef, settings = undef){
         mb_block(
             config = config,
             settings = concat(sharedSettings, [
-                ["size", [size[0], brick1SizeY, size[2]]],
-                ["align", "ccs"],
-                ["offset", [0, brick1OffsetY - 0.5*(size[1] - brick1SizeY), 0]],
-                ["baseWallGaps", [["y", brick2OffsetX, brick2SizeX]]]
+                ["size", [size[0], brick1_size_y, size[2]]],
+                ["offset", [0, brick1_offset_y, 0]],
+                ["baseWallGaps", [["y", brick2_offset_x, brick2_size_x]]]
             ])
         );
 
@@ -204,10 +208,9 @@ module mb__mb__bricks__corner(config = undef, settings = undef){
         mb_block(
             config = config,
             settings = concat(sharedSettings, [
-                ["size", [brick2SizeX, size[1], size[2]]],
-                ["align", "ccs"],
-                ["offset", [brick2OffsetX - 0.5*(size[0] - brick2SizeX), 0, 0]],
-                ["baseWallGaps", [["x", brick1OffsetY, brick1SizeY]]]
+                ["size", [brick2_size_x, size[1], size[2]]],
+                ["offset", [brick2_offset_x, 0, 0]],
+                ["baseWallGaps", [["x", brick1_offset_y, brick1_size_y]]]
             ])
         );
     }
