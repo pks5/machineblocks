@@ -73,7 +73,7 @@ studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 // Stud Sink (mbu)
-studSink = 0.25; // [0:0.125:1]
+studBaseOverlap = 0.25; // [0:0.125:1]
 
 /* [Style] */
 
@@ -112,7 +112,7 @@ mb__com__machineblocks__examples__Cross(
         ["studShift", studShift],
         ["studType", studType],
         ["studPadding", studPadding],
-        ["studSink", studSink],
+        ["studBaseOverlap", studBaseOverlap],
         ["baseColor", baseColor],
         ["surfacePattern", surfacePattern],
         ["surfacePatternScale", surfacePatternScale],
@@ -140,7 +140,7 @@ module mb__com__machineblocks__examples__Cross(config = undef, settings = undef)
     grilleCount = mb_param_grilleCount(config, settings);
     studs = mb_param_studs(config, settings);
     studShift = mb_param_studShift(config, settings);
-    studSink = mb_param_studBaseOverlap(config, settings);
+    studBaseOverlap = mb_param_studBaseOverlap(config, settings);
     studType = mb_param_studType(config, settings);
     studPadding = mb_param_studPadding(config, settings);
     baseColor = mb_param_baseColor(config, settings);
@@ -167,7 +167,7 @@ module mb__com__machineblocks__examples__Cross(config = undef, settings = undef)
         ["grilleCount", grilleCount],
         ["studs", studs],
         ["studShift", studShift],
-        ["studSink", studSink],
+        ["studBaseOverlap", studBaseOverlap],
         ["studType", studType],
         ["studPadding", studPadding],
         ["baseColor", baseColor],
@@ -189,7 +189,6 @@ module mb__com__machineblocks__examples__Cross(config = undef, settings = undef)
             ["studs", false],
             ["size", size],
             ["align", align],
-            
             ["offset", offset],
             ["direction", direction]
         ]
