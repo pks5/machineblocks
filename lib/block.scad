@@ -23,6 +23,7 @@ use <layout/base.scad>;
 
 use <shape/cube.scad>;
 
+include <core/parameters.scad>;
 include <core/api.scad>;
 
 /*
