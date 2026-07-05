@@ -515,7 +515,9 @@ function mb_block_obj(
                 stud_clamp_height,
                 stud_clamp_offset,
                 stud_padding,
-                recess_stud_padding
+                recess_stud_padding,
+                mb_param_recessWallStuds(config, settings),
+                mb_param_recessWallGapStuds(config, settings)
             ],  // 14 - 
             [
                 tube_diameter_xyz, 
@@ -753,6 +755,8 @@ function mb_block_get_recess_stud_type(block_obj) =                 block_obj[14
 function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14][15];
 function mb_block_get_stud_padding(block_obj) =                     block_obj[14][19];
 function mb_block_get_recess_stud_padding(block_obj) =              block_obj[14][20];
+function mb_block_get_recess_wall_studs(block_obj) =                block_obj[14][21];
+function mb_block_get_recess_wall_gap_studs(block_obj) =            block_obj[14][22];
 
 // Stud Clamp
 function mb_block_get_stud_clamp_thickness(block_obj) =             block_obj[14][16];
@@ -996,6 +1000,8 @@ function mb_block_stud_render(block_obj, x, y) =
         
         has_recess = mb_block_has_recess(block_obj),
         has_recess_studs = mb_block_has_recess_studs(block_obj),
+        has_recess_wall_studs = mb_block_get_recess_wall_studs(block_obj),
+        has_recess_wall_gap_studs = mb_block_get_recess_wall_gap_studs(block_obj),
         stud_max_overhang = mb_block_get_stud_max_overhang(block_obj),
         
         stud_shift = mb_block_get_stud_shift(block_obj),
@@ -1030,7 +1036,7 @@ function mb_block_stud_render(block_obj, x, y) =
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
 
         found_rec = [
-            if(has_recess && has_recess_studs && !in_recess)
+            if(has_recess && has_recess_studs && has_recess_wall_gap_studs && !in_recess)
                 for(rwg = rwgs)
                     let(
                         gap_data = mb_block_recess_wall_gap(block_obj, rwg)
@@ -1071,7 +1077,7 @@ function mb_block_stud_render(block_obj, x, y) =
         
         
         found = [
-            if(has_recess && on_recess_wall)
+            if(has_recess && has_recess_wall_studs && on_recess_wall)
                 for(rwg = rwgs)
                     let(
                         gap_data = mb_block_recess_wall_gap(block_obj, rwg)

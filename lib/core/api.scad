@@ -289,6 +289,9 @@ function mb_param_recessRoundingRadius(config, settings, default = undef) = mb_p
 function mb_param_recessDepth(config, settings, default = undef) = mb_param(config, settings, "recessDepth", default != undef ? default : "auto");
 function mb_param_recessWallThickness(config, settings, default = undef) = mb_param(config, settings, "recessWallThickness", default != undef ? default : 0.333);
 function mb_param_recessStuds(config, settings, default = undef) = mb_param(config, settings, "recessStuds", default != undef ? default : true);
+function mb_param_recessWallStuds(config, settings, default = undef) = mb_param(config, settings, "recessWallStuds", default != undef ? default : true);
+function mb_param_recessWallGapStuds(config, settings, default = undef) = mb_param(config, settings, "recessWallGapStuds", default != undef ? default : false);
+
 function mb_param_recessStudPadding(config, settings, default = undef) = mb_param(config, settings, "recessStudPadding", default != undef ? default : 0.2);
 function mb_param_recessStudType(config, settings, default = undef) = mb_param(config, settings, "recessStudType", default != undef ? default : "solid");
 function mb_param_recessStudShift(config, settings, default = undef) = mb_param(config, settings, "recessStudShift", default != undef ? default : false);
