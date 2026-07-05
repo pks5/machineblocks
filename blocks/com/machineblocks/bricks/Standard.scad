@@ -17,9 +17,7 @@
 /*
  * Imports
  */
-// MachineBlocks Library
 use <../../../../lib/block.scad>;
-// Global Config
 include <../../../../config/mb_config.scad>;
 
 /*
@@ -119,7 +117,7 @@ recessWallThickness = [0.333, 0.333, 0.333, 0.333]; // [0:0.001:128]
 // Auto Recess Depth
 recessDepthAuto = true;
 // Recess Depth (grid)
-recessDepth = 0; //[0:0.25:32]
+recessDepth = 0; // [0:0.25:32]
 // Recess Stud Padding
 recessStudPadding = [0.2, 0.2, 0.2, 0.2];
 
@@ -133,10 +131,10 @@ slope = [0, 0, 0, 0]; // [-128:0.1:128]
 // Text to write on the brick.
 text = "";
 // Side of the brick on which text is written.
-textSide = 5; // [0:X0, 1:X1, 2:Y0, 3:Y1, 4:Z0, 5:Z1]
+textFace = 5; // [0:X-, 1:X+, 2:Y-, 3:Y+, 4:Z-, 5:Z+]
 // Letter Depth (mbu)
 textDepth = 0.5; // [-3.2:0.05:3.2]
-// Text Size (pt)
+// Text Size
 textSize = 9; // [1:32]
 // Font
 textFont = "RBNo3.1 Black"; // [Creato Display, RBNo3.1 Black, Font Awesome 6 Free Regular, Font Awesome 6 Free Solid]
@@ -156,7 +154,7 @@ surfacePatternScale = 0.2; // [0:0.001:1]
 // Surface Pattern
 surfacePattern = "none"; // [none:None, ../pattern/honeycombs.svg:Honeycombs, ../pattern/squares.svg:Squares, ../pattern/squares-diagonal.svg:Squares Diagonal, ../pattern/diamonds.svg:Diamonds, ../pattern/textile.svg:Textile, ../pattern/card-background.svg:Card Background, ../pattern/dots.svg:Dots, ../pattern/circuit-board.svg:Circuit Board]
 // Icons on studs
-studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-solid-full.svg:Anchor, ../pattern/bell-solid-full.svg:Bell, ../pattern/bolt-solid-full.svg:Bolt, ../pattern/bomb-solid-full.svg:Bomb, ../pattern/bullhorn-solid-full.svg:Bullhorn, ../pattern/car-side-solid-full.svg:CarSide, ../pattern/car-solid-full.svg:Car, ../pattern/cat-solid-full.svg:Cat, ../pattern/certificate-solid-full.svg:Certificate, ../pattern/circle-radiation-solid-full.svg:CircleRadiation, ../pattern/circle-solid-full.svg:Circle, ../pattern/diamond-solid-full.svg:Diamond, ../pattern/dog-solid-full.svg:Dog, ../pattern/earth-americas-solid-full.svg:EarthAmericas, ../pattern/face-flushed-solid-full.svg:FaceFlushed, ../pattern/face-grin-hearts-solid-full.svg:FaceGrinHearts, ../pattern/face-laugh-solid-full.svg:FaceLaugh, ../pattern/face-smile-solid-full.svg:FaceSmile, ../pattern/fish-solid-full.svg:Fish, ../pattern/flag-solid-full.svg:Flag, ../pattern/flask-solid-full.svg:Flask, ../pattern/football-solid-full.svg:Football, ../pattern/frog-solid-full.svg:Frog, ../pattern/futbol-solid-full.svg:Futbol, ../pattern/ghost-solid-full.svg:Ghost, ../pattern/graduation-cap-solid-full.svg:GraduationCap, ../pattern/hand-middle-finger-solid-full.svg:HandMiddleFinger, ../pattern/hand-solid-full.svg:Hand, ../pattern/heart-solid-full.svg:Heart, ../pattern/horse-head-solid-full.svg:HorseHead, ../pattern/key-solid-full.svg:Key, ../pattern/leaf-solid-full.svg:Leaf, ../pattern/lightbulb-solid-full.svg:Lightbulb, ../pattern/microphone-solid-full.svg:Microphone, ../pattern/moon-solid-full.svg:Moon, ../pattern/plane-solid-full.svg:Plane, ../pattern/plug-solid-full.svg:Plug, ../pattern/poo-solid-full.svg:Poo, ../pattern/puzzle-piece-solid-full.svg:PuzzlePiece, ../pattern/robot-solid-full.svg:Robot, ../pattern/rocket-solid-full.svg:Rocket, ../pattern/sack-dollar-solid-full.svg:SackDollar, ../pattern/skull-solid-full.svg:Skull, ../pattern/square-solid-full.svg:Square, ../pattern/star-solid-full.svg:Star, ../pattern/thumbs-down-solid-full.svg:ThumbsDown, ../pattern/thumbs-up-solid-full.svg:ThumbsUp, ../pattern/tooth-solid-full.svg:Tooth, ../pattern/tree-solid-full.svg:Tree, ../pattern/trophy-solid-full.svg:Trophy]
+studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor-solid-full.svg:Anchor, ../pattern/bell-solid-full.svg:Bell, ../pattern/bolt-solid-full.svg:Bolt]
 
 /* [Hidden] */
 
@@ -171,62 +169,169 @@ recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 mb__com__machineblocks__bricks__Standard(
     config = mb_config,
     settings = [
-        ["size", size],
-        ["baseRoundingRadius", baseRoundingRadius],
-        ["baseCutoutType", baseCutoutType],
-        ["pillars", pillars],
-        ["reliefCut", baseReliefCut],
-        ["reliefCutHeight", baseReliefCutHeight],
-        ["reliefCutThickness", baseReliefCutThickness],
-        ["grille", grille],
-        ["grilleInverted", grilleInverted],
-        ["grilleDepth", grilleDepth],
-        ["grilleCount", grilleCount],
-        ["bevel", bevel],
-        ["studs", studs],
-        ["studShift", studShift],
-        ["studType", studType],
-        ["studPadding", studPadding],
-        ["holeX", holeX],
-        ["holeXType", holeXType],
-        ["holeXShift", holeXShift],
-        ["holeXGridOffsetZ", holeXGridOffsetZ],
-        ["holeY", holeY],
-        ["holeYType", holeYType],
-        ["holeYShift", holeYShift],
-        ["holeYGridOffsetZ", holeYGridOffsetZ],
-        ["holeZ", holeZ],
-        ["holeZType", holeZType],
-        ["holeZShift", holeZShift],
-        ["recess", recess],
-        ["recessStuds", recessStuds],
-        ["recessWallThickness", recessWallThickness],
-        ["recessDepth", recessDepthResolved],
-        ["recessStuds", recessStuds],
-        ["recessStudPadding", recessStudPadding],
-        ["slope", slope],
-        ["text", text],
-        ["textSide", textSide],
-        ["textDepth", textDepth],
-        ["textSize", textSize],
-        ["textFont", textFontFull],
-        ["textSpacing", textSpacing],
-        ["textColor", textColor],
-        ["baseColor", baseColor],
-        ["surfacePattern", surfacePattern],
-        ["surfacePatternScale", surfacePatternScale],
-        ["studIcon", studIcon],
-        ["studBaseOverlap", studBaseOverlap],
-        ["debugShowOnly", undef]
+        ["size",                 size],
+        ["baseRoundingRadius",   baseRoundingRadius],
+        ["baseCutoutType",       baseCutoutType],
+        ["pillars",              pillars],
+        ["reliefCut",            baseReliefCut],
+        ["reliefCutHeight",      baseReliefCutHeight],
+        ["reliefCutThickness",   baseReliefCutThickness],
+        ["grille",               grille],
+        ["grilleInverted",       grilleInverted],
+        ["grilleDepth",          grilleDepth],
+        ["grilleCount",          grilleCount],
+        ["bevel",                bevel],
+        ["studs",                studs],
+        ["studShift",            studShift],
+        ["studType",             studType],
+        ["studPadding",          studPadding],
+        ["studBaseOverlap",      studBaseOverlap],
+        ["holeX",                holeX],
+        ["holeXType",            holeXType],
+        ["holeXShift",           holeXShift],
+        ["holeXGridOffsetZ",     holeXGridOffsetZ],
+        ["holeY",                holeY],
+        ["holeYType",            holeYType],
+        ["holeYShift",           holeYShift],
+        ["holeYGridOffsetZ",     holeYGridOffsetZ],
+        ["holeZ",                holeZ],
+        ["holeZType",            holeZType],
+        ["holeZShift",           holeZShift],
+        ["recess",               recess],
+        ["recessStuds",          recessStuds],
+        ["recessWallThickness",  recessWallThickness],
+        ["recessDepth",          recessDepthResolved],
+        ["recessStudPadding",    recessStudPadding],
+        ["slope",                slope],
+        ["text",                 text],
+        ["textFace",             textFace],
+        ["textDepth",            textDepth],
+        ["textSize",             textSize],
+        ["textFont",             textFontFull],
+        ["textSpacing",          textSpacing],
+        ["textColor",            textColor],
+        ["baseColor",            baseColor],
+        ["surfacePattern",       surfacePattern],
+        ["surfacePatternScale",  surfacePatternScale],
+        ["studIcon",             studIcon]
     ]
 );
 
 /*
  * Main Module Definition
+ * com.machineblocks.bricks.Standard
+ *
+ * CompositeBlock with a single NativeBlock child — no wrapper mb_block()
+ * generated (1 child rule). Each parameter is explicitly extracted via
+ * mb_param_* — no passthrough of settings. Only the declared parameter
+ * set of StandardBrick is forwarded to mb_block().
  */
-module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef){
+module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef) {
+
+    // Extract all declared properties explicitly
+    blockId             = mb_param_id(config, settings, "com.machineblocks.bricks.Standard");
+    size                = mb_param_size(config, settings, [4, 2, 3]);
+    baseRoundingRadius  = mb_param(config, settings, "baseRoundingRadius", 0);
+    baseCutoutType      = mb_param_baseCutoutType(config, settings);
+    pillars             = mb_param(config, settings, "pillars", true);
+    reliefCut           = mb_param(config, settings, "reliefCut", false);
+    reliefCutHeight     = mb_param(config, settings, "reliefCutHeight", 0.375);
+    reliefCutThickness  = mb_param(config, settings, "reliefCutThickness", 0.375);
+    grille              = mb_param(config, settings, "grille", "none");
+    grilleInverted      = mb_param(config, settings, "grilleInverted", false);
+    grilleDepth         = mb_param(config, settings, "grilleDepth", 1);
+    grilleCount         = mb_param(config, settings, "grilleCount", 2.5);
+    bevel               = mb_param(config, settings, "bevel", [[0,0],[0,0],[0,0],[0,0]]);
+    studs               = mb_param_studs(config, settings);
+    studShift           = mb_param(config, settings, "studShift", false);
+    studType            = mb_param(config, settings, "studType", "solid");
+    studPadding         = mb_param(config, settings, "studPadding", [0.2,0.2,0.2,0.2]);
+    studBaseOverlap     = mb_param(config, settings, "studBaseOverlap", 0.25);
+    holeX               = mb_param(config, settings, "holeX", false);
+    holeXType           = mb_param(config, settings, "holeXType", "pin");
+    holeXShift          = mb_param(config, settings, "holeXShift", true);
+    holeXGridOffsetZ    = mb_param(config, settings, "holeXGridOffsetZ", 3.5);
+    holeY               = mb_param(config, settings, "holeY", false);
+    holeYType           = mb_param(config, settings, "holeYType", "pin");
+    holeYShift          = mb_param(config, settings, "holeYShift", true);
+    holeYGridOffsetZ    = mb_param(config, settings, "holeYGridOffsetZ", 3.5);
+    holeZ               = mb_param(config, settings, "holeZ", false);
+    holeZType           = mb_param(config, settings, "holeZType", "pin");
+    holeZShift          = mb_param(config, settings, "holeZShift", true);
+    recess              = mb_param(config, settings, "recess", false);
+    recessStuds         = mb_param(config, settings, "recessStuds", false);
+    recessWallThickness = mb_param(config, settings, "recessWallThickness",
+                              [0.333,0.333,0.333,0.333]);
+    recessDepth         = mb_param(config, settings, "recessDepth", "auto");
+    recessStudPadding   = mb_param(config, settings, "recessStudPadding",
+                              [0.2,0.2,0.2,0.2]);
+    slope               = mb_param(config, settings, "slope", [0,0,0,0]);
+    text                = mb_param(config, settings, "text", "");
+    textFace            = mb_param(config, settings, "textFace", 5);
+    textDepth           = mb_param(config, settings, "textDepth", 0.5);
+    textSize            = mb_param(config, settings, "textSize", 9);
+    textFont            = mb_param(config, settings, "textFont", "RBNo3.1 Black");
+    textStyle           = mb_param(config, settings, "textStyle", "Regular");
+    textSpacing         = mb_param(config, settings, "textSpacing", 1);
+    textColor           = mb_param(config, settings, "textColor", "#303D4E");
+    baseColor           = mb_param_baseColor(config, settings);
+    surfacePattern      = mb_param(config, settings, "surfacePattern", "none");
+    surfacePatternScale = mb_param(config, settings, "surfacePatternScale", 0.2);
+    studIcon            = mb_param(config, settings, "studIcon", "none");
+
+    // textFont + textStyle combined for mb_block
+    textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)));
+
+    // Single NativeBlock — no wrapper (1 child rule)
     mb_block(
         config = config,
-        settings = settings
+        settings = [
+            ["id",                 blockId],
+            ["size",               size],
+            ["baseRoundingRadius", baseRoundingRadius],
+            ["baseCutoutType",     baseCutoutType],
+            ["pillars",            pillars],
+            ["reliefCut",          reliefCut],
+            ["reliefCutHeight",    reliefCutHeight],
+            ["reliefCutThickness", reliefCutThickness],
+            ["grille",             grille],
+            ["grilleInverted",     grilleInverted],
+            ["grilleDepth",        grilleDepth],
+            ["grilleCount",        grilleCount],
+            ["bevel",              bevel],
+            ["studs",              studs],
+            ["studShift",          studShift],
+            ["studType",           studType],
+            ["studPadding",        studPadding],
+            ["studBaseOverlap",    studBaseOverlap],
+            ["holeX",              holeX],
+            ["holeXType",          holeXType],
+            ["holeXShift",         holeXShift],
+            ["holeXGridOffsetZ",   holeXGridOffsetZ],
+            ["holeY",              holeY],
+            ["holeYType",          holeYType],
+            ["holeYShift",         holeYShift],
+            ["holeYGridOffsetZ",   holeYGridOffsetZ],
+            ["holeZ",              holeZ],
+            ["holeZType",          holeZType],
+            ["holeZShift",         holeZShift],
+            ["recess",             recess],
+            ["recessStuds",        recessStuds],
+            ["recessWallThickness",recessWallThickness],
+            ["recessDepth",        recessDepth],
+            ["recessStudPadding",  recessStudPadding],
+            ["slope",              slope],
+            ["text",               text],
+            ["textFace",           textFace],
+            ["textDepth",          textDepth],
+            ["textSize",           textSize],
+            ["textFont",           textFontFull],
+            ["textSpacing",        textSpacing],
+            ["textColor",          textColor],
+            ["baseColor",          baseColor],
+            ["surfacePattern",     surfacePattern],
+            ["surfacePatternScale",surfacePatternScale],
+            ["studIcon",           studIcon]
+        ]
     );
 }

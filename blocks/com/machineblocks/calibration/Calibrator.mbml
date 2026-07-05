@@ -1,0 +1,388 @@
+<!--
+  MachineBlocks.com Block File
+
+  Name: Calibrator
+  Filename: Calibrator.mbml
+  FQN: com.machineblocks.calibration.Calibrator
+
+  Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+
+  Published under license:
+  Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<block xmlns="http://blockml.org/block.xsd"
+       xmlns:bml="http://blockml.org/bml"
+       xmlns:bricks="com.machineblocks.bricks">
+
+  <name>Calibrator</name>
+  <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+    <!-- Native properties with non-default values -->
+    <property name="base"          type="Boolean" defaultValue="false" />
+    <property name="studs"         type="Boolean" defaultValue="false" />
+    <property name="alignChildren" type="String"  defaultValue="ccs" />
+    <property name="size"          type="Size3D"
+              defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+
+    <!-- Custom properties -->
+    <property name="numberOfSamples" type="Integer" defaultValue="5">
+      <documentation>Number of samples per calibration row. Range: [3..9]</documentation>
+    </property>
+    <property name="font"      type="String"  defaultValue="Liberation Sans" />
+    <property name="fontSize"  type="Float"   defaultValue="3" />
+    <property name="labelSize" type="Integer" defaultValue="5" />
+
+    <property name="studDiameterAdjustmentValueStart"      type="Float" defaultValue="0.0" />
+    <property name="studDiameterAdjustmentValueStep"       type="Float" defaultValue="0.1" />
+    <property name="baseWallThicknessAdjustmentValueStart" type="Float" defaultValue="-0.3" />
+    <property name="baseWallThicknessAdjustmentValueStep"  type="Float" defaultValue="0.1" />
+    <property name="tubeDiameterAdjustmentValueStart"      type="Float" defaultValue="-0.3" />
+    <property name="tubeDiameterAdjustmentValueStep"       type="Float" defaultValue="0.1" />
+    <property name="pinDiameterAdjustmentValueStart"       type="Float" defaultValue="-0.2" />
+    <property name="pinDiameterAdjustmentValueStep"        type="Float" defaultValue="0.1" />
+  </properties>
+
+  <!--
+    @utils declared context-scoped — all Sub-Blocks in this Composition
+    inherit it and can access @utils.formatValue() without redeclaring.
+  -->
+  <aggregations>
+    <aggregation name="utils"
+                 type="com.machineblocks.calibration.Calibrator.Utils"
+                 beanName="utils"
+                 cardinality="0..1"
+                 scope="context"
+                 visibility="hidden" />
+  </aggregations>
+
+  <subBlocks>
+
+    <!--
+      Sub-Block: Calibrator.Utils (FunctionBlock)
+      FQN: com.machineblocks.calibration.Calibrator.Utils
+      SCAD: mb__com__machineblocks__calibration__Calibrator__Utils
+
+      Utility FunctionBlock for the Calibrator block family.
+      Declared context-scoped on the Calibrator root — all Sub-Blocks
+      inherit @utils automatically.
+
+      formatValue: SCAD implementation with helper functions.
+      The compiler prefixes all function names with the block FQN:
+        formatValue    → mb__...__Utils__formatValue  (main — matches capability name)
+        replaceZeroDot → mb__...__Utils__replaceZeroDot  (helper)
+        strPrefix      → mb__...__Utils__strPrefix        (helper)
+        strSuffix      → mb__...__Utils__strSuffix        (helper)
+    -->
+    <block>
+      <name>Utils</name>
+      <baseType>org.blockml.service.FunctionBlock</baseType>
+      <version>1.0.0</version>
+
+      <capabilities>
+
+        <capability name="formatValue"
+                    class="org.blockml.capability.Sync"
+                    payloadType="org.blockml.type.Float"
+                    returnType="org.blockml.type.String">
+          <documentation>
+            Formats a float for display by removing the leading zero before
+            the decimal point.
+            Examples:  0.1 -> ".1"    -0.2 -> "-.2"    3.0 -> "3.0"
+          </documentation>
+          <implementation language="scad"><![CDATA[
+// Main function — name matches capability name, compiler adds block FQN prefix
+function formatValue(x) =
+    replaceZeroDot(str(#math.round_n(x, 1)));
+
+// Helper functions — compiler adds block FQN prefix to all names
+function replaceZeroDot(s, i = 0) =
+    (i >= len(s) - 1) ? s :
+    (s[i] == "0" && s[i + 1] == ".")
+        ? str(strPrefix(s, i), ".", replaceZeroDot(strSuffix(s, i + 2), 0))
+        : replaceZeroDot(s, i + 1);
+
+function strPrefix(s, k, i = 0) =
+    (i >= k) ? "" : str(s[i], strPrefix(s, k, i + 1));
+
+function strSuffix(s, k, i = 0) =
+    (k + i >= len(s)) ? "" : str(s[k + i], strSuffix(s, k, i + 1));
+          ]]></implementation>
+        </capability>
+
+      </capabilities>
+    </block>
+
+    <!--
+      Sub-Block: Calibrator.Base
+      FQN: com.machineblocks.calibration.Calibrator.Base
+      SCAD: mb__com__machineblocks__calibration__Calibrator__Base
+
+      Renders the base strip, label block, and value label blocks for one row.
+      All blocks use sizeMod z+=-0.5 (approx 0.5 unitGrid[1] height, ~0.8mm).
+      Uses @utils.formatValue() — inherited from Calibrator via scope="context".
+    -->
+    <block>
+      <name>Base</name>
+      <baseType>com.machineblocks.core.Block</baseType>
+      <version>1.0.0</version>
+      <properties>
+        <property name="label"           type="String"  defaultValue="" />
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="0" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="font"            type="String"  defaultValue="Liberation Sans" />
+        <property name="fontSize"        type="Float"   defaultValue="3" />
+        <property name="labelSize"       type="Integer" defaultValue="5" />
+      </properties>
+      <composition>
+
+        <!-- Base strip: centered at row position -->
+        <bricks:StandardBrick
+            id="strip"
+            size="${ [2 * numberOfSamples + 1, 1, 1] }"
+            sizeMod="${ {'z+': -0.5} }"
+            baseCutoutType="none"
+            studs="false"
+            baseAdjustment="${ {'y': 0.11} }" />
+
+        <!-- Label block: 1 stud above base strip -->
+        <bricks:StandardBrick
+            id="label"
+            size="${ [labelSize, 1, 1] }"
+            sizeMod="${ {'z+': -0.5} }"
+            offset="[0, 1, 0]"
+            text="${ label }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            textFace="5"
+            textDepth="-0.25"
+            baseCutoutType="none"
+            studs="false"
+            baseAdjustment="${ {'y': 0.11} }" />
+
+        <!-- Value label blocks: 1 stud below base strip, one per sample -->
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 'val_' + i }"
+            size="[1, 1, 1]"
+            sizeMod="${ {'z+': -0.5} }"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
+            text="${ @utils.formatValue(valueStart + i * valueStep) }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            textFace="5"
+            textDepth="0.25"
+            baseCutoutType="none"
+            studs="false" />
+
+      </composition>
+    </block>
+
+    <!--
+      Sub-Block: Calibrator.StudDiameter
+      FQN: com.machineblocks.calibration.Calibrator.StudDiameter
+      SCAD: mb__com__machineblocks__calibration__Calibrator__StudDiameter
+
+      Sample blocks with varying studDiameterAdjustment.
+      NOTE: studDiameterAdjustment is config_only in MB3 — used intentionally.
+    -->
+    <block>
+      <name>StudDiameter</name>
+      <baseType>com.machineblocks.core.Block</baseType>
+      <version>1.0.0</version>
+      <properties>
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="0.0" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+      </properties>
+      <composition>
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[1, 1, 0.4]"
+            baseCutoutType="none"
+            studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
+      </composition>
+    </block>
+
+    <!--
+      Sub-Block: Calibrator.BaseWallThickness
+      FQN: com.machineblocks.calibration.Calibrator.BaseWallThickness
+      SCAD: mb__com__machineblocks__calibration__Calibrator__BaseWallThickness
+
+      Inverted sample blocks with varying baseWallThicknessAdjustment.
+      NOTE: baseWallThicknessAdjustment is config_only in MB3 — used intentionally.
+    -->
+    <block>
+      <name>BaseWallThickness</name>
+      <baseType>com.machineblocks.core.Block</baseType>
+      <version>1.0.0</version>
+      <properties>
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="-0.3" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+      </properties>
+      <composition>
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[1, 1, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            topPlateHelpers="false"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+      </composition>
+    </block>
+
+    <!--
+      Sub-Block: Calibrator.TubeDiameter
+      FQN: com.machineblocks.calibration.Calibrator.TubeDiameter
+      SCAD: mb__com__machineblocks__calibration__Calibrator__TubeDiameter
+
+      Inverted 2x2 sample blocks with varying tubeDiameterAdjustment.
+      NOTE: V2 tubeZDiameterAdjustment -> V3 tubeDiameterAdjustment (unified).
+    -->
+    <block>
+      <name>TubeDiameter</name>
+      <baseType>com.machineblocks.core.Block</baseType>
+      <version>1.0.0</version>
+      <properties>
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="-0.3" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+      </properties>
+      <composition>
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[2, 2, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            tubeDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            baseCrop="${ {'xy': -0.5} }"
+            baseWallThickness="0"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+      </composition>
+    </block>
+
+    <!--
+      Sub-Block: Calibrator.PinDiameter
+      FQN: com.machineblocks.calibration.Calibrator.PinDiameter
+      SCAD: mb__com__machineblocks__calibration__Calibrator__PinDiameter
+
+      Inverted 2x1 sample blocks with varying pinDiameterAdjustment.
+    -->
+    <block>
+      <name>PinDiameter</name>
+      <baseType>com.machineblocks.core.Block</baseType>
+      <version>1.0.0</version>
+      <properties>
+        <property name="numberOfSamples" type="Integer" defaultValue="5" />
+        <property name="valueStart"      type="Float"   defaultValue="-0.2" />
+        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+      </properties>
+      <composition>
+        <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[2, 1, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            pinDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            baseCrop="${ {'x': -0.5} }"
+            baseWallThickness="0"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+      </composition>
+    </block>
+
+  </subBlocks>
+
+  <!--
+    Main Composition: 4 calibration rows.
+    Each row: Calibrator.Base + type-specific sample sub-block.
+    Rows differ in sample sub-block type — no loop possible here.
+    Offsets: Row 0=Y:0, Row 1=Y:-3, Row 2=Y:-6, Row 3=Y:-9.
+  -->
+  <composition>
+
+    <!-- Row 0: studDiameterAdjustment -->
+    <Base
+        id="base_stud"
+        offset="[0, 0, 0]"
+        label="studDiaAdj"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ studDiameterAdjustmentValueStart }"
+        valueStep="${ studDiameterAdjustmentValueStep }"
+        font="${ font }"
+        fontSize="${ fontSize }"
+        labelSize="${ labelSize }" />
+    <StudDiameter
+        id="samples_stud"
+        offset="[0, 0, 0]"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ studDiameterAdjustmentValueStart }"
+        valueStep="${ studDiameterAdjustmentValueStep }" />
+
+    <!-- Row 1: baseWallThicknessAdjustment -->
+    <Base
+        id="base_wall"
+        offset="[0, -3, 0]"
+        label="wallThickAdj"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ baseWallThicknessAdjustmentValueStart }"
+        valueStep="${ baseWallThicknessAdjustmentValueStep }"
+        font="${ font }"
+        fontSize="${ fontSize }"
+        labelSize="${ labelSize }" />
+    <BaseWallThickness
+        id="samples_wall"
+        offset="[0, -3, 2]"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ baseWallThicknessAdjustmentValueStart }"
+        valueStep="${ baseWallThicknessAdjustmentValueStep }" />
+
+    <!-- Row 2: tubeDiameterAdjustment -->
+    <Base
+        id="base_tube"
+        offset="[0, -6, 0]"
+        label="tubeZDiaAdj"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ tubeDiameterAdjustmentValueStart }"
+        valueStep="${ tubeDiameterAdjustmentValueStep }"
+        font="${ font }"
+        fontSize="${ fontSize }"
+        labelSize="${ labelSize }" />
+    <TubeDiameter
+        id="samples_tube"
+        offset="[0, -6, 2]"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ tubeDiameterAdjustmentValueStart }"
+        valueStep="${ tubeDiameterAdjustmentValueStep }" />
+
+    <!-- Row 3: pinDiameterAdjustment -->
+    <Base
+        id="base_pin"
+        offset="[0, -9, 0]"
+        label="pinDiaAdj"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ pinDiameterAdjustmentValueStart }"
+        valueStep="${ pinDiameterAdjustmentValueStep }"
+        font="${ font }"
+        fontSize="${ fontSize }"
+        labelSize="${ labelSize }" />
+    <PinDiameter
+        id="samples_pin"
+        offset="[0, -9, 2]"
+        numberOfSamples="${ numberOfSamples }"
+        valueStart="${ pinDiameterAdjustmentValueStart }"
+        valueStep="${ pinDiameterAdjustmentValueStep }" />
+
+  </composition>
+
+</block>
