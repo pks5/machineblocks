@@ -4,7 +4,7 @@ use <block_dim.scad>;
 use <block_part.scad>;
 
 use <poly_expand.scad>;
-use <api.scad>;
+use <parameters.scad>;
 use <quality.scad>;
 use <prismoid_contains.scad>;
 use <../shape/prismoid.scad>;
