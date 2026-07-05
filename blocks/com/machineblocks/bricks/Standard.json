@@ -22,7 +22,6 @@
             "studType": "hollow",
             "text": "BEAM",
             "textColor": "#EAC645",
-            "textSide": "2",
             "textSize": "6"
         },
         "Random 03 - Emerald Grille": {
@@ -32,9 +31,8 @@
             "grilleDepth": "1.5",
             "grilleInverted": "true",
             "size": "[4, 4, 2]",
-            "studIcon": "../pattern/dots.svg",
             "studs": "false",
-            "surfacePattern": "../pattern/squares.svg",
+            "surfacePattern": "..\/pattern\/squares.svg",
             "surfacePatternScale": "0.12"
         },
         "Random 04 - Carrot Recess Box": {
@@ -47,7 +45,10 @@
             "recessWallThickness": "[0.5, 0.5, 0.333, 0.333]",
             "size": "[5, 3, 5]",
             "studPadding": "[0.4, 0.4, 0.2, 0.2]",
-            "text": "BOX"
+            "text": "BOX",
+            "textDepth": "0.5",
+            "textFace": "1",
+            "textSize": "3"
         },
         "Random 05 - Purple Wedge": {
             "baseColor": "#925CB1",
@@ -57,7 +58,7 @@
             "size": "[4, 3, 3]",
             "slope": "[0, 0, 1, 0]",
             "studPadding": "[0.5, 0.2, 0.2, 0.2]",
-            "surfacePattern": "../pattern/diamonds.svg",
+            "surfacePattern": "..\/pattern\/diamonds.svg",
             "surfacePatternScale": "0.16"
         },
         "Random 06 - Silver Low Tile": {
@@ -67,11 +68,11 @@
             "pillars": "false",
             "size": "[3, 3, 1]",
             "studs": "false",
-            "surfacePattern": "../pattern/card-background.svg",
+            "surfacePattern": "..\/pattern\/card-background.svg",
             "surfacePatternScale": "0.08",
             "text": "TAG",
             "textColor": "#303D4E",
-            "textDepth": "0.3",
+            "textDepth": "0.30000000000000004",
             "textSize": "8"
         },
         "Random 07 - Red Axle Block": {
@@ -94,11 +95,10 @@
             "baseReliefCutHeight": "0.625",
             "baseReliefCutThickness": "0.5",
             "size": "[2, 6, 3]",
-            "studIcon": "../pattern/anchor-solid-full.svg",
-            "surfacePattern": "../pattern/textile.svg",
+            "studIcon": "..\/pattern\/anchor-solid-full.svg",
+            "surfacePattern": "..\/pattern\/textile.svg",
             "surfacePatternScale": "0.18",
             "text": "WALL",
-            "textSide": "3",
             "textSize": "6"
         },
         "Random 09 - Black Smooth Corner": {
@@ -122,7 +122,7 @@
             "recessStuds": "false",
             "size": "[6, 4, 2]",
             "studs": "false",
-            "surfacePattern": "../pattern/circuit-board.svg",
+            "surfacePattern": "..\/pattern\/circuit-board.svg",
             "surfacePatternScale": "0.2",
             "text": "IO",
             "textColor": "#58B99D",

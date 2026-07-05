@@ -1,0 +1,11 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "blockSize": "[4, 2, 3]",
+            "colorA": "#5296D5",
+            "colorB": "#D65745",
+            "rows": "8"
+        }
+    }
+}
