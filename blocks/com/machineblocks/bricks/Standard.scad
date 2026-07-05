@@ -70,7 +70,7 @@ studType = "solid"; // [solid, hollow]
 // Stud Padding (grid)
 studPadding = [0.2, 0.2, 0.2, 0.2]; // [0:0.1:128]
 // Stud Sink (mbu)
-studSink = 0.25; // [0:0.25:8]
+studBaseOverlap = 0.25; // [0:0.25:8]
 
 /* [Bevel] */
 
@@ -168,11 +168,10 @@ recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
 /*
  * Main Module Call
  */
-mb_block__com__machineblocks__bricks__Standard(
+mb__com__machineblocks__bricks__Standard(
     config = mb_config,
     settings = [
         ["size", size],
-        ["sizeMod", [["x-", 1], ["z+", -1]]],
         ["baseRoundingRadius", baseRoundingRadius],
         ["baseCutoutType", baseCutoutType],
         ["pillars", pillars],
@@ -217,7 +216,7 @@ mb_block__com__machineblocks__bricks__Standard(
         ["surfacePattern", surfacePattern],
         ["surfacePatternScale", surfacePatternScale],
         ["studIcon", studIcon],
-        ["studSink", studSink],
+        ["studBaseOverlap", studBaseOverlap],
         ["debugShowOnly", undef]
     ]
 );
@@ -225,7 +224,7 @@ mb_block__com__machineblocks__bricks__Standard(
 /*
  * Main Module Definition
  */
-module mb_block__com__machineblocks__bricks__Standard(config = undef, settings = undef){
+module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings

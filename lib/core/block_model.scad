@@ -748,7 +748,7 @@ function mb_block_get_stud_shift(block_obj) =                       block_obj[14
 function mb_block_get_stud_hole_diameter(block_obj) =               block_obj[14][10];
 function mb_block_get_stud_hole_clamp_thickness(block_obj) =        block_obj[14][11];
 function mb_block_get_stud_type(block_obj) =                        block_obj[14][12];
-function mb_block_get_recess_studs(block_obj) =                     block_obj[14][13];
+function mb_block_has_recess_studs(block_obj) =                     block_obj[14][13];
 function mb_block_get_recess_stud_type(block_obj) =                 block_obj[14][14];
 function mb_block_get_recess_stud_shift(block_obj) =                block_obj[14][15];
 function mb_block_get_stud_padding(block_obj) =                     block_obj[14][19];
@@ -995,6 +995,7 @@ function mb_block_stud_render(block_obj, x, y) =
         stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
         
         has_recess = mb_block_has_recess(block_obj),
+        has_recess_studs = mb_block_has_recess_studs(block_obj),
         stud_max_overhang = mb_block_get_stud_max_overhang(block_obj),
         
         stud_shift = mb_block_get_stud_shift(block_obj),
@@ -1021,7 +1022,7 @@ function mb_block_stud_render(block_obj, x, y) =
             y + r_off + 0.5 * stud_diameter + recess_stud_padding[3] - stud_max_overhang
         ],
 
-        in_recess = has_recess && mb_prismoid_contains_prepared(
+        in_recess = has_recess && has_recess_studs && mb_prismoid_contains_prepared(
             prism_recess,
             recess_stud_offset
         ),
@@ -1029,7 +1030,7 @@ function mb_block_stud_render(block_obj, x, y) =
         rwgs = mb_block_get_recess_wall_gaps(block_obj),
 
         found_rec = [
-            if(has_recess && !in_recess)
+            if(has_recess && has_recess_studs && !in_recess)
                 for(rwg = rwgs)
                     let(
                         gap_data = mb_block_recess_wall_gap(block_obj, rwg)

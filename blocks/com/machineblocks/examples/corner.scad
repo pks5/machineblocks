@@ -91,7 +91,7 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../../pattern/anc
 /*
  * Main Module Call
  */
-mb_block__mb__bricks__corner(
+mb__mb__bricks__corner(
     config = mb_config,
     settings = [
         ["size", size],
@@ -123,7 +123,7 @@ mb_block__mb__bricks__corner(
 /*
  * Main Module Definition
  */
-module mb_block__mb__bricks__corner(config = undef, settings = undef){
+module mb__mb__bricks__corner(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);

@@ -32,7 +32,7 @@ include <../../../config/mb_config.scad>;
 /*
  * Main Module Call
  */
-mb_block__mb__bricks__connector(
+mb__mb__bricks__connector(
     config = mb_config,
     settings = [
         
@@ -42,7 +42,7 @@ mb_block__mb__bricks__connector(
 /*
  * Main Module Definition
  */
-module mb_block__mb__bricks__connector(config = undef, settings = undef){
+module mb__mb__bricks__connector(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);
