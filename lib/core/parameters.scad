@@ -150,8 +150,8 @@ function mb_param_pinDiameterAdjustment(config, settings, default = undef) = mb_
 * Tubes
 */ 
 
-function mb_param_tubeDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "tubeDiameter", default != undef ? default : "auto"));
-function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "tubeDiameterAdjustment", default != undef ? default : -0.1));
+function mb_param_tubeDiameter(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "tubeDiameter", default != undef ? default : "auto"));
+function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "tubeDiameterAdjustment", default != undef ? default : -0.1));
 
 /*
 * Slope
@@ -173,30 +173,30 @@ function mb_param_bevel(config, settings, default = undef) = mb_param(config, se
 */
 
 // XY
-function mb_param_holeXYGridOffsetZ(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625));
-function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0));
-function mb_param_holeXYGridSizeZ(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6));
-function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) =  mb_param_resolve_xy(mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0));
-function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_param_resolve_xy(mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5));
+function mb_param_holeXYGridOffsetZ(config, settings, default = undef) =  mb_params_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZ", default != undef ? default : 3.625));
+function mb_param_holeXYGridOffsetZAdjustment(config, settings, default = undef) =  mb_params_resolve_xy(mb_param(config, settings, "holeXYGridOffsetZAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYGridSizeZ(config, settings, default = undef) =  mb_params_resolve_xy(mb_param(config, settings, "holeXYGridSizeZ", default != undef ? default : 6));
+function mb_param_holeXYGridSizeZAdjustment(config, settings, default = undef) =  mb_params_resolve_xy(mb_param(config, settings, "holeXYGridSizeZAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYMinTopMargin(config, settings, default = undef) = mb_params_resolve_xy(mb_param(config, settings, "holeXYMinTopMargin", default != undef ? default : 0.5));
 
 // XYZ
-function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZInsetThickness", default != undef ? default : 0.375));
-function mb_param_holeXYZInsetThicknessAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZInsetThicknessAdjustment", default != undef ? default : 0.0));
-function mb_param_holeXYZInsetDepth(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZInsetDepth", default != undef ? default : 0.5));
-function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZInsetDepthAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYZInsetThickness(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZInsetThickness", default != undef ? default : 0.375));
+function mb_param_holeXYZInsetThicknessAdjustment(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZInsetThicknessAdjustment", default != undef ? default : 0.0));
+function mb_param_holeXYZInsetDepth(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZInsetDepth", default != undef ? default : 0.5));
+function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZInsetDepthAdjustment", default != undef ? default : 0.0));
 // TODO implement
 function mb_param_holeXYZAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThickness", default != undef ? default : 1);
 // TODO implement
 function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0);
 
 // TODO implement
-function mb_param_holeXYZType(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
+function mb_param_holeXYZType(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
 
-function mb_param_holeXYZShift(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
-function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
-function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
+function mb_param_holeXYZShift(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
+function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
+function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
 // TODO Implement Z Modes
-function mb_param_holeXYZEdgeMode(config, settings, default = undef) = mb_param_resolve_xyz(mb_param(config, settings, "holeXYZEdgeMode", default != undef ? default : "none"), use_list = true);
+function mb_param_holeXYZEdgeMode(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZEdgeMode", default != undef ? default : "none"), use_list = true);
 
 // X
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
@@ -424,43 +424,11 @@ function mb_param_scadPreviewPreRenderConvexity(config, settings, default = unde
 function mb_param_assembly(config, settings, default = undef) = let (ass = mb_param(config, settings, "assembly", default != undef ? default : "assembled")) is_list(ass) ? ass : [ass];
 function mb_param_renderGroups(config, settings, default = undef) = let (parts = mb_param(config, settings, "renderGroups", default != undef ? default : "all")) is_list(parts) ? parts : [parts];
 
-
-
 /*
-* -----------------
-* Parameter Helpers
-* -----------------
+* -----------------------
+* Custom Parameter Getter
+* -----------------------
 */
-
-
-
-function _mb_param_is_value(value, use_list = false) = 
-    is_bool(value) || is_num(value) || is_string(value)
-    || (use_list && is_list(value) && len(value) == 2 && _mb_param_is_value(value[0], false) && _mb_param_is_value(value[1], false));
-
-function mb_param_resolve_xyz(value, use_list = false) = 
-    let (
-        xyz = _mb_param_is_value(value) ? [value, value, value] :
-        is_list(value) ? (
-            len(value) == 1 && _mb_param_is_value(value[0], use_list) ? [value[0], value[0], value[0]] :
-            len(value) == 2 && _mb_param_is_value(value[0], use_list) && _mb_param_is_value(value[1], use_list) ? [value[0], value[0], value[1]] :
-            len(value) == 3 && _mb_param_is_value(value[0], use_list) && _mb_param_is_value(value[1], use_list) && _mb_param_is_value(value[2], use_list) ? value : undef
-        ) : undef
-    )
-    is_undef(xyz) ? undef : 
-    use_list ? [
-        is_list(xyz[0]) ? xyz[0] : [xyz[0], xyz[0]],
-        is_list(xyz[1]) ? xyz[1] : [xyz[1], xyz[1]],
-        is_list(xyz[2]) ? xyz[2] : [xyz[2], xyz[2]]
-    ] : xyz;
-
-function mb_param_resolve_xy(value) = 
-    _mb_param_is_value(value) ? [value, value] :
-        is_list(value) ? (
-            len(value) == 1 && _mb_param_is_value(value[0]) ? [value[0], value[0]] :
-            len(value) == 2 && _mb_param_is_value(value[0]) && _mb_param_is_value(value[1]) ? value : undef
-        ) : undef;
-
 
 function mb_param(config, settings, key, default=undef) =
     let(
@@ -470,6 +438,43 @@ function mb_param(config, settings, key, default=undef) =
     s != undef ? s :
     c != undef ? c :
     default;
+
+/*
+* -----------------
+* Parameter Helpers
+* -----------------
+*/
+
+function _mb_params_is_value(value, use_list = false) = 
+    is_bool(value) || is_num(value) || is_string(value)
+    || (use_list && is_list(value) && len(value) == 2 && _mb_params_is_value(value[0], false) && _mb_params_is_value(value[1], false));
+
+function mb_params_resolve_xyz(value, use_list = false) = 
+    let (
+        xyz = _mb_params_is_value(value) ? [value, value, value] :
+        is_list(value) ? (
+            len(value) == 1 && _mb_params_is_value(value[0], use_list) ? [value[0], value[0], value[0]] :
+            len(value) == 2 && _mb_params_is_value(value[0], use_list) && _mb_params_is_value(value[1], use_list) ? [value[0], value[0], value[1]] :
+            len(value) == 3 && _mb_params_is_value(value[0], use_list) && _mb_params_is_value(value[1], use_list) && _mb_params_is_value(value[2], use_list) ? value : undef
+        ) : undef
+    )
+    is_undef(xyz) ? undef : 
+    use_list ? [
+        is_list(xyz[0]) ? xyz[0] : [xyz[0], xyz[0]],
+        is_list(xyz[1]) ? xyz[1] : [xyz[1], xyz[1]],
+        is_list(xyz[2]) ? xyz[2] : [xyz[2], xyz[2]]
+    ] : xyz;
+
+function mb_params_resolve_xy(value) = 
+    _mb_params_is_value(value) ? [value, value] :
+        is_list(value) ? (
+            len(value) == 1 && _mb_params_is_value(value[0]) ? [value[0], value[0]] :
+            len(value) == 2 && _mb_params_is_value(value[0]) && _mb_params_is_value(value[1]) ? value : undef
+        ) : undef;
+
+/*
+* Generic Parameter Functions
+*/
 
 function _mb_params_valid(p) =
     p != undef && is_list(p) && len(p) > 0;  
