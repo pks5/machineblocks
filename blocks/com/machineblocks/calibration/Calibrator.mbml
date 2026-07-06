@@ -11,9 +11,22 @@
   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
   https://creativecommons.org/licenses/by-nc-sa/4.0/
 -->
-<block xmlns="http://blockml.org/block.xsd"
-       xmlns:bml="http://blockml.org/bml"
-       xmlns:bricks="com.machineblocks.bricks">
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:data="http://blockml.org/schema/data"
+  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:core="com.machineblocks.core"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+    http://machineblocks.com/schema/core
+        https://machineblocks.com/schemas/machineblocks/core.xsd
+    http://machineblocks.com/schema/bricks
+        https://machineblocks.com/schemas/machineblocks/bricks.xsd
+  ">
 
   <name>Calibrator</name>
   <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
@@ -25,7 +38,7 @@
     <property name="base"          type="Boolean" defaultValue="false" />
     <property name="studs"         type="Boolean" defaultValue="false" />
     <property name="alignChildren" type="String"  defaultValue="ccs" />
-    <property name="size"          type="Size3D"
+    <property name="size"          type="type:Size3D"
               defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 
     <!-- Custom properties -->
