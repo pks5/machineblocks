@@ -1,0 +1,171 @@
+<!--
+  MachineBlocks.com Block File
+
+  Name: Cross / Corner Brick
+  Filename: Cross.mbml
+  FQN: com.machineblocks.examples.Cross
+
+  Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+
+  Published under license:
+  Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:data="http://blockml.org/schema/data"
+  xmlns:core="com.machineblocks.core"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+    http://machineblocks.com/schema/core
+        https://machineblocks.com/schemas/machineblocks/core.xsd
+    http://machineblocks.com/schema/bricks
+        https://machineblocks.com/schemas/machineblocks/bricks.xsd
+  ">
+
+  <name>Cross</name>
+  <fullQualifiedName>com.machineblocks.examples.Cross</fullQualifiedName>
+  <baseType>com.machineblocks.core.Block</baseType>
+  <version>1.0.0</version>
+
+  <properties>
+
+    <!--
+      Wrapper properties.
+      base=false, studs=false: the wrapper mb_block() is layout-only —
+      geometry is rendered entirely by the two NativeBlock children.
+    -->
+    <property name="studs" type="Boolean" defaultValue="true" />
+
+    <!-- Size -->
+    <property name="size" type="type:Size3D" defaultValue="[4, 4, 3]" />
+
+    <!-- Cross geometry -->
+    <property name="brick1SizeY"   type="Integer" defaultValue="2">
+      <documentation>Brick 1 size in Y-direction (grid units).</documentation>
+    </property>
+    <property name="brick2SizeX"   type="Integer" defaultValue="2">
+      <documentation>Brick 2 size in X-direction (grid units).</documentation>
+    </property>
+    <property name="brick1OffsetY" type="Integer" defaultValue="0">
+      <documentation>Brick 1 offset in Y-direction (grid units).</documentation>
+    </property>
+    <property name="brick2OffsetX" type="Integer" defaultValue="0">
+      <documentation>Brick 2 offset in X-direction (grid units).</documentation>
+    </property>
+
+    <!-- Base -->
+    <property name="baseCutoutType"         type="type:BaseCutoutType" defaultValue="standard" />
+    <property name="pillars"                type="Boolean"             defaultValue="true" />
+    <property name="baseReliefCut"          type="Boolean"             defaultValue="false" />
+    <property name="baseReliefCutHeight"    type="Float"               defaultValue="0.4" />
+    <property name="baseReliefCutThickness" type="Float"               defaultValue="0.4" />
+    <property name="grille"                 type="type:GrilleType"     defaultValue="none" />
+    <property name="grilleInverted"         type="Boolean"             defaultValue="false" />
+    <property name="grilleDepth"            type="Float"               defaultValue="1" />
+    <property name="grilleCount"            type="Float"               defaultValue="2.5" />
+
+    <property name="studShift"       type="Boolean"          defaultValue="false" />
+    <property name="studType"        type="type:StudType"    defaultValue="solid" />
+    <property name="studPadding"     type="type:PaddingList" defaultValue="[0.2, 0.2, 0.2, 0.2]" />
+    <property name="studBaseOverlap" type="Float"            defaultValue="0.25" />
+
+    <!-- Style -->
+    <property name="baseColor" type="type:Color" defaultValue="#EAC645">
+      <suggestions>
+        <suggestion value="#EAC645" label="Sun Flower" />
+        <suggestion value="#303D4E" label="Midnight Blue" />
+        <suggestion value="#58B99D" label="Turquoise" />
+        <suggestion value="#D65745" label="Alizarin" />
+        <suggestion value="#EDF0F1" label="Clouds" />
+      </suggestions>
+    </property>
+    <property name="surfacePattern"      type="String" defaultValue="none" />
+    <property name="surfacePatternScale" type="Float"  defaultValue="0.2" />
+    <property name="studIcon"            type="String" defaultValue="none" />
+
+  </properties>
+
+  <!--
+    Composition: 2 NativeBlock children.
+    → ScadBlockProcessor generates automatic wrapper mb_block() with
+      base=false, studs=false (from own properties above).
+
+    Derived values via bml:with on <composition>:
+      b1SizeY   = min(size[1], brick1SizeY)           — clamped brick1 height
+      b1OffsetY = min(size[1] - b1SizeY, brick1OffsetY) — clamped brick1 Y offset
+      b2SizeX   = min(size[0], brick2SizeX)           — clamped brick2 width
+      b2OffsetX = min(size[0] - brick2SizeX, brick2OffsetX) — clamped brick2 X offset
+
+    Note: bml:with variables are evaluated left-to-right, so b1OffsetY can
+    reference b1SizeY and b2OffsetX can reference b2SizeX.
+
+    baseWallGaps: WallGapList — each entry is [axis, offset, size]
+      Brick 1 gets a gap in Y for where Brick 2 passes through.
+      Brick 2 gets a gap in X for where Brick 1 passes through.
+  -->
+  <composition
+      bml:with="
+        b1SizeY   = ${ #math.min(size[1], brick1SizeY) },
+        b1OffsetY = ${ #math.min(size[1] - b1SizeY, brick1OffsetY) },
+        b2SizeX   = ${ #math.min(size[0], brick2SizeX) },
+        b2OffsetX = ${ #math.min(size[0] - brick2SizeX, brick2OffsetX) }
+      ">
+
+    <!-- Brick 1: full X width, narrow in Y -->
+    <core:NativeBlock
+        id="brick1"
+        size="${ [size[0], b1SizeY, size[2]] }"
+        offset="${ [0, b1OffsetY, 0] }"
+        baseCutoutType="${ baseCutoutType }"
+        pillars="${ pillars }"
+        reliefCut="${ baseReliefCut }"
+        reliefCutHeight="${ baseReliefCutHeight }"
+        reliefCutThickness="${ baseReliefCutThickness }"
+        grille="${ grille }"
+        grilleInverted="${ grilleInverted }"
+        grilleDepth="${ grilleDepth }"
+        grilleCount="${ grilleCount }"
+        studs="${ studs }"
+        studShift="${ studShift }"
+        studType="${ studType }"
+        studPadding="${ studPadding }"
+        studBaseOverlap="${ studBaseOverlap }"
+        baseColor="${ baseColor }"
+        surfacePattern="${ surfacePattern }"
+        surfacePatternScale="${ surfacePatternScale }"
+        studIcon="${ studIcon }"
+        baseWallGaps="${ [['y', b2OffsetX, b2SizeX]] }" />
+
+    <!-- Brick 2: narrow in X, full Y height -->
+    <core:NativeBlock
+        id="brick2"
+        size="${ [b2SizeX, size[1], size[2]] }"
+        offset="${ [b2OffsetX, 0, 0] }"
+        baseCutoutType="${ baseCutoutType }"
+        pillars="${ pillars }"
+        reliefCut="${ baseReliefCut }"
+        reliefCutHeight="${ baseReliefCutHeight }"
+        reliefCutThickness="${ baseReliefCutThickness }"
+        grille="${ grille }"
+        grilleInverted="${ grilleInverted }"
+        grilleDepth="${ grilleDepth }"
+        grilleCount="${ grilleCount }"
+        studs="${ studs }"
+        studShift="${ studShift }"
+        studType="${ studType }"
+        studPadding="${ studPadding }"
+        studBaseOverlap="${ studBaseOverlap }"
+        baseColor="${ baseColor }"
+        surfacePattern="${ surfacePattern }"
+        surfacePatternScale="${ surfacePatternScale }"
+        studIcon="${ studIcon }"
+        baseWallGaps="${ [['x', b1OffsetY, b1SizeY]] }" />
+
+  </composition>
+
+</block>

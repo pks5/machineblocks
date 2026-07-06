@@ -11,10 +11,21 @@
   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
   https://creativecommons.org/licenses/by-nc-sa/4.0/
 -->
-<block xmlns="http://blockml.org/block.xsd"
-       xmlns:bml="http://blockml.org/bml"
-       xmlns:data="http://blockml.org/data"
-       xmlns:core="com.machineblocks.core">
+<block
+  xmlns="http://blockml.org/schema/block"
+  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:data="http://blockml.org/schema/data"
+  xmlns:core="com.machineblocks.core"
+  xmlns:type="com.machineblocks.type"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://blockml.org/schema/block
+        https://blockml.org/schemas/core/block.xsd
+    http://machineblocks.com/schema/core
+        https://machineblocks.com/schemas/machineblocks/core.xsd
+    http://machineblocks.com/schema/bricks
+        https://machineblocks.com/schemas/machineblocks/bricks.xsd
+  ">
 
   <name>Standard</name>
   <fullQualifiedName>com.machineblocks.bricks.Standard</fullQualifiedName>
@@ -24,83 +35,50 @@
   <properties>
 
     <!-- Size -->
-    <property name="size" type="Size3D" defaultValue="[4, 2, 3]" />
+    <property name="size" type="type:Size3D" defaultValue="[4, 2, 3]" />
 
     <!-- Base -->
-    <property name="baseCutoutType" type="String" defaultValue="standard">
-      <suggestions>
-        <suggestion value="none"     label="None" />
-        <suggestion value="standard" label="Standard" />
-        <suggestion value="studs"    label="Studs" />
-        <suggestion value="groove"   label="Groove" />
-      </suggestions>
-    </property>
+    <property name="baseCutoutType" type="type:BaseCutoutType" defaultValue="standard" />
     <property name="pillars"                  type="Boolean"        defaultValue="true" />
     <property name="baseReliefCut"            type="Boolean"        defaultValue="false" />
     <property name="baseReliefCutHeight"      type="Float"          defaultValue="0.375" />
     <property name="baseReliefCutThickness"   type="Float"          defaultValue="0.375" />
-    <property name="baseRoundingRadius"       type="RoundingRadius" defaultValue="0" />
-    <property name="grille"                   type="String"         defaultValue="none">
-      <suggestions>
-        <suggestion value="none" label="None" />
-        <suggestion value="x"    label="X" />
-        <suggestion value="y"    label="Y" />
-      </suggestions>
-    </property>
+    <property name="baseRoundingRadius"       type="type:RoundingRadius" defaultValue="0" />
+    <property name="grille"                   type="type:GrilleType"       defaultValue="none" />
     <property name="grilleInverted" type="Boolean" defaultValue="false" />
     <property name="grilleDepth"    type="Float"   defaultValue="1" />
     <property name="grilleCount"    type="Float"   defaultValue="2.5" />
-    <property name="bevel"          type="BevelList" defaultValue="[[0,0],[0,0],[0,0],[0,0]]" />
+    <property name="bevel"          type="type:BevelList" defaultValue="[[0,0],[0,0],[0,0],[0,0]]" />
 
     <!-- Studs -->
     <property name="studs"           type="Boolean"     defaultValue="true" />
     <property name="studShift"       type="Boolean"     defaultValue="false" />
-    <property name="studType"        type="String"      defaultValue="solid">
-      <suggestions>
-        <suggestion value="solid"  label="Solid" />
-        <suggestion value="hollow" label="Hollow" />
-      </suggestions>
-    </property>
-    <property name="studPadding"     type="PaddingList" defaultValue="[0.2, 0.2, 0.2, 0.2]" />
+    <property name="studType"        type="type:StudType"       defaultValue="solid" />
+    <property name="studPadding"     type="type:PaddingList" defaultValue="[0.2, 0.2, 0.2, 0.2]" />
     <property name="studBaseOverlap" type="Float"       defaultValue="0.25" />
 
     <!-- Holes -->
     <property name="holeX"            type="Boolean" defaultValue="false" />
-    <property name="holeXType"        type="String"  defaultValue="pin">
-      <suggestions>
-        <suggestion value="pin"  label="Pin" />
-        <suggestion value="axle" label="Axle" />
-      </suggestions>
-    </property>
+    <property name="holeXType"        type="type:HoleType"  defaultValue="pin" />
     <property name="holeXShift"       type="Boolean" defaultValue="true" />
     <property name="holeXGridOffsetZ" type="Float"   defaultValue="3.5" />
     <property name="holeY"            type="Boolean" defaultValue="false" />
-    <property name="holeYType"        type="String"  defaultValue="pin">
-      <suggestions>
-        <suggestion value="pin"  label="Pin" />
-        <suggestion value="axle" label="Axle" />
-      </suggestions>
-    </property>
+    <property name="holeYType"        type="type:HoleType"  defaultValue="pin" />
     <property name="holeYShift"       type="Boolean" defaultValue="true" />
     <property name="holeYGridOffsetZ" type="Float"   defaultValue="3.5" />
     <property name="holeZ"            type="Boolean" defaultValue="false" />
-    <property name="holeZType"        type="String"  defaultValue="pin">
-      <suggestions>
-        <suggestion value="pin"  label="Pin" />
-        <suggestion value="axle" label="Axle" />
-      </suggestions>
-    </property>
+    <property name="holeZType"        type="type:HoleType"  defaultValue="pin" />
     <property name="holeZShift"       type="Boolean" defaultValue="true" />
 
     <!-- Recess -->
     <property name="recess"              type="Boolean"        defaultValue="false" />
     <property name="recessStuds"         type="Boolean"        defaultValue="false" />
-    <property name="recessWallThickness" type="PaddingList"    defaultValue="[0.333, 0.333, 0.333, 0.333]" />
-    <property name="recessDepth"         type="AutoOr&lt;Float&gt;" defaultValue="auto" />
-    <property name="recessStudPadding"   type="PaddingList"    defaultValue="[0.2, 0.2, 0.2, 0.2]" />
+    <property name="recessWallThickness" type="type:PaddingList"    defaultValue="[0.333, 0.333, 0.333, 0.333]" />
+    <property name="recessDepth"         type="type:AutoOr_Float" defaultValue="auto" />
+    <property name="recessStudPadding"   type="type:PaddingList"    defaultValue="[0.2, 0.2, 0.2, 0.2]" />
 
     <!-- Slope -->
-    <property name="slope" type="SlopeList" defaultValue="[0, 0, 0, 0]" />
+    <property name="slope" type="type:SlopeList" defaultValue="[0, 0, 0, 0]" />
 
     <!-- Text -->
     <property name="text"      type="String"  defaultValue="" />
@@ -126,7 +104,7 @@
       </suggestions>
     </property>
     <property name="textSpacing" type="Float" defaultValue="1" />
-    <property name="textColor"   type="Color" defaultValue="#303D4E">
+    <property name="textColor"   type="type:Color" defaultValue="#303D4E">
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
         <suggestion value="#EAC645" label="Sun Flower" />
@@ -140,7 +118,7 @@
     </property>
 
     <!-- Style -->
-    <property name="baseColor" type="Color" defaultValue="#EAC645">
+    <property name="baseColor" type="type:Color" defaultValue="#EAC645">
       <suggestions>
         <suggestion value="#EAC645" label="Sun Flower" />
         <suggestion value="#303D4E" label="Midnight Blue" />
