@@ -180,7 +180,7 @@ function strSuffix(s, k, i = 0) =
         <!-- Value label blocks: 1 stud below base strip, one per sample -->
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 'val_' + i }"
+            id="${ 'val_' + i }"
             size="[1, 1, 1]"
             sizeMod="${ {'z+': -0.5} }"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
@@ -215,7 +215,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
+            id="${ 's_' + i }"
             size="[1, 1, 0.4]"
             baseCutoutType="none"
             studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
@@ -243,7 +243,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
+            id="${ 's_' + i }"
             size="[1, 1, 1]"
             studs="false"
             rotation="[180, 0, 0]"
@@ -273,7 +273,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
+            id="${ 's_' + i }"
             size="[2, 2, 1]"
             studs="false"
             rotation="[180, 0, 0]"
@@ -303,7 +303,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
+            id="${ 's_' + i }"
             size="[2, 1, 1]"
             studs="false"
             rotation="[180, 0, 0]"
