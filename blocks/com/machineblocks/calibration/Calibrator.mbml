@@ -64,12 +64,10 @@
     inherit it and can access @utils.formatValue() without redeclaring.
   -->
   <aggregations>
-    <aggregation name="utils"
+    <aggregation name="_utils"
                  type="com.machineblocks.calibration.Calibrator.Utils"
                  beanName="utils"
-                 cardinality="0..1"
-                 scope="context"
-                 visibility="hidden" />
+                 scope="context" />
   </aggregations>
 
   <subBlocks>
