@@ -67,7 +67,7 @@
   -->
   <aggregations>
     <aggregation name="_utils"
-                 type="com.machineblocks.calibration.Calibrator.Utils"
+                 type="Utils"
                  beanName="utils"
                  scope="context" />
   </aggregations>
@@ -155,7 +155,7 @@ function strSuffix(s, k, i = 0) =
 
         <!-- Base strip: centered at row position -->
         <bricks:StandardBrick
-            id="strip"
+            bml:id="strip"
             size="${ [2 * numberOfSamples + 1, 1, 1] }"
             sizeMod="${ {'z+': -0.5} }"
             baseCutoutType="none"
@@ -164,7 +164,7 @@ function strSuffix(s, k, i = 0) =
 
         <!-- Label block: 1 stud above base strip -->
         <bricks:StandardBrick
-            id="label"
+            bml:id="label"
             size="${ [labelSize, 1, 1] }"
             sizeMod="${ {'z+': -0.5} }"
             offset="[0, 1, 0]"
@@ -180,7 +180,7 @@ function strSuffix(s, k, i = 0) =
         <!-- Value label blocks: 1 stud below base strip, one per sample -->
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 'val_' + i }"
+            bml:id="${ 'val_' + i }"
             size="[1, 1, 1]"
             sizeMod="${ {'z+': -0.5} }"
             offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
@@ -215,7 +215,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 's_' + i }"
+            bml:id="${ 's_' + i }"
             size="[1, 1, 0.4]"
             baseCutoutType="none"
             studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
@@ -243,7 +243,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 's_' + i }"
+            bml:id="${ 's_' + i }"
             size="[1, 1, 1]"
             studs="false"
             rotation="[180, 0, 0]"
@@ -273,7 +273,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 's_' + i }"
+            bml:id="${ 's_' + i }"
             size="[2, 2, 1]"
             studs="false"
             rotation="[180, 0, 0]"
@@ -303,7 +303,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
         <bricks:StandardBrick
             bml:each="i : ${ numberOfSamples }"
-            id="${ 's_' + i }"
+            bml:id="${ 's_' + i }"
             size="[2, 1, 1]"
             studs="false"
             rotation="[180, 0, 0]"
@@ -326,7 +326,7 @@ function strSuffix(s, k, i = 0) =
 
     <!-- Row 0: studDiameterAdjustment -->
     <Base
-        id="base_stud"
+        bml:id="base_stud"
         offset="[0, 0, 0]"
         label="studDiaAdj"
         numberOfSamples="${ numberOfSamples }"
@@ -336,7 +336,7 @@ function strSuffix(s, k, i = 0) =
         fontSize="${ fontSize }"
         labelSize="${ labelSize }" />
     <StudDiameter
-        id="samples_stud"
+        bml:id="samples_stud"
         offset="[0, 0, 0]"
         numberOfSamples="${ numberOfSamples }"
         valueStart="${ studDiameterAdjustmentValueStart }"
@@ -362,7 +362,7 @@ function strSuffix(s, k, i = 0) =
 
     <!-- Row 2: tubeDiameterAdjustment -->
     <Base
-        id="base_tube"
+        bml:id="base_tube"
         offset="[0, -6, 0]"
         label="tubeZDiaAdj"
         numberOfSamples="${ numberOfSamples }"
@@ -372,7 +372,7 @@ function strSuffix(s, k, i = 0) =
         fontSize="${ fontSize }"
         labelSize="${ labelSize }" />
     <TubeDiameter
-        id="samples_tube"
+        bml:id="samples_tube"
         offset="[0, -6, 2]"
         numberOfSamples="${ numberOfSamples }"
         valueStart="${ tubeDiameterAdjustmentValueStart }"
@@ -380,7 +380,7 @@ function strSuffix(s, k, i = 0) =
 
     <!-- Row 3: pinDiameterAdjustment -->
     <Base
-        id="base_pin"
+        bml:id="base_pin"
         offset="[0, -9, 0]"
         label="pinDiaAdj"
         numberOfSamples="${ numberOfSamples }"
@@ -390,7 +390,7 @@ function strSuffix(s, k, i = 0) =
         fontSize="${ fontSize }"
         labelSize="${ labelSize }" />
     <PinDiameter
-        id="samples_pin"
+        bml:id="samples_pin"
         offset="[0, -9, 2]"
         numberOfSamples="${ numberOfSamples }"
         valueStart="${ pinDiameterAdjustmentValueStart }"

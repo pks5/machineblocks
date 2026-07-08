@@ -120,7 +120,7 @@
 
     <!-- Brick 1: full X width, narrow in Y -->
     <core:NativeBlock
-        id="brick1"
+        bml:id="brick1"
         size="${ [size[0], b1SizeY, size[2]] }"
         offset="${ [0, b1OffsetY, 0] }"
         baseCutoutType="${ baseCutoutType }"
@@ -145,7 +145,7 @@
 
     <!-- Brick 2: narrow in X, full Y height -->
     <core:NativeBlock
-        id="brick2"
+        bml:id="brick2"
         size="${ [b2SizeX, size[1], size[2]] }"
         offset="${ [b2OffsetX, 0, 0] }"
         baseCutoutType="${ baseCutoutType }"
