@@ -28,6 +28,8 @@
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
   ">
 
+  <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
+
   <name>Calibrator</name>
   <type>com.machineblocks.calibration.Calibrator</type>
   <baseType>com.machineblocks.core.Block</baseType>

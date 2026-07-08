@@ -27,6 +27,8 @@
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
   ">
 
+  <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
+
   <name>Connector</name>
   <type>com.machineblocks.examples.Connector</type>
   <baseType>com.machineblocks.core.Block</baseType>

@@ -27,6 +27,8 @@
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
   ">
 
+  <idea>Lego compatible standard building block.</idea>
+
   <name>Standard</name>
   <type>com.machineblocks.bricks.Standard</type>
   <baseType>com.machineblocks.core.Block</baseType>
