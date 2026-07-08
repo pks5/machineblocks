@@ -2,7 +2,7 @@
   MachineBlocks.com Block File
 
   Name: Connector
-  Filename: Connector.mbml
+  Filename: Connector.bml
   FQN: com.machineblocks.examples.Connector
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>

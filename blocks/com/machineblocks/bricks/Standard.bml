@@ -2,7 +2,7 @@
   MachineBlocks.com Block File
 
   Name: MachineBlock Standard Brick
-  Filename: Standard.mbml
+  Filename: Standard.bml
   FQN: com.machineblocks.bricks.Standard
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>

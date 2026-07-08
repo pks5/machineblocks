@@ -2,7 +2,7 @@
   MachineBlocks.com Block File
 
   Name: Calibrator
-  Filename: Calibrator.mbml
+  Filename: Calibrator.bml
   FQN: com.machineblocks.calibration.Calibrator
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
@@ -90,7 +90,7 @@
     -->
     <block>
       <name>Utils</name>
-      <baseType>org.blockml.service.FunctionBlock</baseType>
+      <baseType>org.blockml.core.FunctionBlock</baseType>
       <version>1.0.0</version>
 
       <capabilities>
