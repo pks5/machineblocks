@@ -37,28 +37,28 @@
 
   <properties>
     <!-- Native properties with non-default values -->
-    <property name="base"          type="Boolean" defaultValue="false" />
-    <property name="studs"         type="Boolean" defaultValue="false" />
-    <property name="alignChildren" type="String"  defaultValue="ccs" />
+    <property name="base"          type="Boolean" value="false" />
+    <property name="studs"         type="Boolean" value="false" />
+    <property name="alignChildren" type="String"  value="ccs" />
     <property name="size"          type="type:Size3D"
-              defaultValue="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
+              value="${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }" />
 
     <!-- Custom properties -->
-    <property name="numberOfSamples" type="Integer" defaultValue="5">
+    <property name="numberOfSamples" type="Integer" value="5">
       <documentation>Number of samples per calibration row. Range: [3..9]</documentation>
     </property>
-    <property name="font"      type="String"  defaultValue="Liberation Sans" />
-    <property name="fontSize"  type="Float"   defaultValue="3" />
-    <property name="labelSize" type="Integer" defaultValue="5" />
+    <property name="font"      type="String"  value="Liberation Sans" />
+    <property name="fontSize"  type="Float"   value="3" />
+    <property name="labelSize" type="Integer" value="5" />
 
-    <property name="studDiameterAdjustmentValueStart"      type="Float" defaultValue="0.0" />
-    <property name="studDiameterAdjustmentValueStep"       type="Float" defaultValue="0.1" />
-    <property name="baseWallThicknessAdjustmentValueStart" type="Float" defaultValue="-0.3" />
-    <property name="baseWallThicknessAdjustmentValueStep"  type="Float" defaultValue="0.1" />
-    <property name="tubeDiameterAdjustmentValueStart"      type="Float" defaultValue="-0.3" />
-    <property name="tubeDiameterAdjustmentValueStep"       type="Float" defaultValue="0.1" />
-    <property name="pinDiameterAdjustmentValueStart"       type="Float" defaultValue="-0.2" />
-    <property name="pinDiameterAdjustmentValueStep"        type="Float" defaultValue="0.1" />
+    <property name="studDiameterAdjustmentValueStart"      type="Float" value="0.0" />
+    <property name="studDiameterAdjustmentValueStep"       type="Float" value="0.1" />
+    <property name="baseWallThicknessAdjustmentValueStart" type="Float" value="-0.3" />
+    <property name="baseWallThicknessAdjustmentValueStep"  type="Float" value="0.1" />
+    <property name="tubeDiameterAdjustmentValueStart"      type="Float" value="-0.3" />
+    <property name="tubeDiameterAdjustmentValueStep"       type="Float" value="0.1" />
+    <property name="pinDiameterAdjustmentValueStart"       type="Float" value="-0.2" />
+    <property name="pinDiameterAdjustmentValueStep"        type="Float" value="0.1" />
   </properties>
 
   <!--
@@ -143,13 +143,13 @@ function strSuffix(s, k, i = 0) =
       <baseType>com.machineblocks.core.Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <property name="label"           type="String"  defaultValue="" />
-        <property name="numberOfSamples" type="Integer" defaultValue="5" />
-        <property name="valueStart"      type="Float"   defaultValue="0" />
-        <property name="valueStep"       type="Float"   defaultValue="0.1" />
-        <property name="font"            type="String"  defaultValue="Liberation Sans" />
-        <property name="fontSize"        type="Float"   defaultValue="3" />
-        <property name="labelSize"       type="Integer" defaultValue="5" />
+        <property name="label"           type="String"  value="" />
+        <property name="numberOfSamples" type="Integer" value="5" />
+        <property name="valueStart"      type="Float"   value="0" />
+        <property name="valueStep"       type="Float"   value="0.1" />
+        <property name="font"            type="String"  value="Liberation Sans" />
+        <property name="fontSize"        type="Float"   value="3" />
+        <property name="labelSize"       type="Integer" value="5" />
       </properties>
       <composition>
 
@@ -208,9 +208,9 @@ function strSuffix(s, k, i = 0) =
       <baseType>com.machineblocks.core.Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <property name="numberOfSamples" type="Integer" defaultValue="5" />
-        <property name="valueStart"      type="Float"   defaultValue="0.0" />
-        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="numberOfSamples" type="Integer" value="5" />
+        <property name="valueStart"      type="Float"   value="0.0" />
+        <property name="valueStep"       type="Float"   value="0.1" />
       </properties>
       <composition>
         <bricks:StandardBrick
@@ -236,9 +236,9 @@ function strSuffix(s, k, i = 0) =
       <baseType>com.machineblocks.core.Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <property name="numberOfSamples" type="Integer" defaultValue="5" />
-        <property name="valueStart"      type="Float"   defaultValue="-0.3" />
-        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="numberOfSamples" type="Integer" value="5" />
+        <property name="valueStart"      type="Float"   value="-0.3" />
+        <property name="valueStep"       type="Float"   value="0.1" />
       </properties>
       <composition>
         <bricks:StandardBrick
@@ -266,9 +266,9 @@ function strSuffix(s, k, i = 0) =
       <baseType>com.machineblocks.core.Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <property name="numberOfSamples" type="Integer" defaultValue="5" />
-        <property name="valueStart"      type="Float"   defaultValue="-0.3" />
-        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="numberOfSamples" type="Integer" value="5" />
+        <property name="valueStart"      type="Float"   value="-0.3" />
+        <property name="valueStep"       type="Float"   value="0.1" />
       </properties>
       <composition>
         <bricks:StandardBrick
@@ -296,9 +296,9 @@ function strSuffix(s, k, i = 0) =
       <baseType>com.machineblocks.core.Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <property name="numberOfSamples" type="Integer" defaultValue="5" />
-        <property name="valueStart"      type="Float"   defaultValue="-0.2" />
-        <property name="valueStep"       type="Float"   defaultValue="0.1" />
+        <property name="numberOfSamples" type="Integer" value="5" />
+        <property name="valueStart"      type="Float"   value="-0.2" />
+        <property name="valueStep"       type="Float"   value="0.1" />
       </properties>
       <composition>
         <bricks:StandardBrick

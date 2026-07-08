@@ -41,43 +41,43 @@
       base=false, studs=false: the wrapper mb_block() is layout-only —
       geometry is rendered entirely by the two NativeBlock children.
     -->
-    <property name="studs" type="Boolean" defaultValue="true" />
+    <property name="studs" type="Boolean" value="true" />
 
     <!-- Size -->
-    <property name="size" type="type:Size3D" defaultValue="[4, 4, 3]" />
+    <property name="size" type="type:Size3D" value="[4, 4, 3]" />
 
     <!-- Cross geometry -->
-    <property name="brick1SizeY"   type="Integer" defaultValue="2">
+    <property name="brick1SizeY"   type="Integer" value="2">
       <documentation>Brick 1 size in Y-direction (grid units).</documentation>
     </property>
-    <property name="brick2SizeX"   type="Integer" defaultValue="2">
+    <property name="brick2SizeX"   type="Integer" value="2">
       <documentation>Brick 2 size in X-direction (grid units).</documentation>
     </property>
-    <property name="brick1OffsetY" type="Integer" defaultValue="0">
+    <property name="brick1OffsetY" type="Integer" value="0">
       <documentation>Brick 1 offset in Y-direction (grid units).</documentation>
     </property>
-    <property name="brick2OffsetX" type="Integer" defaultValue="0">
+    <property name="brick2OffsetX" type="Integer" value="0">
       <documentation>Brick 2 offset in X-direction (grid units).</documentation>
     </property>
 
     <!-- Base -->
-    <property name="baseCutoutType"         type="type:BaseCutoutType" defaultValue="standard" />
-    <property name="pillars"                type="Boolean"             defaultValue="true" />
-    <property name="baseReliefCut"          type="Boolean"             defaultValue="false" />
-    <property name="baseReliefCutHeight"    type="Float"               defaultValue="0.4" />
-    <property name="baseReliefCutThickness" type="Float"               defaultValue="0.4" />
-    <property name="grille"                 type="type:GrilleType"     defaultValue="none" />
-    <property name="grilleInverted"         type="Boolean"             defaultValue="false" />
-    <property name="grilleDepth"            type="Float"               defaultValue="1" />
-    <property name="grilleCount"            type="Float"               defaultValue="2.5" />
+    <property name="baseCutoutType"         type="type:BaseCutoutType" value="standard" />
+    <property name="pillars"                type="Boolean"             value="true" />
+    <property name="baseReliefCut"          type="Boolean"             value="false" />
+    <property name="baseReliefCutHeight"    type="Float"               value="0.4" />
+    <property name="baseReliefCutThickness" type="Float"               value="0.4" />
+    <property name="grille"                 type="type:GrilleType"     value="none" />
+    <property name="grilleInverted"         type="Boolean"             value="false" />
+    <property name="grilleDepth"            type="Float"               value="1" />
+    <property name="grilleCount"            type="Float"               value="2.5" />
 
-    <property name="studShift"       type="Boolean"          defaultValue="false" />
-    <property name="studType"        type="type:StudType"    defaultValue="solid" />
-    <property name="studPadding"     type="type:PaddingList" defaultValue="[0.2, 0.2, 0.2, 0.2]" />
-    <property name="studBaseOverlap" type="Float"            defaultValue="0.25" />
+    <property name="studShift"       type="Boolean"          value="false" />
+    <property name="studType"        type="type:StudType"    value="solid" />
+    <property name="studPadding"     type="type:PaddingList" value="[0.2, 0.2, 0.2, 0.2]" />
+    <property name="studBaseOverlap" type="Float"            value="0.25" />
 
     <!-- Style -->
-    <property name="baseColor" type="type:Color" defaultValue="#EAC645">
+    <property name="baseColor" type="type:Color" value="#EAC645">
       <suggestions>
         <suggestion value="#EAC645" label="Sun Flower" />
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -86,9 +86,9 @@
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
     </property>
-    <property name="surfacePattern"      type="String" defaultValue="none" />
-    <property name="surfacePatternScale" type="Float"  defaultValue="0.2" />
-    <property name="studIcon"            type="String" defaultValue="none" />
+    <property name="surfacePattern"      type="String" value="none" />
+    <property name="surfacePatternScale" type="Float"  value="0.2" />
+    <property name="studIcon"            type="String" value="none" />
 
   </properties>
 

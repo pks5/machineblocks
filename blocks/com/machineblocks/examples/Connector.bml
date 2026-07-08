@@ -37,20 +37,20 @@
   <properties>
 
     <!-- Grid dimensions -->
-    <property name="columns"   type="Integer" defaultValue="5" />
-    <property name="rows"      type="Integer" defaultValue="4" />
-    <property name="blockSize" type="type:Size3D" defaultValue="[4, 2, 3]" />
+    <property name="columns"   type="Integer" value="5" />
+    <property name="rows"      type="Integer" value="4" />
+    <property name="blockSize" type="type:Size3D" value="[4, 2, 3]" />
 
     <!--
       size is computed from columns, rows, blockSize.
-      Computed defaultValue — references other properties of this Block.
+      Computed value — references other properties of this Block.
       Cycle detection: columns, rows, blockSize have no dependencies → resolved first.
     -->
     <property name="size" type="type:Size3D"
-              defaultValue="${ [blockSize[0] * columns, blockSize[1] * rows, blockSize[2]] }" />
+              value="${ [blockSize[0] * columns, blockSize[1] * rows, blockSize[2]] }" />
 
     <!-- Checkerboard colors -->
-    <property name="colorA" type="type:Color" defaultValue="#55AB68">
+    <property name="colorA" type="type:Color" value="#55AB68">
       <suggestions>
         <suggestion value="#55AB68" label="Nephritis" />
         <suggestion value="#58B99D" label="Turquoise" />
@@ -59,7 +59,7 @@
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
     </property>
-    <property name="colorB" type="type:Color" defaultValue="#303D4E">
+    <property name="colorB" type="type:Color" value="#303D4E">
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
         <suggestion value="#38485C" label="Wet Asphalt" />
