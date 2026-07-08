@@ -29,7 +29,7 @@
   ">
 
   <name>Calibrator</name>
-  <fullQualifiedName>com.machineblocks.calibration.Calibrator</fullQualifiedName>
+  <type>com.machineblocks.calibration.Calibrator</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 

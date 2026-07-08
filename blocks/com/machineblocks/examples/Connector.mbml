@@ -28,7 +28,7 @@
   ">
 
   <name>Connector</name>
-  <fullQualifiedName>com.machineblocks.examples.Connector</fullQualifiedName>
+  <type>com.machineblocks.examples.Connector</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 

@@ -28,7 +28,7 @@
   ">
 
   <name>Cross</name>
-  <fullQualifiedName>com.machineblocks.examples.Cross</fullQualifiedName>
+  <type>com.machineblocks.examples.Cross</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>1.0.0</version>
 

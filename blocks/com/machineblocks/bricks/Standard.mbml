@@ -28,7 +28,7 @@
   ">
 
   <name>Standard</name>
-  <fullQualifiedName>com.machineblocks.bricks.Standard</fullQualifiedName>
+  <type>com.machineblocks.bricks.Standard</type>
   <baseType>com.machineblocks.core.Block</baseType>
   <version>3.0.0</version>
 
