@@ -18,14 +18,10 @@
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-    http://machineblocks.com/schema/core
-        https://machineblocks.com/schemas/machineblocks/core.xsd
-    http://machineblocks.com/schema/bricks
-        https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  "
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
+                      http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
+                      "
   xmlns:examples="com.machineblocks.examples">
 
   <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
@@ -38,13 +34,13 @@
   <properties>
 
     <!-- Grid dimensions -->
-    <columns   type="Integer" >
+    <columns type="Integer">
       <value>5</value>
     </columns>
-    <rows      type="Integer" >
+    <rows type="Integer">
       <value>4</value>
     </rows>
-    <blockSize type="type:Size3D" >
+    <blockSize type="type:Size3D">
       <value>[4, 2, 3]</value>
     </blockSize>
 
@@ -54,7 +50,7 @@
       Cycle detection: columns, rows, blockSize have no dependencies → resolved first.
     -->
     <size type="type:Size3D"
-              >
+    >
       <value>${ [blockSize[0] * columns, blockSize[1] * rows, blockSize[2]] }</value>
     </size>
 
@@ -106,12 +102,12 @@
 
     <bml:container bml:each="x, xStat : ${ columns }">
       <core:NativeBlock
-          bml:each="y, yStat : ${ rows }"
-          bml:id="${ 'brick_' + x + '_' + y }"
-          size="${ blockSize }"
-          offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
-          baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
-          connectors="${ #lists.concat(
+        bml:each="y, yStat : ${ rows }"
+        bml:id="${ 'brick_' + x + '_' + y }"
+        size="${ blockSize }"
+        offset="${ [x * blockSize[0], y * blockSize[1], 0] }"
+        baseColor="${ (x + y) % 2 == 0 ? colorA : colorB }"
+        connectors="${ #lists.concat(
             !xStat.first ? [{ face: 'x-', axis: 'z', type: 'female' }] : [],
             !xStat.last  ? [{ face: 'x+', axis: 'z', type: 'male'   }] : [],
             !yStat.first ? [{ face: 'y-', axis: 'z', type: 'female' }] : [],

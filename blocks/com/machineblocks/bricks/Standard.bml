@@ -18,14 +18,10 @@
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-    http://machineblocks.com/schema/core
-        https://machineblocks.com/schemas/machineblocks/core.xsd
-    http://machineblocks.com/schema/bricks
-        https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  "
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
+                      http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
+                      "
   xmlns:bricks="com.machineblocks.bricks">
 
   <idea>Lego compatible standard building block.</idea>
@@ -38,156 +34,156 @@
   <properties>
 
     <!-- Size -->
-    <size type="type:Size3D" >
+    <size type="type:Size3D">
       <value>[4, 2, 3]</value>
     </size>
 
     <!-- Base -->
-    <baseCutoutType type="type:BaseCutoutType" >
+    <baseCutoutType type="type:BaseCutoutType">
       <value>standard</value>
     </baseCutoutType>
-    <pillars                  type="Boolean"        >
+    <pillars type="Boolean">
       <value>true</value>
     </pillars>
-    <baseReliefCut            type="Boolean"        >
+    <baseReliefCut type="Boolean">
       <value>false</value>
     </baseReliefCut>
-    <baseReliefCutHeight      type="Float"          >
+    <baseReliefCutHeight type="Float">
       <value>0.375</value>
     </baseReliefCutHeight>
-    <baseReliefCutThickness   type="Float"          >
+    <baseReliefCutThickness type="Float">
       <value>0.375</value>
     </baseReliefCutThickness>
-    <baseRoundingRadius       type="type:RoundingRadius" >
+    <baseRoundingRadius type="type:RoundingRadius">
       <value>0</value>
     </baseRoundingRadius>
-    <grille                   type="type:GrilleType"       >
+    <grille type="type:GrilleType">
       <value>none</value>
     </grille>
-    <grilleInverted type="Boolean" >
+    <grilleInverted type="Boolean">
       <value>false</value>
     </grilleInverted>
-    <grilleDepth    type="Float"   >
+    <grilleDepth type="Float">
       <value>1</value>
     </grilleDepth>
-    <grilleCount    type="Float"   >
+    <grilleCount type="Float">
       <value>2.5</value>
     </grilleCount>
-    <bevel          type="type:BevelList" >
+    <bevel type="type:BevelList">
       <value>[[0,0],[0,0],[0,0],[0,0]]</value>
     </bevel>
 
     <!-- Studs -->
-    <studs           type="Boolean"     >
+    <studs type="Boolean">
       <value>true</value>
     </studs>
-    <studShift       type="Boolean"     >
+    <studShift type="Boolean">
       <value>false</value>
     </studShift>
-    <studType        type="type:StudType"       >
+    <studType type="type:StudType">
       <value>solid</value>
     </studType>
-    <studPadding     type="type:PaddingList" >
+    <studPadding type="type:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
-    <studBaseOverlap type="Float"       >
+    <studBaseOverlap type="Float">
       <value>0.25</value>
     </studBaseOverlap>
 
     <!-- Holes -->
-    <holeX            type="Boolean" >
+    <holeX type="Boolean">
       <value>false</value>
     </holeX>
-    <holeXType        type="type:HoleType"  >
+    <holeXType type="type:HoleType">
       <value>pin</value>
     </holeXType>
-    <holeXShift       type="Boolean" >
+    <holeXShift type="Boolean">
       <value>true</value>
     </holeXShift>
-    <holeXGridOffsetZ type="Float"   >
+    <holeXGridOffsetZ type="Float">
       <value>3.5</value>
     </holeXGridOffsetZ>
-    <holeY            type="Boolean" >
+    <holeY type="Boolean">
       <value>false</value>
     </holeY>
-    <holeYType        type="type:HoleType"  >
+    <holeYType type="type:HoleType">
       <value>pin</value>
     </holeYType>
-    <holeYShift       type="Boolean" >
+    <holeYShift type="Boolean">
       <value>true</value>
     </holeYShift>
-    <holeYGridOffsetZ type="Float"   >
+    <holeYGridOffsetZ type="Float">
       <value>3.5</value>
     </holeYGridOffsetZ>
-    <holeZ            type="Boolean" >
+    <holeZ type="Boolean">
       <value>false</value>
     </holeZ>
-    <holeZType        type="type:HoleType"  >
+    <holeZType type="type:HoleType">
       <value>pin</value>
     </holeZType>
-    <holeZShift       type="Boolean" >
+    <holeZShift type="Boolean">
       <value>true</value>
     </holeZShift>
 
     <!-- Recess -->
-    <recess              type="Boolean"        >
+    <recess type="Boolean">
       <value>false</value>
     </recess>
-    <recessStuds         type="Boolean"        >
+    <recessStuds type="Boolean">
       <value>false</value>
     </recessStuds>
-    <recessWallThickness type="type:PaddingList"    >
+    <recessWallThickness type="type:PaddingList">
       <value>[0.333, 0.333, 0.333, 0.333]</value>
     </recessWallThickness>
-    <recessDepth         type="type:AutoOr_Float" >
+    <recessDepth type="type:AutoOr_Float">
       <value>auto</value>
     </recessDepth>
-    <recessStudPadding   type="type:PaddingList"    >
+    <recessStudPadding type="type:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </recessStudPadding>
 
     <!-- Slope -->
-    <slope type="type:SlopeList" >
+    <slope type="type:SlopeList">
       <value>[0, 0, 0, 0]</value>
     </slope>
 
     <!-- Text -->
-    <text      type="String"  >
+    <text type="String">
       <value></value>
     </text>
-    <textSide  type="Integer" >
+    <textSide type="Integer">
       <value>5</value>
     </textSide>
-    <textDepth type="Float"   >
+    <textDepth type="Float">
       <value>0.5</value>
     </textDepth>
-    <textSize  type="Integer" >
+    <textSize type="Integer">
       <value>9</value>
     </textSize>
-    <textFont  type="String" >
+    <textFont type="String">
       <value>RBNo3.1 Black</value>
       <suggestions>
-        <suggestion value="Creato Display"               label="Creato Display" />
-        <suggestion value="RBNo3.1 Black"                label="RBNo3.1 Black" />
-        <suggestion value="Font Awesome 6 Free Regular"  label="Font Awesome Regular" />
-        <suggestion value="Font Awesome 6 Free Solid"    label="Font Awesome Solid" />
+        <suggestion value="Creato Display" label="Creato Display" />
+        <suggestion value="RBNo3.1 Black" label="RBNo3.1 Black" />
+        <suggestion value="Font Awesome 6 Free Regular" label="Font Awesome Regular" />
+        <suggestion value="Font Awesome 6 Free Solid" label="Font Awesome Solid" />
       </suggestions>
     </textFont>
-    <textStyle type="String" >
+    <textStyle type="String">
       <value>Regular</value>
       <suggestions>
         <suggestion value="Regular" label="Regular" />
-        <suggestion value="Bold"    label="Bold" />
-        <suggestion value="Black"   label="Black" />
-        <suggestion value="Light"   label="Light" />
-        <suggestion value="Thin"    label="Thin" />
-        <suggestion value="Medium"  label="Medium" />
+        <suggestion value="Bold" label="Bold" />
+        <suggestion value="Black" label="Black" />
+        <suggestion value="Light" label="Light" />
+        <suggestion value="Thin" label="Thin" />
+        <suggestion value="Medium" label="Medium" />
       </suggestions>
     </textStyle>
-    <textSpacing type="Float" >
+    <textSpacing type="Float">
       <value>1</value>
     </textSpacing>
-    <textColor   type="type:Color">
+    <textColor type="type:Color">
       <value>#303D4E</value>
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -215,13 +211,13 @@
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
     </baseColor>
-    <surfacePattern      type="String" >
+    <surfacePattern type="String">
       <value>none</value>
     </surfacePattern>
-    <surfacePatternScale type="Float"  >
+    <surfacePatternScale type="Float">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon            type="String" >
+    <studIcon type="String">
       <value>none</value>
     </studIcon>
 
@@ -237,52 +233,52 @@
   -->
   <composition>
     <core:NativeBlock
-        size="${ size }"
-        baseCutoutType="${ baseCutoutType }"
-        pillars="${ pillars }"
-        reliefCut="${ baseReliefCut }"
-        reliefCutHeight="${ baseReliefCutHeight }"
-        reliefCutThickness="${ baseReliefCutThickness }"
-        baseRoundingRadius="${ baseRoundingRadius }"
-        grille="${ grille }"
-        grilleInverted="${ grilleInverted }"
-        grilleDepth="${ grilleDepth }"
-        grilleCount="${ grilleCount }"
-        bevel="${ bevel }"
-        studs="${ studs }"
-        studShift="${ studShift }"
-        studType="${ studType }"
-        studPadding="${ studPadding }"
-        studBaseOverlap="${ studBaseOverlap }"
-        holeX="${ holeX }"
-        holeXType="${ holeXType }"
-        holeXShift="${ holeXShift }"
-        holeXGridOffsetZ="${ holeXGridOffsetZ }"
-        holeY="${ holeY }"
-        holeYType="${ holeYType }"
-        holeYShift="${ holeYShift }"
-        holeYGridOffsetZ="${ holeYGridOffsetZ }"
-        holeZ="${ holeZ }"
-        holeZType="${ holeZType }"
-        holeZShift="${ holeZShift }"
-        recess="${ recess }"
-        recessStuds="${ recessStuds }"
-        recessWallThickness="${ recessWallThickness }"
-        recessDepth="${ recessDepth }"
-        recessStudPadding="${ recessStudPadding }"
-        slope="${ slope }"
-        text="${ text }"
-        textSide="${ textSide }"
-        textDepth="${ textDepth }"
-        textSize="${ textSize }"
-        textFont="${ textFont }"
-        textStyle="${ textStyle }"
-        textSpacing="${ textSpacing }"
-        textColor="${ textColor }"
-        baseColor="${ baseColor }"
-        surfacePattern="${ surfacePattern }"
-        surfacePatternScale="${ surfacePatternScale }"
-        studIcon="${ studIcon }" />
+      size="${ size }"
+      baseCutoutType="${ baseCutoutType }"
+      pillars="${ pillars }"
+      reliefCut="${ baseReliefCut }"
+      reliefCutHeight="${ baseReliefCutHeight }"
+      reliefCutThickness="${ baseReliefCutThickness }"
+      baseRoundingRadius="${ baseRoundingRadius }"
+      grille="${ grille }"
+      grilleInverted="${ grilleInverted }"
+      grilleDepth="${ grilleDepth }"
+      grilleCount="${ grilleCount }"
+      bevel="${ bevel }"
+      studs="${ studs }"
+      studShift="${ studShift }"
+      studType="${ studType }"
+      studPadding="${ studPadding }"
+      studBaseOverlap="${ studBaseOverlap }"
+      holeX="${ holeX }"
+      holeXType="${ holeXType }"
+      holeXShift="${ holeXShift }"
+      holeXGridOffsetZ="${ holeXGridOffsetZ }"
+      holeY="${ holeY }"
+      holeYType="${ holeYType }"
+      holeYShift="${ holeYShift }"
+      holeYGridOffsetZ="${ holeYGridOffsetZ }"
+      holeZ="${ holeZ }"
+      holeZType="${ holeZType }"
+      holeZShift="${ holeZShift }"
+      recess="${ recess }"
+      recessStuds="${ recessStuds }"
+      recessWallThickness="${ recessWallThickness }"
+      recessDepth="${ recessDepth }"
+      recessStudPadding="${ recessStudPadding }"
+      slope="${ slope }"
+      text="${ text }"
+      textSide="${ textSide }"
+      textDepth="${ textDepth }"
+      textSize="${ textSize }"
+      textFont="${ textFont }"
+      textStyle="${ textStyle }"
+      textSpacing="${ textSpacing }"
+      textColor="${ textColor }"
+      baseColor="${ baseColor }"
+      surfacePattern="${ surfacePattern }"
+      surfacePatternScale="${ surfacePatternScale }"
+      studIcon="${ studIcon }" />
   </composition>
 
 </block>

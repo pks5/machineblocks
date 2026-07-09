@@ -19,14 +19,10 @@
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-    http://blockml.org/schema/block
-        https://blockml.org/schemas/core/block.xsd
-    http://machineblocks.com/schema/core
-        https://machineblocks.com/schemas/machineblocks/core.xsd
-    http://machineblocks.com/schema/bricks
-        https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  "
+  xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
+                      http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
+                      http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
+                      "
   xmlns:bcore="org.blockml.core"
   xmlns:btype="org.blockml.type"
   xmlns:calibration="com.machineblocks.calibration"
@@ -42,17 +38,17 @@
 
   <properties>
     <!-- Native properties with non-default values -->
-    <base          type="Boolean" >
+    <base type="Boolean">
       <value>false</value>
     </base>
-    <studs         type="Boolean" >
+    <studs type="Boolean">
       <value>false</value>
     </studs>
-    <alignChildren type="String"  >
+    <alignChildren type="String">
       <value>ccs</value>
     </alignChildren>
-    <size          type="type:Size3D"
-              >
+    <size type="type:Size3D"
+    >
       <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
     </size>
 
@@ -61,38 +57,38 @@
       <value>5</value>
       <documentation>Number of samples per calibration row. Range: [3..9]</documentation>
     </numberOfSamples>
-    <font      type="String"  >
+    <font type="String">
       <value>Liberation Sans</value>
     </font>
-    <fontSize  type="Float"   >
+    <fontSize type="Float">
       <value>3</value>
     </fontSize>
-    <labelSize type="Integer" >
+    <labelSize type="Integer">
       <value>5</value>
     </labelSize>
 
-    <studDiameterAdjustmentValueStart      type="Float" >
+    <studDiameterAdjustmentValueStart type="Float">
       <value>0.0</value>
     </studDiameterAdjustmentValueStart>
-    <studDiameterAdjustmentValueStep       type="Float" >
+    <studDiameterAdjustmentValueStep type="Float">
       <value>0.1</value>
     </studDiameterAdjustmentValueStep>
-    <baseWallThicknessAdjustmentValueStart type="Float" >
+    <baseWallThicknessAdjustmentValueStart type="Float">
       <value>-0.3</value>
     </baseWallThicknessAdjustmentValueStart>
-    <baseWallThicknessAdjustmentValueStep  type="Float" >
+    <baseWallThicknessAdjustmentValueStep type="Float">
       <value>0.1</value>
     </baseWallThicknessAdjustmentValueStep>
-    <tubeDiameterAdjustmentValueStart      type="Float" >
+    <tubeDiameterAdjustmentValueStart type="Float">
       <value>-0.3</value>
     </tubeDiameterAdjustmentValueStart>
-    <tubeDiameterAdjustmentValueStep       type="Float" >
+    <tubeDiameterAdjustmentValueStep type="Float">
       <value>0.1</value>
     </tubeDiameterAdjustmentValueStep>
-    <pinDiameterAdjustmentValueStart       type="Float" >
+    <pinDiameterAdjustmentValueStart type="Float">
       <value>-0.2</value>
     </pinDiameterAdjustmentValueStart>
-    <pinDiameterAdjustmentValueStep        type="Float" >
+    <pinDiameterAdjustmentValueStep type="Float">
       <value>0.1</value>
     </pinDiameterAdjustmentValueStep>
   </properties>
@@ -103,9 +99,9 @@
   -->
   <aggregations>
     <_utils
-                 type="Utils"
-                 beanName="utils"
-                 scope="context" />
+      type="Utils"
+      beanName="utils"
+      scope="context" />
   </aggregations>
 
   <subBlocks>
@@ -134,13 +130,13 @@
       <capabilities>
 
         <formatValue
-                    type="cap:Transformation"
-                    inputType="Float"
-                    outputType="String">
+          type="cap:Transformation"
+          inputType="Float"
+          outputType="String">
           <documentation>
             Formats a float for display by removing the leading zero before
             the decimal point.
-            Examples:  0.1 -> ".1"    -0.2 -> "-.2"    3.0 -> "3.0"
+            Examples: 0.1 -> ".1" -0.2 -> "-.2" 3.0 -> "3.0"
           </documentation>
           <implementation type="lang:OpenSCAD"><![CDATA[
 // Main function — name matches capability name, compiler adds block FQN prefix
@@ -179,68 +175,68 @@ function strSuffix(s, k, i = 0) =
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <label           type="String"  >
-      <value></value>
-    </label>
-        <numberOfSamples type="Integer" >
-      <value>5</value>
-    </numberOfSamples>
-        <valueStart      type="Float"   >
-      <value>0</value>
-    </valueStart>
-        <valueStep       type="Float"   >
-      <value>0.1</value>
-    </valueStep>
-        <font            type="String"  >
-      <value>Liberation Sans</value>
-    </font>
-        <fontSize        type="Float"   >
-      <value>3</value>
-    </fontSize>
-        <labelSize       type="Integer" >
-      <value>5</value>
-    </labelSize>
+        <label type="String">
+          <value></value>
+        </label>
+        <numberOfSamples type="Integer">
+          <value>5</value>
+        </numberOfSamples>
+        <valueStart type="Float">
+          <value>0</value>
+        </valueStart>
+        <valueStep type="Float">
+          <value>0.1</value>
+        </valueStep>
+        <font type="String">
+          <value>Liberation Sans</value>
+        </font>
+        <fontSize type="Float">
+          <value>3</value>
+        </fontSize>
+        <labelSize type="Integer">
+          <value>5</value>
+        </labelSize>
       </properties>
       <composition>
 
         <!-- Base strip: centered at row position -->
         <bricks:StandardBrick
-            bml:id="strip"
-            size="${ [2 * numberOfSamples + 1, 1, 1] }"
-            sizeMod="${ {'z+': -0.5} }"
-            baseCutoutType="none"
-            studs="false"
-            baseAdjustment="${ {'y': 0.11} }" />
+          bml:id="strip"
+          size="${ [2 * numberOfSamples + 1, 1, 1] }"
+          sizeMod="${ {'z+': -0.5} }"
+          baseCutoutType="none"
+          studs="false"
+          baseAdjustment="${ {'y': 0.11} }" />
 
         <!-- Label block: 1 stud above base strip -->
         <bricks:StandardBrick
-            bml:id="label"
-            size="${ [labelSize, 1, 1] }"
-            sizeMod="${ {'z+': -0.5} }"
-            offset="[0, 1, 0]"
-            text="${ label }"
-            textFont="${ font }"
-            textSize="${ fontSize }"
-            textFace="5"
-            textDepth="-0.25"
-            baseCutoutType="none"
-            studs="false"
-            baseAdjustment="${ {'y': 0.11} }" />
+          bml:id="label"
+          size="${ [labelSize, 1, 1] }"
+          sizeMod="${ {'z+': -0.5} }"
+          offset="[0, 1, 0]"
+          text="${ label }"
+          textFont="${ font }"
+          textSize="${ fontSize }"
+          textFace="5"
+          textDepth="-0.25"
+          baseCutoutType="none"
+          studs="false"
+          baseAdjustment="${ {'y': 0.11} }" />
 
         <!-- Value label blocks: 1 stud below base strip, one per sample -->
         <bricks:StandardBrick
-            bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 'val_' + i }"
-            size="[1, 1, 1]"
-            sizeMod="${ {'z+': -0.5} }"
-            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
-            text="${ @utils.formatValue(valueStart + i * valueStep) }"
-            textFont="${ font }"
-            textSize="${ fontSize }"
-            textFace="5"
-            textDepth="0.25"
-            baseCutoutType="none"
-            studs="false" />
+          bml:each="i : ${ numberOfSamples }"
+          bml:id="${ 'val_' + i }"
+          size="[1, 1, 1]"
+          sizeMod="${ {'z+': -0.5} }"
+          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
+          text="${ @utils.formatValue(valueStart + i * valueStep) }"
+          textFont="${ font }"
+          textSize="${ fontSize }"
+          textFace="5"
+          textDepth="0.25"
+          baseCutoutType="none"
+          studs="false" />
 
       </composition>
     </block>
@@ -258,24 +254,24 @@ function strSuffix(s, k, i = 0) =
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <numberOfSamples type="Integer" >
-      <value>5</value>
-    </numberOfSamples>
-        <valueStart      type="Float"   >
-      <value>0.0</value>
-    </valueStart>
-        <valueStep       type="Float"   >
-      <value>0.1</value>
-    </valueStep>
+        <numberOfSamples type="Integer">
+          <value>5</value>
+        </numberOfSamples>
+        <valueStart type="Float">
+          <value>0.0</value>
+        </valueStart>
+        <valueStep type="Float">
+          <value>0.1</value>
+        </valueStep>
       </properties>
       <composition>
         <bricks:StandardBrick
-            bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
-            size="[1, 1, 0.4]"
-            baseCutoutType="none"
-            studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
+          bml:each="i : ${ numberOfSamples }"
+          bml:id="${ 's_' + i }"
+          size="[1, 1, 0.4]"
+          baseCutoutType="none"
+          studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
       </composition>
     </block>
 
@@ -292,26 +288,26 @@ function strSuffix(s, k, i = 0) =
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <numberOfSamples type="Integer" >
-      <value>5</value>
-    </numberOfSamples>
-        <valueStart      type="Float"   >
-      <value>-0.3</value>
-    </valueStart>
-        <valueStep       type="Float"   >
-      <value>0.1</value>
-    </valueStep>
+        <numberOfSamples type="Integer">
+          <value>5</value>
+        </numberOfSamples>
+        <valueStart type="Float">
+          <value>-0.3</value>
+        </valueStart>
+        <valueStep type="Float">
+          <value>0.1</value>
+        </valueStep>
       </properties>
       <composition>
         <bricks:StandardBrick
-            bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
-            size="[1, 1, 1]"
-            studs="false"
-            rotation="[180, 0, 0]"
-            baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-            topPlateHelpers="false"
-            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          bml:each="i : ${ numberOfSamples }"
+          bml:id="${ 's_' + i }"
+          size="[1, 1, 1]"
+          studs="false"
+          rotation="[180, 0, 0]"
+          baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+          topPlateHelpers="false"
+          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
       </composition>
     </block>
 
@@ -328,27 +324,27 @@ function strSuffix(s, k, i = 0) =
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <numberOfSamples type="Integer" >
-      <value>5</value>
-    </numberOfSamples>
-        <valueStart      type="Float"   >
-      <value>-0.3</value>
-    </valueStart>
-        <valueStep       type="Float"   >
-      <value>0.1</value>
-    </valueStep>
+        <numberOfSamples type="Integer">
+          <value>5</value>
+        </numberOfSamples>
+        <valueStart type="Float">
+          <value>-0.3</value>
+        </valueStart>
+        <valueStep type="Float">
+          <value>0.1</value>
+        </valueStep>
       </properties>
       <composition>
         <bricks:StandardBrick
-            bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
-            size="[2, 2, 1]"
-            studs="false"
-            rotation="[180, 0, 0]"
-            tubeDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-            baseCrop="${ {'xy': -0.5} }"
-            baseWallThickness="0"
-            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          bml:each="i : ${ numberOfSamples }"
+          bml:id="${ 's_' + i }"
+          size="[2, 2, 1]"
+          studs="false"
+          rotation="[180, 0, 0]"
+          tubeDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+          baseCrop="${ {'xy': -0.5} }"
+          baseWallThickness="0"
+          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
       </composition>
     </block>
 
@@ -364,27 +360,27 @@ function strSuffix(s, k, i = 0) =
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
-        <numberOfSamples type="Integer" >
-      <value>5</value>
-    </numberOfSamples>
-        <valueStart      type="Float"   >
-      <value>-0.2</value>
-    </valueStart>
-        <valueStep       type="Float"   >
-      <value>0.1</value>
-    </valueStep>
+        <numberOfSamples type="Integer">
+          <value>5</value>
+        </numberOfSamples>
+        <valueStart type="Float">
+          <value>-0.2</value>
+        </valueStart>
+        <valueStep type="Float">
+          <value>0.1</value>
+        </valueStep>
       </properties>
       <composition>
         <bricks:StandardBrick
-            bml:each="i : ${ numberOfSamples }"
-            bml:id="${ 's_' + i }"
-            size="[2, 1, 1]"
-            studs="false"
-            rotation="[180, 0, 0]"
-            pinDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-            baseCrop="${ {'x': -0.5} }"
-            baseWallThickness="0"
-            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          bml:each="i : ${ numberOfSamples }"
+          bml:id="${ 's_' + i }"
+          size="[2, 1, 1]"
+          studs="false"
+          rotation="[180, 0, 0]"
+          pinDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+          baseCrop="${ {'x': -0.5} }"
+          baseWallThickness="0"
+          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
       </composition>
     </block>
 
@@ -400,75 +396,75 @@ function strSuffix(s, k, i = 0) =
 
     <!-- Row 0: studDiameterAdjustment -->
     <Base
-        bml:id="base_stud"
-        offset="[0, 0, 0]"
-        label="studDiaAdj"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ studDiameterAdjustmentValueStart }"
-        valueStep="${ studDiameterAdjustmentValueStep }"
-        font="${ font }"
-        fontSize="${ fontSize }"
-        labelSize="${ labelSize }" />
+      bml:id="base_stud"
+      offset="[0, 0, 0]"
+      label="studDiaAdj"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ studDiameterAdjustmentValueStart }"
+      valueStep="${ studDiameterAdjustmentValueStep }"
+      font="${ font }"
+      fontSize="${ fontSize }"
+      labelSize="${ labelSize }" />
     <StudDiameter
-        bml:id="samples_stud"
-        offset="[0, 0, 0]"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ studDiameterAdjustmentValueStart }"
-        valueStep="${ studDiameterAdjustmentValueStep }" />
+      bml:id="samples_stud"
+      offset="[0, 0, 0]"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ studDiameterAdjustmentValueStart }"
+      valueStep="${ studDiameterAdjustmentValueStep }" />
 
     <!-- Row 1: baseWallThicknessAdjustment -->
     <Base
-        id="base_wall"
-        offset="[0, -3, 0]"
-        label="wallThickAdj"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ baseWallThicknessAdjustmentValueStart }"
-        valueStep="${ baseWallThicknessAdjustmentValueStep }"
-        font="${ font }"
-        fontSize="${ fontSize }"
-        labelSize="${ labelSize }" />
+      id="base_wall"
+      offset="[0, -3, 0]"
+      label="wallThickAdj"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ baseWallThicknessAdjustmentValueStart }"
+      valueStep="${ baseWallThicknessAdjustmentValueStep }"
+      font="${ font }"
+      fontSize="${ fontSize }"
+      labelSize="${ labelSize }" />
     <BaseWallThickness
-        id="samples_wall"
-        offset="[0, -3, 2]"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ baseWallThicknessAdjustmentValueStart }"
-        valueStep="${ baseWallThicknessAdjustmentValueStep }" />
+      id="samples_wall"
+      offset="[0, -3, 2]"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ baseWallThicknessAdjustmentValueStart }"
+      valueStep="${ baseWallThicknessAdjustmentValueStep }" />
 
     <!-- Row 2: tubeDiameterAdjustment -->
     <Base
-        bml:id="base_tube"
-        offset="[0, -6, 0]"
-        label="tubeZDiaAdj"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ tubeDiameterAdjustmentValueStart }"
-        valueStep="${ tubeDiameterAdjustmentValueStep }"
-        font="${ font }"
-        fontSize="${ fontSize }"
-        labelSize="${ labelSize }" />
+      bml:id="base_tube"
+      offset="[0, -6, 0]"
+      label="tubeZDiaAdj"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ tubeDiameterAdjustmentValueStart }"
+      valueStep="${ tubeDiameterAdjustmentValueStep }"
+      font="${ font }"
+      fontSize="${ fontSize }"
+      labelSize="${ labelSize }" />
     <TubeDiameter
-        bml:id="samples_tube"
-        offset="[0, -6, 2]"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ tubeDiameterAdjustmentValueStart }"
-        valueStep="${ tubeDiameterAdjustmentValueStep }" />
+      bml:id="samples_tube"
+      offset="[0, -6, 2]"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ tubeDiameterAdjustmentValueStart }"
+      valueStep="${ tubeDiameterAdjustmentValueStep }" />
 
     <!-- Row 3: pinDiameterAdjustment -->
     <Base
-        bml:id="base_pin"
-        offset="[0, -9, 0]"
-        label="pinDiaAdj"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ pinDiameterAdjustmentValueStart }"
-        valueStep="${ pinDiameterAdjustmentValueStep }"
-        font="${ font }"
-        fontSize="${ fontSize }"
-        labelSize="${ labelSize }" />
+      bml:id="base_pin"
+      offset="[0, -9, 0]"
+      label="pinDiaAdj"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ pinDiameterAdjustmentValueStart }"
+      valueStep="${ pinDiameterAdjustmentValueStep }"
+      font="${ font }"
+      fontSize="${ fontSize }"
+      labelSize="${ labelSize }" />
     <PinDiameter
-        bml:id="samples_pin"
-        offset="[0, -9, 2]"
-        numberOfSamples="${ numberOfSamples }"
-        valueStart="${ pinDiameterAdjustmentValueStart }"
-        valueStep="${ pinDiameterAdjustmentValueStep }" />
+      bml:id="samples_pin"
+      offset="[0, -9, 2]"
+      numberOfSamples="${ numberOfSamples }"
+      valueStart="${ pinDiameterAdjustmentValueStart }"
+      valueStep="${ pinDiameterAdjustmentValueStep }" />
 
   </composition>
 
