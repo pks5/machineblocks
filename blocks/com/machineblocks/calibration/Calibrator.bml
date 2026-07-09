@@ -33,8 +33,6 @@
   <name>Calibrator</name>
   <type>calibration:Calibrator</type>
   <baseType>core:Block</baseType>
-  <version>1.0.0</version>
-
   <properties>
     <!-- Native properties with non-default values -->
     <base type="Boolean">
@@ -124,8 +122,6 @@
     <block>
       <name>Utils</name>
       <baseType>bcore:Entity</baseType>
-      <version>1.0.0</version>
-
       <capabilities>
 
         <formatValue
@@ -172,7 +168,6 @@ function strSuffix(s, k, i = 0) =
     <block>
       <name>Base</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <properties>
         <label type="String">
           <value></value>
@@ -251,7 +246,6 @@ function strSuffix(s, k, i = 0) =
     <block>
       <name>StudDiameter</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -285,7 +279,6 @@ function strSuffix(s, k, i = 0) =
     <block>
       <name>BaseWallThickness</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -321,7 +314,6 @@ function strSuffix(s, k, i = 0) =
     <block>
       <name>TubeDiameter</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -357,7 +349,6 @@ function strSuffix(s, k, i = 0) =
     <block>
       <name>PinDiameter</name>
       <baseType>core:Block</baseType>
-      <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>

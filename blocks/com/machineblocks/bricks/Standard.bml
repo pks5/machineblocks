@@ -28,8 +28,6 @@
   <name>Standard</name>
   <type>bricks:Standard</type>
   <baseType>core:Block</baseType>
-  <version>3.0.0</version>
-
   <properties>
 
     <!-- Size -->
