@@ -22,12 +22,9 @@
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:examples="com.machineblocks.examples"
-  xmlns:status="org.blockml.status">
+  xmlns:examples="com.machineblocks.examples">
 
-  <idea bml:status="status:Stable">Corner brick formed by two overlapping standard bricks.</idea>
-
-  <status>status:Stable</status>
+  <idea>Corner brick formed by two overlapping standard bricks.</idea>
   <name>Cross</name>
   <type>examples:Cross</type>
   <baseType>core:Block</baseType>
@@ -52,19 +49,19 @@
     <!-- Cross geometry -->
     <brick1SizeY type="Integer">
       <value>2</value>
-      <documentation bml:status="status:Stable">Brick 1 size in Y-direction (grid units).</documentation>
+      <documentation>Brick 1 size in Y-direction (grid units).</documentation>
     </brick1SizeY>
     <brick2SizeX type="Integer">
       <value>2</value>
-      <documentation bml:status="status:Stable">Brick 2 size in X-direction (grid units).</documentation>
+      <documentation>Brick 2 size in X-direction (grid units).</documentation>
     </brick2SizeX>
     <brick1OffsetY type="Integer">
       <value>0</value>
-      <documentation bml:status="status:Stable">Brick 1 offset in Y-direction (grid units).</documentation>
+      <documentation>Brick 1 offset in Y-direction (grid units).</documentation>
     </brick1OffsetY>
     <brick2OffsetX type="Integer">
       <value>0</value>
-      <documentation bml:status="status:Stable">Brick 2 offset in X-direction (grid units).</documentation>
+      <documentation>Brick 2 offset in X-direction (grid units).</documentation>
     </brick2OffsetX>
 
     <!-- Base -->

@@ -13,7 +13,6 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
   xmlns:data="http://blockml.org/schema/data"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
@@ -25,9 +24,7 @@
   xmlns:bricks="com.machineblocks.bricks"
   xmlns:status="org.blockml.status">
 
-  <idea bml:status="status:Stable">Lego compatible standard building block.</idea>
-
-  <status>status:Stable</status>
+  <idea>Lego compatible standard building block.</idea>
   <name>Standard</name>
   <type>bricks:Standard</type>
   <baseType>core:Block</baseType>

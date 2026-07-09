@@ -44,6 +44,8 @@ STL / 3MF
 
 BlockML definitions and documentation express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status.
 
+**Default:** `status:Stable` at document root. Status is inherited downward; authors declare status **only when deviating** from the inherited effective status.
+
 Core status blocks:
 
 ```text

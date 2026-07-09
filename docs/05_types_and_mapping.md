@@ -27,14 +27,16 @@ For architecture context see `01_system.md`.
 The MBOM type system is defined but not yet fully validated against the SCAD
 implementation. Maturity is expressed via **status Block references** — see `02_mbml.md` — § Status.
 
+**Default:** `status:Stable`. Declare status only when deviating (e.g. `<status>status:Draft</status>` on a parameter whose mapping is incomplete).
+
 ```text
-status:Stable       — implemented, tested, mapping complete
+status:Stable       — implemented, tested, mapping complete (implicit default)
 status:Draft        — defined; mapping incomplete or untested
 status:Stub         — placeholder; shape declared, behaviour not yet specified
 status:Deprecated   — retained for compatibility; do not use in new work
 ```
 
-Use `status:Draft` with an explicit note when SCAD implementation and MBOM target diverge (formerly labelled WIP in prose).
+Use `status:Draft` with an explicit note when SCAD implementation and MBOM target diverge.
 
 ---
 

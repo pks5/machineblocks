@@ -22,12 +22,9 @@
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:examples="com.machineblocks.examples"
-  xmlns:status="org.blockml.status">
+  xmlns:examples="com.machineblocks.examples">
 
-  <idea bml:status="status:Stable">Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
-
-  <status>status:Stable</status>
+  <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
   <name>Connector</name>
   <type>examples:Connector</type>
   <baseType>core:Block</baseType>
