@@ -79,11 +79,11 @@
     <!-- Style -->
     <property name="baseColor" type="type:Color" value="#EAC645">
       <suggestions>
-        <suggestion value="#EAC645" label="Sun Flower" />
-        <suggestion value="#303D4E" label="Midnight Blue" />
-        <suggestion value="#58B99D" label="Turquoise" />
-        <suggestion value="#D65745" label="Alizarin" />
-        <suggestion value="#EDF0F1" label="Clouds" />
+        <type:Color value="#EAC645" label="Sun Flower" />
+        <type:Color value="#303D4E" label="Midnight Blue" />
+        <type:Color value="#58B99D" label="Turquoise" />
+        <type:Color value="#D65745" label="Alizarin" />
+        <type:Color value="#EDF0F1" label="Clouds" />
       </suggestions>
     </property>
     <property name="surfacePattern"      type="String" value="none" />
@@ -110,6 +110,9 @@
       Brick 1 gets a gap in Y for where Brick 2 passes through.
       Brick 2 gets a gap in X for where Brick 1 passes through.
   -->
+  <aggregations>
+
+  <aggregation name="_items">
   <composition
       bml:with="
         b1SizeY   = ${ #math.min(size[1], brick1SizeY) },
@@ -169,5 +172,6 @@
         baseWallGaps="${ [['x', b1OffsetY, b1SizeY]] }" />
 
   </composition>
-
+</aggregation>
+</aggregations>
 </block>

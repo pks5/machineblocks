@@ -98,9 +98,9 @@
       <capabilities>
 
         <capability name="formatValue"
-                    type="org.blockml.capability.Sync"
-                    payloadType="org.blockml.type.Float"
-                    returnType="org.blockml.type.String">
+                    type="org.blockml.capability.Transformation"
+                    inputType="org.blockml.type.Float"
+                    outputType="org.blockml.type.String">
           <documentation>
             Formats a float for display by removing the leading zero before
             the decimal point.
