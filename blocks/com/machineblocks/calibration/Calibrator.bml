@@ -26,13 +26,17 @@
         https://machineblocks.com/schemas/machineblocks/core.xsd
     http://machineblocks.com/schema/bricks
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  ">
+  "
+  xmlns:bcore="org.blockml.core"
+  xmlns:btype="org.blockml.type"
+  xmlns:calibration="com.machineblocks.calibration"
+  xmlns:cap="org.blockml.capability">
 
   <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
 
   <name>Calibrator</name>
-  <type>com.machineblocks.calibration.Calibrator</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>calibration:Calibrator</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <properties>
@@ -123,15 +127,15 @@
     -->
     <block>
       <name>Utils</name>
-      <baseType>org.blockml.core.FunctionBlock</baseType>
+      <baseType>bcore:FunctionBlock</baseType>
       <version>1.0.0</version>
 
       <capabilities>
 
         <formatValue
-                    type="org.blockml.capability.Transformation"
-                    inputType="org.blockml.type.Float"
-                    outputType="org.blockml.type.String">
+                    type="cap:Transformation"
+                    inputType="Float"
+                    outputType="String">
           <documentation>
             Formats a float for display by removing the leading zero before
             the decimal point.
@@ -171,7 +175,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>Base</name>
-      <baseType>com.machineblocks.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
         <label           type="String"  >
@@ -250,7 +254,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>StudDiameter</name>
-      <baseType>com.machineblocks.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer" >
@@ -284,7 +288,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>BaseWallThickness</name>
-      <baseType>com.machineblocks.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer" >
@@ -320,7 +324,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>TubeDiameter</name>
-      <baseType>com.machineblocks.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer" >
@@ -356,7 +360,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>PinDiameter</name>
-      <baseType>com.machineblocks.core.Block</baseType>
+      <baseType>core:Block</baseType>
       <version>1.0.0</version>
       <properties>
         <numberOfSamples type="Integer" >

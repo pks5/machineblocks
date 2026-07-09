@@ -25,13 +25,14 @@
         https://machineblocks.com/schemas/machineblocks/core.xsd
     http://machineblocks.com/schema/bricks
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  ">
+  "
+  xmlns:examples="com.machineblocks.examples">
 
   <idea>Corner brick formed by two overlapping standard bricks.</idea>
 
   <name>Cross</name>
-  <type>com.machineblocks.examples.Cross</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>examples:Cross</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <properties>

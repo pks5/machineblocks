@@ -25,13 +25,14 @@
         https://machineblocks.com/schemas/machineblocks/core.xsd
     http://machineblocks.com/schema/bricks
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  ">
+  "
+  xmlns:bricks="com.machineblocks.bricks">
 
   <idea>Lego compatible standard building block.</idea>
 
   <name>Standard</name>
-  <type>com.machineblocks.bricks.Standard</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>bricks:Standard</type>
+  <baseType>core:Block</baseType>
   <version>3.0.0</version>
 
   <properties>

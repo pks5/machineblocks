@@ -25,13 +25,14 @@
         https://machineblocks.com/schemas/machineblocks/core.xsd
     http://machineblocks.com/schema/bricks
         https://machineblocks.com/schemas/machineblocks/bricks.xsd
-  ">
+  "
+  xmlns:examples="com.machineblocks.examples">
 
   <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
 
   <name>Connector</name>
-  <type>com.machineblocks.examples.Connector</type>
-  <baseType>com.machineblocks.core.Block</baseType>
+  <type>examples:Connector</type>
+  <baseType>core:Block</baseType>
   <version>1.0.0</version>
 
   <properties>
