@@ -30,7 +30,8 @@
   xmlns:bcore="org.blockml.core"
   xmlns:btype="org.blockml.type"
   xmlns:calibration="com.machineblocks.calibration"
-  xmlns:cap="org.blockml.capability">
+  xmlns:cap="org.blockml.capability"
+  xmlns:lang="org.blockml.language">
 
   <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
 
@@ -110,11 +111,11 @@
   <subBlocks>
 
     <!--
-      Sub-Block: Calibrator.Utils (FunctionBlock)
+      Sub-Block: Calibrator.Utils
       FQN: com.machineblocks.calibration.Calibrator.Utils
       SCAD: mb__com__machineblocks__calibration__Calibrator__Utils
 
-      Utility FunctionBlock for the Calibrator block family.
+      Utility sub-block for the Calibrator block family.
       Declared context-scoped on the Calibrator root — all Sub-Blocks
       inherit @utils automatically.
 
@@ -127,7 +128,7 @@
     -->
     <block>
       <name>Utils</name>
-      <baseType>bcore:FunctionBlock</baseType>
+      <baseType>bcore:Entity</baseType>
       <version>1.0.0</version>
 
       <capabilities>
@@ -141,7 +142,7 @@
             the decimal point.
             Examples:  0.1 -> ".1"    -0.2 -> "-.2"    3.0 -> "3.0"
           </documentation>
-          <implementation language="scad"><![CDATA[
+          <implementation type="lang:OpenSCAD"><![CDATA[
 // Main function — name matches capability name, compiler adds block FQN prefix
 function formatValue(x) =
     replaceZeroDot(str(#math.round_n(x, 1)));
