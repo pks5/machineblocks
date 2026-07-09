@@ -37,65 +37,143 @@
   <properties>
 
     <!-- Size -->
-    <property name="size" type="type:Size3D" value="[4, 2, 3]" />
+    <size type="type:Size3D" >
+      <value>[4, 2, 3]</value>
+    </size>
 
     <!-- Base -->
-    <property name="baseCutoutType" type="type:BaseCutoutType" value="standard" />
-    <property name="pillars"                  type="Boolean"        value="true" />
-    <property name="baseReliefCut"            type="Boolean"        value="false" />
-    <property name="baseReliefCutHeight"      type="Float"          value="0.375" />
-    <property name="baseReliefCutThickness"   type="Float"          value="0.375" />
-    <property name="baseRoundingRadius"       type="type:RoundingRadius" value="0" />
-    <property name="grille"                   type="type:GrilleType"       value="none" />
-    <property name="grilleInverted" type="Boolean" value="false" />
-    <property name="grilleDepth"    type="Float"   value="1" />
-    <property name="grilleCount"    type="Float"   value="2.5" />
-    <property name="bevel"          type="type:BevelList" value="[[0,0],[0,0],[0,0],[0,0]]" />
+    <baseCutoutType type="type:BaseCutoutType" >
+      <value>standard</value>
+    </baseCutoutType>
+    <pillars                  type="Boolean"        >
+      <value>true</value>
+    </pillars>
+    <baseReliefCut            type="Boolean"        >
+      <value>false</value>
+    </baseReliefCut>
+    <baseReliefCutHeight      type="Float"          >
+      <value>0.375</value>
+    </baseReliefCutHeight>
+    <baseReliefCutThickness   type="Float"          >
+      <value>0.375</value>
+    </baseReliefCutThickness>
+    <baseRoundingRadius       type="type:RoundingRadius" >
+      <value>0</value>
+    </baseRoundingRadius>
+    <grille                   type="type:GrilleType"       >
+      <value>none</value>
+    </grille>
+    <grilleInverted type="Boolean" >
+      <value>false</value>
+    </grilleInverted>
+    <grilleDepth    type="Float"   >
+      <value>1</value>
+    </grilleDepth>
+    <grilleCount    type="Float"   >
+      <value>2.5</value>
+    </grilleCount>
+    <bevel          type="type:BevelList" >
+      <value>[[0,0],[0,0],[0,0],[0,0]]</value>
+    </bevel>
 
     <!-- Studs -->
-    <property name="studs"           type="Boolean"     value="true" />
-    <property name="studShift"       type="Boolean"     value="false" />
-    <property name="studType"        type="type:StudType"       value="solid" />
-    <property name="studPadding"     type="type:PaddingList" value="[0.2, 0.2, 0.2, 0.2]" />
-    <property name="studBaseOverlap" type="Float"       value="0.25" />
+    <studs           type="Boolean"     >
+      <value>true</value>
+    </studs>
+    <studShift       type="Boolean"     >
+      <value>false</value>
+    </studShift>
+    <studType        type="type:StudType"       >
+      <value>solid</value>
+    </studType>
+    <studPadding     type="type:PaddingList" >
+      <value>[0.2, 0.2, 0.2, 0.2]</value>
+    </studPadding>
+    <studBaseOverlap type="Float"       >
+      <value>0.25</value>
+    </studBaseOverlap>
 
     <!-- Holes -->
-    <property name="holeX"            type="Boolean" value="false" />
-    <property name="holeXType"        type="type:HoleType"  value="pin" />
-    <property name="holeXShift"       type="Boolean" value="true" />
-    <property name="holeXGridOffsetZ" type="Float"   value="3.5" />
-    <property name="holeY"            type="Boolean" value="false" />
-    <property name="holeYType"        type="type:HoleType"  value="pin" />
-    <property name="holeYShift"       type="Boolean" value="true" />
-    <property name="holeYGridOffsetZ" type="Float"   value="3.5" />
-    <property name="holeZ"            type="Boolean" value="false" />
-    <property name="holeZType"        type="type:HoleType"  value="pin" />
-    <property name="holeZShift"       type="Boolean" value="true" />
+    <holeX            type="Boolean" >
+      <value>false</value>
+    </holeX>
+    <holeXType        type="type:HoleType"  >
+      <value>pin</value>
+    </holeXType>
+    <holeXShift       type="Boolean" >
+      <value>true</value>
+    </holeXShift>
+    <holeXGridOffsetZ type="Float"   >
+      <value>3.5</value>
+    </holeXGridOffsetZ>
+    <holeY            type="Boolean" >
+      <value>false</value>
+    </holeY>
+    <holeYType        type="type:HoleType"  >
+      <value>pin</value>
+    </holeYType>
+    <holeYShift       type="Boolean" >
+      <value>true</value>
+    </holeYShift>
+    <holeYGridOffsetZ type="Float"   >
+      <value>3.5</value>
+    </holeYGridOffsetZ>
+    <holeZ            type="Boolean" >
+      <value>false</value>
+    </holeZ>
+    <holeZType        type="type:HoleType"  >
+      <value>pin</value>
+    </holeZType>
+    <holeZShift       type="Boolean" >
+      <value>true</value>
+    </holeZShift>
 
     <!-- Recess -->
-    <property name="recess"              type="Boolean"        value="false" />
-    <property name="recessStuds"         type="Boolean"        value="false" />
-    <property name="recessWallThickness" type="type:PaddingList"    value="[0.333, 0.333, 0.333, 0.333]" />
-    <property name="recessDepth"         type="type:AutoOr_Float" value="auto" />
-    <property name="recessStudPadding"   type="type:PaddingList"    value="[0.2, 0.2, 0.2, 0.2]" />
+    <recess              type="Boolean"        >
+      <value>false</value>
+    </recess>
+    <recessStuds         type="Boolean"        >
+      <value>false</value>
+    </recessStuds>
+    <recessWallThickness type="type:PaddingList"    >
+      <value>[0.333, 0.333, 0.333, 0.333]</value>
+    </recessWallThickness>
+    <recessDepth         type="type:AutoOr_Float" >
+      <value>auto</value>
+    </recessDepth>
+    <recessStudPadding   type="type:PaddingList"    >
+      <value>[0.2, 0.2, 0.2, 0.2]</value>
+    </recessStudPadding>
 
     <!-- Slope -->
-    <property name="slope" type="type:SlopeList" value="[0, 0, 0, 0]" />
+    <slope type="type:SlopeList" >
+      <value>[0, 0, 0, 0]</value>
+    </slope>
 
     <!-- Text -->
-    <property name="text"      type="String"  value="" />
-    <property name="textSide"  type="Integer" value="5" />
-    <property name="textDepth" type="Float"   value="0.5" />
-    <property name="textSize"  type="Integer" value="9" />
-    <property name="textFont"  type="String"  value="RBNo3.1 Black">
+    <text      type="String"  >
+      <value></value>
+    </text>
+    <textSide  type="Integer" >
+      <value>5</value>
+    </textSide>
+    <textDepth type="Float"   >
+      <value>0.5</value>
+    </textDepth>
+    <textSize  type="Integer" >
+      <value>9</value>
+    </textSize>
+    <textFont  type="String" >
+      <value>RBNo3.1 Black</value>
       <suggestions>
         <suggestion value="Creato Display"               label="Creato Display" />
         <suggestion value="RBNo3.1 Black"                label="RBNo3.1 Black" />
         <suggestion value="Font Awesome 6 Free Regular"  label="Font Awesome Regular" />
         <suggestion value="Font Awesome 6 Free Solid"    label="Font Awesome Solid" />
       </suggestions>
-    </property>
-    <property name="textStyle" type="String"  value="Regular">
+    </textFont>
+    <textStyle type="String" >
+      <value>Regular</value>
       <suggestions>
         <suggestion value="Regular" label="Regular" />
         <suggestion value="Bold"    label="Bold" />
@@ -104,9 +182,12 @@
         <suggestion value="Thin"    label="Thin" />
         <suggestion value="Medium"  label="Medium" />
       </suggestions>
-    </property>
-    <property name="textSpacing" type="Float" value="1" />
-    <property name="textColor"   type="type:Color" value="#303D4E">
+    </textStyle>
+    <textSpacing type="Float" >
+      <value>1</value>
+    </textSpacing>
+    <textColor   type="type:Color">
+      <value>#303D4E</value>
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
         <suggestion value="#EAC645" label="Sun Flower" />
@@ -117,10 +198,11 @@
         <suggestion value="#D65745" label="Alizarin" />
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
-    </property>
+    </textColor>
 
     <!-- Style -->
-    <property name="baseColor" type="type:Color" value="#EAC645">
+    <baseColor type="type:Color">
+      <value>#EAC645</value>
       <suggestions>
         <suggestion value="#EAC645" label="Sun Flower" />
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -131,10 +213,16 @@
         <suggestion value="#D65745" label="Alizarin" />
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
-    </property>
-    <property name="surfacePattern"      type="String" value="none" />
-    <property name="surfacePatternScale" type="Float"  value="0.2" />
-    <property name="studIcon"            type="String" value="none" />
+    </baseColor>
+    <surfacePattern      type="String" >
+      <value>none</value>
+    </surfacePattern>
+    <surfacePatternScale type="Float"  >
+      <value>0.2</value>
+    </surfacePatternScale>
+    <studIcon            type="String" >
+      <value>none</value>
+    </studIcon>
 
   </properties>
 

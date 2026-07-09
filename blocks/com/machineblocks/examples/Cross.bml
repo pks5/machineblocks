@@ -41,43 +41,78 @@
       base=false, studs=false: the wrapper mb_block() is layout-only —
       geometry is rendered entirely by the two NativeBlock children.
     -->
-    <property name="studs" type="Boolean" value="true" />
+    <studs type="Boolean" >
+      <value>true</value>
+    </studs>
 
     <!-- Size -->
-    <property name="size" type="type:Size3D" value="[4, 4, 3]" />
+    <size type="type:Size3D" >
+      <value>[4, 4, 3]</value>
+    </size>
 
     <!-- Cross geometry -->
-    <property name="brick1SizeY"   type="Integer" value="2">
+    <brick1SizeY   type="Integer">
+      <value>2</value>
       <documentation>Brick 1 size in Y-direction (grid units).</documentation>
-    </property>
-    <property name="brick2SizeX"   type="Integer" value="2">
+    </brick1SizeY>
+    <brick2SizeX   type="Integer">
+      <value>2</value>
       <documentation>Brick 2 size in X-direction (grid units).</documentation>
-    </property>
-    <property name="brick1OffsetY" type="Integer" value="0">
+    </brick2SizeX>
+    <brick1OffsetY type="Integer">
+      <value>0</value>
       <documentation>Brick 1 offset in Y-direction (grid units).</documentation>
-    </property>
-    <property name="brick2OffsetX" type="Integer" value="0">
+    </brick1OffsetY>
+    <brick2OffsetX type="Integer">
+      <value>0</value>
       <documentation>Brick 2 offset in X-direction (grid units).</documentation>
-    </property>
+    </brick2OffsetX>
 
     <!-- Base -->
-    <property name="baseCutoutType"         type="type:BaseCutoutType" value="standard" />
-    <property name="pillars"                type="Boolean"             value="true" />
-    <property name="baseReliefCut"          type="Boolean"             value="false" />
-    <property name="baseReliefCutHeight"    type="Float"               value="0.4" />
-    <property name="baseReliefCutThickness" type="Float"               value="0.4" />
-    <property name="grille"                 type="type:GrilleType"     value="none" />
-    <property name="grilleInverted"         type="Boolean"             value="false" />
-    <property name="grilleDepth"            type="Float"               value="1" />
-    <property name="grilleCount"            type="Float"               value="2.5" />
+    <baseCutoutType         type="type:BaseCutoutType" >
+      <value>standard</value>
+    </baseCutoutType>
+    <pillars                type="Boolean"             >
+      <value>true</value>
+    </pillars>
+    <baseReliefCut          type="Boolean"             >
+      <value>false</value>
+    </baseReliefCut>
+    <baseReliefCutHeight    type="Float"               >
+      <value>0.4</value>
+    </baseReliefCutHeight>
+    <baseReliefCutThickness type="Float"               >
+      <value>0.4</value>
+    </baseReliefCutThickness>
+    <grille                 type="type:GrilleType"     >
+      <value>none</value>
+    </grille>
+    <grilleInverted         type="Boolean"             >
+      <value>false</value>
+    </grilleInverted>
+    <grilleDepth            type="Float"               >
+      <value>1</value>
+    </grilleDepth>
+    <grilleCount            type="Float"               >
+      <value>2.5</value>
+    </grilleCount>
 
-    <property name="studShift"       type="Boolean"          value="false" />
-    <property name="studType"        type="type:StudType"    value="solid" />
-    <property name="studPadding"     type="type:PaddingList" value="[0.2, 0.2, 0.2, 0.2]" />
-    <property name="studBaseOverlap" type="Float"            value="0.25" />
+    <studShift       type="Boolean"          >
+      <value>false</value>
+    </studShift>
+    <studType        type="type:StudType"    >
+      <value>solid</value>
+    </studType>
+    <studPadding     type="type:PaddingList" >
+      <value>[0.2, 0.2, 0.2, 0.2]</value>
+    </studPadding>
+    <studBaseOverlap type="Float"            >
+      <value>0.25</value>
+    </studBaseOverlap>
 
     <!-- Style -->
-    <property name="baseColor" type="type:Color" value="#EAC645">
+    <baseColor type="type:Color">
+      <value>#EAC645</value>
       <suggestions>
         <type:Color value="#EAC645" label="Sun Flower" />
         <type:Color value="#303D4E" label="Midnight Blue" />
@@ -85,10 +120,16 @@
         <type:Color value="#D65745" label="Alizarin" />
         <type:Color value="#EDF0F1" label="Clouds" />
       </suggestions>
-    </property>
-    <property name="surfacePattern"      type="String" value="none" />
-    <property name="surfacePatternScale" type="Float"  value="0.2" />
-    <property name="studIcon"            type="String" value="none" />
+    </baseColor>
+    <surfacePattern      type="String" >
+      <value>none</value>
+    </surfacePattern>
+    <surfacePatternScale type="Float"  >
+      <value>0.2</value>
+    </surfacePatternScale>
+    <studIcon            type="String" >
+      <value>none</value>
+    </studIcon>
 
   </properties>
 
@@ -112,7 +153,7 @@
   -->
   <aggregations>
 
-  <aggregation name="_items">
+  <_items>
   <composition
       bml:with="
         b1SizeY   = ${ #math.min(size[1], brick1SizeY) },
@@ -172,6 +213,6 @@
         baseWallGaps="${ [['x', b1OffsetY, b1SizeY]] }" />
 
   </composition>
-</aggregation>
+</_items>
 </aggregations>
 </block>
