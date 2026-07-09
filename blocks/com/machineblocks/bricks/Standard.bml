@@ -22,10 +22,12 @@
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:bricks="com.machineblocks.bricks">
+  xmlns:bricks="com.machineblocks.bricks"
+  xmlns:status="org.blockml.status">
 
-  <idea>Lego compatible standard building block.</idea>
+  <idea bml:status="status:Stable">Lego compatible standard building block.</idea>
 
+  <status>status:Stable</status>
   <name>Standard</name>
   <type>bricks:Standard</type>
   <baseType>core:Block</baseType>
@@ -55,6 +57,7 @@
       <value>0.375</value>
     </baseReliefCutThickness>
     <baseRoundingRadius type="type:RoundingRadius">
+      <status>status:Draft</status>
       <value>0</value>
     </baseRoundingRadius>
     <grille type="type:GrilleType">

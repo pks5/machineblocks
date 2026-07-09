@@ -40,19 +40,28 @@ STL / 3MF
 
 ---
 
-## Documentation Status Convention
+## Status Convention
 
-This documentation covers a system that is actively being finalized. The V3 SCAD library is approximately 90–95% complete. The MBOM type system is defined but not yet fully validated against the SCAD implementation. Discrepancies between SCAD and MBOM are expected during this phase and are tracked explicitly.
+BlockML definitions and documentation express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status.
 
-Each parameter and mapping may carry one of three status annotations:
+Core status blocks:
 
-**Stable** — Implemented, tested, and MBOM mapping complete. Behavior is reliable.
+```text
+status:Stable       — implemented, tested, and MBOM mapping complete. Behavior is reliable.
+status:Draft        — V3 definition exists; implementation or MBOM mapping incomplete or untested. May change.
+status:Stub         — placeholder; shape declared, behaviour not yet specified.
+status:Deprecated   — retained for compatibility; do not use in new work.
+```
 
-**Draft** — V3 definition exists. Implementation or MBOM mapping is incomplete or untested. May change.
+Use `status:Draft` with an explicit note when SCAD implementation and MBOM target are misaligned (formerly labelled WIP in prose). Example:
 
-**WIP** — Known gap. SCAD implementation and MBOM target are currently misaligned. An explicit note describes what is missing or different. The `roundingRadius` parameters are the primary example: the MBOM target format is defined in `05_types_and_mapping.md`, but the current SCAD implementation still reflects V2 behavior.
+```text
+Status: status:Draft — MBOM canonical form defined; SCAD implementation reflects V2 behavior.
+```
 
-Status annotations apply independently to the SCAD implementation and to the MBOM mapping. A parameter can be `Stable` on the SCAD side and `Draft` on the MBOM mapping side.
+Status annotations apply independently to the SCAD implementation and to the MBOM mapping. A parameter can be `status:Stable` on the SCAD side and `status:Draft` on the MBOM mapping side.
+
+Domain libraries may define additional status blocks. There is no implicit resolution of bare names — always use the `status:` prefix.
 
 ---
 

@@ -22,14 +22,19 @@ For architecture context see `01_system.md`.
 
 ---
 
-## Documentation Status
+## Status
 
 The MBOM type system is defined but not yet fully validated against the SCAD
-implementation. Status annotations are used throughout:
+implementation. Maturity is expressed via **status Block references** — see `02_mbml.md` — § Status.
 
-- **Stable** — implemented, tested, mapping complete
-- **Draft** — defined, mapping incomplete or untested
-- **WIP** — known gap between SCAD implementation and MBOM target; explicit note included
+```text
+status:Stable       — implemented, tested, mapping complete
+status:Draft        — defined; mapping incomplete or untested
+status:Stub         — placeholder; shape declared, behaviour not yet specified
+status:Deprecated   — retained for compatibility; do not use in new work
+```
+
+Use `status:Draft` with an explicit note when SCAD implementation and MBOM target diverge (formerly labelled WIP in prose).
 
 ---
 
@@ -339,7 +344,7 @@ SCAD: ["face", [x, y]]                                              → defaults
 
 ## RoundingRadius
 
-> **Status: WIP**
+> **Status: `status:Draft`**
 > The MBOM canonical form and V3 SCAD input modes are defined below. The current
 > SCAD implementation reflects V2 behavior (Modus 1 only, no ellipse support per
 > corner, no per-corner 6-radius support). Modus 2 and Modus 3 are defined here

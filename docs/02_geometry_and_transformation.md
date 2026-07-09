@@ -10,7 +10,7 @@ This document explains the concepts and relationships behind MachineBlocks geome
 
 ## SCAD Renderer Context
 
-This document describes geometry and transformation concepts as implemented in the MachineBlocks V3 SCAD library. In the MBML/MBOM workflow, these concepts correspond to the canonical geometry types defined in `05_types_and_mapping.md` — for example, `sizeMod` maps to `FaceVector6<FloatUnitGrid>`, `crop` to a negative `FaceVector6`, and `align` to `AxisXYZ<AlignValue>`. The SCAD implementation is the render target; MBOM is the canonical representation. Where SCAD behavior and MBOM target diverge, this is noted with a status annotation.
+This document describes geometry and transformation concepts as implemented in the MachineBlocks V3 SCAD library. In the MBML/MBOM workflow, these concepts correspond to the canonical geometry types defined in `05_types_and_mapping.md` — for example, `sizeMod` maps to `FaceVector6<FloatUnitGrid>`, `crop` to a negative `FaceVector6`, and `align` to `AxisXYZ<AlignValue>`. The SCAD implementation is the render target; MBOM is the canonical representation. Where SCAD behavior and MBOM target diverge, this is noted with a status Block reference (`status:Draft`, …) — see `01_system.md` — Status Convention.
 
 ---
 

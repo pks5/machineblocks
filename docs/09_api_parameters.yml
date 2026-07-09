@@ -306,7 +306,7 @@ parameters:
     unit: mm
     default: 1.6
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: rarely
     description: |
       Base unit of the MachineBlocks system in millimeters.
@@ -328,7 +328,7 @@ parameters:
     unit: mbu
     default: [5, 2]
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: rarely
     description: |
       Grid size in mbu, representing a 1x1 plate.
@@ -346,7 +346,7 @@ parameters:
     unit: dimensionless
     default: 1.0
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Global scaling factor. Scales all mbu-based values.
@@ -360,7 +360,7 @@ parameters:
     unit: mm
     default: 0.4
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Nozzle diameter of the 3D printer in mm. Typically set once in the
@@ -378,7 +378,7 @@ parameters:
     unit: mm
     default: 0.2
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Layer height of the 3D printer in mm. Typically set once in the
@@ -397,7 +397,7 @@ parameters:
     unit: dimensionless
     default: ""
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Unique identifier of the block or part within a block tree. Used primarily
@@ -427,7 +427,7 @@ parameters:
     unit: dimensionless
     default: false
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Enables debug output to the console. Has no effect on geometry.
@@ -439,7 +439,7 @@ parameters:
     unit: dimensionless
     default: true
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Whether the block is rendered at all. When false, the block and all
@@ -479,7 +479,7 @@ parameters:
     unit: unitGrid
     default: [0, 0, 0, 0, 0, 0]
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Semantic size modification per side, in grid units. Adjusts the
@@ -634,7 +634,7 @@ parameters:
     unit: mixed (follows individual parameter units)
     default: false
     since: "3.0"
-    status: experimental
+    status: status:Draft
     ai_usage: never
     description: |
       Defines one or more void volumes to subtract from the block body.
@@ -680,7 +680,7 @@ parameters:
     unit: dimensionless
     default: "start"
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Alignment relative to the origin, per axis.
@@ -713,7 +713,7 @@ parameters:
     unit: dimensionless
     default: "start"
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Defines the origin inside a parent brick for child positioning.
@@ -921,7 +921,7 @@ parameters:
     unit: "position in studs, length in 1x1 bricks"
     default: []
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Gaps in the underside wall (baseCutoutType=standard).
@@ -996,7 +996,7 @@ parameters:
     group: rounding
     type: float_or_array
     mbom_type: "RoundingRadius"
-    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
+    mbom_status: status:Draft  # see 05_types_and_mapping.md RoundingRadius section
     format: |
       Float: all corners all axes.
       3-element array [x, y, z]: per axis, all 4 corners.
@@ -1138,7 +1138,7 @@ parameters:
     unit: mm
     default: [-0.1, 0]
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Global calibration adjustment for block size, applied uniformly.
@@ -1166,7 +1166,7 @@ parameters:
     unit: mm
     default: "auto"
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Per-side calibration adjustment for the inner recess walls and floor.
@@ -1865,7 +1865,7 @@ parameters:
     unit: mm
     default: 0.0
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Calibration adjustment for holeXYZAxleThickness, in mm.
@@ -2185,7 +2185,7 @@ parameters:
     group: tongue_groove
     type: float_or_auto
     mbom_type: "AutoOr<RoundingRadius>"
-    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
+    mbom_status: status:Draft  # see 05_types_and_mapping.md RoundingRadius section
     unit: unitGrid
     default: "auto"
     ai_usage: rarely
@@ -2293,7 +2293,7 @@ parameters:
     unit: mbu
     default: 0.2
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Additional depth clearance above the tongue inside the groove.
@@ -2311,7 +2311,7 @@ parameters:
     unit: mm
     default: 0.1
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Clearance added to the groove width to allow the tongue to fit.
@@ -2331,7 +2331,7 @@ parameters:
     unit: mbu
     default: 0
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: config_only
     description: |
       Extra clearance in the groove before the clamp recess. In the groove,
@@ -2416,7 +2416,7 @@ parameters:
     group: recess
     type: float_or_auto
     mbom_type: "AutoOr<RoundingRadius>"
-    mbom_status: "WIP — see 05_types_and_mapping.md RoundingRadius section"
+    mbom_status: status:Draft  # see 05_types_and_mapping.md RoundingRadius section
     unit: unitGrid
     default: "auto"
     ai_usage: rarely
@@ -2434,7 +2434,7 @@ parameters:
     unit: unitGrid[1] (plates)
     default: "auto"
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] = 2 mbu).
@@ -2550,7 +2550,7 @@ parameters:
     unit: "side: side index (0-3) or string ("x-" etc.), offsets: unitGrid"
     default: []
     since: "2"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Openings in recess walls. Each entry specifies a side and optional
@@ -2678,7 +2678,7 @@ parameters:
     unit: dimensionless
     default: "ccc"
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Alignment of the text on the brick surface, using the same
@@ -3078,7 +3078,7 @@ parameters:
     unit: "position in unitGrid, sizes in mm"
     default: []
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Mounting screw holes on any face of the brick. Each entry defines one hole
@@ -3135,7 +3135,7 @@ parameters:
     unit: mm
     default: 0
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Default inset ring thickness around screw holes. 0 = no inset.
@@ -3147,7 +3147,7 @@ parameters:
     unit: mm
     default: 0
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Default inset ring depth for screw holes. 0 = no inset.
@@ -3470,7 +3470,7 @@ composite_block_parameters:
     unit: dimensionless
     default: "assembled"
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Controls the visualization mode of a composite block.
@@ -3502,7 +3502,7 @@ composite_block_parameters:
     unit: dimensionless
     default: "all"
     since: "3.0"
-    status: stable
+    status: status:Stable
     ai_usage: yes
     description: |
       Controls which named render groups of a composite block are rendered.

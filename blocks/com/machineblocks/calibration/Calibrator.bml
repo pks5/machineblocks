@@ -27,10 +27,12 @@
   xmlns:btype="org.blockml.type"
   xmlns:calibration="com.machineblocks.calibration"
   xmlns:cap="org.blockml.capability"
-  xmlns:lang="org.blockml.language">
+  xmlns:lang="org.blockml.language"
+  xmlns:status="org.blockml.status">
 
-  <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
+  <idea bml:status="status:Stable">Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
 
+  <status>status:Stable</status>
   <name>Calibrator</name>
   <type>calibration:Calibrator</type>
   <baseType>core:Block</baseType>
@@ -55,7 +57,7 @@
     <!-- Custom properties -->
     <numberOfSamples type="Integer">
       <value>5</value>
-      <documentation>Number of samples per calibration row. Range: [3..9]</documentation>
+      <documentation bml:status="status:Stable">Number of samples per calibration row. Range: [3..9]</documentation>
     </numberOfSamples>
     <font type="String">
       <value>Liberation Sans</value>
@@ -123,6 +125,7 @@
         strSuffix      → mb__...__Utils__strSuffix        (helper)
     -->
     <block>
+      <status>status:Stable</status>
       <name>Utils</name>
       <baseType>bcore:Entity</baseType>
       <version>1.0.0</version>
@@ -133,7 +136,7 @@
           type="cap:Transformation"
           inputType="Float"
           outputType="String">
-          <documentation>
+          <documentation bml:status="status:Stable">
             Formats a float for display by removing the leading zero before
             the decimal point.
             Examples: 0.1 -> ".1" -0.2 -> "-.2" 3.0 -> "3.0"
@@ -171,6 +174,7 @@ function strSuffix(s, k, i = 0) =
       Uses @utils.formatValue() — inherited from Calibrator via scope="context".
     -->
     <block>
+      <status>status:Stable</status>
       <name>Base</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
@@ -250,6 +254,7 @@ function strSuffix(s, k, i = 0) =
       NOTE: studDiameterAdjustment is config_only in MB3 — used intentionally.
     -->
     <block>
+      <status>status:Stable</status>
       <name>StudDiameter</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
@@ -284,6 +289,7 @@ function strSuffix(s, k, i = 0) =
       NOTE: baseWallThicknessAdjustment is config_only in MB3 — used intentionally.
     -->
     <block>
+      <status>status:Stable</status>
       <name>BaseWallThickness</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
@@ -320,6 +326,7 @@ function strSuffix(s, k, i = 0) =
       NOTE: V2 tubeZDiameterAdjustment -> V3 tubeDiameterAdjustment (unified).
     -->
     <block>
+      <status>status:Stable</status>
       <name>TubeDiameter</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
@@ -356,6 +363,7 @@ function strSuffix(s, k, i = 0) =
       Inverted 2x1 sample blocks with varying pinDiameterAdjustment.
     -->
     <block>
+      <status>status:Stable</status>
       <name>PinDiameter</name>
       <baseType>core:Block</baseType>
       <version>1.0.0</version>
