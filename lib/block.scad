@@ -67,8 +67,9 @@ module mb_block(
     stabilizerExpansionOffset = mb_param_stabilizerExpansionOffset(config, settings);
 
     pillars = mb_param_pillars(config, settings);
-    pillarGapCornerLength = mb_param_pillarGapCornerLength(config, settings);
-    pillarGapMiddle = mb_param_pillarGapMiddle(config, settings);
+    pillarGapAutoConfig = mb_param_pillarGapAutoConfig(config, settings);
+    pillarGapCornerLength = [0];
+    pillarGapMiddle = [1];
 
     recess = mb_param_recess(config, settings);
     recessWallThickness = mb_param_recessWallThickness(config, settings);
@@ -80,7 +81,7 @@ module mb_block(
     previewRender = mb_param_scadPreviewPreRender(config, settings);
     previewRenderConvexity = mb_param_scadPreviewPreRenderConvexity(config, settings);
 
-    blockId = mb_param_id(config, settings);
+    
     debug = mb_param_debug(config, settings);
     debugShowOnly = mb_param_debugShowOnly(config, settings);
 
@@ -99,6 +100,7 @@ module mb_block(
         settings = settings
     );
 
+    blockId = mb_block_get_id(block_obj);
     size = mb_block_get_size(block_obj);
     sizeAdjustment = mb_param_sizeAdjustment(config, settings);
 

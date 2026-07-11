@@ -14,6 +14,7 @@ function mb_block_obj(
     settings
 ) =
     let(
+        //TODO generate id if undef
         id = mb_param_id(config, settings),
         debug = mb_param_debug(config, settings),
 

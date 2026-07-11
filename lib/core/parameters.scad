@@ -21,7 +21,7 @@ function mb_param_printerLayerHeight(config, settings, default = undef) = mb_par
 /*
 * ID, Debug, Render
 */
-function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default != undef ? default : "[Block]");
+function mb_param_id(config, settings, default = undef) = mb_param(config, settings, "id", default);
 function mb_param_debug(config, settings, default = undef) = mb_param(config, settings, "debug", default != undef ? default : false);
 function mb_param_debugShowOnly(config, settings, default = undef) = mb_param(config, settings, "debugShowOnly", default != undef ? default : undef);
 
@@ -134,10 +134,8 @@ function mb_param_stabilizerExpansionOffset(config, settings, default = undef) =
 function mb_param_pillars(config, settings, default = undef) = mb_param(config, settings, "pillars", default != undef ? default : true);
 function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
 function mb_param_pillarInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "pillarInnerClampThickness", default != undef ? default : 0.1);
-
-// TODO implement & rename
-function mb_param_pillarGapCornerLength(config, settings, default = undef) = mb_param(config, settings, "pillarGapCornerLength", default != undef ? default : 2);
-function mb_param_pillarGapMiddle(config, settings, default = undef) = mb_param(config, settings, "pillarGapMiddle", default != undef ? default : 10);
+// TODO implement
+function mb_param_pillarGapAutoConfig(config, settings, default = undef) = mb_param(config, settings, "pillarGapAutoConfig", default != undef ? default : [2, 10]);
 
 /*
 * Pins
@@ -159,7 +157,7 @@ function mb_param_tubeDiameterAdjustment(config, settings, default = undef) = mb
 
 function mb_param_slope(config, settings, default = undef) = mb_param(config, settings, "slope", default != undef ? default : false);
 function mb_param_slopeBaseHeightBottom(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightBottom", default != undef ? default : 1.333);
-function mb_param_slopeBaseHeightInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightLower", default != undef ? default : 1.125);
+function mb_param_slopeBaseHeightInner(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightInner", default != undef ? default : 1.125);
 function mb_param_slopeBaseHeightTop(config, settings, default = undef) = mb_param(config, settings, "slopeBaseHeightTop", default != undef ? default : 1);
 
 /*
@@ -187,7 +185,7 @@ function mb_param_holeXYZInsetDepthAdjustment(config, settings, default = undef)
 // TODO implement
 function mb_param_holeXYZAxleThickness(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThickness", default != undef ? default : 1);
 // TODO implement
-function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0);
+function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = undef) = mb_param(config, settings, "holeXYZAxleThicknessAdjustment", default != undef ? default : 0.0);
 
 // TODO implement
 function mb_param_holeXYZType(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
@@ -218,7 +216,7 @@ function mb_param_studRounding(config, settings, default = undef) = mb_param(con
 // Clamp
 // TODO validate
 function mb_param_studClampHeight(config, settings, default = undef) = mb_param(config, settings, "studClampHeight", default != undef ? default : 0.5);
-function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0);
+function mb_param_studClampThickness(config, settings, default = undef) = mb_param(config, settings, "studClampThickness", default != undef ? default : 0.0);
 function mb_param_studClampOffset(config, settings, default = undef) = mb_param(config, settings, "studClampOffset", default != undef ? default : "auto");
 
 // TODO introduce?
@@ -406,10 +404,10 @@ function mb_param_scadQualityClassMinSegments(config, settings, default = undef)
     ]);
 
 function mb_param_scadQualitySegmentMultiplier(config, settings, default = undef) = mb_param(config, settings, "scadQualitySegmentMultiplier", 
-    default != undef ? default : 1);
+    default != undef ? default : 1.0);
 
 function mb_param_scadPreviewQuality(config, settings, default = undef) = mb_param(config, settings, "scadPreviewQuality", 
-    default != undef ? default : 1);
+    default != undef ? default : 1.0);
 
 function mb_param_scadPreviewMaxMult(config, settings, default = undef) = mb_param(config, settings, "scadPreviewMaxMult", 
     default != undef ? default : 2.5);
