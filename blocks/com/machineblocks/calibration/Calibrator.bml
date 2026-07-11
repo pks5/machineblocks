@@ -41,7 +41,7 @@
     <studs type="Boolean">
       <value>false</value>
     </studs>
-    <alignChildren type="String">
+    <alignChildren type="Text">
       <value>ccs</value>
     </alignChildren>
     <size type="type:Size3D"
@@ -54,7 +54,7 @@
       <value>5</value>
       <documentation>Number of samples per calibration row. Range: [3..9]</documentation>
     </numberOfSamples>
-    <font type="String">
+    <font type="Text">
       <value>Liberation Sans</value>
     </font>
     <fontSize type="Float">
@@ -127,7 +127,7 @@
         <formatValue
           type="cap:Transformation"
           inputType="Float"
-          outputType="String">
+          outputType="Text">
           <documentation>
             Formats a float for display by removing the leading zero before
             the decimal point.
@@ -169,7 +169,7 @@ function strSuffix(s, k, i = 0) =
       <name>Base</name>
       <baseType>core:Block</baseType>
       <properties>
-        <label type="String">
+        <label type="Text">
           <value></value>
         </label>
         <numberOfSamples type="Integer">
@@ -181,7 +181,7 @@ function strSuffix(s, k, i = 0) =
         <valueStep type="Float">
           <value>0.1</value>
         </valueStep>
-        <font type="String">
+        <font type="Text">
           <value>Liberation Sans</value>
         </font>
         <fontSize type="Float">

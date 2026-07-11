@@ -146,7 +146,7 @@
     </slope>
 
     <!-- Text -->
-    <text type="String">
+    <text type="Text">
       <value></value>
     </text>
     <textSide type="Integer">
@@ -158,7 +158,7 @@
     <textSize type="Integer">
       <value>9</value>
     </textSize>
-    <textFont type="String">
+    <textFont type="Text">
       <value>RBNo3.1 Black</value>
       <suggestions>
         <suggestion value="Creato Display" label="Creato Display" />
@@ -167,7 +167,7 @@
         <suggestion value="Font Awesome 6 Free Solid" label="Font Awesome Solid" />
       </suggestions>
     </textFont>
-    <textStyle type="String">
+    <textStyle type="Text">
       <value>Regular</value>
       <suggestions>
         <suggestion value="Regular" label="Regular" />
@@ -209,13 +209,13 @@
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
     </baseColor>
-    <surfacePattern type="String">
+    <surfacePattern type="Text">
       <value>none</value>
     </surfacePattern>
     <surfacePatternScale type="Float">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="String">
+    <studIcon type="Text">
       <value>none</value>
     </studIcon>
 
