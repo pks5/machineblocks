@@ -27,7 +27,7 @@
 #
 # ============================================================================
 
-version: "3.0.4"
+version: "3.0.5"
 
 # ============================================================================
 # GLOBAL RULES
@@ -115,12 +115,12 @@ global_rules:
     mbu:
       description: |
         MachineBlocks Base Unit. Most geometry parameters are expressed as
-        multiples of unitMbu. Default: 1.6 mm.
+        multiples of unitMbuToMm. Default: 1.6 mm.
     unitGrid:
       description: |
         Grid unit expressing the size of a 1x1 plate in mbu.
-        Default: [5, 2] meaning X/Y = 5 mbu, Z = 2 mbu.
-        Used as the reference for size, offset, crop, and many other parameters.
+        Default (unitGridToMbu): [5, 2] meaning X/Y = 5 mbu, Z = 2 mbu.
+        Used as the reference for size, offset, baseCrop, and many other parameters.
     mm:
       description: |
         Millimeters. Used exclusively for Adjustment/Clearance calibration parameters
@@ -137,20 +137,20 @@ global_rules:
 
   mm_to_absolute:
     formula: |
-      absolute_mm = size[i] * unitGrid[0 or 1] * unitMbu * scale
-      X/Y use unitGrid[0], Z uses unitGrid[1]
+      absolute_mm = size[i] * unitGridToMbu[0 or 1] * unitMbuToMm * scale
+      X/Y use unitGridToMbu[0], Z uses unitGridToMbu[1]
     example: |
-      size = [4, 2, 3], unitMbu = 1.6, unitGrid = [5, 2], scale = 1
+      size = [4, 2, 3], unitMbuToMm = 1.6, unitGridToMbu = [5, 2], scale = 1
       absolute = [4*5*1.6, 2*5*1.6, 3*2*1.6] = [32, 16, 9.6] mm
 
   critical_proportion_rule:
     description: |
       CRITICAL: X/Y and Z axes are NOT equally scaled in the grid system.
 
-      1 unit in X or Y = unitGrid[0] * unitMbu = 5 * 1.6 = 8.0 mm
-      1 unit in Z      = unitGrid[1] * unitMbu = 2 * 1.6 = 3.2 mm
+      1 unit in X or Y = unitGridToMbu[0] * unitMbuToMm = 5 * 1.6 = 8.0 mm
+      1 unit in Z      = unitGridToMbu[1] * unitMbuToMm = 2 * 1.6 = 3.2 mm
 
-      The ratio is unitGrid[0] / unitGrid[1] = 5 / 2 = 2.5
+      The ratio is unitGridToMbu[0] / unitGridToMbu[1] = 5 / 2 = 2.5
       This means Z must be 2.5× larger than X/Y to produce equal physical
       dimensions.
 
@@ -248,7 +248,7 @@ global_rules:
 
   per_side_format:
     description: |
-      Several parameters (crop, studPadding, recessWallThickness, recessStudPadding)
+      Several parameters (baseCrop, studPadding, recessWallThickness, recessStudPadding)
       support a per-side format:
       - Float: applies to all 4 sides equally
       - 2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3)
@@ -300,7 +300,7 @@ parameters:
   # GROUP: System / Units
   # --------------------------------------------------------------------------
 
-  - name: unitMbu
+  - name: unitMbuToMm
     group: system
     type: float
     unit: mm
@@ -312,15 +312,8 @@ parameters:
       Base unit of the MachineBlocks system in millimeters.
       All grid-based size values are multiples of this unit.
       Adjustment parameters are exempt (always in mm).
-    deleted_in_v3: false
-    renamed_from_v2: unitMbuToMm
-    version_history:
-      - version: "2"
-        description: "Named unitMbuToMm in V2."
-      - version: "3.0"
-        description: "Renamed to unitMbu."
 
-  - name: unitGrid
+  - name: unitGridToMbu
     group: system
     type: array
     mbom_type: "UnitGridToMbu"
@@ -334,11 +327,6 @@ parameters:
       Grid size in mbu, representing a 1x1 plate.
       X and Y share the first value, Z uses the second.
       A 1x1 plate = 5×5×2 mbu = 8×8×3.2 mm at default settings.
-    version_history:
-      - version: "2"
-        description: "Named unitGridToMbu in V2."
-      - version: "3.0"
-        description: "Renamed to unitGrid."
 
   - name: scale
     group: system
@@ -392,10 +380,11 @@ parameters:
         tongueGrooveDepthClearance = "auto"  →  printerLayerHeight
         tongueGrooveClampOffsetClearance = "auto"  →  printerLayerHeight
 
-
+  - name: id
+    group: system
     type: string
     unit: dimensionless
-    default: ""
+    default: undef
     since: "3.0"
     status: status:Stable
     ai_usage: yes
@@ -404,6 +393,8 @@ parameters:
       for debug output in mb_block() so that console messages can be clearly
       attributed to a specific block or part. May gain additional functions in
       the future.
+
+      At undef, a random ID is generated.
 
       In composite blocks, blockId is resolved via mb_param_id() and then
       assigned to the wrapper block and all parts:
@@ -432,6 +423,23 @@ parameters:
     description: |
       Enables debug output to the console. Has no effect on geometry.
       Used for development and troubleshooting.
+
+  - name: debugShowOnly
+    group: system
+    type: string_or_undef
+    unit: dimensionless
+    default: undef
+    since: "3.0"
+    status: status:Stable
+    ai_usage: rarely
+    description: |
+      Debug-only filter. When set to a string, only that part of the block
+      is shown (e.g. "studs"), all other geometry is hidden. Has no effect
+      on geometry semantics — for debugging/inspection only.
+    constraints:
+      requires:
+        - parameter: debug
+          condition: "debug = true"
 
   - name: render
     group: system
@@ -477,7 +485,7 @@ parameters:
     mbom_type: "FaceVector6<FloatUnitGrid>"
     format: "[x-, x+, y-, y+, z-, z+] — per-side modification in unitGrid"
     unit: unitGrid
-    default: [0, 0, 0, 0, 0, 0]
+    default: []
     since: "3.0"
     status: status:Stable
     ai_usage: yes
@@ -589,11 +597,11 @@ parameters:
       [[0,3],[0,0],[2,0],[0,0]] shifts corner 0 by 3 plates in y+
       and corner 2 by 2 plates in x+.
 
-  - name: crop
+  - name: baseCrop
     group: core_geometry
     type: float_or_array
     mbom_type: "FaceVector6<FloatUnitGrid>"
-    mbom_note: "crop values must be <= 0. SCAD accepts shorthand forms; canonical MBOM is always full FaceVector6."
+    mbom_note: "baseCrop values must be <= 0. SCAD accepts shorthand forms; canonical MBOM is always full FaceVector6."
     format: |
       Float: all 4 sides equal.
       2-element array [X, Y]: X for x-(0) and x+(1), Y for y-(2) and y+(3).
@@ -602,6 +610,7 @@ parameters:
     default: 0
     customizer_range: "[-32:0.25:32]"
     ai_usage: yes
+    renamed_from_v2: crop
     description: |
       Hard cut or extension per side (0-3 only, no Z-axis crop).
       Positive = cut geometry, negative = extend geometry.
@@ -609,16 +618,14 @@ parameters:
       walls, tubes, or other structural features.
       Does NOT affect bounding box or positioning.
       For semantic size modification that keeps the brick structurally intact,
-      use sizeMod instead. crop is intended for cross-sections, screenshots,
+      use sizeMod instead. baseCrop is intended for cross-sections, screenshots,
       or helper bricks — not for normal size adjustment.
+      Same functionality as crop in V2, renamed only.
     version_history:
       - version: "2"
-        description: "crop attempted to preserve grid compatibility in some cases."
+        description: "Named crop in V2."
       - version: "3.0"
-        description: |
-          crop is now a hard cut in all cases, with no regard for grid
-          compatibility, walls, or structure. Use sizeMod for semantic
-          size changes that preserve brick integrity.
+        description: "Renamed to baseCrop."
 
   - name: cutouts
     group: core_geometry
@@ -627,7 +634,7 @@ parameters:
       false: no cutouts.
       Array of settings arrays: each inner array is a list of key-value pairs
       using native parameter names to define one cutout volume.
-      Supported parameters per cutout: size, offset, bevel, slope, crop,
+      Supported parameters per cutout: size, offset, bevel, slope, baseCrop,
       baseSideAdjustment, baseHeightAdjustment, and any other parameters
       that affect the shape or size of a volume.
       Parameters that only affect surface features or rendering are ignored.
@@ -646,6 +653,42 @@ parameters:
         [["size", [1, 1, 1]], ["offset", [0, 1, 1]]],
         [["size", [1, 2, 3]], ["offset", [2, 1, 4]]]
       ]
+
+  - name: ports
+    group: core_geometry
+    type: array
+    format: |
+      Array of port definitions: [face, anchor, offset, rotation, shapes, "auto"]
+      - face: side string ("x-", "x+", "y-", "y+", "z-", "z+") or int (0-5).
+      - anchor: 2D align value on the face ("start", "center", "end", or
+        [alignX, alignY], same convention as align/alignChildren).
+      - offset: 2D offset from the anchor, in grid units.
+      - rotation: rotation of the whole port in degrees.
+      - shapes: array of shape definitions cut into the face for this port.
+        Each shape: [type, offset, rotation, typeData]
+          - type: "rect" or "circle"
+          - offset: [x, y] offset in mm from the port center.
+          - rotation: shape rotation in degrees.
+          - typeData:
+              rect:   [[width, height], roundingRadius]
+              circle: [diameter]
+      - last element: "auto" or explicit depth/behaviour mode (implementation detail).
+    unit: mixed (grid units for anchor offset, mm for shape offsets/sizes)
+    default: false
+    since: "3.0"
+    status: status:Draft
+    ai_usage: never
+    description: |
+      Cutouts on a face for connectors such as USB, screw terminals, etc.
+      Each port is placed on a face using anchor + offset, then filled with
+      one or more shapes (rect/circle) that are subtracted from the body.
+    example: |
+      ["ports", [
+        ["x-", "start", [4.35, 3.25], 0, [ ["circle", [0, 0], 0, [7.1]] ], "auto"],
+        ["x-", "start", [9.725, 2.6875], 0, [ ["rect", [0, 0], 0, [[8.5, 3.9], 1.95]] ], "auto"],
+        ["x-", "start", [7.0375, 3.5625], 0, [ ["rect", [0, 0.575], 0, [[16.2, 5.2], 1.3]], ["rect", [0, -1.425], 0, [[13.48, 3.5], 1.2]] ], "auto"],
+        ["y-", "start", [1.6125, 4.5], 0, [ ["rect", [0, 0], 0, [[17, 14.4], 0.5]] ], "auto"]
+      ]]
 
   # --------------------------------------------------------------------------
   # GROUP: Positioning / Transformation
@@ -1078,14 +1121,14 @@ parameters:
       Sides may be specified as strings ("x-", "x+", "y-", "y+", "z-", "z+")
       or integers (0-5). String format is preferred.
       mb_block() interprets only the standard sides: x-, x+, y-, y+, z-, z+.
-      Default: [] (empty — no per-side override).
+      Default: undef (no per-side override).
 
       Namespace support: keys may include a namespace prefix separated by a dot.
         [["pbx.x+", 0.01], ["pty.z+", 0.1]]
       mb_block() ignores namespaced entries. They are intended for child
       composite blocks, which extract them via mb_params_filter().
     unit: mm
-    default: []
+    default: undef
     ai_usage: config_only
     description: |
       Per-side calibration adjustment in mm. Extends or reduces specific sides
@@ -1127,7 +1170,7 @@ parameters:
       - version: "3.0"
         description: |
           Renamed to baseAdjustment. Now supports z- with special downward-shift
-          behaviour. Default changed from -0.1 to [] (empty).
+          behaviour. Default changed from -0.1 to undef.
 
   - name: sizeAdjustment
     group: calibration
@@ -1166,7 +1209,7 @@ parameters:
     unit: mm
     default: "auto"
     since: "3.0"
-    status: status:Stable
+    status: status:planned
     ai_usage: config_only
     description: |
       Per-side calibration adjustment for the inner recess walls and floor.
@@ -1212,7 +1255,7 @@ parameters:
     group: print_helpers
     type: float_or_auto
     unit: mm
-    default: "auto"
+    default: 0.2
     ai_usage: rarely
     description: |
       Height of one top plate helper layer. Typically matches the 3D print
@@ -1228,7 +1271,7 @@ parameters:
     group: print_helpers
     type: float_or_auto
     unit: mm
-    default: "auto"
+    default: 0.2
     ai_usage: rarely
     description: |
       Thickness of the top plate helpers in X/Y direction.
@@ -1266,7 +1309,7 @@ parameters:
     group: print_helpers
     type: float_or_auto
     unit: mm
-    default: "auto"
+    default: 0.2
     ai_usage: rarely
     description: |
       Offset between the first and subsequent grid layers.
@@ -1369,6 +1412,39 @@ parameters:
     example: |
       [false, [0,0,1,1,true]] — all off, but range (0,0)-(1,1) on
       [true, [0,1,2,2,false]] — all on, but range (0,1)-(2,2) off
+
+  - name: pillarGapAutoConfig
+    group: pillars
+    type: array
+    format: "[cornerLength, middleWidth]"
+    unit: dimensionless (grid units)
+    default: [2, 10]
+    since: "3.0"
+    status: status:Experimental
+    ai_usage: never
+    renamed_from_v2: [pillarGapCornerLength, pillarGapMiddle]
+    description: |
+      Configures how pillars are placed when pillars = "auto". Used to
+      avoid a full pillar grid on large plates, which would otherwise sit
+      too tightly on other bricks — only the corners and a middle cross
+      remain filled.
+
+      cornerLength: length of the two legs of the pillar triangle at each
+      corner (in grid units). The corner is filled with a triangular
+      arrangement of pillars whose leg length is this value; the remaining
+      corner pillars follow from the triangle shape.
+
+      middleWidth: width of a pillar cross in the middle of the plate, in
+      both X and Y direction. Each arm extends middleWidth / 2 from the
+      center in both directions, forming a cross of pillars in the middle.
+
+      Combines the V2 parameters pillarGapCornerLength and pillarGapMiddle
+      into a single array.
+    version_history:
+      - version: "2"
+        description: "Two separate parameters: pillarGapCornerLength, pillarGapMiddle."
+      - version: "3.0"
+        description: "Combined into pillarGapAutoConfig as [cornerLength, middleWidth]."
 
   # --------------------------------------------------------------------------
   # GROUP: Pins
@@ -1513,7 +1589,7 @@ parameters:
       2-element array [xy, z]: first for x and y, second for z.
       3-element array [x, y, z]: each axis individually.
     unit: dimensionless
-    default: true
+    default: false
     ai_usage: yes
     description: |
       Whether Technic holes per axis are shifted by 1/2 stud.
@@ -1960,6 +2036,23 @@ parameters:
     description: |
       Thickness of the stud clamp ring. At 0 no clamp is active.
 
+  - name: studClampOffset
+    group: studs
+    type: float_or_auto
+    unit: mbu
+    default: "auto"
+    since: "3.0"
+    status: status:Stable
+    ai_usage: rarely
+    description: |
+      Distance from the stud clamp ring to the base body.
+      "auto" = studHeight - studClampHeight, so the clamp sits as high
+      as possible, flush with the top of the stud.
+    constraints:
+      requires:
+        - parameter: studClampThickness
+          condition: "studClampThickness > 0"
+
   - name: studHoleDiameter
     group: studs
     type: float_or_auto
@@ -2102,7 +2195,7 @@ parameters:
     group: stud_icon
     type: string
     unit: dimensionless
-    default: "../pattern/bolt-solid-full.svg"
+    default: "../../pattern/bolt-solid-full.svg"
     ai_usage: yes
     description: |
       SVG file engraved into each stud.
@@ -2122,7 +2215,7 @@ parameters:
     group: stud_icon
     type: float
     unit: dimensionless
-    default: 0.024
+    default: 0.8
     ai_usage: yes
     description: |
       Effective scale factor for the stud icon.
@@ -2256,7 +2349,7 @@ parameters:
     group: tongue_groove
     type: float
     unit: mbu
-    default: 0.25
+    default: 0.5
     ai_usage: rarely
     description: |
       Distance from the lower edge of the tongue to the lower edge of
@@ -2291,7 +2384,7 @@ parameters:
     group: tongue_groove
     type: float_or_auto
     unit: mbu
-    default: 0.2
+    default: "auto"
     since: "3.0"
     status: status:Stable
     ai_usage: config_only
@@ -2311,7 +2404,7 @@ parameters:
     unit: mm
     default: 0.1
     since: "3.0"
-    status: status:Stable
+    status: status:planned
     ai_usage: config_only
     description: |
       Clearance added to the groove width to allow the tongue to fit.
@@ -2331,7 +2424,7 @@ parameters:
     unit: mbu
     default: 0
     since: "3.0"
-    status: status:Stable
+    status: status:planned
     ai_usage: config_only
     description: |
       Extra clearance in the groove before the clamp recess. In the groove,
@@ -2533,6 +2626,23 @@ parameters:
         - parameter: recessStuds
           condition: "recessStuds = true"
 
+  - name: recessWallStuds
+    group: recess
+    type: bool
+    unit: dimensionless
+    default: true
+    since: "3.0"
+    status: status:Stable
+    ai_usage: yes
+    description: |
+      Whether studs are drawn on the recess wall (the vertical wall of the
+      recess cavity). Only active when studs = true and the recess wall is
+      thick enough to fit studs.
+    constraints:
+      requires:
+        - parameter: studs
+          condition: "studs = true"
+
   - name: recessWallGaps
     group: recess
     type: array
@@ -2576,6 +2686,22 @@ parameters:
           Sides can now be specified as strings ("x-", "x+", "y-", "y+").
           Short forms are expanded to the internal full format automatically.
 
+  - name: recessWallGapStuds
+    group: recess
+    type: bool
+    unit: dimensionless
+    default: false
+    since: "3.0"
+    status: status:Experimental
+    ai_usage: never
+    description: |
+      Whether studs are shown inside openings created by recessWallGaps.
+      Only effective in combination with recessStuds = true.
+    constraints:
+      requires:
+        - parameter: recessStuds
+          condition: "recessStuds = true"
+
   # --------------------------------------------------------------------------
   # GROUP: Text
   # --------------------------------------------------------------------------
@@ -2595,7 +2721,7 @@ parameters:
     type: int_or_string
     values: [0, 1, 2, 3, 4, 5]
     unit: dimensionless
-    default: 0
+    default: "x-"
     ai_usage: yes
     description: |
       Side of the brick on which text is displayed (0-5 or string "x-" etc.).
@@ -2676,7 +2802,7 @@ parameters:
       Y = vertical alignment on the face surface.
       Z = ignored for text.
     unit: dimensionless
-    default: "ccc"
+    default: "center"
     since: "3.0"
     status: status:Stable
     ai_usage: yes
@@ -2763,11 +2889,32 @@ parameters:
         - parameter: surfacePattern
           condition: "surfacePattern is not 'none'"
 
+  - name: surfacePatternPadding
+    group: surface_pattern
+    type: float_or_array
+    format: |
+      0: no padding.
+      4-element array [x-(0), x+(1), y-(2), y+(3)]: padding per edge, in unitGrid.
+    unit: unitGrid
+    default: 0
+    since: "3.0"
+    status: status:Stable
+    ai_usage: yes
+    description: |
+      Distance from the edges of the surface pattern area, forming a smooth
+      (pattern-free) border around the structure. At 0, the pattern extends
+      to the edges. Each edge can be configured individually via the
+      4-element array form.
+    constraints:
+      requires:
+        - parameter: surfacePattern
+          condition: "surfacePattern is not 'none'"
+
   - name: surfacePatternScale
     group: surface_pattern
     type: float
     unit: dimensionless
-    default: 0.25
+    default: 1
     ai_usage: yes
     description: |
       Scale factor for the surface pattern.
@@ -2780,7 +2927,7 @@ parameters:
     group: surface_pattern
     type: float
     unit: mm
-    default: -0.2
+    default: -0.0625
     ai_usage: yes
     description: |
       Depth of the surface pattern. Negative = engraved. Positive = raised.
@@ -3004,7 +3151,7 @@ parameters:
     group: connectors
     type: float
     unit: mbu
-    default: 2.5
+    default: 2.25
     ai_usage: yes
     description: |
       Width of the connector triangles.
@@ -3105,7 +3252,7 @@ parameters:
     group: screw_holes
     type: float
     unit: mm
-    default: 2.1
+    default: 1.6
     ai_usage: yes
     description: |
       Default diameter of screw holes. Can be overridden per hole in screwHoles.
@@ -3133,7 +3280,7 @@ parameters:
     group: screw_holes
     type: float
     unit: mm
-    default: 0
+    default: 0.6
     since: "3.0"
     status: status:Stable
     ai_usage: yes
@@ -3145,7 +3292,7 @@ parameters:
     group: screw_holes
     type: float
     unit: mm
-    default: 0
+    default: 0.8
     since: "3.0"
     status: status:Stable
     ai_usage: yes
@@ -3167,7 +3314,7 @@ parameters:
     group: screw_holes
     type: float_or_auto
     unit: mm
-    default: "auto"
+    default: 0.2
     ai_usage: rarely
     description: |
       Offset between the two helper layers for Z-face screw holes.
@@ -3350,6 +3497,7 @@ parameters:
        [segmentLengthMm, maxSegments],  // print
        [segmentLengthMm, maxSegments]]  // render
     unit: dimensionless
+    default: [[0.55, 32], [0.38, 48], [0.28, 64], [0.16, 120]]
     ai_usage: rarely
     description: |
       OpenSCAD quality profile mapping. Maps each quality preset to
@@ -3364,6 +3512,7 @@ parameters:
     scad_render_target: true
     format: "[functional, visual, hidden]"
     unit: dimensionless
+    default: [1.00, 1.35, 2.25]
     ai_usage: rarely
     description: |
       Per quality-class segment length multipliers.
@@ -3376,6 +3525,7 @@ parameters:
     scad_render_target: true
     format: "[functional, visual, hidden]"
     unit: dimensionless
+    default: [16, 12, 8]
     ai_usage: rarely
     description: |
       Minimum full-circle segment count per quality class.
@@ -3387,6 +3537,7 @@ parameters:
     type: float
     scad_render_target: true
     unit: dimensionless
+    default: 1
     ai_usage: rarely
     description: |
       Global segment length multiplier. Applied after quality preset
@@ -3414,6 +3565,7 @@ parameters:
     type: float
     scad_render_target: true
     unit: dimensionless
+    default: 2.5
     ai_usage: rarely
     description: |
       Maximum preview segment length multiplier.
@@ -3426,7 +3578,7 @@ parameters:
     type: bool
     scad_render_target: true
     unit: dimensionless
-    default: false
+    default: true
     ai_usage: rarely
     description: |
       Whether the block is rendered as mesh in OpenSCAD preview mode
@@ -3438,7 +3590,7 @@ parameters:
     type: int
     scad_render_target: true
     unit: dimensionless
-    default: 15
+    default: 25
     ai_usage: rarely
     description: |
       Convexity parameter passed to OpenSCAD render() function.
@@ -4056,15 +4208,15 @@ removed_in_v3:
     use_instead: "slopeBaseHeightInner"
     reason: "Renamed to slopeBaseHeightInner."
 
-  - name: unitMbuToMm
+  - name: pillarGapCornerLength
     removed_in: "3.0"
-    use_instead: "unitMbu"
-    reason: "Renamed to unitMbu."
+    use_instead: "pillarGapAutoConfig"
+    reason: "Combined with pillarGapMiddle into pillarGapAutoConfig ([cornerLength, middleWidth])."
 
-  - name: unitGridToMbu
+  - name: pillarGapMiddle
     removed_in: "3.0"
-    use_instead: "unitGrid"
-    reason: "Renamed to unitGrid."
+    use_instead: "pillarGapAutoConfig"
+    reason: "Combined with pillarGapCornerLength into pillarGapAutoConfig ([cornerLength, middleWidth])."
 
 # ============================================================================
 # CHANGELOG — PARAMETERS CHANGED IN V3
@@ -4103,12 +4255,6 @@ changed_in_v3:
   - name: size
     changed_in: "3.0"
     summary: "Values must be integers. Fractional values are no longer permitted."
-
-  - name: crop
-    changed_in: "3.0"
-    summary: |
-      Now a hard cut in all cases, with no regard for grid compatibility,
-      walls, or structural features. Use sizeMod for semantic size changes.
 
   - name: slope
     changed_in: "3.0"
@@ -4413,6 +4559,38 @@ added_in_v3:
     added_in: "3.0"
     summary: "Renamed from screwHoleZHelperOffset. Supports 'auto' (uses printerLayerHeight)."
 
+  - name: baseCrop
+    added_in: "3.0"
+    summary: "Renamed from crop. Same functionality as V2 crop."
+
+  - name: debugShowOnly
+    added_in: "3.0"
+    summary: "Debug-only filter to show just one part of a block (e.g. studs)."
+
+  - name: surfacePatternPadding
+    added_in: "3.0"
+    summary: "Smooth border padding around the surface pattern, per edge."
+
+  - name: studClampOffset
+    added_in: "3.0"
+    summary: "Distance from the stud clamp ring to the base body. 'auto' sits flush with stud top."
+
+  - name: recessWallStuds
+    added_in: "3.0"
+    summary: "Whether studs are drawn on the recess wall."
+
+  - name: recessWallGapStuds
+    added_in: "3.0"
+    summary: "Whether studs are shown inside recessWallGaps openings (experimental)."
+
+  - name: ports
+    added_in: "3.0"
+    summary: "Face cutouts for connectors such as USB, using anchor + shape definitions (draft)."
+
+  - name: pillarGapAutoConfig
+    added_in: "3.0"
+    summary: "Combines pillarGapCornerLength and pillarGapMiddle into [cornerLength, middleWidth] (experimental)."
+
 # ============================================================================
 # EXPERIMENTAL PARAMETERS
 # ============================================================================
@@ -4428,10 +4606,17 @@ experimental_parameters:
       Cutout geometry is non-trivial to define correctly.
       AI must not use cutouts autonomously.
 
-  - name: pillarGapCornerLength
-    since: "2"
-    reason: "Experimental since V2 — do not use."
+  - name: ports
+    since: "3.0"
+    reason: |
+      Port/shape geometry is non-trivial to define correctly.
+      AI must not use ports autonomously.
 
-  - name: pillarGapMiddle
-    since: "2"
-    reason: "Experimental since V2 — do not use."
+  - name: pillarGapAutoConfig
+    since: "3.0"
+    reason: |
+      Experimental since V2 (as pillarGapCornerLength/pillarGapMiddle) — do not use.
+
+  - name: recessWallGapStuds
+    since: "3.0"
+    reason: "Experimental — do not use."
