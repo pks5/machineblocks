@@ -13,7 +13,6 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:data="http://blockml.org/schema/data"
   xmlns:core="com.machineblocks.core"
   xmlns:type="com.machineblocks.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
