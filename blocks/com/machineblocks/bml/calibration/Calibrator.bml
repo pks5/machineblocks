@@ -31,7 +31,7 @@
   <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
   <name>Calibrator</name>
   <type>calibration:Calibrator</type>
-  <baseType>core:Block</baseType>
+  <baseType>core:CompositeBlock</baseType>
   <properties>
     <!-- Native properties with non-default values -->
     <base type="Boolean">
@@ -88,10 +88,6 @@
       <value>0.1</value>
     </pinDiameterAdjustmentValueStep>
   </properties>
-
-  <aggregations>
-    <_utils type="Utils" />
-  </aggregations>
 
   <subBlocks>
 
@@ -159,7 +155,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>Base</name>
-      <baseType>core:Block</baseType>
+      <baseType>core:CompositeBlock</baseType>
       <properties>
         <label type="Text">
           <value></value>
@@ -183,7 +179,8 @@ function strSuffix(s, k, i = 0) =
           <value>5</value>
         </labelSize>
       </properties>
-      <composition>
+      <_parts>
+        <composition>
 
         <!-- Base strip: centered at row position -->
         <bricks:StandardBrick
@@ -224,7 +221,8 @@ function strSuffix(s, k, i = 0) =
           baseCutoutType="none"
           studs="false" />
 
-      </composition>
+        </composition>
+      </_parts>
     </block>
 
     <!--
@@ -237,7 +235,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>StudDiameter</name>
-      <baseType>core:Block</baseType>
+      <baseType>core:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -249,7 +247,8 @@ function strSuffix(s, k, i = 0) =
           <value>0.1</value>
         </valueStep>
       </properties>
-      <composition>
+      <_parts>
+        <composition>
         <bricks:StandardBrick
           bml:each="i : ${ numberOfSamples }"
           bml:id="${ 's_' + i }"
@@ -257,7 +256,8 @@ function strSuffix(s, k, i = 0) =
           baseCutoutType="none"
           studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
-      </composition>
+        </composition>
+      </_parts>
     </block>
 
     <!--
@@ -270,7 +270,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>BaseWallThickness</name>
-      <baseType>core:Block</baseType>
+      <baseType>core:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -282,7 +282,8 @@ function strSuffix(s, k, i = 0) =
           <value>0.1</value>
         </valueStep>
       </properties>
-      <composition>
+      <_parts>
+        <composition>
         <bricks:StandardBrick
           bml:each="i : ${ numberOfSamples }"
           bml:id="${ 's_' + i }"
@@ -292,7 +293,8 @@ function strSuffix(s, k, i = 0) =
           baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
           topPlateHelpers="false"
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
-      </composition>
+        </composition>
+      </_parts>
     </block>
 
     <!--
@@ -305,7 +307,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>TubeDiameter</name>
-      <baseType>core:Block</baseType>
+      <baseType>core:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -317,7 +319,8 @@ function strSuffix(s, k, i = 0) =
           <value>0.1</value>
         </valueStep>
       </properties>
-      <composition>
+      <_parts>
+        <composition>
         <bricks:StandardBrick
           bml:each="i : ${ numberOfSamples }"
           bml:id="${ 's_' + i }"
@@ -328,7 +331,8 @@ function strSuffix(s, k, i = 0) =
           baseCrop="${ {'xy': -0.5} }"
           baseWallThickness="0"
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
-      </composition>
+        </composition>
+      </_parts>
     </block>
 
     <!--
@@ -340,7 +344,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>PinDiameter</name>
-      <baseType>core:Block</baseType>
+      <baseType>core:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -352,7 +356,8 @@ function strSuffix(s, k, i = 0) =
           <value>0.1</value>
         </valueStep>
       </properties>
-      <composition>
+      <_parts>
+        <composition>
         <bricks:StandardBrick
           bml:each="i : ${ numberOfSamples }"
           bml:id="${ 's_' + i }"
@@ -363,30 +368,26 @@ function strSuffix(s, k, i = 0) =
           baseCrop="${ {'x': -0.5} }"
           baseWallThickness="0"
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
-      </composition>
+        </composition>
+      </_parts>
     </block>
 
   </subBlocks>
 
   <!--
-    Context-scoped @utils bean — all Sub-Blocks in this Composition
-    inherit it and can access @utils.formatValue() without redeclaring.
+    Context-scoped @utils bean and main _parts composition.
+    Sub-Blocks are defined above — referenced here by qualified name.
   -->
-  <_utils>
-    <composition>
-      <Utils
-        bml:bean="utils"
-        bml:scope="context" />
-    </composition>
-  </_utils>
-
-  <!--
-    Main Composition: 4 calibration rows.
-    Each row: Calibrator.Base + type-specific sample sub-block.
-    Rows differ in sample sub-block type — no loop possible here.
-    Offsets: Row 0=Y:0, Row 1=Y:-3, Row 2=Y:-6, Row 3=Y:-9.
-  -->
-  <composition>
+  <aggregations>
+    <_utils type="Utils">
+      <composition>
+        <Utils
+          bml:bean="utils"
+          bml:scope="context" />
+      </composition>
+    </_utils>
+    <_parts>
+      <composition>
 
     <!-- Row 0: studDiameterAdjustment -->
     <calibration:Calibrator.Base
@@ -460,6 +461,8 @@ function strSuffix(s, k, i = 0) =
       valueStart="${ pinDiameterAdjustmentValueStart }"
       valueStep="${ pinDiameterAdjustmentValueStep }" />
 
-  </composition>
+      </composition>
+    </_parts>
+  </aggregations>
 
 </block>
