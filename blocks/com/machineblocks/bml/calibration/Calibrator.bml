@@ -376,7 +376,7 @@ function strSuffix(s, k, i = 0) =
 
   <!--
     Context-scoped @utils bean and main _parts composition.
-    Sub-Blocks are defined above — referenced here by qualified name.
+    Sub-Blocks are defined above — referenced here by short name.
   -->
   <aggregations>
     <_utils type="Utils">
@@ -390,7 +390,7 @@ function strSuffix(s, k, i = 0) =
       <composition>
 
     <!-- Row 0: studDiameterAdjustment -->
-    <calibration:Calibrator.Base
+    <Base
       bml:id="base_stud"
       offset="[0, 0, 0]"
       label="studDiaAdj"
@@ -400,7 +400,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <calibration:Calibrator.StudDiameter
+    <StudDiameter
       bml:id="samples_stud"
       offset="[0, 0, 0]"
       numberOfSamples="${ numberOfSamples }"
@@ -408,7 +408,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ studDiameterAdjustmentValueStep }" />
 
     <!-- Row 1: baseWallThicknessAdjustment -->
-    <calibration:Calibrator.Base
+    <Base
       id="base_wall"
       offset="[0, -3, 0]"
       label="wallThickAdj"
@@ -418,7 +418,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <calibration:Calibrator.BaseWallThickness
+    <BaseWallThickness
       id="samples_wall"
       offset="[0, -3, 2]"
       numberOfSamples="${ numberOfSamples }"
@@ -426,7 +426,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ baseWallThicknessAdjustmentValueStep }" />
 
     <!-- Row 2: tubeDiameterAdjustment -->
-    <calibration:Calibrator.Base
+    <Base
       bml:id="base_tube"
       offset="[0, -6, 0]"
       label="tubeZDiaAdj"
@@ -436,7 +436,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <calibration:Calibrator.TubeDiameter
+    <TubeDiameter
       bml:id="samples_tube"
       offset="[0, -6, 2]"
       numberOfSamples="${ numberOfSamples }"
@@ -444,7 +444,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ tubeDiameterAdjustmentValueStep }" />
 
     <!-- Row 3: pinDiameterAdjustment -->
-    <calibration:Calibrator.Base
+    <Base
       bml:id="base_pin"
       offset="[0, -9, 0]"
       label="pinDiaAdj"
@@ -454,7 +454,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <calibration:Calibrator.PinDiameter
+    <PinDiameter
       bml:id="samples_pin"
       offset="[0, -9, 2]"
       numberOfSamples="${ numberOfSamples }"
