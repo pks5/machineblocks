@@ -3,7 +3,7 @@
  *
  * Name: FlatPyramid
  * Filename: FlatPyramid.scad
- * FQN: com.machineblocks.examples.FlatPyramid
+ * FQN: com.machineblocks.bml.examples.FlatPyramid
  */
 
 use <../../../../lib/block.scad>;

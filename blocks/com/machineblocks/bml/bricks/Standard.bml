@@ -3,7 +3,7 @@
 
   Name: MachineBlock Standard Brick
   Filename: Standard.bml
-  FQN: com.machineblocks.bricks.Standard
+  FQN: com.machineblocks.bml.bricks.Standard
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 
@@ -13,15 +13,15 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:core="com.machineblocks.core"
-  xmlns:type="com.machineblocks.type"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:bricks="com.machineblocks.bricks"
-  xmlns:status="org.blockml.status">
+  xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:status="org.blockml.bml.status">
 
   <idea>Lego compatible standard building block.</idea>
   <name>Standard</name>

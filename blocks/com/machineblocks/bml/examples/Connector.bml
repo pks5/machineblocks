@@ -3,7 +3,7 @@
 
   Name: Connector
   Filename: Connector.bml
-  FQN: com.machineblocks.examples.Connector
+  FQN: com.machineblocks.bml.examples.Connector
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 
@@ -14,14 +14,14 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:core="com.machineblocks.core"
-  xmlns:type="com.machineblocks.type"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:examples="com.machineblocks.examples">
+  xmlns:examples="com.machineblocks.bml.examples">
 
   <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
   <name>Connector</name>

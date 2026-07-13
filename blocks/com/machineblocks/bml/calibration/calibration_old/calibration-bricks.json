@@ -1,5 +1,5 @@
 {
-    "type": "com.machineblocks.examples",
+    "type": "com.machineblocks.bml.examples",
     "config":{
         "lib": "../../lib",
         "presets": "../../config/config.scad"

@@ -3,7 +3,7 @@
  *
  * Name: Connector
  * Filename: Connector.scad
- * FQN: com.machineblocks.examples.Connector
+ * FQN: com.machineblocks.bml.examples.Connector
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *

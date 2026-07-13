@@ -3,7 +3,7 @@
  *
  * Name: MachineBlock Standard Brick
  * Filename: Standard.scad
- * FQN: com.machineblocks.bricks.Standard
+ * FQN: com.machineblocks.bml.bricks.Standard
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -219,7 +219,7 @@ mb__com__machineblocks__bricks__Standard(
 
 /*
  * Main Module Definition
- * com.machineblocks.bricks.Standard
+ * com.machineblocks.bml.bricks.Standard
  *
  * CompositeBlock with a single NativeBlock child — no wrapper mb_block()
  * generated (1 child rule). Each parameter is explicitly extracted via
@@ -229,7 +229,7 @@ mb__com__machineblocks__bricks__Standard(
 module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef) {
 
     // Extract all declared properties explicitly
-    blockId             = mb_param_id(config, settings, "com.machineblocks.bricks.Standard");
+    blockId             = mb_param_id(config, settings, "com.machineblocks.bml.bricks.Standard");
     size                = mb_param_size(config, settings, [4, 2, 3]);
     baseRoundingRadius  = mb_param(config, settings, "baseRoundingRadius", 0);
     baseCutoutType      = mb_param_baseCutoutType(config, settings);

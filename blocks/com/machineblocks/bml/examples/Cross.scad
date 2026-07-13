@@ -3,7 +3,7 @@
  *
  * Name: Cross / Corner Brick
  * Filename: Cross.scad
- * FQN: com.machineblocks.examples.Cross
+ * FQN: com.machineblocks.bml.examples.Cross
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *

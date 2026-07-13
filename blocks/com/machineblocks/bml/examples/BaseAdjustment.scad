@@ -3,7 +3,7 @@
  *
  * Name: BaseAdjustment
  * Filename: BaseAdjustment.scad
- * FQN: com.machineblocks.examples.BaseAdjustment
+ * FQN: com.machineblocks.bml.examples.BaseAdjustment
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *

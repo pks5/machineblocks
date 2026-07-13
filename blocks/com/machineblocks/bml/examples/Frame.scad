@@ -3,7 +3,7 @@
  *
  * Name: Frame
  * Filename: Frame.scad
- * FQN: com.machineblocks.examples.Frame
+ * FQN: com.machineblocks.bml.examples.Frame
  */
 
 /*

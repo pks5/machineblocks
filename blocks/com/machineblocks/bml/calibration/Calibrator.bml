@@ -3,7 +3,7 @@
 
   Name: Calibrator
   Filename: Calibrator.bml
-  FQN: com.machineblocks.calibration.Calibrator
+  FQN: com.machineblocks.bml.calibration.Calibrator
 
   Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
 
@@ -14,19 +14,19 @@
 <block
   xmlns="http://blockml.org/schema/block"
   xmlns:bml="http://blockml.org/schema/bml"
-  xmlns:bricks="com.machineblocks.bricks"
-  xmlns:core="com.machineblocks.core"
-  xmlns:type="com.machineblocks.type"
+  xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:bcore="org.blockml.core"
-  xmlns:btype="org.blockml.type"
-  xmlns:calibration="com.machineblocks.calibration"
-  xmlns:cap="org.blockml.capability"
-  xmlns:lang="org.blockml.language">
+  xmlns:bcore="org.blockml.bml.core"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:calibration="com.machineblocks.bml.calibration"
+  xmlns:cap="org.blockml.bml.capability"
+  xmlns:lang="org.blockml.bml.language">
 
   <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
   <name>Calibrator</name>
@@ -104,7 +104,7 @@
 
     <!--
       Sub-Block: Calibrator.Utils
-      FQN: com.machineblocks.calibration.Calibrator.Utils
+      FQN: com.machineblocks.bml.calibration.Calibrator.Utils
       SCAD: mb__com__machineblocks__calibration__Calibrator__Utils
 
       Utility sub-block for the Calibrator block family.
@@ -157,7 +157,7 @@ function strSuffix(s, k, i = 0) =
 
     <!--
       Sub-Block: Calibrator.Base
-      FQN: com.machineblocks.calibration.Calibrator.Base
+      FQN: com.machineblocks.bml.calibration.Calibrator.Base
       SCAD: mb__com__machineblocks__calibration__Calibrator__Base
 
       Renders the base strip, label block, and value label blocks for one row.
@@ -236,7 +236,7 @@ function strSuffix(s, k, i = 0) =
 
     <!--
       Sub-Block: Calibrator.StudDiameter
-      FQN: com.machineblocks.calibration.Calibrator.StudDiameter
+      FQN: com.machineblocks.bml.calibration.Calibrator.StudDiameter
       SCAD: mb__com__machineblocks__calibration__Calibrator__StudDiameter
 
       Sample blocks with varying studDiameterAdjustment.
@@ -269,7 +269,7 @@ function strSuffix(s, k, i = 0) =
 
     <!--
       Sub-Block: Calibrator.BaseWallThickness
-      FQN: com.machineblocks.calibration.Calibrator.BaseWallThickness
+      FQN: com.machineblocks.bml.calibration.Calibrator.BaseWallThickness
       SCAD: mb__com__machineblocks__calibration__Calibrator__BaseWallThickness
 
       Inverted sample blocks with varying baseWallThicknessAdjustment.
@@ -304,7 +304,7 @@ function strSuffix(s, k, i = 0) =
 
     <!--
       Sub-Block: Calibrator.TubeDiameter
-      FQN: com.machineblocks.calibration.Calibrator.TubeDiameter
+      FQN: com.machineblocks.bml.calibration.Calibrator.TubeDiameter
       SCAD: mb__com__machineblocks__calibration__Calibrator__TubeDiameter
 
       Inverted 2x2 sample blocks with varying tubeDiameterAdjustment.
@@ -340,7 +340,7 @@ function strSuffix(s, k, i = 0) =
 
     <!--
       Sub-Block: Calibrator.PinDiameter
-      FQN: com.machineblocks.calibration.Calibrator.PinDiameter
+      FQN: com.machineblocks.bml.calibration.Calibrator.PinDiameter
       SCAD: mb__com__machineblocks__calibration__Calibrator__PinDiameter
 
       Inverted 2x1 sample blocks with varying pinDiameterAdjustment.

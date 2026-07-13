@@ -3,7 +3,7 @@
  *
  * Name: Calibrator
  * Filename: Calibrator.scad
- * FQN: com.machineblocks.calibration.Calibrator
+ * FQN: com.machineblocks.bml.calibration.Calibrator
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -81,7 +81,7 @@ mb_block__com__machineblocks__calibration__Calibrator(
 
 /*
  * Main Module Definition
- * com.machineblocks.calibration.Calibrator
+ * com.machineblocks.bml.calibration.Calibrator
  *
  * Composite block. Renders four calibration rows:
  *   Row 0 (vOffset=0):  studDiameterAdjustment
@@ -94,7 +94,7 @@ mb_block__com__machineblocks__calibration__Calibrator(
  */
 module mb_block__com__machineblocks__calibration__Calibrator(config = undef, settings = undef) {
     // Native Parameters
-    blockId = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator");
+    blockId = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator");
     align   = mb_param_align(config, settings);
     offset  = mb_param_offset(config, settings);
 
@@ -242,14 +242,14 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
 
 /*
  * Sub Module "Base"
- * com.machineblocks.calibration.Calibrator.Base
+ * com.machineblocks.bml.calibration.Calibrator.Base
  *
  * Renders the base strip, the label block, and the value label blocks for one row.
  * All blocks use baseHeight = 0.5 unitGrid[1] (size[2] = 0.5).
  * Positions are relative to the row's vOffset (passed via offset[1]).
  */
 module mb_block__com__machineblocks__calibration__Calibrator__Base(config = undef, settings = undef) {
-    blockId       = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator.Base");
+    blockId       = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator.Base");
     rowOffset     = mb_param_offset(config, settings);
 
     label         = mb_param(config, settings, "label", "");
@@ -326,7 +326,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
 
 /*
  * Sub Module "StudDiameter"
- * com.machineblocks.calibration.Calibrator.StudDiameter
+ * com.machineblocks.bml.calibration.Calibrator.StudDiameter
  *
  * Renders one sample block per step with varying studDiameterAdjustment.
  * NOTE: studDiameterAdjustment is config_only in MB3. Its use in settings
@@ -334,7 +334,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
  * vary this value per brick.
  */
 module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(config = undef, settings = undef) {
-    blockId       = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator.StudDiameter");
+    blockId       = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator.StudDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
     valueStart    = mb_param(config, settings, "valueStart", 0);
@@ -361,7 +361,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(confi
 
 /*
  * Sub Module "BaseWallThickness"
- * com.machineblocks.calibration.Calibrator.BaseWallThickness
+ * com.machineblocks.bml.calibration.Calibrator.BaseWallThickness
  *
  * Renders inverted sample blocks with varying baseWallThicknessAdjustment.
  * CUSTOM SCAD: rotation = [180, 0, 0] is required to flip blocks upside-down.
@@ -369,7 +369,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(confi
  * NOTE: baseWallThicknessAdjustment is config_only in MB3; used here intentionally.
  */
 module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(config = undef, settings = undef) {
-    blockId       = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator.BaseWallThickness");
+    blockId       = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator.BaseWallThickness");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
     valueStart    = mb_param(config, settings, "valueStart", -0.3);
@@ -398,7 +398,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
 
 /*
  * Sub Module "TubeDiameter"
- * com.machineblocks.calibration.Calibrator.TubeDiameter
+ * com.machineblocks.bml.calibration.Calibrator.TubeDiameter
  *
  * Renders inverted 2×2 sample blocks with varying tubeDiameterAdjustment.
  * CUSTOM SCAD: rotation = [180, 0, 0] is required to flip blocks upside-down.
@@ -406,7 +406,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
  *       V2 tubeZDiameterAdjustment → V3 tubeDiameterAdjustment (unified).
  */
 module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(config = undef, settings = undef) {
-    blockId       = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator.TubeDiameter");
+    blockId       = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator.TubeDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
     valueStart    = mb_param(config, settings, "valueStart", -0.3);
@@ -436,14 +436,14 @@ module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(confi
 
 /*
  * Sub Module "PinDiameter"
- * com.machineblocks.calibration.Calibrator.PinDiameter
+ * com.machineblocks.bml.calibration.Calibrator.PinDiameter
  *
  * Renders inverted 2×1 sample blocks with varying pinDiameterAdjustment.
  * CUSTOM SCAD: rotation = [180, 0, 0] is required to flip blocks upside-down.
  * NOTE: pinDiameterAdjustment is config_only in MB3; used here intentionally.
  */
 module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config = undef, settings = undef) {
-    blockId       = mb_param_id(config, settings, "com.machineblocks.calibration.Calibrator.PinDiameter");
+    blockId       = mb_param_id(config, settings, "com.machineblocks.bml.calibration.Calibrator.PinDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
     valueStart    = mb_param(config, settings, "valueStart", -0.2);
@@ -473,7 +473,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config
 
 /**
  * Global function "round1"
- * com.machineblocks.calibration.Calibrator.func.round1
+ * com.machineblocks.bml.calibration.Calibrator.func.round1
  *
  * Rounds x to 1 decimal place.
  */
@@ -482,7 +482,7 @@ function mb_block__com__machineblocks__calibration__Calibrator__func__round1(x) 
 
 /**
  * Global function "formatValue"
- * com.machineblocks.calibration.Calibrator.func.formatValue
+ * com.machineblocks.bml.calibration.Calibrator.func.formatValue
  *
  * Converts a float to a display string, removing the leading "0" before
  * the decimal point (e.g. 0.1 → ".1", -0.2 → "-.2").
