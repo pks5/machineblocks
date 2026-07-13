@@ -89,15 +89,8 @@
     </pinDiameterAdjustmentValueStep>
   </properties>
 
-  <!--
-    @utils declared context-scoped — all Sub-Blocks in this Composition
-    inherit it and can access @utils.formatValue() without redeclaring.
-  -->
   <aggregations>
-    <_utils
-      type="Utils"
-      beanName="utils"
-      scope="context" />
+    <_utils type="Utils" />
   </aggregations>
 
   <subBlocks>
@@ -108,7 +101,7 @@
       SCAD: mb__com__machineblocks__calibration__Calibrator__Utils
 
       Utility sub-block for the Calibrator block family.
-      Declared context-scoped on the Calibrator root — all Sub-Blocks
+      Bound as context-scoped @utils on the Calibrator root — all Sub-Blocks
       inherit @utils automatically.
 
       formatValue: SCAD implementation with helper functions.
@@ -162,7 +155,7 @@ function strSuffix(s, k, i = 0) =
 
       Renders the base strip, label block, and value label blocks for one row.
       All blocks use sizeMod z+=-0.5 (approx 0.5 unitGrid[1] height, ~0.8mm).
-      Uses @utils.formatValue() — inherited from Calibrator via scope="context".
+      Uses @utils.formatValue() — inherited from Calibrator via bml:scope="context".
     -->
     <block>
       <name>Base</name>
@@ -374,6 +367,18 @@ function strSuffix(s, k, i = 0) =
     </block>
 
   </subBlocks>
+
+  <!--
+    Context-scoped @utils bean — all Sub-Blocks in this Composition
+    inherit it and can access @utils.formatValue() without redeclaring.
+  -->
+  <_utils>
+    <composition>
+      <Utils
+        bml:bean="utils"
+        bml:scope="context" />
+    </composition>
+  </_utils>
 
   <!--
     Main Composition: 4 calibration rows.
