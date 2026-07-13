@@ -124,7 +124,7 @@
       <capabilities>
 
         <formatValue
-          type="cap:Transformation"
+          type="Transformation"
           inputType="Float"
           outputType="Text">
           <documentation>
@@ -132,7 +132,7 @@
             the decimal point.
             Examples: 0.1 -> ".1" -0.2 -> "-.2" 3.0 -> "3.0"
           </documentation>
-          <implementation type="lang:OpenSCAD"><![CDATA[
+          <implementation language="OpenSCAD"><![CDATA[
 // Main function — name matches capability name, compiler adds block FQN prefix
 function formatValue(x) =
     replaceZeroDot(str(#math.round_n(x, 1)));
@@ -384,7 +384,7 @@ function strSuffix(s, k, i = 0) =
   <composition>
 
     <!-- Row 0: studDiameterAdjustment -->
-    <Base
+    <calibration:Calibrator.Base
       bml:id="base_stud"
       offset="[0, 0, 0]"
       label="studDiaAdj"
@@ -394,7 +394,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <StudDiameter
+    <calibration:Calibrator.StudDiameter
       bml:id="samples_stud"
       offset="[0, 0, 0]"
       numberOfSamples="${ numberOfSamples }"
@@ -402,7 +402,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ studDiameterAdjustmentValueStep }" />
 
     <!-- Row 1: baseWallThicknessAdjustment -->
-    <Base
+    <calibration:Calibrator.Base
       id="base_wall"
       offset="[0, -3, 0]"
       label="wallThickAdj"
@@ -412,7 +412,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <BaseWallThickness
+    <calibration:Calibrator.BaseWallThickness
       id="samples_wall"
       offset="[0, -3, 2]"
       numberOfSamples="${ numberOfSamples }"
@@ -420,7 +420,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ baseWallThicknessAdjustmentValueStep }" />
 
     <!-- Row 2: tubeDiameterAdjustment -->
-    <Base
+    <calibration:Calibrator.Base
       bml:id="base_tube"
       offset="[0, -6, 0]"
       label="tubeZDiaAdj"
@@ -430,7 +430,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <TubeDiameter
+    <calibration:Calibrator.TubeDiameter
       bml:id="samples_tube"
       offset="[0, -6, 2]"
       numberOfSamples="${ numberOfSamples }"
@@ -438,7 +438,7 @@ function strSuffix(s, k, i = 0) =
       valueStep="${ tubeDiameterAdjustmentValueStep }" />
 
     <!-- Row 3: pinDiameterAdjustment -->
-    <Base
+    <calibration:Calibrator.Base
       bml:id="base_pin"
       offset="[0, -9, 0]"
       label="pinDiaAdj"
@@ -448,7 +448,7 @@ function strSuffix(s, k, i = 0) =
       font="${ font }"
       fontSize="${ fontSize }"
       labelSize="${ labelSize }" />
-    <PinDiameter
+    <calibration:Calibrator.PinDiameter
       bml:id="samples_pin"
       offset="[0, -9, 2]"
       numberOfSamples="${ numberOfSamples }"

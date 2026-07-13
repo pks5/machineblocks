@@ -27,7 +27,7 @@ For architecture context see `01_system.md`.
 The MBOM type system is defined but not yet fully validated against the SCAD
 implementation. Maturity is expressed via **status Block references** — see `02_mbml.md` — § Status.
 
-**Default:** `status:Stable`. Declare status only when deviating (e.g. `<status>status:Draft</status>` on a parameter whose mapping is incomplete).
+**Default:** `status:Stable`. Declare status only when deviating (e.g. `<status>Draft</status>` on a parameter whose mapping is incomplete).
 
 ```text
 status:Stable       — implemented, tested, mapping complete (implicit default)
