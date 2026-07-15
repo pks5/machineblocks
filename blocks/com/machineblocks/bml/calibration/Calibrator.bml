@@ -27,11 +27,10 @@
   xmlns:calibration="com.machineblocks.bml.calibration"
   xmlns:cap="org.blockml.bml.capability"
   xmlns:lang="org.blockml.bml.language">
-
-  <idea>Print calibration sheet for tuning stud, wall, tube, and pin dimensions.</idea>
   <name>Calibrator</name>
   <type>calibration:Calibrator</type>
   <baseType>core:CompositeBlock</baseType>
+  <is>A print calibration sheet</is>
   <properties>
     <!-- Native properties with non-default values -->
     <base type="Boolean">
@@ -142,7 +141,8 @@ function strSuffix(s, k, i = 0) =
         </formatValue>
 
       </capabilities>
-    </block>
+    
+</block>
 
     <!--
       Sub-Block: Calibrator.Base
@@ -223,7 +223,8 @@ function strSuffix(s, k, i = 0) =
 
         </composition>
       </_parts>
-    </block>
+    
+</block>
 
     <!--
       Sub-Block: Calibrator.StudDiameter
@@ -258,7 +259,8 @@ function strSuffix(s, k, i = 0) =
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
         </composition>
       </_parts>
-    </block>
+    
+</block>
 
     <!--
       Sub-Block: Calibrator.BaseWallThickness
@@ -295,7 +297,8 @@ function strSuffix(s, k, i = 0) =
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    </block>
+    
+</block>
 
     <!--
       Sub-Block: Calibrator.TubeDiameter
@@ -333,7 +336,8 @@ function strSuffix(s, k, i = 0) =
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    </block>
+    
+</block>
 
     <!--
       Sub-Block: Calibrator.PinDiameter
@@ -370,7 +374,8 @@ function strSuffix(s, k, i = 0) =
           offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    </block>
+    
+</block>
 
   </subBlocks>
 

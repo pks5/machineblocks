@@ -22,11 +22,10 @@
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
   xmlns:examples="com.machineblocks.bml.examples">
-
-  <idea>Corner brick formed by two overlapping standard bricks.</idea>
   <name>Cross</name>
   <type>examples:Cross</type>
   <baseType>core:Block</baseType>
+  <is>An overlapping corner brick</is>
   <properties>
 
     <!--

@@ -22,11 +22,10 @@
                       "
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:status="org.blockml.bml.status">
-
-  <idea>Lego compatible standard building block.</idea>
   <name>Standard</name>
   <type>bricks:Standard</type>
   <baseType>core:Block</baseType>
+  <is>A Lego brick</is>
   <properties>
 
     <!-- Size -->

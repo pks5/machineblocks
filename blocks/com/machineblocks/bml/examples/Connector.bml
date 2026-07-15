@@ -22,11 +22,10 @@
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
   xmlns:examples="com.machineblocks.bml.examples">
-
-  <idea>Checkerboard grid of bricks demonstrating composition and computed defaults.</idea>
   <name>Connector</name>
   <type>examples:Connector</type>
   <baseType>core:Block</baseType>
+  <is>A brick composition example</is>
   <properties>
 
     <!-- Grid dimensions -->
