@@ -13,7 +13,7 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="http://blockml.org/schema/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="com.machineblocks.bml.core"
   xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
