@@ -22,6 +22,7 @@
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>Standard</name>
   <type>bricks:Standard</type>
   <baseType>mbcore:Block</baseType>

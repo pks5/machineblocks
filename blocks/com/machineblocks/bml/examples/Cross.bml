@@ -22,6 +22,7 @@
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>Cross</name>
   <type>examples:Cross</type>
   <baseType>mbcore:Block</baseType>

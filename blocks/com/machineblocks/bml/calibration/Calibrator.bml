@@ -27,6 +27,7 @@
   xmlns:cal="com.machineblocks.bml.calibration"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbtype="com.machineblocks.bml.type">
+
   <name>Calibrator</name>
   <type>cal:Calibrator</type>
   <baseType>mbcore:CompositeBlock</baseType>
