@@ -13,20 +13,20 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:bricks="com.machineblocks.bml.bricks"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:bcore="org.blockml.bml.core"
-  xmlns:btype="org.blockml.bml.type"
-  xmlns:calibration="com.machineblocks.bml.calibration"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:cap="org.blockml.bml.capability"
-  xmlns:lang="org.blockml.bml.language">
+  xmlns:bcore="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:btype="org.blockml.bml.type"
+  xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:calibration="com.machineblocks.bml.calibration"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:type="com.machineblocks.bml.type">
   <name>Calibrator</name>
   <type>calibration:Calibrator</type>
   <baseType>core:CompositeBlock</baseType>

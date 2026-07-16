@@ -13,15 +13,15 @@
 -->
 <block
   xmlns="http://blockml.org/schema/block"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/schema/block https://blockml.org/schemas/core/block.xsd
                       http://machineblocks.com/schema/core https://machineblocks.com/schemas/machineblocks/core.xsd
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
-  xmlns:examples="com.machineblocks.bml.examples">
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="com.machineblocks.bml.core"
+  xmlns:examples="com.machineblocks.bml.examples"
+  xmlns:type="com.machineblocks.bml.type">
   <name>Cross</name>
   <type>examples:Cross</type>
   <baseType>core:Block</baseType>
