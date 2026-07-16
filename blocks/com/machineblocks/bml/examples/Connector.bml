@@ -19,12 +19,12 @@
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:core="com.machineblocks.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Connector</name>
   <type>examples:Connector</type>
-  <baseType>core:Block</baseType>
+  <baseType>mbcore:Block</baseType>
   <is>A brick composition example</is>
   <properties>
 
@@ -35,7 +35,7 @@
     <rows type="Integer">
       <value>4</value>
     </rows>
-    <blockSize type="type:Size3D">
+    <blockSize type="mbtype:Size3D">
       <value>[4, 2, 3]</value>
     </blockSize>
 
@@ -44,13 +44,13 @@
       Computed value — references other properties of this Block.
       Cycle detection: columns, rows, blockSize have no dependencies → resolved first.
     -->
-    <size type="type:Size3D"
+    <size type="mbtype:Size3D"
     >
       <value>${ [blockSize.x * columns, blockSize.y * rows, blockSize.z] }</value>
     </size>
 
     <!-- Checkerboard colors -->
-    <colorA type="type:Color">
+    <colorA type="mbtype:Color">
       <value>#55AB68</value>
       <suggestions>
         <suggestion value="#55AB68" label="Nephritis" />
@@ -60,7 +60,7 @@
         <suggestion value="#EDF0F1" label="Clouds" />
       </suggestions>
     </colorA>
-    <colorB type="type:Color">
+    <colorB type="mbtype:Color">
       <value>#303D4E</value>
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -96,7 +96,7 @@
   <composition>
 
     <bml:container bml:each="x, xStat : ${ columns }">
-      <core:NativeBlock
+      <mbcore:NativeBlock
         bml:each="y, yStat : ${ rows }"
         bml:id="${ 'brick_' + x + '_' + y }"
         size="${ blockSize }"

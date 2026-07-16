@@ -20,21 +20,21 @@
                       "
   xmlns:status="org.blockml.bml.status"
   xmlns:bricks="com.machineblocks.bml.bricks"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Standard</name>
   <type>bricks:Standard</type>
-  <baseType>core:Block</baseType>
+  <baseType>mbcore:Block</baseType>
   <is>A Lego brick</is>
   <properties>
 
     <!-- Size -->
-    <size type="type:Size3D">
+    <size type="mbtype:Size3D">
       <value>[4, 2, 3]</value>
     </size>
 
     <!-- Base -->
-    <baseCutoutType type="type:BaseCutoutType">
+    <baseCutoutType type="mbtype:BaseCutoutType">
       <value>standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
@@ -49,11 +49,11 @@
     <baseReliefCutThickness type="Float">
       <value>0.375</value>
     </baseReliefCutThickness>
-    <baseRoundingRadius type="type:RoundingRadius">
+    <baseRoundingRadius type="mbtype:RoundingRadius">
       <status>Draft</status>
       <value>0</value>
     </baseRoundingRadius>
-    <grille type="type:GrilleType">
+    <grille type="mbtype:GrilleType">
       <value>none</value>
     </grille>
     <grilleInverted type="Boolean">
@@ -65,7 +65,7 @@
     <grilleCount type="Float">
       <value>2.5</value>
     </grilleCount>
-    <bevel type="type:BevelList">
+    <bevel type="mbtype:BevelList">
       <value>[[0,0],[0,0],[0,0],[0,0]]</value>
     </bevel>
 
@@ -76,10 +76,10 @@
     <studShift type="Boolean">
       <value>false</value>
     </studShift>
-    <studType type="type:StudType">
+    <studType type="mbtype:StudType">
       <value>solid</value>
     </studType>
-    <studPadding type="type:PaddingList">
+    <studPadding type="mbtype:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
     <studBaseOverlap type="Float">
@@ -90,7 +90,7 @@
     <holeX type="Boolean">
       <value>false</value>
     </holeX>
-    <holeXType type="type:HoleType">
+    <holeXType type="mbtype:HoleType">
       <value>pin</value>
     </holeXType>
     <holeXShift type="Boolean">
@@ -102,7 +102,7 @@
     <holeY type="Boolean">
       <value>false</value>
     </holeY>
-    <holeYType type="type:HoleType">
+    <holeYType type="mbtype:HoleType">
       <value>pin</value>
     </holeYType>
     <holeYShift type="Boolean">
@@ -114,7 +114,7 @@
     <holeZ type="Boolean">
       <value>false</value>
     </holeZ>
-    <holeZType type="type:HoleType">
+    <holeZType type="mbtype:HoleType">
       <value>pin</value>
     </holeZType>
     <holeZShift type="Boolean">
@@ -128,18 +128,18 @@
     <recessStuds type="Boolean">
       <value>false</value>
     </recessStuds>
-    <recessWallThickness type="type:PaddingList">
+    <recessWallThickness type="mbtype:PaddingList">
       <value>[0.333, 0.333, 0.333, 0.333]</value>
     </recessWallThickness>
-    <recessDepth type="type:AutoOr_Float">
+    <recessDepth type="mbtype:AutoOr_Float">
       <value>auto</value>
     </recessDepth>
-    <recessStudPadding type="type:PaddingList">
+    <recessStudPadding type="mbtype:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </recessStudPadding>
 
     <!-- Slope -->
-    <slope type="type:SlopeList">
+    <slope type="mbtype:SlopeList">
       <value>[0, 0, 0, 0]</value>
     </slope>
 
@@ -179,7 +179,7 @@
     <textSpacing type="Float">
       <value>1</value>
     </textSpacing>
-    <textColor type="type:Color">
+    <textColor type="mbtype:Color">
       <value>#303D4E</value>
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -194,7 +194,7 @@
     </textColor>
 
     <!-- Style -->
-    <baseColor type="type:Color">
+    <baseColor type="mbtype:Color">
       <value>#EAC645</value>
       <suggestions>
         <suggestion value="#EAC645" label="Sun Flower" />
@@ -228,7 +228,7 @@
       recessDepthAuto + recessDepth with hidden_merge.
   -->
   <composition>
-    <core:NativeBlock
+    <mbcore:NativeBlock
       size="${ size }"
       baseCutoutType="${ baseCutoutType }"
       pillars="${ pillars }"

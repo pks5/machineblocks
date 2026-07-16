@@ -19,12 +19,12 @@
                       http://machineblocks.com/schema/bricks https://machineblocks.com/schemas/machineblocks/bricks.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:core="com.machineblocks.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Cross</name>
   <type>examples:Cross</type>
-  <baseType>core:Block</baseType>
+  <baseType>mbcore:Block</baseType>
   <is>An overlapping corner brick</is>
   <properties>
 
@@ -38,7 +38,7 @@
     </studs>
 
     <!-- Size -->
-    <size type="type:Size3D">
+    <size type="mbtype:Size3D">
       <value>[4, 4, 3]</value>
     </size>
 
@@ -61,7 +61,7 @@
     </brick2OffsetX>
 
     <!-- Base -->
-    <baseCutoutType type="type:BaseCutoutType">
+    <baseCutoutType type="mbtype:BaseCutoutType">
       <value>standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
@@ -76,7 +76,7 @@
     <baseReliefCutThickness type="Float">
       <value>0.4</value>
     </baseReliefCutThickness>
-    <grille type="type:GrilleType">
+    <grille type="mbtype:GrilleType">
       <value>none</value>
     </grille>
     <grilleInverted type="Boolean">
@@ -92,10 +92,10 @@
     <studShift type="Boolean">
       <value>false</value>
     </studShift>
-    <studType type="type:StudType">
+    <studType type="mbtype:StudType">
       <value>solid</value>
     </studType>
-    <studPadding type="type:PaddingList">
+    <studPadding type="mbtype:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
     <studBaseOverlap type="Float">
@@ -103,14 +103,14 @@
     </studBaseOverlap>
 
     <!-- Style -->
-    <baseColor type="type:Color">
+    <baseColor type="mbtype:Color">
       <value>#EAC645</value>
       <suggestions>
-        <type:Color value="#EAC645" label="Sun Flower" />
-        <type:Color value="#303D4E" label="Midnight Blue" />
-        <type:Color value="#58B99D" label="Turquoise" />
-        <type:Color value="#D65745" label="Alizarin" />
-        <type:Color value="#EDF0F1" label="Clouds" />
+        <mbtype:Color value="#EAC645" label="Sun Flower" />
+        <mbtype:Color value="#303D4E" label="Midnight Blue" />
+        <mbtype:Color value="#58B99D" label="Turquoise" />
+        <mbtype:Color value="#D65745" label="Alizarin" />
+        <mbtype:Color value="#EDF0F1" label="Clouds" />
       </suggestions>
     </baseColor>
     <surfacePattern type="Text">
@@ -155,7 +155,7 @@
       ">
 
         <!-- Brick 1: full X width, narrow in Y -->
-        <core:NativeBlock
+        <mbcore:NativeBlock
           bml:id="brick1"
           size="${ [size.x, b1SizeY, size.z] }"
           offset="${ [0, b1OffsetY, 0] }"
@@ -180,7 +180,7 @@
           baseWallGaps="${ [['y', b2OffsetX, b2SizeX]] }" />
 
         <!-- Brick 2: narrow in X, full Y height -->
-        <core:NativeBlock
+        <mbcore:NativeBlock
           bml:id="brick2"
           size="${ [b2SizeX, size.y, size.z] }"
           offset="${ [b2OffsetX, 0, 0] }"

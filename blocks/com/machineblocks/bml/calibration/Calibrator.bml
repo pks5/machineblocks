@@ -20,16 +20,16 @@
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:cap="org.blockml.bml.capability"
-  xmlns:bcore="org.blockml.bml.core"
+  xmlns:core="org.blockml.bml.core"
   xmlns:lang="org.blockml.bml.language"
-  xmlns:btype="org.blockml.bml.type"
+  xmlns:type="org.blockml.bml.type"
   xmlns:bricks="com.machineblocks.bml.bricks"
-  xmlns:calibration="com.machineblocks.bml.calibration"
-  xmlns:core="com.machineblocks.bml.core"
-  xmlns:type="com.machineblocks.bml.type">
+  xmlns:cal="com.machineblocks.bml.calibration"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbtype="com.machineblocks.bml.type">
   <name>Calibrator</name>
-  <type>calibration:Calibrator</type>
-  <baseType>core:CompositeBlock</baseType>
+  <type>cal:Calibrator</type>
+  <baseType>mbcore:CompositeBlock</baseType>
   <is>A print calibration sheet</is>
   <properties>
     <!-- Native properties with non-default values -->
@@ -42,7 +42,7 @@
     <alignChildren type="Text">
       <value>ccs</value>
     </alignChildren>
-    <size type="type:Size3D"
+    <size type="mbtype:Size3D"
     >
       <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
     </size>
@@ -108,7 +108,7 @@
     -->
     <block>
       <name>Utils</name>
-      <baseType>bcore:Entity</baseType>
+      <baseType>core:Entity</baseType>
       <capabilities>
 
         <formatValue
@@ -155,7 +155,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>Base</name>
-      <baseType>core:CompositeBlock</baseType>
+      <baseType>mbcore:CompositeBlock</baseType>
       <properties>
         <label type="Text">
           <value></value>
@@ -236,7 +236,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>StudDiameter</name>
-      <baseType>core:CompositeBlock</baseType>
+      <baseType>mbcore:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -272,7 +272,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>BaseWallThickness</name>
-      <baseType>core:CompositeBlock</baseType>
+      <baseType>mbcore:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -310,7 +310,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>TubeDiameter</name>
-      <baseType>core:CompositeBlock</baseType>
+      <baseType>mbcore:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
@@ -348,7 +348,7 @@ function strSuffix(s, k, i = 0) =
     -->
     <block>
       <name>PinDiameter</name>
-      <baseType>core:CompositeBlock</baseType>
+      <baseType>mbcore:CompositeBlock</baseType>
       <properties>
         <numberOfSamples type="Integer">
           <value>5</value>
