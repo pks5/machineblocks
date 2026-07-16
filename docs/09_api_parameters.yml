@@ -463,7 +463,7 @@ parameters:
   - name: size
     group: core_geometry
     type: array
-    mbom_type: "Size3D"
+    mbom_type: "SizeXYZ"
     format: "[x, y, z]"
     unit: unitGrid (multiples of a 1x1 plate)
     default: [1, 1, 1]
@@ -712,7 +712,7 @@ parameters:
   - name: align
     group: positioning
     type: enum_or_array
-    mbom_type: "AxisXYZ<AlignValue>"
+    mbom_type: "AxisXYZ<Align>"
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]
@@ -745,7 +745,7 @@ parameters:
   - name: alignChildren
     group: positioning
     type: enum_or_array
-    mbom_type: "AxisXYZ<AlignValue>"
+    mbom_type: "AxisXYZ<Align>"
     values: ["start", "center", "end"]
     format: |
       String: "start" → ["start","start","start"]

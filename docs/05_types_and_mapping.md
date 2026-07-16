@@ -17,6 +17,8 @@ It serves two audiences:
 > MBOM is canonical. SCAD is a renderer serialization.
 > Do not design MBOM around SCAD arrays. Design SCAD arrays as serialization of MBOM.
 
+**Naming:** axis-keyed types use **XYZ** / **XY** (not 3D / 2D) — e.g. `SizeXYZ`, `AxisXYZ<T>`, `AxisXY<T>`, `GridPositionXYZ`. See `docs/04_types.md` — Naming convention.
+
 For parameter definitions (names, defaults, constraints) see `09_api_parameters.yml`.
 For architecture context see `01_system.md`.
 
@@ -71,7 +73,7 @@ String
 "west" | "north" | "east" | "south"
 ```
 
-## AlignValue
+## Align
 
 ```text
 "start" | "center" | "end"
@@ -267,7 +269,7 @@ default value only (scalar or boolean)
 
 # 5. Compound Domain Types
 
-## Size3D
+## SizeXYZ
 
 ```text
 MBOM: { x: Integer, y: Integer, z: Integer }
@@ -567,7 +569,7 @@ default value only (scalar or boolean)
 
 # 7. Mapping Examples
 
-## Size3D
+## SizeXYZ
 
 ```text
 MBOM: { x:4, y:2, z:3 }
