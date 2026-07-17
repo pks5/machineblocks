@@ -242,27 +242,30 @@ Supports namespaced keys for composite block forwarding:
 
 ## SelectiveGrid\<T\>
 
-Canonical MBOM:
+Canonical MBOM (`com.machineblocks.bml.type.SelectiveGrid` — Sub-Block `Selector`):
 
 ```text
 {
-  default: T,
-  overrides: [
-    { region: { from: {x, y}, to: {x, y} }, value: T }
+  baseValue: T,
+  selectors: [
+    { from: {x, y}, to: {x, y}, value: T }
   ]
 }
 ```
 
+`Selector` is a Java-style static nested StructType with its own `T`; the parent forwards via
+`selectors: Selector(T)[]`. `from` / `to` are `AxisXY(Integer(GridUnitXY))`.
+
 SCAD format:
 
 ```text
-[default, [[x0, y0, x1, y1], value], ...]
+[baseValue, [[x0, y0, x1, y1], value], ...]
 ```
 
-If no overrides:
+If no selectors:
 
 ```text
-default value only (scalar or boolean)
+baseValue only (scalar or boolean)
 ```
 
 ---
@@ -556,13 +559,13 @@ Always emit full 6-element array:
 ## SelectiveGrid Serialization
 
 ```text
-[default, [[x0,y0,x1,y1], value], ...]
+[baseValue, [[x0,y0,x1,y1], value], ...]
 ```
 
-If no overrides:
+If no selectors:
 
 ```text
-default value only (scalar or boolean)
+baseValue only (scalar or boolean)
 ```
 
 ---
@@ -642,15 +645,15 @@ MBOM: { "pbx.x+": 0.01, "pty.z+": 0.1 }
 SCAD: ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```
 
-## SelectiveGrid\<BooleanOr\<StudType\>\> — studs
+## SelectiveGrid\<Boolean | StudType\> — studs
 
 ```text
 MBOM:
 {
-  default: true,
-  overrides: [
-    { region: { from:{x:0,y:0}, to:{x:1,y:1} }, value: false },
-    { region: { from:{x:2,y:0}, to:{x:3,y:1} }, value: "hollow" }
+  baseValue: true,
+  selectors: [
+    { from:{x:0,y:0}, to:{x:1,y:1}, value: false },
+    { from:{x:2,y:0}, to:{x:3,y:1}, value: "hollow" }
   ]
 }
 
