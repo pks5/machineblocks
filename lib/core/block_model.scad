@@ -193,10 +193,12 @@ function mb_block_obj(
         /*
         * Top Plate Helpers
         */
+        topPlateHelperHeight = mb_param_topPlateHelperHeight(config, settings),
+        topPlateHelperThickness = mb_param_topPlateHelperThickness(config, settings),
         top_plate_helpers_final = [
             mb_param_topPlateHelpers(config, settings),
-            mb_param_topPlateHelperThickness(config, settings) * mm2grd_xy, 
-            mb_param_topPlateHelperHeight(config, settings) * mm2grd_z
+            (topPlateHelperThickness == "auto" ? max(0.1, 0.5 * printerNozzleDiameter) : topPlateHelperThickness) * mm2grd_xy, 
+            (topPlateHelperHeight == "auto" ? printerLayerHeight : topPlateHelperHeight) * mm2grd_z
         ],
         
         /*
@@ -281,11 +283,12 @@ function mb_block_obj(
         /*
         * Stabilizers
         */
+        stabilizerLayerOffset = mb_param_stabilizerLayerOffset(config, settings),
         stabilizers_res = [
             mb_param_stabilizers(config, settings), // Has Stabilizers
             mb_param_stabilizerThickness(config, settings) * mbu2grd_xy, // Thickness (mbu)
             mb_param_stabilizerHeight(config, settings) * mbu2grd_z, // Height (mbu)
-            mb_param_stabilizerLayerOffset(config, settings) * mm2grd_z, // Offset (mm)
+            (stabilizerLayerOffset == "auto" ? printerLayerHeight : stabilizerLayerOffset) * mm2grd_z, // Offset (mm)
             mb_param_stabilizerExpansion(config, settings),                       // Expansion Each
             mb_param_stabilizerExpansionOffset(config, settings) * mbu2grd_z // Expansion Offset (mbu)
         ],

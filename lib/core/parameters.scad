@@ -113,15 +113,15 @@ function mb_param_topPlateHeight(config, settings, default = undef) = mb_param(c
 function mb_param_topPlateHeightAdjustment(config, settings, default = undef) = mb_param(config, settings, "topPlateHeightAdjustment", default != undef ? default : -0.6);
 
 function mb_param_topPlateHelpers(config, settings, default = undef) = mb_param(config, settings, "topPlateHelpers", default != undef ? default : true);
-function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : 0.2);
-function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : 0.2);
+function mb_param_topPlateHelperHeight(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperHeight", default != undef ? default : "auto");
+function mb_param_topPlateHelperThickness(config, settings, default = undef) = mb_param(config, settings, "topPlateHelperThickness", default != undef ? default : "auto");
 
 /*
 * Stabilizers
 */
 
 function mb_param_stabilizers(config, settings, default = undef) = mb_param(config, settings, "stabilizers", default != undef ? default : true);
-function mb_param_stabilizerLayerOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerLayerOffset", default != undef ? default : 0.2);
+function mb_param_stabilizerLayerOffset(config, settings, default = undef) = mb_param(config, settings, "stabilizerLayerOffset", default != undef ? default : "auto");
 function mb_param_stabilizerHeight(config, settings, default = undef) = mb_param(config, settings, "stabilizerHeight", default != undef ? default : 0.5);
 function mb_param_stabilizerThickness(config, settings, default = undef) = mb_param(config, settings, "stabilizerThickness", default != undef ? default : 0.5);
 function mb_param_stabilizerExpansion(config, settings, default = undef) = mb_param(config, settings, "stabilizerExpansion", default != undef ? default : 2);
@@ -301,7 +301,7 @@ function mb_param_recessWallGaps(config, settings, default = undef) = mb_to_arra
 * Text Decorator
 */
 
-function mb_param_text(config, settings, default = undef) = mb_param(config, settings, "text", default != undef ? default : "");
+function mb_param_text(config, settings, default = undef) = mb_param(config, settings, "text", default != undef ? default : false);
 function mb_param_textFace(config, settings, default = undef) = mb_param(config, settings, "textFace", default != undef ? default : "x-");
 function mb_param_textDepth(config, settings, default = undef) = mb_param(config, settings, "textDepth", default != undef ? default : -0.25);
 function mb_param_textFont(config, settings, default = undef) = mb_param(config, settings, "textFont", default != undef ? default : "Liberation Sans");
@@ -315,7 +315,7 @@ function mb_param_textColor(config, settings, default = undef) = mb_param(config
 * Surface Pattern
 */
 // TODO implement
-function mb_param_surfacePattern(config, settings, default = undef) = mb_param(config, settings, "surfacePattern", default != undef ? default : "none");
+function mb_param_surfacePattern(config, settings, default = undef) = mb_param(config, settings, "surfacePattern", default != undef ? default : false);
 function mb_param_surfacePatternDimensions(config, settings, default = undef) = mb_param(config, settings, "surfacePatternDimensions", default != undef ? default : [451.556, 451.556]);
 function mb_param_surfacePatternOffset(config, settings, default = undef) = mb_param(config, settings, "surfacePatternOffset", default != undef ? default : [0, 0]);
 // TODO Remove
@@ -330,7 +330,7 @@ function mb_param_surfacePatternColor(config, settings, default = undef) = mb_pa
 * SVG Decorator
 */
 
-function mb_param_svg(config, settings, default = undef) = mb_param(config, settings, "svg", default != undef ? default : "");
+function mb_param_svg(config, settings, default = undef) = mb_param(config, settings, "svg", default != undef ? default : false);
 function mb_param_svgFace(config, settings, default = undef) = mb_param(config, settings, "svgFace", default != undef ? default : 5);
 function mb_param_svgDepth(config, settings, default = undef) = mb_param(config, settings, "svgDepth", default != undef ? default : 0.4);
 function mb_param_svgDimensions(config, settings, default = undef) = mb_param(config, settings, "svgDimensions", default != undef ? default : [100, 100]);

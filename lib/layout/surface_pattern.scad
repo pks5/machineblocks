@@ -10,7 +10,10 @@ function mb_block_part__surface_pattern(block_obj) =
         surface_pattern_depth = mb_block_get_surface_pattern_depth(block_obj),
         height = abs(surface_pattern_depth),
     )
-    mb_is_empty_string(surface_pattern) || surface_pattern == "none" || height == 0 ? undef :
+    surface_pattern == false
+    || mb_is_empty_string(surface_pattern) 
+    || surface_pattern == "none" 
+    || height == 0 ? undef :
     let(
         mod_size = mb_block_dim_mod_size(block_dim),
         surface_pattern_dimensions = mb_block_get_surface_pattern_dimensions(block_obj),
