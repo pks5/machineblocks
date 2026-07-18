@@ -1,29 +1,24 @@
 # ============================================================================
-# MachineBlocks Parameter Reference
-# Single Source of Truth for all mb_block() parameters
+# MachineBlocks Parameter Reference (SCAD library mirror)
 # ============================================================================
 #
-# This document is the authoritative specification for all parameters
-# accepted by mb_block(config, settings). It is designed for AI consumption
-# and deterministic code generation.
+# SSOT for MachineBlocks MBML / SCAD parameters:
+#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
+# Type shapes SSOT:
+#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
+# Conventions (XY / XYZ / AB, kinds):
+#   docs/04_types.md
 #
-# All other documents in this project reference this file.
-# If a conflict exists between this file and any other document,
-# this file is authoritative for parameter definitions.
+# This YAML is a SCAD-facing mirror for AI / codegen against mb_block().
+# If it conflicts with NativeBlock.bml or type BML, BML wins — update this
+# file to match, never the reverse.
 #
 # ----------------------------------------------------------------------------
 # MBOM / SCAD RENDER TARGET CONTEXT
 # ----------------------------------------------------------------------------
 #
-# This document describes parameters at the SCAD render target level.
-# In the MBML/MBOM workflow, parameters are typed using the canonical MBOM
-# type system defined in 05_types_and_mapping.md. The mbom_type field on
-# each parameter references the canonical MBOM type. The SCAD compiler
-# serializes MBOM values to SCAD format following the rules in
-# 05_types_and_mapping.md.
-#
-# Parameters without an mbom_type field use primitive types (Boolean, Float,
-# Integer, String, Enum) which map directly without special serialization rules.
+# Parameters are typed using MBOM types from NativeBlock / type BML.
+# The SCAD compiler serializes MBOM values following docs/04_types.md.
 #
 # ============================================================================
 
