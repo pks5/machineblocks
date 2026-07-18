@@ -2,10 +2,17 @@
 # MachineBlocks Parameter Reference (SCAD library mirror)
 # ============================================================================
 #
+# RENDER OUTPUT — Compiler render artifact of MachineBlocks BML (SSOT).
+# Not an authored source. Future builds regenerate this YAML from BML.
+# Do not edit as canonical — change BML first; sync this file only as a
+# transitional mirror.
+#
 # SSOT for MachineBlocks MBML / SCAD parameters:
 #   domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
 # Type shapes SSOT:
 #   domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
+# Concept / SCAD docs SSOT:
+#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/documentation/
 # Conventions (XY / XYZ / AB, kinds):
 #   docs/04_types.md
 #
@@ -18,7 +25,8 @@
 # ----------------------------------------------------------------------------
 #
 # Parameters are typed using MBOM types from NativeBlock / type BML.
-# The SCAD compiler serializes MBOM values following docs/04_types.md.
+# The SCAD compiler serializes MBOM values following docs/04_types.md and
+# documentation.scad.TypesAndSerialization.
 #
 # ============================================================================
 

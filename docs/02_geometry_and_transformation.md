@@ -2,6 +2,13 @@
 
 version: 3.0.3
 
+> **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
+> authored source. Primary sources:
+> `com.machineblocks.bml.documentation.concept.*` (GeometryConcepts,
+> TransformationConcepts, StructureSystems, CompositionConcepts) and related
+> `NativeBlock` / `type.*` members. Future builds regenerate this Markdown from
+> BML. Do not edit as canonical — change BML first.
+
 ## Purpose of this Document
 
 This document explains the concepts and relationships behind MachineBlocks geometry, transformation, and structure parameters. It does not repeat parameter definitions — for all parameter details (types, defaults, formats, constraints), see `09_api_parameters_1_0_1.yml`.

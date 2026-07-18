@@ -2,6 +2,12 @@
 
 version: 3.0.4
 
+> **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
+> authored source. Primary sources:
+> `com.machineblocks.bml.documentation.scad.BlockFileStructure`,
+> `ModulePatterns`, and related scad documentation Blocks. Future builds
+> regenerate this Markdown from BML. Do not edit as canonical — change BML first.
+
 ## Purpose of this Document
 
 This document defines the Block File structure, customizer conventions, config handling, and Block Module patterns. Each pattern is accompanied by concrete, production-ready examples.

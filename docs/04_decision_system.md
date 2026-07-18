@@ -2,6 +2,12 @@
 
 version: 3.0.4
 
+> **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
+> authored source. Primary sources:
+> `com.machineblocks.bml.documentation.concept.DecisionFramework` and
+> `com.machineblocks.bml.documentation.scad.ScadDecisionRules`. Future builds
+> regenerate this Markdown from BML. Do not edit as canonical — change BML first.
+
 ## Purpose of this Document
 
 This document defines the decision framework the AI must use when working with MachineBlocks. It constrains and guides AI behavior for generating valid block modules, making consistent architectural decisions, and respecting physical constraints.

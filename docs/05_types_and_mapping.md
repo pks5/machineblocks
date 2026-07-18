@@ -2,6 +2,12 @@
 
 version: 3.0.1
 
+> **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
+> authored source. Primary sources: `com.machineblocks.bml.type.*`,
+> `com.machineblocks.bml.documentation.mbml.TypeSystem`, and
+> `com.machineblocks.bml.documentation.scad.TypesAndSerialization`. Future builds
+> regenerate this Markdown from BML. Do not edit as canonical — change BML first.
+
 ## Purpose of this Document
 
 This document defines the canonical MBOM (MachineBlocks Object Model) type system

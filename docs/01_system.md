@@ -2,6 +2,13 @@
 
 version: 3.0.4
 
+> **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
+> authored source. Primary sources:
+> `com.machineblocks.bml.documentation.concept.*`,
+> `com.machineblocks.bml.documentation.scad.*`, and related domain BML.
+> Future builds regenerate this Markdown from BML. Do not edit as canonical —
+> change BML first; keep this file in sync only as a transitional mirror.
+
 ## Purpose
 
 MachineBlocks is a parametric system for generating LEGO-compatible 3D blocks, primarily for 3D printing but also applicable to general 3D modeling workflows (e.g. Unity or CAD).
@@ -708,7 +715,7 @@ A block module is completely self-contained and must NEVER access global variabl
 
 **Native Parameters — Always Use Getters**
 
-For every parameter read inside a block module, first check whether it is a native parameter (defined in `09_api_parameters.yml`). If it is native, always use its dedicated getter:
+For every parameter read inside a block module, first check whether it is a native parameter (SSOT: `NativeBlock.bml`; SCAD mirror: `09_api_parameters.yml`). If it is native, always use its dedicated getter:
 
 ```scad
 // Native parameter → getter
@@ -744,23 +751,35 @@ This rule applies whenever these three variable names appear in a legacy file wi
 
 ## Documentation Architecture
 
-This documentation is a formal, machine-readable specification of the system. Its purpose is to enable deterministic generation of valid block modules, correct interpretation of parameters and rules, automated construction of complex structures, and implementation of the MBOM-to-SCAD compiler.
+These files under `scad-lib/docs/` are **Render Output** of MachineBlocks BML —
+the same role as pre-rendered `.scad` artifacts under `scad-lib/blocks/`. They are
+not the authored specification. The compiler will regenerate them from BML;
+until that pipeline exists they remain transitional mirrors.
 
-The documentation consists of:
+**SSOT (authored):**
 
 ```text
-01_system.md                       — this document (architecture, ecosystem, units, execution model, terminology)
-02_geometry_and_transformation.md  — geometry concepts, positioning, and structure
-03_patterns_and_examples.md        — block file structure, module patterns, and concrete examples
-04_decision_system.md              — AI decision framework for direct SCAD generation
-05_types_and_mapping.md            — MBOM type system and MBOM-to-SCAD serialization mappings
-09_api_parameters.yml              — single source of truth for all parameter definitions
-10_set_example.scad                — reference implementation of the Set file format
+com.machineblocks.bml.documentation.concept.*   — renderer-agnostic concepts
+com.machineblocks.bml.documentation.mbml.*      — MBML authoring docs
+com.machineblocks.bml.documentation.scad.*      — SCAD render-target docs
+com.machineblocks.bml.core.NativeBlock         — native parameter inventory
+com.machineblocks.bml.type.*                   — type shapes
 ```
 
-`05_types_and_mapping.md` defines the canonical MBOM types for all parameters and the serialization rules for mapping MBOM values to SCAD format. It is the interface specification between the MBOM compiler and the SCAD render target. Parameter entries in `09_api_parameters.yml` reference their MBOM type from this document.
+**Render output (this directory — do not treat as SSOT):**
 
-The YAML file is authoritative for all parameter definitions (types, defaults, formats, constraints). The Markdown documents explain concepts, relationships, and decision logic — they do not duplicate parameter definitions.
+```text
+01_system.md                       — system / architecture / units / legacy (from concept + scad BML)
+02_geometry_and_transformation.md  — geometry, transform, structure concepts (from concept BML)
+03_patterns_and_examples.md        — Block File structure and module patterns (from scad BML)
+04_decision_system.md              — decision framework (from concept + scad BML)
+05_types_and_mapping.md            — type catalog and SCAD serialization (from type + scad BML)
+09_api_parameters.yml              — SCAD-facing parameter mirror (from NativeBlock + type BML)
+10_set_example.scad                — reference Set file format example
+```
+
+If Markdown or YAML conflicts with BML, **BML wins**. Update BML first, then
+regenerate or sync these artifacts.
 
 ### Documentation Extensions
 
