@@ -67,20 +67,23 @@ global_rules:
 
   parameter_access:
     description: |
-      All parameters listed in this document are NATIVE parameters — they are
-      used directly by mb_block(). Every native parameter has a dedicated
-      getter function:
+      Native parameters are the properties declared on
+      com.machineblocks.bml.core.NativeBlock (SSOT; this YAML is a render
+      mirror). In SCAD every native parameter MUST be read via:
 
-        mb_param_{parameterName}(config, settings)
-        mb_param_{parameterName}(config, settings, defaultOverride)
+        mb_param_[propertyName](config, settings)
+        mb_param_[propertyName](config, settings, defaultOverride)
 
-      Custom parameters defined by individual block modules use the generic
-      getter:
+      Custom parameters (not a NativeBlock property) MUST use:
 
         mb_param(config, settings, "parameterName", defaultValue)
 
-      Block modules MUST use the dedicated getter for native parameters.
-      Direct array access is not permitted.
+      Never invent mb_param_* for custom names. Never use mb_param() for
+      NativeBlock properties. Direct array access is not permitted.
+
+      Reference (native + custom in one module):
+        blocks/com/machineblocks/bml/examples/Cross.scad
+        (mb__com__machineblocks__examples__Cross)
 
   getter_format_resolution:
     description: |

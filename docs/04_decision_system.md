@@ -189,7 +189,7 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 8 — Connection selection.** LEGO connection → standard underside. Structural connection → tongue/groove. Flexible connection → connectors.
 
-**Rule 9 — Use mb_param_*() for native parameters.** Never access settings arrays directly. Always use the dedicated getter for native parameters and `mb_param()` for custom parameters.
+**Rule 9 — NativeBlock properties use `mb_param_[propertyName]()`.** Custom parameters use `mb_param()`. Never access settings arrays directly. Criterion: property on `NativeBlock` → native getter; otherwise → `mb_param()`. Reference: `examples/Cross.scad`.
 
 **Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{ClassName}`. Always end the response with the output summary (Package, Module, Filename, Location).
 

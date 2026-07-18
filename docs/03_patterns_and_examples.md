@@ -284,9 +284,9 @@ c = a + 1; // NOT shown in customizer
 
 # Parameter Access Rules
 
-All block modules must follow these rules for reading parameters:
+All block modules must follow these rules for reading parameters. **Native** means: declared as a property on `com.machineblocks.bml.core.NativeBlock` (SSOT). Everything else is **custom**.
 
-**Native parameters** (parameters used by `mb_block()`) — use the dedicated getter:
+**Native parameters** — use the dedicated getter `mb_param_[propertyName]()`:
 ```scad
 size = mb_param_size(config, settings);
 direction = mb_param_direction(config, settings);
@@ -298,13 +298,15 @@ An optional default can be passed as the third argument:
 size = mb_param_size(config, settings, [4, 2, 3]);
 ```
 
-**Custom parameters** (module-specific parameters) — use the generic getter:
+**Custom parameters** (not a NativeBlock property) — use the generic getter `mb_param()`:
 ```scad
 myParam = mb_param(config, settings, "myParam", "myDefaultValue");
-cornerRounding = mb_param(config, settings, "cornerRounding", 0.5);
+brick1SizeY = mb_param(config, settings, "brick1SizeY", 2);
 ```
 
-> Never access the settings or config arrays directly. Always use the getter functions.
+> Never access the settings or config arrays directly. Never invent `mb_param_*` for custom names. Never use `mb_param()` for NativeBlock properties.
+
+**Reference:** `examples/Cross.scad` shows both in one module — native getters for shared brick params, `mb_param()` for `brick1SizeY` / `brick2SizeX` / `brick1OffsetY` / `brick2OffsetX`.
 
 ---
 
@@ -1103,6 +1105,6 @@ A set file supports four rendering modes: `total` (fully assembled), `print` (in
 
 **Assembly Toggling:** Resolve via `mb_assembly()`. Also resolve `renderGroups = mb_param_renderGroups(config, settings)`. Use `mb_assembly_tongue(assembly, renderGroups, g)` for tongue, `mb_assembly_groove(assembly, renderGroups, g)` for baseCutoutType, `mb_group_render(renderGroups, g)` for render, `mb_assembly_offset([...], assembly, renderGroups, g)` for offset. `g` is always a group name.
 
-**Parameter Access:** Always use `mb_param_*()` for native parameters and `mb_param()` for custom parameters. Never access arrays directly.
+**Parameter Access:** NativeBlock properties → `mb_param_[propertyName]()`; all other parameters → `mb_param()`. Never access arrays directly. See `examples/Cross.scad` for both in one module.
 
 **studBaseOverlap:** Set to 0 only when a sub-block has `base = false` but still renders studs (e.g. stud-only decorative layers in composite blocks).

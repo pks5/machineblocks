@@ -149,24 +149,26 @@ Both arguments are optional arrays of key-value pairs:
 
 ### Native Parameters vs Custom Parameters
 
-There are two kinds of parameters in MachineBlocks:
+There are two kinds of parameters in MachineBlocks. The criterion is **NativeBlock**, not “whatever `mb_block()` happens to accept today”:
 
-**Native parameters** are parameters used directly by `mb_block()`. Every native parameter has a dedicated getter function:
+**Native parameters** — every property declared on `com.machineblocks.bml.core.NativeBlock`. In SCAD they MUST be read via the dedicated getter named after the property:
 
 ```scad
 size = mb_param_size(config, settings);
 baseAdjustment = mb_param_baseAdjustment(config, settings);
 ```
 
-**Custom parameters** are parameters defined by individual block modules. They are accessed via the generic getter:
+Optional third argument: block-specific default override (`mb_param_size(config, settings, [4, 2, 3])`).
+
+**Custom parameters** — any other parameter (module-specific; not a NativeBlock property). They MUST be read via the generic getter:
 
 ```scad
 myParam = mb_param(config, settings, "myParam", "myDefaultValue");
 ```
 
-Both getter variants accept an optional default as the last argument.
+> All block modules MUST use `mb_param_[propertyName]()` for NativeBlock properties and `mb_param()` for everything else. Never invent a native getter for a custom name. Never use `mb_param()` for a NativeBlock property. Direct array access is not permitted.
 
-> All block modules MUST use `mb_param_{nativeParameterName}()` for native parameters and `mb_param()` for custom parameters. Direct array access is not permitted.
+**Reference:** `blocks/com/machineblocks/bml/examples/Cross.scad` (`mb__com__machineblocks__examples__Cross`) uses native getters for `size`, `studs`, `baseColor`, … and `mb_param()` for `brick1SizeY`, `brick2SizeX`, `brick1OffsetY`, `brick2OffsetX`.
 
 ### Format Resolution
 

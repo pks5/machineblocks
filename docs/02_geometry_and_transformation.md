@@ -385,7 +385,7 @@ Each entry in `parts` is `[size, direction, offset]`. The function computes the 
 
 **assembly[0] is always the mode string.** Always check `assembly[0]` after resolving via `mb_assembly()`.
 
-**Never use mb_param_*() for custom parameters.** Only use `mb_param_size()` etc. for parameters that are native to `mb_block()`.
+**Never use `mb_param_*()` for custom parameters.** Only NativeBlock properties get dedicated getters (`mb_param_[propertyName]()`). Everything else uses `mb_param()`. See `examples/Cross.scad`.
 
 ---
 
