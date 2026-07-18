@@ -72,7 +72,7 @@ STEPS = [
 /*
 * Main Module Call
 */
-mb_block__com__martianmicro__anyclosure__DefaultEnclosure(
+mb__com__martianmicro__anyclosure__DefaultEnclosure(
     config = mb_config,
     settings = [
         ["baseColor", baseColor],
@@ -88,27 +88,27 @@ mb_block__com__martianmicro__anyclosure__DefaultEnclosure(
 /*
 * Main Module Definition
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure(config = undef, settings = undef){
     mode = mb_param(config, settings, "mode", default="total");
 
     if(mode == "total"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total(config = config, settings = settings);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Total(config = config, settings = settings);
     }
     else if(mode == "print"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print(config = config, settings = settings);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Print(config = config, settings = settings);
     }
     else if(mode == "step"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = config, settings = settings);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = config, settings = settings);
     }
     else if(mode == "instance"){
-        mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = settings);
+        mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = settings);
     }
 }
 
 /*
 * Sub Module Definition: Assembled Enclosure
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Total(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.anyclosure.default_enclosure.total");
     baseColor = mb_param_baseColor(config, settings);
     align = mb_param_align(config, settings);
@@ -141,7 +141,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total(config =
                 ["baseColor", baseColor],
                 ["assembly", "merged"]
             ];
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
         }
     }
 }
@@ -149,7 +149,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Total(config =
 /*
 * Sub Module Definition: 3D Print View with single parts
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Print(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.anyclosure.default_enclosure.print");
     baseColor = mb_param_baseColor(config, settings);
     align = mb_param_align(config, settings);
@@ -181,7 +181,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print(config =
                 ["assembly", assembly],
                 ["baseColor", baseColor]
             ];
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
         }
     }
 }
@@ -189,7 +189,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Print(config =
 /*
 * Sub Module Definition: Step by Step View
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.anyclosure.default_enclosure.step");
     step = mb_param(config, settings, "step");
     combined = mb_param(config, settings, "combined", false);
@@ -232,12 +232,12 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = 
                         ["baseColor", baseColor],
                         ["assembly", "merged"]
                     ];
-                    mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
+                    mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = config, settings = blockSettings);
                 }
             }
 
             //Instance
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(
                 config = config,
                 settings = [
                     ["id", mb_block_id(blockId, instanceId)],
@@ -260,39 +260,39 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Step(config = 
 /*
 * Sub Module Definition: Instance
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance(config = undef, settings = undef){
     instanceId = mb_param(config, settings, "instanceId");
 
     if(instanceId != undef){
         if(instanceId == "00001"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(config = config, settings = settings);
         }
         else if(instanceId == "00002"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(config = config, settings = settings);
         }
         else if(instanceId == "00003"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003(config = config, settings = settings);
         }
         else if(instanceId == "00004"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004(config = config, settings = settings);
         }
         else if(instanceId == "00005"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005(config = config, settings = settings);
         }
         else if(instanceId == "00006"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006(config = config, settings = settings);
         }
         else if(instanceId == "00007"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007(config = config, settings = settings);
         }
         else if(instanceId == "00008"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008(config = config, settings = settings);
         }
         else if(instanceId == "00009"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009(config = config, settings = settings);
         }
         else if(instanceId == "0000A"){
-            mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_0000A(config = config, settings = settings);
+            mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_0000A(config = config, settings = settings);
         }
     }
 }
@@ -300,7 +300,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance(confi
 /*
 * Sub Module Definition: Instance 00001
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -309,7 +309,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001
     offset = mb_param_offset(config, settings);
     
     //Bottom Plate
-    mb_block__com__martianmicro__anyclosure__Floor(
+    mb__com__martianmicro__anyclosure__Floor(
         config = config,
         settings = [
             ["id", blockId],
@@ -333,7 +333,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00001
 /*
 * Sub Module Definition: Instance 00002
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -342,7 +342,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002
     offset = mb_param_offset(config, settings);
     
     //Corner Front Left
-    mb_block__com__martianmicro__anyclosure__Corner(
+    mb__com__martianmicro__anyclosure__Corner(
         config = config,
         settings = [
             ["id", blockId],
@@ -366,7 +366,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00002
 /*
 * Sub Module Definition: Instance 00003
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -375,7 +375,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003
     offset = mb_param_offset(config, settings);
     
     //Wall Left
-    mb_block__com__martianmicro__anyclosure__Wall(
+    mb__com__martianmicro__anyclosure__Wall(
         config = config,
         settings = [
             ["id", blockId],
@@ -399,7 +399,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00003
 /*
 * Sub Module Definition: Instance 00004
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -408,7 +408,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004
     offset = mb_param_offset(config, settings);
     
     //Corner Rear Left
-    mb_block__com__martianmicro__anyclosure__Corner(
+    mb__com__martianmicro__anyclosure__Corner(
         config = config,
         settings = [
             ["id", blockId],
@@ -432,7 +432,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00004
 /*
 * Sub Module Definition: Instance 00005
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -441,7 +441,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005
     offset = mb_param_offset(config, settings);
     
     //Wall Rear
-    mb_block__com__martianmicro__anyclosure__Wall(
+    mb__com__martianmicro__anyclosure__Wall(
         config = config,
         settings = [
             ["id", blockId],
@@ -465,7 +465,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00005
 /*
 * Sub Module Definition: Instance 00006
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -474,7 +474,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006
     offset = mb_param_offset(config, settings);
     
     //Corner Rear Right
-    mb_block__com__martianmicro__anyclosure__Corner(
+    mb__com__martianmicro__anyclosure__Corner(
         config = config,
         settings = [
             ["id", blockId],
@@ -498,7 +498,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00006
 /*
 * Sub Module Definition: Instance 00007
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -507,7 +507,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007
     offset = mb_param_offset(config, settings);
     
     //Wall Right
-    mb_block__com__martianmicro__anyclosure__Wall(
+    mb__com__martianmicro__anyclosure__Wall(
         config = config,
         settings = [
             ["id", blockId],
@@ -531,7 +531,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00007
 /*
 * Sub Module Definition: Instance 00008
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -540,7 +540,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008
     offset = mb_param_offset(config, settings);
     
     //Corner Front Right
-    mb_block__com__martianmicro__anyclosure__Corner(
+    mb__com__martianmicro__anyclosure__Corner(
         config = config,
         settings = [
             ["id", blockId],
@@ -564,7 +564,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00008
 /*
 * Sub Module Definition: Instance 00009
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -573,7 +573,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009
     offset = mb_param_offset(config, settings);
 
     //Wall Front
-    mb_block__com__martianmicro__anyclosure__Wall(
+    mb__com__martianmicro__anyclosure__Wall(
         config = config,
         settings = [
             ["id", blockId],
@@ -597,7 +597,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_00009
 /*
 * Sub Module Definition: Instance 0000A
 */
-module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_0000A(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__DefaultEnclosure__Instance_0000A(config = undef, settings = undef){
     blockId = mb_param_id(config, settings);
     baseColor = mb_param_baseColor(config, settings);
     assembly = mb_param_assembly(config, settings);
@@ -606,7 +606,7 @@ module mb_block__com__martianmicro__anyclosure__DefaultEnclosure__Instance_0000A
     offset = mb_param_offset(config, settings);
     
     //Lid
-    mb_block__com__martianmicro__anyclosure__Lid(
+    mb__com__martianmicro__anyclosure__Lid(
         config = config,
         settings = [
             ["id", blockId],

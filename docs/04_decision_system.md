@@ -105,7 +105,7 @@ Composite: `assembly`, `renderGroups`, `render`, `id`.
 
 ## Pattern 1 — Wrapper Module
 
-No logic, pass-through only. Calls `mb_block()` or another `mb_block__*` directly.
+No logic, pass-through only. Calls `mb_block()` or another `mb__*` directly.
 
 ## Pattern 2 — Semantic Block
 
@@ -195,7 +195,7 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 11 — Block file naming and location (V3).** The filename is the class name (PascalCase) as a `.scad` file. The class is placed in a folder named after the parent package segment. The module name uses all FQN segments with `__` separators:
 - FQN `com.machineblocks.bml.bricks.Standard` → filename `Standard.scad`
-- Module name: `mb_block__com__machineblocks__bricks__Standard`
+- Module name: `mb__com__machineblocks__bricks__Standard`
 - Location: `scad/com/machineblocks/bml/bricks/Standard.scad`
 - FQN `com.martianmicro.anyclosure.Corner` → `scad/com/martianmicro/anyclosure/Corner.scad`
 

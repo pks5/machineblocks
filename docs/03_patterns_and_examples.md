@@ -120,7 +120,7 @@ baseColor = "#EAC645";
 /*
  * Main Module Call
  */
-mb_block__my__package__MyBlock(
+mb__my__package__MyBlock(
     config = mb_config,
     settings = [
         ["size", size],
@@ -132,7 +132,7 @@ mb_block__my__package__MyBlock(
 /*
  * Main Module Definition
  */
-module mb_block__my__package__MyBlock(config = undef, settings = undef){
+module mb__my__package__MyBlock(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
@@ -176,7 +176,7 @@ include <../../../../config/mb_config.scad>        →  include </mb_config.scad
 The Block File includes `mb_config.scad` which provides the `mb_config` variable. This variable is passed to the Main Module Call:
 
 ```scad
-mb_block__my__package__my_block(
+mb__my__package__my_block(
     config = mb_config,
     settings = [...]
 );
@@ -184,10 +184,10 @@ mb_block__my__package__my_block(
 
 ## Module Level
 
-Inside the module definition, the `config` parameter (not `mb_config`) is passed to all `mb_block()` calls and all `mb_block__*()` sub-module calls:
+Inside the module definition, the `config` parameter (not `mb_config`) is passed to all `mb_block()` calls and all `mb__*()` sub-module calls:
 
 ```scad
-module mb_block__my__package__MyBlock(config = undef, settings = undef){
+module mb__my__package__MyBlock(config = undef, settings = undef){
     mb_block(
         config = config,  // always the config parameter, never mb_config
         settings = [...]
@@ -360,7 +360,7 @@ studs = true;
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__examples__PrimitiveWrapper(
+mb__com__martianmicro__examples__PrimitiveWrapper(
     config = mb_config,
     settings = [
         ["size", size],
@@ -373,7 +373,7 @@ mb_block__com__martianmicro__examples__PrimitiveWrapper(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__examples__PrimitiveWrapper(config = undef, settings = undef){
+module mb__com__martianmicro__examples__PrimitiveWrapper(config = undef, settings = undef){
     mb_block(
         config = config,
         settings = settings
@@ -443,7 +443,7 @@ roundingRadiusZ = 0.5; // [0:0.25:2]
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__examples__SimpleRoundBrick(
+mb__com__martianmicro__examples__SimpleRoundBrick(
     config = mb_config,
     settings = [
         ["size", size],
@@ -454,7 +454,7 @@ mb_block__com__martianmicro__examples__SimpleRoundBrick(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__examples__SimpleRoundBrick(config = undef, settings = undef){
+module mb__com__martianmicro__examples__SimpleRoundBrick(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings, [4, 2, 3]);
     // Custom Parameters
@@ -473,7 +473,7 @@ module mb_block__com__martianmicro__examples__SimpleRoundBrick(config = undef, s
  * Sub Module "Alt"
  * com.martianmicro.examples.SimpleRoundBrick.Alt
  */
-module mb_block__com__martianmicro__examples__SimpleRoundBrick__Alt(config = undef, settings = undef){
+module mb__com__martianmicro__examples__SimpleRoundBrick__Alt(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings, [4, 2, 3]);
     // Custom Parameters
@@ -529,7 +529,7 @@ speedMph = 50; // [0:1:160]
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__examples__SimpleTextPlate(
+mb__com__martianmicro__examples__SimpleTextPlate(
     config = mb_config,
     settings = [
         ["sizeMode", sizeMode],
@@ -540,19 +540,19 @@ mb_block__com__martianmicro__examples__SimpleTextPlate(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__examples__SimpleTextPlate(config = undef, settings = undef){
+module mb__com__martianmicro__examples__SimpleTextPlate(config = undef, settings = undef){
     // Custom Parameters
     sizeMode = mb_param(config, settings, "sizeMode", "small");
     speedMph = mb_param(config, settings, "speedMph", 0);
 
-    mb_block__com__martianmicro__examples__SimpleTextPlate__help__doIt(10);
+    mb__com__martianmicro__examples__SimpleTextPlate__help__doIt(10);
 
     mb_block(
         config = config,
         settings = [
             ["size", sizeMode == "small" ? [4, 2, 1] : [8, 4, 1]],
             ["studs", false],
-            ["text", str(mb_block__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(speedMph))],
+            ["text", str(mb__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(speedMph))],
             ["textFace", 5],
             ["textSize", 12]
         ]
@@ -563,7 +563,7 @@ module mb_block__com__martianmicro__examples__SimpleTextPlate(config = undef, se
  * Helper Module "doIt"
  * com.martianmicro.examples.SimpleTextPlate.help.doIt
  */
-module mb_block__com__martianmicro__examples__SimpleTextPlate__help__doIt(my_var = 5){
+module mb__com__martianmicro__examples__SimpleTextPlate__help__doIt(my_var = 5){
     echo(concat("My var: ", my_var));
 }
 
@@ -573,7 +573,7 @@ module mb_block__com__martianmicro__examples__SimpleTextPlate__help__doIt(my_var
  *
  * Converts MPH to KMH
  */
-function mb_block__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(mph) = 1.6 * mph;
+function mb__com__martianmicro__examples__SimpleTextPlate__func__mphToKmh(mph) = 1.6 * mph;
 ```
 
 ## Pattern 3 — Composite Block
@@ -625,7 +625,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__anyclosure__Wall(
+mb__com__martianmicro__anyclosure__Wall(
     config = mb_config,
     settings = [
         ["size", size],
@@ -639,7 +639,7 @@ mb_block__com__martianmicro__anyclosure__Wall(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__anyclosure__Wall(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__Wall(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.Wall");
     size = mb_param_size(config, settings);
@@ -757,7 +757,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__anyclosure__Corner(
+mb__com__martianmicro__anyclosure__Corner(
     config = mb_config,
     settings = [
         ["size", size],
@@ -772,7 +772,7 @@ mb_block__com__martianmicro__anyclosure__Corner(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__anyclosure__Corner(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__Corner(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.Corner");
     size = mb_param_size(config, settings, [4, 4, 9]);
@@ -942,7 +942,7 @@ baseColor = "#303D4E";
 /*
  * Main Module Call
  */
-mb_block__com__martianmicro__anyclosure__CombinedWall(
+mb__com__martianmicro__anyclosure__CombinedWall(
     config = mb_config,
     settings = [
         ["direction", direction],
@@ -955,7 +955,7 @@ mb_block__com__martianmicro__anyclosure__CombinedWall(
 /*
  * Main Module Definition
  */
-module mb_block__com__martianmicro__anyclosure__CombinedWall(config = undef, settings = undef){
+module mb__com__martianmicro__anyclosure__CombinedWall(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     blockId = mb_param_id(config, settings, "com.martianmicro.anyclosure.CombinedWall");
     direction = mb_param_direction(config, settings);
@@ -992,7 +992,7 @@ module mb_block__com__martianmicro__anyclosure__CombinedWall(config = undef, set
         //Part 1: Corner Front Left
         part_corner_fl = "corner_fl";
 
-        mb_block__com__martianmicro__anyclosure__Corner(
+        mb__com__martianmicro__anyclosure__Corner(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_corner_fl)],
@@ -1008,7 +1008,7 @@ module mb_block__com__martianmicro__anyclosure__CombinedWall(config = undef, set
         //Part 2: Wall Left
         part_wall_l = "wall_l";
 
-        mb_block__com__martianmicro__anyclosure__Wall(
+        mb__com__martianmicro__anyclosure__Wall(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_wall_l)],
@@ -1024,7 +1024,7 @@ module mb_block__com__martianmicro__anyclosure__CombinedWall(config = undef, set
         //Part 3: Corner Rear Left
         part_corner_rr = "corner_rr";
 
-        mb_block__com__martianmicro__anyclosure__Corner(
+        mb__com__martianmicro__anyclosure__Corner(
             config = config,
             settings = [
                 ["id", mb_block_id(blockId, part_corner_rr)],

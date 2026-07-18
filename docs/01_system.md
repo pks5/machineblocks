@@ -84,10 +84,10 @@ MachineBlocks follows a single-module architecture. There is one core module —
 
 ### Block Module
 
-An OpenSCAD module that uses `mb_block()` directly or indirectly. Follows the naming convention `mb_block__<package>` where package segments are separated by double underscores.
+An OpenSCAD module that uses `mb_block()` directly or indirectly. Follows the naming convention `mb__<package>` where package segments are separated by double underscores.
 
 ```text
-module mb_block__my__package__Wall(config = undef, settings = undef){ ... }
+module mb__my__package__Wall(config = undef, settings = undef){ ... }
 ```
 
 The Block Module is the reusable code unit. It always has the signature `(config, settings)`.
@@ -443,7 +443,7 @@ This capability makes `mb_block()` not only a geometry primitive, but also a loc
 Block modules are wrappers around `mb_block()`:
 
 ```text
-mb_block__<package>
+mb__<package>
 ```
 
 They share the same signature `(config, settings)`, map parameters to `mb_block`, and provide reusable abstractions.
@@ -452,17 +452,17 @@ They share the same signature `(config, settings)`, map parameters to `mb_block`
 
 Sub-modules (same signature as main module):
 ```text
-mb_block__<package>__<SubName>
+mb__<package>__<SubName>
 ```
 
 Helper modules (own arbitrary signature, uses subpackage `help`):
 ```text
-mb_block__<package>__help__<helperName>
+mb__<package>__help__<helperName>
 ```
 
 Global functions (uses subpackage `func`):
 ```text
-mb_block__<package>__func__<funcName>
+mb__<package>__func__<funcName>
 ```
 
 The names `func` and `help` are reserved and cannot be used as regular sub-module names.
@@ -510,7 +510,7 @@ File:     Wall.scad
 The module name uses all package segments with `__` separators, and the class segment is PascalCase:
 
 ```text
-Module:   mb_block__com__martianmicro__anyclosure__Wall
+Module:   mb__com__martianmicro__anyclosure__Wall
 ```
 
 ### The /scad/user/ Folder
@@ -529,7 +529,7 @@ When generating a block in chat (without an explicit package), the AI must alway
 
 ```text
 Package:   com.martianmicro.user.MyBlock
-Module:    mb_block__com__martianmicro__user__MyBlock
+Module:    mb__com__martianmicro__user__MyBlock
 Filename:  MyBlock.scad
 Location:  mylib/scad/com/martianmicro/user/MyBlock.scad
 ```
@@ -634,7 +634,7 @@ MachineBlocks has had three major module naming generations:
 ```text
 v1:  block()        — earliest version, no nesting support
 v2:  machineblock() — second generation, direct parameter style
-v3:  mb_block() / mb_block__x__y__z() — current version, config/settings style
+v3:  mb_block() / mb__x__y__z() — current version, config/settings style
 ```
 
 The legacy converter can reliably convert `machineblock()` (V2) to `mb_block()` or composite blocks (V3). This is the primary supported conversion path.
@@ -647,7 +647,7 @@ Legacy files use direct OpenSCAD module parameters instead of the `config`/`sett
 
 **Step 1 — Create Block File Structure**
 
-Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb_block__<package>__<ClassName>` where the class name is PascalCase.
+Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb__<package>__<ClassName>` where the class name is PascalCase.
 
 **Step 2 — Replace machineblock() with mb_block()**
 
@@ -691,7 +691,7 @@ Variables that are only computed and used internally by the module do NOT belong
 tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * mb_unit_grid()[0] * mb_unit_mbu();
 
 /* CORRECT — internal computation inside the module */
-module mb_block__x__y__Z(config = undef, settings = undef){
+module mb__x__y__Z(config = undef, settings = undef){
     tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * unitGrid[0] * unitMbu;
     ...
 }
@@ -705,7 +705,7 @@ Native parameter getters (`mb_param_*()`) must NEVER be called in the Hidden Sec
 bAdjustment = mb_param_baseAdjustment_default();
 
 /* CORRECT — getter called inside the module body */
-module mb_block__x__y__Z(config = undef, settings = undef){
+module mb__x__y__Z(config = undef, settings = undef){
     baseAdjustment = mb_param_baseAdjustment(config, settings);
     ...
 }
