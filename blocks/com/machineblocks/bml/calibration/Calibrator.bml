@@ -24,7 +24,7 @@
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:cal="com.machineblocks.bml.calibration"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Calibrator</name>
   <type>cal:Calibrator</type>
@@ -41,7 +41,7 @@
     <alignChildren type="Text">
       <value>ccs</value>
     </alignChildren>
-    <size type="mbtype:Size3D"
+    <size type="mbt:Size3D"
     >
       <value>${ [#math.max(2 * numberOfSamples + 1, labelSize), 12, 2] }</value>
     </size>

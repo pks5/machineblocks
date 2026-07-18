@@ -19,7 +19,7 @@
   xmlns:status="org.blockml.bml.status"
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Standard</name>
   <type>bricks:Standard</type>
@@ -28,12 +28,12 @@
   <properties>
 
     <!-- Size -->
-    <size type="mbtype:Size3D">
+    <size type="mbt:Size3D">
       <value>[4, 2, 3]</value>
     </size>
 
     <!-- Base -->
-    <baseCutoutType type="mbtype:BaseCutoutType">
+    <baseCutoutType type="mbt:BaseCutoutType">
       <value>standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
@@ -48,11 +48,11 @@
     <baseReliefCutThickness type="Float">
       <value>0.375</value>
     </baseReliefCutThickness>
-    <baseRoundingRadius type="mbtype:RoundingRadius">
+    <baseRoundingRadius type="mbt:RoundingRadius">
       <status>Draft</status>
       <value>0</value>
     </baseRoundingRadius>
-    <grille type="mbtype:GrilleType">
+    <grille type="mbt:GrilleType">
       <value>none</value>
     </grille>
     <grilleInverted type="Boolean">
@@ -64,7 +64,7 @@
     <grilleCount type="Float">
       <value>2.5</value>
     </grilleCount>
-    <bevel type="mbtype:BevelList">
+    <bevel type="mbt:BevelList">
       <value>[[0,0],[0,0],[0,0],[0,0]]</value>
     </bevel>
 
@@ -75,10 +75,10 @@
     <studShift type="Boolean">
       <value>false</value>
     </studShift>
-    <studType type="mbtype:StudType">
+    <studType type="mbt:StudType">
       <value>solid</value>
     </studType>
-    <studPadding type="mbtype:PaddingList">
+    <studPadding type="mbt:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
     <studBaseOverlap type="Float">
@@ -89,7 +89,7 @@
     <holeX type="Boolean">
       <value>false</value>
     </holeX>
-    <holeXType type="mbtype:HoleType">
+    <holeXType type="mbt:HoleType">
       <value>pin</value>
     </holeXType>
     <holeXShift type="Boolean">
@@ -101,7 +101,7 @@
     <holeY type="Boolean">
       <value>false</value>
     </holeY>
-    <holeYType type="mbtype:HoleType">
+    <holeYType type="mbt:HoleType">
       <value>pin</value>
     </holeYType>
     <holeYShift type="Boolean">
@@ -113,7 +113,7 @@
     <holeZ type="Boolean">
       <value>false</value>
     </holeZ>
-    <holeZType type="mbtype:HoleType">
+    <holeZType type="mbt:HoleType">
       <value>pin</value>
     </holeZType>
     <holeZShift type="Boolean">
@@ -127,18 +127,18 @@
     <recessStuds type="Boolean">
       <value>false</value>
     </recessStuds>
-    <recessWallThickness type="mbtype:PaddingList">
+    <recessWallThickness type="mbt:PaddingList">
       <value>[0.333, 0.333, 0.333, 0.333]</value>
     </recessWallThickness>
-    <recessDepth type="mbtype:AutoOr_Float">
+    <recessDepth type="mbt:AutoOr_Float">
       <value>auto</value>
     </recessDepth>
-    <recessStudPadding type="mbtype:PaddingList">
+    <recessStudPadding type="mbt:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </recessStudPadding>
 
     <!-- Slope -->
-    <slope type="mbtype:SlopeList">
+    <slope type="mbt:SlopeList">
       <value>[0, 0, 0, 0]</value>
     </slope>
 
@@ -178,7 +178,7 @@
     <textSpacing type="Float">
       <value>1</value>
     </textSpacing>
-    <textColor type="mbtype:Color">
+    <textColor type="mbt:Color">
       <value>#303D4E</value>
       <suggestions>
         <suggestion value="#303D4E" label="Midnight Blue" />
@@ -193,7 +193,7 @@
     </textColor>
 
     <!-- Style -->
-    <baseColor type="mbtype:Color">
+    <baseColor type="mbt:Color">
       <value>#EAC645</value>
       <suggestions>
         <suggestion value="#EAC645" label="Sun Flower" />

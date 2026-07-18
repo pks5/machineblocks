@@ -19,7 +19,7 @@
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
-  xmlns:mbtype="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <name>Cross</name>
   <type>examples:Cross</type>
@@ -37,7 +37,7 @@
     </studs>
 
     <!-- Size -->
-    <size type="mbtype:Size3D">
+    <size type="mbt:Size3D">
       <value>[4, 4, 3]</value>
     </size>
 
@@ -60,7 +60,7 @@
     </brick2OffsetX>
 
     <!-- Base -->
-    <baseCutoutType type="mbtype:BaseCutoutType">
+    <baseCutoutType type="mbt:BaseCutoutType">
       <value>standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
@@ -75,7 +75,7 @@
     <baseReliefCutThickness type="Float">
       <value>0.4</value>
     </baseReliefCutThickness>
-    <grille type="mbtype:GrilleType">
+    <grille type="mbt:GrilleType">
       <value>none</value>
     </grille>
     <grilleInverted type="Boolean">
@@ -91,10 +91,10 @@
     <studShift type="Boolean">
       <value>false</value>
     </studShift>
-    <studType type="mbtype:StudType">
+    <studType type="mbt:StudType">
       <value>solid</value>
     </studType>
-    <studPadding type="mbtype:PaddingList">
+    <studPadding type="mbt:PaddingList">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
     <studBaseOverlap type="Float">
@@ -102,14 +102,14 @@
     </studBaseOverlap>
 
     <!-- Style -->
-    <baseColor type="mbtype:Color">
+    <baseColor type="mbt:Color">
       <value>#EAC645</value>
       <suggestions>
-        <mbtype:Color value="#EAC645" label="Sun Flower" />
-        <mbtype:Color value="#303D4E" label="Midnight Blue" />
-        <mbtype:Color value="#58B99D" label="Turquoise" />
-        <mbtype:Color value="#D65745" label="Alizarin" />
-        <mbtype:Color value="#EDF0F1" label="Clouds" />
+        <mbt:Color value="#EAC645" label="Sun Flower" />
+        <mbt:Color value="#303D4E" label="Midnight Blue" />
+        <mbt:Color value="#58B99D" label="Turquoise" />
+        <mbt:Color value="#D65745" label="Alizarin" />
+        <mbt:Color value="#EDF0F1" label="Clouds" />
       </suggestions>
     </baseColor>
     <surfacePattern type="Text">
