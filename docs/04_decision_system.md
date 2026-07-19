@@ -147,7 +147,7 @@ else → Pattern 3
 
 A single `mb_block()` is well suited for:
 
-Classic geometry (bricks, plates, stud variations, Technic holes). Slopes and wedges (but not combined — slope + bevel is not supported). Round geometry (rounded bricks, circular shapes). Recess structures (box-like top cutout, up to 4 walls, walls removable via gaps, corners always remain). Stud configuration (fully parametric: full, none, or selective). Single-line text on all sides except bottom (-Z). PCB-compatible cavity geometries. Straight Technic liftarms (no bends). Cutouts (brutally applied void subtraction via `cutouts` parameter).
+Classic geometry (bricks, plates, stud variations, Technic holes). Slopes and wedges (may be combined in V3 — slope + bevel together is supported; V2 forbade it). Round geometry (rounded bricks, circular shapes). Recess structures (box-like top cutout, up to 4 walls, walls removable via gaps, corners always remain). Stud configuration (fully parametric: full, none, or selective). Single-line text on all sides except bottom (-Z). PCB-compatible cavity geometries. Straight Technic liftarms (no bends). Cutouts (brutally applied void subtraction via `cutouts` parameter).
 
 ## Blacklist — Composite Required
 
@@ -208,7 +208,7 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 ## Do NOT
 
-Mix slope and bevel. Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGaps`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed in V3 — use `cutouts`). Use any `*RoundingResolution` parameter (removed in V3). Use `baseWallGapsX` or `baseWallGapsY` (removed in V3 — use `baseWallGaps`). Access `assembly[0]` without first resolving via `mb_assembly()`. Use `cutouts` for AI-generated blocks (experimental — do not use autonomously). Use `assemblyParts`, `namedSideAdjustments`, `mb_named_side_adjustments`, `mb_named_height_adjustments`, or `blockName` (removed/replaced in V3).
+Use rotation for basic orientation (use direction instead). Use `baseWallThickness` for design (it is a compatibility constant). Open walls using `recessWallThickness = 0` (use `recessWallGaps`). Ignore underside collisions in composites (use `baseWallGaps`). Access settings arrays directly (use getter functions). Use adjustment parameters in settings (config only). Use `cutout` or `cutoutOffset` (removed in V3 — use `cutouts`). Use any `*RoundingResolution` parameter (removed in V3). Use `baseWallGapsX` or `baseWallGapsY` (removed in V3 — use `baseWallGaps`). Access `assembly[0]` without first resolving via `mb_assembly()`. Use `cutouts` for AI-generated blocks (experimental — do not use autonomously). Use `assemblyParts`, `namedSideAdjustments`, `mb_named_side_adjustments`, `mb_named_height_adjustments`, or `blockName` (removed/replaced in V3).
 
 > Most errors come from using parameters directly instead of patterns.
 

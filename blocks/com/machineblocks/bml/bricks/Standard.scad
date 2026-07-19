@@ -160,8 +160,13 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor
 
 baseRoundingRadius = [baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ];
 bevel = [bevel0, bevel1, bevel2, bevel3];
+// textStyle is customizer-only — NativeBlock has textFont (may include :style=…)
 textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)));
 recessDepthResolved = recessDepthAuto ? "auto" : recessDepth;
+// Per-axis customizer UI → V3 NativeBlock / mb_param_* keys
+holeXYZType = [holeXType, holeYType, holeZType];
+holeXYZShift = [holeXShift, holeYShift, holeZShift];
+holeXYGridOffsetZ = [holeXGridOffsetZ, holeYGridOffsetZ];
 
 /*
  * Main Module Call
@@ -187,16 +192,11 @@ mb__com__machineblocks__bricks__Standard(
         ["studPadding",          studPadding],
         ["studBaseOverlap",      studBaseOverlap],
         ["holeX",                holeX],
-        ["holeXType",            holeXType],
-        ["holeXShift",           holeXShift],
-        ["holeXGridOffsetZ",     holeXGridOffsetZ],
         ["holeY",                holeY],
-        ["holeYType",            holeYType],
-        ["holeYShift",           holeYShift],
-        ["holeYGridOffsetZ",     holeYGridOffsetZ],
         ["holeZ",                holeZ],
-        ["holeZType",            holeZType],
-        ["holeZShift",           holeZShift],
+        ["holeXYZType",          holeXYZType],
+        ["holeXYZShift",         holeXYZShift],
+        ["holeXYGridOffsetZ",    holeXYGridOffsetZ],
         ["recess",               recess],
         ["recessStuds",          recessStuds],
         ["recessWallThickness",  recessWallThickness],
@@ -222,116 +222,101 @@ mb__com__machineblocks__bricks__Standard(
  * com.machineblocks.bml.bricks.Standard
  *
  * CompositeBlock with a single NativeBlock child — no wrapper mb_block()
- * generated (1 child rule). Each parameter is explicitly extracted via
- * mb_param_* — no passthrough of settings. Only the declared parameter
- * set of StandardBrick is forwarded to mb_block().
+ * generated (1 child rule). Each NativeBlock property is extracted via
+ * mb_param_* — no generic mb_param() for natives. Only the declared
+ * parameter set of Standard is forwarded to mb_block().
  */
 module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef) {
 
-    // Extract all declared properties explicitly
     blockId             = mb_param_id(config, settings, "com.machineblocks.bml.bricks.Standard");
     size                = mb_param_size(config, settings, [4, 2, 3]);
-    baseRoundingRadius  = mb_param(config, settings, "baseRoundingRadius", 0);
+    baseRoundingRadius  = mb_param_baseRoundingRadius(config, settings, 0);
     baseCutoutType      = mb_param_baseCutoutType(config, settings);
-    pillars             = mb_param(config, settings, "pillars", true);
-    reliefCut           = mb_param(config, settings, "reliefCut", false);
-    reliefCutHeight     = mb_param(config, settings, "reliefCutHeight", 0.375);
-    reliefCutThickness  = mb_param(config, settings, "reliefCutThickness", 0.375);
-    grille              = mb_param(config, settings, "grille", "none");
-    grilleInverted      = mb_param(config, settings, "grilleInverted", false);
-    grilleDepth         = mb_param(config, settings, "grilleDepth", 1);
-    grilleCount         = mb_param(config, settings, "grilleCount", 2.5);
-    bevel               = mb_param(config, settings, "bevel", [[0,0],[0,0],[0,0],[0,0]]);
+    pillars             = mb_param_pillars(config, settings, true);
+    reliefCut           = mb_param_reliefCut(config, settings, false);
+    reliefCutHeight     = mb_param_reliefCutHeight(config, settings, 0.375);
+    reliefCutThickness  = mb_param_reliefCutThickness(config, settings, 0.375);
+    grille              = mb_param_grille(config, settings, "none");
+    grilleInverted      = mb_param_grilleInverted(config, settings, false);
+    grilleDepth         = mb_param_grilleDepth(config, settings, 1);
+    grilleCount         = mb_param_grilleCount(config, settings, 2.5);
+    bevel               = mb_param_bevel(config, settings, [[0,0],[0,0],[0,0],[0,0]]);
     studs               = mb_param_studs(config, settings);
-    studShift           = mb_param(config, settings, "studShift", false);
-    studType            = mb_param(config, settings, "studType", "solid");
-    studPadding         = mb_param(config, settings, "studPadding", [0.2,0.2,0.2,0.2]);
-    studBaseOverlap     = mb_param(config, settings, "studBaseOverlap", 0.25);
-    holeX               = mb_param(config, settings, "holeX", false);
-    holeXType           = mb_param(config, settings, "holeXType", "pin");
-    holeXShift          = mb_param(config, settings, "holeXShift", true);
-    holeXGridOffsetZ    = mb_param(config, settings, "holeXGridOffsetZ", 3.5);
-    holeY               = mb_param(config, settings, "holeY", false);
-    holeYType           = mb_param(config, settings, "holeYType", "pin");
-    holeYShift          = mb_param(config, settings, "holeYShift", true);
-    holeYGridOffsetZ    = mb_param(config, settings, "holeYGridOffsetZ", 3.5);
-    holeZ               = mb_param(config, settings, "holeZ", false);
-    holeZType           = mb_param(config, settings, "holeZType", "pin");
-    holeZShift          = mb_param(config, settings, "holeZShift", true);
-    recess              = mb_param(config, settings, "recess", false);
-    recessStuds         = mb_param(config, settings, "recessStuds", false);
-    recessWallThickness = mb_param(config, settings, "recessWallThickness",
+    studShift           = mb_param_studShift(config, settings, false);
+    studType            = mb_param_studType(config, settings, "solid");
+    studPadding         = mb_param_studPadding(config, settings, [0.2,0.2,0.2,0.2]);
+    studBaseOverlap     = mb_param_studBaseOverlap(config, settings, 0.25);
+    holeX               = mb_param_holeX(config, settings, false);
+    holeY               = mb_param_holeY(config, settings, false);
+    holeZ               = mb_param_holeZ(config, settings, false);
+    holeXYZType         = mb_param_holeXYZType(config, settings, "pin");
+    holeXYZShift        = mb_param_holeXYZShift(config, settings, true);
+    holeXYGridOffsetZ   = mb_param_holeXYGridOffsetZ(config, settings, 3.5);
+    recess              = mb_param_recess(config, settings, false);
+    recessStuds         = mb_param_recessStuds(config, settings, false);
+    recessWallThickness = mb_param_recessWallThickness(config, settings,
                               [0.333,0.333,0.333,0.333]);
-    recessDepth         = mb_param(config, settings, "recessDepth", "auto");
-    recessStudPadding   = mb_param(config, settings, "recessStudPadding",
+    recessDepth         = mb_param_recessDepth(config, settings, "auto");
+    recessStudPadding   = mb_param_recessStudPadding(config, settings,
                               [0.2,0.2,0.2,0.2]);
-    slope               = mb_param(config, settings, "slope", [0,0,0,0]);
-    text                = mb_param(config, settings, "text", "");
-    textFace            = mb_param(config, settings, "textFace", 5);
-    textDepth           = mb_param(config, settings, "textDepth", 0.5);
-    textSize            = mb_param(config, settings, "textSize", 9);
-    textFont            = mb_param(config, settings, "textFont", "RBNo3.1 Black");
-    textStyle           = mb_param(config, settings, "textStyle", "Regular");
-    textSpacing         = mb_param(config, settings, "textSpacing", 1);
-    textColor           = mb_param(config, settings, "textColor", "#303D4E");
+    slope               = mb_param_slope(config, settings, [0,0,0,0]);
+    text                = mb_param_text(config, settings, "");
+    textFace            = mb_param_textFace(config, settings, 5);
+    textDepth           = mb_param_textDepth(config, settings, 0.5);
+    textSize            = mb_param_textSize(config, settings, 9);
+    textFont            = mb_param_textFont(config, settings, "RBNo3.1 Black");
+    textSpacing         = mb_param_textSpacing(config, settings, 1);
+    textColor           = mb_param_textColor(config, settings, "#303D4E");
     baseColor           = mb_param_baseColor(config, settings);
-    surfacePattern      = mb_param(config, settings, "surfacePattern", "none");
-    surfacePatternScale = mb_param(config, settings, "surfacePatternScale", 0.2);
-    studIcon            = mb_param(config, settings, "studIcon", "none");
-
-    // textFont + textStyle combined for mb_block
-    textFontFull = str(textFont, (textStyle == "" ? "" : str(":style=", textStyle)));
+    surfacePattern      = mb_param_surfacePattern(config, settings, "none");
+    surfacePatternScale = mb_param_surfacePatternScale(config, settings, 0.2);
+    studIcon            = mb_param_studIcon(config, settings, "none");
 
     // Single NativeBlock — no wrapper (1 child rule)
     mb_block(
         config = config,
         settings = [
-            ["id",                 blockId],
-            ["size",               size],
-            ["baseRoundingRadius", baseRoundingRadius],
-            ["baseCutoutType",     baseCutoutType],
-            ["pillars",            pillars],
-            ["reliefCut",          reliefCut],
-            ["reliefCutHeight",    reliefCutHeight],
-            ["reliefCutThickness", reliefCutThickness],
-            ["grille",             grille],
-            ["grilleInverted",     grilleInverted],
-            ["grilleDepth",        grilleDepth],
-            ["grilleCount",        grilleCount],
-            ["bevel",              bevel],
-            ["studs",              studs],
-            ["studShift",          studShift],
-            ["studType",           studType],
-            ["studPadding",        studPadding],
-            ["studBaseOverlap",    studBaseOverlap],
-            ["holeX",              holeX],
-            ["holeXType",          holeXType],
-            ["holeXShift",         holeXShift],
-            ["holeXGridOffsetZ",   holeXGridOffsetZ],
-            ["holeY",              holeY],
-            ["holeYType",          holeYType],
-            ["holeYShift",         holeYShift],
-            ["holeYGridOffsetZ",   holeYGridOffsetZ],
-            ["holeZ",              holeZ],
-            ["holeZType",          holeZType],
-            ["holeZShift",         holeZShift],
-            ["recess",             recess],
-            ["recessStuds",        recessStuds],
-            ["recessWallThickness",recessWallThickness],
-            ["recessDepth",        recessDepth],
-            ["recessStudPadding",  recessStudPadding],
-            ["slope",              slope],
-            ["text",               text],
-            ["textFace",           textFace],
-            ["textDepth",          textDepth],
-            ["textSize",           textSize],
-            ["textFont",           textFontFull],
-            ["textSpacing",        textSpacing],
-            ["textColor",          textColor],
-            ["baseColor",          baseColor],
-            ["surfacePattern",     surfacePattern],
-            ["surfacePatternScale",surfacePatternScale],
-            ["studIcon",           studIcon]
+            ["id",                  blockId],
+            ["size",                size],
+            ["baseRoundingRadius",  baseRoundingRadius],
+            ["baseCutoutType",      baseCutoutType],
+            ["pillars",             pillars],
+            ["reliefCut",           reliefCut],
+            ["reliefCutHeight",     reliefCutHeight],
+            ["reliefCutThickness",  reliefCutThickness],
+            ["grille",              grille],
+            ["grilleInverted",      grilleInverted],
+            ["grilleDepth",         grilleDepth],
+            ["grilleCount",         grilleCount],
+            ["bevel",               bevel],
+            ["studs",               studs],
+            ["studShift",           studShift],
+            ["studType",            studType],
+            ["studPadding",         studPadding],
+            ["studBaseOverlap",     studBaseOverlap],
+            ["holeX",               holeX],
+            ["holeY",               holeY],
+            ["holeZ",               holeZ],
+            ["holeXYZType",         holeXYZType],
+            ["holeXYZShift",        holeXYZShift],
+            ["holeXYGridOffsetZ",   holeXYGridOffsetZ],
+            ["recess",              recess],
+            ["recessStuds",         recessStuds],
+            ["recessWallThickness", recessWallThickness],
+            ["recessDepth",         recessDepth],
+            ["recessStudPadding",   recessStudPadding],
+            ["slope",               slope],
+            ["text",                text],
+            ["textFace",            textFace],
+            ["textDepth",           textDepth],
+            ["textSize",            textSize],
+            ["textFont",            textFont],
+            ["textSpacing",         textSpacing],
+            ["textColor",           textColor],
+            ["baseColor",           baseColor],
+            ["surfacePattern",      surfacePattern],
+            ["surfacePatternScale", surfacePatternScale],
+            ["studIcon",            studIcon]
         ]
     );
 }
