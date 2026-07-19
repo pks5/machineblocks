@@ -97,7 +97,8 @@ Composite: `assembly`, `renderGroups`, `render`, `id`.
 
 > Parameters realize patterns — they do not define them.
 
-> For all parameter definitions see `09_api_parameters.yml`.
+> For all parameter definitions see `NativeBlock.bml` + type BML (sole SSOT).
+> `09_api_parameters.yml` is a pointer stub only (no inventory).
 
 ---
 

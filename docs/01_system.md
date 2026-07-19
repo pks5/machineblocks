@@ -37,9 +37,9 @@ STL / 3MF
 
 **MBML** is a declarative markup language for describing blocks, sets, and devices. It is the authoring format — the equivalent of HTML or SAPUI5 XML views. Blocks are described as typed, parameterized elements without any knowledge of SCAD.
 
-**MBOM** is the renderer-independent object model. It is the canonical representation of all block data. The MBML compiler parses MBML and produces MBOM. MBOM defines all parameter types canonically — for type definitions and MBOM-to-SCAD mappings see `05_types_and_mapping.md`.
+**MBOM** is the renderer-independent object model. It is the canonical representation of all block data. The MBML compiler parses MBML and produces MBOM. Parameter types and native parameter inventory live in BML (`NativeBlock.bml` + `com.machineblocks.bml.type.*`); for SCAD serialize commentary see `05_types_and_mapping.md` and `docs/04_types.md`.
 
-**SCAD** is the render target. The SCAD compiler serializes MBOM into OpenSCAD files, which are then rendered to STL or 3MF by OpenSCAD. This documentation is the complete specification of the SCAD render target — it defines all parameters, their SCAD formats, and their MBOM mappings.
+**SCAD** is the render target. The SCAD compiler serializes MBOM into OpenSCAD files, which are then rendered to STL or 3MF by OpenSCAD. This documentation describes the SCAD render-target conventions — not a second parameter inventory (see NativeBlock).
 
 **The Editor** is built entirely on MBOM. It has no knowledge of SCAD except for triggering the render pipeline. Block authoring, validation, snapping, layout, and all editor logic operate on MBOM exclusively.
 
@@ -76,7 +76,7 @@ Domain libraries may define additional status blocks. There is no implicit resol
 
 ## Core Principle
 
-MachineBlocks follows a single-module architecture. There is one core module — `mb_block()` — and all geometry is defined through parameters (>200). Complexity is not created through multiple modules, but through parameter combinations, composition (multiple blocks), and nesting (`children()`).
+MachineBlocks follows a single-module architecture. There is one core module — `mb_block()` — and all geometry is defined through parameters (inventory: `NativeBlock.bml`). Complexity is not created through multiple modules, but through parameter combinations, composition (multiple blocks), and nesting (`children()`).
 
 ---
 
@@ -350,7 +350,9 @@ absolute_mm = size[i] * unitGrid[0 or 1] * unitMbu * scale
 
 X/Y use unitGrid[0], Z uses unitGrid[1].
 
-> For all parameter details, defaults, and units see `09_api_parameters.yml`.
+> For all parameter details, defaults, and units see `NativeBlock.bml` (sole SSOT:
+> `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + type BML).
+> `09_api_parameters.yml` is a pointer stub only (no inventory).
 
 ---
 
@@ -717,7 +719,8 @@ A block module is completely self-contained and must NEVER access global variabl
 
 **Native Parameters — Always Use Getters**
 
-For every parameter read inside a block module, first check whether it is a native parameter (SSOT: `NativeBlock.bml`; SCAD mirror: `09_api_parameters.yml`). If it is native, always use its dedicated getter:
+For every parameter read inside a block module, first check whether it is a native parameter
+(sole SSOT: `NativeBlock.bml` + `com.machineblocks.bml.type.*`). If it is native, always use its dedicated getter:
 
 ```scad
 // Native parameter → getter
@@ -725,13 +728,13 @@ baseCutoutType = mb_param_baseCutoutType(config, settings);
 pillars        = mb_param_pillars(config, settings);
 ```
 
-Do not set an explicit default in the getter call unless a block-specific default is intentionally required. Never copy a default from the legacy code if it matches the YML default. Exception: `size` almost always benefits from a block-specific default:
+Do not set an explicit default in the getter call unless a block-specific default is intentionally required. Never copy a default from legacy code if it matches the NativeBlock default. Exception: `size` almost always benefits from a block-specific default:
 
 ```scad
 size = mb_param_size(config, settings, [4, 1, 3]);
 ```
 
-Custom parameters (not in the YML) continue to use `mb_param()`:
+Custom parameters (not declared on NativeBlock) continue to use `mb_param()`:
 
 ```scad
 myParam = mb_param(config, settings, "myParam", "defaultValue");
@@ -776,7 +779,7 @@ com.machineblocks.bml.type.*                   — type shapes
 03_patterns_and_examples.md        — Block File structure and module patterns (from scad BML)
 04_decision_system.md              — decision framework (from concept + scad BML)
 05_types_and_mapping.md            — type catalog and SCAD serialization (from type + scad BML)
-09_api_parameters.yml              — SCAD-facing parameter mirror (from NativeBlock + type BML)
+09_api_parameters.yml              — pointer stub only (inventory removed; see NativeBlock)
 10_set_example.scad                — reference Set file format example
 ```
 

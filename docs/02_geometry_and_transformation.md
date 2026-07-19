@@ -11,7 +11,9 @@ version: 3.0.3
 
 ## Purpose of this Document
 
-This document explains the concepts and relationships behind MachineBlocks geometry, transformation, and structure parameters. It does not repeat parameter definitions — for all parameter details (types, defaults, formats, constraints), see `09_api_parameters_1_0_1.yml`.
+This document explains the concepts and relationships behind MachineBlocks geometry, transformation, and structure parameters. It does not repeat parameter definitions — for all parameter details (types, defaults, formats, constraints), see `NativeBlock.bml` + `com.machineblocks.bml.type.*` (sole SSOT). `09_api_parameters.yml` is a pointer stub only (no inventory).
+
+Where concept sections mention example defaults, treat them as illustrative — authoritative defaults live only on NativeBlock.
 
 ---
 
@@ -391,4 +393,4 @@ Each entry in `parts` is `[size, direction, offset]`. The function computes the 
 
 ## Parameter Reference
 
-For all parameter definitions, types, defaults, formats, constraints, and AI usage guidelines, see `09_api_parameters_1_0_1.yml`.
+For all parameter definitions, types, defaults, formats, constraints, and AI usage guidelines, see `NativeBlock.bml` + `com.machineblocks.bml.type.*` (sole SSOT). `09_api_parameters.yml` is a pointer stub only (no inventory).

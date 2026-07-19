@@ -12,8 +12,8 @@ version: 3.0.4
 
 This document defines the Block File structure, customizer conventions, config handling, and Block Module patterns. Each pattern is accompanied by concrete, production-ready examples.
 
-> For all parameter definitions see `09_api_parameters.yml`.
-> For terminology (Block Module, Block File) see `01_system.md`.
+> For all parameter definitions see `NativeBlock.bml` + `com.machineblocks.bml.type.*` (sole SSOT).
+> `09_api_parameters.yml` is a pointer stub only (no inventory). Terminology: `01_system.md`.
 
 ---
 
