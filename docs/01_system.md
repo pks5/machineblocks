@@ -4,8 +4,10 @@ version: 3.0.4
 
 > **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
 > authored source. Primary sources:
-> `com.machineblocks.bml.documentation.concept.*`,
-> `com.machineblocks.bml.documentation.scad.*`, and related domain BML.
+> `concept.Introduction`, `concept.Architecture`, `concept.StatusConvention`,
+> `concept.UnitsAndGrid`, `concept.CompositionConcepts`,
+> `scad.ScadRenderTarget`, `scad.MbBlockApi`, `scad.BlockFileStructure`,
+> `scad.LegacyConversion` (package `com.machineblocks.bml.documentation.*`).
 > Future builds regenerate this Markdown from BML. Do not edit as canonical —
 > change BML first; keep this file in sync only as a transitional mirror.
 
@@ -49,28 +51,30 @@ STL / 3MF
 
 ## Status Convention
 
-BlockML definitions and documentation express maturity via **status Block references** — not strings or boolean flags. See `02_mbml.md` — § Status.
+BlockML definitions and documentation express maturity via **status Block references** — not free strings or boolean flags. See `02_mbml.md` — § Status and `concept.StatusConvention`.
 
-**Default:** `status:Stable` at document root. Status is inherited downward; authors declare status **only when deviating** from the inherited effective status.
+**Default:** `Stable`. Status is inherited downward; authors declare status **only when deviating** from the inherited effective status.
 
-Core status blocks:
-
-```text
-status:Stable       — implemented, tested, and MBOM mapping complete. Behavior is reliable.
-status:Draft        — V3 definition exists; implementation or MBOM mapping incomplete or untested. May change.
-status:Stub         — placeholder; shape declared, behaviour not yet specified.
-status:Deprecated   — retained for compatibility; do not use in new work.
-```
-
-Use `status:Draft` with an explicit note when SCAD implementation and MBOM target are misaligned (formerly labelled WIP in prose). Example:
+Core status blocks (`org.blockml.bml.status.*`):
 
 ```text
-Status: status:Draft — MBOM canonical form defined; SCAD implementation reflects V2 behavior.
+Stable       — implemented, tested, and mapping complete. Behavior is reliable.
+Draft        — definition exists; implementation or mapping incomplete, untested, or intentionally divergent. May change.
+Stub         — placeholder; shape declared, behaviour not yet specified.
+Deprecated   — retained for compatibility; do not use in new work.
 ```
 
-Status annotations apply independently to the SCAD implementation and to the MBOM mapping. A parameter can be `status:Stable` on the SCAD side and `status:Draft` on the MBOM mapping side.
+At `<status>` and `bml:status` reference sites, unqualified names resolve to `org.blockml.bml.status.*` — bare names are correct there (e.g. `<status>Draft</status>`, `bml:status="Deprecated"`). Explicit prefixes or FQNs remain valid (`status:Draft` ≡ `Draft` at those sites). Bare status names are invalid outside specialized status reference sites.
 
-Domain libraries may define additional status blocks. There is no implicit resolution of bare names — always use the `status:` prefix.
+Use `Draft` with an explicit note when SCAD implementation and MBOM target are misaligned. Example:
+
+```text
+Status: Draft — MBOM canonical form defined; SCAD implementation reflects V2 behavior.
+```
+
+Status annotations apply independently to the SCAD implementation and to the MBOM mapping. A parameter can be Stable on the SCAD side and Draft on the MBOM mapping side.
+
+Domain libraries may define additional status blocks.
 
 ---
 
@@ -118,10 +122,12 @@ It is not a semantic block definition, not a complete device model, not a helper
 
 ### Parameters Ignored by mb_block()
 
-The following native parameters exist in the system but are intentionally ignored by `mb_block()`. They are only meaningful in composite block modules:
+The following are **not** NativeBlock properties. They are SCAD composite preview/print helpers recognized by composite Block Modules (not by `mb_block()` itself):
 
-- `assembly` — controls assembly mode visualization in composite blocks
-- `renderGroups` — controls which named render groups of a composite block are rendered
+- `assembly` — unassembled / assembled / merged layout for composite preview/print
+- `renderGroups` — which named render groups of a composite block are rendered
+
+They are not MBOM domain concepts — see `concept.CompositionConcepts` and `scad.ModulePatterns`.
 
 Note: `render` and `id` are processed by `mb_block()` directly.
 
@@ -188,7 +194,7 @@ align / alignChildren:
   (Since V3: getters always return a resolved 3-element array)
 ```
 
-All other per-side parameters follow the same resolution pattern as `crop`.
+All other per-side parameters follow the same resolution pattern as `baseCrop`.
 
 ### config
 
@@ -281,12 +287,14 @@ In the MBML/MBOM workflow, the Online Editor will accept MBML source files inste
 Local development uses relative paths that depend on the project structure. The Online Editor uses fixed virtual paths.
 
 ```text
-Local:   use <../../../../../machineblocks/lib/block.scad>;
+Local:   use <../../../../../lib/block.scad>;
 Online:  use <machineblocks/lib/block.scad>;
 
-Local:   include <../../../../config/mb_config.scad>;
+Local:   include <../../../../../config/mb_config.scad>;
 Online:  include </mb_config.scad>;
 ```
+
+(Depth of `../` depends on package nesting under `scad-lib/blocks/`.)
 
 The Online Editor converts paths automatically during upload. AI systems generating Block Files should use local paths by default and note that conversion happens on upload.
 
@@ -336,19 +344,17 @@ MachineBlocks uses a layered unit system:
 mm → mbu → grid → block geometry
 ```
 
-The base unit (`unitMbu`) is 1.6 mm. Most idealized block geometry is built as multiples of this base unit.
+`unitMbuToMm` (default 1.6) is the millimetre length of one mbu (MachineBlocks Unit). Most idealized block geometry is built as multiples of this base unit.
 
-The grid (`unitGrid = [5, 2]`) expresses the size of a 1×1 LEGO plate in mbu. X and Y share the first value (5 mbu), Z uses the second (2 mbu). A 1×1 plate = 8×8×3.2 mm at default settings.
+`unitGridToMbu` is `SizeXYZ` (default `{x: 5, y: 5, z: 2}`): mbu per grid step on each axis for a 1×1 plate. At defaults that is 8×8×3.2 mm. A `size` of `[1, 1, 1]` is therefore a plate — not a cube. X and Y may differ (`unitGridToMbu` is full XYZ).
 
 The scale factor (`scale`) rescales the entire system globally. mbu values remain unchanged; only the resulting physical dimensions change.
 
 ### Absolute Size Formula
 
 ```text
-absolute_mm = size[i] * unitGrid[0 or 1] * unitMbu * scale
+absolute_mm = size[axis] × unitGridToMbu[axis] × unitMbuToMm × scale
 ```
-
-X/Y use unitGrid[0], Z uses unitGrid[1].
 
 > For all parameter details, defaults, and units see `NativeBlock.bml` (sole SSOT:
 > `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + type BML).
@@ -360,7 +366,7 @@ X/Y use unitGrid[0], Z uses unitGrid[1].
 
 MachineBlocks separates idealized geometry from real-world calibration. These are two distinct domains that must not be mixed.
 
-The geometry layer is based on `unitMbu` and `unitGrid`. It is deterministic and scalable.
+The geometry layer is based on `unitMbuToMm` and `unitGridToMbu`. It is deterministic and scalable.
 
 The calibration layer consists of all parameters containing `Adjustment` in their name. Adjustment parameters are always expressed in millimeters, never scale with the `scale` parameter, and are used for printer compensation, filament shrinkage, fit tuning, and tolerance adjustments. They are not part of the idealized block coordinate system.
 
@@ -370,20 +376,23 @@ The calibration layer consists of all parameters containing `Adjustment` in thei
 
 ## Coordinate Systems
 
-### Side Indexing
+### Side Indexing / Face Identifiers
 
-Block sides are always indexed as integers (0–5) or string identifiers (V3+):
+In MBML/BOM, faces are enum member ids — not integers and not authored as SCAD face strings:
 
 ```text
-0 / "x-" → -X (left)
-1 / "x+" → +X (right)
-2 / "y-" → -Y (front)
-3 → +Y (back)
-4 → -Z (bottom)
-5 → +Z (top)
+XNeg / XPos / YNeg / YPos / ZNeg / ZPos
 ```
 
-These side indices are always defined in the native west-oriented coordinate system. They do not get renumbered by `direction`.
+In SCAD settings/config, use Face `scad:value` literals (emit-only):
+
+```text
+"x-" → -X (left)     "x+" → +X (right)
+"y-" → -Y (front)    "y+" → +Y (back)
+"z-" → -Z (bottom)   "z+" → +Z (top)
+```
+
+Integer indices (0–5) remain accepted by some getters for compatibility but are not preferred in new V3 code. Face semantics are always west-oriented local block space — they do not get renumbered by `direction`.
 
 ### Corner Indexing
 
@@ -556,11 +565,18 @@ machineblocks/
     lib/
 ```
 
-Relative paths from a block file in `mylib/scad/com/martianmicro/user/`:
+Relative paths from a block file in `mylib/scad/com/martianmicro/user/` (sibling layout):
 
 ```text
 use <../../../../../machineblocks/lib/block.scad>;
 include <../../../../config/mb_config.scad>;
+```
+
+Inside this repo’s `scad-lib/blocks/com/machineblocks/scad/…` tree, imports point at the local runtime instead:
+
+```text
+use <../../../../../lib/block.scad>;
+include <../../../../../config/mb_config.scad>;
 ```
 
 Paths adjust accordingly for deeper package nesting.
@@ -619,7 +635,7 @@ Set Instruction Helpers — render step-by-step assembly instructions for Sets. 
 
 Block Modules are classified along two independent axes:
 
-**Pattern** (how the module is technically built): Primitive Wrapper, Simple Block, or Composite Block. See `03_patterns_and_examples.md` for details.
+**Pattern** (how the module is technically built): Primitive Wrapper, Simple/Semantic Block, Composite Block, or Helper/Form. See `03_patterns_and_examples.md` for details.
 
 **Nature** (what the module's purpose is): Content or Helper.
 
@@ -651,7 +667,7 @@ Legacy files use direct OpenSCAD module parameters instead of the `config`/`sett
 
 **Step 1 — Create Block File Structure**
 
-Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb__<package>__<ClassName>` where the class name is PascalCase.
+Add the standard Block File structure: mandatory header, imports (with correct local paths), customizer section, module call, and module definition. Use the naming convention `mb__<package>__<ClassName>` where the class name is PascalCase. For MachineBlocks 1:1 SCAD files, Manifestation FQN replaces the Definition segment `bml` with `scad` (e.g. Definition `com.machineblocks.bml.examples.Cross` → module `mb__com__machineblocks__scad__examples__Cross`, path `…/scad/examples/Cross.scad`).
 
 **Step 2 — Replace machineblock() with mb_block()**
 
@@ -696,7 +712,9 @@ tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * mb_unit_grid()
 
 /* CORRECT — internal computation inside the module */
 module mb__x__y__Z(config = undef, settings = undef){
-    tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * unitGrid[0] * unitMbu;
+    unitGridToMbu = mb_param_unitGridToMbu(config, settings);
+    unitMbuToMm = mb_param_unitMbuToMm(config, settings);
+    tunnelWidth = (secondColumn ? 1 : 2) * (size[0] - column1SizeX) * unitGridToMbu[0] * unitMbuToMm;
     ...
 }
 ```
@@ -742,15 +760,15 @@ myParam = mb_param(config, settings, "myParam", "defaultValue");
 
 **Legacy Global Variables — `unitMbu`, `unitGrid`, `scale`**
 
-Legacy block files frequently use the variables `unitMbu`, `unitGrid`, and `scale` without defining them in the same file. These always originate from the old global config. In the converted module, they must be retrieved via their dedicated getters:
+Legacy block files frequently use the variables `unitMbu`, `unitGrid`, and `scale` without defining them in the same file. These always originate from the old global config. V3 renames: `unitMbu` → `unitMbuToMm`, `unitGrid` → `unitGridToMbu` (`SizeXYZ`). In the converted module, retrieve them via their dedicated getters:
 
 ```scad
-unitMbu  = mb_param_unitMbu(config, settings);
-unitGrid = mb_param_unitGrid(config, settings);
-scale    = mb_param_scale(config, settings);
+unitMbuToMm   = mb_param_unitMbuToMm(config, settings);
+unitGridToMbu = mb_param_unitGridToMbu(config, settings);
+scale         = mb_param_scale(config, settings);
 ```
 
-This rule applies whenever these three variable names appear in a legacy file without a local definition.
+Also map customizer `baseReliefCut*` UI names to settings keys `reliefCut` / `reliefCutHeight` / `reliefCutThickness` (`mb_param_reliefCut*`). See `scad.LegacyConversion` for Cross-specific V2→V3 mappings (`baseWallGaps`, `studShift`, etc.).
 
 ---
 

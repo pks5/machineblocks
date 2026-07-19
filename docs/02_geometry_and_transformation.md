@@ -1,13 +1,14 @@
 # MachineBlocks — Geometry, Transformation & Structure Concepts
 
-version: 3.0.3
+version: 3.0.4
 
 > **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
 > authored source. Primary sources:
-> `com.machineblocks.bml.documentation.concept.*` (GeometryConcepts,
-> TransformationConcepts, StructureSystems, CompositionConcepts) and related
-> `NativeBlock` / `type.*` members. Future builds regenerate this Markdown from
-> BML. Do not edit as canonical — change BML first.
+> `concept.UnitsAndGrid`, `concept.GeometryConcepts`,
+> `concept.TransformationConcepts`, `concept.StructureSystems`,
+> `concept.CompositionConcepts` (package `com.machineblocks.bml.documentation.*`)
+> and related `NativeBlock` / `type.*` members. Future builds regenerate this
+> Markdown from BML. Do not edit as canonical — change BML first.
 
 ## Purpose of this Document
 
@@ -19,7 +20,7 @@ Where concept sections mention example defaults, treat them as illustrative — 
 
 ## SCAD Renderer Context
 
-This document describes geometry and transformation concepts as implemented in the MachineBlocks V3 SCAD library. In the MBML/MBOM workflow, these concepts correspond to the canonical geometry types defined in `05_types_and_mapping.md` — for example, `sizeMod` maps to `FaceVector6<FloatUnitGrid>`, `crop` to a negative `FaceVector6`, and `align` to `AxisXYZ<Align>`. The SCAD implementation is the render target; MBOM is the canonical representation. Where SCAD behavior and MBOM target diverge, this is noted with a status Block reference (`status:Draft`, …) — see `01_system.md` — Status Convention.
+This document describes geometry and transformation concepts as implemented in the MachineBlocks V3 SCAD library. In the MBML/MBOM workflow, these concepts correspond to the canonical geometry types — for example, `sizeMod` / `baseCrop` as FaceMapXYZ forms, and `align` as `AxisXYZ<Align>`. SCAD emit shapes are commentary in `05_types_and_mapping.md` / `scad.TypesAndSerialization`. The SCAD implementation is the render target; MBOM is the canonical representation. Where SCAD behavior and MBOM target diverge, this is noted with a status Block reference (`Draft`, …) — see `01_system.md` — Status Convention.
 
 ---
 
@@ -33,9 +34,9 @@ The bounding box is defined exclusively by `size`. No other parameter modifies t
 
 ## Grid Aspect Ratio
 
-The grid is asymmetric: X/Y use `unitGrid[0]` (default 5 mbu = 8 mm per unit) while Z uses `unitGrid[1]` (default 2 mbu = 3.2 mm per unit). This means the ratio of XY to Z is 2.5:1. A `size` of `[1,1,1]` does not produce a cube — it produces a flat plate (8×8×3.2 mm).
+The grid is asymmetric: `unitGridToMbu` defaults to `{x: 5, y: 5, z: 2}` (5 mbu = 8 mm on X/Y, 2 mbu = 3.2 mm on Z). The default XY-to-Z ratio is 2.5:1. A `size` of `[1,1,1]` does not produce a cube — it produces a flat plate (8×8×3.2 mm). X and Y may differ (`unitGridToMbu` is full XYZ).
 
-To produce a cube, the Z value must be 2.5 times the XY value. Since `size` values should be whole numbers for grid compatibility, the AI must approximate. For example, a cube-like block could be `[1,1,3]` (8×8×9.6 mm) or `[2,2,5]` (16×16×16 mm) or `[4,4,10]` (32×32×32 mm).
+To produce a cube, Z must be ≈ 2.5× the XY grid extent. Since `size` values should be whole numbers for grid compatibility, approximate — e.g. `[2,2,5]` (16×16×16 mm) or `[4,4,10]` (32×32×32 mm).
 
 > AI must always account for the 1:2.5 XY-to-Z ratio when estimating sizes. Assuming 1:1 produces visually squashed models.
 
@@ -43,21 +44,22 @@ To produce a cube, the Z value must be 2.5 times the XY value. Since `size` valu
 
 Core geometry parameters modify the block shape within the bounding box in distinct ways:
 
-`size` defines space (integer values only). `sizeMod` provides semantic per-side modification while keeping the brick structurally intact. `slope` modifies height per side — positive values slope the top surface, negative values create inverted slopes on the bottom. `bevel` modifies the footprint by shifting top corners in XY space, producing wedge shapes. `crop` applies hard cuts or extensions to the geometry.
+`size` defines space (integer values only). `sizeMod` provides semantic per-side modification while keeping the brick structurally intact. `slope` modifies height per side — positive values slope the top surface, negative values create inverted slopes on the bottom. `bevel` modifies the footprint by shifting top corners in XY space, producing wedge shapes. `baseCrop` (FaceMapXYZ; V2 name was `crop`) applies hard cuts or extensions per face — positive = cut, negative = extend.
 
 ### Key Relationships
 
-Slope modifies height, not footprint. Bevel modifies footprint, not height. Slope and bevel can be combined. `crop` is a hard cut — it does not preserve grid compatibility, walls, or structural features. Use `sizeMod` for semantic size changes that keep the brick intact. Crop does not affect bounding box or positioning. Corner rounding is applied after cropping.
+Slope modifies height, not footprint. Bevel modifies footprint, not height. Slope and bevel can be combined in V3 (V2 forbade both in one call). `baseCrop` is a hard cut — it does not preserve grid compatibility, walls, or structural features. Use `sizeMod` for semantic size changes that keep the brick intact. `baseCrop` does not affect bounding box or positioning. Prefer `sizeMod` over `baseCrop` when the brick should remain structurally intact.
 
 > Wedges are not a primitive — they emerge from bevel transformations.
 
 ## Cutouts
 
-`cutouts` is an array of settings arrays. Each inner array defines one cutout volume using native parameters relevant to geometry and size (`size`, `offset`, `bevel`, `slope`, `*Adjustment`, `crop`, and any other parameters that affect the shape of the cut volume). The cutout is applied as a boolean subtraction from the block body — brutally, without regard to walls, recess, or other structure.
+`cutouts` is an aggregation of `NativeBlock` instances (`NativeBlock[]`) — not a property and not the canonical MBOM shape of a SCAD settings-array-of-arrays. Each cutout is a full NativeBlock limited to shape-determining parameters (`size`, `offset`, `bevel`, `slope`, rounding, …). The volume is boolean-subtracted from the body; structural features (walls, recess, tongue) are ignored. SCAD emit form is a serialization concern — see `05_types_and_mapping.md` / `scad.TypesAndSerialization`.
 
 Not all parameters are meaningful in a cutout context. Parameters that only control surface features or rendering are ignored.
 
 ```scad
+// SCAD emit illustration only — MBOM stores NativeBlock[] cutouts
 settings = [
     ["size", [8, 8, 8]],
     ["cutouts", [
@@ -95,11 +97,11 @@ These two parameters serve fundamentally different purposes and must not be conf
 
 ### direction — Semantic Orientation
 
-`direction` is the semantic grid-aligned orientation of a block. It is applied before alignment, rotates the block in 90-degree increments, and affects the interpretation of `size` (swaps X/Y at 90 and 270 degrees). It does not change side numbering or corner indexing. It is grid-safe.
+`direction` is the semantic grid-aligned orientation of a block. It is applied before alignment, rotates the block in 90-degree increments, and affects the interpretation of `size` (swaps X/Y at North and South). It does not change face semantics or corner indexing. It is grid-safe.
 
 Blocks are always designed in west orientation. Direction is applied during placement.
 
-**Direction integer values:**
+In MBML/BOM author Direction as enum member ids (`West` / `North` / `East` / `South`). In SCAD, use `scad:value` literals:
 
 ```text
 "west"  → 0
@@ -155,7 +157,7 @@ Returns the size array with X and Y swapped if direction is north (1) or south (
 
 `align` defines how a block is positioned relative to its reference space (per axis: `start`, `center`, `end`). It is applied after `direction` and is based strictly on the bounding box.
 
-Alignment does NOT consider studs, slope, bevel, crop, or adjustments. It only considers the bounding box.
+Alignment does NOT consider studs, slope, bevel, `baseCrop`, or adjustments. It only considers the bounding box.
 
 ### alignChildren
 
@@ -181,15 +183,15 @@ Structure parameters form four distinct systems, each with a clear responsibilit
 
 ### 2. Underside System
 
-`baseCutoutType` defines the underside structure:
+`baseCutoutType` selects underside mode by enum member ids (`None` / `Standard` / `Studs` / `Groove`); SCAD uses lowercase string literals (`none` / `standard` / `studs` / `groove`).
 
 `standard` provides the classic LEGO tube structure. `studs` provides individual holes per stud. `groove` is the counterpart to `tongue`. `none` provides a solid underside.
 
-`baseWallGapsX` and `baseWallGapsY` restore grid compatibility in composite blocks where blocks cross each other's underside walls.
+`baseWallGaps` (`WallGap[]`) open passages through underside walls for crossing geometry in composites. V2 `baseWallGapsX` / `baseWallGapsY` are removed — use `baseWallGaps` with face strings (or axis shortcuts like `"x"` / `"y"` / `"xy"`).
 
 ### 3. Enclosure System
 
-`recess` creates a top-down cavity. `recessWallThickness` defines wall thickness per side. `recessWallGaps` creates controlled openings.
+`recess` creates a top-down cavity. `recessWallThickness` defines wall thickness per side. `recessWallGaps` (`RecessWallGap[]`) creates controlled openings. `RecessWallGap` extends `WallGap` with `padStart` / `padEnd` (default `Auto`) for tongue/groove-aware end insets.
 
 > Use `recessWallGaps` to create openings — never set `recessWallThickness = 0` for this purpose.
 
@@ -217,9 +219,9 @@ Geometry defines shape (what the block looks like). Structure defines function (
 
 # Composite Block Concepts
 
-## Assembly System
+## Assembly System (SCAD preview/print helpers)
 
-The `assembly` parameter is a native parameter recognized by composite block modules (not by `mb_block()` itself). It controls how the parts of a composite block are displayed.
+There is no MBOM “assembly mode” property. Unassembled / assembled / merged are **SCAD preview/print helpers** (`mb_assembly`, …), recognized by composite Block Modules — not by `mb_block()` and not NativeBlock domain parameters. See `concept.CompositionConcepts` / `scad.ModulePatterns`.
 
 ### Format
 

@@ -4,6 +4,7 @@ version: 3.1.0
 
 > **Render Output / commentary** — not the type or parameter inventory.
 > Sole SSOT: `com.machineblocks.bml.type.*` and `NativeBlock.bml`.
+> Doc SSOT for strategy: `scad.TypesAndSerialization` (Draft).
 > Future builds may regenerate SCAD-facing notes from BML. Change BML first.
 
 ## Purpose of this Document
@@ -30,7 +31,7 @@ For architecture context see `01_system.md`.
 
 ## Status
 
-Maturity uses **status Block references** — see `02_mbml.md` — § Status. Default `status:Stable`; declare only when deviating.
+Maturity uses **status Block references** — see `02_mbml.md` / `concept.StatusConvention`. Default `Stable`; declare only when deviating. Bare names are valid at `<status>` / `bml:status` sites. This mirror and `scad.TypesAndSerialization` are **Draft**.
 
 ---
 
@@ -139,44 +140,49 @@ SCAD: ["holeXYGridOffsetZ", [3.5, 4]]
 
 ## PerSide4\<FloatUnitGrid\> — recessWallThickness
 
+MBOM Face keys are enum member ids; SCAD emit uses Face `scad:value` strings.
+
 ```text
-MBOM: { "x-":0.333, "x+":0.333, "y-":0.333, "y+":0.333 }
+MBOM: { XNeg:0.333, XPos:0.333, YNeg:0.333, YPos:0.333 }
 SCAD: ["recessWallThickness", 0.333]
 
-MBOM: { "x-":0.5, "x+":0.5, "y-":0.25, "y+":0.25 }
+MBOM: { XNeg:0.5, XPos:0.5, YNeg:0.25, YPos:0.25 }
 SCAD: ["recessWallThickness", [0.5, 0.25]]
 
-MBOM: { "x-":0.5, "x+":0.4, "y-":0.25, "y+":0.2 }
+MBOM: { XNeg:0.5, XPos:0.4, YNeg:0.25, YPos:0.2 }
 SCAD: ["recessWallThickness", [0.5, 0.4, 0.25, 0.2]]
 ```
 
-## FaceVector6\<FloatUnitGrid\> — sizeMod
+## FaceMapXYZ — sizeMod
 
 ```text
-MBOM: { "x-":0, "x+":0.5, "y-":0, "y+":0, "z-":0, "z+":0 }
+MBOM: { XNeg:0, XPos:0.5, YNeg:0, YPos:0, ZNeg:0, ZPos:0 }
 SCAD: ["sizeMod", [0, 0.5, 0, 0, 0, 0]]
 ```
 
-## FaceVector6 — crop
+## FaceMapXYZ — baseCrop
+
+V2 name was `crop`. Positive = cut geometry, negative = extend. Does not change bounding box.
 
 ```text
-MBOM: { "x-":0, "x+":-0.5, "y-":0, "y+":0, "z-":0, "z+":-1 }
-SCAD: ["crop", [0, -0.5, 0, 0, 0, -1]]
-```
+MBOM: { XNeg:0.5, XPos:0.5, YNeg:0, YPos:0, ZNeg:0, ZPos:0 }
+SCAD: ["baseCrop", [0.5, 0.5, 0, 0, 0, 0]]
 
-Rule: crop values must be `<= 0`.
+MBOM: { XNeg:0, XPos:0, YNeg:0, YPos:0, ZNeg:0, ZPos:1 }
+SCAD: ["baseCrop", [0, 0, 0, 0, 0, 1]]
+```
 
 ## FaceMap\<FloatMm\> — baseAdjustment
 
 ```text
-MBOM: { "x-": -0.1, "x+": -0.1, "z+": 0.05 }
+MBOM: { XNeg: -0.1, XPos: -0.1, ZPos: 0.05 }
 SCAD: ["baseAdjustment", [["x-", -0.1], ["x+", -0.1], ["z+", 0.05]]]
 ```
 
-Namespaced composite forwarding:
+Namespaced composite forwarding (SCAD keys keep dotted face strings):
 
 ```text
-MBOM: { "pbx.x+": 0.01, "pty.z+": 0.1 }
+MBOM / SCAD bridge: { "pbx.x+": 0.01, "pty.z+": 0.1 }
 SCAD: ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```
 
@@ -195,25 +201,29 @@ MBOM:
 SCAD: ["studs", [true, [[0,0,1,1], false], [[2,0,3,1], "hollow"]]]
 ```
 
-## WallGapList — recessWallGaps
+## RecessWallGap[] — recessWallGaps
+
+Type is `RecessWallGap[]` (extends `WallGap` with `padStart` / `padEnd`, default `Auto`).
 
 ```text
 MBOM:
 [
-  { face:"x+", position:0, length:"full" },
-  { face:"y-", position:2, length:3 }
+  { face: XPos, pos: 0, len: Auto, padStart: Auto, padEnd: Auto },
+  { face: YNeg, pos: 2, len: 3 }
 ]
 
 SCAD: ["recessWallGaps", [["x+"], ["y-", 2, 3]]]
 ```
+
+`baseWallGaps` uses plain `WallGap[]` (no pads) — same SCAD tuple shape for face/pos/len.
 
 ## ConnectorList — connectors
 
 ```text
 MBOM:
 [
-  { face:"x+", axis:"z", gender:"male", align:"center", paddingStart:1, paddingEnd:1 },
-  { face:"z+", axis:"x", gender:"female" }
+  { face: XPos, axis: Z, gender: Male, align: Center, paddingStart:1, paddingEnd:1 },
+  { face: ZPos, axis: X, gender: Female }
 ]
 
 SCAD: ["connectors", [["x+", "z", "male", "center", 1, 1], ["z+", "x", "female"]]]
@@ -224,8 +234,8 @@ SCAD: ["connectors", [["x+", "z", "male", "center", 1, 1], ["z+", "x", "female"]
 ```text
 MBOM:
 [
-  { face:"z+", position:{x:2,y:2} },
-  { face:"y+", position:{x:4,y:3}, diameter:2.1, depth:4, insetThickness:0.5, insetDepth:0.6 }
+  { face: ZPos, position:{x:2,y:2} },
+  { face: YPos, position:{x:4,y:3}, diameter:2.1, depth:4, insetThickness:0.5, insetDepth:0.6 }
 ]
 
 SCAD: ["screwHoles", [["z+", [2,2]], ["y+", [4,3], 2.1, 4, 0.5, 0.6]]]

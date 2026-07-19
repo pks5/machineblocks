@@ -1,12 +1,17 @@
 # MachineBlocks — Decision System
 
-version: 3.0.4
+version: 3.0.5
+
+status: Draft
 
 > **Render Output** — Compiler render artifact of MachineBlocks BML (SSOT), not an
 > authored source. Primary sources:
-> `com.machineblocks.bml.documentation.concept.DecisionFramework` and
+> `com.machineblocks.bml.documentation.concept.DecisionFramework` (Draft) and
 > `com.machineblocks.bml.documentation.scad.ScadDecisionRules`. Future builds
 > regenerate this Markdown from BML. Do not edit as canonical — change BML first.
+>
+> Draft note — planned Decision Knowledge package `com.machineblocks.bml.decision.*`
+> will own practices/rules; documentation.* stays reading guides.
 
 ## Purpose of this Document
 
@@ -90,10 +95,10 @@ Step 5 — Is printability an issue? → split into parts using tongue/groove or
 
 After pattern selection, parameters are assigned from the appropriate groups:
 
-Geometry: `size`, `slope`, `bevel`, `crop`, `cutouts`.
+Geometry: `size`, `slope`, `bevel`, `baseCrop`, `cutouts` (aggregation `NativeBlock[]`).
 Structure: `base`, `recess`, `baseCutoutType`, `tongue`, `connectors`.
 Positioning: `direction`, `align`, `offset`.
-Composite: `assembly`, `renderGroups`, `render`, `id`.
+SCAD composite helpers (not NativeBlock): `assembly`, `renderGroups`. Also `render`, `id`.
 
 > Parameters realize patterns — they do not define them.
 
@@ -104,13 +109,13 @@ Composite: `assembly`, `renderGroups`, `render`, `id`.
 
 # Block Module Patterns
 
-## Pattern 1 — Wrapper Module
+## Pattern 1 — Primitive Wrapper
 
-No logic, pass-through only. Calls `mb_block()` or another `mb__*` directly.
+Thin pass-through around `mb_block()` with a curated default settings surface. No own logic beyond forwarding.
 
-## Pattern 2 — Semantic Block
+## Pattern 2 — Semantic / Simple Block
 
-Reads parameters via `mb_param_*()` and `mb_param()`, defines defaults, maps to exactly one `mb_block()`.
+Named module with getters, block-specific defaults, and a focused customizer; still one `mb_block()` at the leaf. Production example: `com.machineblocks.scad.bricks.Standard` — every NativeBlock property via `mb_param_*()`.
 
 ## Pattern 3 — Composite Block
 
@@ -122,11 +127,11 @@ studs = false
 size defines bounding box
 ```
 
-Must implement `mb_assembly()` if parts support assembly. Must implement `baseAdjustment` namespace filtering via `mb_params_filter()` if parts are adjacent without overlap. Must implement `renderGroups` via `mb_param_renderGroups()` and `mb_group_render()`.
+Must implement `mb_assembly()` if parts support SCAD assembly preview. Must implement `baseAdjustment` namespace filtering via `mb_params_filter()` if parts are adjacent without overlap. Must implement `renderGroups` via `mb_param_renderGroups()` and `mb_group_render()`. Examples: Cross, Frame.
 
 ## Pattern 4 — Helper / Form Module
 
-3D interface using the OpenSCAD customizer. Not a canonical block definition.
+Shared geometry helpers used by other modules — not end-user content products.
 
 ## Decision Logic
 
@@ -190,17 +195,17 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 8 — Connection selection.** LEGO connection → standard underside. Structural connection → tongue/groove. Flexible connection → connectors.
 
-**Rule 9 — NativeBlock properties use `mb_param_[propertyName]()`.** Custom parameters use `mb_param()`. Never access settings arrays directly. Criterion: property on `NativeBlock` → native getter; otherwise → `mb_param()`. Reference: `examples/Cross.scad`.
+**Rule 9 — NativeBlock properties use `mb_param_[propertyName]()`.** Custom parameters use `mb_param()`. Never access settings arrays directly. Criterion: property on `NativeBlock` → native getter; otherwise → `mb_param()`. Reference: `blocks/com/machineblocks/scad/examples/Cross.scad`.
 
 **Rule 10 — Default package for generated blocks.** When generating a block without an explicit package, use `{root_package}.user.{ClassName}`. Always end the response with the output summary (Package, Module, Filename, Location).
 
-**Rule 11 — Block file naming and location (V3).** The filename is the class name (PascalCase) as a `.scad` file. The class is placed in a folder named after the parent package segment. The module name uses all FQN segments with `__` separators:
-- FQN `com.machineblocks.bml.bricks.Standard` → filename `Standard.scad`
-- Module name: `mb__com__machineblocks__scad__bricks__Standard`
-- Location: `scad/com/machineblocks/scad/bricks/Standard.scad`
-- FQN `com.martianmicro.anyclosure.Corner` → `scad/com/martianmicro/anyclosure/Corner.scad`
+**Rule 11 — Block file naming and location (V3).** Filename = class name (PascalCase) `.scad`. Module name uses all Manifestation FQN segments with `__` separators. For MachineBlocks 1:1 SCAD, replace Definition segment `bml` → `scad`:
+- Definition FQN `com.machineblocks.bml.bricks.Standard` → Manifestation `com.machineblocks.scad.bricks.Standard`
+- Module: `mb__com__machineblocks__scad__bricks__Standard`
+- Path: `scad-lib/blocks/com/machineblocks/scad/bricks/Standard.scad`
+- Other packages without a `bml` definition segment keep their FQN as-is under `blocks/…`.
 
-**Rule 12 — Side references (V3).** Always use string side identifiers ("x-", "x+", "y-", "y+", "z-", "z+") in generated code. Integer indices (0-5) are valid but not preferred.
+**Rule 12 — Face / Direction / Align (V3).** In SCAD settings/config always use Face `scad:value` strings (`"x-"`, `"x+"`, …). In MBML/BOM author enum member ids (`XNeg`, `XPos`, …) — never SCAD face strings as MBOM keys. Integer indices (0–5) are valid in SCAD but not preferred.
 
 ---
 
