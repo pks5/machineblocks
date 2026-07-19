@@ -18,9 +18,9 @@
  * Imports
  */
 // MachineBlocks Library
-use <../../../../lib/block.scad>;
+use <../../../../../lib/block.scad>;
 // Global Config
-include <../../../../config/mb_config.scad>;
+include <../../../../../config/mb_config.scad>;
 
 /*
  * Customization

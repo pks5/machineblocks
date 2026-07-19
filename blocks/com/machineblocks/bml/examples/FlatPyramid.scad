@@ -6,8 +6,8 @@
  * FQN: com.machineblocks.bml.examples.FlatPyramid
  */
 
-use <../../../../lib/block.scad>;
-include <../../../../config/mb_config.scad>;
+use <../../../../../lib/block.scad>;
+include <../../../../../config/mb_config.scad>;
 
 /*
  * Customization

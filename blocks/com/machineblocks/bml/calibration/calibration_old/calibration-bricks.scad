@@ -12,8 +12,8 @@
 */
 
 // Imports
-use <../../lib/block.scad>;
-include <../../config/config.scad>;
+use <../../../../../../lib/block.scad>;
+include <../../../../../../config/config.scad>;
 
 
 /* [Size] */
