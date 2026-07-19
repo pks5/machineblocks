@@ -168,7 +168,7 @@ myParam = mb_param(config, settings, "myParam", "myDefaultValue");
 
 > All block modules MUST use `mb_param_[propertyName]()` for NativeBlock properties and `mb_param()` for everything else. Never invent a native getter for a custom name. Never use `mb_param()` for a NativeBlock property. Direct array access is not permitted.
 
-**Reference:** `blocks/com/machineblocks/bml/examples/Cross.scad` (`mb__com__machineblocks__examples__Cross`) uses native getters for `size`, `studs`, `baseColor`, … and `mb_param()` for `brick1SizeY`, `brick2SizeX`, `brick1OffsetY`, `brick2OffsetX`.
+**Reference:** `blocks/com/machineblocks/scad/examples/Cross.scad` (`mb__com__machineblocks__scad__examples__Cross`) uses native getters for `size`, `studs`, `baseColor`, … and `mb_param()` for `brick1SizeY`, `brick2SizeX`, `brick1OffsetY`, `brick2OffsetX`.
 
 ### Format Resolution
 

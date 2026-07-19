@@ -3,7 +3,7 @@
  *
  * Name: FlatPyramid
  * Filename: FlatPyramid.scad
- * FQN: com.machineblocks.bml.examples.FlatPyramid
+ * FQN: com.machineblocks.scad.examples.FlatPyramid
  */
 
 use <../../../../../lib/block.scad>;
@@ -40,7 +40,7 @@ size = [
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__FlatPyramid(
+mb__com__machineblocks__scad__examples__FlatPyramid(
     config = mb_config,
     settings = [
         ["size", size],
@@ -55,7 +55,7 @@ mb__com__machineblocks__examples__FlatPyramid(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__FlatPyramid(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__FlatPyramid(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.examples.staple_pyramid");
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);

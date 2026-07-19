@@ -3,7 +3,7 @@
  *
  * Name: Cross / Corner Brick
  * Filename: Cross.scad
- * FQN: com.machineblocks.bml.examples.Cross
+ * FQN: com.machineblocks.scad.examples.Cross
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -91,7 +91,7 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../../pattern/anc
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Cross(
+mb__com__machineblocks__scad__examples__Cross(
     config = mb_config,
     settings = [
         ["size", size],
@@ -123,7 +123,7 @@ mb__com__machineblocks__examples__Cross(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Cross(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__Cross(config = undef, settings = undef){
     // Native Parameters (provided by "mb_block()")
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);

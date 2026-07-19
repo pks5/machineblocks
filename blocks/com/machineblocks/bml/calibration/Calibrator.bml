@@ -92,7 +92,7 @@
     <!--
       Sub-Block: Calibrator.Utils
       FQN: com.machineblocks.bml.calibration.Calibrator.Utils
-      SCAD: mb__com__machineblocks__calibration__Calibrator__Utils
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__Utils
 
       Utility sub-block for the Calibrator block family.
       Bound as context-scoped @utils on the Calibrator root — all Sub-Blocks
@@ -146,7 +146,7 @@ function strSuffix(s, k, i = 0) =
     <!--
       Sub-Block: Calibrator.Base
       FQN: com.machineblocks.bml.calibration.Calibrator.Base
-      SCAD: mb__com__machineblocks__calibration__Calibrator__Base
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__Base
 
       Renders the base strip, label block, and value label blocks for one row.
       All blocks use sizeMod z+=-0.5 (approx 0.5 unitGrid[1] height, ~0.8mm).
@@ -228,7 +228,7 @@ function strSuffix(s, k, i = 0) =
     <!--
       Sub-Block: Calibrator.StudDiameter
       FQN: com.machineblocks.bml.calibration.Calibrator.StudDiameter
-      SCAD: mb__com__machineblocks__calibration__Calibrator__StudDiameter
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__StudDiameter
 
       Sample blocks with varying studDiameterAdjustment.
       NOTE: studDiameterAdjustment is config_only in MB3 — used intentionally.
@@ -264,7 +264,7 @@ function strSuffix(s, k, i = 0) =
     <!--
       Sub-Block: Calibrator.BaseWallThickness
       FQN: com.machineblocks.bml.calibration.Calibrator.BaseWallThickness
-      SCAD: mb__com__machineblocks__calibration__Calibrator__BaseWallThickness
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__BaseWallThickness
 
       Inverted sample blocks with varying baseWallThicknessAdjustment.
       NOTE: baseWallThicknessAdjustment is config_only in MB3 — used intentionally.
@@ -302,7 +302,7 @@ function strSuffix(s, k, i = 0) =
     <!--
       Sub-Block: Calibrator.TubeDiameter
       FQN: com.machineblocks.bml.calibration.Calibrator.TubeDiameter
-      SCAD: mb__com__machineblocks__calibration__Calibrator__TubeDiameter
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__TubeDiameter
 
       Inverted 2x2 sample blocks with varying tubeDiameterAdjustment.
       NOTE: V2 tubeZDiameterAdjustment -> V3 tubeDiameterAdjustment (unified).
@@ -341,7 +341,7 @@ function strSuffix(s, k, i = 0) =
     <!--
       Sub-Block: Calibrator.PinDiameter
       FQN: com.machineblocks.bml.calibration.Calibrator.PinDiameter
-      SCAD: mb__com__machineblocks__calibration__Calibrator__PinDiameter
+      SCAD: mb__com__machineblocks__scad__calibration__Calibrator__PinDiameter
 
       Inverted 2x1 sample blocks with varying pinDiameterAdjustment.
     -->

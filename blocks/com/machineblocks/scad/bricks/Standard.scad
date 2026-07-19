@@ -3,7 +3,7 @@
  *
  * Name: MachineBlock Standard Brick
  * Filename: Standard.scad
- * FQN: com.machineblocks.bml.bricks.Standard
+ * FQN: com.machineblocks.scad.bricks.Standard
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -171,7 +171,7 @@ holeXYGridOffsetZ = [holeXGridOffsetZ, holeYGridOffsetZ];
 /*
  * Main Module Call
  */
-mb__com__machineblocks__bricks__Standard(
+mb__com__machineblocks__scad__bricks__Standard(
     config = mb_config,
     settings = [
         ["size",                 size],
@@ -219,16 +219,16 @@ mb__com__machineblocks__bricks__Standard(
 
 /*
  * Main Module Definition
- * com.machineblocks.bml.bricks.Standard
+ * com.machineblocks.scad.bricks.Standard
  *
  * CompositeBlock with a single NativeBlock child — no wrapper mb_block()
  * generated (1 child rule). Each NativeBlock property is extracted via
  * mb_param_* — no generic mb_param() for natives. Only the declared
  * parameter set of Standard is forwarded to mb_block().
  */
-module mb__com__machineblocks__bricks__Standard(config = undef, settings = undef) {
+module mb__com__machineblocks__scad__bricks__Standard(config = undef, settings = undef) {
 
-    blockId             = mb_param_id(config, settings, "com.machineblocks.bml.bricks.Standard");
+    blockId             = mb_param_id(config, settings, "com.machineblocks.scad.bricks.Standard");
     size                = mb_param_size(config, settings, [4, 2, 3]);
     baseRoundingRadius  = mb_param_baseRoundingRadius(config, settings, 0);
     baseCutoutType      = mb_param_baseCutoutType(config, settings);

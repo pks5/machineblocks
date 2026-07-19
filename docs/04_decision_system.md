@@ -196,8 +196,8 @@ These rules apply in Device Mode (Semantic Mode = Device).
 
 **Rule 11 — Block file naming and location (V3).** The filename is the class name (PascalCase) as a `.scad` file. The class is placed in a folder named after the parent package segment. The module name uses all FQN segments with `__` separators:
 - FQN `com.machineblocks.bml.bricks.Standard` → filename `Standard.scad`
-- Module name: `mb__com__machineblocks__bricks__Standard`
-- Location: `scad/com/machineblocks/bml/bricks/Standard.scad`
+- Module name: `mb__com__machineblocks__scad__bricks__Standard`
+- Location: `scad/com/machineblocks/scad/bricks/Standard.scad`
 - FQN `com.martianmicro.anyclosure.Corner` → `scad/com/martianmicro/anyclosure/Corner.scad`
 
 **Rule 12 — Side references (V3).** Always use string side identifiers ("x-", "x+", "y-", "y+", "z-", "z+") in generated code. Integer indices (0-5) are valid but not preferred.

@@ -3,7 +3,7 @@
  *
  * Name: Connector
  * Filename: Connector.scad
- * FQN: com.machineblocks.bml.examples.Connector
+ * FQN: com.machineblocks.scad.examples.Connector
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -52,7 +52,7 @@ size = [
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Connector(
+mb__com__machineblocks__scad__examples__Connector(
     config = mb_config,
     settings = [
         ["size", size],
@@ -67,7 +67,7 @@ mb__com__machineblocks__examples__Connector(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Connector(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__Connector(config = undef, settings = undef){
 
     // Native Parameters
     size = mb_param_size(config, settings);

@@ -3,7 +3,7 @@
  *
  * Name: Frame
  * Filename: Frame.scad
- * FQN: com.machineblocks.bml.examples.Frame
+ * FQN: com.machineblocks.scad.examples.Frame
  */
 
 /*
@@ -55,7 +55,7 @@ studIcon = "../../pattern/bolt-solid-full.svg";
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__Frame(
+mb__com__machineblocks__scad__examples__Frame(
     config = mb_config,
     settings = [
         ["size", size],
@@ -84,7 +84,7 @@ mb__com__machineblocks__examples__Frame(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__Frame(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__Frame(config = undef, settings = undef){
     // Native Parameters
     size = mb_param_size(config, settings);
     offset = mb_param_offset(config, settings);

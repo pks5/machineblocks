@@ -3,7 +3,7 @@
  *
  * Name: BaseAdjustment
  * Filename: BaseAdjustment.scad
- * FQN: com.machineblocks.bml.examples.BaseAdjustment
+ * FQN: com.machineblocks.scad.examples.BaseAdjustment
  *
  * Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
  *
@@ -47,7 +47,7 @@ direction = "west"; // [west, north, east, south]
 /*
  * Main Module Call
  */
-mb__com__machineblocks__examples__BaseAdjustment(
+mb__com__machineblocks__scad__examples__BaseAdjustment(
     config = mb_config,
     settings = [
         ["size", size],
@@ -63,7 +63,7 @@ mb__com__machineblocks__examples__BaseAdjustment(
 /*
  * Main Module Definition
  */
-module mb__com__machineblocks__examples__BaseAdjustment(config = undef, settings = undef){
+module mb__com__machineblocks__scad__examples__BaseAdjustment(config = undef, settings = undef){
     blockId = mb_param_id(config, settings, "mm.examples.base_adjustment");
     size = mb_param_size(config, settings, [8, 8, 1]);
     direction = mb_param_direction(config, settings);
