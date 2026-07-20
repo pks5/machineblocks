@@ -132,6 +132,7 @@ function mb_param_stabilizerExpansionOffset(config, settings, default = undef) =
 */
 
 function mb_param_pillars(config, settings, default = undef) = mb_param(config, settings, "pillars", default != undef ? default : true);
+function mb_param_pillarAreas(config, settings, default = undef) = mb_param(config, settings, "pillarAreas", default != undef ? default : []);
 function mb_param_pillarOriginalWallThickness(config, settings, default = undef) = mb_param(config, settings, "pillarOriginalWallThickness", default != undef ? default : 0.53125);
 function mb_param_pillarInnerClampThickness(config, settings, default = undef) = mb_param(config, settings, "pillarInnerClampThickness", default != undef ? default : 0.1);
 // TODO implement
@@ -198,16 +199,23 @@ function mb_param_holeXYZEdgeMode(config, settings, default = undef) = mb_params
 
 // X
 function mb_param_holeX(config, settings, default = undef) = mb_param(config, settings, "holeX", default != undef ? default : false);
+function mb_param_holeXAreas(config, settings, default = undef) = mb_param(config, settings, "holeXAreas", default != undef ? default : []);
+
 // Y
 function mb_param_holeY(config, settings, default = undef) = mb_param(config, settings, "holeY", default != undef ? default : false);
+function mb_param_holeYAreas(config, settings, default = undef) = mb_param(config, settings, "holeYAreas", default != undef ? default : []);
+
 // Z
 // TODO Implement Z-Hole
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
+function mb_param_holeZAreas(config, settings, default = undef) = mb_param(config, settings, "holeZAreas", default != undef ? default : []);
 
 /*
 * Studs
 */
 function mb_param_studs(config, settings, default = undef) = mb_param(config, settings, "studs", default != undef ? default : true);
+function mb_param_studAreas(config, settings, default = undef) = mb_param(config, settings, "studAreas", default != undef ? default : []);
+
 function mb_param_studType(config, settings, default = undef) = mb_param(config, settings, "studType", default != undef ? default : "solid");
 function mb_param_studShift(config, settings, default = undef) = mb_param(config, settings, "studShift", default != undef ? default : false);
 function mb_param_studPadding(config, settings, default = undef) = mb_param(config, settings, "studPadding", default != undef ? default : 0);

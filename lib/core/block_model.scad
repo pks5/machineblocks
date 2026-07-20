@@ -522,13 +522,15 @@ function mb_block_obj(
                 stud_padding,
                 recess_stud_padding,
                 mb_param_recessWallStuds(config, settings),
-                mb_param_recessWallGapStuds(config, settings)
+                mb_param_recessWallGapStuds(config, settings),
+                mb_param_studAreas(config, settings)
             ],  // 14 - 
             [
                 tube_diameter_xyz, 
                 mb_param_pillars(config, settings), 
                 pillar_org_wall_thickness, 
-                pin_diameter
+                pin_diameter,
+                mb_param_pillarAreas(config, settings)
             ],  // 15 - 
             stabilizers_res,  // 16 - 
             [
@@ -625,7 +627,8 @@ function mb_block_obj(
                 tube_hole_grid_offset_z,
                 tube_hole_grid_size_z,
                 tube_hole_min_top_margin,
-                mb_param_holeXYZEdgeMode(config, settings)
+                mb_param_holeXYZEdgeMode(config, settings),
+                [mb_param_holeXAreas(config, settings), mb_param_holeYAreas(config, settings), mb_param_holeZAreas(config, settings)]
             ] // 28 - Pin Holes
         ];
 
@@ -730,6 +733,7 @@ function mb_block_get_tube_diameter(block_obj, axis) =              block_obj[15
 function mb_block_has_pillars(block_obj) =                          block_obj[15][1];
 function mb_block_get_pillar_wall_thickness(block_obj) =            block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
+function mb_block_get_pillar_areas(block_obj) =                     block_obj[15][4];
 
 // Holes
 function mb_block_has_holes(block_obj, axis) =                      block_obj[28][0][mb_axis_to_int(axis)];
@@ -741,6 +745,7 @@ function mb_block_get_hole_xy_grid_offset_z(block_obj, axis) =      block_obj[28
 function mb_block_get_hole_xy_grid_size_z(block_obj, axis) =        block_obj[28][6][mb_axis_to_int(axis)];
 function mb_block_get_hole_xy_min_top_margin(block_obj, axis) =     block_obj[28][7][mb_axis_to_int(axis)];
 function mb_block_get_hole_xyz_edge_mode(block_obj, axis) =         block_obj[28][8][mb_axis_to_int(axis)];
+function mb_block_get_hole_xyz_areas(block_obj, axis) =             block_obj[28][9][mb_axis_to_int(axis)];
 
 // Studs
 function mb_block_get_stud_diameter(block_obj, adjusted = true) =   block_obj[14][adjusted ? 0 : 4];
@@ -762,6 +767,7 @@ function mb_block_get_stud_padding(block_obj) =                     block_obj[14
 function mb_block_get_recess_stud_padding(block_obj) =              block_obj[14][20];
 function mb_block_get_recess_wall_studs(block_obj) =                block_obj[14][21];
 function mb_block_get_recess_wall_gap_studs(block_obj) =            block_obj[14][22];
+function mb_block_get_stud_areas(block_obj) =                       block_obj[14][23];
 
 // Stud Clamp
 function mb_block_get_stud_clamp_thickness(block_obj) =             block_obj[14][16];
@@ -990,7 +996,8 @@ function mb_block_stud_range(block_obj) =
 function mb_block_stud_render(block_obj, x, y) =
     let(
         has_studs = mb_block_has_studs(block_obj),
-        item = get_grid_item(has_studs, true, x, y)
+        stud_areas = mb_block_get_stud_areas(block_obj),
+        item = get_area_selection(stud_areas, true, x, y, has_studs)
     )
     item == false ? false : 
     let(
@@ -1247,7 +1254,8 @@ function mb_block_tube_render(block_obj, axis, xy, z) =
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
         has_holes = mb_block_has_holes(block_obj, hole_axis),
-        item = get_grid_item(has_holes, true, xy, z)
+        hole_areas = mb_block_get_hole_xyz_areas(block_obj, hole_axis),
+        item = get_area_selection(hole_areas, true, xy, z, has_holes)
     )
     item == true;
 
@@ -1311,7 +1319,9 @@ function mb_block_pillar_range(block_obj) =
 
 function mb_block_pillar_render(block_obj, x, y) =
     let(
-        item = get_grid_item(mb_block_has_pillars(block_obj), true, x, y)
+        has_pillars = mb_block_has_pillars(block_obj),
+        pillar_areas = mb_block_get_pillar_areas(block_obj),
+        item = get_area_selection(pillar_areas, true, x-1, y-1, has_pillars)
     )
     item == true;
 
@@ -1722,6 +1732,7 @@ function in_grid_area(a, b, p0, p1) =
     && (a <= p1[0]) 
     && (b <= p1[1]); //[xy-, xy+, yz-, yz+]
 
+/*
 function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) = 
     (is_bool(items) 
         ? (items == false ? false : defaultValue) 
@@ -1743,7 +1754,21 @@ function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) =
                         )
                 )
         )
-    );
+    );*/
+
+function get_area_selection(items, defaultValue, a, b, prev = false, i = 0) = 
+    (i >= len(items)) 
+        ? prev 
+        : get_area_selection(
+            items, 
+            defaultValue, 
+            a, 
+            b, 
+            in_grid_area(a, b, items[i][0], items[i][1]) 
+                    ? (items[i][2] == undef ? defaultValue : items[i][2]) 
+                    : prev, 
+            i + 1
+        );
     
 
 function _mb_block_model_surface_shape(bevel_matrix, slope, stud_padding) =
