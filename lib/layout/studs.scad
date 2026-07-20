@@ -12,7 +12,7 @@ use <shared.scad>;
 */
 
 function mb_block_part__stud_icon(block_obj, off, top) =
-    
+
     let(
         block_dim = mb_block_get_dim(block_obj),
         stud_diameter = mb_block_get_stud_diameter(block_obj, adjusted = false),
@@ -67,7 +67,6 @@ function mb_block_part__studs(block_obj) =
         stud_height = mb_block_get_stud_height(block_obj),
         stud_base_overlap = mb_block_get_stud_base_overlap(block_obj),
         clamp_offset = stud_height - stud_clamp_height - stud_clamp_offset
-        
     )
     mb_block_part_model(
         type = "list",

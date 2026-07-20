@@ -1716,7 +1716,11 @@ function _mb_block_rounding_radius(rounding_radius, xy = true, xz = true, yz = t
  /*
 * Grid
 */
-function in_grid_area(a, b, rect) = (a >= rect[0]) && (a <= rect[2]) && (b >= rect[1]) && (b <= rect[3]); //[xy-, xy+, yz-, yz+]
+function in_grid_area(a, b, p0, p1) = 
+       (a >= p0[0]) 
+    && (b >= p0[1])
+    && (a <= p1[0]) 
+    && (b <= p1[1]); //[xy-, xy+, yz-, yz+]
 
 function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) = 
     (is_bool(items) 
@@ -1733,8 +1737,8 @@ function get_grid_item(items, defaultValue, a, b, i = 0, prev = false) =
                     is_bool(items[i]) 
                         ? (items[i] == false ? false : defaultValue) 
                         : (
-                            in_grid_area(a, b, items[i][0]) 
-                            ? (items[i][1] == undef ? defaultValue : items[i][1]) 
+                            in_grid_area(a, b, items[i][0], items[i][1]) 
+                            ? (items[i][2] == undef ? defaultValue : items[i][2]) 
                             : prev
                         )
                 )
