@@ -206,7 +206,6 @@ function mb_param_holeY(config, settings, default = undef) = mb_param(config, se
 function mb_param_holeYAreas(config, settings, default = undef) = mb_param(config, settings, "holeYAreas", default != undef ? default : []);
 
 // Z
-// TODO Implement Z-Hole
 function mb_param_holeZ(config, settings, default = undef) = mb_param(config, settings, "holeZ", default != undef ? default : false);
 function mb_param_holeZAreas(config, settings, default = undef) = mb_param(config, settings, "holeZAreas", default != undef ? default : []);
 

@@ -1363,8 +1363,9 @@ function mb_block_tube_z_radius(block_obj, x, y, hole = false) =
 
 function mb_block_tube_z_offset(block_obj, x, y) =
     let(
-        z_axis = mb_axis_to_int("x"),
+        z_axis = mb_axis_to_int("z"),
         tube_shift = mb_block_get_hole_xyz_shift(block_obj, z_axis),
+        _ = echo(ts=tube_shift),
         tube_offset_x = tube_shift[0] ? 0.5 : 1,
         tube_offset_y = tube_shift[1] ? 0.5 : 1
     )
