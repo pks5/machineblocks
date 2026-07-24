@@ -262,7 +262,8 @@ function mb_block_dim_height_expand(block_dim, axis, height, expand) =
         : [
             expand[0] == "auto" ? end + expand[1] - (!is_undef(height) ? height : mod_size[axis]) : start - expand[0], 
             expand[1] == "auto" ? start - expand[0] + (!is_undef(height) ? height : mod_size[axis]) : end + expand[1]
-        ]
+        ],
+        _ = echo(h_adj)
     )
     h_adj;
 

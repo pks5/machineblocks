@@ -1210,7 +1210,7 @@ function mb_block_screw_hole_offset(block_obj, axis, off) =
 * -----
 */
 
-function mb_block_tube_range(block_obj, axis) =
+function mb_block_tube_xy_range(block_obj, axis) =
     let(
         block_dim = mb_block_get_dim(block_obj),
         mod_size = mb_block_dim_mod_size(block_dim),
@@ -1226,8 +1226,9 @@ function mb_block_tube_range(block_obj, axis) =
         tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, hole_axis),
         tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, hole_axis),
         tube_hole_min_top_margin = mb_block_get_hole_xy_min_top_margin(block_obj, hole_axis),
-        tube_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
+        hole_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
 
+        // TODO Edge z mode
         hole_max_rows = mb_vertical_hole_count(
             rect_height = mod_size[2],
             first_hole_center_from_bottom = tube_hole_grid_offset_z,
@@ -1242,14 +1243,14 @@ function mb_block_tube_range(block_obj, axis) =
             ? min_max_index_all[1][hole_axis] + 1 : min_max_index_full[1][hole_axis],
 
         range_offset_start = 0,
-        range_offset_end = tube_shift ? 0 : -1
+        range_offset_end = hole_shift[0] ? 0 : -1
     )
     [
         [(start_index_xy + range_offset_start) : (end_index_xy + range_offset_end)],
         [0 : hole_max_rows - 1]
     ];
 
-function mb_block_tube_render(block_obj, axis, xy, z) =
+function mb_block_tube_xy_render(block_obj, axis, xy, z) =
     let(
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
@@ -1259,14 +1260,14 @@ function mb_block_tube_render(block_obj, axis, xy, z) =
     )
     item == true;
 
-function mb_block_tube_offset(block_obj, axis, xy, z) =
+function mb_block_tube_xy_offset(block_obj, axis, xy, z) =
     let(
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
         tube_hole_grid_offset_z = mb_block_get_hole_xy_grid_offset_z(block_obj, hole_axis),
         tube_hole_grid_size_z = mb_block_get_hole_xy_grid_size_z(block_obj, hole_axis),
         tube_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
-        tube_offset_xy = tube_shift ? 0.5 : 1,
+        tube_offset_xy = tube_shift[0] ? 0.5 : 1,
     )
     mb_block_pos_to_offset(block_obj, [
         axis == 1 ? xy + tube_offset_xy : undef, 
@@ -1274,7 +1275,7 @@ function mb_block_tube_offset(block_obj, axis, xy, z) =
         tube_hole_grid_offset_z + z * tube_hole_grid_size_z
     ]);
 
-function mb_block_tube_radius(block_obj, axis, xy, z, hole = false) =
+function mb_block_tube_xy_radius(block_obj, axis, xy, z, hole = false) =
     let(
         axis = mb_axis_to_int(axis),
         hole_axis = mb_axis_inverse(axis),
@@ -1284,7 +1285,7 @@ function mb_block_tube_radius(block_obj, axis, xy, z, hole = false) =
     )
     0.5 * (hole ? hole_xyz_diameter : tube_diameter);
 
-function mb_block_tube_hole_inset(block_obj, axis, xy, z) =
+function mb_block_tube_xy_hole_inset(block_obj, axis, xy, z) =
     let(
         hole_axis = mb_axis_inverse(axis),
         inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, hole_axis),
@@ -1292,6 +1293,86 @@ function mb_block_tube_hole_inset(block_obj, axis, xy, z) =
     )
     [inset_thickness, inset_depth];
 
+/**
+* -------
+* Z-Holes
+* -------
+*/
+
+function mb_block_tube_z_range(block_obj) =
+    let(
+        hole_axis = mb_axis_to_int("z"),
+        x_axis = mb_axis_to_int("x"),
+        y_axis = mb_axis_to_int("y"),
+        block_dim = mb_block_get_dim(block_obj),
+        mod_size = mb_block_dim_mod_size(block_dim),
+        min_max_index_full = mb_block_dim_min_max_index_full(block_dim),
+        min_max_index_all = mb_block_dim_min_max_index(block_dim),
+        
+        
+        hole_xyz_edge_mode = mb_block_get_hole_xyz_edge_mode(block_obj, hole_axis),
+        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, hole_axis),
+        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, hole_axis),
+        hole_shift = mb_block_get_hole_xyz_shift(block_obj, hole_axis),
+
+        start_index_x = hole_xyz_edge_mode[0] == "start" || hole_xyz_edge_mode[0] == "all" 
+            ? min_max_index_all[0][x_axis] - 1 : min_max_index_full[0][x_axis],
+        end_index_x = hole_xyz_edge_mode[0] == "end" || hole_xyz_edge_mode[0] == "all" 
+            ? min_max_index_all[1][x_axis] + 1 : min_max_index_full[1][x_axis],
+
+        start_index_y = hole_xyz_edge_mode[1] == "start" || hole_xyz_edge_mode[1] == "all" 
+            ? min_max_index_all[0][y_axis] - 1 : min_max_index_full[0][y_axis],
+        end_index_y = hole_xyz_edge_mode[1] == "end" || hole_xyz_edge_mode[1] == "all" 
+            ? min_max_index_all[1][y_axis] + 1 : min_max_index_full[1][y_axis],
+
+        range_x_offset_start = 0,
+        range_x_offset_end = hole_shift[0] ? 0 : -1,
+        range_y_offset_start = 0,
+        range_y_offset_end = hole_shift[1] ? 0 : -1
+    )
+    [
+        [(start_index_x + range_x_offset_start) : (end_index_x + range_x_offset_end)],
+        [(start_index_y + range_y_offset_start) : (end_index_y + range_y_offset_end)],
+    ];
+
+function mb_block_tube_z_render(block_obj, x, y) =
+    let(
+        z_axis = mb_axis_to_int("z"),
+        has_holes = mb_block_has_holes(block_obj, z_axis),
+        hole_areas = mb_block_get_hole_xyz_areas(block_obj, z_axis),
+        item = get_area_selection(hole_areas, true, x, y, has_holes)
+    )
+    item == true;
+
+function mb_block_tube_z_hole_inset(block_obj, x, y) =
+    let(
+        z_axis = mb_axis_to_int("z"),
+        inset_thickness = mb_block_get_hole_xyz_inset_thickness(block_obj, z_axis),
+        inset_depth = mb_block_get_hole_xyz_inset_depth(block_obj, z_axis)
+    )
+    [inset_thickness, inset_depth];
+
+function mb_block_tube_z_radius(block_obj, x, y, hole = false) =
+    let(
+        z_axis = mb_axis_to_int("z"),
+        tube_diameter = mb_block_get_tube_diameter(block_obj, z_axis),
+        hole_xyz_diameter = mb_block_get_hole_xyz_diameter(block_obj, z_axis)
+        
+    )
+    0.5 * (hole ? hole_xyz_diameter : tube_diameter);
+
+function mb_block_tube_z_offset(block_obj, x, y) =
+    let(
+        z_axis = mb_axis_to_int("x"),
+        tube_shift = mb_block_get_hole_xyz_shift(block_obj, z_axis),
+        tube_offset_x = tube_shift[0] ? 0.5 : 1,
+        tube_offset_y = tube_shift[1] ? 0.5 : 1
+    )
+    mb_block_pos_to_offset(block_obj, [
+        x + tube_offset_x, 
+        y + tube_offset_y, 
+        undef
+    ]);
 /**
 * -------
 * Pillars

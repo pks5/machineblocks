@@ -25,7 +25,7 @@ use <pcb_holder.scad>;
 use <screw_holes.scad>;
 
 use <tubes.scad>;
-
+use <zholes.scad>;
 use <connectors.scad>;
 
 function mb_block_part__base(block_obj) =
@@ -121,9 +121,14 @@ function mb_block_part__base(block_obj) =
                     mb_block_part__screw_holes(block_obj),
 
                     /*
-                    * Tube Holes
+                    * Tube XY Holes
                     */
                     mb_block_part__tubes(block_obj, hole = true),
+
+                    /*
+                    * Tube Z Holes
+                    */
+                    mb_block_part__zholes(block_obj),
 
                     /*
                     * Connectors
@@ -163,7 +168,9 @@ function mb_block_part__base(block_obj) =
             /*
             * Connectors
             */
-            mb_block_part__connectors(block_obj)
+            mb_block_part__connectors(block_obj),
+
+           // mb_block_part__zholes(block_obj),
         ]
     );
 

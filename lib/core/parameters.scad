@@ -191,7 +191,7 @@ function mb_param_holeXYZAxleThicknessAdjustment(config, settings, default = und
 // TODO implement
 function mb_param_holeXYZType(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZType", default != undef ? default : "pin"));
 
-function mb_param_holeXYZShift(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false));
+function mb_param_holeXYZShift(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZShift", default != undef ? default : false), use_list = true);
 function mb_param_holeXYZDiameter(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZDiameter", default != undef ? default : "auto"));
 function mb_param_holeXYZDiameterAdjustment(config, settings, default = undef) = mb_params_resolve_xyz(mb_param(config, settings, "holeXYZDiameterAdjustment", default != undef ? default : 0.3));
 // TODO Implement Z Modes

@@ -9,54 +9,52 @@ use <shared.scad>;
 * Tube
 * ----
 */
-function mb_block_part__tubes(block_obj, hole = false) = 
+function mb_block_part__zholes(block_obj) = 
     let(
         block_dim = mb_block_get_dim(block_obj)
     )
     mb_block_part_model(
         type = "list",
-        name = "tubes",
+        name = "zholes",
         items = [
-            for(a = ["x", "y"])
+            
                 let(
-                    axis = mb_axis_to_int(a),
-                    hole_axis = mb_axis_inverse(axis),
-                    tube_range = mb_block_tube_xy_range(block_obj, axis),
-                    axis_faces = mb_axis_faces(axis)
+                    axis = mb_axis_to_int("z"),
+                    tube_range = mb_block_tube_z_range(block_obj),
+                    top_plate_height = mb_block_get_top_plate_height(block_obj)
                 )
-                if(mb_block_has_holes(block_obj, hole_axis) != false)
-                    for(xy = tube_range[0])
-                        for(z = tube_range[1])
-                            if(mb_block_tube_xy_render(block_obj, axis, xy, z))
+                if(mb_block_has_holes(block_obj, axis) != false)
+                    for(x = tube_range[0])
+                        for(y = tube_range[1])
+                            if(mb_block_tube_z_render(block_obj, x, y))
                                 let(
-                                    clamp = mb_block_tube_xy_hole_inset(block_obj, axis, xy, z),
-                                    tube_clamp_start = [
+                                    clamp = mb_block_tube_z_hole_inset(block_obj, x, y),
+                                    tube_clamp_end = [
                                         clamp[0], 
                                         clamp[1] + mb_block_dim_overlap(block_dim, overlap = true)
-                                    ],
-                                    tube_clamp_end = tube_clamp_start,
+                                    ]
                                 )
                                 mb_block_part_tube(
                                     block_dim = block_dim,
-                                    radius = mb_block_tube_xy_radius(block_obj, axis, xy, z, hole = hole),
-                                    clamp_end = tube_clamp_end, 
-                                    clamp_start = tube_clamp_start, 
+                                    radius = mb_block_tube_z_radius(block_obj, x, y, hole = true),
+                                    clamp_end = tube_clamp_end,
                                     axis = axis,
                                     expand = [
                                         mb_block_dim_face_edge_expand(
                                             block_dim, 
-                                            adjusted = true,
                                             overlap = true,
-                                            face = axis_faces[0]
+                                            opposite = true,
+                                            exp = top_plate_height,
+                                            face = "z-"
                                         ),
                                         mb_block_dim_face_edge_expand(
                                             block_dim, 
                                             adjusted = true,
                                             overlap = true,
-                                            face = axis_faces[1]
+                                            face = "z+"
                                         ),
                                     ],
-                                    offset = mb_block_tube_xy_offset(block_obj, axis, xy, z)
+                                    offset = mb_block_tube_z_offset(block_obj, x, y)
                                 )
         ]
     );
