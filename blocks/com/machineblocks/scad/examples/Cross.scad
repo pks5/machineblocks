@@ -182,6 +182,7 @@ module mb__com__machineblocks__scad__examples__Cross(config = undef, settings = 
     brick2_offset_x = min(size[0] - brick2SizeX, brick2OffsetX);
 
     // Wrapper block
+    
     mb_block(
         config = config,
         settings = [
@@ -199,7 +200,8 @@ module mb__com__machineblocks__scad__examples__Cross(config = undef, settings = 
             settings = concat(sharedSettings, [
                 ["size", [size[0], brick1_size_y, size[2]]],
                 ["offset", [0, brick1_offset_y, 0]],
-                ["baseWallGaps", [["y", brick2_offset_x, brick2_size_x]]]
+                ["baseWallGaps", [["y", brick2_offset_x, brick2_size_x]]],
+                ["slope", [0, 0, 1, 1]]
             ])
         );
 
@@ -209,7 +211,8 @@ module mb__com__machineblocks__scad__examples__Cross(config = undef, settings = 
             settings = concat(sharedSettings, [
                 ["size", [brick2_size_x, size[1], size[2]]],
                 ["offset", [brick2_offset_x, 0, 0]],
-                ["baseWallGaps", [["x", brick1_offset_y, brick1_size_y]]]
+                ["baseWallGaps", [["x", brick1_offset_y, brick1_size_y]]],
+                ["slope", [0, 1, 0, 0]]
             ])
         );
     }

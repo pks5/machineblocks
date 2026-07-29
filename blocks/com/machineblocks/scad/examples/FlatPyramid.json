@@ -14,6 +14,13 @@
             "colorA": "#55AB68",
             "colorB": "#303D4E",
             "seamOverlap": "0.01"
+        },
+        "New set 3": {
+            "bottomCount": "7",
+            "brickSize": "[4, 2, 4]",
+            "colorA": "#55AB68",
+            "colorB": "#303D4E",
+            "seamOverlap": "0.01"
         }
     }
 }
