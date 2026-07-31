@@ -94,14 +94,23 @@ Always emit full 6-element array:
 
 ## SelectiveGrid Serialization
 
+One area entry (Struct property order: start, end, value):
+
 ```text
-[baseValue, [[x0,y0,x1,y1], value], ...]
+[[x0,y0], [x1,y1], value]
 ```
 
-If no selectors:
+`*Areas` properties are arrays of entries. The Boolean default property (`studs`, `holeX`, …) supplies the value for cells not covered by any area. Later entries win on overlap.
 
 ```text
-baseValue only (scalar or boolean)
+["studs", true]
+["studAreas", [[[0,0],[1,1], false], [[2,0],[3,1], "hollow"]]]
+```
+
+If no areas:
+
+```text
+Boolean default only (e.g. ["studs", true])
 ```
 
 ---
@@ -186,19 +195,19 @@ MBOM / SCAD bridge: { "pbx.x+": 0.01, "pty.z+": 0.1 }
 SCAD: ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
 ```
 
-## SelectiveGrid\<Boolean | StudType\> — studs
+## SelectiveGrid\<Boolean | StudType\> — studAreas
 
 ```text
 MBOM:
-{
-  baseValue: true,
-  selectors: [
-    { from:{x:0,y:0}, to:{x:1,y:1}, value: false },
-    { from:{x:2,y:0}, to:{x:3,y:1}, value: "hollow" }
-  ]
-}
+studs: true
+studAreas: [
+  { start:{x:0,y:0}, end:{x:1,y:1}, value: false },
+  { start:{x:2,y:0}, end:{x:3,y:1}, value: "hollow" }
+]
 
-SCAD: ["studs", [true, [[0,0,1,1], false], [[2,0,3,1], "hollow"]]]
+SCAD:
+["studs", true]
+["studAreas", [[[0,0],[1,1], false], [[2,0],[3,1], "hollow"]]]
 ```
 
 ## RecessWallGap[] — recessWallGaps
