@@ -37,7 +37,7 @@ function mb_block_part__zholes(block_obj) =
                                 mb_block_part_tube(
                                     block_dim = block_dim,
                                     radius = mb_block_tube_z_radius(block_obj, x, y, hole = true),
-                                    clamp_end = tube_clamp_end,
+                                    clamp_outer_end = tube_clamp_end,
                                     axis = axis,
                                     expand = [
                                         mb_block_dim_face_edge_expand(

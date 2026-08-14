@@ -5,7 +5,7 @@ use <poly_expand.scad>;
 use <quality.scad>;
 
 use <../shape/prismoid.scad>;
-use <../shape/tube.scad>;
+use <../shape/tube_new.scad>;
 use <../shape/cube.scad>;
 use <../shape/wedge.scad>;
 use <../shape/svg3d.scad>;
@@ -204,8 +204,10 @@ function mb_block_part_tube(
     block_dim,
     radius,
     rounding_radius = undef,
-    clamp_start = undef,
-    clamp_end = undef,
+    clamp_inner_start = undef,
+    clamp_inner_end = undef,
+    clamp_outer_start = undef,
+    clamp_outer_end = undef,
     axis = "z",
     length = undef,
     expand = undef,
@@ -233,8 +235,10 @@ function mb_block_part_tube(
             radius,
             mb_block_dim_height_expand(block_dim, axis, length, expand),
             rounding_radius,
-            clamp_start,
-            clamp_end,
+            clamp_inner_start,
+            clamp_inner_end,
+            clamp_outer_start,
+            clamp_outer_end,
             axis,
             offset,
             quality_class
@@ -579,16 +583,18 @@ module mb_block_part(
                 tube_data = mb_block_part_model_data_item(part, 0);
                 radius = tube_data[0];
                 rounding_radius = tube_data[2];
-                quality_class = tube_data[7]; // [tube, edge]
+                quality_class = tube_data[9]; // [tube, edge]
 
                 mb_tube(
                     radius = radius,
                     length = tube_data[1],
                     rounding_radius = rounding_radius,
-                    clamp_start = tube_data[3],
-                    clamp_end = tube_data[4],
-                    axis = tube_data[5],
-                    offset = tube_data[6],
+                    clamp_inner_start = tube_data[3],
+                    clamp_inner_end = tube_data[4],
+                    clamp_outer_start = tube_data[5],
+                    clamp_outer_end = tube_data[6],
+                    axis = tube_data[7],
+                    offset = tube_data[8],
                     mul = mul,
                     debug = debug,
                     color = base_color,

@@ -31,7 +31,7 @@ function mb_block_part__stud_cutouts(block_obj) =
                             block_dim = block_dim,
                             radius = 0.5 * stud_cutout_diameter,
                             axis = "z",
-                            clamp_start = [
+                            clamp_outer_start = [
                                 -base_clamp_thickness,
                                 base_clamp_height,
                                 base_clamp_offset + mb_block_dim_overlap(block_dim, overlap=true)

@@ -59,8 +59,7 @@ function _mb_tube_profile_points(
         cbos_y_end = cbos_y_start + cbos_height,
         cbos_x_rounding = cbos_outer_radius - sign(clamp_outer_start_thickness) * cbos_rr,
         cbos_y_rounding = cbos_y_start + cbos_rr,
-        
-        
+
         // Clamp Outer End
         cboe_offset = min(length - cbos_offset - cbos_height, max(0, clamp_outer_end_offset)),
         cboe_height = min(length - cbos_offset - cbos_height - cboe_offset, max(0, clamp_outer_end_height)),
@@ -72,10 +71,37 @@ function _mb_tube_profile_points(
         cboe_y_start = cboe_y_end - cboe_height,
         cboe_x_rounding = cboe_outer_radius - sign(clamp_outer_end_thickness) * cboe_rr,
         cboe_y_rounding = cboe_y_end - cboe_rr,
-        
-        
+
+        // Clamp Inner Start
+        cbis_offset = min(length, max(0, clamp_inner_start_offset)),
+        cbis_height = min(length - cbis_offset, max(0, clamp_inner_start_height)),
+        cbis_thickness = clamp_inner_start_thickness < 0
+            ? sign(clamp_inner_start_thickness) * min(ring_thickness, abs(clamp_inner_start_thickness))
+            : min(radius_inner, clamp_inner_start_thickness),
+        cbis = radius_inner > 0 && cbis_height > 0 && cbis_thickness != 0,
+        cbis_rr = min(max(0, clamp_inner_start_rounding_radius), abs(cbis_thickness), cbis_height),
+        cbis_inner_radius = radius_inner - cbis_thickness,
+        cbis_y_start = start + cbis_offset,
+        cbis_y_end = cbis_y_start + cbis_height,
+        cbis_x_rounding = cbis_inner_radius + sign(cbis_thickness) * cbis_rr,
+        cbis_y_rounding = cbis_y_start + cbis_rr,
+
+        // Clamp Inner End
+        cbie_offset = min(length - cbis_offset - cbis_height, max(0, clamp_inner_end_offset)),
+        cbie_height = min(length - cbis_offset - cbis_height - cbie_offset, max(0, clamp_inner_end_height)),
+        cbie_thickness = clamp_inner_end_thickness < 0
+            ? sign(clamp_inner_end_thickness) * min(ring_thickness, abs(clamp_inner_end_thickness))
+            : min(radius_inner, clamp_inner_end_thickness),
+        cbie = radius_inner > 0 && cbie_height > 0 && cbie_thickness != 0,
+        cbie_rr = min(max(0, clamp_inner_end_rounding_radius), abs(cbie_thickness), cbie_height),
+        cbie_inner_radius = radius_inner - cbie_thickness,
+        cbie_y_end = end - cbie_offset,
+        cbie_y_start = cbie_y_end - cbie_height,
+        cbie_x_rounding = cbie_inner_radius + sign(cbie_thickness) * cbie_rr,
+        cbie_y_rounding = cbie_y_end - cbie_rr,
+
         // Start
-        si_rr = min(max(0, start_rounding_radius), max_rr, length),
+        si_rr = min(max(0, start_rounding_radius), max_rr, cbis ? cbis_offset : cbie ? (length - cbie_offset - cbie_height) : length),
         so_rr = min(max(0, start_rounding_radius), max_rr, cbos ? cbos_offset : cboe ? (length - cboe_offset - cboe_height) : length),
         si_x_rounding = radius_inner + si_rr,
         so_x_rounding = radius_outer - so_rr,
@@ -83,18 +109,16 @@ function _mb_tube_profile_points(
         so_y_rounding = start + so_rr,
 
         // End
-        ei_rr = min(max(0, end_rounding_radius), max_rr, length),
-        
+        ei_rr = min(max(0, end_rounding_radius), max_rr, cbie ? cbie_offset : cbis ? (length - cbis_offset - cbis_height) : length),
         eo_rr = min(max(0, end_rounding_radius), max_rr, cboe ? cboe_offset : cbos ? (length - cbos_offset - cbos_height) : length),
         ei_x_rounding = radius_inner + ei_rr,
         eo_x_rounding = radius_outer - eo_rr,
         ei_y_rounding = end - ei_rr,
-        eo_y_rounding = end - eo_rr,
-        
+        eo_y_rounding = end - eo_rr
     )
     concat(
         // Start Inner
-        concat(
+        cbis && cbis_offset == 0 ? [] : concat(
             si_rr > 0 && radius_inner > 0 ? concat(
                 [
                     [radius_inner, si_y_rounding]
@@ -107,14 +131,11 @@ function _mb_tube_profile_points(
                     a1 = -180,
                     segments = rounding_resolution_edge
                 )
-                
             ) : [],
             [
                 [si_rr > 0 && radius_inner > 0 ? si_x_rounding : radius_inner, start]
             ]
-            
         ),
-        
 
         // Start Outer
         cbos && cbos_offset == 0 ? [] : concat(
@@ -148,7 +169,7 @@ function _mb_tube_profile_points(
                 cx = cbos_x_rounding,
                 cy = cbos_y_rounding,
                 r = cbos_rr,
-                a0 = cbos_thickness < 0 ? -90 : -90,
+                a0 = -90,
                 a1 = cbos_thickness < 0 ? -180 : 0,
                 segments = rounding_resolution_edge
             ) : [],
@@ -163,15 +184,14 @@ function _mb_tube_profile_points(
             [
                 [radius_outer, cboe_y_start],
                 [cboe_outer_radius, cboe_y_start],
-                
                 [cboe_outer_radius, cboe_rr > 0 ? cboe_y_rounding : cboe_y_end]
             ],
-            cboe_rr > 0 ?_mb_tube_arc_points(
+            cboe_rr > 0 ? _mb_tube_arc_points(
                 cx = cboe_x_rounding,
                 cy = cboe_y_rounding,
                 r = cboe_rr,
                 a0 = cboe_thickness < 0 ? 180 : 0,
-                a1 = cboe_thickness < 0 ? 90 : 90,
+                a1 = 90,
                 segments = rounding_resolution_edge
             ) : [],
             cboe_offset == 0 ? [] : [
@@ -200,7 +220,7 @@ function _mb_tube_profile_points(
         ),
 
         // End Inner
-        concat(
+        cbie && cbie_offset == 0 ? [] : concat(
             ei_rr > 0 && radius_inner > 0 ? concat(
                 [
                     [ei_x_rounding, end]
@@ -213,14 +233,53 @@ function _mb_tube_profile_points(
                     a1 = 90,
                     segments = rounding_resolution_edge
                 )
-                
-                
             ) : [],
             [
                 [radius_inner, ei_rr > 0 && radius_inner > 0 ? ei_y_rounding : end]
             ]
-            
-        )
+        ),
+
+        // Clamp Inner End (walk end→start; structure like Clamp Outer Start)
+        cbie ? concat(
+            cbie_offset == 0 ? [] : [
+                [radius_inner, cbie_y_end]
+            ],
+            [
+                [cbie_rr > 0 ? cbie_x_rounding : cbie_inner_radius, cbie_y_end],
+            ],
+            cbie_rr > 0 ? _mb_tube_arc_points(
+                cx = cbie_x_rounding,
+                cy = cbie_y_rounding,
+                r = cbie_rr,
+                a0 = 90,
+                a1 = cbie_thickness < 0 ? 0 : 180,
+                segments = rounding_resolution_edge
+            ) : [],
+            [
+                [cbie_inner_radius, cbie_y_start],
+                [radius_inner, cbie_y_start]
+            ]
+        ) : [],
+
+        // Clamp Inner Start (walk end→start; structure like Clamp Outer End)
+        cbis ? concat(
+            [
+                [radius_inner, cbis_y_end],
+                [cbis_inner_radius, cbis_y_end],
+                [cbis_inner_radius, cbis_rr > 0 ? cbis_y_rounding : cbis_y_start]
+            ],
+            cbis_rr > 0 ? _mb_tube_arc_points(
+                cx = cbis_x_rounding,
+                cy = cbis_y_rounding,
+                r = cbis_rr,
+                a0 = cbis_thickness < 0 ? 0 : 180,
+                a1 = cbis_thickness < 0 ? -90 : 270,
+                segments = rounding_resolution_edge
+            ) : [],
+            cbis_offset == 0 ? [] : [
+                [radius_inner, cbis_y_start]
+            ]
+        ) : []
     );
 
 module mb_tube(
@@ -328,7 +387,7 @@ module mb_tube(
             start_rounding_radius == 0 && 
             end_rounding_radius == 0 &&
             (clamp_inner_start_thickness == 0 || clamp_inner_start_height == 0) &&
-            (clamp_inner_end_thickness == 0 || clamp_inner_end_height == 0)
+            (clamp_inner_end_thickness == 0 || clamp_inner_end_height == 0) &&
             (clamp_outer_start_thickness == 0 || clamp_outer_start_height == 0) &&
             (clamp_outer_end_thickness == 0 || clamp_outer_end_height == 0);
 
@@ -389,15 +448,15 @@ module mb_tube(
 
 mb_tube(
     radius = [50, 60],
-    length = [-40, 80],
+    length = [-160, 80],
     
     rounding_radius = 0, //[4, 12],
     axis = "z",
     offset = undef,
     mul = [8, 8, 3.2],
 
-    clamp_inner_start = [5, 42, 10, 5],
-    clamp_inner_end = [5, 42, 10, 5],
+    clamp_inner_start = [5, 42, 10],
+    clamp_inner_end = [5, 42],
     
     clamp_outer_start = [5, 42, 10, 5],
     clamp_outer_end = [5, 42, 10, 5],

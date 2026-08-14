@@ -16,8 +16,10 @@ function mb_block_part__pillars(block_obj) =
         base_clamp_thickness = mb_block_get_base_clamp_thickness(block_obj),
         base_clamp_height = mb_block_get_base_clamp_height(block_obj),
         base_clamp_offset = mb_block_get_base_clamp_offset(block_obj),
+        pillar_inner_clamp_thickness = mb_block_get_pillar_inner_clamp_thickness(block_obj),
         top_plate_helpers_thickness = mb_block_get_top_plate_helpers_thickness(block_obj),
         top_plate_helpers_height = mb_block_get_top_plate_helpers_height(block_obj),
+        has_z_holes = mb_block_has_holes(block_obj, "z"),
         base_cutout_ceiling_offset_with_cut = mb_block_base_cutout_ceiling_offset(block_obj, face = "z+", cut = true)
     )
     mb_block_part_model(
@@ -37,13 +39,20 @@ function mb_block_part__pillars(block_obj) =
                                 base_clamp_thickness,
                                 base_clamp_height,
                                 base_clamp_offset
+                            ],
+                            tube_inner_clamp_start = [
+                                pillar_inner_clamp_thickness,
+                                base_clamp_height,
+                                base_clamp_offset
                             ]
                         )
                         mb_block_part_tube(
                             block_dim = block_dim,
                             radius = mb_block_pillar_radius(block_obj, x, y),
-                            clamp_end = tube_clamp_end, 
-                            clamp_start = tube_clamp_start, 
+                            clamp_inner_start = has_z_holes ? undef : tube_inner_clamp_start,
+                            clamp_inner_end = has_z_holes ? undef : tube_clamp_end, 
+                            clamp_outer_end = tube_clamp_end, 
+                            clamp_outer_start = tube_clamp_start, 
                             axis = "z",
                             expand = [
                                 0,

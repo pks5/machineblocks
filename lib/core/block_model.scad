@@ -530,7 +530,8 @@ function mb_block_obj(
                 mb_param_pillars(config, settings), 
                 pillar_org_wall_thickness, 
                 pin_diameter,
-                mb_param_pillarAreas(config, settings)
+                mb_param_pillarAreas(config, settings),
+                mb_param_pillarInnerClampThickness(config, settings) * mm2grd_xy
             ],  // 15 - 
             stabilizers_res,  // 16 - 
             [
@@ -734,6 +735,7 @@ function mb_block_has_pillars(block_obj) =                          block_obj[15
 function mb_block_get_pillar_wall_thickness(block_obj) =            block_obj[15][2];
 function mb_block_get_pin_diameter(block_obj) =                     block_obj[15][3];
 function mb_block_get_pillar_areas(block_obj) =                     block_obj[15][4];
+function mb_block_get_pillar_inner_clamp_thickness(block_obj) =     block_obj[15][5];
 
 // Holes
 function mb_block_has_holes(block_obj, axis) =                      block_obj[28][0][mb_axis_to_int(axis)];

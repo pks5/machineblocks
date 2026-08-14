@@ -115,7 +115,7 @@ function mb_block_part__studs(block_obj) =
                                     axis = "z",
                                     expand = exp,
                                     offset = render[1],
-                                    clamp_end = stud_clamp_thickness > 0 && stud_clamp_height > 0 ? [
+                                    clamp_outer_end = stud_clamp_thickness > 0 && stud_clamp_height > 0 ? [
                                         stud_clamp_thickness,
                                         stud_clamp_height,
                                         clamp_offset

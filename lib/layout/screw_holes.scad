@@ -38,8 +38,8 @@ function mb_block_part__screw_holes(block_obj) =
                     block_dim = block_dim,
                     radius = screw_hole_diameter[0],
                     axis = axis,
-                    clamp_start = face_start ? tube_clamp : undef,
-                    clamp_end = face_start ? undef : tube_clamp,
+                    clamp_outer_start = face_start ? tube_clamp : undef,
+                    clamp_outer_end = face_start ? undef : tube_clamp,
                     expand = face_start
                         ?  [
                             mb_block_dim_face_edge_expand(
