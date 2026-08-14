@@ -1,12 +1,24 @@
 use <../core/utils.scad>;
 use <../core/quality.scad>;
 
-function _mb_tube_arc_points(cx, cy, r, a0, a1, segments = 8) =
+function _mb_tube_arc_points(cx, cy, rx, ry, a0, a1, segments = 8) =
     [
         for (i = [0:segments])
             let(a = a0 + (a1 - a0) * i / segments)
-                [cx + cos(a) * r, cy + sin(a) * r]
+                [cx + cos(a) * rx, cy + sin(a) * ry]
     ];
+
+function _mb_tube_rr_xy(rr) =
+    is_list(rr) ? [max(0, rr[0]), max(0, len(rr) > 1 ? rr[1] : rr[0])]
+                : let(r = max(0, is_num(rr) ? rr : 0)) [r, r];
+
+function _mb_tube_scale_rr(rr, mul_r, mul_l) =
+    is_list(rr) ? [rr[0] * mul_r, (len(rr) > 1 ? rr[1] : rr[0]) * mul_l]
+                : is_num(rr) ? rr * mul_r : 0;
+
+function _mb_tube_rr_max_component(rr) =
+    let(xy = _mb_tube_rr_xy(rr))
+        max(xy[0], xy[1]);
 
 function _mb_tube_profile_points(
     start,
@@ -53,24 +65,30 @@ function _mb_tube_profile_points(
         cbos_height = min(length - cbos_offset, max(0, clamp_outer_start_height)),
         cbos_thickness = clamp_outer_start_thickness < 0 ? sign(clamp_outer_start_thickness) * min(ring_thickness, abs(clamp_outer_start_thickness)) : clamp_outer_start_thickness,
         cbos = cbos_height > 0 && cbos_thickness != 0,
-        cbos_rr = min(max(0, clamp_outer_start_rounding_radius), abs(cbos_thickness), cbos_height),
+        cbos_rr_raw = _mb_tube_rr_xy(clamp_outer_start_rounding_radius),
+        cbos_rx = min(cbos_rr_raw[0], abs(cbos_thickness)),
+        cbos_ry = min(cbos_rr_raw[1], cbos_height),
+        cbos_round = cbos_rx > 0 && cbos_ry > 0,
         cbos_outer_radius = radius_outer + cbos_thickness,
         cbos_y_start = start + cbos_offset,
         cbos_y_end = cbos_y_start + cbos_height,
-        cbos_x_rounding = cbos_outer_radius - sign(clamp_outer_start_thickness) * cbos_rr,
-        cbos_y_rounding = cbos_y_start + cbos_rr,
+        cbos_x_rounding = cbos_outer_radius - sign(clamp_outer_start_thickness) * cbos_rx,
+        cbos_y_rounding = cbos_y_start + cbos_ry,
 
         // Clamp Outer End
         cboe_offset = min(length - cbos_offset - cbos_height, max(0, clamp_outer_end_offset)),
         cboe_height = min(length - cbos_offset - cbos_height - cboe_offset, max(0, clamp_outer_end_height)),
         cboe_thickness = clamp_outer_end_thickness < 0 ? sign(clamp_outer_end_thickness) * min(ring_thickness, abs(clamp_outer_end_thickness)) : clamp_outer_end_thickness,
         cboe = cboe_height > 0 && cboe_thickness != 0,
-        cboe_rr = min(max(0, clamp_outer_end_rounding_radius), abs(cboe_thickness), cboe_height),
+        cboe_rr_raw = _mb_tube_rr_xy(clamp_outer_end_rounding_radius),
+        cboe_rx = min(cboe_rr_raw[0], abs(cboe_thickness)),
+        cboe_ry = min(cboe_rr_raw[1], cboe_height),
+        cboe_round = cboe_rx > 0 && cboe_ry > 0,
         cboe_outer_radius = radius_outer + cboe_thickness,
         cboe_y_end = end - cboe_offset,
         cboe_y_start = cboe_y_end - cboe_height,
-        cboe_x_rounding = cboe_outer_radius - sign(clamp_outer_end_thickness) * cboe_rr,
-        cboe_y_rounding = cboe_y_end - cboe_rr,
+        cboe_x_rounding = cboe_outer_radius - sign(clamp_outer_end_thickness) * cboe_rx,
+        cboe_y_rounding = cboe_y_end - cboe_ry,
 
         // Clamp Inner Start
         cbis_offset = min(length, max(0, clamp_inner_start_offset)),
@@ -79,12 +97,15 @@ function _mb_tube_profile_points(
             ? sign(clamp_inner_start_thickness) * min(ring_thickness, abs(clamp_inner_start_thickness))
             : min(radius_inner, clamp_inner_start_thickness),
         cbis = radius_inner > 0 && cbis_height > 0 && cbis_thickness != 0,
-        cbis_rr = min(max(0, clamp_inner_start_rounding_radius), abs(cbis_thickness), cbis_height),
+        cbis_rr_raw = _mb_tube_rr_xy(clamp_inner_start_rounding_radius),
+        cbis_rx = min(cbis_rr_raw[0], abs(cbis_thickness)),
+        cbis_ry = min(cbis_rr_raw[1], cbis_height),
+        cbis_round = cbis_rx > 0 && cbis_ry > 0,
         cbis_inner_radius = radius_inner - cbis_thickness,
         cbis_y_start = start + cbis_offset,
         cbis_y_end = cbis_y_start + cbis_height,
-        cbis_x_rounding = cbis_inner_radius + sign(cbis_thickness) * cbis_rr,
-        cbis_y_rounding = cbis_y_start + cbis_rr,
+        cbis_x_rounding = cbis_inner_radius + sign(cbis_thickness) * cbis_rx,
+        cbis_y_rounding = cbis_y_start + cbis_ry,
 
         // Clamp Inner End
         cbie_offset = min(length - cbis_offset - cbis_height, max(0, clamp_inner_end_offset)),
@@ -93,12 +114,15 @@ function _mb_tube_profile_points(
             ? sign(clamp_inner_end_thickness) * min(ring_thickness, abs(clamp_inner_end_thickness))
             : min(radius_inner, clamp_inner_end_thickness),
         cbie = radius_inner > 0 && cbie_height > 0 && cbie_thickness != 0,
-        cbie_rr = min(max(0, clamp_inner_end_rounding_radius), abs(cbie_thickness), cbie_height),
+        cbie_rr_raw = _mb_tube_rr_xy(clamp_inner_end_rounding_radius),
+        cbie_rx = min(cbie_rr_raw[0], abs(cbie_thickness)),
+        cbie_ry = min(cbie_rr_raw[1], cbie_height),
+        cbie_round = cbie_rx > 0 && cbie_ry > 0,
         cbie_inner_radius = radius_inner - cbie_thickness,
         cbie_y_end = end - cbie_offset,
         cbie_y_start = cbie_y_end - cbie_height,
-        cbie_x_rounding = cbie_inner_radius + sign(cbie_thickness) * cbie_rr,
-        cbie_y_rounding = cbie_y_end - cbie_rr,
+        cbie_x_rounding = cbie_inner_radius + sign(cbie_thickness) * cbie_rx,
+        cbie_y_rounding = cbie_y_end - cbie_ry,
 
         // Start
         si_rr = min(max(0, start_rounding_radius), max_rr, cbis ? cbis_offset : cbie ? (length - cbie_offset - cbie_height) : length),
@@ -126,7 +150,8 @@ function _mb_tube_profile_points(
                 _mb_tube_arc_points(
                     cx = si_x_rounding,
                     cy = si_y_rounding,
-                    r = si_rr,
+                    rx = si_rr,
+                    ry = si_rr,
                     a0 = -90,
                     a1 = -180,
                     segments = rounding_resolution_edge
@@ -146,7 +171,8 @@ function _mb_tube_profile_points(
                 _mb_tube_arc_points(
                     cx = so_x_rounding,
                     cy = so_y_rounding,
-                    r = so_rr,
+                    rx = so_rr,
+                    ry = so_rr,
                     a0 = -90,
                     a1 = 0,
                     segments = rounding_resolution_edge
@@ -163,12 +189,13 @@ function _mb_tube_profile_points(
                 [radius_outer, cbos_y_start]
             ],
             [
-                [cbos_rr > 0 ? cbos_x_rounding : cbos_outer_radius, cbos_y_start],
+                [cbos_round ? cbos_x_rounding : cbos_outer_radius, cbos_y_start],
             ],
-            cbos_rr > 0 ? _mb_tube_arc_points(
+            cbos_round ? _mb_tube_arc_points(
                 cx = cbos_x_rounding,
                 cy = cbos_y_rounding,
-                r = cbos_rr,
+                rx = cbos_rx,
+                ry = cbos_ry,
                 a0 = -90,
                 a1 = cbos_thickness < 0 ? -180 : 0,
                 segments = rounding_resolution_edge
@@ -184,12 +211,13 @@ function _mb_tube_profile_points(
             [
                 [radius_outer, cboe_y_start],
                 [cboe_outer_radius, cboe_y_start],
-                [cboe_outer_radius, cboe_rr > 0 ? cboe_y_rounding : cboe_y_end]
+                [cboe_outer_radius, cboe_round ? cboe_y_rounding : cboe_y_end]
             ],
-            cboe_rr > 0 ? _mb_tube_arc_points(
+            cboe_round ? _mb_tube_arc_points(
                 cx = cboe_x_rounding,
                 cy = cboe_y_rounding,
-                r = cboe_rr,
+                rx = cboe_rx,
+                ry = cboe_ry,
                 a0 = cboe_thickness < 0 ? 180 : 0,
                 a1 = 90,
                 segments = rounding_resolution_edge
@@ -208,7 +236,8 @@ function _mb_tube_profile_points(
                 _mb_tube_arc_points(
                     cx = eo_x_rounding,
                     cy = eo_y_rounding,
-                    r = eo_rr,
+                    rx = eo_rr,
+                    ry = eo_rr,
                     a0 = 0,
                     a1 = 90,
                     segments = rounding_resolution_edge
@@ -228,7 +257,8 @@ function _mb_tube_profile_points(
                 _mb_tube_arc_points(
                     cx = ei_x_rounding,
                     cy = ei_y_rounding,
-                    r = ei_rr,
+                    rx = ei_rr,
+                    ry = ei_rr,
                     a0 = 180,
                     a1 = 90,
                     segments = rounding_resolution_edge
@@ -245,12 +275,13 @@ function _mb_tube_profile_points(
                 [radius_inner, cbie_y_end]
             ],
             [
-                [cbie_rr > 0 ? cbie_x_rounding : cbie_inner_radius, cbie_y_end],
+                [cbie_round ? cbie_x_rounding : cbie_inner_radius, cbie_y_end],
             ],
-            cbie_rr > 0 ? _mb_tube_arc_points(
+            cbie_round ? _mb_tube_arc_points(
                 cx = cbie_x_rounding,
                 cy = cbie_y_rounding,
-                r = cbie_rr,
+                rx = cbie_rx,
+                ry = cbie_ry,
                 a0 = 90,
                 a1 = cbie_thickness < 0 ? 0 : 180,
                 segments = rounding_resolution_edge
@@ -266,12 +297,13 @@ function _mb_tube_profile_points(
             [
                 [radius_inner, cbis_y_end],
                 [cbis_inner_radius, cbis_y_end],
-                [cbis_inner_radius, cbis_rr > 0 ? cbis_y_rounding : cbis_y_start]
+                [cbis_inner_radius, cbis_round ? cbis_y_rounding : cbis_y_start]
             ],
-            cbis_rr > 0 ? _mb_tube_arc_points(
+            cbis_round ? _mb_tube_arc_points(
                 cx = cbis_x_rounding,
                 cy = cbis_y_rounding,
-                r = cbis_rr,
+                rx = cbis_rx,
+                ry = cbis_ry,
                 a0 = cbis_thickness < 0 ? 0 : 180,
                 a1 = cbis_thickness < 0 ? -90 : 270,
                 segments = rounding_resolution_edge
@@ -337,22 +369,30 @@ module mb_tube(
         clamp_inner_start_thickness = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[0]) ? 0 : clamp_inner_start[0] * mul_radius;
         clamp_inner_start_height = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[1]) ? 0 : clamp_inner_start[1] * mul_length;
         clamp_inner_start_offset = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[2]) ? 0 : clamp_inner_start[2] * mul_length;
-        clamp_inner_start_rounding_radius = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[3]) ? 0 : clamp_inner_start[3] * mul_radius;
+        clamp_inner_start_rounding_radius = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_inner_start[3], mul_radius, mul_length);
 
         clamp_inner_end_thickness = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[0]) ? 0 : clamp_inner_end[0] * mul_radius;
         clamp_inner_end_height = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[1]) ? 0 : clamp_inner_end[1] * mul_length;
         clamp_inner_end_offset = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[2]) ? 0 : clamp_inner_end[2] * mul_length;
-        clamp_inner_end_rounding_radius = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[3]) ? 0 : clamp_inner_end[3] * mul_radius;
+        clamp_inner_end_rounding_radius = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_inner_end[3], mul_radius, mul_length);
 
         clamp_outer_start_thickness = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[0]) ? 0 : clamp_outer_start[0] * mul_radius;
         clamp_outer_start_height = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[1]) ? 0 : clamp_outer_start[1] * mul_length;
         clamp_outer_start_offset = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[2]) ? 0 : clamp_outer_start[2] * mul_length;
-        clamp_outer_start_rounding_radius = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[3]) ? 0 : clamp_outer_start[3] * mul_radius;
+        clamp_outer_start_rounding_radius = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_outer_start[3], mul_radius, mul_length);
 
         clamp_outer_end_thickness = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[0]) ? 0 : clamp_outer_end[0] * mul_radius;
         clamp_outer_end_height = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[1]) ? 0 : clamp_outer_end[1] * mul_length;
         clamp_outer_end_offset = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[2]) ? 0 : clamp_outer_end[2] * mul_length;
-        clamp_outer_end_rounding_radius = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[3]) ? 0 : clamp_outer_end[3] * mul_radius;
+        clamp_outer_end_rounding_radius = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_outer_end[3], mul_radius, mul_length);
 
         rounding_resolution_tube = mb_q_fn_even_for_radius(
             r = radius_outer,
@@ -368,10 +408,10 @@ module mb_tube(
 
         rounding_resolution_edge = mb_q_fn_even_for_radius(
             r = max(
-                clamp_inner_start_rounding_radius, 
-                clamp_inner_end_rounding_radius, 
-                clamp_outer_start_rounding_radius, 
-                clamp_outer_end_rounding_radius
+                _mb_tube_rr_max_component(clamp_inner_start_rounding_radius),
+                _mb_tube_rr_max_component(clamp_inner_end_rounding_radius),
+                _mb_tube_rr_max_component(clamp_outer_start_rounding_radius),
+                _mb_tube_rr_max_component(clamp_outer_end_rounding_radius)
             ),
             q = quality_class_edge,
             preset = quality,
@@ -448,18 +488,18 @@ module mb_tube(
 
 mb_tube(
     radius = [50, 60],
-    length = [-160, 80],
+    length = [-80, 80],
     
     rounding_radius = 0, //[4, 12],
     axis = "z",
     offset = undef,
     mul = [8, 8, 3.2],
 
-    clamp_inner_start = [5, 42, 10],
-    clamp_inner_end = [5, 42],
+    clamp_inner_start = [5, 42, 10, [3, 8]],
+    clamp_inner_end = [5, 42, 0, [3, 8]],
     
-    clamp_outer_start = [5, 42, 10, 5],
-    clamp_outer_end = [5, 42, 10, 5],
+    clamp_outer_start = [5, 40, 40, [3, 8]],
+    clamp_outer_end = [5, 40, 40, 0],
     
 
     rounding_resolution_tube = 64,
