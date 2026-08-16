@@ -335,9 +335,6 @@ module mb_tube(
     offset = undef,
     mul = undef,
     
-    rounding_resolution_tube = 64,
-    rounding_resolution_edge = 8,
-
     quality_class_tube = "functional",
     quality_class_edge = "visual",
 
@@ -486,8 +483,7 @@ module mb_tube(
 }   
 
 module mb_rail(
-    radius,
-    length,
+    size, 
     rounding_radius = undef,
 
     clamp_inner_start = undef,
@@ -500,9 +496,6 @@ module mb_rail(
     offset = undef,
     mul = undef,
     
-    rounding_resolution_tube = 64,
-    rounding_resolution_edge = 8,
-
     quality_class_tube = "functional",
     quality_class_edge = "visual",
 
@@ -520,16 +513,50 @@ module mb_rail(
     debug = false
 ) {
     axis = mb_axis_to_int(axis);
+    size =  mb_cube_size_resolve(size);
     offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
     mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
     mul_radius = mul[0];
     mul_length = mul[axis];
 
-    start = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
-    end = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
+    dim = [
+            size[1][0] - size[0][0], 
+            size[1][1] - size[0][1],
+            size[1][2] - size[0][2]
+        ];
 
-    radius_inner = (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius;
-    radius_outer = (is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius) * mul_radius; 
+    tr = [
+        0.5 * (size[0][0] + size[1][0]),
+        0.5 * (size[0][1] + size[1][1]),
+        0.5 * (size[0][2] + size[1][2])
+    ];
+
+    si = [
+        dim[0] * mul[0], 
+        dim[1] * mul[1], 
+        dim[2] * mul[2]
+    ];
+
+    sid = axis == 0 ? 
+            [
+                si[2],
+                si[1],
+                si[0]   
+            ] : 
+            axis == 1 ?
+            [
+                si[0],
+                si[2],
+                si[1]    
+            ] : 
+            
+            si;
+
+    start = -0.5 * sid[1]; 
+    end = 0.5 * sid[1];
+
+    radius_inner = -0.5 * sid[0];
+    radius_outer = 0.5 * sid[0]; 
 
     start_rounding_radius = (is_list(rounding_radius) ? rounding_radius[0] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
     end_rounding_radius = (is_list(rounding_radius) ? rounding_radius[1] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
@@ -537,30 +564,33 @@ module mb_rail(
     if((end - start) > 0 && (radius_outer - radius_inner) > 0){
         rot = mb_axis_rotate(axis);
 
-        clamp_inner_start_thickness = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[0]) ? 0 : clamp_inner_start[0] * mul_radius;
-        clamp_inner_start_height = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[1]) ? 0 : clamp_inner_start[1] * mul_length;
-        clamp_inner_start_offset = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[2]) ? 0 : clamp_inner_start[2] * mul_length;
+        clamp_mul_height = axis == 0 ? mul[1] : axis == 1 ? mul[2] : mul[0];
+        clamp_mul_thickness = axis == 0 ? mul[2] : axis == 1 ? mul[0] : mul[0];
+
+        clamp_inner_start_thickness = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[0]) ? 0 : clamp_inner_start[0] * clamp_mul_thickness;
+        clamp_inner_start_height = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[1]) ? 0 : clamp_inner_start[1] * clamp_mul_height;
+        clamp_inner_start_offset = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[2]) ? 0 : clamp_inner_start[2] * clamp_mul_height;
         clamp_inner_start_rounding_radius = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[3])
             ? 0
             : _mb_tube_scale_rr(clamp_inner_start[3], mul_radius, mul_length);
 
-        clamp_inner_end_thickness = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[0]) ? 0 : clamp_inner_end[0] * mul_radius;
-        clamp_inner_end_height = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[1]) ? 0 : clamp_inner_end[1] * mul_length;
-        clamp_inner_end_offset = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[2]) ? 0 : clamp_inner_end[2] * mul_length;
+        clamp_inner_end_thickness = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[0]) ? 0 : clamp_inner_end[0] * clamp_mul_thickness;
+        clamp_inner_end_height = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[1]) ? 0 : clamp_inner_end[1] * clamp_mul_height;
+        clamp_inner_end_offset = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[2]) ? 0 : clamp_inner_end[2] * clamp_mul_height;
         clamp_inner_end_rounding_radius = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[3])
             ? 0
             : _mb_tube_scale_rr(clamp_inner_end[3], mul_radius, mul_length);
 
-        clamp_outer_start_thickness = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[0]) ? 0 : clamp_outer_start[0] * mul_radius;
-        clamp_outer_start_height = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[1]) ? 0 : clamp_outer_start[1] * mul_length;
-        clamp_outer_start_offset = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[2]) ? 0 : clamp_outer_start[2] * mul_length;
+        clamp_outer_start_thickness = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[0]) ? 0 : clamp_outer_start[0] * clamp_mul_thickness;
+        clamp_outer_start_height = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[1]) ? 0 : clamp_outer_start[1] * clamp_mul_height;
+        clamp_outer_start_offset = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[2]) ? 0 : clamp_outer_start[2] * clamp_mul_height;
         clamp_outer_start_rounding_radius = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[3])
             ? 0
             : _mb_tube_scale_rr(clamp_outer_start[3], mul_radius, mul_length);
 
-        clamp_outer_end_thickness = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[0]) ? 0 : clamp_outer_end[0] * mul_radius;
-        clamp_outer_end_height = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[1]) ? 0 : clamp_outer_end[1] * mul_length;
-        clamp_outer_end_offset = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[2]) ? 0 : clamp_outer_end[2] * mul_length;
+        clamp_outer_end_thickness = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[0]) ? 0 : clamp_outer_end[0] * clamp_mul_thickness;
+        clamp_outer_end_height = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[1]) ? 0 : clamp_outer_end[1] * clamp_mul_height;
+        clamp_outer_end_offset = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[2]) ? 0 : clamp_outer_end[2] * clamp_mul_height;
         clamp_outer_end_rounding_radius = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[3])
             ? 0
             : _mb_tube_scale_rr(clamp_outer_end[3], mul_radius, mul_length);
@@ -594,7 +624,7 @@ module mb_rail(
             preview_max_mult = q_preview_max_mult
         );
 
-        is_cylinder = radius_inner == 0 && 
+        is_cube = radius_inner == 0 && 
             start_rounding_radius == 0 && 
             end_rounding_radius == 0 &&
             (clamp_inner_start_thickness == 0 || clamp_inner_start_height == 0) &&
@@ -602,17 +632,20 @@ module mb_rail(
             (clamp_outer_start_thickness == 0 || clamp_outer_start_height == 0) &&
             (clamp_outer_end_thickness == 0 || clamp_outer_end_height == 0);
 
-        translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
+        translate([
+            (tr[0] + offset[0]) * mul[0],  // + axis == 2 ? 0.5 * (max(clamp_inner_start_thickness, clamp_inner_end_thickness) + max(clamp_outer_start_thickness, clamp_outer_end_thickness)) : 0
+            (tr[1] + offset[1]) * mul[1], 
+            (tr[2] + offset[2]) * mul[2]
+        ])
             rotate(rot){
-                if(is_cylinder || draw_together){
+                if(is_cube || draw_together){
                     color(draw_together || debug ? "green" : color)
-                        translate([0, 0, 0.5 * (start + end)])
-                            cylinder(r = radius_outer, h = (end - start), center = true, $fn = rounding_resolution_tube);
+                        cube(size = sid, center = true);
                 }
 
-                if(!is_cylinder || draw_together){
+                if(!is_cube || draw_together){
                     color(draw_together || debug ? "yellow" : color)
-                        linear_extrude(convexity = 10, height = 100, center = true)
+                        linear_extrude(convexity = 10, height = sid[2], center = true)
                             polygon(points = _mb_tube_profile_points(
                                 radius_inner = radius_inner,
                                 radius_outer = radius_outer,
@@ -657,24 +690,19 @@ module mb_rail(
 */
 
 mb_rail(
-    radius = [-60, 60],
-    length = [-60, 60],
+    size = [4, 2, 3],
     
     rounding_radius = 0, //[4, 12],
-    axis = "z",
+    axis = "x",
     offset = undef,
     mul = [8, 8, 3.2],
 
-    clamp_inner_start = [5, 42, 10, [3, 8]],
-    clamp_inner_end = [5, 42, 0, [3, 8]],
+    clamp_inner_start = [2, 0.5, 0.5, [3, 8]],
+    clamp_inner_end = [2, 0.5, 0, [3, 8]],
     
-    clamp_outer_start = [5, 40, 40, [3, 8]],
-    clamp_outer_end = [5, 40, 40, 0],
+    clamp_outer_start = [1, 1, 0.5, [3, 8]],
+    clamp_outer_end = [1, 1, 0.5, 0],
     
-
-    rounding_resolution_tube = 64,
-    rounding_resolution_edge = 8,
-
-    draw_together = false,
+    draw_together = true,
     debug = true
 );
