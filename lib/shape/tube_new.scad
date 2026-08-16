@@ -690,10 +690,10 @@ module mb_rail(
 */
 
 mb_rail(
-    size = [4, 2, 3],
+    size = [[0, 0, 0], [4, 2, 3]],
     
     rounding_radius = 0, //[4, 12],
-    axis = "x",
+    axis = "z",
     offset = undef,
     mul = [8, 8, 3.2],
 
