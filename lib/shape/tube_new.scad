@@ -21,14 +21,14 @@ function _mb_tube_rr_max_component(rr) =
         max(xy[0], xy[1]);
 
 function _mb_tube_profile_points(
-    start,
-    start_rounding_radius,
-
-    end,
-    end_rounding_radius,
-
     radius_inner,
     radius_outer,
+
+    start,
+    end,
+
+    start_rounding_radius,
+    end_rounding_radius,
 
     clamp_inner_start_thickness,
     clamp_inner_start_height,
@@ -449,12 +449,12 @@ module mb_tube(
                     color(draw_together || debug ? "yellow" : color)
                         rotate_extrude(convexity = 10, $fn = rounding_resolution_tube)
                             polygon(points = _mb_tube_profile_points(
+                                radius_inner = radius_inner,
+                                radius_outer = radius_outer,
+                                
                                 start = start, 
                                 end = end,
                             
-                                radius_outer = radius_outer,
-                                radius_inner = radius_inner,
-
                                 start_rounding_radius = start_rounding_radius,
                                 end_rounding_radius = end_rounding_radius,
 
@@ -614,12 +614,13 @@ module mb_rail(
                     color(draw_together || debug ? "yellow" : color)
                         linear_extrude(convexity = 10, height = 100, center = true)
                             polygon(points = _mb_tube_profile_points(
+                                radius_inner = radius_inner,
+                                radius_outer = radius_outer,
+                                
+
                                 start = start, 
                                 end = end,
                             
-                                radius_outer = radius_outer,
-                                radius_inner = radius_inner,
-
                                 start_rounding_radius = start_rounding_radius,
                                 end_rounding_radius = end_rounding_radius,
 
@@ -656,8 +657,8 @@ module mb_rail(
 */
 
 mb_rail(
-    radius = [-50, 60],
-    length = [-80, 80],
+    radius = [-60, 60],
+    length = [-60, 60],
     
     rounding_radius = 0, //[4, 12],
     axis = "z",
