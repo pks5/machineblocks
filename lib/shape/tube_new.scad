@@ -53,12 +53,14 @@ function _mb_tube_profile_points(
     rounding_resolution_edge
 ) =
     let(
-        radius_inner = max(0, radius_inner),
+        // radius_inner may be negative (e.g. mb_rail / linear_extrude).
+        // mb_tube clamps to >= 0 before calling (rotate_extrude requires x >= 0).
         radius_outer = max(radius_inner, radius_outer),
         ring_thickness = radius_outer - radius_inner,
-        max_rr = radius_inner > 0 ? 0.5 * ring_thickness : radius_outer,
+        max_rr = radius_inner == 0 ? radius_outer : 0.5 * ring_thickness,
         end = max(start, end),
         length = end - start,
+        has_inner = radius_inner != 0,
 
         // Clamp Outer Start
         cbos_offset = min(length, max(0, clamp_outer_start_offset)),
@@ -95,8 +97,10 @@ function _mb_tube_profile_points(
         cbis_height = min(length - cbis_offset, max(0, clamp_inner_start_height)),
         cbis_thickness = clamp_inner_start_thickness < 0
             ? sign(clamp_inner_start_thickness) * min(ring_thickness, abs(clamp_inner_start_thickness))
-            : min(radius_inner, clamp_inner_start_thickness),
-        cbis = radius_inner > 0 && cbis_height > 0 && cbis_thickness != 0,
+            : radius_inner > 0
+                ? min(radius_inner, clamp_inner_start_thickness)
+                : clamp_inner_start_thickness,
+        cbis = has_inner && cbis_height > 0 && cbis_thickness != 0,
         cbis_rr_raw = _mb_tube_rr_xy(clamp_inner_start_rounding_radius),
         cbis_rx = min(cbis_rr_raw[0], abs(cbis_thickness)),
         cbis_ry = min(cbis_rr_raw[1], cbis_height),
@@ -112,8 +116,10 @@ function _mb_tube_profile_points(
         cbie_height = min(length - cbis_offset - cbis_height - cbie_offset, max(0, clamp_inner_end_height)),
         cbie_thickness = clamp_inner_end_thickness < 0
             ? sign(clamp_inner_end_thickness) * min(ring_thickness, abs(clamp_inner_end_thickness))
-            : min(radius_inner, clamp_inner_end_thickness),
-        cbie = radius_inner > 0 && cbie_height > 0 && cbie_thickness != 0,
+            : radius_inner > 0
+                ? min(radius_inner, clamp_inner_end_thickness)
+                : clamp_inner_end_thickness,
+        cbie = has_inner && cbie_height > 0 && cbie_thickness != 0,
         cbie_rr_raw = _mb_tube_rr_xy(clamp_inner_end_rounding_radius),
         cbie_rx = min(cbie_rr_raw[0], abs(cbie_thickness)),
         cbie_ry = min(cbie_rr_raw[1], cbie_height),
@@ -143,7 +149,7 @@ function _mb_tube_profile_points(
     concat(
         // Start Inner
         cbis && cbis_offset == 0 ? [] : concat(
-            si_rr > 0 && radius_inner > 0 ? concat(
+            si_rr > 0 && has_inner ? concat(
                 [
                     [radius_inner, si_y_rounding]
                 ],
@@ -158,7 +164,7 @@ function _mb_tube_profile_points(
                 )
             ) : [],
             [
-                [si_rr > 0 && radius_inner > 0 ? si_x_rounding : radius_inner, start]
+                [si_rr > 0 && has_inner ? si_x_rounding : radius_inner, start]
             ]
         ),
 
@@ -250,7 +256,7 @@ function _mb_tube_profile_points(
 
         // End Inner
         cbie && cbie_offset == 0 ? [] : concat(
-            ei_rr > 0 && radius_inner > 0 ? concat(
+            ei_rr > 0 && has_inner ? concat(
                 [
                     [ei_x_rounding, end]
                 ],
@@ -265,7 +271,7 @@ function _mb_tube_profile_points(
                 )
             ) : [],
             [
-                [radius_inner, ei_rr > 0 && radius_inner > 0 ? ei_y_rounding : end]
+                [radius_inner, ei_rr > 0 && has_inner ? ei_y_rounding : end]
             ]
         ),
 
@@ -357,7 +363,7 @@ module mb_tube(
     start = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
     end = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
 
-    radius_inner = (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius;
+    radius_inner = max(0, (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius);
     radius_outer = (is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius) * mul_radius; 
 
     start_rounding_radius = (is_list(rounding_radius) ? rounding_radius[0] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
