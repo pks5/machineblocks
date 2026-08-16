@@ -479,15 +479,178 @@ module mb_tube(
     }
 }   
 
+module mb_rail(
+    radius,
+    length,
+    rounding_radius = undef,
 
+    clamp_inner_start = undef,
+    clamp_inner_end = undef,
+    
+    clamp_outer_start = undef,
+    clamp_outer_end = undef,
+
+    axis = "z",
+    offset = undef,
+    mul = undef,
+    
+    rounding_resolution_tube = 64,
+    rounding_resolution_edge = 8,
+
+    quality_class_tube = "functional",
+    quality_class_edge = "visual",
+
+    quality = "normal",
+
+    q_profile = undef,
+    q_class_factors = undef,
+    q_class_min_segments = undef,
+    q_segment_multiplier = undef,
+    q_preview_quality = undef,
+    q_preview_max_mult = undef,
+
+    color = "white",
+    draw_together = false,
+    debug = false
+) {
+    axis = mb_axis_to_int(axis);
+    offset = mb_resolve_xyz(offset, default = [0, 0, 0]);
+    mul = mb_resolve_xyz(mul, default = [1, 1, 1]);
+    mul_radius = mul[0];
+    mul_length = mul[axis];
+
+    start = (is_list(length) ? length[0] : is_num(length) ? -0.5 * length : 0) * mul_length; 
+    end = (is_list(length) ? length[1] : is_num(length) ? 0.5 * length : 0) * mul_length;
+
+    radius_inner = (is_list(radius) && len(radius) > 1 ? radius[0] : 0) * mul_radius;
+    radius_outer = (is_list(radius) && len(radius) > 0 ? (len(radius) > 1 ? radius[1] : radius[0]) : radius) * mul_radius; 
+
+    start_rounding_radius = (is_list(rounding_radius) ? rounding_radius[0] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
+    end_rounding_radius = (is_list(rounding_radius) ? rounding_radius[1] : is_num(rounding_radius) ? rounding_radius : 0) * mul_radius;
+    
+    if((end - start) > 0 && (radius_outer - radius_inner) > 0){
+        rot = mb_axis_rotate(axis);
+
+        clamp_inner_start_thickness = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[0]) ? 0 : clamp_inner_start[0] * mul_radius;
+        clamp_inner_start_height = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[1]) ? 0 : clamp_inner_start[1] * mul_length;
+        clamp_inner_start_offset = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[2]) ? 0 : clamp_inner_start[2] * mul_length;
+        clamp_inner_start_rounding_radius = !is_list(clamp_inner_start) || is_undef(clamp_inner_start[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_inner_start[3], mul_radius, mul_length);
+
+        clamp_inner_end_thickness = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[0]) ? 0 : clamp_inner_end[0] * mul_radius;
+        clamp_inner_end_height = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[1]) ? 0 : clamp_inner_end[1] * mul_length;
+        clamp_inner_end_offset = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[2]) ? 0 : clamp_inner_end[2] * mul_length;
+        clamp_inner_end_rounding_radius = !is_list(clamp_inner_end) || is_undef(clamp_inner_end[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_inner_end[3], mul_radius, mul_length);
+
+        clamp_outer_start_thickness = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[0]) ? 0 : clamp_outer_start[0] * mul_radius;
+        clamp_outer_start_height = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[1]) ? 0 : clamp_outer_start[1] * mul_length;
+        clamp_outer_start_offset = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[2]) ? 0 : clamp_outer_start[2] * mul_length;
+        clamp_outer_start_rounding_radius = !is_list(clamp_outer_start) || is_undef(clamp_outer_start[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_outer_start[3], mul_radius, mul_length);
+
+        clamp_outer_end_thickness = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[0]) ? 0 : clamp_outer_end[0] * mul_radius;
+        clamp_outer_end_height = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[1]) ? 0 : clamp_outer_end[1] * mul_length;
+        clamp_outer_end_offset = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[2]) ? 0 : clamp_outer_end[2] * mul_length;
+        clamp_outer_end_rounding_radius = !is_list(clamp_outer_end) || is_undef(clamp_outer_end[3])
+            ? 0
+            : _mb_tube_scale_rr(clamp_outer_end[3], mul_radius, mul_length);
+
+        rounding_resolution_tube = mb_q_fn_even_for_radius(
+            r = radius_outer,
+            q = quality_class_tube,
+            preset = quality,
+            profile = q_profile,
+            class_factors = q_class_factors,
+            class_min_segments = q_class_min_segments,
+            segment_multiplier = q_segment_multiplier,
+            preview_quality = q_preview_quality,
+            preview_max_mult = q_preview_max_mult
+        );
+
+        rounding_resolution_edge = mb_q_fn_even_for_radius(
+            r = max(
+                _mb_tube_rr_max_component(clamp_inner_start_rounding_radius),
+                _mb_tube_rr_max_component(clamp_inner_end_rounding_radius),
+                _mb_tube_rr_max_component(clamp_outer_start_rounding_radius),
+                _mb_tube_rr_max_component(clamp_outer_end_rounding_radius)
+            ),
+            q = quality_class_edge,
+            preset = quality,
+            profile = q_profile,
+            class_factors = q_class_factors,
+            class_min_segments = q_class_min_segments,
+            segment_multiplier = q_segment_multiplier,
+            preview_quality = q_preview_quality,
+            preview_max_mult = q_preview_max_mult
+        );
+
+        is_cylinder = radius_inner == 0 && 
+            start_rounding_radius == 0 && 
+            end_rounding_radius == 0 &&
+            (clamp_inner_start_thickness == 0 || clamp_inner_start_height == 0) &&
+            (clamp_inner_end_thickness == 0 || clamp_inner_end_height == 0) &&
+            (clamp_outer_start_thickness == 0 || clamp_outer_start_height == 0) &&
+            (clamp_outer_end_thickness == 0 || clamp_outer_end_height == 0);
+
+        translate([offset[0] * mul[0], offset[1] * mul[1], offset[2] * mul[2]])
+            rotate(rot){
+                if(is_cylinder || draw_together){
+                    color(draw_together || debug ? "green" : color)
+                        translate([0, 0, 0.5 * (start + end)])
+                            cylinder(r = radius_outer, h = (end - start), center = true, $fn = rounding_resolution_tube);
+                }
+
+                if(!is_cylinder || draw_together){
+                    color(draw_together || debug ? "yellow" : color)
+                        linear_extrude(convexity = 10, height = 100, center = true)
+                            polygon(points = _mb_tube_profile_points(
+                                start = start, 
+                                end = end,
+                            
+                                radius_outer = radius_outer,
+                                radius_inner = radius_inner,
+
+                                start_rounding_radius = start_rounding_radius,
+                                end_rounding_radius = end_rounding_radius,
+
+                                clamp_inner_start_thickness = clamp_inner_start_thickness,
+                                clamp_inner_start_height = clamp_inner_start_height,
+                                clamp_inner_start_offset = clamp_inner_start_offset,
+                                clamp_inner_start_rounding_radius = clamp_inner_start_rounding_radius,
+                                
+                                clamp_inner_end_thickness = clamp_inner_end_thickness,
+                                clamp_inner_end_height = clamp_inner_end_height,
+                                clamp_inner_end_offset = clamp_inner_end_offset,
+                                clamp_inner_end_rounding_radius = clamp_inner_end_rounding_radius,
+
+                                clamp_outer_start_thickness = clamp_outer_start_thickness,
+                                clamp_outer_start_height = clamp_outer_start_height,
+                                clamp_outer_start_offset = clamp_outer_start_offset,
+                                clamp_outer_start_rounding_radius = clamp_outer_start_rounding_radius,
+                                
+                                clamp_outer_end_thickness = clamp_outer_end_thickness,
+                                clamp_outer_end_height = clamp_outer_end_height,
+                                clamp_outer_end_offset = clamp_outer_end_offset,
+                                clamp_outer_end_rounding_radius = clamp_outer_end_rounding_radius,
+
+                                rounding_resolution_edge = rounding_resolution_edge
+                            ));
+                }
+            }
+    }
+}   
 /*
 * --------------
 * START EXAMPLES
 * --------------
 */
 
-mb_tube(
-    radius = [50, 60],
+mb_rail(
+    radius = [-50, 60],
     length = [-80, 80],
     
     rounding_radius = 0, //[4, 12],
