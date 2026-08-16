@@ -5,7 +5,7 @@ use <poly_expand.scad>;
 use <quality.scad>;
 
 use <../shape/prismoid.scad>;
-use <../shape/tube_new.scad>;
+use <../shape/tube_rail.scad>;
 use <../shape/cube.scad>;
 use <../shape/wedge.scad>;
 use <../shape/svg3d.scad>;
