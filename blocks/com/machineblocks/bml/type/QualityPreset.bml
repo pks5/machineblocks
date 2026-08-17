@@ -1,0 +1,35 @@
+<!--
+  MachineBlocks — QualityPreset enum
+
+  FQN: com.machineblocks.bml.type.QualityPreset
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>QualityPreset</name>
+  <type>mbt:QualityPreset</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>A render or mesh quality preset</is>
+
+  <documentation>Enum ValueType for quality presets — preview / normal / print / render.
+    Extends MBEnum(Text). BOM property values store only the member id (Preview / Normal /
+    Print / Render) plus this EnumType; scad:value holds the SCAD serialization literal.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <QualityPreset bml:id="Preview" scad:value="preview" />
+        <QualityPreset bml:id="Normal" scad:value="normal" />
+        <QualityPreset bml:id="Print" scad:value="print" />
+        <QualityPreset bml:id="Render" scad:value="render" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

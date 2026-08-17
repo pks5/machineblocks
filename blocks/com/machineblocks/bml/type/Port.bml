@@ -1,0 +1,142 @@
+<!--
+  MachineBlocks — Port struct type
+
+  FQN: com.machineblocks.bml.type.Port
+  Sub-Blocks: PortShape · PortShapeSettings · PortCircleShapeSettings · PortRectShapeSettings
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>Port</name>
+  <type>mbt:Port</type>
+  <baseType>StructType</baseType>
+  <is>A face cutout port with shapes</is>
+
+  <documentation>Struct ValueType for a face cutout port { face, align, offset, rotation, shapes,
+    depth }. Maps 1:1 to the SCAD ports tuple [face, anchor, offset, rotation, shapes, depth].
+    offset and depth are unitless — the face determines which grid/physical scale applies.
+    Used by NativeBlock.ports as Boolean.False | Port[].</documentation>
+
+  <properties>
+    <face type="mbt:Face">
+      <documentation>Directed face where the port is cut (x- / x+ / y- / y+ / z- / z+).</documentation>
+    </face>
+    <align type="mbt:Align | mbt:AxisAB(mbt:Align)">
+      <documentation>Anchor alignment on the face — scalar Align, or AxisAB(Align) for the
+        two in-plane axes (SCAD string vs [alignA, alignB]). Uses AxisAB (not AxisXYZ):
+        the plane is face-local (XY / XZ / YZ from Face), whereas NativeBlock.align expands
+        in brick world space via AxisXYZ(Align). See Align type docs.</documentation>
+    </align>
+    <offset type="mbt:OffsetAB">
+      <documentation>2D offset from the align anchor on the face. Unitless — scale depends on
+        the selected face.</documentation>
+    </offset>
+    <rotation type="Decimal(unit:Degree)">
+      <documentation>Rotation of the whole port in degrees.</documentation>
+    </rotation>
+    <shapes type="PortShape[]">
+      <documentation>One or more shapes cut into the face for this port.</documentation>
+    </shapes>
+    <depth type="mbt:Auto | Decimal">
+      <documentation>Cut depth — Auto for default resolution, or an explicit unitless Decimal.</documentation>
+    </depth>
+  </properties>
+
+  <subBlocks>
+    <block>
+      <name>PortShape</name>
+      <baseType>StructType</baseType>
+      <is>A single shape within a port</is>
+
+      <documentation>Struct ValueType for one port shape { type, offset, rotation, setting }.
+        Maps 1:1 to the SCAD shape tuple [type, offset, rotation, typeData].
+        FQN: com.machineblocks.bml.type.Port.PortShape.</documentation>
+
+      <properties>
+        <type type="mbt:PortShapeType">
+          <documentation>Shape kind — Rect or Circle (SCAD "rect" / "circle").</documentation>
+        </type>
+        <offset type="mbt:OffsetAB(Decimal(unit:Millimeter))">
+          <documentation>Offset of the shape from the port center, in millimeters.</documentation>
+        </offset>
+        <rotation type="Decimal(unit:Degree)">
+          <documentation>Shape rotation in degrees.</documentation>
+        </rotation>
+        <setting type="PortShapeSettings">
+          <documentation>Type-specific shape data — PortCircleShapeSettings or
+            PortRectShapeSettings (SCAD typeData).</documentation>
+        </setting>
+      </properties>
+    </block>
+
+    <block>
+      <name>PortShapeSettings</name>
+      <baseType>StructType</baseType>
+      <abstract>true</abstract>
+      <is>Abstract port shape type-data</is>
+
+      <documentation>Abstract StructType base for port shape typeData. Extended by
+        PortCircleShapeSettings and PortRectShapeSettings.
+        FQN: com.machineblocks.bml.type.Port.PortShapeSettings.</documentation>
+    </block>
+
+    <block>
+      <name>PortCircleShapeSettings</name>
+      <baseType>PortShapeSettings</baseType>
+      <is>Circle port shape type-data</is>
+
+      <documentation>Circle typeData for a port shape — SCAD [diameter].
+        FQN: com.machineblocks.bml.type.Port.PortCircleShapeSettings.</documentation>
+
+      <properties>
+        <diameter type="Decimal(unit:Millimeter)">
+          <documentation>Circle diameter in millimeters.</documentation>
+        </diameter>
+      </properties>
+    </block>
+
+    <block>
+      <name>PortRectShapeSettings</name>
+      <baseType>PortShapeSettings</baseType>
+      <is>Rectangle port shape type-data</is>
+
+      <documentation>Rectangle typeData for a port shape — SCAD [[width, height], roundingRadius].
+        FQN: com.machineblocks.bml.type.Port.PortRectShapeSettings.</documentation>
+
+      <properties>
+        <size type="mbt:SizeAB(Decimal(unit:Millimeter))">
+          <documentation>Rectangle width / height in millimeters (a / b).</documentation>
+        </size>
+        <radius type="Decimal(unit:Millimeter) | mbt:RadiusAB(Decimal(unit:Millimeter))">
+          <documentation>Corner rounding — uniform Decimal(Millimeter), or per-component
+            RadiusAB(Decimal(Millimeter)).</documentation>
+        </radius>
+      </properties>
+    </block>
+  </subBlocks>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — face, align, offset, rotation, shapes, depth.
+    </see>
+    <see type="mbt:PortShapeType" relation="SeeAlso">
+      Shape kind discriminator on PortShape.type.
+    </see>
+    <see type="mbt:OffsetAB" relation="SeeAlso">
+      Port and shape offsets.
+    </see>
+    <see type="mbt:SizeAB" relation="SeeAlso">
+      Rect size on PortRectShapeSettings.
+    </see>
+    <see type="mbt:RadiusAB" relation="SeeAlso">
+      Optional per-axis rect corner radius.
+    </see>
+  </references>
+
+</block>

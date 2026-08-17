@@ -1,0 +1,80 @@
+<!--
+  MachineBlocks Bricks Library Descriptor
+
+  Name: Library
+  Filename: Library.bml
+  FQN: com.machineblocks.bml.bricks.Library
+
+  MachineBlocks brick sub-library — exports brick block definitions.
+  Nested under com.machineblocks.bml.Library via subLibraries.
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:mb="com.machineblocks.bml"
+  xmlns:bricks="com.machineblocks.bml.bricks">
+
+  <name>Library</name>
+  <type>bricks:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>A MachineBlocks brick catalog</is>
+
+  <documentation>MachineBlocks standard brick library — Standard, Plate, Tile blocks and their
+    preset blocks. Sub-library of com.machineblocks.bml.Library; depends on the root library for
+    shared types and units.</documentation>
+
+  <references>
+    <see type="mb:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
+    </see>
+  </references>
+
+  <version>3.0.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>Standard brick types for MachineBlocks</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <mb:README />
+      </composition>
+    </readMe>
+
+    <dependencies>
+      <composition>
+        <mb:Library />
+      </composition>
+    </dependencies>
+
+    <!-- Optional legacy XSD — omit when all types are exported via blocks -->
+    <schemas>
+      <composition>
+        <core:BlockLibrary.Schema ref="bricks.xsd" />
+      </composition>
+    </schemas>
+
+    <blocks>
+      <composition>
+        <bricks:Standard />
+        <bricks:Plate />
+        <bricks:Tile />
+        <bricks:StandardPresets />
+      </composition>
+    </blocks>
+  </aggregations>
+
+</block>

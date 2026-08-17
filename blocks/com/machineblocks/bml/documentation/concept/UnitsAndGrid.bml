@@ -1,0 +1,64 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.UnitsAndGrid
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbunit="com.machineblocks.bml.unit"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>UnitsAndGrid</name>
+  <type>concept:UnitsAndGrid</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks units and the grid</is>
+
+  <documentation>
+    MachineBlocks sizes the world in a unit stack:
+
+    mm → mbu → grid → block geometry
+
+    unitMbuToMm (default 1.6) is the millimetre length of one mbu (MachineBlocks Unit).
+    unitGridToMbu is SizeXYZ (default {x: 5, y: 5, z: 2}): mbu per grid step on each axis for a
+    1×1 plate. At defaults that is 8×8×3.2 mm. A size of [1, 1, 1] is therefore a plate — not a
+    cube. The default XY-to-Z grid ratio is 2.5:1; cube-like blocks need Z ≈ 2.5× the XY grid
+    extent (for example [2, 2, 5] → 16×16×16 mm). X and Y may differ (unitGridToMbu is full XYZ).
+
+    Absolute size along an axis is
+    size[axis] × unitGridToMbu[axis] × unitMbuToMm × scale.
+
+    The bounding box is defined exclusively by size. Other parameters change visible geometry
+    inside that box; they do not redefine the spatial contract.
+
+    Geometry parameters use mbu or grid units. Calibration adjustments (for example baseAdjustment)
+    use absolute millimetres and must not scale with the global scale factor.
+  </documentation>
+
+  <references>
+    <see type="concept:GeometryConcepts" relation="ReadNext">
+      Next — shape modification inside the bounding box.
+    </see>
+    <see type="mbunit:MBU" relation="Defines">
+      MachineBlocks Unit — 1.6 mm.
+    </see>
+    <see type="mbunit:GridUnitXY" relation="Defines">
+      Default XY grid step in mbu.
+    </see>
+    <see type="mbunit:GridUnitZ" relation="Defines">
+      Default Z grid step in mbu.
+    </see>
+    <see type="mbt:SizeXYZ" relation="Defines">
+      Integer grid size — spatial contract of a block; also the shape of unitGridToMbu.
+    </see>
+    <see type="mbcore:NativeBlock" relation="SeeAlso">
+      Native parameters including size, unitGridToMbu, unitMbuToMm, scale — SSOT.
+    </see>
+  </references>
+
+</block>

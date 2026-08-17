@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Base Clamp member group
+
+  FQN: com.machineblocks.bml.group.BaseClamp
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>BaseClamp</name>
+  <type>mbgroup:BaseClamp</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Base Clamp parameter group</is>
+
+  <documentation>MachineBlocks member group for Base Clamp parameters on NativeBlock
+    (YAML group id: base_clamp).</documentation>
+
+</block>

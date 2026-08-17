@@ -1,0 +1,57 @@
+<!--
+  MachineBlocks — MBML documentation
+
+  FQN: com.machineblocks.bml.documentation.mbml.MbmlOverview
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml">
+
+  <name>MbmlOverview</name>
+  <type>mbml:MbmlOverview</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MBML authoring in MachineBlocks</is>
+
+  <documentation>
+    MBML (MachineBlocks Markup Language) is the declarative authoring format for MachineBlocks.
+    It is BML specialized for the MachineBlocks domain: blocks, sets, presets, and composition
+    described as typed XML without OpenSCAD knowledge. XML is the sole BML serialization for
+    V1 and V2.
+
+    The BOM Compiler parses BML into an immutable Urmodell (Canonical BOM). MBOM is the
+    MachineBlocks domain specialization of that model — types, NativeBlock parameters, and
+    domain block kinds — not a separate compiler product. Render targets interpret the BOM/MBOM
+    graph (Urmodell, pragmatic fork, or their own forks); they do not redefine the domain model.
+
+    Authoring flow: write .bml sources → parse to Urmodell → validate (Stage 2) → render with a
+    registered target (reference: machineblocks-v3-scad). Direct .scad Block Files bypass
+    MBML/MBOM and remain an advanced path; prefer MBML for new domain content.
+  </documentation>
+
+  <references>
+    <see type="mbml:DomainModel" relation="ReadNext">
+      Next — Block, NativeBlock, CompositeBlock, Set, Step.
+    </see>
+    <see type="concept:Architecture" relation="SeeAlso">
+      Layered architecture this authoring path sits in.
+    </see>
+    <see file="docs/00_system.md" relation="DeepDive">
+      BOM Compiler pipeline — parse to Urmodell, validate, render.
+    </see>
+    <see file="docs/01_bom_core.md" relation="DeepDive">
+      Urmodell vs pragmatic model; Validation Stages.
+    </see>
+    <see file="docs/02_mbml.md" relation="AuthoringGuide">
+      BlockML / BML format rules used by MBML.
+    </see>
+    <see file="docs/03_mbom.md" relation="DeepDive">
+      MBOM domain specialization.
+    </see>
+  </references>
+
+</block>

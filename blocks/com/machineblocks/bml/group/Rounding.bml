@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Rounding member group
+
+  FQN: com.machineblocks.bml.group.Rounding
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Rounding</name>
+  <type>mbgroup:Rounding</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Rounding parameter group</is>
+
+  <documentation>MachineBlocks member group for Rounding parameters on NativeBlock
+    (YAML group id: rounding).</documentation>
+
+</block>

@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Recess member group
+
+  FQN: com.machineblocks.bml.group.Recess
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Recess</name>
+  <type>mbgroup:Recess</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Recess parameter group</is>
+
+  <documentation>MachineBlocks member group for Recess parameters on NativeBlock
+    (YAML group id: recess).</documentation>
+
+</block>

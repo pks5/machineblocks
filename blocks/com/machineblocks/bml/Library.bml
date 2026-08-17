@@ -1,0 +1,196 @@
+<!--
+  MachineBlocks Root Library Descriptor
+
+  Name: Library
+  Filename: Library.bml
+  FQN: com.machineblocks.bml.Library
+
+  MachineBlocks root library — exports domain types and units; nests brick sub-libraries.
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:blockml="org.blockml.bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:mb="com.machineblocks.bml"
+  xmlns:mbann="com.machineblocks.bml.annotation"
+  xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit"
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Library</name>
+  <type>mb:Library</type>
+  <baseType>core:BlockLibrary</baseType>
+  <is>A MachineBlocks root library catalog</is>
+
+  <documentation>
+    Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
+    ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), ScadAnnotation, and curated
+    documentation blocks under com.machineblocks.bml.documentation.{concept,mbml,scad}. Brick
+    catalogs are nested via subLibraries — consumers that need bricks depend on
+    com.machineblocks.bml.bricks.Library directly. Membership is defined exclusively by this file's
+    blocks list — not by directory layout.
+  </documentation>
+
+  <references>
+    <see type="mb:README" relation="ReadFirst">
+      Human/LLM reading entry for this library.
+    </see>
+  </references>
+
+  <version>3.0.0</version>
+
+  <language>
+    <English />
+  </language>
+
+  <properties>
+    <description>
+      <value>MachineBlocks root library</value>
+    </description>
+  </properties>
+
+  <aggregations>
+    <readMe>
+      <composition>
+        <mb:README />
+      </composition>
+    </readMe>
+
+    <dependencies>
+      <composition>
+        <blockml:Library />
+      </composition>
+    </dependencies>
+
+    <subLibraries>
+      <composition>
+        <bricks:Library />
+      </composition>
+    </subLibraries>
+
+    <blocks>
+      <composition>
+        <concept:Introduction />
+        <concept:Architecture />
+        <concept:UnitsAndGrid />
+        <concept:GeometryConcepts />
+        <concept:TransformationConcepts />
+        <concept:StructureSystems />
+        <concept:CompositionConcepts />
+        <concept:DecisionFramework />
+        <concept:StatusConvention />
+        <mbml:MbmlOverview />
+        <mbml:DomainModel />
+        <mbml:TypeSystem />
+        <mbml:AuthoringPatterns />
+        <scad:ScadRenderTarget />
+        <scad:MbBlockApi />
+        <scad:BlockFileStructure />
+        <scad:ModulePatterns />
+        <scad:TypesAndSerialization />
+        <scad:ScadDecisionRules />
+        <scad:LegacyConversion />
+        <mbann:ScadAnnotation />
+        <mbgroup:AiUsage />
+        <mbgroup:FrequentAiUsage />
+        <mbgroup:RareAiUsage />
+        <mbgroup:ConfigOnlyAiUsage />
+        <mbgroup:NeverAiUsage />
+        <mbgroup:Category />
+        <mbgroup:System />
+        <mbgroup:CoreGeometry />
+        <mbgroup:Positioning />
+        <mbgroup:Body />
+        <mbgroup:TopPlate />
+        <mbgroup:Underside />
+        <mbgroup:BaseClamp />
+        <mbgroup:Rounding />
+        <mbgroup:ReliefCut />
+        <mbgroup:Calibration />
+        <mbgroup:PrintHelpers />
+        <mbgroup:Pillars />
+        <mbgroup:Pins />
+        <mbgroup:Tubes />
+        <mbgroup:TechnicHolesX />
+        <mbgroup:TechnicHoles />
+        <mbgroup:TechnicHolesY />
+        <mbgroup:TechnicHolesZ />
+        <mbgroup:Studs />
+        <mbgroup:StudIcon />
+        <mbgroup:TongueGroove />
+        <mbgroup:Grille />
+        <mbgroup:Recess />
+        <mbgroup:Text />
+        <mbgroup:SurfacePattern />
+        <mbgroup:Svg />
+        <mbgroup:Connectors />
+        <mbgroup:ScrewHoles />
+        <mbgroup:Pcb />
+        <mbgroup:Quality />
+        <mbt:Align />
+        <mbt:Auto />
+        <mbt:Axis />
+        <mbt:AxisAB />
+        <mbt:AxisXY />
+        <mbt:AxisXYZ />
+        <mbt:BaseCutout />
+        <mbt:BaseRoundingMap />
+        <mbt:Bevel />
+        <mbt:Connector />
+        <mbt:CornerMap />
+        <mbt:Direction />
+        <mbt:Face />
+        <mbt:FaceAxisXY />
+        <mbt:FaceMapXY />
+        <mbt:FaceMapXYZ />
+        <mbt:Gender />
+        <mbt:Grille />
+        <mbt:HoleEdgeMap />
+        <mbt:HoleEdgeMode />
+        <mbt:HoleEdgePair />
+        <mbt:HoleType />
+        <mbt:Inherit />
+        <mbt:MBEnum />
+        <mbt:MultiAxis />
+        <mbt:None />
+        <mbt:OffsetAB />
+        <mbt:OffsetXY />
+        <mbt:OffsetXYZ />
+        <mbt:PcbMountingType />
+        <mbt:PcbSocket />
+        <mbt:PillarGapAutoConfig />
+        <mbt:PlaneRoundingMap />
+        <mbt:Port />
+        <mbt:PortShapeType />
+        <mbt:QualityPreset />
+        <mbt:RadiusAB />
+        <mbt:RecessWallGap />
+        <mbt:RotationXY />
+        <mbt:RotationXYZ />
+        <mbt:ScadQualityClassFactors />
+        <mbt:ScadQualityClassMinSegments />
+        <mbt:ScadQualityProfile />
+        <mbt:ScrewHole />
+        <mbt:SelectiveGrid />
+        <mbt:SizeAB />
+        <mbt:SizeXY />
+        <mbt:SizeXYZ />
+        <mbt:StudType />
+        <mbt:WallGap />
+        <mbunit:GridUnitXY />
+        <mbunit:GridUnitZ />
+        <mbunit:MBU />
+      </composition>
+    </blocks>
+  </aggregations>
+
+</block>

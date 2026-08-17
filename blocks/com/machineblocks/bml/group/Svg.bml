@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — SVG member group
+
+  FQN: com.machineblocks.bml.group.Svg
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Svg</name>
+  <type>mbgroup:Svg</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A SVG parameter group</is>
+
+  <documentation>MachineBlocks member group for SVG parameters on NativeBlock
+    (YAML group id: svg).</documentation>
+
+</block>

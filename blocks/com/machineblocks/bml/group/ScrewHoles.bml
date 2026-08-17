@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Screw Holes member group
+
+  FQN: com.machineblocks.bml.group.ScrewHoles
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>ScrewHoles</name>
+  <type>mbgroup:ScrewHoles</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Screw Holes parameter group</is>
+
+  <documentation>MachineBlocks member group for Screw Holes parameters on NativeBlock
+    (YAML group id: screw_holes).</documentation>
+
+</block>

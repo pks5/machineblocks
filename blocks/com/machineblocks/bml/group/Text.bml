@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Text member group
+
+  FQN: com.machineblocks.bml.group.Text
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Text</name>
+  <type>mbgroup:Text</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Text parameter group</is>
+
+  <documentation>MachineBlocks member group for Text parameters on NativeBlock
+    (YAML group id: text).</documentation>
+
+</block>

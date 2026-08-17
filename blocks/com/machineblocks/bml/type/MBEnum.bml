@@ -1,0 +1,58 @@
+<!--
+  MachineBlocks — abstract enum base with SCAD catalog property
+
+  FQN: com.machineblocks.bml.type.MBEnum
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>MBEnum</name>
+  <type>mbt:MBEnum</type>
+  <baseType>type:EnumType</baseType>
+  <is>A MachineBlocks enum with a SCAD serialization literal</is>
+
+  <documentation>Abstract base for MachineBlocks EnumTypes. Extends org.blockml.bml.type.EnumType
+    and declares catalog property scad:value : T — the SCAD serialization literal for each enum
+    member (annotation member QName under ScadAnnotation.Property, name="*"). This is a top-level
+    namespaced member on the enum type — not a PropertyDefinition value facet
+    (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt; uses Annotation.Value).
+    Concrete enums bind T (typically Text) and set scad:value on values composition members. BOM
+    property values still store only member id + EnumType; scad:value is catalog metadata looked
+    up at render time.</documentation>
+
+  <abstract>true</abstract>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <scad:value abstract="true" type="T">
+      <documentation>SCAD serialization literal for this enum member — catalog property member
+        (ScadAnnotation.Property). Abstract on MBEnum — concrete enums bind T and set scad:value
+        on each values composition entry. Not part of the BOM property value (id + typeFqn only).
+        Distinct from nested PropertyDefinition value facets
+        (&lt;myProp&gt;&lt;scad:value&gt;…&lt;/scad:value&gt;&lt;/myProp&gt; → Annotation.Value).</documentation>
+    </scad:value>
+  </properties>
+
+  <references>
+    <see type="type:EnumType" relation="Extends">
+      Framework EnumType branch — closed member set via values aggregation.
+    </see>
+    <see type="mbt:Align" relation="SeeAlso">
+      Concrete MBEnum(Text) — alignment literals.
+    </see>
+    <see type="mbt:BaseCutout" relation="SeeAlso">
+      Concrete MBEnum(Text) — base cutout literals.
+    </see>
+  </references>
+
+</block>

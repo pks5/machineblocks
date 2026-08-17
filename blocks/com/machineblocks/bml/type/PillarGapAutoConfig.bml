@@ -1,0 +1,39 @@
+<!--
+  MachineBlocks — PillarGapAutoConfig struct type
+
+  FQN: com.machineblocks.bml.type.PillarGapAutoConfig
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>PillarGapAutoConfig</name>
+  <type>mbt:PillarGapAutoConfig</type>
+  <baseType>StructType</baseType>
+  <is>Auto pillar-gap layout parameters</is>
+
+  <documentation>Struct ValueType for pillars="auto" layout: corner triangle leg length and
+    middle cross width (grid units). Used by NativeBlock.pillarGapAutoConfig — replaces the
+    V2 pair pillarGapCornerLength / pillarGapMiddle.</documentation>
+
+  <properties>
+    <cornerLength type="Integer">
+      <documentation>Length of the two legs of the pillar triangle at each corner (grid units).</documentation>
+    </cornerLength>
+    <middleWidth type="Integer">
+      <documentation>Width of the pillar cross in the middle of the plate (grid units);
+        each arm extends middleWidth / 2 from the center.</documentation>
+    </middleWidth>
+  </properties>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — named layout fields.
+    </see>
+  </references>
+
+</block>

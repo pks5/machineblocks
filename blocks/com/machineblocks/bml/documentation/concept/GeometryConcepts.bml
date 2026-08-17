@@ -1,0 +1,60 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.GeometryConcepts
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>GeometryConcepts</name>
+  <type>concept:GeometryConcepts</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks shape modification concepts</is>
+
+  <documentation>
+    Core geometry parameters modify the block shape inside the bounding box defined by size:
+
+    size — integer grid extent; the spatial contract of the block.
+    sizeMod — semantic per-side modification that keeps the brick structurally intact.
+    slope — height change per side; positive slopes the top, negative creates inverted bottom
+      slopes. Does not change footprint.
+    bevel — footprint change by shifting top corners in XY; produces wedge shapes. Does not change
+      height. Wedges are not a separate primitive — they emerge from bevel.
+    baseCrop — hard cut or extension per face (FaceMapXYZ); does not preserve grid compatibility,
+      walls, or structural features; does not change bounding box or positioning. Same behaviour as
+      V2 crop, renamed in V3. Prefer sizeMod over baseCrop when the brick should remain
+      structurally intact.
+
+    cutouts — aggregation of NativeBlock instances (NativeBlock[]), not a property and not a SCAD
+    settings-array shape. Each cutout is a full NativeBlock limited to shape-determining parameters
+    (size, offset, bevel, slope, rounding, …). The volume is boolean-subtracted from the body;
+    structural features (walls, recess, tongue) are ignored by the subtraction. SCAD emit form of
+    cutouts is a serialization concern — see scad:TypesAndSerialization.
+
+    Parameter names, types, and defaults are defined on NativeBlock — do not treat external YAML or
+    Markdown tables as authoritative.
+  </documentation>
+
+  <references>
+    <see type="concept:TransformationConcepts" relation="ReadNext">
+      Next — direction, alignment, rotation, and transform order.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      SSOT for size, sizeMod, slope, bevel, baseCrop, cutouts, and related members.
+    </see>
+    <see type="scad:TypesAndSerialization" relation="SeeAlso">
+      SCAD emit form of MBOM values including cutout aggregation.
+    </see>
+    <see type="concept:DecisionFramework" relation="SeeAlso">
+      Intent → pattern → parameters; slope and bevel may share one native call in V3.
+    </see>
+  </references>
+
+</block>

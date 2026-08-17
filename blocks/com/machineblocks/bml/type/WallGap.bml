@@ -1,0 +1,46 @@
+<!--
+  MachineBlocks — WallGap struct type
+
+  FQN: com.machineblocks.bml.type.WallGap
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>WallGap</name>
+  <type>mbt:WallGap</type>
+  <baseType>StructType</baseType>
+  <is>A wall opening on a face or axis</is>
+
+  <documentation>Struct ValueType for a gap in a base or recess wall. face selects an XY face,
+    axis, or both axes (FaceAxisXY); pos is the start along that wall in grid units; len is the
+    opening length in grid units. Used by NativeBlock.baseWallGaps and recessWallGaps as
+    WallGap[].</documentation>
+
+  <properties>
+    <face type="mbt:FaceAxisXY">
+      <documentation>Wall side or axis where the gap applies (x- / x+ / y- / y+ / x / y / xy).</documentation>
+    </face>
+    <pos type="Decimal(mbunit:GridXY)">
+      <documentation>Start position of the gap along the wall (grid units).</documentation>
+    </pos>
+    <len type="Decimal(mbunit:GridXY)">
+      <documentation>Length of the gap along the wall (grid units).</documentation>
+    </len>
+  </properties>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — face, pos, len.
+    </see>
+    <see type="mbt:FaceAxisXY" relation="SeeAlso">
+      face selector — XY faces, axes, and XY.
+    </see>
+  </references>
+
+</block>

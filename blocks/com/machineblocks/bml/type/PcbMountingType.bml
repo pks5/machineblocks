@@ -1,0 +1,34 @@
+<!--
+  MachineBlocks — PcbMountingType enum
+
+  FQN: com.machineblocks.bml.type.PcbMountingType
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>PcbMountingType</name>
+  <type>mbt:PcbMountingType</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>A PCB mounting mode</is>
+
+  <documentation>Enum ValueType for PCB mounting features on MachineBlocks bricks —
+    clips (clip-in frame) / sockets (screw sockets). Extends MBEnum(Text). BOM property
+    values store only the member id (Clips / Sockets) plus this EnumType; scad:value holds
+    the SCAD serialization literal. Used by NativeBlock.pcb as Boolean.False | PcbMountingType.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <PcbMountingType bml:id="Clips" scad:value="clips" />
+        <PcbMountingType bml:id="Sockets" scad:value="sockets" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

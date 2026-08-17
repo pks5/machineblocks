@@ -1,0 +1,55 @@
+<!--
+  MachineBlocks — SelectiveGrid struct type
+
+  FQN: com.machineblocks.bml.type.SelectiveGrid
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>SelectiveGrid</name>
+  <type>mbt:SelectiveGrid</type>
+  <baseType>StructType</baseType>
+  <is>A rectangular plate-grid range override</is>
+
+  <documentation>Struct ValueType for one inclusive axis-aligned range on the plate grid with an
+    override value. Used as SelectiveGrid(T)[] on *Areas properties (e.g. studAreas) alongside a
+    Boolean default property (e.g. studs). Generic T is the cell value type — e.g.
+    SelectiveGrid(Boolean) or SelectiveGrid(Boolean | mbt:HoleType). Later entries win on overlap
+    (authoring order).</documentation>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <start type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
+      <documentation>Inclusive start corner of the selection (x, y) in GridUnitXY.</documentation>
+    </start>
+    <end type="mbt:AxisXY(Integer(mbunit:GridUnitXY))">
+      <documentation>Inclusive end corner of the selection (x, y) in GridUnitXY.</documentation>
+    </end>
+    <value type="T">
+      <documentation>Override value for cells in [start, end].</documentation>
+    </value>
+  </properties>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — start, end, value.
+    </see>
+    <see type="mbt:AxisXY" relation="SeeAlso">
+      start / end range corners.
+    </see>
+    <see type="mbunit:GridUnitXY" relation="SeeAlso">
+      Plate-grid unit on start / end Integer components.
+    </see>
+  </references>
+
+</block>

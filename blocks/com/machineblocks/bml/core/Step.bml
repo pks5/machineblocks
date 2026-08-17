@@ -1,0 +1,45 @@
+<!--
+  MachineBlocks MBOM — Set assembly step
+
+  FQN: com.machineblocks.bml.core.Step
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>Step</name>
+  <type>mbcore:Step</type>
+  <baseType>core:Block</baseType>
+  <is>A single assembly instruction</is>
+
+  <documentation>Framework Block defining one assembly instruction step. Document order in _steps
+    defines build order.</documentation>
+
+  <references>
+    <see type="mbcore:Set">
+      Used as children of Set's _steps aggregation.
+    </see>
+    <see type="mbcore:Block">
+      part association references a placed instance by bml:id in _parts.
+    </see>
+  </references>
+
+  <final>true</final>
+
+  <associations>
+    <part type="InstanceReference(mbcore:Block)"></part>
+  </associations>
+
+  <properties>
+    <description type="Text">
+      <documentation>Additional description of the step.</documentation>
+    </description>
+  </properties>
+
+</block>

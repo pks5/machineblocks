@@ -1,0 +1,68 @@
+<!--
+  MachineBlocks — AxisAB struct type
+
+  FQN: com.machineblocks.bml.type.AxisAB
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>AxisAB</name>
+  <type>mbt:AxisAB</type>
+  <baseType>mbt:MultiAxis(N)</baseType>
+  <is>A value pair along A and B</is>
+
+  <documentation>Struct ValueType for component-keyed { a, b }. Extends MultiAxis(N).
+    AB names an abstract face-local plane that resolves to XY, XZ, or YZ depending on context —
+    not a fixed world-axis pair like AxisXY. World / brick axes use XY / XYZ; face-local
+    in-plane values use AB — see docs/04_types.md (XY / XYZ / AB). Inherits the MultiAxis N
+    parameter for a. B is a separate generic (defaultType N) so the b component may differ from
+    a — e.g. AxisAB(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)) when the plane mixes
+    XY and Z scales. Bare AxisAB / AxisAB(T) binds B to N as dimensionless Decimal; no default
+    grid unit, because no single GridUnitXY / GridUnitZ applies to every AB plane. N and B are
+    any ValueType.</documentation>
+
+  <genericTypes>
+    <N baseType="core:ValueType" defaultType="Decimal"/>
+    <B baseType="core:ValueType" defaultType="N"/>
+  </genericTypes>
+
+  <properties>
+    <a type="N">
+      <documentation>Value of the first component (a) — type N.</documentation>
+    </a>
+    <b type="B">
+      <documentation>Value of the second component (b) — type B (defaults to N).</documentation>
+    </b>
+  </properties>
+
+  <references>
+    <see type="mbt:MultiAxis" relation="Extends">
+      Abstract axis-map base — N.
+    </see>
+    <see type="mbt:AxisXY" relation="SeeAlso">
+      Parallel ValueType-universal pair on X / Y.
+    </see>
+    <see type="mbt:AxisXYZ" relation="SeeAlso">
+      Parallel pattern — Z defaults to N.
+    </see>
+    <see type="mbt:OffsetAB" relation="SeeAlso">
+      Offset semantics on AxisAB — N / B closed to Number.
+    </see>
+    <see type="mbt:RadiusAB" relation="SeeAlso">
+      Radius semantics on AxisAB — N / B closed to Number, default Decimal.
+    </see>
+    <see type="mbt:SizeAB" relation="SeeAlso">
+      Size semantics on AxisAB — N / B closed to Number, default Decimal.
+    </see>
+    <see type="mbt:Align" relation="SeeAlso">
+      Port.align expands as Align | AxisAB(Align); brick align uses AxisXYZ(Align).
+    </see>
+  </references>
+
+</block>

@@ -1,0 +1,74 @@
+<!--
+  MachineBlocks — ScadQualityProfile struct type
+
+  FQN: com.machineblocks.bml.type.ScadQualityProfile
+  Sub-Block: com.machineblocks.bml.type.ScadQualityProfile.Profile
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>ScadQualityProfile</name>
+  <type>mbt:ScadQualityProfile</type>
+  <baseType>StructType</baseType>
+  <is>A quality-preset map of SCAD mesh profiles</is>
+
+  <documentation>Struct ValueType mapping each QualityPreset (preview / normal / print / render)
+    to a Profile of segment length (mm) and maximum segment count. Used by
+    NativeBlock.scadQualityProfile. Smaller length increases mesh quality; segments caps
+    full-circle resolution. Property names match the QualityPreset scad:value literals.</documentation>
+
+  <properties>
+    <preview type="Profile">
+      <documentation>Profile for QualityPreset Preview (scad:value preview).</documentation>
+    </preview>
+    <normal type="Profile">
+      <documentation>Profile for QualityPreset Normal (scad:value normal).</documentation>
+    </normal>
+    <print type="Profile">
+      <documentation>Profile for QualityPreset Print (scad:value print).</documentation>
+    </print>
+    <render type="Profile">
+      <documentation>Profile for QualityPreset Render (scad:value render).</documentation>
+    </render>
+  </properties>
+
+  <subBlocks>
+    <block>
+      <name>Profile</name>
+      <baseType>StructType</baseType>
+      <is>A SCAD mesh quality profile entry</is>
+
+      <documentation>Struct ValueType for one quality level: target segment length in millimeters
+        and maximum segment count. FQN: com.machineblocks.bml.type.ScadQualityProfile.Profile.</documentation>
+
+      <properties>
+        <length type="Decimal(unit:Millimeter)">
+          <documentation>Target segment length in millimeters. Smaller values increase mesh
+            quality.</documentation>
+        </length>
+        <segments type="Integer">
+          <documentation>Maximum segment count for a full circle (caps resolution).</documentation>
+        </segments>
+      </properties>
+    </block>
+  </subBlocks>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — preview, normal, print, render.
+    </see>
+    <see type="mbt:QualityPreset" relation="SeeAlso">
+      Enum whose four members map 1:1 to the profile properties.
+    </see>
+    <see type="unit:Millimeter" relation="SeeAlso">
+      Unit on Profile.length.
+    </see>
+  </references>
+
+</block>

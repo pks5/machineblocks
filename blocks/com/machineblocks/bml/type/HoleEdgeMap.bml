@@ -1,0 +1,36 @@
+<!--
+  MachineBlocks — HoleEdgeMap struct type
+
+  FQN: com.machineblocks.bml.type.HoleEdgeMap
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>HoleEdgeMap</name>
+  <type>mbt:HoleEdgeMap</type>
+  <baseType>mbt:AxisXYZ(mbt:HoleEdgeMode | mbt:HoleEdgePair)</baseType>
+  <is>A per-axis hole-edge mode map</is>
+
+  <documentation>Closed AxisXYZ(HoleEdgeMode | HoleEdgePair) for Technic hole edge modes on
+    X, Y, and Z hole directions. Not re-opened as a generic. Inherits x, y, z; each component is
+    either a scalar HoleEdgeMode or a HoleEdgePair for the two companion edges. SCAD serializes
+    as a 3-element array (1/2/3-value rules apply at the property). Used by
+    NativeBlock.holeXYZEdgeMode.</documentation>
+
+  <references>
+    <see type="mbt:AxisXYZ" relation="Extends">
+      Structural { x, y, z } map — HoleEdgeMap closes N/Z to HoleEdgeMode | HoleEdgePair.
+    </see>
+    <see type="mbt:HoleEdgeMode" relation="SeeAlso">
+      Scalar per-axis mode.
+    </see>
+    <see type="mbt:HoleEdgePair" relation="SeeAlso">
+      Two-edge companion pair nested per axis.
+    </see>
+  </references>
+
+</block>

@@ -1,0 +1,33 @@
+<!--
+  MachineBlocks — PortShapeType enum
+
+  FQN: com.machineblocks.bml.type.PortShapeType
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>PortShapeType</name>
+  <type>mbt:PortShapeType</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>A port cutout shape kind</is>
+
+  <documentation>Enum ValueType for port shape kinds — rect / circle. Extends MBEnum(Text).
+    BOM property values store only the member id (Rect / Circle) plus this EnumType;
+    scad:value holds the SCAD serialization literal. Used by Port.PortShape.type.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <PortShapeType bml:id="Rect" scad:value="rect" />
+        <PortShapeType bml:id="Circle" scad:value="circle" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

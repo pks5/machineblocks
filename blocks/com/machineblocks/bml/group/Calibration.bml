@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Side / Height Adjustment (Calibration) member group
+
+  FQN: com.machineblocks.bml.group.Calibration
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>Calibration</name>
+  <type>mbgroup:Calibration</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Side / Height Adjustment (Calibration) parameter group</is>
+
+  <documentation>MachineBlocks member group for Side / Height Adjustment (Calibration) parameters on NativeBlock
+    (YAML group id: calibration).</documentation>
+
+</block>

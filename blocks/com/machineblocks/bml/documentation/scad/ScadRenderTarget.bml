@@ -1,0 +1,53 @@
+<!--
+  MachineBlocks — SCAD documentation
+
+  FQN: com.machineblocks.bml.documentation.scad.ScadRenderTarget
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>ScadRenderTarget</name>
+  <type>scad:ScadRenderTarget</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to the MachineBlocks OpenSCAD render target</is>
+
+  <documentation>
+    OpenSCAD is the reference MachineBlocks render target. It is not the canonical representation
+    of blocks — MBOM is. The SCAD target serializes MBOM into MachineBlocks V3 .scad files that
+    OpenSCAD renders to STL or 3MF.
+
+    The target registers as machineblocks-v3-scad. V1 handles two base domain kinds:
+    Block (and descendants that lower to block modules) via a block processor, and Set via a set
+    processor (STEPS and view submodules).
+
+    MachineBlocks World convention: leaf NativeBlock ↔ mb_block(); composition becomes a nested
+    mb_block() tree; domain types lower to mb_block() settings. Other BlockML render targets may
+    emit entirely different shapes — this mapping is MachineBlocks-specific.
+
+    For 1:1 Block→file emit, Manifestation packages replace definition segment bml with scad
+    (com.machineblocks.bml.X → com.machineblocks.scad.X for path and mb__ module names). See
+    BlockFileStructure. Other targets may choose a different segment; this is not a platform rule.
+
+    Direct authoring of V3 Block Files (hand-written or AI-generated) remains supported and bypasses
+    MBML/MBOM. As MBML matures, that path becomes advanced/legacy for domain content.
+  </documentation>
+
+  <references>
+    <see type="scad:MbBlockApi" relation="ReadNext">
+      Next — mb_block() signature and parameter model.
+    </see>
+    <see type="concept:Architecture" relation="SeeAlso">
+      Canonical layers — MBOM vs render target.
+    </see>
+    <see file="docs/05_scad_renderer.md" relation="DeepDive">
+      Target registration, processors, naming, source maps.
+    </see>
+  </references>
+
+</block>

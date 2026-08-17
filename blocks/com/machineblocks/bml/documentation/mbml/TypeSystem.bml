@@ -1,0 +1,63 @@
+<!--
+  MachineBlocks — MBML documentation
+
+  FQN: com.machineblocks.bml.documentation.mbml.TypeSystem
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>TypeSystem</name>
+  <type>mbml:TypeSystem</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks domain types</is>
+
+  <documentation>
+    MachineBlocks domain ValueTypes live in com.machineblocks.bml.type.*. They are the SSOT for
+    type shapes used by NativeBlock properties and other domain members. Do not redefine types from
+    Markdown or YAML.
+
+    Categories (illustrative — see package members for the full inventory):
+
+    Atomic enums — Axis, Face, Direction, Align, StudType, HoleType, Gender, and related.
+    Axis containers — AxisXY(T), AxisXYZ(T), AxisAB(T) for per-axis values.
+    Face / side maps — FaceMapXY, FaceMapXYZ, CornerMap, Per-side and hole-edge maps.
+    Size and offset — SizeXYZ, SizeXY, SizeAB, OffsetXYZ, OffsetXY, OffsetAB, RotationXYZ.
+    Domain compounds — Connector, ScrewHole, WallGap / RecessWallGap, Port, Grille, SelectiveGrid,
+      rounding maps, quality profiles, PCB types.
+
+    Naming uses XYZ / XY / AB axis keys — not 3D / 2D labels.
+
+    MBOM values are canonical. Render targets serialize those values (for SCAD mappings see the
+    SCAD TypesAndSerialization documentation). NativeBlock property type attributes reference these
+    types directly.
+  </documentation>
+
+  <references>
+    <see type="mbml:AuthoringPatterns" relation="ReadNext">
+      Next — MBML authoring patterns for simple and composite blocks.
+    </see>
+    <see type="mbt:SizeXYZ" relation="SeeAlso">
+      Example compound type — integer grid size.
+    </see>
+    <see type="mbt:SelectiveGrid" relation="SeeAlso">
+      Example generic grid selector used by studs and related features.
+    </see>
+    <see type="mbt:Connector" relation="SeeAlso">
+      Example domain compound for discrete connectors.
+    </see>
+    <see type="scad:TypesAndSerialization" relation="SeeAlso">
+      MBOM → SCAD serialization of these types.
+    </see>
+    <see file="docs/04_types.md" relation="AuthoringGuide">
+      BlockML / MBOM type naming and conventions.
+    </see>
+  </references>
+
+</block>

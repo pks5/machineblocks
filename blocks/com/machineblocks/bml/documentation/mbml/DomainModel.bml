@@ -1,0 +1,68 @@
+<!--
+  MachineBlocks — MBML documentation
+
+  FQN: com.machineblocks.bml.documentation.mbml.DomainModel
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml">
+
+  <name>DomainModel</name>
+  <type>mbml:DomainModel</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to the MachineBlocks domain Block hierarchy</is>
+
+  <documentation>
+    MachineBlocks domain types under com.machineblocks.bml.core:
+
+    Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
+    basePresets association.
+    CompositeBlock — Block with default _parts aggregation for child block instances.
+    NativeBlock — final leaf geometry Block. Maps 1:1 to the native geometry primitive at render
+      time. SSOT for all native MachineBlocks parameters. Uses children for nested native geometry
+      instead of _parts. Must not be used as baseType for custom Block definitions.
+    Set — CompositeBlock for LEGO-style builds: palette via presets, placed instances in _parts,
+      assembly order in _steps.
+    Step — final assembly instruction Block. baseType is org.blockml.bml.core.Block (framework
+      Block), not mbcore:Block / Entity — a sibling outside the Entity → mbcore:Block tree.
+      part association references a placed _parts instance by bml:id; document order in _steps is
+      build order.
+
+    Hierarchy: Entity → mbcore:Block → CompositeBlock → Set. NativeBlock is a final sibling under
+    mbcore:Block. Step sits on org.blockml.bml.core.Block → Step.
+
+    Class identity is the Block FQN. Instance identity inside composition uses bml:id (nested paths
+    use ::). There is no separate Placement type — direction, offset, and related placement data
+    live on the placed instances.
+  </documentation>
+
+  <references>
+    <see type="mbml:TypeSystem" relation="ReadNext">
+      Next — MachineBlocks type package overview.
+    </see>
+    <see type="mbcore:Block" relation="Defines">
+      Abstract MachineBlocks domain Block.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      Final leaf geometry Block — native parameter SSOT.
+    </see>
+    <see type="mbcore:CompositeBlock" relation="Defines">
+      Composable Block with _parts.
+    </see>
+    <see type="mbcore:Set" relation="Defines">
+      LEGO-style set with _steps.
+    </see>
+    <see type="mbcore:Step" relation="Defines">
+      Assembly step — framework Block (org.blockml.bml.core.Block), not mbcore:Block.
+    </see>
+    <see type="core:Block" relation="SeeAlso">
+      Framework Block — baseType of Step.
+    </see>
+  </references>
+
+</block>

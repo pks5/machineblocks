@@ -1,0 +1,33 @@
+<!--
+  MachineBlocks — Gender enum
+
+  FQN: com.machineblocks.bml.type.Gender
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>Gender</name>
+  <type>mbt:Gender</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>A connector mating gender</is>
+
+  <documentation>Enum ValueType for male / female connector mating. Extends MBEnum(Text).
+    BOM property values store only the member id (Male / Female) plus this EnumType;
+    scad:value holds the SCAD serialization literal. Used by Connector.gender.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <Gender bml:id="Male" scad:value="male" />
+        <Gender bml:id="Female" scad:value="female" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

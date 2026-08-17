@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Relief Cut member group
+
+  FQN: com.machineblocks.bml.group.ReliefCut
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>ReliefCut</name>
+  <type>mbgroup:ReliefCut</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Relief Cut parameter group</is>
+
+  <documentation>MachineBlocks member group for Relief Cut parameters on NativeBlock
+    (YAML group id: relief_cut).</documentation>
+
+</block>

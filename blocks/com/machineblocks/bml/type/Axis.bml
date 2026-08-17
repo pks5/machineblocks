@@ -1,0 +1,34 @@
+<!--
+  MachineBlocks — Axis enum
+
+  FQN: com.machineblocks.bml.type.Axis
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>Axis</name>
+  <type>mbt:Axis</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>A coordinate axis</is>
+
+  <documentation>Enum ValueType for the X / Y / Z axes on MachineBlocks bricks.
+    Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
+    scad:value holds the SCAD serialization literal.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <Axis bml:id="X" scad:value="x" />
+        <Axis bml:id="Y" scad:value="y" />
+        <Axis bml:id="Z" scad:value="z" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

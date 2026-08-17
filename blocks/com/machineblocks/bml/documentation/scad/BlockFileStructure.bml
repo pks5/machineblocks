@@ -1,0 +1,70 @@
+<!--
+  MachineBlocks — SCAD documentation
+
+  FQN: com.machineblocks.bml.documentation.scad.BlockFileStructure
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>BlockFileStructure</name>
+  <type>scad:BlockFileStructure</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks V3 Block File structure</is>
+
+  <documentation>
+    A Block Module is the reusable OpenSCAD module that calls mb_block() (directly or indirectly).
+    Naming: mb__&lt;package&gt;__&lt;Class&gt; with package segments separated by double underscores
+    (example: mb__com__machineblocks__scad__examples__Cross).
+
+    MachineBlocks 1:1 SCAD convention — Manifestation FQN: replace the reserved definition segment
+    bml with scad in the Definition FQN. Definition com.machineblocks.bml.examples.Cross maps to
+    Manifestation com.machineblocks.scad.examples.Cross → file under
+    scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad and module
+    mb__com__machineblocks__scad__examples__Cross. Header FQN on the .scad file is the Manifestation
+    FQN; the BML Definition FQN remains the Idea identity in MBOM. Other targets may use another
+    segment (e.g. cadq) the same way. This replace rule applies only to 1:1 Block→file projects —
+    not a BlockML platform requirement.
+
+    Signature is always (config, settings).
+
+    A Block File is a self-contained .scad file: Block Module plus customizer variables and a main
+    module call. Mandatory section order, each marked with a /* Section Name */ comment:
+
+    Mandatory Header
+    Imports
+    Customization
+    Main Module Call
+    Main Module Definition
+    Optional Sub Modules
+    Optional Helper Modules
+    Optional Global Functions
+
+    Header first line inside the comment must be exactly: MachineBlocks.com Block File.
+    Required fields: Name, Filename, FQN. Copyright, license, and visit lines are optional.
+
+    Imports: use the library block.scad; include mb_config.scad. Inside modules, always pass the
+    config parameter — do not rely on globals for config.
+
+    Customization uses OpenSCAD Customizer tabs and annotations. Hidden section may only bridge
+    customizer variables into module arguments — no internal module computations and no
+    mb_param_*() calls at file scope.
+  </documentation>
+
+  <references>
+    <see type="scad:ModulePatterns" relation="ReadNext">
+      Next — Primitive Wrapper, Simple, and Composite patterns with full-file examples.
+    </see>
+    <see type="scad:LegacyConversion" relation="SeeAlso">
+      Converting V2 machineblock() files into this structure.
+    </see>
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/03_patterns_and_examples.md" relation="DeepDive">
+      Extended Block File and customizer rules.
+    </see>
+  </references>
+
+</block>

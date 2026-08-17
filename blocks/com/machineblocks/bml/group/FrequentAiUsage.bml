@@ -1,0 +1,23 @@
+<!--
+  MachineBlocks — frequent AI usage facet
+
+  FQN: com.machineblocks.bml.group.FrequentAiUsage
+  YAML ai_usage: yes
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>FrequentAiUsage</name>
+  <type>mbgroup:FrequentAiUsage</type>
+  <baseType>mbgroup:AiUsage</baseType>
+  <is>A frequent AI usage recommendation</is>
+
+  <documentation>AI usage facet — safe and common to set this member in per-brick settings when
+    generating Block instances (YAML ai_usage: yes). Maps to the guidance that AI systems may use
+    this parameter routinely for individual bricks.</documentation>
+
+</block>

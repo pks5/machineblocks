@@ -1,0 +1,40 @@
+<!--
+  MachineBlocks — None constant sentinel
+
+  FQN: com.machineblocks.bml.type.None
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>None</name>
+  <type>mbt:None</type>
+  <baseType>Constant(Text)</baseType>
+  <is>The literal None sentinel</is>
+
+  <documentation>Named Constant(Text) for the singleton value "None". Use as a union
+    alternative — for example None | Float — instead of writing Constant(Text){value: "None"}
+    at every reference site. The external value is "None" (identical to Text). Distinct from
+    org.blockml.bml.unit.None (the dimensionless unit) — this type lives under
+    com.machineblocks.bml.type.</documentation>
+
+  <references>
+    <see type="Constant" relation="Extends">
+      Constant(Text) with value fixed to "None".
+    </see>
+    <see type="mbt:Auto" relation="SeeAlso">
+      Parallel Auto sentinel Constant.
+    </see>
+  </references>
+
+  <properties>
+    <value override="true" type="Text">
+      <value>None</value>
+    </value>
+  </properties>
+
+</block>

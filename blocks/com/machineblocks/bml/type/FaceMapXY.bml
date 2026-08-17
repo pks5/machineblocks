@@ -1,0 +1,57 @@
+<!--
+  MachineBlocks — FaceMapXY struct type
+
+  FQN: com.machineblocks.bml.type.FaceMapXY
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>FaceMapXY</name>
+  <type>mbt:FaceMapXY</type>
+  <baseType>StructType</baseType>
+  <is>A face-keyed value map on X and Y</is>
+
+  <documentation>Struct ValueType for a sparse face map on the four lateral faces
+    { xNeg, xPos, yNeg, yPos }. Generic T is the per-face value type — e.g.
+    FaceMapXY(Decimal(unit:Millimeter)). FaceMapXYZ extends this type and adds zNeg / zPos
+    (generic Z, defaultType T). Keys are signed-axis faces (not min/max ranges); SCAD literals
+    remain x- / x+ via Face / scad:value. Named FaceMapXY (not FaceMap2D).</documentation>
+
+  <genericTypes>
+    <T baseType="core:ValueType"/>
+  </genericTypes>
+
+  <properties>
+    <xNeg type="T">
+      <documentation>Value on the X- face (negative X).</documentation>
+    </xNeg>
+    <xPos type="T">
+      <documentation>Value on the X+ face (positive X).</documentation>
+    </xPos>
+    <yNeg type="T">
+      <documentation>Value on the Y- face (negative Y).</documentation>
+    </yNeg>
+    <yPos type="T">
+      <documentation>Value on the Y+ face (positive Y).</documentation>
+    </yPos>
+  </properties>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — named face fields.
+    </see>
+    <see type="mbt:FaceMapXYZ" relation="SeeAlso">
+      Adds Z faces (generic Z, defaultType T) — extends this type.
+    </see>
+    <see type="mbt:Face" relation="SeeAlso">
+      Face enum — XNeg / XPos / YNeg / YPos / ZNeg / ZPos.
+    </see>
+  </references>
+
+</block>

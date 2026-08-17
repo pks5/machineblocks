@@ -1,0 +1,102 @@
+<!--
+  MachineBlocks — README / library reading entry point
+
+  FQN: com.machineblocks.bml.README
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mb="com.machineblocks.bml"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>README</name>
+  <type>mb:README</type>
+  <baseType>core:ReadMe</baseType>
+  <is>A library reading entry point</is>
+
+  <documentation>
+    README block for the MachineBlocks root library (com.machineblocks.bml.Library).
+    Start with references marked relation=ReadFirst — curated documentation in mental learning
+    order across concept (renderer-agnostic), mbml (authoring), and scad (OpenSCAD render target).
+    Library.bml points here via the required readMe aggregation (&lt;mb:README /&gt;).
+  </documentation>
+
+  <references>
+
+    <see type="concept:Introduction" relation="ReadFirst">
+      Start here — what MachineBlocks is.
+    </see>
+    <see type="concept:Architecture" relation="ReadFirst">
+      MBML → MBOM → render target layers.
+    </see>
+    <see type="concept:UnitsAndGrid" relation="ReadFirst">
+      Unit stack, grid ratio, bounding box.
+    </see>
+    <see type="concept:GeometryConcepts" relation="ReadFirst">
+      size, sizeMod, slope, bevel, baseCrop, cutouts.
+    </see>
+    <see type="concept:TransformationConcepts" relation="ReadFirst">
+      Direction, align, rotation, transform order.
+    </see>
+    <see type="concept:StructureSystems" relation="ReadFirst">
+      Body, underside, enclosure, connection.
+    </see>
+    <see type="concept:CompositionConcepts" relation="ReadFirst">
+      Composition, assembly, parts.
+    </see>
+    <see type="concept:DecisionFramework" relation="ReadFirst">
+      Intent → pattern → parameters.
+    </see>
+    <see type="concept:StatusConvention" relation="ReadFirst">
+      status:Stable / Draft / Stub / Deprecated.
+    </see>
+
+    <see type="mbml:MbmlOverview" relation="ReadFirst">
+      MBML authoring overview.
+    </see>
+    <see type="mbml:DomainModel" relation="ReadFirst">
+      Block, NativeBlock, CompositeBlock, Set, Step.
+    </see>
+    <see type="mbml:TypeSystem" relation="ReadFirst">
+      com.machineblocks.bml.type.* overview.
+    </see>
+    <see type="mbml:AuthoringPatterns" relation="ReadFirst">
+      Simple vs composite MBML patterns.
+    </see>
+
+    <see type="scad:ScadRenderTarget" relation="ReadFirst">
+      OpenSCAD as reference render target.
+    </see>
+    <see type="scad:MbBlockApi" relation="ReadFirst">
+      mb_block() signature and config/settings model.
+    </see>
+    <see type="scad:BlockFileStructure" relation="ReadFirst">
+      Mandatory Block File sections.
+    </see>
+    <see type="scad:ModulePatterns" relation="ReadFirst">
+      Wrapper / Simple / Composite with full-file examples.
+    </see>
+    <see type="scad:TypesAndSerialization" relation="ReadFirst">
+      MBOM → SCAD value serialization.
+    </see>
+    <see type="scad:ScadDecisionRules" relation="ReadFirst">
+      SCAD capability boundary and device rules.
+    </see>
+    <see type="scad:LegacyConversion" relation="ReadFirst">
+      V2 machineblock() → V3 mb_block() conversion.
+    </see>
+
+    <see type="mb:Library" relation="SeeAlso">
+      Published MachineBlocks root library catalog.
+    </see>
+    <see file="docs/03_mbom.md" relation="DeepDive">
+      MBOM domain model — BlockML MD companion.
+    </see>
+
+  </references>
+</block>

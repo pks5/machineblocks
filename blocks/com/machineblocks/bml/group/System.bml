@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — System / Units member group
+
+  FQN: com.machineblocks.bml.group.System
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>System</name>
+  <type>mbgroup:System</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A System / Units parameter group</is>
+
+  <documentation>MachineBlocks member group for System / Units parameters on NativeBlock
+    (YAML group id: system).</documentation>
+
+</block>

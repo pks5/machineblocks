@@ -1,0 +1,42 @@
+<!--
+  MachineBlocks — OffsetXY struct type
+
+  FQN: com.machineblocks.bml.type.OffsetXY
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>OffsetXY</name>
+  <type>mbt:OffsetXY</type>
+  <baseType>mbt:AxisXY(N)</baseType>
+  <is>An offset along X and Y</is>
+
+  <documentation>Semantic Struct ValueType for an offset pair { x, y }. Extends AxisXY(N) —
+    inherits x and y; adds offset / translation semantics (may be negative). N is constrained to
+    Number (AxisXY remains ValueType-universal). Bare OffsetXY defaults N to
+    Decimal(mbunit:GridUnitXY). Override via N — e.g. OffsetXY(Decimal(unit:Millimeter)). Named
+    OffsetXY (not Offset2D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
+
+  <genericTypes>
+    <N baseType="Number" defaultType="Decimal(mbunit:GridUnitXY)"/>
+  </genericTypes>
+
+  <references>
+    <see type="mbt:AxisXY" relation="Extends">
+      Structural { x, y } map — OffsetXY adds offset semantics.
+    </see>
+    <see type="mbt:OffsetXYZ" relation="SeeAlso">
+      Three-axis offset map on AxisXYZ.
+    </see>
+    <see type="mbt:SizeXY" relation="SeeAlso">
+      Parallel size semantics on AxisXY.
+    </see>
+  </references>
+
+</block>

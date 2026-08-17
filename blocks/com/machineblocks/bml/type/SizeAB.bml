@@ -1,0 +1,42 @@
+<!--
+  MachineBlocks — SizeAB struct type
+
+  FQN: com.machineblocks.bml.type.SizeAB
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>SizeAB</name>
+  <type>mbt:SizeAB</type>
+  <baseType>mbt:AxisAB(N, B)</baseType>
+  <is>A size pair along A and B</is>
+
+  <documentation>Semantic Struct ValueType for a size pair { a, b }. Extends AxisAB(N, B) —
+    inherits a (N) and b (B); adds size / extent semantics. N and B are constrained to Number.
+    B defaults to N so bare SizeAB / SizeAB(T) binds both to the same effective type. Bare SizeAB
+    defaults N to Decimal (dimensionless). Override via N / B — e.g. SizeAB(Decimal(unit:Millimeter)).</documentation>
+
+  <genericTypes>
+    <N baseType="Number" defaultType="Decimal"/>
+    <B baseType="Number" defaultType="N"/>
+  </genericTypes>
+
+  <references>
+    <see type="mbt:AxisAB" relation="Extends">
+      Structural { a, b } map — SizeAB adds size semantics; forwards N and B.
+    </see>
+    <see type="mbt:SizeXY" relation="SeeAlso">
+      Parallel size semantics on AxisXY.
+    </see>
+    <see type="mbt:RadiusAB" relation="SeeAlso">
+      Parallel radius semantics on AxisAB.
+    </see>
+  </references>
+
+</block>

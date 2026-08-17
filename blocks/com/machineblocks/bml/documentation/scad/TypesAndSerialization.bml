@@ -1,0 +1,63 @@
+<!--
+  MachineBlocks — SCAD documentation
+
+  FQN: com.machineblocks.bml.documentation.scad.TypesAndSerialization
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>TypesAndSerialization</name>
+  <type>scad:TypesAndSerialization</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MBOM type serialization for SCAD</is>
+
+  <status>Draft</status>
+
+  <documentation>
+    Status: Draft — MBOM type shapes are defined in com.machineblocks.bml.type.*; SCAD serialization
+    rules continue to be validated against the V3 library. Prefer BML type definitions over
+    Markdown/YAML for shapes; this block summarizes the serialization strategy only.
+
+    Strategy: take the canonical MBOM value → validate → normalize → emit the shortest valid SCAD
+    form → wrap as ["paramName", value] in settings/config.
+
+    Typical SCAD forms (details live on the type Blocks):
+    AxisXYZ — scalar, [xy, z], or [x, y, z]
+    AxisXY — scalar or [x, y]
+    Per-side-4 — scalar, [x, y], or four-value array
+    FaceVector6 — always six values
+    FaceMap — [["face", value], …] (optional namespaced keys)
+    SelectiveGrid — [base, [[rect], value], …] or a scalar broadcast
+
+    Do not design MBOM around SCAD arrays. Design SCAD arrays as serialization of MBOM.
+  </documentation>
+
+  <references>
+    <see type="scad:ScadDecisionRules" relation="ReadNext">
+      Next — SCAD decision rules and mb_block() capability boundary.
+    </see>
+    <see type="mbml:TypeSystem" relation="SeeAlso">
+      Domain type package overview.
+    </see>
+    <see type="mbt:SizeXYZ" relation="Defines">
+      Example type — see BML definition for shape.
+    </see>
+    <see type="mbt:AxisXYZ" relation="Defines">
+      AxisXYZ container type.
+    </see>
+    <see type="mbt:SelectiveGrid" relation="Defines">
+      SelectiveGrid container type.
+    </see>
+    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/05_types_and_mapping.md" relation="DeepDive">
+      Historical mapping notes — follow BML types when they diverge.
+    </see>
+  </references>
+
+</block>

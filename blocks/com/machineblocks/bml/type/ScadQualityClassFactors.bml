@@ -1,0 +1,44 @@
+<!--
+  MachineBlocks — ScadQualityClassFactors struct type
+
+  FQN: com.machineblocks.bml.type.ScadQualityClassFactors
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:type="org.blockml.bml.type"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>ScadQualityClassFactors</name>
+  <type>mbt:ScadQualityClassFactors</type>
+  <baseType>StructType</baseType>
+  <is>Per quality-class segment length multipliers</is>
+
+  <documentation>Struct ValueType for OpenSCAD quality-class segment length multipliers
+    { functional, visual, hidden }. Higher values reduce mesh quality and improve render
+    performance. Used by NativeBlock.scadQualityClassFactors.</documentation>
+
+  <properties>
+    <functional type="Decimal">
+      <documentation>Segment length multiplier for the functional quality class.</documentation>
+    </functional>
+    <visual type="Decimal">
+      <documentation>Segment length multiplier for the visual quality class.</documentation>
+    </visual>
+    <hidden type="Decimal">
+      <documentation>Segment length multiplier for the hidden quality class.</documentation>
+    </hidden>
+  </properties>
+
+  <references>
+    <see type="StructType" relation="Extends">
+      Struct ValueType branch — functional, visual, hidden.
+    </see>
+    <see type="mbt:ScadQualityProfile" relation="SeeAlso">
+      Per-preset segment length and max segment count.
+    </see>
+  </references>
+
+</block>

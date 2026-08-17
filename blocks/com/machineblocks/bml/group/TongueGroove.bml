@@ -1,0 +1,21 @@
+<!--
+  MachineBlocks — Tongue / Groove member group
+
+  FQN: com.machineblocks.bml.group.TongueGroove
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>TongueGroove</name>
+  <type>mbgroup:TongueGroove</type>
+  <baseType>mbgroup:Category</baseType>
+  <is>A Tongue / Groove parameter group</is>
+
+  <documentation>MachineBlocks member group for Tongue / Groove parameters on NativeBlock
+    (YAML group id: tongue_groove).</documentation>
+
+</block>

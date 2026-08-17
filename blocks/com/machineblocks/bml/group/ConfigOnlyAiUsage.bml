@@ -1,0 +1,23 @@
+<!--
+  MachineBlocks — config-only AI usage facet
+
+  FQN: com.machineblocks.bml.group.ConfigOnlyAiUsage
+  YAML ai_usage: config_only
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>ConfigOnlyAiUsage</name>
+  <type>mbgroup:ConfigOnlyAiUsage</type>
+  <baseType>mbgroup:AiUsage</baseType>
+  <is>A config-only AI usage recommendation</is>
+
+  <documentation>AI usage facet — AI should only place this member in config / environment scope,
+    not in per-brick settings (YAML ai_usage: config_only). Typical for calibration and adjustment
+    values shared across bricks.</documentation>
+
+</block>

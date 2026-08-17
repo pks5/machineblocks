@@ -1,0 +1,66 @@
+<!--
+  MachineBlocks — concept documentation
+
+  FQN: com.machineblocks.bml.documentation.concept.StructureSystems
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>StructureSystems</name>
+  <type>concept:StructureSystems</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MachineBlocks structure systems</is>
+
+  <documentation>
+    Structure parameters add physical function inside the same bounding box that size defines.
+    Geometry shapes the volume; structure makes it printable and connectable.
+
+    Four structure systems:
+
+    1. Body — base toggles the solid body. base=false hides the body while bounding box and
+       alignment stay unchanged (useful for composite wrappers and stud-only layers).
+    2. Underside — baseCutoutType selects None / Standard / Studs / Groove (enum member ids).
+       baseWallGaps (WallGap[]) open passages through underside walls for crossing geometry.
+    3. Enclosure — recess and recessWallThickness carve an interior; recessWallGaps
+       (RecessWallGap[]) open walls. RecessWallGap extends WallGap with padStart / padEnd
+       (default Auto) for tongue/groove-aware end insets. Do not use wall thickness 0 to create
+       openings — use gaps.
+    4. Connection — continuous tongue-and-groove versus discrete connectors for segmented or
+       angled joints.
+
+    Studs sit on the top grid. studBaseOverlap (mbu) sinks studs into the top surface; 0 is valid
+    when base=false but studs still render.
+  </documentation>
+
+  <references>
+    <see type="concept:CompositionConcepts" relation="ReadNext">
+      Next — composition, assembly, and parts.
+    </see>
+    <see type="mbt:BaseCutout" relation="Defines">
+      Underside cutout mode enum (None, Standard, Studs, Groove).
+    </see>
+    <see type="mbt:StudType" relation="Defines">
+      Stud Solid / Hollow modes.
+    </see>
+    <see type="mbt:WallGap" relation="Defines">
+      Wall gap for underside openings (baseWallGaps) — face, pos, len.
+    </see>
+    <see type="mbt:RecessWallGap" relation="Defines">
+      Recess wall gap (recessWallGaps) — WallGap plus padStart / padEnd.
+    </see>
+    <see type="mbt:Connector" relation="Defines">
+      Discrete connector compound type.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      SSOT for base, studs, recess, tongue/groove, connectors, and related properties.
+    </see>
+  </references>
+
+</block>

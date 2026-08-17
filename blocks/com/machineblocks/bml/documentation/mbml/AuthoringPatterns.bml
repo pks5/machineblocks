@@ -1,0 +1,63 @@
+<!--
+  MachineBlocks — MBML documentation
+
+  FQN: com.machineblocks.bml.documentation.mbml.AuthoringPatterns
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbml="com.machineblocks.bml.documentation.mbml"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <name>AuthoringPatterns</name>
+  <type>mbml:AuthoringPatterns</type>
+  <baseType>core:Documentation</baseType>
+  <is>A guide to MBML authoring patterns</is>
+
+  <documentation>
+    MBML authoring mirrors the shared pattern inventory (DecisionFramework / ModulePatterns):
+
+    1. Primitive Wrapper / Native leaf — lowers to NativeBlock parameters. One body, one spatial
+    contract. Custom brick types typically extend CompositeBlock or Block and lower to NativeBlock
+    instances — NativeBlock itself is final and cannot be a baseType.
+
+    2. Simple semantic Block — named domain type with defaults and a focused parameter surface;
+    still one native geometry realization at the leaf.
+
+    3. Composite Block — _parts (or nested children) for L/T/cross shapes, enclosures, channels,
+    and multi-body devices. Parent size is the outer bbox; parts carry direction and offset.
+    Set is a Composite specialization: palette in presets, placed instances in _parts, optional
+    ordered _steps for assembly instructions.
+
+    4. Helper / Form — shared geometry helpers, not content products. Primarily a SCAD Block File
+    concern (see ModulePatterns / ScadDecisionRules); rarely published as an MBML product Block.
+
+    Decision rule: if a single native call cannot express the topology without breaking the
+    capability boundary, author a Composite Block. Prefer composition over baseCrop and over mixing
+    incompatible shape modifiers in one leaf.
+  </documentation>
+
+  <references>
+    <see type="concept:DecisionFramework" relation="SeeAlso">
+      Shared intent → pattern → parameter framework.
+    </see>
+    <see type="mbcore:NativeBlock" relation="Defines">
+      Leaf geometry realization and parameter SSOT.
+    </see>
+    <see type="mbcore:CompositeBlock" relation="Defines">
+      Default composition aggregation _parts.
+    </see>
+    <see type="mbcore:Set" relation="Defines">
+      Set pattern with _steps.
+    </see>
+    <see type="scad:ModulePatterns" relation="SeeAlso">
+      Parallel SCAD Block File patterns with full-file examples.
+    </see>
+  </references>
+
+</block>

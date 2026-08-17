@@ -1,0 +1,22 @@
+<!--
+  MachineBlocks — plate-grid unit in Z
+
+  FQN: com.machineblocks.bml.unit.GridUnitZ
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbunit="com.machineblocks.bml.unit">
+
+  <name>GridUnitZ</name>
+  <type>mbunit:GridUnitZ</type>
+  <baseType>core:Unit</baseType>
+  <is>MachineBlocks grid unit (Z)</is>
+
+  <documentation>Plate-grid unit along Z (stack height). One plate layer is one GridUnitZ.
+    Size in mbu via unitGridToMbu.z (default 2 mbu per GridUnitZ). Distinct from GridUnitXY —
+    horizontal footprint uses a different mbu scale.</documentation>
+</block>

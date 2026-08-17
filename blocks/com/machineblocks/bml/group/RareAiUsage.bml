@@ -1,0 +1,23 @@
+<!--
+  MachineBlocks — rare AI usage facet
+
+  FQN: com.machineblocks.bml.group.RareAiUsage
+  YAML ai_usage: rarely
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:mbgroup="com.machineblocks.bml.group">
+
+  <name>RareAiUsage</name>
+  <type>mbgroup:RareAiUsage</type>
+  <baseType>mbgroup:AiUsage</baseType>
+  <is>A rare AI usage recommendation</is>
+
+  <documentation>AI usage facet — usually not needed, but safe if intentional (YAML ai_usage:
+    rarely). AI systems should omit this member by default and only set it when the generation task
+    clearly requires it.</documentation>
+
+</block>

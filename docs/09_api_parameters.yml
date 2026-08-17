@@ -4,8 +4,8 @@
 #
 # Sole SSOT for MachineBlocks native parameters (names, types, docs, defaults,
 # scad:value) and type shapes:
-#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
-#   domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
+#   scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
+#   scad-lib/blocks/com/machineblocks/bml/type/*.bml
 #
 # This file previously duplicated the full parameter catalog for SCAD/AI use.
 # That inventory has been removed to stop Markdown/YAML drift. Do not reintroduce
@@ -21,6 +21,6 @@
 version: "3.0.6"
 status: stub-pointer
 ssot:
-  parameters: domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
-  types: domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/
+  parameters: scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
+  types: scad-lib/blocks/com/machineblocks/bml/type/
 parameters: []   # intentionally empty — see NativeBlock.bml

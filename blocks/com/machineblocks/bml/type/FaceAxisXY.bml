@@ -1,0 +1,38 @@
+<!--
+  MachineBlocks — FaceAxisXY enum
+
+  FQN: com.machineblocks.bml.type.FaceAxisXY
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>FaceAxisXY</name>
+  <type>mbt:FaceAxisXY</type>
+  <baseType>mbt:MBEnum(Text)</baseType>
+  <is>An XY face, axis, or both axes</is>
+
+  <documentation>Enum ValueType for XY-directed faces (x- / x+ / y- / y+), single axes (x / y),
+    and the combined XY plane on MachineBlocks bricks. Extends MBEnum(Text). BOM property values
+    store only the member id plus this EnumType; scad:value holds the SCAD serialization literal.</documentation>
+
+  <aggregations>
+    <values>
+      <composition>
+        <FaceAxisXY bml:id="XNeg" scad:value="x-" />
+        <FaceAxisXY bml:id="XPos" scad:value="x+" />
+        <FaceAxisXY bml:id="YNeg" scad:value="y-" />
+        <FaceAxisXY bml:id="YPos" scad:value="y+" />
+        <FaceAxisXY bml:id="X" scad:value="x" />
+        <FaceAxisXY bml:id="Y" scad:value="y" />
+        <FaceAxisXY bml:id="XY" scad:value="xy" />
+      </composition>
+    </values>
+  </aggregations>
+
+</block>

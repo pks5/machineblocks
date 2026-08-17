@@ -1,0 +1,48 @@
+<!--
+  MachineBlocks MBOM — composable Block with _parts aggregation
+
+  FQN: com.machineblocks.bml.core.CompositeBlock
+-->
+<block
+  xmlns="http://blockml.org/bml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
+                      "
+  xmlns:core="org.blockml.bml.core"
+  xmlns:lang="org.blockml.bml.language"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:mbt="com.machineblocks.bml.type">
+
+  <name>CompositeBlock</name>
+  <type>mbcore:CompositeBlock</type>
+  <baseType>mbcore:Block</baseType>
+  <is>A Block made of child Blocks</is>
+
+  <documentation>Composable MachineBlocks Block with default _parts aggregation. _parts holds
+    placed block instances (direction, offset, appliedPresets) or child blocks for SCAD
+    composition.</documentation>
+
+  <references>
+    <see type="mbcore:Block">
+      Domain base type — inherits presets and basePresets for preset resolution.
+    </see>
+    <see type="mbcore:Set">
+      Set specialization uses _parts for placed instances in a LEGO-style build.
+    </see>
+  </references>
+
+  <abstract>true</abstract>
+
+  <subTypes>
+    <mbcore:Block />
+  </subTypes>
+  <languages>
+    <lang:OpenSCAD />
+  </languages>
+  <aggregations>
+    <_parts
+      type="mbcore:Block[]"
+      default="true" />
+  </aggregations>
+
+</block>
