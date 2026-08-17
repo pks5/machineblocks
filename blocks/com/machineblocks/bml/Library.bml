@@ -5,7 +5,7 @@
   Filename: Library.bml
   FQN: com.machineblocks.bml.Library
 
-  MachineBlocks root library — exports domain types and units; nests brick sub-libraries.
+  MachineBlocks root library — exports domain types, units, bricks, examples, and calibration.
 -->
 <block
   xmlns="http://blockml.org/bml"
@@ -19,7 +19,9 @@
   xmlns:mb="com.machineblocks.bml"
   xmlns:mbann="com.machineblocks.bml.annotation"
   xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:cal="com.machineblocks.bml.calibration"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:examples="com.machineblocks.bml.examples"
   xmlns:mbml="com.machineblocks.bml.documentation.mbml"
   xmlns:scad="com.machineblocks.bml.documentation.scad"
   xmlns:mbt="com.machineblocks.bml.type"
@@ -33,11 +35,10 @@
 
   <documentation>
     Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
-    ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), ScadAnnotation, and curated
-    documentation blocks under com.machineblocks.bml.documentation.{concept,mbml,scad}. Brick
-    catalogs are nested via subLibraries — consumers that need bricks depend on
-    com.machineblocks.bml.bricks.Library directly. Membership is defined exclusively by this file's
-    blocks list — not by directory layout.
+    ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), ScadAnnotation, curated
+    documentation blocks under com.machineblocks.bml.documentation.{concept,mbml,scad}, brick
+    types (com.machineblocks.bml.bricks.*), calibration, and examples. Membership is defined
+    exclusively by this file's blocks list — not by directory layout.
   </documentation>
 
   <references>
@@ -70,12 +71,6 @@
         <blockml:Library />
       </composition>
     </dependencies>
-
-    <subLibraries>
-      <composition>
-        <bricks:Library />
-      </composition>
-    </subLibraries>
 
     <blocks>
       <composition>
@@ -189,6 +184,11 @@
         <mbunit:GridUnitXY />
         <mbunit:GridUnitZ />
         <mbunit:MBU />
+        <bricks:Standard />
+        <bricks:StandardPresets />
+        <cal:Calibrator />
+        <examples:Connector />
+        <examples:Cross />
       </composition>
     </blocks>
   </aggregations>
