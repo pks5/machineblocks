@@ -724,18 +724,18 @@ module mb_rail(
 */
 
 mb_rail(
-    size = [[0,0,0], [1, 3, 3]],
+    size = [[0,0,0], [1.8, 4.8, 3]],
     
-    rounding_radius = [0.5, [0.5, 0.1]],
+    rounding_radius = [[0.9, 0.2], [0.9, 0.2]],
     axis = "z",
     offset = undef,
     mul = [8, 8, 3.2],
 
-    clamp_inner_start = [1, 1, 1, 0],
-    clamp_inner_end = [1, 1, 1, 0],
+    clamp_inner_start = [1.5, 0.9, 1.5, [0.2, 0.9]],
+    clamp_inner_end = [1.5, 0.9, 1.5, [0.2, 0.9]],
     
-    clamp_outer_start = [1, 1, 1, 0],
-    clamp_outer_end = [1, 1, 1, 0],
+    clamp_outer_start = [1.5, 0.9, 1.5, [0.2, 0.9]],
+    clamp_outer_end = [1.5, 0.9, 1.5, [0.2, 0.9]],
     
     draw_together = false,
     debug = true
