@@ -23,7 +23,7 @@
 
   <name>Standard</name>
   <type>bricks:Standard</type>
-  <baseType>mbcore:Block</baseType>
+  <baseType>mbcore:CompositeBlock</baseType>
   <is>A Lego brick</is>
   <properties>
 
@@ -226,54 +226,57 @@
     recessDepth is AutoOr<Float> — ScadBlockProcessor splits into
       recessDepthAuto + recessDepth with hidden_merge.
   -->
-  <composition>
-    <mbcore:NativeBlock
-      size="${ size }"
-      baseCutoutType="${ baseCutoutType }"
-      pillars="${ pillars }"
-      reliefCut="${ baseReliefCut }"
-      reliefCutHeight="${ baseReliefCutHeight }"
-      reliefCutThickness="${ baseReliefCutThickness }"
-      baseRoundingRadius="${ baseRoundingRadius }"
-      grille="${ grille }"
-      grilleInverted="${ grilleInverted }"
-      grilleDepth="${ grilleDepth }"
-      grilleCount="${ grilleCount }"
-      bevel="${ bevel }"
-      studs="${ studs }"
-      studShift="${ studShift }"
-      studType="${ studType }"
-      studPadding="${ studPadding }"
-      studBaseOverlap="${ studBaseOverlap }"
-      holeX="${ holeX }"
-      holeXType="${ holeXType }"
-      holeXShift="${ holeXShift }"
-      holeXGridOffsetZ="${ holeXGridOffsetZ }"
-      holeY="${ holeY }"
-      holeYType="${ holeYType }"
-      holeYShift="${ holeYShift }"
-      holeYGridOffsetZ="${ holeYGridOffsetZ }"
-      holeZ="${ holeZ }"
-      holeZType="${ holeZType }"
-      holeZShift="${ holeZShift }"
-      recess="${ recess }"
-      recessStuds="${ recessStuds }"
-      recessWallThickness="${ recessWallThickness }"
-      recessDepth="${ recessDepth }"
-      recessStudPadding="${ recessStudPadding }"
-      slope="${ slope }"
-      text="${ text }"
-      textSide="${ textSide }"
-      textDepth="${ textDepth }"
-      textSize="${ textSize }"
-      textFont="${ textFont }"
-      textStyle="${ textStyle }"
-      textSpacing="${ textSpacing }"
-      textColor="${ textColor }"
-      baseColor="${ baseColor }"
-      surfacePattern="${ surfacePattern }"
-      surfacePatternScale="${ surfacePatternScale }"
-      studIcon="${ studIcon }" />
-  </composition>
-
+  <aggregations>
+    <_parts>
+      <composition>
+        <mbcore:NativeBlock
+          size="${ size }"
+          baseCutoutType="${ baseCutoutType }"
+          pillars="${ pillars }"
+          reliefCut="${ baseReliefCut }"
+          reliefCutHeight="${ baseReliefCutHeight }"
+          reliefCutThickness="${ baseReliefCutThickness }"
+          baseRoundingRadius="${ baseRoundingRadius }"
+          grille="${ grille }"
+          grilleInverted="${ grilleInverted }"
+          grilleDepth="${ grilleDepth }"
+          grilleCount="${ grilleCount }"
+          bevel="${ bevel }"
+          studs="${ studs }"
+          studShift="${ studShift }"
+          studType="${ studType }"
+          studPadding="${ studPadding }"
+          studBaseOverlap="${ studBaseOverlap }"
+          holeX="${ holeX }"
+          holeXType="${ holeXType }"
+          holeXShift="${ holeXShift }"
+          holeXGridOffsetZ="${ holeXGridOffsetZ }"
+          holeY="${ holeY }"
+          holeYType="${ holeYType }"
+          holeYShift="${ holeYShift }"
+          holeYGridOffsetZ="${ holeYGridOffsetZ }"
+          holeZ="${ holeZ }"
+          holeZType="${ holeZType }"
+          holeZShift="${ holeZShift }"
+          recess="${ recess }"
+          recessStuds="${ recessStuds }"
+          recessWallThickness="${ recessWallThickness }"
+          recessDepth="${ recessDepth }"
+          recessStudPadding="${ recessStudPadding }"
+          slope="${ slope }"
+          text="${ text }"
+          textSide="${ textSide }"
+          textDepth="${ textDepth }"
+          textSize="${ textSize }"
+          textFont="${ textFont }"
+          textStyle="${ textStyle }"
+          textSpacing="${ textSpacing }"
+          textColor="${ textColor }"
+          baseColor="${ baseColor }"
+          surfacePattern="${ surfacePattern }"
+          surfacePatternScale="${ surfacePatternScale }"
+          studIcon="${ studIcon }" />
+      </composition>
+    </_parts>
+  </aggregations>‚
 </block>

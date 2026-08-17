@@ -140,8 +140,8 @@ function strSuffix(s, k, i = 0) =
         </formatValue>
 
       </capabilities>
-    
-</block>
+
+    </block>
 
     <!--
       Sub-Block: Calibrator.Base
@@ -181,49 +181,49 @@ function strSuffix(s, k, i = 0) =
       <_parts>
         <composition>
 
-        <!-- Base strip: centered at row position -->
-        <bricks:StandardBrick
-          bml:id="strip"
-          size="${ [2 * numberOfSamples + 1, 1, 1] }"
-          sizeMod="${ {'z+': -0.5} }"
-          baseCutoutType="none"
-          studs="false"
-          baseAdjustment="${ {'y': 0.11} }" />
+          <!-- Base strip: centered at row position -->
+          <bricks:StandardBrick
+            bml:id="strip"
+            size="${ [2 * numberOfSamples + 1, 1, 1] }"
+            sizeMod="${ {'z+': -0.5} }"
+            baseCutoutType="none"
+            studs="false"
+            baseAdjustment="${ {'y': 0.11} }" />
 
-        <!-- Label block: 1 stud above base strip -->
-        <bricks:StandardBrick
-          bml:id="label"
-          size="${ [labelSize, 1, 1] }"
-          sizeMod="${ {'z+': -0.5} }"
-          offset="[0, 1, 0]"
-          text="${ label }"
-          textFont="${ font }"
-          textSize="${ fontSize }"
-          textFace="5"
-          textDepth="-0.25"
-          baseCutoutType="none"
-          studs="false"
-          baseAdjustment="${ {'y': 0.11} }" />
+          <!-- Label block: 1 stud above base strip -->
+          <bricks:StandardBrick
+            bml:id="label"
+            size="${ [labelSize, 1, 1] }"
+            sizeMod="${ {'z+': -0.5} }"
+            offset="[0, 1, 0]"
+            text="${ label }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            textFace="5"
+            textDepth="-0.25"
+            baseCutoutType="none"
+            studs="false"
+            baseAdjustment="${ {'y': 0.11} }" />
 
-        <!-- Value label blocks: 1 stud below base strip, one per sample -->
-        <bricks:StandardBrick
-          bml:each="i : ${ numberOfSamples }"
-          bml:id="${ 'val_' + i }"
-          size="[1, 1, 1]"
-          sizeMod="${ {'z+': -0.5} }"
-          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
-          text="${ @utils.formatValue(valueStart + i * valueStep) }"
-          textFont="${ font }"
-          textSize="${ fontSize }"
-          textFace="5"
-          textDepth="0.25"
-          baseCutoutType="none"
-          studs="false" />
+          <!-- Value label blocks: 1 stud below base strip, one per sample -->
+          <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 'val_' + i }"
+            size="[1, 1, 1]"
+            sizeMod="${ {'z+': -0.5} }"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), -1, 0] }"
+            text="${ @utils.formatValue(valueStart + i * valueStep) }"
+            textFont="${ font }"
+            textSize="${ fontSize }"
+            textFace="5"
+            textDepth="0.25"
+            baseCutoutType="none"
+            studs="false" />
 
         </composition>
       </_parts>
-    
-</block>
+
+    </block>
 
     <!--
       Sub-Block: Calibrator.StudDiameter
@@ -249,17 +249,17 @@ function strSuffix(s, k, i = 0) =
       </properties>
       <_parts>
         <composition>
-        <bricks:StandardBrick
-          bml:each="i : ${ numberOfSamples }"
-          bml:id="${ 's_' + i }"
-          size="[1, 1, 0.4]"
-          baseCutoutType="none"
-          studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
+          <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[1, 1, 0.4]"
+            baseCutoutType="none"
+            studDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, 0.5] }" />
         </composition>
       </_parts>
-    
-</block>
+
+    </block>
 
     <!--
       Sub-Block: Calibrator.BaseWallThickness
@@ -285,19 +285,19 @@ function strSuffix(s, k, i = 0) =
       </properties>
       <_parts>
         <composition>
-        <bricks:StandardBrick
-          bml:each="i : ${ numberOfSamples }"
-          bml:id="${ 's_' + i }"
-          size="[1, 1, 1]"
-          studs="false"
-          rotation="[180, 0, 0]"
-          baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-          topPlateHelpers="false"
-          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[1, 1, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            baseWallThicknessAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            topPlateHelpers="false"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    
-</block>
+
+    </block>
 
     <!--
       Sub-Block: Calibrator.TubeDiameter
@@ -323,20 +323,20 @@ function strSuffix(s, k, i = 0) =
       </properties>
       <_parts>
         <composition>
-        <bricks:StandardBrick
-          bml:each="i : ${ numberOfSamples }"
-          bml:id="${ 's_' + i }"
-          size="[2, 2, 1]"
-          studs="false"
-          rotation="[180, 0, 0]"
-          tubeDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-          baseCrop="${ {'xy': -0.5} }"
-          baseWallThickness="0"
-          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[2, 2, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            tubeDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            baseCrop="${ {'xy': -0.5} }"
+            baseWallThickness="0"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    
-</block>
+
+    </block>
 
     <!--
       Sub-Block: Calibrator.PinDiameter
@@ -361,20 +361,20 @@ function strSuffix(s, k, i = 0) =
       </properties>
       <_parts>
         <composition>
-        <bricks:StandardBrick
-          bml:each="i : ${ numberOfSamples }"
-          bml:id="${ 's_' + i }"
-          size="[2, 1, 1]"
-          studs="false"
-          rotation="[180, 0, 0]"
-          pinDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
-          baseCrop="${ {'x': -0.5} }"
-          baseWallThickness="0"
-          offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
+          <bricks:StandardBrick
+            bml:each="i : ${ numberOfSamples }"
+            bml:id="${ 's_' + i }"
+            size="[2, 1, 1]"
+            studs="false"
+            rotation="[180, 0, 0]"
+            pinDiameterAdjustment="${ #math.round_n(valueStart + i * valueStep, 1) }"
+            baseCrop="${ {'x': -0.5} }"
+            baseWallThickness="0"
+            offset="${ [2 * (i - #math.floor(0.5 * numberOfSamples)), 0, -0.5] }" />
         </composition>
       </_parts>
-    
-</block>
+
+    </block>
 
   </subBlocks>
 
@@ -393,77 +393,77 @@ function strSuffix(s, k, i = 0) =
     <_parts>
       <composition>
 
-    <!-- Row 0: studDiameterAdjustment -->
-    <Base
-      bml:id="base_stud"
-      offset="[0, 0, 0]"
-      label="studDiaAdj"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ studDiameterAdjustmentValueStart }"
-      valueStep="${ studDiameterAdjustmentValueStep }"
-      font="${ font }"
-      fontSize="${ fontSize }"
-      labelSize="${ labelSize }" />
-    <StudDiameter
-      bml:id="samples_stud"
-      offset="[0, 0, 0]"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ studDiameterAdjustmentValueStart }"
-      valueStep="${ studDiameterAdjustmentValueStep }" />
+        <!-- Row 0: studDiameterAdjustment -->
+        <Base
+          bml:id="base_stud"
+          offset="[0, 0, 0]"
+          label="studDiaAdj"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ studDiameterAdjustmentValueStart }"
+          valueStep="${ studDiameterAdjustmentValueStep }"
+          font="${ font }"
+          fontSize="${ fontSize }"
+          labelSize="${ labelSize }" />
+        <StudDiameter
+          bml:id="samples_stud"
+          offset="[0, 0, 0]"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ studDiameterAdjustmentValueStart }"
+          valueStep="${ studDiameterAdjustmentValueStep }" />
 
-    <!-- Row 1: baseWallThicknessAdjustment -->
-    <Base
-      id="base_wall"
-      offset="[0, -3, 0]"
-      label="wallThickAdj"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ baseWallThicknessAdjustmentValueStart }"
-      valueStep="${ baseWallThicknessAdjustmentValueStep }"
-      font="${ font }"
-      fontSize="${ fontSize }"
-      labelSize="${ labelSize }" />
-    <BaseWallThickness
-      id="samples_wall"
-      offset="[0, -3, 2]"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ baseWallThicknessAdjustmentValueStart }"
-      valueStep="${ baseWallThicknessAdjustmentValueStep }" />
+        <!-- Row 1: baseWallThicknessAdjustment -->
+        <Base
+          id="base_wall"
+          offset="[0, -3, 0]"
+          label="wallThickAdj"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ baseWallThicknessAdjustmentValueStart }"
+          valueStep="${ baseWallThicknessAdjustmentValueStep }"
+          font="${ font }"
+          fontSize="${ fontSize }"
+          labelSize="${ labelSize }" />
+        <BaseWallThickness
+          id="samples_wall"
+          offset="[0, -3, 2]"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ baseWallThicknessAdjustmentValueStart }"
+          valueStep="${ baseWallThicknessAdjustmentValueStep }" />
 
-    <!-- Row 2: tubeDiameterAdjustment -->
-    <Base
-      bml:id="base_tube"
-      offset="[0, -6, 0]"
-      label="tubeZDiaAdj"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ tubeDiameterAdjustmentValueStart }"
-      valueStep="${ tubeDiameterAdjustmentValueStep }"
-      font="${ font }"
-      fontSize="${ fontSize }"
-      labelSize="${ labelSize }" />
-    <TubeDiameter
-      bml:id="samples_tube"
-      offset="[0, -6, 2]"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ tubeDiameterAdjustmentValueStart }"
-      valueStep="${ tubeDiameterAdjustmentValueStep }" />
+        <!-- Row 2: tubeDiameterAdjustment -->
+        <Base
+          bml:id="base_tube"
+          offset="[0, -6, 0]"
+          label="tubeZDiaAdj"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ tubeDiameterAdjustmentValueStart }"
+          valueStep="${ tubeDiameterAdjustmentValueStep }"
+          font="${ font }"
+          fontSize="${ fontSize }"
+          labelSize="${ labelSize }" />
+        <TubeDiameter
+          bml:id="samples_tube"
+          offset="[0, -6, 2]"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ tubeDiameterAdjustmentValueStart }"
+          valueStep="${ tubeDiameterAdjustmentValueStep }" />
 
-    <!-- Row 3: pinDiameterAdjustment -->
-    <Base
-      bml:id="base_pin"
-      offset="[0, -9, 0]"
-      label="pinDiaAdj"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ pinDiameterAdjustmentValueStart }"
-      valueStep="${ pinDiameterAdjustmentValueStep }"
-      font="${ font }"
-      fontSize="${ fontSize }"
-      labelSize="${ labelSize }" />
-    <PinDiameter
-      bml:id="samples_pin"
-      offset="[0, -9, 2]"
-      numberOfSamples="${ numberOfSamples }"
-      valueStart="${ pinDiameterAdjustmentValueStart }"
-      valueStep="${ pinDiameterAdjustmentValueStep }" />
+        <!-- Row 3: pinDiameterAdjustment -->
+        <Base
+          bml:id="base_pin"
+          offset="[0, -9, 0]"
+          label="pinDiaAdj"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ pinDiameterAdjustmentValueStart }"
+          valueStep="${ pinDiameterAdjustmentValueStep }"
+          font="${ font }"
+          fontSize="${ fontSize }"
+          labelSize="${ labelSize }" />
+        <PinDiameter
+          bml:id="samples_pin"
+          offset="[0, -9, 2]"
+          numberOfSamples="${ numberOfSamples }"
+          valueStart="${ pinDiameterAdjustmentValueStart }"
+          valueStep="${ pinDiameterAdjustmentValueStep }" />
 
       </composition>
     </_parts>

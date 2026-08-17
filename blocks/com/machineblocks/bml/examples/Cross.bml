@@ -23,7 +23,7 @@
 
   <name>Cross</name>
   <type>examples:Cross</type>
-  <baseType>mbcore:Block</baseType>
+  <baseType>mbcore:CompositeBlock</baseType>
   <is>An overlapping corner brick</is>
   <properties>
 
@@ -144,7 +144,7 @@
   -->
   <aggregations>
 
-    <_items>
+    <_parts>
       <composition
         bml:with="
         b1SizeY   = ${ #math.min(size.y, brick1SizeY) },
@@ -204,6 +204,6 @@
           baseWallGaps="${ [['x', b1OffsetY, b1SizeY]] }" />
 
       </composition>
-    </_items>
+    </_parts>
   </aggregations>
 </block>
