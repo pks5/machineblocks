@@ -3,3 +3,4 @@
 cli/build
 __pycache__
 *.egg-info
+.npmrc
