@@ -22,6 +22,9 @@
       "access": "public"
     },
     "dependencies": {
-      "@blockml/core": "^1.0.2"
+      "@blockml/core": "^1.1.1"
+    },
+    "devDependencies": {
+      "@blockml/cli": "^0.9.1"
     }
   }

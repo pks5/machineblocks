@@ -33,12 +33,6 @@
 
   <abstract>true</abstract>
 
-  <subTypes>
-    <mbcore:Block />
-  </subTypes>
-  <languages>
-    <lang:OpenSCAD />
-  </languages>
   <aggregations>
     <_parts
       type="mbcore:Block[]"

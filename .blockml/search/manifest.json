@@ -1,0 +1,2628 @@
+{
+  "version": 1,
+  "documents": 574,
+  "packageJsonHash": "b9263861fa081bb38b2cc3333e4b02b5253b0694be13029215e7e2fc742d2430",
+  "lockfileHash": "8158dd3b2ae4ad1ccc34a86b446c1a018aa50e07cb34748a832bd19db22db253",
+  "files": [
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/Library.bml",
+      "mtimeMs": 1786997002776.4368,
+      "size": 5761
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/README.bml",
+      "mtimeMs": 1786997002776.513,
+      "size": 3700
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/annotation/ScadAnnotation.bml",
+      "mtimeMs": 1786997002776.6375,
+      "size": 6563
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/bricks/Standard.bml",
+      "mtimeMs": 1786997379710.3794,
+      "size": 8859
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/bricks/presets/StandardPresets.bml",
+      "mtimeMs": 1786997002776.755,
+      "size": 2371
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/calibration/Calibrator.bml",
+      "mtimeMs": 1786997202029.3608,
+      "size": 15652
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/Block.bml",
+      "mtimeMs": 1786997002776.8647,
+      "size": 1719
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
+      "mtimeMs": 1787091434330.0342,
+      "size": 1262
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/NativeBlock.bml",
+      "mtimeMs": 1788646700709.5022,
+      "size": 194084
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/Set.bml",
+      "mtimeMs": 1786997002777.473,
+      "size": 1065
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/Step.bml",
+      "mtimeMs": 1786997002777.549,
+      "size": 1249
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/Architecture.bml",
+      "mtimeMs": 1786997002777.719,
+      "size": 3408
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/CompositionConcepts.bml",
+      "mtimeMs": 1786997002777.796,
+      "size": 2582
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/DecisionFramework.bml",
+      "mtimeMs": 1786997002777.8755,
+      "size": 3586
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/GeometryConcepts.bml",
+      "mtimeMs": 1786997002777.9534,
+      "size": 2874
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/Introduction.bml",
+      "mtimeMs": 1786997002778.0374,
+      "size": 1751
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/StatusConvention.bml",
+      "mtimeMs": 1786997002778.217,
+      "size": 2581
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/StructureSystems.bml",
+      "mtimeMs": 1786997002778.3398,
+      "size": 2760
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/TransformationConcepts.bml",
+      "mtimeMs": 1786997002778.4312,
+      "size": 2890
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/concept/UnitsAndGrid.bml",
+      "mtimeMs": 1786997002778.512,
+      "size": 2528
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/AuthoringPatterns.bml",
+      "mtimeMs": 1786997002778.6343,
+      "size": 2686
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/DomainModel.bml",
+      "mtimeMs": 1786997002778.7188,
+      "size": 2888
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/MbmlOverview.bml",
+      "mtimeMs": 1786997002778.795,
+      "size": 2375
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/TypeSystem.bml",
+      "mtimeMs": 1786997002778.871,
+      "size": 2561
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/BlockFileStructure.bml",
+      "mtimeMs": 1786997002778.995,
+      "size": 3080
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/LegacyConversion.bml",
+      "mtimeMs": 1786997002779.0957,
+      "size": 20661
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/MbBlockApi.bml",
+      "mtimeMs": 1786997002779.2144,
+      "size": 3299
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/ModulePatterns.bml",
+      "mtimeMs": 1786997002779.3364,
+      "size": 33955
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/ScadDecisionRules.bml",
+      "mtimeMs": 1786997002779.44,
+      "size": 2802
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/ScadRenderTarget.bml",
+      "mtimeMs": 1786997002779.519,
+      "size": 2308
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/TypesAndSerialization.bml",
+      "mtimeMs": 1786997002779.5906,
+      "size": 2458
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/examples/Connector.bml",
+      "mtimeMs": 1786997135451.2146,
+      "size": 4059
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/examples/Cross.bml",
+      "mtimeMs": 1786997078981.7715,
+      "size": 7017
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/AiUsage.bml",
+      "mtimeMs": 1786997002779.696,
+      "size": 1079
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/BaseClamp.bml",
+      "mtimeMs": 1786997002779.7712,
+      "size": 631
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Body.bml",
+      "mtimeMs": 1786997002779.8428,
+      "size": 592
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Calibration.bml",
+      "mtimeMs": 1786997002779.9055,
+      "size": 722
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Category.bml",
+      "mtimeMs": 1786997002779.9673,
+      "size": 1028
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/ConfigOnlyAiUsage.bml",
+      "mtimeMs": 1786997002780.0312,
+      "size": 809
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Connectors.bml",
+      "mtimeMs": 1786997002780.0908,
+      "size": 634
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/CoreGeometry.bml",
+      "mtimeMs": 1786997002780.1604,
+      "size": 652
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/FrequentAiUsage.bml",
+      "mtimeMs": 1786997002780.2305,
+      "size": 805
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Grille.bml",
+      "mtimeMs": 1786997002780.3054,
+      "size": 606
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/NeverAiUsage.bml",
+      "mtimeMs": 1786997002780.3823,
+      "size": 735
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Pcb.bml",
+      "mtimeMs": 1786997002780.4746,
+      "size": 585
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Pillars.bml",
+      "mtimeMs": 1786997002780.5342,
+      "size": 613
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Pins.bml",
+      "mtimeMs": 1786997002780.5952,
+      "size": 592
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Positioning.bml",
+      "mtimeMs": 1786997002780.6992,
+      "size": 692
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/PrintHelpers.bml",
+      "mtimeMs": 1786997002780.7783,
+      "size": 652
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Quality.bml",
+      "mtimeMs": 1786997002780.8462,
+      "size": 649
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/RareAiUsage.bml",
+      "mtimeMs": 1786997002780.9194,
+      "size": 761
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Recess.bml",
+      "mtimeMs": 1786997002780.9868,
+      "size": 606
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/ReliefCut.bml",
+      "mtimeMs": 1786997002781.0527,
+      "size": 631
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Rounding.bml",
+      "mtimeMs": 1786997002781.117,
+      "size": 620
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/ScrewHoles.bml",
+      "mtimeMs": 1786997002781.1748,
+      "size": 638
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/StudIcon.bml",
+      "mtimeMs": 1786997002781.2415,
+      "size": 624
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Studs.bml",
+      "mtimeMs": 1786997002781.3047,
+      "size": 599
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/SurfacePattern.bml",
+      "mtimeMs": 1786997002781.3716,
+      "size": 666
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Svg.bml",
+      "mtimeMs": 1786997002781.44,
+      "size": 585
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/System.bml",
+      "mtimeMs": 1786997002781.5083,
+      "size": 630
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TechnicHoles.bml",
+      "mtimeMs": 1786997002781.5957,
+      "size": 652
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TechnicHolesX.bml",
+      "mtimeMs": 1786997002781.6643,
+      "size": 663
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TechnicHolesY.bml",
+      "mtimeMs": 1786997002781.7234,
+      "size": 663
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TechnicHolesZ.bml",
+      "mtimeMs": 1786997002781.7793,
+      "size": 663
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Text.bml",
+      "mtimeMs": 1786997002781.9993,
+      "size": 592
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TongueGroove.bml",
+      "mtimeMs": 1786997002782.0752,
+      "size": 658
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/TopPlate.bml",
+      "mtimeMs": 1786997002782.137,
+      "size": 624
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Tubes.bml",
+      "mtimeMs": 1786997002782.1992,
+      "size": 599
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/group/Underside.bml",
+      "mtimeMs": 1786997002782.265,
+      "size": 669
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Align.bml",
+      "mtimeMs": 1786997002782.382,
+      "size": 1767
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Auto.bml",
+      "mtimeMs": 1786997002782.4485,
+      "size": 1028
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Axis.bml",
+      "mtimeMs": 1786997002782.5176,
+      "size": 1038
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/AxisAB.bml",
+      "mtimeMs": 1786997002782.5977,
+      "size": 2612
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/AxisXY.bml",
+      "mtimeMs": 1786997002782.672,
+      "size": 1701
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/AxisXYZ.bml",
+      "mtimeMs": 1786997002782.7578,
+      "size": 1934
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/BaseCutout.bml",
+      "mtimeMs": 1786997002782.8376,
+      "size": 1183
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/BaseRoundingMap.bml",
+      "mtimeMs": 1786997002782.9478,
+      "size": 1595
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Bevel.bml",
+      "mtimeMs": 1786997002783.3442,
+      "size": 1671
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Connector.bml",
+      "mtimeMs": 1786997002783.4243,
+      "size": 2327
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/CornerMap.bml",
+      "mtimeMs": 1786997002783.5046,
+      "size": 1910
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Direction.bml",
+      "mtimeMs": 1786997002783.5747,
+      "size": 1161
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Face.bml",
+      "mtimeMs": 1786997002783.6484,
+      "size": 1225
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/FaceAxisXY.bml",
+      "mtimeMs": 1786997002783.7227,
+      "size": 1374
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/FaceMapXY.bml",
+      "mtimeMs": 1786997002783.8174,
+      "size": 1903
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/FaceMapXYZ.bml",
+      "mtimeMs": 1786997002783.8845,
+      "size": 1922
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Gender.bml",
+      "mtimeMs": 1786997002783.963,
+      "size": 1061
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Grille.bml",
+      "mtimeMs": 1786997002784.0535,
+      "size": 1140
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/HoleEdgeMap.bml",
+      "mtimeMs": 1786997002784.1272,
+      "size": 1322
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/HoleEdgeMode.bml",
+      "mtimeMs": 1786997002784.2014,
+      "size": 1513
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/HoleEdgePair.bml",
+      "mtimeMs": 1786997002784.2761,
+      "size": 1290
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/HoleType.bml",
+      "mtimeMs": 1786997002784.3357,
+      "size": 1092
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Inherit.bml",
+      "mtimeMs": 1786997002784.4038,
+      "size": 1350
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/MBEnum.bml",
+      "mtimeMs": 1786997002784.4749,
+      "size": 2425
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/MultiAxis.bml",
+      "mtimeMs": 1786997002784.5447,
+      "size": 1392
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/None.bml",
+      "mtimeMs": 1786997002784.7573,
+      "size": 1250
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/OffsetAB.bml",
+      "mtimeMs": 1786997002784.8762,
+      "size": 1924
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/OffsetXY.bml",
+      "mtimeMs": 1786997002784.9534,
+      "size": 1485
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/OffsetXYZ.bml",
+      "mtimeMs": 1786997002785.0425,
+      "size": 1700
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/PcbMountingType.bml",
+      "mtimeMs": 1786997002785.118,
+      "size": 1220
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/PcbSocket.bml",
+      "mtimeMs": 1786997002785.1968,
+      "size": 1674
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/PillarGapAutoConfig.bml",
+      "mtimeMs": 1786997002785.301,
+      "size": 1372
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/PlaneRoundingMap.bml",
+      "mtimeMs": 1786997002785.3804,
+      "size": 1763
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/Port.bml",
+      "mtimeMs": 1786997002785.4773,
+      "size": 5627
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/PortShapeType.bml",
+      "mtimeMs": 1786997002785.548,
+      "size": 1109
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/QualityPreset.bml",
+      "mtimeMs": 1786997002785.6082,
+      "size": 1254
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/RadiusAB.bml",
+      "mtimeMs": 1786997002785.6733,
+      "size": 1759
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/RecessWallGap.bml",
+      "mtimeMs": 1786997002785.7498,
+      "size": 1827
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/RotationXY.bml",
+      "mtimeMs": 1786997002785.8174,
+      "size": 1284
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/RotationXYZ.bml",
+      "mtimeMs": 1786997002785.8938,
+      "size": 1341
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/ScadQualityClassFactors.bml",
+      "mtimeMs": 1786997002785.9639,
+      "size": 1568
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/ScadQualityClassMinSegments.bml",
+      "mtimeMs": 1786997002786.026,
+      "size": 1728
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/ScadQualityProfile.bml",
+      "mtimeMs": 1786997002786.096,
+      "size": 2745
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/ScrewHole.bml",
+      "mtimeMs": 1786997002786.1655,
+      "size": 2973
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/SelectiveGrid.bml",
+      "mtimeMs": 1786997002786.2288,
+      "size": 1944
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/SizeAB.bml",
+      "mtimeMs": 1786997002786.2954,
+      "size": 1458
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/SizeXY.bml",
+      "mtimeMs": 1786997002786.355,
+      "size": 1446
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/SizeXYZ.bml",
+      "mtimeMs": 1786997002786.4253,
+      "size": 1667
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/StudType.bml",
+      "mtimeMs": 1786997002786.495,
+      "size": 1088
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/type/WallGap.bml",
+      "mtimeMs": 1786997002786.5686,
+      "size": 1582
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/unit/GridUnitXY.bml",
+      "mtimeMs": 1786997002786.6934,
+      "size": 822
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/unit/GridUnitZ.bml",
+      "mtimeMs": 1786997002786.7761,
+      "size": 773
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/unit/MBU.bml",
+      "mtimeMs": 1786997002786.845,
+      "size": 695
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/Library.bml",
+      "mtimeMs": 1788646784827.5366,
+      "size": 22839
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/README.bml",
+      "mtimeMs": 1788646784839.534,
+      "size": 8527
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/annotation/BmlAnnotation.bml",
+      "mtimeMs": 1788646784787.8103,
+      "size": 9446
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/capability/Action.bml",
+      "mtimeMs": 1788646784429.7004,
+      "size": 840
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/capability/Inbound.bml",
+      "mtimeMs": 1788646784819.8938,
+      "size": 705
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/capability/Outbound.bml",
+      "mtimeMs": 1788646784834.5889,
+      "size": 711
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/capability/Transformation.bml",
+      "mtimeMs": 1788646784846.8203,
+      "size": 806
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/AggregationConstraint.bml",
+      "mtimeMs": 1788646784497.9128,
+      "size": 1112
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/AllowedChildType.bml",
+      "mtimeMs": 1788646784567.2378,
+      "size": 1190
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/AssociationConstraint.bml",
+      "mtimeMs": 1788646784596.2683,
+      "size": 1112
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/BlockConstraint.bml",
+      "mtimeMs": 1788646784638.6682,
+      "size": 1385
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/CapabilityConstraint.bml",
+      "mtimeMs": 1788646784790.8643,
+      "size": 1094
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/Max.bml",
+      "mtimeMs": 1788646784829.1943,
+      "size": 943
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MaxItems.bml",
+      "mtimeMs": 1788646784829.2427,
+      "size": 944
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MaxLength.bml",
+      "mtimeMs": 1788646784829.4343,
+      "size": 1024
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MemberConstraint.bml",
+      "mtimeMs": 1788646784829.864,
+      "size": 1103
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/Min.bml",
+      "mtimeMs": 1788646784832.296,
+      "size": 942
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MinItems.bml",
+      "mtimeMs": 1788646784832.3928,
+      "size": 943
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MinLength.bml",
+      "mtimeMs": 1788646784832.4836,
+      "size": 1023
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/MustBeReadOnly.bml",
+      "mtimeMs": 1788646784832.728,
+      "size": 985
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/NoSelfReference.bml",
+      "mtimeMs": 1788646784833.573,
+      "size": 995
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/Pattern.bml",
+      "mtimeMs": 1788646784835.441,
+      "size": 898
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/PropertyConstraint.bml",
+      "mtimeMs": 1788646784837.267,
+      "size": 1194
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/RequiresImplementation.bml",
+      "mtimeMs": 1788646784840.3682,
+      "size": 1029
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/RequiresMember.bml",
+      "mtimeMs": 1788646784840.6047,
+      "size": 1156
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/StructuralConstraint.bml",
+      "mtimeMs": 1788646784842.5493,
+      "size": 1120
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/ValueConstraint.bml",
+      "mtimeMs": 1788646784851.8347,
+      "size": 1167
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/constraint/ValuePresent.bml",
+      "mtimeMs": 1788646784852.0657,
+      "size": 1206
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Alias.bml",
+      "mtimeMs": 1788646784564.9294,
+      "size": 1533
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Annotation.bml",
+      "mtimeMs": 1788646784574.008,
+      "size": 13501
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Block.bml",
+      "mtimeMs": 1788646784634.485,
+      "size": 5444
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/BlockLibrary.bml",
+      "mtimeMs": 1788646784655.7168,
+      "size": 8433
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Bootstrap.bml",
+      "mtimeMs": 1788646784790.019,
+      "size": 1692
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Capability.bml",
+      "mtimeMs": 1788646784790.7134,
+      "size": 2943
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Constraint.bml",
+      "mtimeMs": 1788646784797.8643,
+      "size": 1816
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Definition.bml",
+      "mtimeMs": 1788646784802.9922,
+      "size": 1495
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Diagnostic.bml",
+      "mtimeMs": 1788646784805.4368,
+      "size": 1274
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Documentation.bml",
+      "mtimeMs": 1788646784805.881,
+      "size": 1447
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Entity.bml",
+      "mtimeMs": 1788646784808.5798,
+      "size": 1457
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Exception.bml",
+      "mtimeMs": 1788646784811.7053,
+      "size": 2378
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Group.bml",
+      "mtimeMs": 1788646784819.684,
+      "size": 838
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Keyword.bml",
+      "mtimeMs": 1788646784825.3445,
+      "size": 1677
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Language.bml",
+      "mtimeMs": 1788646784825.5178,
+      "size": 1093
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Mapping.bml",
+      "mtimeMs": 1788646784828.278,
+      "size": 1694
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/PrimitiveEntity.bml",
+      "mtimeMs": 1788646784835.7493,
+      "size": 2468
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/ReadMe.bml",
+      "mtimeMs": 1788646784839.3892,
+      "size": 1771
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Relation.bml",
+      "mtimeMs": 1788646784839.7817,
+      "size": 1520
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Status.bml",
+      "mtimeMs": 1788646784841.7476,
+      "size": 967
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/TaskGuide.bml",
+      "mtimeMs": 1788646784844.7893,
+      "size": 1494
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/TypeRelation.bml",
+      "mtimeMs": 1788646784849.2034,
+      "size": 2098
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Unit.bml",
+      "mtimeMs": 1788646784850.0317,
+      "size": 1347
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/Validation.bml",
+      "mtimeMs": 1788646784851.5212,
+      "size": 1286
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/core/ValueType.bml",
+      "mtimeMs": 1788646784852.3438,
+      "size": 1421
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/AggregationDefinition.bml",
+      "mtimeMs": 1788646784519.0408,
+      "size": 7535
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/AssociationDefinition.bml",
+      "mtimeMs": 1788646784598.1777,
+      "size": 4186
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/BlockDefinition.bml",
+      "mtimeMs": 1788646784640.2217,
+      "size": 16034
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/CapabilityDefinition.bml",
+      "mtimeMs": 1788646784791.2927,
+      "size": 8102
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/ConstrainableDefinition.bml",
+      "mtimeMs": 1788646784797.4338,
+      "size": 1868
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/EmbeddedBlockDefinition.bml",
+      "mtimeMs": 1788646784807.6504,
+      "size": 3010
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/GenericTypeDefinition.bml",
+      "mtimeMs": 1788646784819.0479,
+      "size": 3913
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/MemberDefinition.bml",
+      "mtimeMs": 1788646784830.1997,
+      "size": 11430
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/PropertyDefinition.bml",
+      "mtimeMs": 1788646784837.348,
+      "size": 7214
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/RootBlockDefinition.bml",
+      "mtimeMs": 1788646784840.8823,
+      "size": 4809
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/StructuralDefinition.bml",
+      "mtimeMs": 1788646784843.1965,
+      "size": 28245
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/definition/SubBlockDefinition.bml",
+      "mtimeMs": 1788646784844.211,
+      "size": 4323
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_ABSTRACT_MEMBER_NOT_IMPLEMENTED.bml",
+      "mtimeMs": 1788646784666.5027,
+      "size": 1427
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_AMBIGUOUS_FUNCTION_MAPPING.bml",
+      "mtimeMs": 1788646784667.1824,
+      "size": 1174
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_AMBIGUOUS_TYPE.bml",
+      "mtimeMs": 1788646784667.974,
+      "size": 1477
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_BLOCK_NAME_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784668.706,
+      "size": 1457
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CAPABILITY_LINK_MISMATCH.bml",
+      "mtimeMs": 1788646784669.7778,
+      "size": 1456
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CARDINALITY_VIOLATION.bml",
+      "mtimeMs": 1788646784670.873,
+      "size": 1699
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CHANGELOG_VERSION_ORDER.bml",
+      "mtimeMs": 1788646784671.3374,
+      "size": 1207
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTANT_VALUE_MISMATCH.bml",
+      "mtimeMs": 1788646784672.2732,
+      "size": 1294
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_INFORMATION.bml",
+      "mtimeMs": 1788646784673.1409,
+      "size": 1281
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_TARGET_MISMATCH.bml",
+      "mtimeMs": 1788646784674.058,
+      "size": 1371
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784675.6357,
+      "size": 1350
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_UNKNOWN.bml",
+      "mtimeMs": 1788646784678.537,
+      "size": 1338
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_VALUE_MISMATCH.bml",
+      "mtimeMs": 1788646784679.179,
+      "size": 1356
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_VIOLATION.bml",
+      "mtimeMs": 1788646784680.564,
+      "size": 1268
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONSTRAINT_WARNING.bml",
+      "mtimeMs": 1788646784681.248,
+      "size": 1259
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONTRACT_MEMBER_KIND_MISMATCH.bml",
+      "mtimeMs": 1788646784681.768,
+      "size": 1465
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_CONTRACT_NOT_ON_ROOT.bml",
+      "mtimeMs": 1788646784682.3225,
+      "size": 1287
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DEFINITION_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784682.7776,
+      "size": 1446
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DEPRECATED_MEMBER_NAMESPACE_ATTR.bml",
+      "mtimeMs": 1788646784683.3596,
+      "size": 1388
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DEPRECATED_TYPE.bml",
+      "mtimeMs": 1788646784684.8267,
+      "size": 1180
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DIRECTIVE_NOT_ALLOWED.bml",
+      "mtimeMs": 1788646784685.4775,
+      "size": 1201
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_CONTRACT.bml",
+      "mtimeMs": 1788646784686.107,
+      "size": 1181
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_DOCUMENTATION.bml",
+      "mtimeMs": 1788646784686.646,
+      "size": 1228
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_EMBEDDED_BLOCK.bml",
+      "mtimeMs": 1788646784687.3308,
+      "size": 1330
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_FUNCTION_PARAMETER.bml",
+      "mtimeMs": 1788646784687.692,
+      "size": 1157
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_GENERIC.bml",
+      "mtimeMs": 1788646784688.3862,
+      "size": 1151
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_MEMBER_NAME.bml",
+      "mtimeMs": 1788646784688.6619,
+      "size": 1324
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_MEMBER_VISIBILITY_VARIANT.bml",
+      "mtimeMs": 1788646784690.1008,
+      "size": 1542
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_PROPERTY_VALUE.bml",
+      "mtimeMs": 1788646784691.8333,
+      "size": 1376
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_SUMMARY.bml",
+      "mtimeMs": 1788646784692.5542,
+      "size": 1156
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_DUPLICATE_TYPE_CONFIGURATION.bml",
+      "mtimeMs": 1788646784692.8425,
+      "size": 1240
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EMBEDDED_BLOCKS_ON_SUBBLOCK.bml",
+      "mtimeMs": 1788646784693.8176,
+      "size": 1442
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXAMPLE_EMPTY_BODY.bml",
+      "mtimeMs": 1788646784694.7173,
+      "size": 1117
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXAMPLE_MISSING_TITLE.bml",
+      "mtimeMs": 1788646784695.3584,
+      "size": 1126
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXAMPLE_UNKNOWN_LANGUAGE.bml",
+      "mtimeMs": 1788646784696.3093,
+      "size": 1336
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPRESSION_TYPE_ERROR.bml",
+      "mtimeMs": 1788646784706.5957,
+      "size": 1337
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_BUILTIN_NOT_V1.bml",
+      "mtimeMs": 1788646784697.805,
+      "size": 1255
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_DIVISION_BY_ZERO.bml",
+      "mtimeMs": 1788646784698.3508,
+      "size": 1270
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_LINK_INVALID_SOURCE.bml",
+      "mtimeMs": 1788646784699.081,
+      "size": 1388
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_LINK_INVALID_TARGET.bml",
+      "mtimeMs": 1788646784699.5205,
+      "size": 1287
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_LINK_PAYLOAD_MISMATCH.bml",
+      "mtimeMs": 1788646784700.0283,
+      "size": 1296
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_MODEL_NO_CONTEXT.bml",
+      "mtimeMs": 1788646784700.7,
+      "size": 1327
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_NOT_ALLOWED_IN_INTERPOLATION.bml",
+      "mtimeMs": 1788646784701.229,
+      "size": 1683
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_PAYLOAD_MISMATCH.bml",
+      "mtimeMs": 1788646784702.6624,
+      "size": 1288
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_SYNTAX_ERROR.bml",
+      "mtimeMs": 1788646784703.8064,
+      "size": 1453
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784704.159,
+      "size": 1555
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_UNKNOWN_BEAN.bml",
+      "mtimeMs": 1788646784704.6865,
+      "size": 1340
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_UNKNOWN_BUILTIN.bml",
+      "mtimeMs": 1788646784705.1477,
+      "size": 1273
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_EXPR_UNKNOWN_PROPERTY.bml",
+      "mtimeMs": 1788646784706.166,
+      "size": 1456
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_FINAL_BASE_TYPE.bml",
+      "mtimeMs": 1788646784707.2148,
+      "size": 1247
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_FINAL_MEMBER_OVERRIDE.bml",
+      "mtimeMs": 1788646784707.6858,
+      "size": 1438
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_FUNCTION_DUPLICATE_MAIN.bml",
+      "mtimeMs": 1788646784708.376,
+      "size": 1302
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_FUNCTION_MISSING_MAIN.bml",
+      "mtimeMs": 1788646784708.8745,
+      "size": 1262
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_FUNCTION_NO_RUNTIME_IMPL.bml",
+      "mtimeMs": 1788646784709.6882,
+      "size": 1412
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERICS_ARGUMENT_MISMATCH.bml",
+      "mtimeMs": 1788646784713.8367,
+      "size": 2430
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERICS_DIRECTIVE_NOT_ALLOWED.bml",
+      "mtimeMs": 1788646784714.452,
+      "size": 1750
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_BLOCK_NAME_COLLISION.bml",
+      "mtimeMs": 1788646784710.863,
+      "size": 1410
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_CONSTRAINT_VIOLATION.bml",
+      "mtimeMs": 1788646784711.206,
+      "size": 1535
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_DEFAULT_CYCLE.bml",
+      "mtimeMs": 1788646784712.0295,
+      "size": 1118
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_DEFAULT_FORWARD_REF.bml",
+      "mtimeMs": 1788646784712.2744,
+      "size": 1219
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_DEFAULT_UNRESOLVED.bml",
+      "mtimeMs": 1788646784712.9973,
+      "size": 1205
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_GENERIC_SUBBLOCK_NAME_COLLISION.bml",
+      "mtimeMs": 1788646784713.4172,
+      "size": 1445
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_IDENTITY_TYPE_CHILD_ELEMENT.bml",
+      "mtimeMs": 1788646784714.9973,
+      "size": 1305
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_IMPLEMENTATION_UNKNOWN_LANGUAGE.bml",
+      "mtimeMs": 1788646784715.4736,
+      "size": 1424
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_BLOCK_NAME.bml",
+      "mtimeMs": 1788646784716.0085,
+      "size": 1323
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_DEFINITION_BRANCH.bml",
+      "mtimeMs": 1788646784717.3596,
+      "size": 1378
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_EMBEDDED_EXPRESSION.bml",
+      "mtimeMs": 1788646784718.6084,
+      "size": 1436
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_NAMESPACE_TARGET.bml",
+      "mtimeMs": 1788646784719.093,
+      "size": 1212
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_PROPERTY.bml",
+      "mtimeMs": 1788646784720.9375,
+      "size": 1273
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_PROPERTY_TYPE.bml",
+      "mtimeMs": 1788646784719.9563,
+      "size": 1502
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_SINCE_VERSION.bml",
+      "mtimeMs": 1788646784721.7495,
+      "size": 1134
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_TYPE_REFERENCE.bml",
+      "mtimeMs": 1788646784722.53,
+      "size": 2399
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_INVALID_VALUE.bml",
+      "mtimeMs": 1788646784723.8308,
+      "size": 1893
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_LEGACY_TYPE_SOURCE.bml",
+      "mtimeMs": 1788646784725.0005,
+      "size": 1281
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_LIBRARY_NESTING_VIOLATION.bml",
+      "mtimeMs": 1788646784725.6394,
+      "size": 1215
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_AGGREGATION_TYPE.bml",
+      "mtimeMs": 1788646784726.1716,
+      "size": 1337
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_BASE_TYPE.bml",
+      "mtimeMs": 1788646784726.647,
+      "size": 1279
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_BLOCK_TYPE.bml",
+      "mtimeMs": 1788646784727.5173,
+      "size": 1237
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_CONSTANT_VALUE.bml",
+      "mtimeMs": 1788646784728.079,
+      "size": 1184
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_DOCUMENTATION.bml",
+      "mtimeMs": 1788646784728.5283,
+      "size": 1239
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_EMBEDDED_BLOCK_TYPE.bml",
+      "mtimeMs": 1788646784730.0261,
+      "size": 1461
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_FUNCTION_MAPPING.bml",
+      "mtimeMs": 1788646784730.9448,
+      "size": 1256
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_FUNCTION_PARAMETER.bml",
+      "mtimeMs": 1788646784731.256,
+      "size": 1213
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_GENERIC_TYPE_ARGUMENT.bml",
+      "mtimeMs": 1788646784731.688,
+      "size": 1608
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_ID.bml",
+      "mtimeMs": 1788646784733.0999,
+      "size": 1225
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_IMPLEMENTATION_LANGUAGE.bml",
+      "mtimeMs": 1788646784733.3188,
+      "size": 1337
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_IS.bml",
+      "mtimeMs": 1788646784734.4287,
+      "size": 1184
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_IS_NOT.bml",
+      "mtimeMs": 1788646784733.9434,
+      "size": 1160
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_SUBBLOCK_NAME.bml",
+      "mtimeMs": 1788646784735.506,
+      "size": 1380
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_SUMMARY.bml",
+      "mtimeMs": 1788646784736.9258,
+      "size": 1194
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MISSING_VERSION.bml",
+      "mtimeMs": 1788646784737.644,
+      "size": 1265
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MIXED_FUNCTION_ARGUMENTS.bml",
+      "mtimeMs": 1788646784737.9978,
+      "size": 1354
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_MIXED_TYPE_CONFIGURATION.bml",
+      "mtimeMs": 1788646784738.5,
+      "size": 1378
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NAMESPACE_PREFIX_COLLISION.bml",
+      "mtimeMs": 1788646784739.087,
+      "size": 1359
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NAMESPACE_UNBOUND.bml",
+      "mtimeMs": 1788646784739.7175,
+      "size": 1324
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NATIVE_BLOCK_CUSTOM_PROPERTY.bml",
+      "mtimeMs": 1788646784740.4045,
+      "size": 1217
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NESTED_EMBEDDED_BLOCKS.bml",
+      "mtimeMs": 1788646784741.119,
+      "size": 1406
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NON_STATIC_INSTANCE_REF.bml",
+      "mtimeMs": 1788646784742.4888,
+      "size": 1392
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_NO_TARGET.bml",
+      "mtimeMs": 1788646784742.105,
+      "size": 1128
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_OPEN_GENERIC_INSTANCE.bml",
+      "mtimeMs": 1788646784742.9302,
+      "size": 1837
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_OUTSIDE_BML_NAMESPACE.bml",
+      "mtimeMs": 1788646784743.675,
+      "size": 1291
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_OVERRIDE_REQUIRED.bml",
+      "mtimeMs": 1788646784744.2197,
+      "size": 1497
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_OVERRIDE_WITHOUT_PARENT.bml",
+      "mtimeMs": 1788646784744.9675,
+      "size": 1365
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PREFER_CONSTANT_TYPE.bml",
+      "mtimeMs": 1788646784745.4143,
+      "size": 1312
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PREFER_TYPE_CONFIGURATION.bml",
+      "mtimeMs": 1788646784745.9307,
+      "size": 1415
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PRESET_CYCLE.bml",
+      "mtimeMs": 1788646784746.5823,
+      "size": 1023
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PRIVATE_MEMBER_ACCESS.bml",
+      "mtimeMs": 1788646784746.956,
+      "size": 1449
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PRIVATE_SUBBLOCK_ACCESS.bml",
+      "mtimeMs": 1788646784747.2861,
+      "size": 1433
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PROPERTY_CYCLE.bml",
+      "mtimeMs": 1788646784748.9495,
+      "size": 1290
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PROTECTED_MEMBER_ACCESS.bml",
+      "mtimeMs": 1788646784749.482,
+      "size": 1460
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_PROTECTED_SUBBLOCK_ACCESS.bml",
+      "mtimeMs": 1788646784749.9717,
+      "size": 1380
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_READONLY_MEMBER_WRITE.bml",
+      "mtimeMs": 1788646784750.6248,
+      "size": 1366
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_REDUNDANT_AGGREGATION_TYPE.bml",
+      "mtimeMs": 1788646784751.2559,
+      "size": 1481
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_REDUNDANT_STATUS.bml",
+      "mtimeMs": 1788646784752.0615,
+      "size": 1166
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_REFERENCE_AMBIGUOUS_TARGET.bml",
+      "mtimeMs": 1788646784752.471,
+      "size": 1218
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_REFERENCE_MISSING_TARGET.bml",
+      "mtimeMs": 1788646784753.1682,
+      "size": 1192
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_REFERENCE_UNKNOWN_MEMBER.bml",
+      "mtimeMs": 1788646784753.8977,
+      "size": 1329
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_STANDALONE_COMPOSITION.bml",
+      "mtimeMs": 1788646784754.479,
+      "size": 1646
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_SUBBLOCK_QUALIFIED_REFERENCE_REQUIRED.bml",
+      "mtimeMs": 1788646784755.5776,
+      "size": 1556
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_SUBBLOCK_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784756.1748,
+      "size": 1438
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_SUGGESTIONS_ON_ENUM.bml",
+      "mtimeMs": 1788646784756.8044,
+      "size": 1315
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_SUGGESTION_TYPE_MISMATCH.bml",
+      "mtimeMs": 1788646784756.323,
+      "size": 1354
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TOO_MANY_FUNCTION_PARAMETERS.bml",
+      "mtimeMs": 1788646784757.4397,
+      "size": 1215
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TYPE_BOUND_NOT_SATISFIED.bml",
+      "mtimeMs": 1788646784758.0527,
+      "size": 1321
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TYPE_CONFIGURATION_VIOLATION.bml",
+      "mtimeMs": 1788646784759.3203,
+      "size": 1287
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TYPE_REFERENCE_CHILD_VALUE.bml",
+      "mtimeMs": 1788646784760.9192,
+      "size": 1356
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TYPE_REFERENCE_CONSTRAINT.bml",
+      "mtimeMs": 1788646784761.2517,
+      "size": 1856
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_TYPE_REFERENCE_MULTIPLICITY.bml",
+      "mtimeMs": 1788646784762.6355,
+      "size": 1382
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNCLOSED_EMBEDDED_EXPRESSION.bml",
+      "mtimeMs": 1788646784764.0693,
+      "size": 1300
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNEXPORTED_INSTANCE_REF.bml",
+      "mtimeMs": 1788646784764.6592,
+      "size": 1373
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_BEAN.bml",
+      "mtimeMs": 1788646784765.309,
+      "size": 1405
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_CAPABILITY.bml",
+      "mtimeMs": 1788646784765.789,
+      "size": 1287
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_CONTRACT.bml",
+      "mtimeMs": 1788646784774.6309,
+      "size": 1273
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_DIRECTIVE.bml",
+      "mtimeMs": 1788646784775.3264,
+      "size": 1151
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_FUNCTION_PARAMETER.bml",
+      "mtimeMs": 1788646784775.4722,
+      "size": 1183
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_NAMESPACE_PREFIX.bml",
+      "mtimeMs": 1788646784776.3726,
+      "size": 1443
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_NATURAL_LANGUAGE.bml",
+      "mtimeMs": 1788646784777.6458,
+      "size": 1332
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_PROPERTY.bml",
+      "mtimeMs": 1788646784777.9226,
+      "size": 2093
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_RELATION.bml",
+      "mtimeMs": 1788646784778.3945,
+      "size": 1291
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_SERVICE.bml",
+      "mtimeMs": 1788646784778.651,
+      "size": 1238
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_STATUS.bml",
+      "mtimeMs": 1788646784779.4797,
+      "size": 1255
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_TARGET.bml",
+      "mtimeMs": 1788646784779.8254,
+      "size": 1152
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_TYPE.bml",
+      "mtimeMs": 1788646784780.936,
+      "size": 3214
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_TYPE_CONFIGURATION.bml",
+      "mtimeMs": 1788646784780.8604,
+      "size": 1242
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNKNOWN_VERSION.bml",
+      "mtimeMs": 1788646784781.264,
+      "size": 1365
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNQUALIFIED_BLOCK_REFERENCE.bml",
+      "mtimeMs": 1788646784781.659,
+      "size": 1639
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNQUALIFIED_EMBEDDED_BLOCK_TYPE.bml",
+      "mtimeMs": 1788646784781.9224,
+      "size": 1311
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNREACHABLE_UNION_ALTERNATIVE.bml",
+      "mtimeMs": 1788646784782.3367,
+      "size": 1272
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_UNRESOLVABLE_INSTANCE_REF.bml",
+      "mtimeMs": 1788646784782.3733,
+      "size": 1999
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VALIDATION_UNKNOWN.bml",
+      "mtimeMs": 1788646784782.9414,
+      "size": 1286
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VERSION_BELOW_LIBRARY.bml",
+      "mtimeMs": 1788646784783.4524,
+      "size": 1224
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VERSION_MINOR_DRIFT.bml",
+      "mtimeMs": 1788646784783.6016,
+      "size": 1232
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VISIBILITY_MISMATCH.bml",
+      "mtimeMs": 1788646784783.7637,
+      "size": 1445
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VISIBILITY_NARROWING.bml",
+      "mtimeMs": 1788646784784.0254,
+      "size": 1456
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_VISIBILITY_ON_ROOT_BLOCK.bml",
+      "mtimeMs": 1788646784784.137,
+      "size": 1473
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_XML_DIRECTIVE_NOT_ALLOWED.bml",
+      "mtimeMs": 1788646784784.3743,
+      "size": 1380
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/diagnostic/BML_XML_RENDERING_INVALID.bml",
+      "mtimeMs": 1788646784784.46,
+      "size": 1191
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/AnnotationModel.bml",
+      "mtimeMs": 1788646784595.1929,
+      "size": 4345
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/BlockAndInstance.bml",
+      "mtimeMs": 1788646784637.5564,
+      "size": 4190
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/BlockNameConvention.bml",
+      "mtimeMs": 1788646784657.6602,
+      "size": 2634
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/BmlDirectives.bml",
+      "mtimeMs": 1788646784787.9502,
+      "size": 6915
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/BmlNamespace.bml",
+      "mtimeMs": 1788646784788.261,
+      "size": 4747
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/BootstrapModel.bml",
+      "mtimeMs": 1788646784790.5125,
+      "size": 5627
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/CapabilitySemantics.bml",
+      "mtimeMs": 1788646784794.0654,
+      "size": 7110
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/CompilerArchitecture.bml",
+      "mtimeMs": 1788646784796.4624,
+      "size": 1924
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/CompositionModel.bml",
+      "mtimeMs": 1788646784796.656,
+      "size": 5952
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ConstantValueType.bml",
+      "mtimeMs": 1788646784797.132,
+      "size": 3072
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ConstraintsModel.bml",
+      "mtimeMs": 1788646784797.9397,
+      "size": 4618
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ContractsModel.bml",
+      "mtimeMs": 1788646784798.7107,
+      "size": 3959
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/CoreUseCases.bml",
+      "mtimeMs": 1788646784799.3052,
+      "size": 6824
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/DefinitionModel.bml",
+      "mtimeMs": 1788646784803.6572,
+      "size": 4237
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/DocumentationModel.bml",
+      "mtimeMs": 1788646784806.3662,
+      "size": 13380
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/EmbeddedExpressions.bml",
+      "mtimeMs": 1788646784807.9373,
+      "size": 3844
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/EverythingIsABlock.bml",
+      "mtimeMs": 1788646784810.9717,
+      "size": 3549
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/Expressions.bml",
+      "mtimeMs": 1788646784811.9707,
+      "size": 8369
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/FunctionMappingModel.bml",
+      "mtimeMs": 1788646784818.0337,
+      "size": 5562
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/GenericsModel.bml",
+      "mtimeMs": 1788646784818.729,
+      "size": 6561
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ImplicitNamespaceResolution.bml",
+      "mtimeMs": 1788646784819.7954,
+      "size": 4490
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/Introduction.bml",
+      "mtimeMs": 1788646784823.2458,
+      "size": 2253
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/LibrarySystem.bml",
+      "mtimeMs": 1788646784827.7734,
+      "size": 4265
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/MemberAuthoring.bml",
+      "mtimeMs": 1788646784829.735,
+      "size": 9215
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/MemberVisibility.bml",
+      "mtimeMs": 1788646784831.593,
+      "size": 4834
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ModelingGuidelines.bml",
+      "mtimeMs": 1788646784832.6558,
+      "size": 4809
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/PartialMemberOverrides.bml",
+      "mtimeMs": 1788646784835.375,
+      "size": 5581
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/PseudoCode.bml",
+      "mtimeMs": 1788646784838.1953,
+      "size": 3208
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/RendererFreedom.bml",
+      "mtimeMs": 1788646784840.0962,
+      "size": 2987
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/SubBlockModel.bml",
+      "mtimeMs": 1788646784844.2307,
+      "size": 4873
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/TaskGuideModel.bml",
+      "mtimeMs": 1788646784845.1392,
+      "size": 3845
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/TypeExpressions.bml",
+      "mtimeMs": 1788646784847.1355,
+      "size": 12514
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/TypeIdentityDerivation.bml",
+      "mtimeMs": 1788646784848.2676,
+      "size": 6465
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/TypeSystemOverview.bml",
+      "mtimeMs": 1788646784849.7412,
+      "size": 7053
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ValueTypeConfiguration.bml",
+      "mtimeMs": 1788646784852.5784,
+      "size": 4184
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/ValueTypeParsing.bml",
+      "mtimeMs": 1788646784852.667,
+      "size": 3538
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/documentation/WOTFoundation.bml",
+      "mtimeMs": 1788646784853.3032,
+      "size": 3287
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/exception/InvalidValueException.bml",
+      "mtimeMs": 1788646784824.5854,
+      "size": 1859
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/group/BlockGroup.bml",
+      "mtimeMs": 1788646784653.6633,
+      "size": 900
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/group/MemberGroup.bml",
+      "mtimeMs": 1788646784830.513,
+      "size": 1080
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/BML.bml",
+      "mtimeMs": 1788646784785.9268,
+      "size": 948
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/C.bml",
+      "mtimeMs": 1788646784790.6445,
+      "size": 864
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/CPP.bml",
+      "mtimeMs": 1788646784799.5312,
+      "size": 880
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/CSharp.bml",
+      "mtimeMs": 1788646784799.7405,
+      "size": 890
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Chinese.bml",
+      "mtimeMs": 1788646784795.633,
+      "size": 677
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/English.bml",
+      "mtimeMs": 1788646784808.433,
+      "size": 677
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/French.bml",
+      "mtimeMs": 1788646784816.409,
+      "size": 671
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/German.bml",
+      "mtimeMs": 1788646784819.648,
+      "size": 671
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/JSON.bml",
+      "mtimeMs": 1788646784825.2556,
+      "size": 914
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Japanese.bml",
+      "mtimeMs": 1788646784824.8066,
+      "size": 683
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Java.bml",
+      "mtimeMs": 1788646784824.9434,
+      "size": 886
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/JavaScript.bml",
+      "mtimeMs": 1788646784824.9658,
+      "size": 936
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Markdown.bml",
+      "mtimeMs": 1788646784828.573,
+      "size": 2592
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/MarkupLanguage.bml",
+      "mtimeMs": 1788646784828.755,
+      "size": 2130
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/NaturalLanguage.bml",
+      "mtimeMs": 1788646784832.9204,
+      "size": 1207
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/OpenSCAD.bml",
+      "mtimeMs": 1788646784834.333,
+      "size": 1001
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/ProgrammingLanguage.bml",
+      "mtimeMs": 1788646784836.3958,
+      "size": 2302
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/PseudoCode.bml",
+      "mtimeMs": 1788646784838.6306,
+      "size": 1097
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Python.bml",
+      "mtimeMs": 1788646784839.1365,
+      "size": 904
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Russian.bml",
+      "mtimeMs": 1788646784841.0798,
+      "size": 677
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Spanish.bml",
+      "mtimeMs": 1788646784841.4783,
+      "size": 677
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/TypeScript.bml",
+      "mtimeMs": 1788646784849.5789,
+      "size": 1006
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/Unity.bml",
+      "mtimeMs": 1788646784850.1233,
+      "size": 942
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/XML.bml",
+      "mtimeMs": 1788646784853.567,
+      "size": 906
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/language/YML.bml",
+      "mtimeMs": 1788646784853.6975,
+      "size": 908
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/mapping/FunctionMapping.bml",
+      "mtimeMs": 1788646784817.8286,
+      "size": 3616
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/meta/FixedAlias.bml",
+      "mtimeMs": 1788646784814.2178,
+      "size": 3218
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/meta/FixedKeyword.bml",
+      "mtimeMs": 1788646784814.2893,
+      "size": 3174
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/meta/FreeTextAlias.bml",
+      "mtimeMs": 1788646784815.8557,
+      "size": 2705
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/meta/FreeTextKeyword.bml",
+      "mtimeMs": 1788646784816.2207,
+      "size": 2639
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/AuthoringGuide.bml",
+      "mtimeMs": 1788646784631.577,
+      "size": 805
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/ContrastsWith.bml",
+      "mtimeMs": 1788646784799.0986,
+      "size": 781
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/DeepDive.bml",
+      "mtimeMs": 1788646784802.5981,
+      "size": 796
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/Defines.bml",
+      "mtimeMs": 1788646784802.8394,
+      "size": 760
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/Extends.bml",
+      "mtimeMs": 1788646784812.2866,
+      "size": 714
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/Prerequisite.bml",
+      "mtimeMs": 1788646784835.5898,
+      "size": 831
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/ReadFirst.bml",
+      "mtimeMs": 1788646784839.317,
+      "size": 1174
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/ReadNext.bml",
+      "mtimeMs": 1788646784839.6091,
+      "size": 1007
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/Requires.bml",
+      "mtimeMs": 1788646784840.2275,
+      "size": 737
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/Resolves.bml",
+      "mtimeMs": 1788646784840.7263,
+      "size": 874
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/SeeAlso.bml",
+      "mtimeMs": 1788646784841.3413,
+      "size": 803
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/TaskIndex.bml",
+      "mtimeMs": 1788646784845.2205,
+      "size": 875
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/TaskStep.bml",
+      "mtimeMs": 1788646784845.255,
+      "size": 902
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/relation/ThenContinueWith.bml",
+      "mtimeMs": 1788646784846.4724,
+      "size": 1837
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/service/Bools.bml",
+      "mtimeMs": 1788646784789.691,
+      "size": 1745
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/service/Lists.bml",
+      "mtimeMs": 1788646784828.111,
+      "size": 8209
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/service/Math.bml",
+      "mtimeMs": 1788646784828.887,
+      "size": 5603
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/service/Numbers.bml",
+      "mtimeMs": 1788646784834.0933,
+      "size": 2222
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/service/Strings.bml",
+      "mtimeMs": 1788646784842.1106,
+      "size": 6633
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/status/Deprecated.bml",
+      "mtimeMs": 1788646784805.1692,
+      "size": 735
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/status/Draft.bml",
+      "mtimeMs": 1788646784806.9746,
+      "size": 767
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/status/Stable.bml",
+      "mtimeMs": 1788646784841.6138,
+      "size": 783
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/status/Stub.bml",
+      "mtimeMs": 1788646784843.4036,
+      "size": 858
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/AddConstraint.bml",
+      "mtimeMs": 1788646784471.6738,
+      "size": 2257
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/AuthorNewBlock.bml",
+      "mtimeMs": 1788646784632.2332,
+      "size": 2505
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/DebugUnknownType.bml",
+      "mtimeMs": 1788646784801.0298,
+      "size": 2737
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/FixCompositionPlacement.bml",
+      "mtimeMs": 1788646784812.9001,
+      "size": 2362
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/FixExpressionErrors.bml",
+      "mtimeMs": 1788646784814.6125,
+      "size": 3313
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/FixMemberOverride.bml",
+      "mtimeMs": 1788646784815.0916,
+      "size": 2421
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/FixTypeIdentity.bml",
+      "mtimeMs": 1788646784815.2034,
+      "size": 2577
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/task/FixVisibilityAccess.bml",
+      "mtimeMs": 1788646784815.3435,
+      "size": 2329
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AggregationIdentifier.bml",
+      "mtimeMs": 1788646784538.4133,
+      "size": 1541
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AggregationIdentifierEntity.bml",
+      "mtimeMs": 1788646784539.943,
+      "size": 885
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AggregationReference.bml",
+      "mtimeMs": 1788646784543.5337,
+      "size": 1563
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AggregationReferenceEntity.bml",
+      "mtimeMs": 1788646784546.9084,
+      "size": 1180
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AssociationIdentifier.bml",
+      "mtimeMs": 1788646784600.3408,
+      "size": 1544
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AssociationIdentifierEntity.bml",
+      "mtimeMs": 1788646784614.0007,
+      "size": 885
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AssociationReference.bml",
+      "mtimeMs": 1788646784615.0193,
+      "size": 1566
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/AssociationReferenceEntity.bml",
+      "mtimeMs": 1788646784616.119,
+      "size": 1180
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Boolean.bml",
+      "mtimeMs": 1788646784788.3967,
+      "size": 2938
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/BooleanEntity.bml",
+      "mtimeMs": 1788646784788.5818,
+      "size": 653
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/CapabilityIdentifier.bml",
+      "mtimeMs": 1788646784791.6453,
+      "size": 1520
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/CapabilityIdentifierEntity.bml",
+      "mtimeMs": 1788646784791.9316,
+      "size": 875
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/CapabilityReference.bml",
+      "mtimeMs": 1788646784792.2434,
+      "size": 1543
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/CapabilityReferenceEntity.bml",
+      "mtimeMs": 1788646784794.0925,
+      "size": 1168
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Color.bml",
+      "mtimeMs": 1788646784795.8813,
+      "size": 3734
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/ColorEntity.bml",
+      "mtimeMs": 1788646784796.0212,
+      "size": 694
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Constant.bml",
+      "mtimeMs": 1788646784796.8647,
+      "size": 3353
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/ConstantType.bml",
+      "mtimeMs": 1788646784796.9985,
+      "size": 2972
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Date.bml",
+      "mtimeMs": 1788646784799.9663,
+      "size": 3475
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/DateEntity.bml",
+      "mtimeMs": 1788646784800.5688,
+      "size": 699
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/DateTime.bml",
+      "mtimeMs": 1788646784800.595,
+      "size": 4040
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/DateTimeEntity.bml",
+      "mtimeMs": 1788646784800.8416,
+      "size": 724
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Decimal.bml",
+      "mtimeMs": 1788646784801.574,
+      "size": 2915
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/DecimalEntity.bml",
+      "mtimeMs": 1788646784802.1108,
+      "size": 648
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Duration.bml",
+      "mtimeMs": 1788646784807.1091,
+      "size": 3568
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/DurationEntity.bml",
+      "mtimeMs": 1788646784807.4915,
+      "size": 724
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/EmptyStruct.bml",
+      "mtimeMs": 1788646784808.0461,
+      "size": 1453
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/EnumType.bml",
+      "mtimeMs": 1788646784808.887,
+      "size": 5276
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/FilePath.bml",
+      "mtimeMs": 1788646784812.4363,
+      "size": 525
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/FilePathEntity.bml",
+      "mtimeMs": 1788646784812.7976,
+      "size": 654
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Float.bml",
+      "mtimeMs": 1788646784815.458,
+      "size": 2278
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/FloatEntity.bml",
+      "mtimeMs": 1788646784815.6628,
+      "size": 645
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/InstanceIdentifier.bml",
+      "mtimeMs": 1788646784820.5513,
+      "size": 3398
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/InstanceIdentifierEntity.bml",
+      "mtimeMs": 1788646784820.6377,
+      "size": 870
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/InstanceReference.bml",
+      "mtimeMs": 1788646784821.117,
+      "size": 4036
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/InstanceReferenceEntity.bml",
+      "mtimeMs": 1788646784822.8806,
+      "size": 1127
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Integer.bml",
+      "mtimeMs": 1788646784823.0696,
+      "size": 2578
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/IntegerEntity.bml",
+      "mtimeMs": 1788646784823.1047,
+      "size": 718
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/MemberIdentifier.bml",
+      "mtimeMs": 1788646784830.9673,
+      "size": 4276
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/MemberIdentifierEntity.bml",
+      "mtimeMs": 1788646784831.344,
+      "size": 1299
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/MimeType.bml",
+      "mtimeMs": 1788646784831.8708,
+      "size": 1651
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/MimeTypeEntity.bml",
+      "mtimeMs": 1788646784832.014,
+      "size": 648
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Number.bml",
+      "mtimeMs": 1788646784834.1672,
+      "size": 2634
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PackageIdentifier.bml",
+      "mtimeMs": 1788646784834.6775,
+      "size": 3453
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PackageIdentifierEntity.bml",
+      "mtimeMs": 1788646784834.7812,
+      "size": 854
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PackageReference.bml",
+      "mtimeMs": 1788646784834.8547,
+      "size": 3407
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PackageReferenceEntity.bml",
+      "mtimeMs": 1788646784835.2153,
+      "size": 781
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PrimitiveType.bml",
+      "mtimeMs": 1788646784836.1785,
+      "size": 3649
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PropertyIdentifier.bml",
+      "mtimeMs": 1788646784837.6206,
+      "size": 1532
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PropertyIdentifierEntity.bml",
+      "mtimeMs": 1788646784837.8481,
+      "size": 859
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PropertyReference.bml",
+      "mtimeMs": 1788646784837.9277,
+      "size": 1672
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/PropertyReferenceEntity.bml",
+      "mtimeMs": 1788646784838.151,
+      "size": 1148
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/StructType.bml",
+      "mtimeMs": 1788646784842.368,
+      "size": 5329
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Temporal.bml",
+      "mtimeMs": 1788646784845.5537,
+      "size": 1977
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Text.bml",
+      "mtimeMs": 1788646784846.0579,
+      "size": 2921
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TextEntity.bml",
+      "mtimeMs": 1788646784846.3923,
+      "size": 630
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Time.bml",
+      "mtimeMs": 1788646784846.561,
+      "size": 3491
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TimeEntity.bml",
+      "mtimeMs": 1788646784846.7354,
+      "size": 704
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TypeIdentifier.bml",
+      "mtimeMs": 1788646784847.7922,
+      "size": 8230
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TypeIdentifierEntity.bml",
+      "mtimeMs": 1788646784848.1187,
+      "size": 830
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TypeReference.bml",
+      "mtimeMs": 1788646784848.7878,
+      "size": 5591
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/TypeReferenceEntity.bml",
+      "mtimeMs": 1788646784849.13,
+      "size": 4362
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/URI.bml",
+      "mtimeMs": 1788646784850.347,
+      "size": 503
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/URIEntity.bml",
+      "mtimeMs": 1788646784850.5867,
+      "size": 633
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/URL.bml",
+      "mtimeMs": 1788646784850.6348,
+      "size": 495
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/URLEntity.bml",
+      "mtimeMs": 1788646784850.8154,
+      "size": 625
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/UUID.bml",
+      "mtimeMs": 1788646784850.9722,
+      "size": 1592
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/UUIDEntity.bml",
+      "mtimeMs": 1788646784851.289,
+      "size": 623
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/Version.bml",
+      "mtimeMs": 1788646784852.898,
+      "size": 2224
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/type/VersionEntity.bml",
+      "mtimeMs": 1788646784853.054,
+      "size": 648
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/Centimeter.bml",
+      "mtimeMs": 1788646784795.2422,
+      "size": 559
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/Degree.bml",
+      "mtimeMs": 1788646784803.5532,
+      "size": 638
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/Inch.bml",
+      "mtimeMs": 1788646784820.097,
+      "size": 523
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/Meter.bml",
+      "mtimeMs": 1788646784831.61,
+      "size": 527
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/Millimeter.bml",
+      "mtimeMs": 1788646784831.796,
+      "size": 559
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/unit/None.bml",
+      "mtimeMs": 1788646784833.066,
+      "size": 587
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/validation/Error.bml",
+      "mtimeMs": 1788646784810.5764,
+      "size": 684
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/validation/Information.bml",
+      "mtimeMs": 1788646784820.3608,
+      "size": 724
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/node_modules/@blockml/core/blocks/org/blockml/bml/validation/Warning.bml",
+      "mtimeMs": 1788646784853.1833,
+      "size": 693
+    }
+  ]
+}

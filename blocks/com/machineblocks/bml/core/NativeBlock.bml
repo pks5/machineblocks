@@ -4020,7 +4020,7 @@
       </examples>
     </stabilizerHeight>
 
-    <stabilizerLayerOffset type="Decimal(unit:Millimeter)">
+    <stabilizerLayerOffset type="mbt:Auto | Decimal(unit:Millimeter)">
       <groups>
         <mbgroup:PrintHelpers />
         <mbgroup:RareAiUsage />
@@ -4158,7 +4158,7 @@
       </examples>
     </studClampHeight>
 
-    <studClampOffset type="Decimal(mbunit:MBU)">
+    <studClampOffset type="mbt:Auto | Decimal(mbunit:MBU)">
       <groups>
         <mbgroup:Studs />
         <mbgroup:RareAiUsage />
@@ -4388,7 +4388,7 @@
       </examples>
     </studHoleClampThickness>
 
-    <studHoleDiameter type="Decimal(mbunit:MBU)">
+    <studHoleDiameter type="mbt:Auto | Decimal(mbunit:MBU)">
       <groups>
         <mbgroup:Studs />
         <mbgroup:RareAiUsage />
@@ -5507,7 +5507,7 @@
       </examples>
     </tongueGrooveClampOffsetClearance>
 
-    <tongueGrooveDepthClearance type="Decimal(unit:Millimeter)">
+    <tongueGrooveDepthClearance type="mbt:Auto | Decimal(unit:Millimeter)">
       <groups>
         <mbgroup:TongueGroove />
         <mbgroup:ConfigOnlyAiUsage />
@@ -5777,7 +5777,7 @@
       </examples>
     </topPlateHeightAdjustment>
 
-    <topPlateHelperHeight type="Decimal(unit:Millimeter)">
+    <topPlateHelperHeight type="mbt:Auto | Decimal(unit:Millimeter)">
       <groups>
         <mbgroup:PrintHelpers />
         <mbgroup:RareAiUsage />
