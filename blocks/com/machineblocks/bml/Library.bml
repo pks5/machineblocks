@@ -54,7 +54,7 @@
   </language>
 
   <properties>
-    <description>
+    <description override="true">
       <value>MachineBlocks root library</value>
     </description>
   </properties>

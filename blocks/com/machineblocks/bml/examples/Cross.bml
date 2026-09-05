@@ -17,9 +17,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
-  xmlns:mbt="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>Cross</name>
   <type>examples:Cross</type>
@@ -37,7 +40,7 @@
     </studs>
 
     <!-- Size -->
-    <size type="mbt:Size3D">
+    <size type="mbt:SizeXYZ">
       <value>[4, 4, 3]</value>
     </size>
 
@@ -59,9 +62,9 @@
       <documentation>Brick 2 offset in X-direction (grid units).</documentation>
     </brick2OffsetX>
 
-    <!-- Base -->
-    <baseCutoutType type="mbt:BaseCutoutType">
-      <value>standard</value>
+    <!-- Base — types aligned to NativeBlock -->
+    <baseCutoutType type="mbt:BaseCutout">
+      <value>Standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
       <value>true</value>
@@ -69,57 +72,50 @@
     <baseReliefCut type="Boolean">
       <value>false</value>
     </baseReliefCut>
-    <baseReliefCutHeight type="Float">
+    <baseReliefCutHeight type="Decimal(mbunit:MBU)">
       <value>0.4</value>
     </baseReliefCutHeight>
-    <baseReliefCutThickness type="Float">
+    <baseReliefCutThickness type="Decimal(mbunit:MBU)">
       <value>0.4</value>
     </baseReliefCutThickness>
-    <grille type="mbt:GrilleType">
-      <value>none</value>
+    <grille type="mbt:Grille">
+      <value>None</value>
     </grille>
     <grilleInverted type="Boolean">
       <value>false</value>
     </grilleInverted>
-    <grilleDepth type="Float">
+    <grilleDepth type="Decimal(mbunit:MBU)">
       <value>1</value>
     </grilleDepth>
-    <grilleCount type="Float">
-      <value>2.5</value>
+    <grilleCount type="Integer">
+      <value>5</value>
     </grilleCount>
 
     <studShift type="Boolean">
       <value>false</value>
     </studShift>
     <studType type="mbt:StudType">
-      <value>solid</value>
+      <value>Solid</value>
     </studType>
-    <studPadding type="mbt:PaddingList">
+    <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
-    <studBaseOverlap type="Float">
+    <studBaseOverlap type="Decimal(mbunit:MBU)">
       <value>0.25</value>
     </studBaseOverlap>
 
     <!-- Style -->
-    <baseColor type="mbt:Color">
+    <baseColor type="Color">
       <value>#EAC645</value>
-      <suggestions>
-        <mbt:Color value="#EAC645" label="Sun Flower" />
-        <mbt:Color value="#303D4E" label="Midnight Blue" />
-        <mbt:Color value="#58B99D" label="Turquoise" />
-        <mbt:Color value="#D65745" label="Alizarin" />
-        <mbt:Color value="#EDF0F1" label="Clouds" />
-      </suggestions>
     </baseColor>
-    <surfacePattern type="Text">
-      <value>none</value>
+    <surfacePattern type="Boolean.False | FilePath">
+      <value>False</value>
     </surfacePattern>
-    <surfacePatternScale type="Float">
+    <surfacePatternScale type="Decimal">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="Text">
-      <value>none</value>
+    <studIcon type="Boolean.False | FilePath">
+      <value>False</value>
     </studIcon>
 
   </properties>
@@ -138,7 +134,7 @@
     Note: bml:with variables are evaluated left-to-right, so b1OffsetY can
     reference b1SizeY and b2OffsetX can reference b2SizeX.
 
-    baseWallGaps: WallGapList — each entry is [axis, offset, size]
+    baseWallGaps: WallGap[] — each entry is {face, pos, len}
       Brick 1 gets a gap in Y for where Brick 2 passes through.
       Brick 2 gets a gap in X for where Brick 1 passes through.
   -->
@@ -176,7 +172,7 @@
           surfacePattern="${ surfacePattern }"
           surfacePatternScale="${ surfacePatternScale }"
           studIcon="${ studIcon }"
-          baseWallGaps="${ [['y', b2OffsetX, b2SizeX]] }" />
+          baseWallGaps="${ [{face: Y, pos: b2OffsetX, len: b2SizeX}] }" />
 
         <!-- Brick 2: narrow in X, full Y height -->
         <mbcore:NativeBlock
@@ -201,7 +197,7 @@
           surfacePattern="${ surfacePattern }"
           surfacePatternScale="${ surfacePatternScale }"
           studIcon="${ studIcon }"
-          baseWallGaps="${ [['x', b1OffsetY, b1SizeY]] }" />
+          baseWallGaps="${ [{face: X, pos: b1OffsetY, len: b1SizeY}] }" />
 
       </composition>
     </_parts>

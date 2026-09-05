@@ -59,7 +59,7 @@
 
         <bricks:Standard bml:id="brick-2x4-special"
           name="Brick 2x4 Special"
-          basePresets="com.myproject.presets.MyPresets::my-base brick-2x4"
+          basePresets="brick-2x4 color-midnight"
           textColor="#EDF0F1" />
 
       </composition>

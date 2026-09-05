@@ -33,6 +33,15 @@
 
   <abstract>true</abstract>
 
+  <!-- Placement props for _parts instances (same shapes as NativeBlock) -->
+  <properties>
+    <offset type="mbt:OffsetXYZ">
+      <documentation>Final displacement of this Block within a parent _parts composition.
+        Same unit as NativeBlock.offset (grid units / multiples of a 1x1 plate).</documentation>
+      <value>{x: 0, y: 0, z: 0}</value>
+    </offset>
+  </properties>
+
   <aggregations>
     <_parts
       type="mbcore:Block[]"

@@ -26,10 +26,10 @@
     <face type="mbt:FaceAxisXY">
       <documentation>Wall side or axis where the gap applies (x- / x+ / y- / y+ / x / y / xy).</documentation>
     </face>
-    <pos type="Decimal(mbunit:GridXY)">
+    <pos type="Decimal(mbunit:GridUnitXY)">
       <documentation>Start position of the gap along the wall (grid units).</documentation>
     </pos>
-    <len type="Decimal(mbunit:GridXY)">
+    <len type="Decimal(mbunit:GridUnitXY)">
       <documentation>Length of the gap along the wall (grid units).</documentation>
     </len>
   </properties>

@@ -17,9 +17,12 @@
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
   xmlns:status="org.blockml.bml.status"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:unit="org.blockml.bml.unit"
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbt="com.machineblocks.bml.type">
+  xmlns:mbt="com.machineblocks.bml.type"
+  xmlns:mbunit="com.machineblocks.bml.unit">
 
   <name>Standard</name>
   <type>bricks:Standard</type>
@@ -27,14 +30,14 @@
   <is>A Lego brick</is>
   <properties>
 
-    <!-- Size -->
-    <size type="mbt:Size3D">
+    <!-- Size — types aligned to NativeBlock -->
+    <size type="mbt:SizeXYZ">
       <value>[4, 2, 3]</value>
     </size>
 
     <!-- Base -->
-    <baseCutoutType type="mbt:BaseCutoutType">
-      <value>standard</value>
+    <baseCutoutType type="mbt:BaseCutout">
+      <value>Standard</value>
     </baseCutoutType>
     <pillars type="Boolean">
       <value>true</value>
@@ -42,29 +45,29 @@
     <baseReliefCut type="Boolean">
       <value>false</value>
     </baseReliefCut>
-    <baseReliefCutHeight type="Float">
+    <baseReliefCutHeight type="Decimal(mbunit:MBU)">
       <value>0.375</value>
     </baseReliefCutHeight>
-    <baseReliefCutThickness type="Float">
+    <baseReliefCutThickness type="Decimal(mbunit:MBU)">
       <value>0.375</value>
     </baseReliefCutThickness>
-    <baseRoundingRadius type="mbt:RoundingRadius">
+    <baseRoundingRadius type="Decimal | mbt:RadiusAB | mbt:BaseRoundingMap">
       <status>Draft</status>
       <value>0</value>
     </baseRoundingRadius>
-    <grille type="mbt:GrilleType">
-      <value>none</value>
+    <grille type="mbt:Grille">
+      <value>None</value>
     </grille>
     <grilleInverted type="Boolean">
       <value>false</value>
     </grilleInverted>
-    <grilleDepth type="Float">
+    <grilleDepth type="Decimal(mbunit:MBU)">
       <value>1</value>
     </grilleDepth>
-    <grilleCount type="Float">
-      <value>2.5</value>
+    <grilleCount type="Integer">
+      <value>5</value>
     </grilleCount>
-    <bevel type="mbt:BevelList">
+    <bevel type="mbt:Bevel">
       <value>[[0,0],[0,0],[0,0],[0,0]]</value>
     </bevel>
 
@@ -76,49 +79,34 @@
       <value>false</value>
     </studShift>
     <studType type="mbt:StudType">
-      <value>solid</value>
+      <value>Solid</value>
     </studType>
-    <studPadding type="mbt:PaddingList">
+    <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </studPadding>
-    <studBaseOverlap type="Float">
+    <studBaseOverlap type="Decimal(mbunit:MBU)">
       <value>0.25</value>
     </studBaseOverlap>
 
-    <!-- Holes -->
+    <!-- Holes — NativeBlock axis-unified API -->
     <holeX type="Boolean">
       <value>false</value>
     </holeX>
-    <holeXType type="mbt:HoleType">
-      <value>pin</value>
-    </holeXType>
-    <holeXShift type="Boolean">
-      <value>true</value>
-    </holeXShift>
-    <holeXGridOffsetZ type="Float">
-      <value>3.5</value>
-    </holeXGridOffsetZ>
     <holeY type="Boolean">
       <value>false</value>
     </holeY>
-    <holeYType type="mbt:HoleType">
-      <value>pin</value>
-    </holeYType>
-    <holeYShift type="Boolean">
-      <value>true</value>
-    </holeYShift>
-    <holeYGridOffsetZ type="Float">
-      <value>3.5</value>
-    </holeYGridOffsetZ>
     <holeZ type="Boolean">
       <value>false</value>
     </holeZ>
-    <holeZType type="mbt:HoleType">
-      <value>pin</value>
-    </holeZType>
-    <holeZShift type="Boolean">
+    <holeXYZType type="mbt:HoleType | mbt:AxisXYZ(mbt:HoleType)">
+      <value>Pin</value>
+    </holeXYZType>
+    <holeXYZShift type="Boolean | mbt:AxisXYZ(Boolean)">
       <value>true</value>
-    </holeZShift>
+    </holeXYZShift>
+    <holeXYGridOffsetZ type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
+      <value>3.5</value>
+    </holeXYGridOffsetZ>
 
     <!-- Recess -->
     <recess type="Boolean">
@@ -127,104 +115,63 @@
     <recessStuds type="Boolean">
       <value>false</value>
     </recessStuds>
-    <recessWallThickness type="mbt:PaddingList">
+    <recessWallThickness type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <value>[0.333, 0.333, 0.333, 0.333]</value>
     </recessWallThickness>
-    <recessDepth type="mbt:AutoOr_Float">
-      <value>auto</value>
+    <recessDepth type="mbt:Auto | Decimal(mbunit:GridUnitZ)">
+      <value>Auto</value>
     </recessDepth>
-    <recessStudPadding type="mbt:PaddingList">
+    <recessStudPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
       <value>[0.2, 0.2, 0.2, 0.2]</value>
     </recessStudPadding>
 
     <!-- Slope -->
-    <slope type="mbt:SlopeList">
-      <value>[0, 0, 0, 0]</value>
+    <slope type="Boolean.False | mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+      <value>false</value>
     </slope>
 
     <!-- Text -->
-    <text type="Text">
-      <value></value>
+    <text type="Boolean.False | Text">
+      <value>False</value>
     </text>
-    <textSide type="Integer">
-      <value>5</value>
-    </textSide>
-    <textDepth type="Float">
+    <textFace type="mbt:Face">
+      <value>ZPos</value>
+    </textFace>
+    <textDepth type="Decimal(mbunit:MBU)">
       <value>0.5</value>
     </textDepth>
-    <textSize type="Integer">
+    <textSize type="Decimal(unit:Millimeter)">
       <value>9</value>
     </textSize>
     <textFont type="Text">
       <value>RBNo3.1 Black</value>
-      <suggestions>
-        <suggestion value="Creato Display" label="Creato Display" />
-        <suggestion value="RBNo3.1 Black" label="RBNo3.1 Black" />
-        <suggestion value="Font Awesome 6 Free Regular" label="Font Awesome Regular" />
-        <suggestion value="Font Awesome 6 Free Solid" label="Font Awesome Solid" />
-      </suggestions>
     </textFont>
-    <textStyle type="Text">
-      <value>Regular</value>
-      <suggestions>
-        <suggestion value="Regular" label="Regular" />
-        <suggestion value="Bold" label="Bold" />
-        <suggestion value="Black" label="Black" />
-        <suggestion value="Light" label="Light" />
-        <suggestion value="Thin" label="Thin" />
-        <suggestion value="Medium" label="Medium" />
-      </suggestions>
-    </textStyle>
-    <textSpacing type="Float">
+    <textSpacing type="Decimal">
       <value>1</value>
     </textSpacing>
-    <textColor type="mbt:Color">
+    <textColor type="Color">
       <value>#303D4E</value>
-      <suggestions>
-        <suggestion value="#303D4E" label="Midnight Blue" />
-        <suggestion value="#EAC645" label="Sun Flower" />
-        <suggestion value="#58B99D" label="Turquoise" />
-        <suggestion value="#65C97A" label="Emerald" />
-        <suggestion value="#5296D5" label="Peter River" />
-        <suggestion value="#925CB1" label="Amethyst" />
-        <suggestion value="#D65745" label="Alizarin" />
-        <suggestion value="#EDF0F1" label="Clouds" />
-      </suggestions>
     </textColor>
 
     <!-- Style -->
-    <baseColor type="mbt:Color">
+    <baseColor type="Color">
       <value>#EAC645</value>
-      <suggestions>
-        <suggestion value="#EAC645" label="Sun Flower" />
-        <suggestion value="#303D4E" label="Midnight Blue" />
-        <suggestion value="#58B99D" label="Turquoise" />
-        <suggestion value="#65C97A" label="Emerald" />
-        <suggestion value="#5296D5" label="Peter River" />
-        <suggestion value="#925CB1" label="Amethyst" />
-        <suggestion value="#D65745" label="Alizarin" />
-        <suggestion value="#EDF0F1" label="Clouds" />
-      </suggestions>
     </baseColor>
-    <surfacePattern type="Text">
-      <value>none</value>
+    <surfacePattern type="Boolean.False | FilePath">
+      <value>False</value>
     </surfacePattern>
-    <surfacePatternScale type="Float">
+    <surfacePatternScale type="Decimal">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="Text">
-      <value>none</value>
+    <studIcon type="Boolean.False | FilePath">
+      <value>False</value>
     </studIcon>
 
   </properties>
 
   <!--
     Single NativeBlock — no wrapper generated (1 child rule).
-    All properties explicitly mapped — no passthrough.
-    textFont and textStyle are combined by the ScadBlockProcessor:
-      textFontFull = str(textFont, textStyle == "" ? "" : str(":style=", textStyle))
-    recessDepth is AutoOr<Float> — ScadBlockProcessor splits into
-      recessDepthAuto + recessDepth with hidden_merge.
+    Property names and types follow NativeBlock (SSOT).
   -->
   <aggregations>
     <_parts>
@@ -248,16 +195,11 @@
           studPadding="${ studPadding }"
           studBaseOverlap="${ studBaseOverlap }"
           holeX="${ holeX }"
-          holeXType="${ holeXType }"
-          holeXShift="${ holeXShift }"
-          holeXGridOffsetZ="${ holeXGridOffsetZ }"
           holeY="${ holeY }"
-          holeYType="${ holeYType }"
-          holeYShift="${ holeYShift }"
-          holeYGridOffsetZ="${ holeYGridOffsetZ }"
           holeZ="${ holeZ }"
-          holeZType="${ holeZType }"
-          holeZShift="${ holeZShift }"
+          holeXYZType="${ holeXYZType }"
+          holeXYZShift="${ holeXYZShift }"
+          holeXYGridOffsetZ="${ holeXYGridOffsetZ }"
           recess="${ recess }"
           recessStuds="${ recessStuds }"
           recessWallThickness="${ recessWallThickness }"
@@ -265,11 +207,10 @@
           recessStudPadding="${ recessStudPadding }"
           slope="${ slope }"
           text="${ text }"
-          textSide="${ textSide }"
+          textFace="${ textFace }"
           textDepth="${ textDepth }"
           textSize="${ textSize }"
           textFont="${ textFont }"
-          textStyle="${ textStyle }"
           textSpacing="${ textSpacing }"
           textColor="${ textColor }"
           baseColor="${ baseColor }"
@@ -278,5 +219,5 @@
           studIcon="${ studIcon }" />
       </composition>
     </_parts>
-  </aggregations>‚
+  </aggregations>
 </block>
