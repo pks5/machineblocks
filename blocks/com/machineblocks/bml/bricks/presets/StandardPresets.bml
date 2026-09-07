@@ -27,7 +27,7 @@
   <documentation>Named property presets for the MachineBlocks Standard brick — sizes, colors, and
     composite combinations for Customizer and basePresets references.</documentation>
   <aggregations>
-    <presets>
+    <presets override="true">
       <composition>
 
         <bricks:Standard bml:id="brick-1x1" name="Brick 1x1" size="[1, 1, 3]" />
@@ -43,13 +43,15 @@
         <bricks:Standard bml:id="color-midnight" name="Midnight Blue"
           baseColor="#303D4E" />
 
-        <bricks:Standard bml:id="brick-1x1-red"
-          name="Brick 1x1 Red"
-          basePresets="brick-1x1 color-red" />
+        <bricks:Standard bml:id="brick-1x1-red" name="Brick 1x1 Red">
+          <basePresets>brick-1x1</basePresets>
+          <basePresets>color-red</basePresets>
+        </bricks:Standard>
 
-        <bricks:Standard bml:id="brick-2x4-blue"
-          name="Brick 2x4 Blue"
-          basePresets="brick-2x4 color-blue" />
+        <bricks:Standard bml:id="brick-2x4-blue" name="Brick 2x4 Blue">
+          <basePresets>brick-2x4</basePresets>
+          <basePresets>color-blue</basePresets>
+        </bricks:Standard>
 
         <bricks:Standard bml:id="brick-1x1-red-text"
           name="Brick 1x1 Red MB"
@@ -57,10 +59,10 @@
           text="MB"
           textColor="#EDF0F1" />
 
-        <bricks:Standard bml:id="brick-2x4-special"
-          name="Brick 2x4 Special"
-          basePresets="brick-2x4 color-midnight"
-          textColor="#EDF0F1" />
+        <bricks:Standard bml:id="brick-2x4-special" name="Brick 2x4 Special" textColor="#EDF0F1">
+          <basePresets>brick-2x4</basePresets>
+          <basePresets>color-midnight</basePresets>
+        </bricks:Standard>
 
       </composition>
     </presets>

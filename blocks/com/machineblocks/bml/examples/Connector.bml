@@ -64,7 +64,7 @@
     Local x/y derived via bml:with.
   -->
   <aggregations>
-    <_parts>
+    <_parts override="true">
       <composition>
 
         <mbcore:NativeBlock

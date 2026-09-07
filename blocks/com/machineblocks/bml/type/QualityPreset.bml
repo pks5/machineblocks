@@ -22,7 +22,7 @@
     Print / Render) plus this EnumType; scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <QualityPreset bml:id="Preview" scad:value="preview" />
         <QualityPreset bml:id="Normal" scad:value="normal" />

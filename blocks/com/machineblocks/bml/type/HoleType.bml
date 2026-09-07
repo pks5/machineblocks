@@ -23,7 +23,7 @@
     SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <HoleType bml:id="Axle" scad:value="axle" />
         <HoleType bml:id="Pin" scad:value="pin" />

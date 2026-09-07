@@ -43,7 +43,7 @@
   </properties>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — face, axis, gender, align, padStart, padEnd.
     </see>
     <see type="mbt:Face" relation="SeeAlso">

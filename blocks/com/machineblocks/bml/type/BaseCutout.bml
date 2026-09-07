@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <BaseCutout bml:id="None" scad:value="none" />
         <BaseCutout bml:id="Standard" scad:value="standard" />

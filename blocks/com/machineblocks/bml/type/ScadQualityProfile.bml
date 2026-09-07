@@ -60,7 +60,7 @@
   </subBlocks>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — preview, normal, print, render.
     </see>
     <see type="mbt:QualityPreset" relation="SeeAlso">

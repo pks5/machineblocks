@@ -35,7 +35,7 @@
   </properties>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — face, pos, len.
     </see>
     <see type="mbt:FaceAxisXY" relation="SeeAlso">

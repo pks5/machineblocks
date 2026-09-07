@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal (x- / x+ / …).</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Face bml:id="XNeg" scad:value="x-" />
         <Face bml:id="XPos" scad:value="x+" />

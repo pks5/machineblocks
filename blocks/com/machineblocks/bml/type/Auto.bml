@@ -21,7 +21,7 @@
     at every reference site. The external value is "Auto" (identical to Text).</documentation>
 
   <references>
-    <see type="Constant" relation="Extends">
+    <see type="type:Constant" relation="Extends">
       Constant(Text) with value fixed to "Auto".
     </see>
   </references>

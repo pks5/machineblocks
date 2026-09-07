@@ -8,6 +8,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
                       "
+  xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbt="com.machineblocks.bml.type">
 
@@ -32,7 +33,7 @@
   </properties>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — x, y.
     </see>
     <see type="mbt:OffsetXY" relation="SeeAlso">

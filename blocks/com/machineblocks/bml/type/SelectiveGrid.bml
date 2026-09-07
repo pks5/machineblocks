@@ -41,7 +41,7 @@
   </properties>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — start, end, value.
     </see>
     <see type="mbt:AxisXY" relation="SeeAlso">

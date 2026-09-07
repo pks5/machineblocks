@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Direction bml:id="West" scad:value="west" />
         <Direction bml:id="North" scad:value="north" />

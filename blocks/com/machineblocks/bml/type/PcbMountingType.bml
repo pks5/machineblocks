@@ -23,7 +23,7 @@
     the SCAD serialization literal. Used by NativeBlock.pcb as Boolean.False | PcbMountingType.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <PcbMountingType bml:id="Clips" scad:value="clips" />
         <PcbMountingType bml:id="Sockets" scad:value="sockets" />

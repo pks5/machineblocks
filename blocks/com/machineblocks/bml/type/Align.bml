@@ -28,7 +28,7 @@
     in-plane on a directed face.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Align bml:id="Start" scad:value="start" />
         <Align bml:id="Center" scad:value="center" />

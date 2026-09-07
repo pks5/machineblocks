@@ -178,7 +178,7 @@ function strSuffix(s, k, i = 0) =
         </labelSize>
       </properties>
       <aggregations>
-        <_parts>
+        <_parts override="true">
         <composition>
 
           <!-- Base strip: centered at row position -->
@@ -249,7 +249,7 @@ function strSuffix(s, k, i = 0) =
         </valueStep>
       </properties>
       <aggregations>
-        <_parts>
+        <_parts override="true">
         <composition>
           <mbcore:NativeBlock
             bml:each="i : ${ numberOfSamples }"
@@ -287,7 +287,7 @@ function strSuffix(s, k, i = 0) =
         </valueStep>
       </properties>
       <aggregations>
-        <_parts>
+        <_parts override="true">
         <composition>
           <mbcore:NativeBlock
             bml:each="i : ${ numberOfSamples }"
@@ -327,7 +327,7 @@ function strSuffix(s, k, i = 0) =
         </valueStep>
       </properties>
       <aggregations>
-        <_parts>
+        <_parts override="true">
         <composition>
           <mbcore:NativeBlock
             bml:each="i : ${ numberOfSamples }"
@@ -367,7 +367,7 @@ function strSuffix(s, k, i = 0) =
         </valueStep>
       </properties>
       <aggregations>
-        <_parts>
+        <_parts override="true">
         <composition>
           <mbcore:NativeBlock
             bml:each="i : ${ numberOfSamples }"
@@ -399,7 +399,7 @@ function strSuffix(s, k, i = 0) =
           bml:scope="context" />
       </composition>
     </_utils>
-    <_parts>
+    <_parts override="true">
       <composition>
 
         <!-- Row 0: studDiameterAdjustment -->

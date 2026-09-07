@@ -22,7 +22,7 @@
     store only the member id plus this EnumType; scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <FaceAxisXY bml:id="XNeg" scad:value="x-" />
         <FaceAxisXY bml:id="XPos" scad:value="x+" />

@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Axis bml:id="X" scad:value="x" />
         <Axis bml:id="Y" scad:value="y" />

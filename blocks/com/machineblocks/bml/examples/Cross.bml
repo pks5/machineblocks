@@ -140,7 +140,7 @@
   -->
   <aggregations>
 
-    <_parts>
+    <_parts override="true">
       <composition
         bml:with="
         b1SizeY   = ${ #math.min(size.y, brick1SizeY) },

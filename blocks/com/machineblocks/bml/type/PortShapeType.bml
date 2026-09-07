@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal. Used by Port.PortShape.type.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <PortShapeType bml:id="Rect" scad:value="rect" />
         <PortShapeType bml:id="Circle" scad:value="circle" />

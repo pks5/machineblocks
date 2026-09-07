@@ -22,7 +22,7 @@
     scad:value holds the SCAD serialization literal. Used by Connector.gender.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Gender bml:id="Male" scad:value="male" />
         <Gender bml:id="Female" scad:value="female" />

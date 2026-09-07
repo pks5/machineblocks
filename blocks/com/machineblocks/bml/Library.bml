@@ -60,19 +60,19 @@
   </properties>
 
   <aggregations>
-    <readMe>
+    <readMe override="true">
       <composition>
         <mb:README />
       </composition>
     </readMe>
 
-    <dependencies>
+    <dependencies override="true">
       <composition>
         <blockml:Library />
       </composition>
     </dependencies>
 
-    <blocks>
+    <blocks override="true">
       <composition>
         <concept:Introduction />
         <concept:Architecture />

@@ -23,7 +23,7 @@
     literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <HoleEdgeMode bml:id="None" scad:value="none" />
         <HoleEdgeMode bml:id="Start" scad:value="start" />

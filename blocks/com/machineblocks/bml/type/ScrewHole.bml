@@ -53,7 +53,7 @@
   </properties>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — face, offset, diameter, depth, insetThickness, insetDepth.
     </see>
     <see type="mbt:Face" relation="SeeAlso">

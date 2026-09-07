@@ -123,7 +123,7 @@
   </subBlocks>
 
   <references>
-    <see type="StructType" relation="Extends">
+    <see type="type:StructType" relation="Extends">
       Struct ValueType branch — face, align, offset, rotation, shapes, depth.
     </see>
     <see type="mbt:PortShapeType" relation="SeeAlso">

@@ -23,7 +23,7 @@
     com.machineblocks.bml.type.</documentation>
 
   <references>
-    <see type="Constant" relation="Extends">
+    <see type="type:Constant" relation="Extends">
       Constant(Text) with value fixed to "None".
     </see>
     <see type="mbt:Auto" relation="SeeAlso">

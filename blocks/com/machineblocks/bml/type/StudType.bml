@@ -23,7 +23,7 @@
     scad:value holds the SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <StudType bml:id="Solid" scad:value="solid" />
         <StudType bml:id="Hollow" scad:value="hollow" />

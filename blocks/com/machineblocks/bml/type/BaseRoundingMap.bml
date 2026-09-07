@@ -12,7 +12,7 @@
 
   <name>BaseRoundingMap</name>
   <type>mbt:BaseRoundingMap</type>
-  <baseType>mbt:AxisXYZ(Decimal | RadiusAB | mbt:CornerMap(Decimal | mbt:RadiusAB))</baseType>
+  <baseType>mbt:AxisXYZ(Decimal | mbt:RadiusAB | mbt:CornerMap(Decimal | mbt:RadiusAB))</baseType>
   <is>A per-axis corner rounding map for the brick body</is>
 
   <documentation>Closed AxisXYZ(Decimal | RadiusAB | CornerMap(Decimal | RadiusAB)) for body corner rounding on

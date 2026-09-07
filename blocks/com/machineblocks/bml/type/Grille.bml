@@ -23,7 +23,7 @@
     SCAD serialization literal.</documentation>
 
   <aggregations>
-    <values>
+    <values override="true">
       <composition>
         <Grille bml:id="X" scad:value="x" />
         <Grille bml:id="Y" scad:value="y" />
