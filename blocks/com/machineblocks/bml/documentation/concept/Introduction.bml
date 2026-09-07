@@ -1,34 +1,28 @@
-<!--
-  MachineBlocks — concept documentation
+<!--MachineBlocks — concept documentation
 
-  FQN: com.machineblocks.bml.documentation.concept.Introduction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.concept.Introduction-->
+<concept:Introduction xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept">
 
-  <name>Introduction</name>
-  <type>concept:Introduction</type>
-  <baseType>core:Documentation</baseType>
-  <is>A short introduction to MachineBlocks</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A short introduction to MachineBlocks
+  </is>
   <documentation>
     MachineBlocks is a parametric system for generating LEGO-compatible 3D blocks. Primary use is
     3D printing (STL / 3MF); the same geometry model also supports general 3D modeling workflows.
-
+    
     The system is a foundation for modular, printable machines: bricks, panels, enclosures, and
     functional assemblies built from typed, parameterized blocks.
-
+    
     MachineBlocks is a domain on top of BlockML. Authoring uses MBML (MachineBlocks Markup
     Language). The canonical representation is MBOM (MachineBlocks Object Model). Render targets —
     OpenSCAD is the reference — serialize MBOM into target-specific output. Direct OpenSCAD Block
     Files remain supported as an advanced and legacy authoring path.
   </documentation>
-
   <references>
     <see type="concept:Architecture" relation="ReadNext">
       Next — layered architecture MBML → MBOM → render target.
@@ -40,5 +34,4 @@
       BlockML system overview — packages and conventions.
     </see>
   </references>
-
-</block>
+</concept:Introduction>

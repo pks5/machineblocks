@@ -1,32 +1,24 @@
-<!--
-  MachineBlocks — OffsetXY struct type
+<!--MachineBlocks — OffsetXY struct type
 
-  FQN: com.machineblocks.bml.type.OffsetXY
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.OffsetXY-->
+<mbt:OffsetXY xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>OffsetXY</name>
-  <type>mbt:OffsetXY</type>
-  <baseType>mbt:AxisXY(N)</baseType>
-  <is>An offset along X and Y</is>
-
-  <documentation>Semantic Struct ValueType for an offset pair { x, y }. Extends AxisXY(N) —
+  <baseType>
+    mbt:AxisXY(N)
+  </baseType>
+  <is>
+    An offset along X and Y
+  </is>
+  <documentation>
+    Semantic Struct ValueType for an offset pair { x, y }. Extends AxisXY(N) —
     inherits x and y; adds offset / translation semantics (may be negative). N is constrained to
     Number (AxisXY remains ValueType-universal). Bare OffsetXY defaults N to
     Decimal(mbunit:GridUnitXY). Override via N — e.g. OffsetXY(Decimal(unit:Millimeter)). Named
-    OffsetXY (not Offset2D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
-
-  <genericTypes>
-    <N baseType="Number" defaultType="Decimal(mbunit:GridUnitXY)"/>
-  </genericTypes>
-
+    OffsetXY (not Offset2D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.
+  </documentation>
   <references>
     <see type="mbt:AxisXY" relation="Extends">
       Structural { x, y } map — OffsetXY adds offset semantics.
@@ -38,5 +30,7 @@
       Parallel size semantics on AxisXY.
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <N baseType="type:Number" defaultType="org.blockml.bml.type.Decimal" />
+  </genericTypes>
+</mbt:OffsetXY>

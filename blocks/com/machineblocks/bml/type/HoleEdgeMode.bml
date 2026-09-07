@@ -1,38 +1,23 @@
-<!--
-  MachineBlocks — HoleEdgeMode enum
+<!--MachineBlocks — HoleEdgeMode enum
 
-  FQN: com.machineblocks.bml.type.HoleEdgeMode
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.HoleEdgeMode-->
+<mbt:HoleEdgeMode xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>HoleEdgeMode</name>
-  <type>mbt:HoleEdgeMode</type>
-  <baseType>mbt:MBEnum(Text)</baseType>
-  <is>A hole edge application mode</is>
-
-  <documentation>Enum ValueType for how hole-edge treatment applies along an edge —
+  <baseType>
+    mbt:MBEnum(org.blockml.bml.type.Text)
+  </baseType>
+  <is>
+    A hole edge application mode
+  </is>
+  <documentation>
+    Enum ValueType for how hole-edge treatment applies along an edge —
     none / start / end / all. Extends MBEnum(Text). BOM property values store only the member id
     (None / Start / End / All) plus this EnumType; scad:value holds the SCAD serialization
-    literal.</documentation>
-
-  <aggregations>
-    <values override="true">
-      <composition>
-        <HoleEdgeMode bml:id="None" scad:value="none" />
-        <HoleEdgeMode bml:id="Start" scad:value="start" />
-        <HoleEdgeMode bml:id="End" scad:value="end" />
-        <HoleEdgeMode bml:id="All" scad:value="all" />
-      </composition>
-    </values>
-  </aggregations>
-
+    literal.
+  </documentation>
   <references>
     <see type="mbt:HoleEdgePair" relation="SeeAlso">
       Two companion edges as AxisAB(HoleEdgeMode).
@@ -41,5 +26,14 @@
       Per hole-axis X/Y/Z map on NativeBlock.holeXYZEdgeMode.
     </see>
   </references>
-
-</block>
+  <aggregations>
+    <values override="true">
+      <composition>
+        <mbt:HoleEdgeMode bml:id="None" value="none" />
+        <mbt:HoleEdgeMode bml:id="Start" value="start" />
+        <mbt:HoleEdgeMode bml:id="End" value="end" />
+        <mbt:HoleEdgeMode bml:id="All" value="all" />
+      </composition>
+    </values>
+  </aggregations>
+</mbt:HoleEdgeMode>

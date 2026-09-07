@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Core Geometry member group
+<!--MachineBlocks — Core Geometry member group
 
-  FQN: com.machineblocks.bml.group.CoreGeometry
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.CoreGeometry-->
+<mbgroup:CoreGeometry xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>CoreGeometry</name>
-  <type>mbgroup:CoreGeometry</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Core Geometry parameter group</is>
-
-  <documentation>MachineBlocks member group for Core Geometry parameters on NativeBlock
-    (YAML group id: core_geometry).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Core Geometry parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Core Geometry parameters on NativeBlock
+    (YAML group id: core_geometry).
+  </documentation>
+</mbgroup:CoreGeometry>

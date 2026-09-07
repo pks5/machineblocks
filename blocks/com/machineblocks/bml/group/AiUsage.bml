@@ -1,28 +1,24 @@
-<!--
-  MachineBlocks — AI usage member group branch
+<!--MachineBlocks — AI usage member group branch
 
-  FQN: com.machineblocks.bml.group.AiUsage
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.AiUsage-->
+<mbgroup:AiUsage xmlns="http://blockml.org/bml"
   xmlns:group="org.blockml.bml.group"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>AiUsage</name>
-  <type>mbgroup:AiUsage</type>
-  <baseType>group:MemberGroup</baseType>
-  <is>An AI member-usage guidance category</is>
-
-  <documentation>Abstract base MemberGroup for AI usage facets — categories that describe whether
+  <baseType>
+    group:MemberGroup
+  </baseType>
+  <is>
+    An AI member-usage guidance category
+  </is>
+  <documentation>
+    Abstract base MemberGroup for AI usage facets — categories that describe whether
     and how an AI should set or omit a member when generating Block instances. Intentionally empty —
     no properties, aggregations, or Sub-Blocks. Concrete facets: FrequentAiUsage (yes), RareAiUsage
     (rarely), ConfigOnlyAiUsage (config_only), NeverAiUsage (never). Orthogonal to Category groups
     such as System or Positioning; members may list both via MemberDefinition.groups.
   </documentation>
-
-  <abstract>true</abstract>
-
-</block>
+  <abstract>
+    true
+  </abstract>
+</mbgroup:AiUsage>

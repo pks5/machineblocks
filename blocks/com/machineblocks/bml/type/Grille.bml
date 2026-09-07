@@ -1,35 +1,30 @@
-<!--
-  MachineBlocks — Grille enum
+<!--MachineBlocks — Grille enum
 
-  FQN: com.machineblocks.bml.type.Grille
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.Grille-->
+<mbt:Grille xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Grille</name>
-  <type>mbt:Grille</type>
-  <baseType>mbt:MBEnum(Text)</baseType>
-  <is>A top-plate grille bar direction</is>
-
-  <documentation>Enum ValueType for grille bar orientation on MachineBlocks bricks.
+  <baseType>
+    mbt:MBEnum(org.blockml.bml.type.Text)
+  </baseType>
+  <is>
+    A top-plate grille bar direction
+  </is>
+  <documentation>
+    Enum ValueType for grille bar orientation on MachineBlocks bricks.
     Extends MBEnum(Text). Members X / Y set bar direction; None disables the grille.
     BOM property values store only the member id plus this EnumType; scad:value holds the
-    SCAD serialization literal.</documentation>
-
+    SCAD serialization literal.
+  </documentation>
   <aggregations>
     <values override="true">
       <composition>
-        <Grille bml:id="X" scad:value="x" />
-        <Grille bml:id="Y" scad:value="y" />
-        <Grille bml:id="None" scad:value="none" />
+        <mbt:Grille bml:id="X" value="x" />
+        <mbt:Grille bml:id="Y" value="y" />
+        <mbt:Grille bml:id="None" value="none" />
       </composition>
     </values>
   </aggregations>
-
-</block>
+</mbt:Grille>

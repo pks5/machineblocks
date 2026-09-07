@@ -1,48 +1,42 @@
-<!--
-  MachineBlocks — concept documentation
+<!--MachineBlocks — concept documentation
 
-  FQN: com.machineblocks.bml.documentation.concept.TransformationConcepts
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.concept.TransformationConcepts-->
+<concept:TransformationConcepts xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>TransformationConcepts</name>
-  <type>concept:TransformationConcepts</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to MachineBlocks transformation concepts</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to MachineBlocks transformation concepts
+  </is>
   <documentation>
     Geometry and children are built first in local space, then transformed together. After the
     local build, the effective order is:
-
+    
     direction → align → rotationOffset → rotation → rotationOffsetRevert → offset
-
+    
     direction — semantic 90° grid orientation (West / North / East / South). At North and South,
     size X and Y swap for placement; face semantics stay west-local for authoring.
     Prefer direction over free rotation whenever the intent is grid-aligned reorientation.
     SCAD serialize literals (scad:value): west / north / east / south.
-
+    
     align — Start / Center / End relative to the reference bounding box (studs, slope, bevel, and
     baseCrop do not change the align box). Scalar Align may broadcast, or AxisXYZ(Align) sets each
     axis. alignChildren sets the parent origin used by children (default Start on all axes).
     SCAD serialize literals (scad:value): start / center / end.
-
+    
     rotation — free rotation after alignment; not grid-safe; last resort.
     rotationOffset — optional pivot for rotation; may be reverted after rotation.
     offset — final placement translation only.
-
+    
     Face identifiers in MBML/BOM are enum member ids (XNeg, XPos, YNeg, YPos, ZNeg, ZPos) —
     not integers and not authored as SCAD face strings. The SCAD literals "x-", "x+", … live on
     Face as scad:value and are emit-only. Same pattern for Direction and Align.
   </documentation>
-
   <references>
     <see type="concept:StructureSystems" relation="ReadNext">
       Next — body, underside, enclosure, and connection structure.
@@ -63,5 +57,4 @@
       SSOT for direction, align, alignChildren, rotation, rotationOffset, offset.
     </see>
   </references>
-
-</block>
+</concept:TransformationConcepts>

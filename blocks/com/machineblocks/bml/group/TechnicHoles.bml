@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Technic Holes member group
+<!--MachineBlocks — Technic Holes member group
 
-  FQN: com.machineblocks.bml.group.TechnicHoles
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.TechnicHoles-->
+<mbgroup:TechnicHoles xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>TechnicHoles</name>
-  <type>mbgroup:TechnicHoles</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Technic Holes parameter group</is>
-
-  <documentation>MachineBlocks member group for Technic Holes parameters on NativeBlock
-    (YAML group id: technic_holes).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Technic Holes parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Technic Holes parameters on NativeBlock
+    (YAML group id: technic_holes).
+  </documentation>
+</mbgroup:TechnicHoles>

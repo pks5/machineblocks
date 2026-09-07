@@ -1,28 +1,24 @@
-<!--
-  MachineBlocks — PlaneRoundingMap struct type
+<!--MachineBlocks — PlaneRoundingMap struct type
 
-  FQN: com.machineblocks.bml.type.PlaneRoundingMap
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.PlaneRoundingMap-->
+<mbt:PlaneRoundingMap xmlns="http://blockml.org/bml"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>PlaneRoundingMap</name>
-  <type>mbt:PlaneRoundingMap</type>
-  <baseType>mbt:CornerMap(Decimal(mbunit:GridUnitXY) | mbt:RadiusAB(Decimal(mbunit:GridUnitXY)))</baseType>
-  <is>A corner rounding map on the horizontal plane</is>
-
-  <documentation>Closed CornerMap(Decimal(GridUnitXY) | RadiusAB(Decimal(GridUnitXY))) for
+  <baseType>
+    mbt:CornerMap(org.blockml.bml.type.Decimal(mbunit:GridUnitXY) | mbt:RadiusAB(org.blockml.bml.type.Decimal(mbunit:GridUnitXY)))
+  </baseType>
+  <is>
+    A corner rounding map on the horizontal plane
+  </is>
+  <documentation>
+    Closed CornerMap(Decimal(GridUnitXY) | RadiusAB(Decimal(GridUnitXY))) for
     recess / tongue corner rounding on the horizontal (Z-face) plane only — not a full
     AxisXYZ map like BaseRoundingMap. Not re-opened as a generic. Inherits sw, nw, ne, se;
     each corner is a scalar GridUnitXY radius or a RadiusAB pair. SCAD serializes as the
     CornerMap form. Used by NativeBlock.recessRoundingRadius and tongueRoundingRadius as the
-    expanded alternative beside Auto and bare Decimal(GridUnitXY).</documentation>
-
+    expanded alternative beside Auto and bare Decimal(GridUnitXY).
+  </documentation>
   <references>
     <see type="mbt:CornerMap" relation="Extends">
       Structural { sw, nw, ne, se } map — PlaneRoundingMap closes T to Decimal(GridUnitXY) | RadiusAB(…).
@@ -37,5 +33,4 @@
       Sentinel alternative on recess / tongue rounding properties.
     </see>
   </references>
-
-</block>
+</mbt:PlaneRoundingMap>

@@ -1,17 +1,11 @@
-<!--
-  MachineBlocks Root Library Descriptor
+<!--MachineBlocks Root Library Descriptor
 
   Name: Library
   Filename: Library.bml
   FQN: com.machineblocks.bml.Library
 
-  MachineBlocks root library — exports domain types, units, bricks, examples, and calibration.
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  MachineBlocks root library — exports domain types, units, bricks, examples, and calibration.-->
+<mb:Library xmlns="http://blockml.org/bml"
   xmlns:blockml="org.blockml.bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
@@ -28,11 +22,15 @@
   xmlns:mbunit="com.machineblocks.bml.unit"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>Library</name>
-  <type>mb:Library</type>
-  <baseType>core:BlockLibrary</baseType>
-  <is>A MachineBlocks root library catalog</is>
-
+  <baseType>
+    core:BlockLibrary
+  </baseType>
+  <is>
+    A MachineBlocks root library catalog
+  </is>
+  <version>
+    3.0.0
+  </version>
   <documentation>
     Publishable MachineBlocks root library (com.machineblocks.bml.Library). Exports shared domain
     ValueTypes, Units, MemberGroups (com.machineblocks.bml.group.*), ScadAnnotation, curated
@@ -40,38 +38,30 @@
     types (com.machineblocks.bml.bricks.*), calibration, and examples. Membership is defined
     exclusively by this file's blocks list — not by directory layout.
   </documentation>
-
   <references>
     <see type="mb:README" relation="ReadFirst">
       Human/LLM reading entry for this library.
     </see>
   </references>
-
-  <version>3.0.0</version>
-
   <language>
-    <English />
+    <lang:English />
   </language>
-
   <properties>
     <description override="true">
       <value>MachineBlocks root library</value>
     </description>
   </properties>
-
   <aggregations>
     <readMe override="true">
       <composition>
         <mb:README />
       </composition>
     </readMe>
-
     <dependencies override="true">
       <composition>
         <blockml:Library />
       </composition>
     </dependencies>
-
     <blocks override="true">
       <composition>
         <concept:Introduction />
@@ -192,5 +182,4 @@
       </composition>
     </blocks>
   </aggregations>
-
-</block>
+</mb:Library>

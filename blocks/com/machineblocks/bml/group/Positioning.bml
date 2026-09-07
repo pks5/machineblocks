@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Positioning / Transformation member group
+<!--MachineBlocks — Positioning / Transformation member group
 
-  FQN: com.machineblocks.bml.group.Positioning
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.Positioning-->
+<mbgroup:Positioning xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>Positioning</name>
-  <type>mbgroup:Positioning</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Positioning / Transformation parameter group</is>
-
-  <documentation>MachineBlocks member group for Positioning / Transformation parameters on NativeBlock
-    (YAML group id: positioning).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Positioning / Transformation parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Positioning / Transformation parameters on NativeBlock
+    (YAML group id: positioning).
+  </documentation>
+</mbgroup:Positioning>

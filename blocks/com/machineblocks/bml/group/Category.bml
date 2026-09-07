@@ -1,27 +1,24 @@
-<!--
-  MachineBlocks — UI / parameter category member group branch
+<!--MachineBlocks — UI / parameter category member group branch
 
-  FQN: com.machineblocks.bml.group.Category
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.Category-->
+<mbgroup:Category xmlns="http://blockml.org/bml"
   xmlns:group="org.blockml.bml.group"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>Category</name>
-  <type>mbgroup:Category</type>
-  <baseType>group:MemberGroup</baseType>
-  <is>A UI / parameter category for members</is>
-
-  <documentation>Abstract base MemberGroup for MachineBlocks UI and parameter categories —
+  <baseType>
+    group:MemberGroup
+  </baseType>
+  <is>
+    A UI / parameter category for members
+  </is>
+  <documentation>
+    Abstract base MemberGroup for MachineBlocks UI and parameter categories —
     named sections that organize members in editors and docs (System, Positioning, Studs, …).
     Intentionally empty — no properties, aggregations, or Sub-Blocks. Concrete category groups
     extend this branch. Orthogonal to AiUsage facets; members may list both a Category and an
-    AiUsage via MemberDefinition.groups.</documentation>
-
-  <abstract>true</abstract>
-
-</block>
+    AiUsage via MemberDefinition.groups.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+</mbgroup:Category>

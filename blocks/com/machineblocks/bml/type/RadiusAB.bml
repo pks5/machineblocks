@@ -1,34 +1,25 @@
-<!--
-  MachineBlocks — RadiusAB struct type
+<!--MachineBlocks — RadiusAB struct type
 
-  FQN: com.machineblocks.bml.type.RadiusAB
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.RadiusAB-->
+<mbt:RadiusAB xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>RadiusAB</name>
-  <type>mbt:RadiusAB</type>
-  <baseType>mbt:AxisAB(N, B)</baseType>
-  <is>A radius pair along A and B</is>
-
-  <documentation>Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N, B) —
+  <baseType>
+    mbt:AxisAB(N, B)
+  </baseType>
+  <is>
+    A radius pair along A and B
+  </is>
+  <documentation>
+    Semantic Struct ValueType for a radius pair { a, b }. Extends AxisAB(N, B) —
     inherits a (N) and b (B); adds radius / rounding semantics (non-negative extents). N and B are
     constrained to Number. B defaults to N so bare RadiusAB / RadiusAB(T) binds both components to
     the same effective type. Bare RadiusAB defaults N to Decimal (dimensionless). Override via N /
     B — e.g. RadiusAB(Decimal(mbunit:MBU)) or RadiusAB(Decimal(unit:Millimeter),
-    Decimal(mbunit:GridUnitZ)).</documentation>
-
-  <genericTypes>
-    <N baseType="Number" defaultType="Decimal"/>
-    <B baseType="Number" defaultType="N"/>
-  </genericTypes>
-
+    Decimal(mbunit:GridUnitZ)).
+  </documentation>
   <references>
     <see type="mbt:AxisAB" relation="Extends">
       Structural { a, b } map — RadiusAB adds radius semantics; forwards N and B.
@@ -43,5 +34,8 @@
       Recess / tongue rounding — CornerMap with GridUnitXY.
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <N baseType="type:Number" defaultType="org.blockml.bml.type.Decimal" />
+    <B baseType="type:Number" defaultType="N" />
+  </genericTypes>
+</mbt:RadiusAB>

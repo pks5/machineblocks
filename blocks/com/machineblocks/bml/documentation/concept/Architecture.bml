@@ -1,53 +1,47 @@
-<!--
-  MachineBlocks — concept documentation
+<!--MachineBlocks — concept documentation
 
-  FQN: com.machineblocks.bml.documentation.concept.Architecture
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.concept.Architecture-->
+<concept:Architecture xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
   xmlns:mbml="com.machineblocks.bml.documentation.mbml"
   xmlns:scad="com.machineblocks.bml.documentation.scad">
 
-  <name>Architecture</name>
-  <type>concept:Architecture</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to the MachineBlocks layered architecture</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to the MachineBlocks layered architecture
+  </is>
   <documentation>
     MachineBlocks follows a layered architecture:
-
+    
     MBML / BML (authoring)
       ↓ parse (@blockml/parser)
     Urmodell — Canonical BOM (immutable; MBOM is the MachineBlocks specialization)
       ↓ Stage 2 — Validator (pragmatic fork; resolve only)
       ↓ Stage 3 — Render Target (reference: OpenSCAD)
     STL / 3MF (or other target artifacts)
-
+    
     MBML is the declarative authoring format for blocks, sets, and related MachineBlocks
     documents. Authors describe typed, parameterized elements without knowledge of any
     render target. XML is the sole BML serialization for V1 and V2.
-
+    
     MBOM is the renderer-independent domain model layered on BOM Core — not a second SSOT.
     The BOM Compiler parses BML into an immutable Urmodell (Canonical BOM); MBOM extends that
     graph with MachineBlocks types, NativeBlock parameters, and SCAD conventions.
     Validation operates on the lossless BOM (Stage 2 pragmatic fork). Composition expansion,
     expression evaluation, and target emit are Stage 3 — the renderer chooses Urmodell,
     the default pragmatic model, or its own forks.
-
+    
     A render target serializes that model into a concrete output language. The MachineBlocks V3
     SCAD library is the reference render target: OpenSCAD files that OpenSCAD turns into STL or
     3MF. MBOM/BOM is canonical; SCAD is a serialization — not the other way around.
-
+    
     Core principle: one native geometry primitive (NativeBlock → mb_block()) with a large
     parameter space (SSOT: NativeBlock.bml). Complexity comes from parameter combinations,
     composition of multiple blocks, and nesting — not from many unrelated primitives.
   </documentation>
-
   <references>
     <see type="concept:UnitsAndGrid" relation="ReadNext">
       Next — unit stack, grid aspect ratio, and bounding box.
@@ -74,5 +68,4 @@
       SCAD render target registration and processors.
     </see>
   </references>
-
-</block>
+</concept:Architecture>

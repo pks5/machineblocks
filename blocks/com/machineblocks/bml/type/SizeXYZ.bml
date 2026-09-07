@@ -1,34 +1,25 @@
-<!--
-  MachineBlocks — SizeXYZ struct type
+<!--MachineBlocks — SizeXYZ struct type
 
-  FQN: com.machineblocks.bml.type.SizeXYZ
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.SizeXYZ-->
+<mbt:SizeXYZ xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>SizeXYZ</name>
-  <type>mbt:SizeXYZ</type>
-  <baseType>mbt:AxisXYZ(N, Z)</baseType>
-  <is>A size along X, Y, and Z</is>
-
-  <documentation>Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N, Z) —
+  <baseType>
+    mbt:AxisXYZ(N, Z)
+  </baseType>
+  <is>
+    A size along X, Y, and Z
+  </is>
+  <documentation>
+    Semantic Struct ValueType for a size triple { x, y, z }. Extends AxisXYZ(N, Z) —
     inherits x, y (N) and z (Z); adds size semantics (extent / brick footprint). N and Z are
     constrained to Number. Bare SizeXYZ defaults N to Decimal(mbunit:GridUnitXY) and Z to
     Decimal(mbunit:GridUnitZ) — distinct plate-grid scales. Uniform override requires both
     arguments — e.g. SizeXYZ(Decimal(unit:Millimeter), Decimal(unit:Millimeter)). Named SizeXYZ
-    (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
-
-  <genericTypes>
-    <N baseType="Number" defaultType="Decimal(mbunit:GridUnitXY)"/>
-    <Z baseType="Number" defaultType="Decimal(mbunit:GridUnitZ)"/>
-  </genericTypes>
-
+    (not Size3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.
+  </documentation>
   <references>
     <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — SizeXYZ adds size semantics; forwards N and Z.
@@ -40,5 +31,8 @@
       Parallel offset semantics on AxisXYZ.
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <N baseType="type:Number" defaultType="org.blockml.bml.type.Decimal" />
+    <Z baseType="type:Number" defaultType="org.blockml.bml.type.Decimal" />
+  </genericTypes>
+</mbt:SizeXYZ>

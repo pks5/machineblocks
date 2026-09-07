@@ -1,26 +1,25 @@
-<!--
-  MachineBlocks MBOM — Set assembly step
+<!--MachineBlocks MBOM — Set assembly step
 
-  FQN: com.machineblocks.bml.core.Step
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.core.Step-->
+<mbcore:Step xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Step</name>
-  <type>mbcore:Step</type>
-  <baseType>core:Block</baseType>
-  <is>A single assembly instruction</is>
-
-  <documentation>Framework Block defining one assembly instruction step. Document order in _steps
-    defines build order.</documentation>
-
+  <baseType>
+    core:Block
+  </baseType>
+  <is>
+    A single assembly instruction
+  </is>
+  <documentation>
+    Framework Block defining one assembly instruction step. Document order in _steps
+    defines build order.
+  </documentation>
+  <final>
+    true
+  </final>
   <references>
     <see type="mbcore:Set">
       Used as children of Set's _steps aggregation.
@@ -29,17 +28,14 @@
       part association references a placed instance by bml:id in _parts.
     </see>
   </references>
-
-  <final>true</final>
-
-  <associations>
-    <part type="InstanceReference(mbcore:Block)"></part>
-  </associations>
-
   <properties>
-    <description type="Text">
-      <documentation>Additional description of the step.</documentation>
+    <description type="org.blockml.bml.type.Text">
+      <documentation>
+        Additional description of the step.
+      </documentation>
     </description>
   </properties>
-
-</block>
+  <associations>
+    <part type="org.blockml.bml.type.InstanceReference(mbcore:Block)" />
+  </associations>
+</mbcore:Step>

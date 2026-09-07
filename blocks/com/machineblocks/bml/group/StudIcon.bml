@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Stud Icon member group
+<!--MachineBlocks — Stud Icon member group
 
-  FQN: com.machineblocks.bml.group.StudIcon
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.StudIcon-->
+<mbgroup:StudIcon xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>StudIcon</name>
-  <type>mbgroup:StudIcon</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Stud Icon parameter group</is>
-
-  <documentation>MachineBlocks member group for Stud Icon parameters on NativeBlock
-    (YAML group id: stud_icon).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Stud Icon parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Stud Icon parameters on NativeBlock
+    (YAML group id: stud_icon).
+  </documentation>
+</mbgroup:StudIcon>

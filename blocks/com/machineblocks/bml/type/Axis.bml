@@ -1,34 +1,29 @@
-<!--
-  MachineBlocks — Axis enum
+<!--MachineBlocks — Axis enum
 
-  FQN: com.machineblocks.bml.type.Axis
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.Axis-->
+<mbt:Axis xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Axis</name>
-  <type>mbt:Axis</type>
-  <baseType>mbt:MBEnum(Text)</baseType>
-  <is>A coordinate axis</is>
-
-  <documentation>Enum ValueType for the X / Y / Z axes on MachineBlocks bricks.
+  <baseType>
+    mbt:MBEnum(org.blockml.bml.type.Text)
+  </baseType>
+  <is>
+    A coordinate axis
+  </is>
+  <documentation>
+    Enum ValueType for the X / Y / Z axes on MachineBlocks bricks.
     Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
-    scad:value holds the SCAD serialization literal.</documentation>
-
+    scad:value holds the SCAD serialization literal.
+  </documentation>
   <aggregations>
     <values override="true">
       <composition>
-        <Axis bml:id="X" scad:value="x" />
-        <Axis bml:id="Y" scad:value="y" />
-        <Axis bml:id="Z" scad:value="z" />
+        <mbt:Axis bml:id="X" value="x" />
+        <mbt:Axis bml:id="Y" value="y" />
+        <mbt:Axis bml:id="Z" value="z" />
       </composition>
     </values>
   </aggregations>
-
-</block>
+</mbt:Axis>

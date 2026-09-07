@@ -1,39 +1,24 @@
-<!--
-  MachineBlocks — AxisXYZ struct type
+<!--MachineBlocks — AxisXYZ struct type
 
-  FQN: com.machineblocks.bml.type.AxisXYZ
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.AxisXYZ-->
+<mbt:AxisXYZ xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>AxisXYZ</name>
-  <type>mbt:AxisXYZ</type>
-  <baseType>mbt:AxisXY(N)</baseType>
-  <is>A value triple along X, Y, and Z</is>
-
-  <documentation>Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
+  <baseType>
+    mbt:AxisXY(N)
+  </baseType>
+  <is>
+    A value triple along X, Y, and Z
+  </is>
+  <documentation>
+    Struct ValueType for axis-keyed { x, y, z }. Extends AxisXY(N) and adds z.
     Inherits x and y typed as N. Z is a separate generic (defaultType N) so the Z component may
     differ from X/Y — e.g. AxisXYZ(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
     Bare AxisXYZ / AxisXYZ(T) binds Z to the same effective type as N. N and Z are any ValueType
-    (default Decimal).</documentation>
-
-  <genericTypes>
-    <N baseType="core:ValueType" defaultType="Decimal"/>
-    <Z baseType="core:ValueType" defaultType="N"/>
-  </genericTypes>
-
-  <properties>
-    <z type="Z">
-      <documentation>Value along the Z axis — type Z (defaults to N).</documentation>
-    </z>
-  </properties>
-
+    (default Decimal).
+  </documentation>
   <references>
     <see type="mbt:AxisXY" relation="Extends">
       Two-axis parent — x, y inherited; z declared here.
@@ -51,5 +36,15 @@
       Rotation semantics — AxisXYZ with N (and Z via default) closed to Decimal(unit:Degree).
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <N baseType="core:ValueType" defaultType="org.blockml.bml.type.Decimal" />
+    <Z baseType="core:ValueType" defaultType="N" />
+  </genericTypes>
+  <properties>
+    <z type="Z">
+      <documentation>
+        Value along the Z axis — type Z (defaults to N).
+      </documentation>
+    </z>
+  </properties>
+</mbt:AxisXYZ>

@@ -1,42 +1,28 @@
-<!--
-  MachineBlocks — Align enum
+<!--MachineBlocks — Align enum
 
-  FQN: com.machineblocks.bml.type.Align
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.Align-->
+<mbt:Align xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Align</name>
-  <type>mbt:Align</type>
-  <baseType>mbt:MBEnum(Text)</baseType>
-  <is>An alignment along an axis</is>
-
-  <documentation>Enum ValueType for start / center / end alignment on MachineBlocks bricks.
+  <baseType>
+    mbt:MBEnum(org.blockml.bml.type.Text)
+  </baseType>
+  <is>
+    An alignment along an axis
+  </is>
+  <documentation>
+    Enum ValueType for start / center / end alignment on MachineBlocks bricks.
     Extends MBEnum(Text). BOM property values store only the member id (Start / Center / End)
     plus this EnumType; scad:value holds the SCAD serialization literal.
-
+    
     Usage contrast — scalar Align may be broadcast, or expanded with an axis map:
       NativeBlock.align / alignChildren → Align | AxisXYZ(Align)  (brick world axes X/Y/Z)
       Port.align (face-local)           → Align | AxisAB(Align)   (face plane A/B = XY|XZ|YZ)
     AxisXYZ vs AxisAB are not interchangeable: XYZ is placement in brick space; AB is
-    in-plane on a directed face.</documentation>
-
-  <aggregations>
-    <values override="true">
-      <composition>
-        <Align bml:id="Start" scad:value="start" />
-        <Align bml:id="Center" scad:value="center" />
-        <Align bml:id="End" scad:value="end" />
-      </composition>
-    </values>
-  </aggregations>
-
+    in-plane on a directed face.
+  </documentation>
   <references>
     <see type="mbt:AxisXYZ" relation="SeeAlso">
       Brick-space expand form — NativeBlock.align / alignChildren.
@@ -45,5 +31,13 @@
       Face-local expand form — Port.align.
     </see>
   </references>
-
-</block>
+  <aggregations>
+    <values override="true">
+      <composition>
+        <mbt:Align bml:id="Start" value="start" />
+        <mbt:Align bml:id="Center" value="center" />
+        <mbt:Align bml:id="End" value="end" />
+      </composition>
+    </values>
+  </aggregations>
+</mbt:Align>

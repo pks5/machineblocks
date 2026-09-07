@@ -1,47 +1,24 @@
-<!--
-  MachineBlocks — CornerMap struct type
+<!--MachineBlocks — CornerMap struct type
 
-  FQN: com.machineblocks.bml.type.CornerMap
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.CornerMap-->
+<mbt:CornerMap xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>CornerMap</name>
-  <type>mbt:CornerMap</type>
-  <baseType>StructType</baseType>
-  <is>A value map on the four corners</is>
-
-  <documentation>Struct ValueType for a corner-keyed map { sw, nw, ne, se } in the local brick
+  <baseType>
+    type:StructType
+  </baseType>
+  <is>
+    A value map on the four corners
+  </is>
+  <documentation>
+    Struct ValueType for a corner-keyed map { sw, nw, ne, se } in the local brick
     frame. The four corners may lie on any local plane (XY, XZ, or YZ) — the plane is not part of
     the type. Generic T is the per-corner value type — any ValueType; no defaultType — bind T
     explicitly, e.g. CornerMap(Boolean) or CornerMap(Decimal(unit:Millimeter)). Short keys map to
-    south-west / north-west / north-east / south-east.</documentation>
-
-  <genericTypes>
-    <T baseType="core:ValueType"/>
-  </genericTypes>
-
-  <properties>
-    <sw type="T">
-      <documentation>Value at the south-west corner (sw).</documentation>
-    </sw>
-    <nw type="T">
-      <documentation>Value at the north-west corner (nw).</documentation>
-    </nw>
-    <ne type="T">
-      <documentation>Value at the north-east corner (ne).</documentation>
-    </ne>
-    <se type="T">
-      <documentation>Value at the south-east corner (se).</documentation>
-    </se>
-  </properties>
-
+    south-west / north-west / north-east / south-east.
+  </documentation>
   <references>
     <see type="type:StructType" relation="Extends">
       Struct ValueType branch — named corner fields.
@@ -53,5 +30,29 @@
       Cardinal directions abbreviated in corner keys.
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <T baseType="core:ValueType" />
+  </genericTypes>
+  <properties>
+    <sw type="T">
+      <documentation>
+        Value at the south-west corner (sw).
+      </documentation>
+    </sw>
+    <nw type="T">
+      <documentation>
+        Value at the north-west corner (nw).
+      </documentation>
+    </nw>
+    <ne type="T">
+      <documentation>
+        Value at the north-east corner (ne).
+      </documentation>
+    </ne>
+    <se type="T">
+      <documentation>
+        Value at the south-east corner (se).
+      </documentation>
+    </se>
+  </properties>
+</mbt:CornerMap>

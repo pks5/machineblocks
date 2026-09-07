@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Print Helpers member group
+<!--MachineBlocks — Print Helpers member group
 
-  FQN: com.machineblocks.bml.group.PrintHelpers
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.PrintHelpers-->
+<mbgroup:PrintHelpers xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>PrintHelpers</name>
-  <type>mbgroup:PrintHelpers</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Print Helpers parameter group</is>
-
-  <documentation>MachineBlocks member group for Print Helpers parameters on NativeBlock
-    (YAML group id: print_helpers).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Print Helpers parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Print Helpers parameters on NativeBlock
+    (YAML group id: print_helpers).
+  </documentation>
+</mbgroup:PrintHelpers>

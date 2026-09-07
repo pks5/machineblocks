@@ -1,40 +1,23 @@
-<!--
-  MachineBlocks — AxisXY struct type
+<!--MachineBlocks — AxisXY struct type
 
-  FQN: com.machineblocks.bml.type.AxisXY
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.AxisXY-->
+<mbt:AxisXY xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>AxisXY</name>
-  <type>mbt:AxisXY</type>
-  <baseType>mbt:MultiAxis(N)</baseType>
-  <is>A value pair along X and Y</is>
-
-  <documentation>Struct ValueType for axis-keyed { x, y }. Extends MultiAxis(N).
+  <baseType>
+    mbt:MultiAxis(N)
+  </baseType>
+  <is>
+    A value pair along X and Y
+  </is>
+  <documentation>
+    Struct ValueType for axis-keyed { x, y }. Extends MultiAxis(N).
     N is any ValueType (default Decimal) — numbers, structs, enums, etc. Bare AxisXY is Decimal
     (dimensionless). Supply a unit via N — e.g. AxisXY(Decimal(unit:Millimeter)) or
-    AxisXY(Integer(mbunit:MBU)).</documentation>
-
-  <genericTypes>
-    <N baseType="core:ValueType" defaultType="Decimal"/>
-  </genericTypes>
-
-  <properties>
-    <x type="N">
-      <documentation>Value along the X axis.</documentation>
-    </x>
-    <y type="N">
-      <documentation>Value along the Y axis.</documentation>
-    </y>
-  </properties>
-
+    AxisXY(Integer(mbunit:MBU)).
+  </documentation>
   <references>
     <see type="mbt:MultiAxis" relation="Extends">
       Abstract axis-map base — N.
@@ -52,5 +35,19 @@
       Rotation semantics — AxisXY with N closed to Decimal(unit:Degree).
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <N baseType="core:ValueType" defaultType="org.blockml.bml.type.Decimal" />
+  </genericTypes>
+  <properties>
+    <x type="N">
+      <documentation>
+        Value along the X axis.
+      </documentation>
+    </x>
+    <y type="N">
+      <documentation>
+        Value along the Y axis.
+      </documentation>
+    </y>
+  </properties>
+</mbt:AxisXY>

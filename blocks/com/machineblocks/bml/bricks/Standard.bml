@@ -1,5 +1,4 @@
-<!--
-  MachineBlocks.com Block File
+<!--MachineBlocks.com Block File
 
   Name: MachineBlock Standard Brick
   Filename: Standard.bml
@@ -9,13 +8,8 @@
 
   Published under license:
   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
-  https://creativecommons.org/licenses/by-nc-sa/4.0/
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  https://creativecommons.org/licenses/by-nc-sa/4.0/-->
+<bricks:Standard xmlns="http://blockml.org/bml"
   xmlns:status="org.blockml.bml.status"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
@@ -24,200 +18,147 @@
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>Standard</name>
-  <type>bricks:Standard</type>
-  <baseType>mbcore:CompositeBlock</baseType>
-  <is>A Lego brick</is>
+  <baseType>
+    mbcore:CompositeBlock
+  </baseType>
+  <is>
+    A Lego brick
+  </is>
   <properties>
-
-    <!-- Size — types aligned to NativeBlock -->
+    <!--Size — types aligned to NativeBlock-->
     <size type="mbt:SizeXYZ">
-      <value>[4, 2, 3]</value>
+      <value>[4,2,3]</value>
     </size>
-
-    <!-- Base -->
+    <!--Base-->
     <baseCutoutType type="mbt:BaseCutout">
       <value>Standard</value>
     </baseCutoutType>
-    <pillars type="Boolean">
+    <pillars type="type:Boolean">
       <value>true</value>
     </pillars>
-    <baseReliefCut type="Boolean">
+    <baseReliefCut type="type:Boolean">
       <value>false</value>
     </baseReliefCut>
-    <baseReliefCutHeight type="Decimal(mbunit:MBU)">
+    <baseReliefCutHeight type="type:Decimal(mbunit:MBU)">
       <value>0.375</value>
     </baseReliefCutHeight>
-    <baseReliefCutThickness type="Decimal(mbunit:MBU)">
+    <baseReliefCutThickness type="type:Decimal(mbunit:MBU)">
       <value>0.375</value>
     </baseReliefCutThickness>
-    <baseRoundingRadius type="Decimal | mbt:RadiusAB | mbt:BaseRoundingMap">
-      <status>Draft</status>
+    <baseRoundingRadius type="type:Decimal | mbt:RadiusAB | mbt:BaseRoundingMap">
       <value>0</value>
     </baseRoundingRadius>
     <grille type="mbt:Grille">
       <value>None</value>
     </grille>
-    <grilleInverted type="Boolean">
+    <grilleInverted type="type:Boolean">
       <value>false</value>
     </grilleInverted>
-    <grilleDepth type="Decimal(mbunit:MBU)">
+    <grilleDepth type="type:Decimal(mbunit:MBU)">
       <value>1</value>
     </grilleDepth>
-    <grilleCount type="Integer">
+    <grilleCount type="type:Integer">
       <value>5</value>
     </grilleCount>
     <bevel type="mbt:Bevel">
       <value>[[0,0],[0,0],[0,0],[0,0]]</value>
     </bevel>
-
-    <!-- Studs -->
-    <studs type="Boolean">
+    <!--Studs-->
+    <studs type="type:Boolean">
       <value>true</value>
     </studs>
-    <studShift type="Boolean">
+    <studShift type="type:Boolean">
       <value>false</value>
     </studShift>
     <studType type="mbt:StudType">
       <value>Solid</value>
     </studType>
-    <studPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
-      <value>[0.2, 0.2, 0.2, 0.2]</value>
+    <studPadding type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
+      <value>[0.2,0.2,0.2,0.2]</value>
     </studPadding>
-    <studBaseOverlap type="Decimal(mbunit:MBU)">
+    <studBaseOverlap type="type:Decimal(mbunit:MBU)">
       <value>0.25</value>
     </studBaseOverlap>
-
-    <!-- Holes — NativeBlock axis-unified API -->
-    <holeX type="Boolean">
+    <!--Holes — NativeBlock axis-unified API-->
+    <holeX type="type:Boolean">
       <value>false</value>
     </holeX>
-    <holeY type="Boolean">
+    <holeY type="type:Boolean">
       <value>false</value>
     </holeY>
-    <holeZ type="Boolean">
+    <holeZ type="type:Boolean">
       <value>false</value>
     </holeZ>
     <holeXYZType type="mbt:HoleType | mbt:AxisXYZ(mbt:HoleType)">
       <value>Pin</value>
     </holeXYZType>
-    <holeXYZShift type="Boolean | mbt:AxisXYZ(Boolean)">
+    <holeXYZShift type="type:Boolean | mbt:AxisXYZ(type:Boolean)">
       <value>true</value>
     </holeXYZShift>
-    <holeXYGridOffsetZ type="Decimal(mbunit:MBU) | mbt:AxisXY(Decimal(mbunit:MBU))">
+    <holeXYGridOffsetZ type="type:Decimal(mbunit:MBU) | mbt:AxisXY(type:Decimal(mbunit:MBU))">
       <value>3.5</value>
     </holeXYGridOffsetZ>
-
-    <!-- Recess -->
-    <recess type="Boolean">
+    <!--Recess-->
+    <recess type="type:Boolean">
       <value>false</value>
     </recess>
-    <recessStuds type="Boolean">
+    <recessStuds type="type:Boolean">
       <value>false</value>
     </recessStuds>
-    <recessWallThickness type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
-      <value>[0.333, 0.333, 0.333, 0.333]</value>
+    <recessWallThickness type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
+      <value>[0.333,0.333,0.333,0.333]</value>
     </recessWallThickness>
-    <recessDepth type="mbt:Auto | Decimal(mbunit:GridUnitZ)">
+    <recessDepth type="mbt:Auto | type:Decimal(mbunit:GridUnitZ)">
       <value>Auto</value>
     </recessDepth>
-    <recessStudPadding type="mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
-      <value>[0.2, 0.2, 0.2, 0.2]</value>
+    <recessStudPadding type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
+      <value>[0.2,0.2,0.2,0.2]</value>
     </recessStudPadding>
-
-    <!-- Slope -->
-    <slope type="Boolean.False | mbt:FaceMapXY(Decimal(mbunit:GridUnitXY))">
+    <!--Slope-->
+    <slope type="type:Boolean | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
       <value>false</value>
     </slope>
-
-    <!-- Text -->
-    <text type="Boolean.False | Text">
-      <value>False</value>
+    <!--Text-->
+    <text type="type:Boolean | type:Text">
+      <value>false</value>
     </text>
     <textFace type="mbt:Face">
       <value>ZPos</value>
     </textFace>
-    <textDepth type="Decimal(mbunit:MBU)">
+    <textDepth type="type:Decimal(mbunit:MBU)">
       <value>0.5</value>
     </textDepth>
-    <textSize type="Decimal(unit:Millimeter)">
+    <textSize type="type:Decimal(unit:Millimeter)">
       <value>9</value>
     </textSize>
-    <textFont type="Text">
+    <textFont type="type:Text">
       <value>RBNo3.1 Black</value>
     </textFont>
-    <textSpacing type="Decimal">
+    <textSpacing type="type:Decimal">
       <value>1</value>
     </textSpacing>
-    <textColor type="Color">
+    <textColor type="type:Color">
       <value>#303D4E</value>
     </textColor>
-
-    <!-- Style -->
-    <baseColor type="Color">
+    <!--Style-->
+    <baseColor type="type:Color">
       <value>#EAC645</value>
     </baseColor>
-    <surfacePattern type="Boolean.False | FilePath">
-      <value>False</value>
+    <surfacePattern type="type:Boolean | type:FilePath">
+      <value>false</value>
     </surfacePattern>
-    <surfacePatternScale type="Decimal">
+    <surfacePatternScale type="type:Decimal">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="Boolean.False | FilePath">
-      <value>False</value>
+    <studIcon type="type:Boolean | type:FilePath">
+      <value>false</value>
     </studIcon>
-
   </properties>
-
-  <!--
-    Single NativeBlock — no wrapper generated (1 child rule).
-    Property names and types follow NativeBlock (SSOT).
-  -->
   <aggregations>
     <_parts override="true">
       <composition>
-        <mbcore:NativeBlock
-          size="${ size }"
-          baseCutoutType="${ baseCutoutType }"
-          pillars="${ pillars }"
-          reliefCut="${ baseReliefCut }"
-          reliefCutHeight="${ baseReliefCutHeight }"
-          reliefCutThickness="${ baseReliefCutThickness }"
-          baseRoundingRadius="${ baseRoundingRadius }"
-          grille="${ grille }"
-          grilleInverted="${ grilleInverted }"
-          grilleDepth="${ grilleDepth }"
-          grilleCount="${ grilleCount }"
-          bevel="${ bevel }"
-          studs="${ studs }"
-          studShift="${ studShift }"
-          studType="${ studType }"
-          studPadding="${ studPadding }"
-          studBaseOverlap="${ studBaseOverlap }"
-          holeX="${ holeX }"
-          holeY="${ holeY }"
-          holeZ="${ holeZ }"
-          holeXYZType="${ holeXYZType }"
-          holeXYZShift="${ holeXYZShift }"
-          holeXYGridOffsetZ="${ holeXYGridOffsetZ }"
-          recess="${ recess }"
-          recessStuds="${ recessStuds }"
-          recessWallThickness="${ recessWallThickness }"
-          recessDepth="${ recessDepth }"
-          recessStudPadding="${ recessStudPadding }"
-          slope="${ slope }"
-          text="${ text }"
-          textFace="${ textFace }"
-          textDepth="${ textDepth }"
-          textSize="${ textSize }"
-          textFont="${ textFont }"
-          textSpacing="${ textSpacing }"
-          textColor="${ textColor }"
-          baseColor="${ baseColor }"
-          surfacePattern="${ surfacePattern }"
-          surfacePatternScale="${ surfacePatternScale }"
-          studIcon="${ studIcon }" />
+        <mbcore:NativeBlock size="${ size }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" baseRoundingRadius="${ baseRoundingRadius }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" bevel="${ bevel }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" holeX="${ holeX }" holeY="${ holeY }" holeZ="${ holeZ }" holeXYZType="${ holeXYZType }" holeXYZShift="${ holeXYZShift }" holeXYGridOffsetZ="${ holeXYGridOffsetZ }" recess="${ recess }" recessStuds="${ recessStuds }" recessWallThickness="${ recessWallThickness }" recessDepth="${ recessDepth }" recessStudPadding="${ recessStudPadding }" slope="${ slope }" text="${ text }" textFace="${ textFace }" textDepth="${ textDepth }" textSize="${ textSize }" textFont="${ textFont }" textSpacing="${ textSpacing }" textColor="${ textColor }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" />
       </composition>
     </_parts>
   </aggregations>
-</block>
+</bricks:Standard>

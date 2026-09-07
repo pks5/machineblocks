@@ -1,43 +1,25 @@
-<!--
-  MachineBlocks — FaceMapXYZ struct type
+<!--MachineBlocks — FaceMapXYZ struct type
 
-  FQN: com.machineblocks.bml.type.FaceMapXYZ
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.FaceMapXYZ-->
+<mbt:FaceMapXYZ xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>FaceMapXYZ</name>
-  <type>mbt:FaceMapXYZ</type>
-  <baseType>mbt:FaceMapXY(T)</baseType>
-  <is>A face-keyed value map on X, Y, and Z</is>
-
-  <documentation>Struct ValueType for a sparse face map on all six faces
+  <baseType>
+    mbt:FaceMapXY(T)
+  </baseType>
+  <is>
+    A face-keyed value map on X, Y, and Z
+  </is>
+  <documentation>
+    Struct ValueType for a sparse face map on all six faces
     { xNeg, xPos, yNeg, yPos, zNeg, zPos }. Extends FaceMapXY(T) and adds zNeg / zPos
     typed as Z. Z defaults to T (declaration-order sibling default) so FaceMapXYZ(T) keeps one
     binding; supply both when Z faces differ — e.g.
     FaceMapXYZ(Decimal(mbunit:GridUnitXY), Decimal(mbunit:GridUnitZ)).
     Preferred type for NativeBlock face maps with Z (baseAdjustment, sizeMod, …). Lateral-only
-    maps use FaceMapXY. Named FaceMapXYZ (not FaceMap3D).</documentation>
-
-  <genericTypes>
-    <T baseType="core:ValueType"/>
-    <Z baseType="core:ValueType" defaultType="T"/>
-  </genericTypes>
-
-  <properties>
-    <zNeg type="Z">
-      <documentation>Value on the Z- face (negative Z) — type Z (defaults to T).</documentation>
-    </zNeg>
-    <zPos type="Z">
-      <documentation>Value on the Z+ face (positive Z) — type Z (defaults to T).</documentation>
-    </zPos>
-  </properties>
-
+    maps use FaceMapXY. Named FaceMapXYZ (not FaceMap3D).
+  </documentation>
   <references>
     <see type="mbt:FaceMapXY" relation="Extends">
       Four-face parent — xNeg, xPos, yNeg, yPos inherited; zNeg / zPos declared here.
@@ -49,5 +31,20 @@
       Parallel pattern — AxisXYZ(N, Z) with Z defaulting to N.
     </see>
   </references>
-
-</block>
+  <genericTypes>
+    <T baseType="core:ValueType" />
+    <Z baseType="core:ValueType" defaultType="T" />
+  </genericTypes>
+  <properties>
+    <zNeg type="Z">
+      <documentation>
+        Value on the Z- face (negative Z) — type Z (defaults to T).
+      </documentation>
+    </zNeg>
+    <zPos type="Z">
+      <documentation>
+        Value on the Z+ face (positive Z) — type Z (defaults to T).
+      </documentation>
+    </zPos>
+  </properties>
+</mbt:FaceMapXYZ>

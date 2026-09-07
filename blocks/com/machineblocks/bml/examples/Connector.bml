@@ -1,5 +1,4 @@
-<!--
-  MachineBlocks.com Block File
+<!--MachineBlocks.com Block File
 
   Name: Connector
   Filename: Connector.bml
@@ -9,77 +8,50 @@
 
   Published under license:
   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
-  https://creativecommons.org/licenses/by-nc-sa/4.0/
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  https://creativecommons.org/licenses/by-nc-sa/4.0/-->
+<examples:Connector xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:type="org.blockml.bml.type"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Connector</name>
-  <type>examples:Connector</type>
-  <baseType>mbcore:CompositeBlock</baseType>
-  <is>A brick composition example</is>
+  <baseType>
+    mbcore:CompositeBlock
+  </baseType>
+  <is>
+    A brick composition example
+  </is>
   <properties>
-
-    <!-- Grid dimensions -->
-    <columns type="Integer">
+    <!--Grid dimensions-->
+    <columns type="type:Integer">
       <value>5</value>
     </columns>
-    <rows type="Integer">
+    <rows type="type:Integer">
       <value>4</value>
     </rows>
     <blockSize type="mbt:SizeXYZ">
-      <value>[4, 2, 3]</value>
+      <value>[4,2,3]</value>
     </blockSize>
-
-    <!--
-      size is computed from columns, rows, blockSize.
+    <!--size is computed from columns, rows, blockSize.
       Computed value — references other properties of this Block.
-      Cycle detection: columns, rows, blockSize have no dependencies → resolved first.
-    -->
+      Cycle detection: columns, rows, blockSize have no dependencies → resolved first.-->
     <size type="mbt:SizeXYZ">
       <value>${ [blockSize.x * columns, blockSize.y * rows, blockSize.z] }</value>
     </size>
-
-    <!-- Checkerboard colors -->
-    <colorA type="Color">
+    <!--Checkerboard colors-->
+    <colorA type="type:Color">
       <value>#55AB68</value>
     </colorA>
-    <colorB type="Color">
+    <colorB type="type:Color">
       <value>#303D4E</value>
     </colorB>
-
   </properties>
-
-  <!--
-    Composition: columns × rows NativeBlock children as a single each over columns*rows.
-    (Nested bml:container+each currently fails BML_MISSING_ID in validate despite bml:id.)
-    Local x/y derived via bml:with.
-  -->
   <aggregations>
     <_parts override="true">
       <composition>
-
-        <mbcore:NativeBlock
-          bml:each="i : ${ columns * rows }"
-          bml:id="brick"
-          bml:with="
-            x = ${ #math.floor(i / rows) },
-            y = ${ i - #math.floor(i / rows) * rows }
-          "
-          size="${ blockSize }"
-          offset="${ [x * blockSize.x, y * blockSize.y, 0] }"
-          baseColor="${ colorA }"
-          connectors="false" />
-
+        <mbcore:NativeBlock bml:each="i : ${ columns * rows }" bml:with="x=${ #math.floor(i / rows) },y=${ i - #math.floor(i / rows) * rows }" bml:id="brick" size="${ blockSize }" offset="${ [x * blockSize.x, y * blockSize.y, 0] }" baseColor="${ colorA }" connectors="false" />
       </composition>
     </_parts>
   </aggregations>
-</block>
+</examples:Connector>

@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Quality / Rendering member group
+<!--MachineBlocks — Quality / Rendering member group
 
-  FQN: com.machineblocks.bml.group.Quality
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.Quality-->
+<mbgroup:Quality xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>Quality</name>
-  <type>mbgroup:Quality</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Quality / Rendering parameter group</is>
-
-  <documentation>MachineBlocks member group for Quality / Rendering parameters on NativeBlock
-    (YAML group id: quality).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Quality / Rendering parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Quality / Rendering parameters on NativeBlock
+    (YAML group id: quality).
+  </documentation>
+</mbgroup:Quality>

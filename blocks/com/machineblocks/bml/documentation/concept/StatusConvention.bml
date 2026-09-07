@@ -1,25 +1,20 @@
-<!--
-  MachineBlocks — concept documentation
+<!--MachineBlocks — concept documentation
 
-  FQN: com.machineblocks.bml.documentation.concept.StatusConvention
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.concept.StatusConvention-->
+<concept:StatusConvention xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
   xmlns:status="org.blockml.bml.status">
 
-  <name>StatusConvention</name>
-  <type>concept:StatusConvention</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to MachineBlocks status Block references</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to MachineBlocks status Block references
+  </is>
   <documentation>
     Maturity is expressed with Status Block references — not free strings or boolean flags.
-
+    
     Core status blocks (package org.blockml.bml.status.*):
     Stable — implemented, tested, and mapping complete; reliable behaviour (implicit default).
     Draft — definition exists; implementation or mapping incomplete, untested, or
@@ -27,20 +22,19 @@
     Stub — placeholder; shape declared, behaviour not yet specified; validates OK;
       renderer may stub/log or abort.
     Deprecated — retained for compatibility; do not use in new work.
-
+    
     Default is Stable. Status inherits downward; authors declare status only when diverging from
     the inherited effective status.
-
-    At &lt;status&gt; and bml:status reference sites, unqualified names resolve to
+    
+    At &lt;status> and bml:status reference sites, unqualified names resolve to
     org.blockml.bml.status.* — bare names are correct there
-    (e.g. &lt;status&gt;Draft&lt;/status&gt;, bml:status="Deprecated").
+    (e.g. &lt;status>Draft&lt;/status>, bml:status="Deprecated").
     Explicit prefixes or FQNs remain valid everywhere (status:Draft ≡ Draft at those sites).
     Bare status names are invalid outside specialized status reference sites.
-
+    
     SCAD implementation status and MBOM mapping status may differ independently for the same
     parameter or type. Use Draft with an explicit note when they are misaligned.
   </documentation>
-
   <references>
     <see type="concept:Introduction" relation="SeeAlso">
       Start of the concept reading path.
@@ -61,5 +55,4 @@
       BlockML status authoring rules.
     </see>
   </references>
-
-</block>
+</concept:StatusConvention>

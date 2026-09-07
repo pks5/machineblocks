@@ -1,27 +1,23 @@
-<!--
-  MachineBlocks — RotationXY struct type
+<!--MachineBlocks — RotationXY struct type
 
-  FQN: com.machineblocks.bml.type.RotationXY
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.RotationXY-->
+<mbt:RotationXY xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>RotationXY</name>
-  <type>mbt:RotationXY</type>
-  <baseType>mbt:AxisXY(Decimal(unit:Degree))</baseType>
-  <is>A rotation about X and Y in degrees</is>
-
-  <documentation>Semantic Struct ValueType for a rotation pair { x, y } in degrees. Extends
+  <baseType>
+    mbt:AxisXY(type:Decimal(unit:Degree))
+  </baseType>
+  <is>
+    A rotation about X and Y in degrees
+  </is>
+  <documentation>
+    Semantic Struct ValueType for a rotation pair { x, y } in degrees. Extends
     AxisXY with N closed to Decimal(unit:Degree) — not re-opened as a generic. Rotation about
     X and Y (degrees of arc). Named RotationXY (not Rotation2D) — MachineBlocks axis-keyed
-    types use XY / XYZ, not 2D / 3D.</documentation>
-
+    types use XY / XYZ, not 2D / 3D.
+  </documentation>
   <references>
     <see type="mbt:AxisXY" relation="Extends">
       Structural { x, y } map — RotationXY closes N to Decimal(unit:Degree).
@@ -33,5 +29,4 @@
       Angular unit bound into N.
     </see>
   </references>
-
-</block>
+</mbt:RotationXY>

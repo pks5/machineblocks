@@ -1,21 +1,17 @@
-<!--
-  MachineBlocks — Underside / Base Cutout member group
+<!--MachineBlocks — Underside / Base Cutout member group
 
-  FQN: com.machineblocks.bml.group.Underside
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.group.Underside-->
+<mbgroup:Underside xmlns="http://blockml.org/bml"
   xmlns:mbgroup="com.machineblocks.bml.group">
 
-  <name>Underside</name>
-  <type>mbgroup:Underside</type>
-  <baseType>mbgroup:Category</baseType>
-  <is>A Underside / Base Cutout parameter group</is>
-
-  <documentation>MachineBlocks member group for Underside / Base Cutout parameters on NativeBlock
-    (YAML group id: underside).</documentation>
-
-</block>
+  <baseType>
+    mbgroup:Category
+  </baseType>
+  <is>
+    A Underside / Base Cutout parameter group
+  </is>
+  <documentation>
+    MachineBlocks member group for Underside / Base Cutout parameters on NativeBlock
+    (YAML group id: underside).
+  </documentation>
+</mbgroup:Underside>

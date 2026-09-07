@@ -1,55 +1,48 @@
-<!--
-  MachineBlocks — concept documentation
+<!--MachineBlocks — concept documentation
 
-  FQN: com.machineblocks.bml.documentation.concept.DecisionFramework
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.concept.DecisionFramework-->
+<concept:DecisionFramework xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
   xmlns:mbml="com.machineblocks.bml.documentation.mbml"
   xmlns:scad="com.machineblocks.bml.documentation.scad">
 
-  <name>DecisionFramework</name>
-  <type>concept:DecisionFramework</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to MachineBlocks decision layers</is>
-
-  <status>Draft</status>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to MachineBlocks decision layers
+  </is>
   <documentation>
     Do not start with parameters — start with intent. Three decision layers apply whether authoring
     in MBML or targeting SCAD:
-
+    
     1. Semantic Intent — what is this block for?
     2. Pattern Selection — how is it structured?
     3. Parameter Realization — how is it built?
-
+    
     Intent order: Semantic Mode (purpose, structure, printability) is primary. Output Mode chooses
     LEGO-like (playful, looser) versus Device (functional, strict printability). Design Mode
     (appearance) is secondary and never overrides purpose.
-
+    
     Shared pattern inventory (aligned with AuthoringPatterns / ModulePatterns / ScadDecisionRules):
     1. Primitive Wrapper — thin pass-through around native geometry / mb_block()
     2. Semantic / Simple Block — named type or module with a focused surface; one native leaf
     3. Composite Block — multi-body (MBML _parts / SCAD children); Set is a Composite specialization
     4. Helper / Form — shared geometry helpers, not content products (primarily SCAD)
     When in doubt, choose Composite.
-
+    
     Capability boundary of a single native geometry call: classic bricks and plates, slopes and
     bevels (may be combined in one call — V3; V2 forbade slope+bevel together), rounds, recess,
     studs, simple cutouts, and similar single-body forms. L/T/cross shapes, Z-brackets, side
     panels, cable channels, bent liftarms, multi-line text, and multi-body carriers require
     composition.
-
+    
     Cross-cutting rules: design in west-local face semantics; prefer direction over free rotation;
     keep calibration adjustments out of instance settings when they belong in config. In MBML/BOM
     author Face (and Direction / Align) as enum member ids (XNeg, XPos, …) — not SCAD face strings;
     SCAD literals ("x-", "x+", …) are emit-only (see TransformationConcepts / scad:ScadDecisionRules).
-
+    
     Draft note — Decision Knowledge package (planned): grow this into a structured collection
     (best practices, antipatterns, pattern choices, boundaries, rules) under
     com.machineblocks.bml.decision.* — not under documentation.*. Own knowledge branch types
@@ -57,7 +50,6 @@
     NativeBlock / CompositeBlock / examples. Migrate this block and scad:ScadDecisionRules into
     that package; keep documentation.concept|mbml|scad as reading guides that only cross-link in.
   </documentation>
-
   <references>
     <see type="concept:StatusConvention" relation="ReadNext">
       Next — status Block references for maturity.
@@ -69,5 +61,4 @@
       SCAD-specific decision rules and mb_block() whitelist/blacklist.
     </see>
   </references>
-
-</block>
+</concept:DecisionFramework>

@@ -1,23 +1,22 @@
-<!--
-  MachineBlocks MBOM — Set base type (STEPS + views)
+<!--MachineBlocks MBOM — Set base type (STEPS + views)
 
-  FQN: com.machineblocks.bml.core.Set
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.core.Set-->
+<mbcore:Set xmlns="http://blockml.org/bml"
   xmlns:mbcore="com.machineblocks.bml.core">
 
-  <name>Set</name>
-  <type>mbcore:Set</type>
-  <baseType>mbcore:CompositeBlock</baseType>
-  <is>A LEGO-style build set</is>
-
-  <documentation>Abstract composable Block for LEGO-style Sets — block palette, placed instances,
-    and assembly order. Top-level catalog unit in MachineBlocks.</documentation>
-
+  <baseType>
+    mbcore:CompositeBlock
+  </baseType>
+  <is>
+    A LEGO-style build set
+  </is>
+  <documentation>
+    Abstract composable Block for LEGO-style Sets — block palette, placed instances,
+    and assembly order. Top-level catalog unit in MachineBlocks.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="mbcore:CompositeBlock">
       Extends CompositeBlock — inherits _parts for placed instances and presets for block palette.
@@ -26,11 +25,7 @@
       Assembly steps in _steps reference placed parts via part association.
     </see>
   </references>
-
-  <abstract>true</abstract>
-
   <aggregations>
     <_steps type="mbcore:Step[]" />
   </aggregations>
-
-</block>
+</mbcore:Set>

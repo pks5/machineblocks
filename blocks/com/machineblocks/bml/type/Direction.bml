@@ -1,35 +1,30 @@
-<!--
-  MachineBlocks — Direction enum
+<!--MachineBlocks — Direction enum
 
-  FQN: com.machineblocks.bml.type.Direction
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.Direction-->
+<mbt:Direction xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Direction</name>
-  <type>mbt:Direction</type>
-  <baseType>mbt:MBEnum(Text)</baseType>
-  <is>A cardinal direction</is>
-
-  <documentation>Enum ValueType for west / north / east / south on MachineBlocks bricks.
+  <baseType>
+    mbt:MBEnum(org.blockml.bml.type.Text)
+  </baseType>
+  <is>
+    A cardinal direction
+  </is>
+  <documentation>
+    Enum ValueType for west / north / east / south on MachineBlocks bricks.
     Extends MBEnum(Text). BOM property values store only the member id plus this EnumType;
-    scad:value holds the SCAD serialization literal.</documentation>
-
+    scad:value holds the SCAD serialization literal.
+  </documentation>
   <aggregations>
     <values override="true">
       <composition>
-        <Direction bml:id="West" scad:value="west" />
-        <Direction bml:id="North" scad:value="north" />
-        <Direction bml:id="East" scad:value="east" />
-        <Direction bml:id="South" scad:value="south" />
+        <mbt:Direction bml:id="West" value="west" />
+        <mbt:Direction bml:id="North" value="north" />
+        <mbt:Direction bml:id="East" value="east" />
+        <mbt:Direction bml:id="South" value="south" />
       </composition>
     </values>
   </aggregations>
-
-</block>
+</mbt:Direction>

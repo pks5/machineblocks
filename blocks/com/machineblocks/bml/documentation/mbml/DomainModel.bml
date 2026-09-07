@@ -1,25 +1,20 @@
-<!--
-  MachineBlocks — MBML documentation
+<!--MachineBlocks — MBML documentation
 
-  FQN: com.machineblocks.bml.documentation.mbml.DomainModel
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.mbml.DomainModel-->
+<mbml:DomainModel xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbml="com.machineblocks.bml.documentation.mbml">
 
-  <name>DomainModel</name>
-  <type>mbml:DomainModel</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to the MachineBlocks domain Block hierarchy</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to the MachineBlocks domain Block hierarchy
+  </is>
   <documentation>
     MachineBlocks domain types under com.machineblocks.bml.core:
-
+    
     Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
     basePresets association.
     CompositeBlock — Block with default _parts aggregation for child block instances.
@@ -32,15 +27,14 @@
       Block), not mbcore:Block / Entity — a sibling outside the Entity → mbcore:Block tree.
       part association references a placed _parts instance by bml:id; document order in _steps is
       build order.
-
+    
     Hierarchy: Entity → mbcore:Block → CompositeBlock → Set. NativeBlock is a final sibling under
     mbcore:Block. Step sits on org.blockml.bml.core.Block → Step.
-
+    
     Class identity is the Block FQN. Instance identity inside composition uses bml:id (nested paths
     use ::). There is no separate Placement type — direction, offset, and related placement data
     live on the placed instances.
   </documentation>
-
   <references>
     <see type="mbml:TypeSystem" relation="ReadNext">
       Next — MachineBlocks type package overview.
@@ -64,5 +58,4 @@
       Framework Block — baseType of Step.
     </see>
   </references>
-
-</block>
+</mbml:DomainModel>

@@ -1,27 +1,26 @@
-<!--
-  MachineBlocks MBOM — domain base Block
+<!--MachineBlocks MBOM — domain base Block
 
-  FQN: com.machineblocks.bml.core.Block
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.core.Block-->
+<mbcore:Block xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>Block</name>
-  <type>mbcore:Block</type>
-  <baseType>core:Entity</baseType>
-  <is>A MachineBlocks domain Block</is>
-
-  <documentation>MachineBlocks domain base Block. Carries presets aggregation and basePresets
+  <baseType>
+    core:Entity
+  </baseType>
+  <is>
+    A MachineBlocks domain Block
+  </is>
+  <documentation>
+    MachineBlocks domain base Block. Carries presets aggregation and basePresets
     association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
-    output is render-target logic.</documentation>
-
+    output is render-target logic.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
   <references>
     <see type="core:Entity">
       Domain branch base — Entity instances with composition identity.
@@ -36,21 +35,17 @@
       LEGO-style build sub-type with palette, placed parts, and assembly steps.
     </see>
   </references>
-
-  <abstract>true</abstract>
-
   <properties>
-    <name type="Text">
-      <documentation>The human readable name of the Block.</documentation>
+    <name type="org.blockml.bml.type.Text">
+      <documentation>
+        The human readable name of the Block.
+      </documentation>
     </name>
   </properties>
-
-  <associations>
-    <basePresets type="InstanceReference(bml:Self)[]"></basePresets>
-  </associations>
-
   <aggregations>
     <presets type="mbcore:Block[]" />
   </aggregations>
-
-</block>
+  <associations>
+    <basePresets type="org.blockml.bml.type.InstanceReference(bml:Self)[]" />
+  </associations>
+</mbcore:Block>

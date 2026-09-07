@@ -1,37 +1,24 @@
-<!--
-  MachineBlocks — PcbSocket struct type
+<!--MachineBlocks — PcbSocket struct type
 
-  FQN: com.machineblocks.bml.type.PcbSocket
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.PcbSocket-->
+<mbt:PcbSocket xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>PcbSocket</name>
-  <type>mbt:PcbSocket</type>
-  <baseType>StructType</baseType>
-  <is>A PCB screw-socket position</is>
-
-  <documentation>Struct ValueType for one PCB screw-socket center { x, y } in millimeters,
+  <baseType>
+    type:StructType
+  </baseType>
+  <is>
+    A PCB screw-socket position
+  </is>
+  <documentation>
+    Struct ValueType for one PCB screw-socket center { x, y } in millimeters,
     measured from the brick center. Maps 1:1 to the SCAD pcbSockets entry [x, y]. Used by
     NativeBlock.pcbSockets as the list of individual sockets — distinct from NativeBlock.pcbOffset,
     which offsets the entire PCB assembly. Diameter, height, and hole diameter stay on
-    NativeBlock.pcbSocket* (global).</documentation>
-
-  <properties>
-    <x type="Decimal(unit:Millimeter)">
-      <documentation>X distance of the socket center from the brick center (mm).</documentation>
-    </x>
-    <y type="Decimal(unit:Millimeter)">
-      <documentation>Y distance of the socket center from the brick center (mm).</documentation>
-    </y>
-  </properties>
-
+    NativeBlock.pcbSocket* (global).
+  </documentation>
   <references>
     <see type="type:StructType" relation="Extends">
       Struct ValueType branch — x, y.
@@ -43,5 +30,16 @@
       Mounting mode that enables sockets (pcb = Sockets).
     </see>
   </references>
-
-</block>
+  <properties>
+    <x type="type:Decimal(unit:Millimeter)">
+      <documentation>
+        X distance of the socket center from the brick center (mm).
+      </documentation>
+    </x>
+    <y type="type:Decimal(unit:Millimeter)">
+      <documentation>
+        Y distance of the socket center from the brick center (mm).
+      </documentation>
+    </y>
+  </properties>
+</mbt:PcbSocket>

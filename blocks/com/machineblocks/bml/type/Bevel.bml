@@ -1,29 +1,25 @@
-<!--
-  MachineBlocks — Bevel struct type
+<!--MachineBlocks — Bevel struct type
 
-  FQN: com.machineblocks.bml.type.Bevel
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.Bevel-->
+<mbt:Bevel xmlns="http://blockml.org/bml"
   xmlns:mbt="com.machineblocks.bml.type"
   xmlns:mbunit="com.machineblocks.bml.unit">
 
-  <name>Bevel</name>
-  <type>mbt:Bevel</type>
-  <baseType>mbt:CornerMap(mbt:OffsetXY)</baseType>
-  <is>A corner bevel displacement map on the horizontal plane</is>
-
-  <documentation>Closed CornerMap(OffsetXY) for wedge bevels on the horizontal (Z-face)
+  <baseType>
+    mbt:CornerMap(mbt:OffsetXY)
+  </baseType>
+  <is>
+    A corner bevel displacement map on the horizontal plane
+  </is>
+  <documentation>
+    Closed CornerMap(OffsetXY) for wedge bevels on the horizontal (Z-face)
     plane only — not a multi-axis map like BaseRoundingMap. Not re-opened as a generic.
     Inherits sw, nw, ne, se; each corner is an OffsetXY displacement in GridUnitXY (OffsetXY
     default). World XY via OffsetXY (not AxisAB) is intentional: the plane is fixed to the
     brick Z-face. SCAD serializes as a 4-element array of [x, y] pairs. Used by
     NativeBlock.bevel; the resulting shape is intersected with the bounding box and may
-    combine with slope.</documentation>
-
+    combine with slope.
+  </documentation>
   <references>
     <see type="mbt:CornerMap" relation="Extends">
       Structural { sw, nw, ne, se } map — Bevel closes T to OffsetXY.
@@ -38,5 +34,4 @@
       Parallel Z-plane CornerMap pattern for recess / tongue radii.
     </see>
   </references>
-
-</block>
+</mbt:Bevel>

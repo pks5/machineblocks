@@ -1,27 +1,23 @@
-<!--
-  MachineBlocks — RotationXYZ struct type
+<!--MachineBlocks — RotationXYZ struct type
 
-  FQN: com.machineblocks.bml.type.RotationXYZ
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.type.RotationXYZ-->
+<mbt:RotationXYZ xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:mbt="com.machineblocks.bml.type">
 
-  <name>RotationXYZ</name>
-  <type>mbt:RotationXYZ</type>
-  <baseType>mbt:AxisXYZ(Decimal(unit:Degree))</baseType>
-  <is>A rotation about X, Y, and Z in degrees</is>
-
-  <documentation>Semantic Struct ValueType for a rotation triple { x, y, z } in degrees. Extends
+  <baseType>
+    mbt:AxisXYZ(type:Decimal(unit:Degree))
+  </baseType>
+  <is>
+    A rotation about X, Y, and Z in degrees
+  </is>
+  <documentation>
+    Semantic Struct ValueType for a rotation triple { x, y, z } in degrees. Extends
     AxisXYZ with N closed to Decimal(unit:Degree); Z is omitted at the baseType application and
     defaults to N (same degree type). Not re-opened as a generic. Named RotationXYZ (not
-    Rotation3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.</documentation>
-
+    Rotation3D) — MachineBlocks axis-keyed types use XY / XYZ, not 2D / 3D.
+  </documentation>
   <references>
     <see type="mbt:AxisXYZ" relation="Extends">
       Structural { x, y, z } map — N closed to Decimal(unit:Degree); Z defaults to N.
@@ -33,5 +29,4 @@
       Angular unit bound into N.
     </see>
   </references>
-
-</block>
+</mbt:RotationXYZ>

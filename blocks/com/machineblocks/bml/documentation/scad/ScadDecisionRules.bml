@@ -1,50 +1,44 @@
-<!--
-  MachineBlocks — SCAD documentation
+<!--MachineBlocks — SCAD documentation
 
-  FQN: com.machineblocks.bml.documentation.scad.ScadDecisionRules
--->
-<block
-  xmlns="http://blockml.org/bml"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://blockml.org/bml https://blockml.org/schemas/bml.xsd
-                      "
+  FQN: com.machineblocks.bml.documentation.scad.ScadDecisionRules-->
+<scad:ScadDecisionRules xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
   xmlns:scad="com.machineblocks.bml.documentation.scad">
 
-  <name>ScadDecisionRules</name>
-  <type>scad:ScadDecisionRules</type>
-  <baseType>core:Documentation</baseType>
-  <is>A guide to SCAD authoring decision rules</is>
-
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to SCAD authoring decision rules
+  </is>
   <documentation>
     Direct SCAD generation follows the same three layers as the concept DecisionFramework
     (Intent → Pattern → Parameters). This block states SCAD-specific constraints.
-
+    
     Pattern choice for Block Modules:
     1. Primitive Wrapper — thin module around mb_block() with defaults
     2. Semantic / Simple Block — named module, getters, focused customizer
     3. Composite Block — wrapper mb_block(base=false, studs=false) with children
     4. Helper / Form — shared geometry helpers, not content products
     When in doubt, choose Composite.
-
+    
     Single mb_block() whitelist (examples): classic bricks/plates; slope and/or bevel (combinable
     in V3 — V2 disallowed both in one call); round forms; recess; studs; simple cutouts;
     single-line top text; PCB cavities; straight liftarms.
-
+    
     Requires Composite (blacklist for one call): L/T/cross; Z-brackets; side panels; cable
     channels; bent liftarms; carriers; multi-line text; multi-body devices.
-
+    
     Device rules: walls/corners/channels as composites; lids as separate blocks; inner cavities
     often baseCutoutType=none.
-
+    
     Implementation rules: design west-local; prefer direction over rotation; no calibration
     adjustments in routine settings; NativeBlock properties always via mb_param_[propertyName](),
     all other parameters via mb_param() (see MbBlockApi; Cross.scad demonstrates both); in SCAD
     settings/config use Face scad:value strings ("x-", "x+", …) — MBML/BOM still authors enum
     member ids; no globals inside modules; Hidden section is customizer bridge only.
   </documentation>
-
   <references>
     <see type="scad:LegacyConversion" relation="ReadNext">
       Next — converting V2 machineblock() files to V3.
@@ -59,5 +53,4 @@
       Concrete Block File patterns and examples.
     </see>
   </references>
-
-</block>
+</scad:ScadDecisionRules>
