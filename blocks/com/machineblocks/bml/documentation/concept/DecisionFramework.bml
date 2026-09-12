@@ -13,6 +13,9 @@
   <is>
     A guide to MachineBlocks decision layers
   </is>
+  <status>
+    Draft
+  </status>
   <documentation>
     Do not start with parameters — start with intent. Three decision layers apply whether authoring
     in MBML or targeting SCAD:

@@ -762,7 +762,7 @@
       <value>2.25</value>
       <scad:value>2.25</scad:value>
     </connectorWidth>
-    <connectors type="type:Boolean | mbt:Connector[]">
+    <connectors type="type:Boolean.False | mbt:Connector[]">
       <documentation>
         Side connection system using triangular wedges. Alternative to tongue/groove.
         Enables side-by-side (0°) and angled (90°) connections.
@@ -1857,7 +1857,7 @@
       <value>{x:0,y:0,z:0}</value>
       <scad:value>[0,0,0]</scad:value>
     </offset>
-    <pcb type="type:Boolean | mbt:PcbMountingType">
+    <pcb type="type:Boolean.False | mbt:PcbMountingType">
       <documentation>
         PCB mounting mode. Combines the former pcb (bool) and pcbMountingType into one.
         false or "none": no PCB mounting features.
@@ -2240,7 +2240,7 @@
       <value>0</value>
       <scad:value>0</scad:value>
     </pinDiameterAdjustment>
-    <ports type="type:Boolean | mbt:Port[]">
+    <ports type="type:Boolean.False | mbt:Port[]">
       <documentation>
         Cutouts on a face for connectors such as USB, screw terminals, etc.
         Each port is placed on a face using anchor + offset, then filled with
@@ -3602,7 +3602,7 @@
       <value>{xNeg:0,xPos:0,yNeg:0,yPos:0,zNeg:0,zPos:0}</value>
       <scad:value>[0,0,0,0,0,0]</scad:value>
     </sizeMod>
-    <slope type="type:Boolean | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
+    <slope type="type:Boolean.False | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
       <documentation>
         Defines slopes per side (0-3).
         Positive values: slope on top surface (z+), starting at slopeBaseHeightBottom
@@ -4227,7 +4227,7 @@
       <value>0.3</value>
       <scad:value>0.3</scad:value>
     </studHoleDiameterAdjustment>
-    <studIcon type="type:Boolean | type:FilePath">
+    <studIcon type="type:Boolean.False | type:FilePath">
       <documentation>
         SVG file engraved into each stud.
         OpenSCAD resolves relative SVG paths against the .scad file that uses the path
@@ -4530,7 +4530,7 @@
       <value>[]</value>
       <scad:value>[]</scad:value>
     </studAreas>
-    <surfacePattern type="type:Boolean | type:FilePath">
+    <surfacePattern type="type:Boolean.False | type:FilePath">
       <documentation>
         SVG file for a pattern on the brick surface. Applied to the brick
         body surface as a repeating or single pattern.
@@ -4715,7 +4715,7 @@
       <value>1</value>
       <scad:value>1</scad:value>
     </surfacePatternScale>
-    <svg type="type:Boolean | type:FilePath">
+    <svg type="type:Boolean.False | type:FilePath">
       <documentation>
         SVG file to draw on a brick side. Placed on the side specified
         by svgFace.
@@ -4890,7 +4890,7 @@
       <value>1</value>
       <scad:value>1</scad:value>
     </svgScale>
-    <text type="type:Boolean | type:Text">
+    <text type="type:Boolean.False | type:Text">
       <documentation>
         Text to draw on the brick. If not empty, rendered on the side
         specified by textFace.

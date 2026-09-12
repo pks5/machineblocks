@@ -46,6 +46,9 @@
       <value>0.375</value>
     </baseReliefCutThickness>
     <baseRoundingRadius type="type:Decimal | mbt:RadiusAB | mbt:BaseRoundingMap">
+      <status>
+        Draft
+      </status>
       <value>0</value>
     </baseRoundingRadius>
     <grille type="mbt:Grille">
@@ -115,11 +118,11 @@
       <value>[0.2,0.2,0.2,0.2]</value>
     </recessStudPadding>
     <!--Slope-->
-    <slope type="type:Boolean | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
+    <slope type="type:Boolean.False | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
       <value>false</value>
     </slope>
     <!--Text-->
-    <text type="type:Boolean | type:Text">
+    <text type="type:Boolean.False | type:Text">
       <value>false</value>
     </text>
     <textFace type="mbt:Face">
@@ -144,16 +147,17 @@
     <baseColor type="type:Color">
       <value>#EAC645</value>
     </baseColor>
-    <surfacePattern type="type:Boolean | type:FilePath">
+    <surfacePattern type="type:Boolean.False | type:FilePath">
       <value>false</value>
     </surfacePattern>
     <surfacePatternScale type="type:Decimal">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="type:Boolean | type:FilePath">
+    <studIcon type="type:Boolean.False | type:FilePath">
       <value>false</value>
     </studIcon>
   </properties>
+  <!--Single NativeBlock — no wrapper generated (1 child rule). Property names and types follow NativeBlock (SSOT).-->
   <aggregations>
     <_parts override="true">
       <composition>

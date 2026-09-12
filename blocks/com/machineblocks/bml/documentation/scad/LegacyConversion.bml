@@ -12,6 +12,9 @@
   <is>
     A guide to converting V2 machineblock() files to V3
   </is>
+  <status>
+    Draft
+  </status>
   <documentation>
     Status: Draft — primary V2→V3 path is documented from the Cross Plate reference pair
     (V2 machineblock script below vs V3 Composite Block File

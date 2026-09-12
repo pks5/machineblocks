@@ -13,6 +13,9 @@
   <is>
     A guide to MBOM type serialization for SCAD
   </is>
+  <status>
+    Draft
+  </status>
   <documentation>
     Status: Draft — MBOM type shapes are defined in com.machineblocks.bml.type.*; SCAD serialization
     rules continue to be validated against the V3 library. Prefer BML type definitions over

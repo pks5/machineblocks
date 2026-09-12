@@ -104,19 +104,35 @@
     <baseColor type="type:Color">
       <value>#EAC645</value>
     </baseColor>
-    <surfacePattern type="type:Boolean | type:FilePath">
+    <surfacePattern type="type:Boolean.False | type:FilePath">
       <value>false</value>
     </surfacePattern>
     <surfacePatternScale type="type:Decimal">
       <value>0.2</value>
     </surfacePatternScale>
-    <studIcon type="type:Boolean | type:FilePath">
+    <studIcon type="type:Boolean.False | type:FilePath">
       <value>false</value>
     </studIcon>
   </properties>
+  <!--Composition: 2 NativeBlock children.
+    → ScadBlockProcessor generates automatic wrapper mb_block() with
+      base=false, studs=false (from own properties above).
+
+    Derived values via bml:with on <composition>:
+      b1SizeY   = min(size.y, brick1SizeY)           — clamped brick1 height
+      b1OffsetY = min(size.y - b1SizeY, brick1OffsetY) — clamped brick1 Y offset
+      b2SizeX   = min(size.x, brick2SizeX)           — clamped brick2 width
+      b2OffsetX = min(size.x - brick2SizeX, brick2OffsetX) — clamped brick2 X offset
+
+    Note: bml:with variables are evaluated left-to-right, so b1OffsetY can
+    reference b1SizeY and b2OffsetX can reference b2SizeX.
+
+    baseWallGaps: WallGap[] — each entry is {face, pos, len}
+      Brick 1 gets a gap in Y for where Brick 2 passes through.
+      Brick 2 gets a gap in X for where Brick 1 passes through.-->
   <aggregations>
     <_parts override="true">
-      <composition bml:with="b1SizeY=${ #math.min(size. },brick1SizeY) }=${  },b1OffsetY=${ #math.min(size.y - b1Size },brick1OffsetY) }=${  },b2SizeX=${ #math.min(size. },brick2SizeX) }=${  },b2OffsetX=${ #math.min(size.x - brick2Size },brick2OffsetX) }=${  }">
+      <composition bml:with="b1SizeY=${ #math.min(size.y, brick1SizeY) },b1OffsetY=${ #math.min(size.y - b1SizeY, brick1OffsetY) },b2SizeX=${ #math.min(size.x, brick2SizeX) },b2OffsetX=${ #math.min(size.x - brick2SizeX, brick2OffsetX) }">
         <!--Brick 1: full X width, narrow in Y-->
         <mbcore:NativeBlock bml:id="brick1" size="${ [size.x, b1SizeY, size.z] }" offset="${ [0, b1OffsetY, 0] }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" baseWallGaps="${ [{face: Y, pos: b2OffsetX, len: b2SizeX}] }" />
         <!--Brick 2: narrow in X, full Y height-->

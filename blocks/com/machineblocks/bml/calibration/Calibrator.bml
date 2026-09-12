@@ -80,6 +80,7 @@
       <value>0.1</value>
     </pinDiameterAdjustmentValueStep>
   </properties>
+  <!--Context-scoped @utils bean and main _parts composition. Sub-Blocks are defined below — referenced here by short name.-->
   <aggregations>
     <_utils type="cal:Calibrator.Utils">
       <composition>
