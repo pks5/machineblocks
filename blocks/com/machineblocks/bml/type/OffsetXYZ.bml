@@ -3,8 +3,7 @@
   FQN: com.machineblocks.bml.type.OffsetXYZ-->
 <mbt:OffsetXYZ xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
-  xmlns:mbt="com.machineblocks.bml.type"
-  xmlns:mbunit="com.machineblocks.bml.unit">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <baseType>
     mbt:AxisXYZ(N, Z)

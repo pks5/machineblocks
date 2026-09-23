@@ -2,10 +2,8 @@
 
   FQN: com.machineblocks.bml.core.Step-->
 <mbcore:Step xmlns="http://blockml.org/bml"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbt="com.machineblocks.bml.type">
+  xmlns:mbcore="com.machineblocks.bml.core">
 
   <baseType>
     core:Block

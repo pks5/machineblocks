@@ -10,7 +10,6 @@
   Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
   https://creativecommons.org/licenses/by-nc-sa/4.0/-->
 <bricks:Standard xmlns="http://blockml.org/bml"
-  xmlns:status="org.blockml.bml.status"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:bricks="com.machineblocks.bml.bricks"
@@ -27,7 +26,7 @@
   <properties>
     <!--Size — types aligned to NativeBlock-->
     <size type="mbt:SizeXYZ">
-      <value>[4,2,3]</value>
+      <value>{x:4,y:2,z:3}</value>
     </size>
     <!--Base-->
     <baseCutoutType type="mbt:BaseCutout">
@@ -64,7 +63,7 @@
       <value>5</value>
     </grilleCount>
     <bevel type="mbt:Bevel">
-      <value>[[0,0],[0,0],[0,0],[0,0]]</value>
+      <value>{sw:{x:0,y:0},nw:{x:0,y:0},ne:{x:0,y:0},se:{x:0,y:0}}</value>
     </bevel>
     <!--Studs-->
     <studs type="type:Boolean">
@@ -77,7 +76,7 @@
       <value>Solid</value>
     </studType>
     <studPadding type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
-      <value>[0.2,0.2,0.2,0.2]</value>
+      <value>{xNeg:0.2,xPos:0.2,yNeg:0.2,yPos:0.2}</value>
     </studPadding>
     <studBaseOverlap type="type:Decimal(mbunit:MBU)">
       <value>0.25</value>
@@ -109,13 +108,13 @@
       <value>false</value>
     </recessStuds>
     <recessWallThickness type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
-      <value>[0.333,0.333,0.333,0.333]</value>
+      <value>{xNeg:0.333,xPos:0.333,yNeg:0.333,yPos:0.333}</value>
     </recessWallThickness>
     <recessDepth type="mbt:Auto | type:Decimal(mbunit:GridUnitZ)">
       <value>Auto</value>
     </recessDepth>
     <recessStudPadding type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
-      <value>[0.2,0.2,0.2,0.2]</value>
+      <value>{xNeg:0.2,xPos:0.2,yNeg:0.2,yPos:0.2}</value>
     </recessStudPadding>
     <!--Slope-->
     <slope type="type:Boolean.False | mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">

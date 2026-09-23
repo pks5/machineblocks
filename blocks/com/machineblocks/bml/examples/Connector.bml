@@ -31,13 +31,13 @@
       <value>4</value>
     </rows>
     <blockSize type="mbt:SizeXYZ">
-      <value>[4,2,3]</value>
+      <value>{x:4,y:2,z:3}</value>
     </blockSize>
     <!--size is computed from columns, rows, blockSize.
       Computed value — references other properties of this Block.
       Cycle detection: columns, rows, blockSize have no dependencies → resolved first.-->
     <size type="mbt:SizeXYZ">
-      <value>${ [blockSize.x * columns, blockSize.y * rows, blockSize.z] }</value>
+      <value>${ {x: blockSize.x * columns, y: blockSize.y * rows, z: blockSize.z} }</value>
     </size>
     <!--Checkerboard colors-->
     <colorA type="type:Color">
@@ -53,7 +53,7 @@
   <aggregations>
     <_parts override="true">
       <composition>
-        <mbcore:NativeBlock bml:each="i : ${ columns * rows }" bml:with="x=${ #math.floor(i / rows) },y=${ i - #math.floor(i / rows) * rows }" bml:id="brick" size="${ blockSize }" offset="${ [x * blockSize.x, y * blockSize.y, 0] }" baseColor="${ colorA }" connectors="false" />
+        <mbcore:NativeBlock bml:each="i : ${ columns * rows }" bml:with="x=${ #math.floor(i / rows) },y=${ i - #math.floor(i / rows) * rows }" bml:id="brick" size="${ blockSize }" offset="${ {x: x * blockSize.x, y: y * blockSize.y, z: 0} }" baseColor="${ colorA }" connectors="false" />
       </composition>
     </_parts>
   </aggregations>

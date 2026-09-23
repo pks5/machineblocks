@@ -2,8 +2,6 @@
 
   FQN: com.machineblocks.bml.core.CompositeBlock-->
 <mbcore:CompositeBlock xmlns="http://blockml.org/bml"
-  xmlns:core="org.blockml.bml.core"
-  xmlns:lang="org.blockml.bml.language"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbt="com.machineblocks.bml.type">
 
@@ -39,6 +37,6 @@
     </offset>
   </properties>
   <aggregations>
-    <_parts type="mbcore:Block[]" default="true" />
+    <_parts type="mbcore:Block[]" />
   </aggregations>
 </mbcore:CompositeBlock>

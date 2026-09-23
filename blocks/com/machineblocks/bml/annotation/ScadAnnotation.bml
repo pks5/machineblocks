@@ -5,7 +5,6 @@
   Preferred authoring binding:
     xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"-->
 <mbann:ScadAnnotation xmlns="http://blockml.org/bml"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
   xmlns:mbann="com.machineblocks.bml.annotation">
 

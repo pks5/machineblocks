@@ -2,13 +2,11 @@
 
   FQN: com.machineblocks.bml.core.Block-->
 <mbcore:Block xmlns="http://blockml.org/bml"
-  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:core="org.blockml.bml.core"
-  xmlns:mbcore="com.machineblocks.bml.core"
-  xmlns:mbt="com.machineblocks.bml.type">
+  xmlns:mbcore="com.machineblocks.bml.core">
 
   <baseType>
-    core:Entity
+    core:Block
   </baseType>
   <is>
     A MachineBlocks domain Block
@@ -22,8 +20,8 @@
     true
   </abstract>
   <references>
-    <see type="core:Entity">
-      Domain branch base — Entity instances with composition identity.
+    <see type="core:Block">
+      Framework inheritance root — domain Blocks extend Block.
     </see>
     <see type="mbcore:CompositeBlock">
       Composable sub-type with default _parts aggregation for child block instances.

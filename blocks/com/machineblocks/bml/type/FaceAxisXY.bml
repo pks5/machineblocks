@@ -3,7 +3,6 @@
   FQN: com.machineblocks.bml.type.FaceAxisXY-->
 <mbt:FaceAxisXY xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
-  xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbt="com.machineblocks.bml.type">
 
   <baseType>

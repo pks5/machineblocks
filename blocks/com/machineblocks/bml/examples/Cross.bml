@@ -12,7 +12,6 @@
 <examples:Cross xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:type="org.blockml.bml.type"
-  xmlns:unit="org.blockml.bml.unit"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:examples="com.machineblocks.bml.examples"
   xmlns:mbt="com.machineblocks.bml.type"
@@ -33,7 +32,7 @@
     </studs>
     <!--Size-->
     <size type="mbt:SizeXYZ">
-      <value>[4,4,3]</value>
+      <value>{x:4,y:4,z:3}</value>
     </size>
     <!--Cross geometry-->
     <brick1SizeY type="type:Integer">
@@ -95,7 +94,7 @@
       <value>Solid</value>
     </studType>
     <studPadding type="mbt:FaceMapXY(type:Decimal(mbunit:GridUnitXY))">
-      <value>[0.2,0.2,0.2,0.2]</value>
+      <value>{xNeg:0.2,xPos:0.2,yNeg:0.2,yPos:0.2}</value>
     </studPadding>
     <studBaseOverlap type="type:Decimal(mbunit:MBU)">
       <value>0.25</value>
@@ -134,9 +133,9 @@
     <_parts override="true">
       <composition bml:with="b1SizeY=${ #math.min(size.y, brick1SizeY) },b1OffsetY=${ #math.min(size.y - b1SizeY, brick1OffsetY) },b2SizeX=${ #math.min(size.x, brick2SizeX) },b2OffsetX=${ #math.min(size.x - brick2SizeX, brick2OffsetX) }">
         <!--Brick 1: full X width, narrow in Y-->
-        <mbcore:NativeBlock bml:id="brick1" size="${ [size.x, b1SizeY, size.z] }" offset="${ [0, b1OffsetY, 0] }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" baseWallGaps="${ [{face: Y, pos: b2OffsetX, len: b2SizeX}] }" />
+        <mbcore:NativeBlock bml:id="brick1" size="${ {x: size.x, y: b1SizeY, z: size.z} }" offset="${ {x: 0, y: b1OffsetY, z: 0} }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" baseWallGaps="${ [{face: Y, pos: b2OffsetX, len: b2SizeX}] }" />
         <!--Brick 2: narrow in X, full Y height-->
-        <mbcore:NativeBlock bml:id="brick2" size="${ [b2SizeX, size.y, size.z] }" offset="${ [b2OffsetX, 0, 0] }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" baseWallGaps="${ [{face: X, pos: b1OffsetY, len: b1SizeY}] }" />
+        <mbcore:NativeBlock bml:id="brick2" size="${ {x: b2SizeX, y: size.y, z: size.z} }" offset="${ {x: b2OffsetX, y: 0, z: 0} }" baseCutoutType="${ baseCutoutType }" pillars="${ pillars }" reliefCut="${ baseReliefCut }" reliefCutHeight="${ baseReliefCutHeight }" reliefCutThickness="${ baseReliefCutThickness }" grille="${ grille }" grilleInverted="${ grilleInverted }" grilleDepth="${ grilleDepth }" grilleCount="${ grilleCount }" studs="${ studs }" studShift="${ studShift }" studType="${ studType }" studPadding="${ studPadding }" studBaseOverlap="${ studBaseOverlap }" baseColor="${ baseColor }" surfacePattern="${ surfacePattern }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" baseWallGaps="${ [{face: X, pos: b1OffsetY, len: b1SizeY}] }" />
       </composition>
     </_parts>
   </aggregations>

@@ -2,8 +2,7 @@
 
   FQN: com.machineblocks.bml.type.Bevel-->
 <mbt:Bevel xmlns="http://blockml.org/bml"
-  xmlns:mbt="com.machineblocks.bml.type"
-  xmlns:mbunit="com.machineblocks.bml.unit">
+  xmlns:mbt="com.machineblocks.bml.type">
 
   <baseType>
     mbt:CornerMap(mbt:OffsetXY)

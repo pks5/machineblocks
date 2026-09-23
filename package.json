@@ -1,6 +1,6 @@
 {
     "name": "@machineblocks/core",
-    "version": "3.0.0-A3",
+    "version": "3.0.0-A4",
     "description": "The MachineBlocks Core Library",
     "license": "Apache-2.0",
     "blockml": {
@@ -22,9 +22,9 @@
       "access": "public"
     },
     "dependencies": {
-      "@blockml/core": "^1.3.0"
+      "@blockml/core": "^1.4.2"
     },
     "devDependencies": {
-      "@blockml/cli": "^0.9.5"
+      "@blockml/cli": "^0.9.13"
     }
   }

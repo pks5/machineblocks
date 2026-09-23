@@ -2932,7 +2932,7 @@
         <mbgroup:Positioning />
         <mbgroup:RareAiUsage />
       </groups>
-      <value>[0,0,0]</value>
+      <value>{x:0,y:0,z:0}</value>
       <scad:value>[0,0,0]</scad:value>
     </rotation>
     <rotationOffset type="mbt:OffsetXYZ">
@@ -2975,7 +2975,7 @@
         <mbgroup:Positioning />
         <mbgroup:RareAiUsage />
       </groups>
-      <value>[0,0,0]</value>
+      <value>{x:0,y:0,z:0}</value>
       <scad:value>[0,0,0]</scad:value>
     </rotationOffset>
     <rotationOffsetRevert type="type:Boolean">
@@ -3505,7 +3505,7 @@
         <mbgroup:CoreGeometry />
         <mbgroup:FrequentAiUsage />
       </groups>
-      <value>[1,1,1]</value>
+      <value>{x:1,y:1,z:1}</value>
       <scad:value>[1,1,1]</scad:value>
     </size>
     <sizeAdjustment type="mbt:FaceMapXYZ(type:Decimal(unit:Millimeter))">
@@ -3517,7 +3517,7 @@
         Typically set once in the global config and applies to all blocks.
         For per-block or per-side overrides, use baseAdjustment.
         
-        Example: [-0.1, 0] reduces x-, x+, y-, y+ by 0.1mm each, no height change.
+        Example: {xNeg:-0.1, xPos:-0.1, yNeg:-0.1, yPos:-0.1, zPos:0} reduces x-, x+, y-, y+ by 0.1mm each, no height change.
         
         Never scales with the scale parameter.
       </documentation>
@@ -3533,7 +3533,7 @@
       </changelog>
       <examples>
         <example title="xy shrink" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock sizeAdjustment="[-0.2, 0]" />]]>
+          <![CDATA[<NativeBlock sizeAdjustment="{xNeg:-0.2,xPos:-0.2,yNeg:-0.2,yPos:-0.2,zPos:0}" />]]>
         </example>
         <scad:example title="xy shrink" language="org.blockml.bml.language.OpenSCAD" snippet="true">
           <![CDATA[
@@ -3547,7 +3547,7 @@
         <mbgroup:Calibration />
         <mbgroup:ConfigOnlyAiUsage />
       </groups>
-      <value>[-0.1,0]</value>
+      <value>{xNeg:-0.1,xPos:-0.1,yNeg:-0.1,yPos:-0.1,zPos:0}</value>
       <scad:value>[-0.1,0]</scad:value>
     </sizeAdjustment>
     <sizeMod type="mbt:FaceMapXYZ(type:Decimal(mbunit:GridUnitXY))">
@@ -5056,7 +5056,7 @@
         <mbgroup:Text />
         <mbgroup:FrequentAiUsage />
       </groups>
-      <value>[0,0]</value>
+      <value>{x:0,y:0}</value>
       <scad:value>[0,0]</scad:value>
     </textOffset>
     <textSize type="type:Decimal(unit:Millimeter)">
@@ -5692,7 +5692,7 @@
     </unitMbuToMm>
   </properties>
   <aggregations>
-    <children type="mbcore:Block[]" default="true">
+    <children type="mbcore:Block[]">
       <documentation>
         Defines the child blocks of the current block.
       </documentation>
