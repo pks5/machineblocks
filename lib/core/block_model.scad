@@ -1009,6 +1009,7 @@ function mb_block_stud_render(block_obj, x, y) =
         prism_recess = prism_masks[1],
         prism_recess_inv = prism_masks[2],
         stud_diameter = mb_block_get_stud_diameter(block_obj, false),
+        stud_diameter_adj = mb_block_get_stud_diameter(block_obj, true),
         stud_hole_diameter = mb_block_get_stud_hole_diameter(block_obj),
         stud_type = (item == "pin" || item == "hollow") ? item : mb_block_get_stud_type(block_obj),
         
@@ -1119,7 +1120,7 @@ function mb_block_stud_render(block_obj, x, y) =
         render_stud && (!has_recess || in_rec || (on_recess_wall && len(found) == 0)),
         in_rec ? recess_stud_offset : stud_offset,
         in_rec,
-        stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter]
+        stud_type == "solid" ? 0.5 * stud_diameter_adj : [0.5 * stud_hole_diameter, 0.5 * stud_diameter_adj]
     ];
 
 function mb_block_stud_cutout_offset(block_obj, x, y) =

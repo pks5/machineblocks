@@ -2,7 +2,9 @@
 
 This repository contains a BlockML model. BML is the editable source of truth. The BOM is the canonical parsed representation.
 
-The effective model includes local BML, workspace packages, and BlockML libraries from npm. Identify Blocks by FQN. Look up semantics in the model. Do not invent types, syntax, or capabilities.
+The effective model includes local BML and BlockML libraries from npm (and any local packages that declare `blockml.library`). Identify Blocks by FQN. Look up semantics in the model. Do not invent types, syntax, or capabilities.
+
+Start at this project's library: `package.json` → `blockml.library` → that Library's `readMe`. Domain vocabulary and project-specific rules live there.
 
 A BlockML repository may contain anything besides BML — TypeScript, Java, OpenSCAD, tests, docs, a song, or any other files. There is no default companion language. Those files are not the model. Change BML first, then update companions to match the new BML: `blockml compile` when a target exists, or edit them directly (including by an LLM). Never invent model semantics only in companions, and never update companions first and retrofit BML.
 
@@ -16,24 +18,26 @@ Use the project-local CLI:
 npx blockml <command>
 ```
 
-Do not install or upgrade `@blockml/cli` unless asked. If the CLI is missing, run `npm ci` first. If `@blockml/cli` is not a project dependency, report that and stop.
+Do not install or upgrade `@blockml/cli` unless asked. If the CLI is missing, run `npm ci` or `npm install`. If `@blockml/cli` is not a project dependency, report that and stop.
 
-Run `npx blockml --help` for commands, workflow, and flags. Run `npx blockml <command> --help` before first use of a command (search, inspect, graph, new, validate, compile, transform).
+Run `npx blockml --help` for commands, workflow, and flags. Run `npx blockml <command> --help` before first use of a command (search, scan, inspect, graph, new, init, validate, compile, transform).
 
-Search answers where something is. Inspect answers: give me this Block already resolved. Graph answers how it connects.
+Search answers where something is. Scan answers which packages or types match selectors (set membership, not full-text search; quote `*` / `**`). Inspect answers: give me this Block already resolved. Graph answers how it connects.
 
 Generic grep, find, and file reads remain allowed. They are not the first way into the model.
 
 ## Workflow
 
 ```text
-task → search → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
+task → search or scan → FQNs → inspect (graph if structure) → targeted BML read → smallest BML edit → validate
      → update companions to match (compile and/or edit)
 ```
 
 If syntax is unclear: inspect the type Block, then similar existing BML, then change. Do not guess.
 
 Treat in-BML documentation as searchable knowledge. After dependency changes, rebuild `search index` if results look incomplete.
+
+Leave the model valid: run `npx blockml validate` after edits. Do not finish with a red model unless the user asked for an incomplete change.
 
 ## Rules
 
