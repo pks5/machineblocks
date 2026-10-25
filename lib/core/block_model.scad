@@ -1119,7 +1119,7 @@ function mb_block_stud_render(block_obj, x, y) =
         render_stud && (!has_recess || in_rec || (on_recess_wall && len(found) == 0)),
         in_rec ? recess_stud_offset : stud_offset,
         in_rec,
-        stud_type == "solid" ? 0.5 * stud_diameter : [0.5 * stud_hole_diameter, 0.5 * stud_diameter]
+        stud_type == "solid" ? 0.5 * mb_block_get_stud_diameter(block_obj, true) : [0.5 * stud_hole_diameter, 0.5 * mb_block_get_stud_diameter(block_obj, true)]
     ];
 
 function mb_block_stud_cutout_offset(block_obj, x, y) =
