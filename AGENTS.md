@@ -41,26 +41,22 @@ Leave the model valid: run `npx blockml validate` after edits. Do not finish wit
 
 # MachineBlocks CLI
 
-`machineblocks` extends the BlockML CLI. It does not replace `blockml`.
+`machineblocks` extends the BlockML CLI; it does not replace it.
 
 ```bash
 npx machineblocks <command>
 ```
 
-When a command exists on both CLIs, prefer `machineblocks`. Those commands are `validate`, `compile`, and `init`.
+Use `machineblocks` for `validate`, `compile`, and `init`. Use `blockml` for model discovery, inspection, transformations, and other generic operations.
 
-Run `npx machineblocks --help` for commands and flags. Run `npx machineblocks <command> --help` before first use of validate, compile, or init. Do not install or upgrade `@machineblocks/cli` unless asked. If `machineblocks` is missing, report that and stop.
+Run `npx machineblocks --help` and the command-specific `--help` before first use. Do not install or upgrade `@machineblocks/cli` unless asked. If the CLI is missing, report it and stop.
 
-- `validate` — parser and semantic check. Same project check as `blockml validate`. Does not write SCAD.
-  `machineblocks validate [--all] [<file>]`
-- `compile` — render selected Block and Set types to OpenSCAD. The target is `machineblocks-v3-scad`. The command does not take a target name.
-  `machineblocks compile <source-selector> [--source-package <FQN>] [--target-package <FQN>]`
-- `init` — scaffold a BlockML project and record the MachineBlocks profile.
-  `machineblocks init <package-fqn> [--src dir] [--no-install]`
+## Validation and Compilation
 
-Search, scan, inspect, graph, new, agents-md, and transform stay on `blockml`. So does `blockml compile` for toolchain targets (`blockdoc`, `xsd`, `fatblock`).
-
-After a BML edit, run `npx machineblocks validate`. Update SCAD companions with `npx machineblocks compile`.
+- After editing BML, run `npx machineblocks validate`.
+- Use `npx machineblocks compile` to generate OpenSCAD Block Files from BML.
+- **Never generate or modify SCAD files directly with the LLM unless explicitly requested.** SCAD is a compiler output, not the source of truth.
+- Do not use `blockml compile` for MachineBlocks SCAD generation; it handles generic BlockML compilation targets.
 
 # Building a MachineBlock
 
