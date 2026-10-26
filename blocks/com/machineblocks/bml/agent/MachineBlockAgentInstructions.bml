@@ -1,0 +1,82 @@
+<!-- MachineBlocks — how to build a MachineBlock
+     FQN: com.machineblocks.bml.agent.MachineBlockAgentInstructions -->
+<agent:MachineBlockAgentInstructions
+    xmlns="http://blockml.org/bml"
+    xmlns:agent="com.machineblocks.bml.agent"
+    xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+    xmlns:core="org.blockml.bml.core">
+
+  <baseType>
+    core:AgentInstructions
+  </baseType>
+
+  <is>
+    Instructions for authoring MachineBlocks
+  </is>
+
+  <documentation>
+    Minimal entry point for MachineBlocks authoring.
+    Domain knowledge and parameter documentation remain
+    in their authoritative Blocks.
+  </documentation>
+
+  <properties>
+    <order override="true">
+      <value>300</value>
+    </order>
+  </properties>
+
+  <aggregations>
+    <sections override="true">
+      <composition>
+        <core:AgentInstructions.Section
+            bml:id="build"
+            title="Building a MachineBlock">
+          <content><![CDATA[
+MachineBlocks are authored in MBML. Use the model as the source of truth.
+
+Start with these references:
+
+- [DecisionFramework](bml:com.machineblocks.bml.documentation.concept.DecisionFramework) — choose the modeling approach.
+- [AuthoringPatterns](bml:com.machineblocks.bml.documentation.mbml.AuthoringPatterns) — implement the model.
+- [NativeBlock](bml:com.machineblocks.bml.core.NativeBlock) — authoritative reference for native parameters, types, and defaults.
+
+Discover additional documentation and model definitions using the BlockML CLI.
+          ]]></content>
+        </core:AgentInstructions.Section>
+      </composition>
+    </sections>
+
+    <rules override="true">
+      <composition>
+        <core:AgentInstructions.Rule bml:id="startWithIntent">
+          <content><![CDATA[
+Start with the modeling intent, not with parameters.
+Consult DecisionFramework before choosing an implementation.
+          ]]></content>
+        </core:AgentInstructions.Rule>
+
+        <core:AgentInstructions.Rule bml:id="parametersOnNativeBlock">
+          <content><![CDATA[
+Never invent native parameters, types, or defaults.
+Inspect NativeBlock for their authoritative definitions.
+          ]]></content>
+        </core:AgentInstructions.Rule>
+
+        <core:AgentInstructions.Rule bml:id="nativeBlockIsFinal">
+          <content><![CDATA[
+Do not extend NativeBlock. Extend Block or CompositeBlock.
+          ]]></content>
+        </core:AgentInstructions.Rule>
+
+        <core:AgentInstructions.Rule bml:id="preferMbml">
+          <content><![CDATA[
+Prefer MBML for new domain content.
+OpenSCAD Block Files are a render target.
+          ]]></content>
+        </core:AgentInstructions.Rule>
+      </composition>
+    </rules>
+  </aggregations>
+
+</agent:MachineBlockAgentInstructions>
