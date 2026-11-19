@@ -1,0 +1,55 @@
+<!--MachineBlocks.com Block File
+
+  Name: Calibration Bricks
+  Filename: CalibrationBricks.bml
+  FQN: com.machineblocks.bml.calibration.CalibrationBricks
+
+  Copyright (c) 2022 - 2025 Jan Philipp Knoeller <pk@pksoftware.de>
+
+  Published under license:
+  Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+  https://creativecommons.org/licenses/by-nc-sa/4.0/-->
+<cal:CalibrationBricks xmlns="http://blockml.org/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:type="org.blockml.bml.type"
+  xmlns:cal="com.machineblocks.bml.calibration"
+  xmlns:mbcore="com.machineblocks.bml.core">
+
+  <baseType>
+    mbcore:CompositeBlock
+  </baseType>
+  <is>
+    A row of calibration bricks
+  </is>
+  <documentation>
+    Three standard bricks in a row for print calibration.
+
+    - 1×1×1 at x = 0
+    - 3×1×1 at x = 1.5
+    - 3×3×1 at x = 5
+
+    Children are start-aligned, with a 0.5 grid gap. Color, pattern scale, and stud icon are shared. No surface pattern is applied. Fit adjustments stay on the selected ConfigProfile.
+  </documentation>
+  <properties>
+    <!--Style — shared by every brick. Paths are relative to lib/shape, where import() runs.-->
+    <baseColor type="type:Color">
+      <value>#EAC645</value>
+    </baseColor>
+    <surfacePatternScale type="type:Decimal">
+      <value>0.2</value>
+    </surfacePatternScale>
+    <studIcon type="type:Boolean.False | type:FilePath">
+      <value>../../pattern/bolt-solid-full.svg</value>
+    </studIcon>
+  </properties>
+  <!--Wrapper is layout-only. Outer size is the parts bounding box.-->
+  <aggregations>
+    <_parts override="true">
+      <composition>
+        <mbcore:NativeBlock bml:id="brick1x1" size="{x:1,y:1,z:1}" offset="{x:0,y:0,z:0}" baseColor="${ baseColor }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" />
+        <mbcore:NativeBlock bml:id="brick3x1" size="{x:3,y:1,z:1}" offset="{x:1.5,y:0,z:0}" baseColor="${ baseColor }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" />
+        <mbcore:NativeBlock bml:id="brick3x3" size="{x:3,y:3,z:1}" offset="{x:5,y:0,z:0}" baseColor="${ baseColor }" surfacePatternScale="${ surfacePatternScale }" studIcon="${ studIcon }" />
+      </composition>
+    </_parts>
+  </aggregations>
+</cal:CalibrationBricks>
