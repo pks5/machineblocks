@@ -11,7 +11,7 @@ use <../shape/wedge.scad>;
 use <../shape/svg3d.scad>;
 use <../shape/text3d.scad>;
 use <../shape/pcb.scad>;
-use <../shape/custom_shapes.scad>;
+//use <../shape/custom_shapes.scad>;
 
 /*
 * ----------
@@ -784,9 +784,9 @@ module mb_block_part(
         /*
         * Custom Shapes
         */
-        else{
-            mb_block_part__custom_shapes(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
-        }
+        //else{
+        //    mb_block_part__custom_shapes(block_obj, part = part, part_params=part_params, mul = mul, debug = debug);
+        //}
         
     }
 }
