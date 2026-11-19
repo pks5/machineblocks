@@ -66,7 +66,7 @@ Start with these references:
 
 - [DecisionFramework](bml:com.machineblocks.bml.documentation.concept.DecisionFramework) — choose the modeling approach.
 - [AuthoringPatterns](bml:com.machineblocks.bml.documentation.mbml.AuthoringPatterns) — implement the model.
-- [NativeBlock](bml:com.machineblocks.bml.core.NativeBlock) — authoritative reference for native parameters, types, and defaults.
+- [Config](bml:com.machineblocks.bml.core.Config) and [NativeBlock](bml:com.machineblocks.bml.core.NativeBlock) — authoritative reference for native parameters, types, and defaults. Config holds the config-conventional properties; NativeBlock inherits them and defines the rest.
 
 Discover additional documentation and model definitions using the BlockML CLI.
 
@@ -80,7 +80,7 @@ Discover additional documentation and model definitions using the BlockML CLI.
 - Start with the modeling intent, not with parameters.
   Consult DecisionFramework before choosing an implementation.
 - Never invent native parameters, types, or defaults.
-  Inspect NativeBlock for their authoritative definitions.
-- Do not extend NativeBlock. Extend Block or CompositeBlock.
+  Inspect Config and NativeBlock for their authoritative definitions.
+- Do not extend NativeBlock or Config. Extend Block or CompositeBlock.
 - Prefer MBML for new domain content.
   OpenSCAD Block Files are a render target.

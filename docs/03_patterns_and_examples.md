@@ -12,7 +12,7 @@ version: 3.0.5
 
 This document defines the Block File structure, customizer conventions, config handling, and Block Module patterns. Each pattern is accompanied by concrete, production-ready examples.
 
-> For all parameter definitions see `NativeBlock.bml` + `com.machineblocks.bml.type.*` (sole SSOT).
+> For all parameter definitions see `Config.bml` and `NativeBlock.bml` + `com.machineblocks.bml.type.*` (SSOT).
 > `09_api_parameters.yml` is a pointer stub only (no inventory). Terminology: `01_system.md`.
 
 ---
@@ -293,7 +293,7 @@ c = a + 1; // NOT shown in customizer
 
 # Parameter Access Rules
 
-All block modules must follow these rules for reading parameters. **Native** means: declared as a property on `com.machineblocks.bml.core.NativeBlock` (SSOT). Everything else is **custom**.
+All block modules must follow these rules for reading parameters. **Native** means: declared as a property on `com.machineblocks.bml.core.Config` or `com.machineblocks.bml.core.NativeBlock` (SSOT). Everything else is **custom**.
 
 **Native parameters** — use the dedicated getter `mb_param_[propertyName]()`:
 ```scad
@@ -307,13 +307,13 @@ An optional default can be passed as the third argument:
 size = mb_param_size(config, settings, [4, 2, 3]);
 ```
 
-**Custom parameters** (not a NativeBlock property) — use the generic getter `mb_param()`:
+**Custom parameters** (not a Config or NativeBlock property) — use the generic getter `mb_param()`:
 ```scad
 myParam = mb_param(config, settings, "myParam", "myDefaultValue");
 brick1SizeY = mb_param(config, settings, "brick1SizeY", 2);
 ```
 
-> Never access the settings or config arrays directly. Never invent `mb_param_*` for custom names. Never use `mb_param()` for NativeBlock properties.
+> Never access the settings or config arrays directly. Never invent `mb_param_*` for custom names. Never use `mb_param()` for Config or NativeBlock properties.
 
 **Reference:** `blocks/com/machineblocks/scad/examples/Cross.scad` shows both in one module — native getters for shared brick params, `mb_param()` for `brick1SizeY` / `brick2SizeX` / `brick1OffsetY` / `brick2OffsetX`.
 
@@ -1203,6 +1203,6 @@ A set file supports four rendering modes: `total` (fully assembled), `print` (in
 
 **Assembly Toggling (SCAD-only helpers):** Resolve via `mb_assembly()`. Also resolve `renderGroups = mb_param_renderGroups(config, settings)`. Use `mb_assembly_tongue(assembly, renderGroups, g)` for tongue, `mb_assembly_groove(assembly, renderGroups, g)` for baseCutoutType, `mb_group_render(renderGroups, g)` for render, `mb_assembly_offset([...], assembly, renderGroups, g)` for offset. `g` is always a group name.
 
-**Parameter Access:** NativeBlock properties → `mb_param_[propertyName]()`; all other parameters → `mb_param()`. Never access arrays directly. See `blocks/com/machineblocks/scad/examples/Cross.scad` for both in one module.
+**Parameter Access:** Config and NativeBlock properties → `mb_param_[propertyName]()`; all other parameters → `mb_param()`. Never access arrays directly. See `blocks/com/machineblocks/scad/examples/Cross.scad` for both in one module.
 
 **studBaseOverlap:** Set to 0 only when a sub-block has `base = false` but still renders studs (e.g. stud-only decorative layers in composite blocks).

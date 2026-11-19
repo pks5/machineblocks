@@ -2,10 +2,13 @@
 
   FQN: com.machineblocks.bml.core.NativeBlock
   Final — cannot be used as baseType on Block definitions
+  Extends Config
 
-  SSOT for all MachineBlocks MBML / SCAD parameters: property set, types, docs,
-  defaults, and scad:value literals. Type shapes SSOT: com.machineblocks.bml.type.*
-  (Library.bml membership). Markdown / YAML / scad-lib docs must follow this BML —
+  Parameter SSOT together with Config: property set, types, docs, defaults,
+  and scad:value literals. Config defines the config-conventional properties;
+  NativeBlock defines brick and feature properties and inherits Config.
+  Type shapes SSOT: com.machineblocks.bml.type.* (Library.bml membership).
+  Markdown / YAML / scad-lib docs must follow Config.bml and this BML —
   they must not redefine the parameter inventory.-->
 <mbcore:NativeBlock xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
@@ -17,7 +20,7 @@
   xmlns:mbgroup="com.machineblocks.bml.group">
 
   <baseType>
-    mbcore:Block
+    mbcore:Config
   </baseType>
   <is>
     A leaf geometry Block
@@ -25,10 +28,16 @@
   <documentation>
     Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
     at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.
+    Extends Config, so the config-conventional properties are part of this leaf.
     
-    Sole SSOT for MachineBlocks (MB) native parameters: names, types, documentation, defaults,
-    and scad:value live only here. Markdown, YAML (09_mbom_properties.yml, 09_api_parameters.yml),
-    and scad-lib docs must follow this file — align to it or link only; never redefine the inventory.
+    Together with Config, the SSOT for MachineBlocks (MB) native parameters: names, types,
+    documentation, defaults, and scad:value. Config defines the config-conventional properties
+    (calibration, printer profile, printer-following clearances). This Block defines brick and
+    feature properties. Inheritance does not change resolution: settings override config, and
+    any parameter may appear in either map.
+    
+    Markdown, YAML (09_mbom_properties.yml, 09_api_parameters.yml), and scad-lib docs must
+    follow Config and this file — align to them or link only; never redefine the inventory.
     
     Type shapes SSOT: com.machineblocks.bml.type.* (Library.bml membership). Extend types there;
     do not invent parallel type tables in Markdown/YAML.
@@ -37,8 +46,11 @@
     true
   </final>
   <references>
+    <see type="mbcore:Config">
+      Extends Config. Config-conventional parameters are defined there and inherited here.
+    </see>
     <see type="mbcore:Block">
-      Extends Block directly — not CompositeBlock.
+      Domain base, via Config — not CompositeBlock.
     </see>
     <see type="mbcore:CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.
@@ -154,81 +166,6 @@
       <value>true</value>
       <scad:value>true</scad:value>
     </base>
-    <baseAdjustment type="mbt:FaceMapXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Per-side calibration adjustment in mm. Extends or reduces specific sides
-        of a block. Never scales with the scale parameter.
-        
-        PRIMARY PURPOSE — Per-side fine-tuning:
-        While sizeAdjustment provides global calibration, baseAdjustment
-        allows per-side overrides including z- and z+ (which sizeAdjustment
-        cannot address individually).
-        
-        z- SPECIAL BEHAVIOUR: A z- value does not reduce block height from below.
-        Instead it shifts the brick downward by the z- amount (independent of
-        offset), and extends z+ by the same amount. This means the brick gains
-        a downward protrusion while the top side expands correspondingly.
-        Same applies to sizeMod z-.
-        
-        Difference to sizeMod: baseAdjustment is for printer calibration and
-        gap closing in composite blocks. sizeMod is a semantic geometry change.
-        
-        IN CONFIG — typically empty or used for global z+/z- adjustments.
-        
-        IN COMPOSITE BLOCKS — use namespaced entries to pass side-specific
-        adjustments to child composite blocks. The child uses mb_params_filter()
-        to extract its namespace:
-        // In outer block:
-        ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
-        // In inner composite block (pbx part):
-        ["baseAdjustment", mb_params_filter(baseAdjustment, "pbx")]
-        // Result: [["x+", 0.01]]
-        
-        mb_params_filter(param, namespace, overrides?):
-        Filters a pseudo-map by namespace prefix, removes the prefix from keys.
-        Ignores entries without a namespace and entries with numeric keys.
-        Optional third argument applies fixed overrides after filtering.
-        Universal — can be applied to any [[string, value]] pseudo-map parameter.
-      </documentation>
-      <changelog>
-        <change version="3.0.0">
-          Renamed from baseSideAdjustment. Format changed from
-          float/2-element/
-          4-element array to pseudo-map [[side, value]] format. Now supports all
-          6 sides (including z-) and namespace-prefixed keys for composite patterns.
-          z- now has a special downward-shift behaviour (not a plain height reduction).
-          Default changed from -0.1 to [] (empty).
-        </change>
-      </changelog>
-      <examples>
-        <example title="xy face calibration" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock baseAdjustment="{xNeg: 0.05, xPos: 0.05, yNeg: -0.02, yPos: -0.02, zNeg: 0, zPos: 0}" />]]>
-        </example>
-        <scad:example title="xy face calibration" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["baseAdjustment", [0.05, 0.05, -0.02, -0.02, 0, 0]]
-          ...
-          ]]>
-        </scad:example>
-        <example title="z-plus tweak" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock baseAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />]]>
-        </example>
-        <scad:example title="z-plus tweak" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["baseAdjustment", [0, 0, 0, 0, 0, 0.1]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Calibration />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>{xNeg:0,xPos:0,yNeg:0,yPos:0,zNeg:0,zPos:0}</value>
-      <scad:value>[0,0,0,0,0,0]</scad:value>
-    </baseAdjustment>
     <baseClampHeight type="type:Decimal(mbunit:MBU)">
       <documentation>
         Height of the base clamp lip.
@@ -578,30 +515,6 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
     </baseWallThickness>
-    <baseWallThicknessAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for baseWallThickness.
-        Only for calibration. Not for AI in settings.
-      </documentation>
-      <examples>
-        <example title="tighter" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock baseWallThicknessAdjustment="-0.2" />]]>
-        </example>
-        <scad:example title="tighter" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["baseWallThicknessAdjustment", -0.2]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Underside />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>-0.1</value>
-      <scad:value>-0.1</scad:value>
-    </baseWallThicknessAdjustment>
     <bevel type="mbt:Bevel">
       <documentation>
         Creates wedges by shifting corners on the horizontal (Z-face) plane
@@ -1185,43 +1098,6 @@
       <value>3.625</value>
       <scad:value>3.625</scad:value>
     </holeXYGridOffsetZ>
-    <holeXYGridOffsetZAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXY(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYGridOffsetZ — per-axis scalar in mm
-        (AxisXY, same convention as holeXYGridOffsetZ).
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYGridOffsetZAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYGridOffsetZAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYGridOffsetZAdjustment="{x: 0.1, y: -0.1}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYGridOffsetZAdjustment", [0.1, -0.1]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </holeXYGridOffsetZAdjustment>
     <holeXYGridSizeZ type="type:Decimal(mbunit:MBU) | mbt:AxisXY(type:Decimal(mbunit:MBU))">
       <documentation>
         Per-axis scalar: center-to-center distance between two rows of Technic
@@ -1260,43 +1136,6 @@
       <value>6</value>
       <scad:value>6</scad:value>
     </holeXYGridSizeZ>
-    <holeXYGridSizeZAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXY(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYGridSizeZ — per-axis scalar in mm
-        (AxisXY, same convention as holeXYGridSizeZ).
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYGridSizeZAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYGridSizeZAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYGridSizeZAdjustment="{x: 0.1, y: 0}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYGridSizeZAdjustment", [0.1, 0]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </holeXYGridSizeZAdjustment>
     <holeXYMinTopMargin type="type:Decimal(mbunit:MBU) | mbt:AxisXY(type:Decimal(mbunit:MBU))">
       <documentation>
         Per-axis scalar: minimum distance between the block top and the topmost
@@ -1372,44 +1211,6 @@
       <value>1</value>
       <scad:value>1</scad:value>
     </holeXYZAxleThickness>
-    <holeXYZAxleThicknessAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYZAxleThickness, in mm.
-        Follows the 1/2/3-value array rule.
-        Analog to other Adjustment parameters for printer compensation.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZAxleThicknessAdjustment="0.05" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZAxleThicknessAdjustment", 0.05]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZAxleThicknessAdjustment="{x: 0, y: 0, z: 0.05}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZAxleThicknessAdjustment", [0, 0, 0.05]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </holeXYZAxleThicknessAdjustment>
     <holeXYZDiameter type="mbt:Auto | type:Decimal(mbunit:MBU) | mbt:AxisXYZ(type:Decimal(mbunit:MBU))">
       <documentation>
         Diameter of Technic holes per axis. Automatically calculated.
@@ -1447,43 +1248,6 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
     </holeXYZDiameter>
-    <holeXYZDiameterAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYZDiameter per axis.
-        Follows the 1/2/3-value array rule.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZDiameterAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZDiameterAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZDiameterAdjustment="{x: 0.1, y: 0.1, z: 0}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZDiameterAdjustment", [0.1, 0.1, 0]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.3</value>
-      <scad:value>0.3</scad:value>
-    </holeXYZDiameterAdjustment>
     <holeXYZEdgeMode type="mbt:HoleEdgeMode | mbt:HoleEdgePair | mbt:HoleEdgeMap">
       <documentation>
         Controls whether partial (half) Technic holes are drawn at the edges
@@ -1588,43 +1352,6 @@
       <value>0.5</value>
       <scad:value>0.5</scad:value>
     </holeXYZInsetDepth>
-    <holeXYZInsetDepthAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYZInsetDepth per axis.
-        Follows the 1/2/3-value array rule.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZInsetDepthAdjustment="0.05" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZInsetDepthAdjustment", 0.05]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZInsetDepthAdjustment="{x: 0, y: 0, z: 0.05}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZInsetDepthAdjustment", [0, 0, 0.05]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </holeXYZInsetDepthAdjustment>
     <holeXYZInsetThickness type="type:Decimal(mbunit:MBU) | mbt:AxisXYZ(type:Decimal(mbunit:MBU))">
       <documentation>
         Width of the inset ring around Technic holes, per axis.
@@ -1664,43 +1391,6 @@
       <value>0.375</value>
       <scad:value>0.375</scad:value>
     </holeXYZInsetThickness>
-    <holeXYZInsetThicknessAdjustment type="type:Decimal(unit:Millimeter) | mbt:AxisXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Calibration adjustment for holeXYZInsetThickness per axis.
-        Follows the 1/2/3-value array rule.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="global" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZInsetThicknessAdjustment="0.05" />]]>
-        </example>
-        <scad:example title="global" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZInsetThicknessAdjustment", 0.05]
-          ...
-          ]]>
-        </scad:example>
-        <example title="per-axis" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock holeXYZInsetThicknessAdjustment="{x: 0.05, y: 0, z: 0}" />]]>
-        </example>
-        <scad:example title="per-axis" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["holeXYZInsetThicknessAdjustment", [0.05, 0, 0]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TechnicHoles />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </holeXYZInsetThicknessAdjustment>
     <holeXYZShift type="type:Boolean | mbt:AxisXYZ(type:Boolean)">
       <documentation>
         Whether Technic holes per axis are shifted by 1/2 stud.
@@ -2217,29 +1907,6 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
     </pinDiameter>
-    <pinDiameterAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for pin diameter.
-      </documentation>
-      <examples>
-        <example title="tighter" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock pinDiameterAdjustment="-0.05" />]]>
-        </example>
-        <scad:example title="tighter" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["pinDiameterAdjustment", -0.05]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Pins />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </pinDiameterAdjustment>
     <ports type="type:Boolean.False | mbt:Port[]">
       <documentation>
         Cutouts on a face for connectors such as USB, screw terminals, etc.
@@ -2346,74 +2013,6 @@
       <value>false</value>
       <scad:value>false</scad:value>
     </ports>
-    <printerLayerHeight type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Layer height of the 3D printer in mm. Typically set once in the
-        global config. Used as the default value for other parameters when
-        those parameters are set to "auto".
-        
-        Current auto-resolution rules:
-        topPlateHelperHeight = "auto" → printerLayerHeight
-        stabilizerLayerOffset = "auto" → printerLayerHeight
-        screwHoleZHelperLayerOffset = "auto" → printerLayerHeight
-        tongueGrooveDepthClearance = "auto" → printerLayerHeight
-        tongueGrooveClampOffsetClearance = "auto" → printerLayerHeight
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="finer" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock printerLayerHeight="0.1" />]]>
-        </example>
-        <scad:example title="finer" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["printerLayerHeight", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:System />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
-    </printerLayerHeight>
-    <printerNozzleDiameter type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Nozzle diameter of the 3D printer in mm. Typically set once in the
-        global config. Used as the default value for other parameters when
-        those parameters are set to "auto".
-        
-        Current auto-resolution rules:
-        topPlateHelperThickness = "auto" → 0.5 * printerNozzleDiameter (min 0.1 mm)
-        tongueGrooveThicknessClearance = "auto" → 0.25 * printerNozzleDiameter (min 0.1 mm)
-        Any future *NozzleDiameter-based "auto" parameter follows the same min 0.1 mm rule.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="0.1 nozzle" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock printerNozzleDiameter="0.1" />]]>
-        </example>
-        <scad:example title="0.1 nozzle" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["printerNozzleDiameter", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:System />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.4</value>
-      <scad:value>0.4</scad:value>
-    </printerNozzleDiameter>
     <quality type="mbt:QualityPreset">
       <documentation>
         User-level quality preset. Controls overall rendering quality
@@ -2467,54 +2066,6 @@
       <value>false</value>
       <scad:value>false</scad:value>
     </recess>
-    <recessAdjustment type="mbt:Auto | mbt:FaceMapXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Per-side calibration adjustment for the inner recess walls and floor.
-        Applied to the interior surfaces of the recess (the inner box).
-        
-        At "auto", uses the same values as baseAdjustment (except z+, which
-        is not applicable to the recess).
-        
-        IMPORTANT — z- behaviour differs from baseAdjustment:
-        The z- value is applied to the recess floor height (moves the floor).
-        No downward shift or z+ extension occurs — it is a direct floor adjustment.
-        
-        Sign convention: negative values enlarge the recess (shrink the inner
-        walls inward in x/y, and lower the floor in z-). Positive values
-        shrink the recess.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="floor down" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock recessAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: -0.1, zPos: 0}" />]]>
-        </example>
-        <scad:example title="floor down" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["recessAdjustment", [0, 0, 0, 0, -0.1, 0]]
-          ...
-          ]]>
-        </scad:example>
-        <example title="faces" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock recessAdjustment="{xNeg: 0, xPos: 0, yNeg: 0, yPos: 0, zNeg: 0, zPos: 0.1}" />]]>
-        </example>
-        <scad:example title="faces" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["recessAdjustment", [0, 0, 0, 0, 0, 0.1]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Calibration />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>Auto</value>
-      <scad:value>auto</scad:value>
-    </recessAdjustment>
     <recessDepth type="mbt:Auto | type:Decimal(mbunit:GridUnitZ)">
       <documentation>
         Depth of the recess cavity, expressed as multiples of one plate (unitGrid[1] =
@@ -3508,48 +3059,6 @@
       <value>{x:1,y:1,z:1}</value>
       <scad:value>[1,1,1]</scad:value>
     </size>
-    <sizeAdjustment type="mbt:FaceMapXYZ(type:Decimal(unit:Millimeter))">
-      <documentation>
-        Global calibration adjustment for block size, applied uniformly.
-        sideXYAdj is applied to all four horizontal sides (x-, x+, y-, y+).
-        heightAdj is applied to the top face (z+) only.
-        
-        Typically set once in the global config and applies to all blocks.
-        For per-block or per-side overrides, use baseAdjustment.
-        
-        Example: {xNeg:-0.1, xPos:-0.1, yNeg:-0.1, yPos:-0.1, zPos:0} reduces x-, x+, y-, y+ by 0.1mm each, no height change.
-        
-        Never scales with the scale parameter.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <changelog>
-        <change version="3.0.0">
-          Now also accepts a single number (applies to XY only, Z = 0), in
-          addition
-          to the previous 2-element array [XYAdj, ZAdj].
-        </change>
-      </changelog>
-      <examples>
-        <example title="xy shrink" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock sizeAdjustment="{xNeg:-0.2,xPos:-0.2,yNeg:-0.2,yPos:-0.2,zPos:0}" />]]>
-        </example>
-        <scad:example title="xy shrink" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["sizeAdjustment", [-0.2, 0]]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Calibration />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>{xNeg:-0.1,xPos:-0.1,yNeg:-0.1,yPos:-0.1,zPos:0}</value>
-      <scad:value>[-0.1,0]</scad:value>
-    </sizeAdjustment>
     <sizeMod type="mbt:FaceMapXYZ(type:Decimal(mbunit:GridUnitXY))">
       <documentation>
         Semantic size modification per side, in grid units. Adjusts the
@@ -4008,62 +3517,6 @@
       <value>0</value>
       <scad:value>0</scad:value>
     </studClampThickness>
-    <studCutoutDiameterAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for stud cutout diameter.
-        Affects cutouts for studs in baseCutoutType=studs and outer wall
-        cutouts in round bricks for grid compatibility. Calibration only.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="looser" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock studCutoutDiameterAdjustment="0.3" />]]>
-        </example>
-        <scad:example title="looser" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["studCutoutDiameterAdjustment", 0.3]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Studs />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
-    </studCutoutDiameterAdjustment>
-    <studCutoutHeightAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for stud cutout height.
-        Affects cutouts for studs in baseCutoutType=studs and outer wall
-        cutouts in round bricks for grid compatibility. Calibration only.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="taller cutout" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock studCutoutHeightAdjustment="0.5" />]]>
-        </example>
-        <scad:example title="taller cutout" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["studCutoutHeightAdjustment", 0.5]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Studs />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.4</value>
-      <scad:value>0.4</scad:value>
-    </studCutoutHeightAdjustment>
     <studDiameter type="type:Decimal(mbunit:MBU)">
       <documentation>
         Diameter of studs. Usually does not need adjustment.
@@ -4087,29 +3540,6 @@
       <value>3</value>
       <scad:value>3</scad:value>
     </studDiameter>
-    <studDiameterAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for studDiameter.
-      </documentation>
-      <examples>
-        <example title="tighter" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock studDiameterAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="tighter" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["studDiameterAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Studs />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.2</value>
-      <scad:value>0.2</scad:value>
-    </studDiameterAdjustment>
     <studHeight type="type:Decimal(mbunit:MBU)">
       <documentation>
         Height of studs. Usually does not need adjustment.
@@ -4133,29 +3563,6 @@
       <value>1</value>
       <scad:value>1</scad:value>
     </studHeight>
-    <studHeightAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for studHeight.
-      </documentation>
-      <examples>
-        <example title="taller mm" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock studHeightAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="taller mm" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["studHeightAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Studs />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </studHeightAdjustment>
     <studHoleClampThickness type="type:Decimal(unit:Millimeter)">
       <documentation>
         Thickness of the clamp inside the stud hole (studType=hollow).
@@ -4204,29 +3611,6 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
     </studHoleDiameter>
-    <studHoleDiameterAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for studHoleDiameter.
-      </documentation>
-      <examples>
-        <example title="looser" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock studHoleDiameterAdjustment="0.4" />]]>
-        </example>
-        <scad:example title="looser" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["studHoleDiameterAdjustment", 0.4]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Studs />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.3</value>
-      <scad:value>0.3</scad:value>
-    </studHoleDiameterAdjustment>
     <studIcon type="type:Boolean.False | type:FilePath">
       <documentation>
         SVG file engraved into each stud.
@@ -5211,97 +4595,6 @@
       <value>0.1</value>
       <scad:value>0.1</scad:value>
     </tongueClampThickness>
-    <!--TODO: implement in SCAD-->
-    <tongueGrooveClampOffsetClearance type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Extra clearance in the groove before the clamp recess. In the groove,
-        both tongueClampOffset and tongueClampHeight are increased by this value,
-        so the clamp snaps more easily into the groove recess.
-        "auto" uses printerLayerHeight.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="more clearance" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock tongueGrooveClampOffsetClearance="0.05" />]]>
-        </example>
-        <scad:example title="more clearance" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["tongueGrooveClampOffsetClearance", 0.05]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TongueGroove />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </tongueGrooveClampOffsetClearance>
-    <tongueGrooveDepthClearance type="mbt:Auto | type:Decimal(unit:Millimeter)">
-      <documentation>
-        Additional depth clearance above the tongue inside the groove.
-        The effective groove depth = tongueHeight + tongueGrooveDepthClearance.
-        Replaces the old tongueGrooveDepth parameter.
-        "auto" uses printerLayerHeight.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="explicit" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock tongueGrooveDepthClearance="0.1" />]]>
-        </example>
-        <scad:example title="explicit" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["tongueGrooveDepthClearance", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TongueGroove />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>Auto</value>
-      <scad:value>auto</scad:value>
-    </tongueGrooveDepthClearance>
-    <!--TODO: implement in SCAD-->
-    <tongueGrooveThicknessClearance type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Clearance added to the groove width to allow the tongue to fit.
-        Applied to both the groove wall thickness and tongueClampThickness
-        inside the groove. Unlike tongueThicknessAdjustment (which only adjusts
-        the tongue itself and not the clamp), this parameter adjusts the groove side
-        including the clamp recess.
-        "auto" uses 0.25 * printerNozzleDiameter (minimum 0.1 mm).
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="more clearance" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock tongueGrooveThicknessClearance="0.15" />]]>
-        </example>
-        <scad:example title="more clearance" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["tongueGrooveThicknessClearance", 0.15]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TongueGroove />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0.1</value>
-      <scad:value>0.1</scad:value>
-    </tongueGrooveThicknessClearance>
     <tongueHeight type="type:Decimal(mbunit:MBU)">
       <documentation>
         Height of the tongue.
@@ -5418,32 +4711,6 @@
       <value>0.666</value>
       <scad:value>0.666</scad:value>
     </tongueThickness>
-    <tongueThicknessAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for tongue thickness. Adjusts the thickness
-        of the tongue only (not the groove). Used when using a tongue with
-        a non-groove partner brick. Does not affect tongueClampThickness.
-        For groove clearance, use tongueGrooveThicknessClearance instead.
-      </documentation>
-      <examples>
-        <example title="thicker mm" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock tongueThicknessAdjustment="0.1" />]]>
-        </example>
-        <scad:example title="thicker mm" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["tongueThicknessAdjustment", 0.1]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TongueGroove />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>0</value>
-      <scad:value>0</scad:value>
-    </tongueThicknessAdjustment>
     <topPlateHeight type="type:Decimal(mbunit:MBU)">
       <documentation>
         Preferred height of the top plate (upper ceiling of the base body).
@@ -5472,33 +4739,6 @@
       <value>1</value>
       <scad:value>1</scad:value>
     </topPlateHeight>
-    <topPlateHeightAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for topPlateHeight.
-        Only for calibration/printer compensation.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="taller mm" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock topPlateHeightAdjustment="-0.4" />]]>
-        </example>
-        <scad:example title="taller mm" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["topPlateHeightAdjustment", -0.4]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:TopPlate />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>-0.6</value>
-      <scad:value>-0.6</scad:value>
-    </topPlateHeightAdjustment>
     <topPlateHelperHeight type="mbt:Auto | type:Decimal(unit:Millimeter)">
       <documentation>
         Height of one top plate helper layer. Typically matches the 3D print
@@ -5603,32 +4843,6 @@
       <value>Auto</value>
       <scad:value>auto</scad:value>
     </tubeDiameter>
-    <tubeDiameterAdjustment type="type:Decimal(unit:Millimeter)">
-      <documentation>
-        Calibration adjustment for tubeDiameter.
-      </documentation>
-      <since>
-        3.0.0
-      </since>
-      <examples>
-        <example title="tighter" language="org.blockml.bml.language.BML" snippet="true">
-          <![CDATA[<NativeBlock tubeDiameterAdjustment="-0.15" />]]>
-        </example>
-        <scad:example title="tighter" language="org.blockml.bml.language.OpenSCAD" snippet="true">
-          <![CDATA[
-          ...
-          ["tubeDiameterAdjustment", -0.15]
-          ...
-          ]]>
-        </scad:example>
-      </examples>
-      <groups>
-        <mbgroup:Tubes />
-        <mbgroup:ConfigOnlyAiUsage />
-      </groups>
-      <value>-0.1</value>
-      <scad:value>-0.1</scad:value>
-    </tubeDiameterAdjustment>
     <!--TODO: use XYZ in scad-->
     <unitGridToMbu type="mbt:SizeXYZ(type:Integer)">
       <documentation>

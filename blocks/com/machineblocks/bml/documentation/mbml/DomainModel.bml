@@ -17,9 +17,15 @@
     
     Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
     basePresets association.
+    Config — abstract parameter surface (baseType Block). Defines the native properties whose
+    conventional home is the config profile: calibration, printer profile, and clearances that
+    follow the printer. Not a resolver constraint — settings may still override any parameter.
+    Content blocks do not extend Config.
     CompositeBlock — Block with default _parts aggregation for child block instances.
     NativeBlock — final leaf geometry Block. Maps 1:1 to the native geometry primitive at render
-      time. SSOT for all native MachineBlocks parameters. Uses children for nested native geometry
+      time. baseType is Config. Together with Config, the SSOT for all native MachineBlocks
+      parameters: config-conventional properties are defined on Config, brick and feature
+      properties on NativeBlock. Uses children for nested native geometry
       instead of _parts. Must not be used as baseType for custom Block definitions.
     Set — CompositeBlock for LEGO-style builds: palette via presets, placed instances in _parts,
       assembly order in _steps.
@@ -28,8 +34,8 @@
       part association references a placed _parts instance by bml:id; document order in _steps is
       build order.
     
-    Hierarchy: Entity → mbcore:Block → CompositeBlock → Set. NativeBlock is a final sibling under
-    mbcore:Block. Step sits on org.blockml.bml.core.Block → Step.
+    Hierarchy: Entity → mbcore:Block → Config → NativeBlock. CompositeBlock → Set stays under
+    mbcore:Block. NativeBlock is final. Step sits on org.blockml.bml.core.Block → Step.
     
     Class identity is the Block FQN. Instance identity inside composition uses bml:id (nested paths
     use ::). There is no separate Placement type — direction, offset, and related placement data
@@ -42,8 +48,11 @@
     <see type="mbcore:Block" relation="Defines">
       Abstract MachineBlocks domain Block.
     </see>
+    <see type="mbcore:Config" relation="Defines">
+      Config-conventional native parameters. NativeBlock extends Config.
+    </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      Final leaf geometry Block — native parameter SSOT.
+      Final leaf geometry Block — native parameter SSOT together with Config.
     </see>
     <see type="mbcore:CompositeBlock" relation="Defines">
       Composable Block with _parts.

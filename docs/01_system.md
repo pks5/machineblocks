@@ -39,7 +39,7 @@ STL / 3MF
 
 **MBML** is a declarative markup language for describing blocks, sets, and devices. It is the authoring format — the equivalent of HTML or SAPUI5 XML views. Blocks are described as typed, parameterized elements without any knowledge of SCAD.
 
-**MBOM** is the renderer-independent object model. It is the canonical representation of all block data. The MBML compiler parses MBML and produces MBOM. Parameter types and native parameter inventory live in BML (`NativeBlock.bml` + `com.machineblocks.bml.type.*`); for SCAD serialize commentary see `05_types_and_mapping.md` and `docs/04_types.md`.
+**MBOM** is the renderer-independent object model. It is the canonical representation of all block data. The MBML compiler parses MBML and produces MBOM. Parameter types and native parameter inventory live in BML (`Config.bml`, `NativeBlock.bml` + `com.machineblocks.bml.type.*`); for SCAD serialize commentary see `05_types_and_mapping.md` and `docs/04_types.md`.
 
 **SCAD** is the render target. The SCAD compiler serializes MBOM into OpenSCAD files, which are then rendered to STL or 3MF by OpenSCAD. This documentation describes the SCAD render-target conventions — not a second parameter inventory (see NativeBlock).
 
@@ -80,7 +80,7 @@ Domain libraries may define additional status blocks.
 
 ## Core Principle
 
-MachineBlocks follows a single-module architecture. There is one core module — `mb_block()` — and all geometry is defined through parameters (inventory: `NativeBlock.bml`). Complexity is not created through multiple modules, but through parameter combinations, composition (multiple blocks), and nesting (`children()`).
+MachineBlocks follows a single-module architecture. There is one core module — `mb_block()` — and all geometry is defined through parameters (inventory: `Config.bml` and `NativeBlock.bml`). Complexity is not created through multiple modules, but through parameter combinations, composition (multiple blocks), and nesting (`children()`).
 
 ---
 
@@ -199,6 +199,8 @@ All other per-side parameters follow the same resolution pattern as `baseCrop`.
 ### config
 
 `config` is the environment-level parameter set. It defines printer profiles, filament calibration, scaling presets, tolerance-related values, and global rendering or manufacturing defaults. It is global — typically passed through all nested block calls and intended to stay stable across a whole structure.
+
+The properties whose conventional home is this profile are defined on `Config` (`com.machineblocks.bml.core.Config`): calibration adjustments, `printerLayerHeight`, `printerNozzleDiameter`, and the tongue-groove clearances that follow the printer. `NativeBlock` inherits them and defines the remaining native parameters. That split is a convention. Resolution still accepts any parameter in either map.
 
 ### settings
 
@@ -356,8 +358,9 @@ The scale factor (`scale`) rescales the entire system globally. mbu values remai
 absolute_mm = size[axis] × unitGridToMbu[axis] × unitMbuToMm × scale
 ```
 
-> For all parameter details, defaults, and units see `NativeBlock.bml` (sole SSOT:
-> `domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml` + type BML).
+> For all parameter details, defaults, and units see `Config.bml` and `NativeBlock.bml` (SSOT:
+> `blocks/com/machineblocks/bml/core/Config.bml`,
+> `blocks/com/machineblocks/bml/core/NativeBlock.bml` + type BML).
 > `09_api_parameters.yml` is a pointer stub only (no inventory).
 
 ---
@@ -368,7 +371,7 @@ MachineBlocks separates idealized geometry from real-world calibration. These ar
 
 The geometry layer is based on `unitMbuToMm` and `unitGridToMbu`. It is deterministic and scalable.
 
-The calibration layer consists of all parameters containing `Adjustment` in their name. Adjustment parameters are always expressed in millimeters, never scale with the `scale` parameter, and are used for printer compensation, filament shrinkage, fit tuning, and tolerance adjustments. They are not part of the idealized block coordinate system.
+The calibration layer consists of all parameters containing `Adjustment` in their name. Those parameters are defined on `Config`. Adjustment parameters are always expressed in millimeters, never scale with the `scale` parameter, and are used for printer compensation, filament shrinkage, fit tuning, and tolerance adjustments. They are not part of the idealized block coordinate system.
 
 > AI must NOT use adjustment parameters in settings to modify individual bricks. AI MAY use them in config to assist the user with printer/material calibration.
 
@@ -738,7 +741,7 @@ A block module is completely self-contained and must NEVER access global variabl
 **Native Parameters — Always Use Getters**
 
 For every parameter read inside a block module, first check whether it is a native parameter
-(sole SSOT: `NativeBlock.bml` + `com.machineblocks.bml.type.*`). If it is native, always use its dedicated getter:
+(SSOT: `Config.bml`, `NativeBlock.bml` + `com.machineblocks.bml.type.*`). If it is native, always use its dedicated getter:
 
 ```scad
 // Native parameter → getter
@@ -746,13 +749,13 @@ baseCutoutType = mb_param_baseCutoutType(config, settings);
 pillars        = mb_param_pillars(config, settings);
 ```
 
-Do not set an explicit default in the getter call unless a block-specific default is intentionally required. Never copy a default from legacy code if it matches the NativeBlock default. Exception: `size` almost always benefits from a block-specific default:
+Do not set an explicit default in the getter call unless a block-specific default is intentionally required. Never copy a default from legacy code if it matches the native default on Config or NativeBlock. Exception: `size` almost always benefits from a block-specific default:
 
 ```scad
 size = mb_param_size(config, settings, [4, 1, 3]);
 ```
 
-Custom parameters (not declared on NativeBlock) continue to use `mb_param()`:
+Custom parameters (not declared on Config or NativeBlock) continue to use `mb_param()`:
 
 ```scad
 myParam = mb_param(config, settings, "myParam", "defaultValue");

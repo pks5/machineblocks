@@ -11,7 +11,7 @@
     A Side / Height Adjustment (Calibration) parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Side / Height Adjustment (Calibration) parameters on NativeBlock
+    MachineBlocks member group for Side / Height Adjustment (Calibration) parameters on Config
     (YAML group id: calibration).
   </documentation>
 </mbgroup:Calibration>

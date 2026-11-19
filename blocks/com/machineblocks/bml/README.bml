@@ -52,7 +52,7 @@
       MBML authoring overview.
     </see>
     <see type="mbml:DomainModel" relation="ReadFirst">
-      Block, NativeBlock, CompositeBlock, Set, Step.
+      Block, Config, NativeBlock, CompositeBlock, Set, Step.
     </see>
     <see type="mbml:TypeSystem" relation="ReadFirst">
       com.machineblocks.bml.type.* overview.

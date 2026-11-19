@@ -17,9 +17,10 @@
   <documentation>
     MBML authoring mirrors the shared pattern inventory (DecisionFramework / ModulePatterns):
     
-    1. Primitive Wrapper / Native leaf — lowers to NativeBlock parameters. One body, one spatial
-    contract. Custom brick types typically extend CompositeBlock or Block and lower to NativeBlock
-    instances — NativeBlock itself is final and cannot be a baseType.
+    1. Primitive Wrapper / Native leaf — lowers to NativeBlock parameters, including those inherited
+    from Config. One body, one spatial contract. Custom brick types typically extend CompositeBlock
+    or Block and lower to NativeBlock instances — NativeBlock itself is final and cannot be a
+    baseType. Do not extend Config; it is only the parameter surface NativeBlock inherits.
     
     2. Simple semantic Block — named domain type with defaults and a focused parameter surface;
     still one native geometry realization at the leaf.
@@ -40,8 +41,11 @@
     <see type="concept:DecisionFramework" relation="SeeAlso">
       Shared intent → pattern → parameter framework.
     </see>
+    <see type="mbcore:Config" relation="Defines">
+      Config-conventional half of the native parameter SSOT.
+    </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      Leaf geometry realization and parameter SSOT.
+      Leaf geometry realization and, together with Config, the parameter SSOT.
     </see>
     <see type="mbcore:CompositeBlock" relation="Defines">
       Default composition aggregation _parts.

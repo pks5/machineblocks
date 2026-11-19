@@ -2,14 +2,15 @@
 # SCAD-facing parameter pointer — NOT the parameter inventory
 # ============================================================================
 #
-# Sole SSOT for MachineBlocks native parameters (names, types, docs, defaults,
+# SSOT for MachineBlocks native parameters (names, types, docs, defaults,
 # scad:value) and type shapes:
-#   scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
-#   scad-lib/blocks/com/machineblocks/bml/type/*.bml
+#   blocks/com/machineblocks/bml/core/Config.bml
+#   blocks/com/machineblocks/bml/core/NativeBlock.bml
+#   blocks/com/machineblocks/bml/type/*.bml
 #
 # This file previously duplicated the full parameter catalog for SCAD/AI use.
 # That inventory has been removed to stop Markdown/YAML drift. Do not reintroduce
-# per-parameter defaults/docs here — change NativeBlock / type BML instead.
+# per-parameter defaults/docs here — change Config, NativeBlock, or type BML instead.
 #
 # Optional future use: regenerate SCAD-only runtime notes from BML if a tool needs
 # a machine-readable mirror. Until then this file is a pointer stub only.
@@ -21,6 +22,8 @@
 version: "3.0.6"
 status: stub-pointer
 ssot:
-  parameters: scad-lib/blocks/com/machineblocks/bml/core/NativeBlock.bml
-  types: scad-lib/blocks/com/machineblocks/bml/type/
-parameters: []   # intentionally empty — see NativeBlock.bml
+  parameters:
+    - blocks/com/machineblocks/bml/core/Config.bml
+    - blocks/com/machineblocks/bml/core/NativeBlock.bml
+  types: blocks/com/machineblocks/bml/type/
+parameters: []   # intentionally empty — see Config.bml and NativeBlock.bml

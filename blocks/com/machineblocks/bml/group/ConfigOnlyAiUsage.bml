@@ -14,6 +14,6 @@
   <documentation>
     AI usage facet — AI should only place this member in config / environment scope,
     not in per-brick settings (YAML ai_usage: config_only). Typical for calibration and adjustment
-    values shared across bricks.
+    values shared across bricks. Properties with this facet are defined on Config.
   </documentation>
 </mbgroup:ConfigOnlyAiUsage>

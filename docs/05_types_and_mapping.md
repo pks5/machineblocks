@@ -3,7 +3,7 @@
 version: 3.1.0
 
 > **Render Output / commentary** — not the type or parameter inventory.
-> Sole SSOT: `com.machineblocks.bml.type.*` and `NativeBlock.bml`.
+> Sole SSOT: `com.machineblocks.bml.type.*`, `Config.bml`, and `NativeBlock.bml`.
 > Doc SSOT for strategy: `scad.TypesAndSerialization` (Draft).
 > Future builds may regenerate SCAD-facing notes from BML. Change BML first.
 
@@ -15,7 +15,7 @@ parameter inventory.
 
 | Audience | Use this doc for | SSOT for types / params |
 |---|---|---|
-| Renderer implementors | emit rules & examples | `type/*.bml` · `NativeBlock.bml` |
+| Renderer implementors | emit rules & examples | `type/*.bml` · `Config.bml` · `NativeBlock.bml` |
 | Direct SCAD / AI | accepted SCAD shapes | same — open BML for defaults/docs |
 
 > MBOM is canonical. SCAD is a renderer serialization.
@@ -23,7 +23,7 @@ parameter inventory.
 
 **Naming:** XY / XYZ / AB — see `docs/04_types.md` — Naming convention.
 
-For parameter definitions (names, defaults, constraints) see `NativeBlock.bml` + type BML.
+For parameter definitions (names, defaults, constraints) see `Config.bml` and `NativeBlock.bml` + type BML.
 `09_api_parameters.yml` is a pointer stub only (no inventory).
 For architecture context see `01_system.md`.
 
@@ -41,7 +41,8 @@ Do not maintain enum/struct catalogs in this Markdown file.
 
 ```text
 domains/machineblocks/mbom/blocks/com/machineblocks/bml/type/*.bml
-domains/machineblocks/mbom/blocks/com/machineblocks/bml/core/NativeBlock.bml
+blocks/com/machineblocks/bml/core/Config.bml
+blocks/com/machineblocks/bml/core/NativeBlock.bml
 docs/04_types.md          — parse/serialize conventions (unions, Map, XY/AB)
 ```
 

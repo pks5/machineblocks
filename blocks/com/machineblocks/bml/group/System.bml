@@ -11,7 +11,7 @@
     A System / Units parameter group
   </is>
   <documentation>
-    MachineBlocks member group for System / Units parameters on NativeBlock
+    MachineBlocks member group for System / Units parameters on Config and NativeBlock
     (YAML group id: system).
   </documentation>
 </mbgroup:System>

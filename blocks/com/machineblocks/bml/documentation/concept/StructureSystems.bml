@@ -53,7 +53,8 @@
       Discrete connector compound type.
     </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      SSOT for base, studs, recess, tongue/groove, connectors, and related properties.
+      Feature properties for base, studs, recess, tongue/groove, connectors. Calibration
+      adjustments and printer-following clearances for those features are defined on Config.
     </see>
   </references>
 </concept:StructureSystems>

@@ -102,7 +102,7 @@ SCAD composite helpers (not NativeBlock): `assembly`, `renderGroups`. Also `rend
 
 > Parameters realize patterns — they do not define them.
 
-> For all parameter definitions see `NativeBlock.bml` + type BML (sole SSOT).
+> For all parameter definitions see `Config.bml` and `NativeBlock.bml` + type BML (SSOT).
 > `09_api_parameters.yml` is a pointer stub only (no inventory).
 
 ---

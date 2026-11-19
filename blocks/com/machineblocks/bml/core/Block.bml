@@ -26,8 +26,11 @@
     <see type="mbcore:CompositeBlock">
       Composable sub-type with default _parts aggregation for child block instances.
     </see>
+    <see type="mbcore:Config">
+      Abstract config-conventional parameter surface. NativeBlock extends Config.
+    </see>
     <see type="mbcore:NativeBlock">
-      Final leaf sub-type rendered directly as mb_block() SCAD primitive.
+      Final leaf sub-type rendered directly as mb_block() SCAD primitive. Inherits Config.
     </see>
     <see type="mbcore:Set">
       LEGO-style build sub-type with palette, placed parts, and assembly steps.
