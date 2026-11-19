@@ -1,48 +1,59 @@
-# MachineBlocks V3 (Alpha)
+# MachineBlocks Core
 
-Toolkit for designing and 3D printing LEGO® compatible building blocks.
+This repository is `@machineblocks/core`: the MachineBlocks BML core and the OpenSCAD library that renders it. It exists so those two can be developed together.
 
-This repository is the **alpha** of MachineBlocks V3. The V3 library is still in alpha. The website at [machineblocks.com](https://machineblocks.com) currently documents the **V2** library.
+A project of your own starts from the [V3 Alpha guide](https://machineblocks.com/v3-alpha). This repository is the place to change the core and the library.
 
-## Two ways to use V3
+## Create a project
 
-### 1. Standalone OpenSCAD library
+The [V3 Alpha guide](https://machineblocks.com/v3-alpha) is the setup for designing bricks: a coding agent, Node.js, and an OpenSCAD development snapshot. In an empty folder, initialize a project with a fully qualified name. The name reverses a domain and includes a `bml` segment. `com.acme.bml.test` is only an example:
 
-Use V3 as a standalone SCAD library, the same way V2 was used. Open the examples in [OpenSCAD](https://openscad.org):
+```bash
+npx @machineblocks/cli init com.acme.bml.test
+```
 
-- `blocks/com/machineblocks/scad`
+Open that folder in the agent and describe the brick. The agent writes the BlockML file, and the MachineBlocks compiler renders the matching OpenSCAD file. Cloning this repository is separate from that setup.
 
-### 2. BML (pre-alpha)
+## What this repository contains
 
-The new **BML** syntax is a second authoring path. BML is both:
+MachineBlocks authors bricks in BML. A compiler renders BML to a target, and OpenSCAD is the reference target: OpenSCAD Desktop turns the generated files into STL or 3MF.
 
-- the **single source of truth** for the library (types, bricks, and documentation are written in BML)
-- a new way to write MachineBlocks bricks
+This package currently holds both layers:
 
-BML is **pre-alpha**: there is no renderer yet that converts BML to SCAD. You can still read the BML sources, ask an LLM about them, and generate SCAD from that understanding.
+- **BML core** in `blocks/com/machineblocks/bml` — types, native parameters, documentation, and example bricks. BML is the source of truth.
+- **OpenSCAD library** in `lib/` — `mb_block()` and the modules behind it. Compiled bricks under `blocks/com/machineblocks/scad` call this library. The compiler replaces the `bml` segment of a fully qualified name with `scad`.
 
-Start here:
+The two layers share this repository while OpenSCAD is the only renderer. A further renderer would be its own library, and the BML core would stay separate from it. Work here to change the BML core, change the OpenSCAD library, or add example bricks beside that core.
 
-- `blocks/com/machineblocks/bml/README.bml` — reading entry point
-- `blocks/com/machineblocks/bml/Library.bml` — library catalog
+## Compile BML to OpenSCAD
 
-## Recommended: open this project in an LLM IDE
-
-Open the repo in an LLM IDE such as [Cursor](https://cursor.com) or [Claude Code](https://claude.com/claude-code). The assistant can read the BML files, answer questions about the library, and generate SCAD examples.
-
-Install the BlockML core package first. It provides the base blocks and syntax that MachineBlocks BML builds on:
+Examples in this repository are BML files. The MachineBlocks CLI renders them. Node.js 20 or newer is required. From the repository root:
 
 ```bash
 npm install
+npx machineblocks validate
+npx machineblocks compile com.machineblocks.bml.examples.Connector
 ```
 
-This installs `@blockml/core` (see `package.json`).
+`validate` checks the model. `compile` renders selected Block and Set types to OpenSCAD under `blocks`, using the `machineblocks-v3-scad` target. The command above writes `blocks/com/machineblocks/scad/examples/Connector.scad`.
 
-## Community
+A package selector compiles every Block and Set in that package. Quote `*` so the shell leaves it alone:
 
-Ask questions about the V3 library, alpha progress, and how to use it on [Discord](https://discord.gg/x9nunaJykA).
+```bash
+npx machineblocks compile "com.machineblocks.bml.examples.*"
+```
 
-Follow MachineBlocks on [TikTok](https://tiktok.com/@machineblocks.com) and [Instagram](https://instagram.com/machineblocks).
+`npx machineblocks compile --help` lists the selector rules and the optional `--source-package` / `--target-package` mapping. Search and inspection stay on `npx blockml`.
+
+## Regenerate AGENTS.md
+
+`AGENTS.md` is generated. `npx blockml agents-md generate` rewrites it from AgentInstructions in this repository and in direct dependencies that publish a BlockML library, including `@blockml/cli` and `@machineblocks/cli`. A CLI update can change those instructions. After updating either CLI, regenerate the file:
+
+```bash
+npx blockml agents-md generate
+```
+
+The command overwrites `AGENTS.md` when it finds at least one section or rule.
 
 ## License
 

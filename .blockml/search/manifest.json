@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "documents": 585,
+  "documents": 587,
   "packageJsonHash": "dee31490625e296f9feb4670c841d5197a82c9232ba21e91f4ad76ac1185aabe",
   "lockfileHash": "90279781922af0ad4dd6df067f300e83f4a3c5a1aacc09808c9ebf3c80743d99",
   "files": [
@@ -11,8 +11,8 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/README.bml",
-      "mtimeMs": 1795125697983.2896,
-      "size": 3653
+      "mtimeMs": 1795126717329.827,
+      "size": 3664
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/agent/MachineBlockAgentInstructions.bml",
@@ -40,9 +40,14 @@
       "size": 14969
     },
     {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/config/DefaultConfigSet.bml",
+      "mtimeMs": 1795127383525.9255,
+      "size": 1661
+    },
+    {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/Block.bml",
-      "mtimeMs": 1795125686715.9277,
-      "size": 1645
+      "mtimeMs": 1795126708905.3176,
+      "size": 1773
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/CompositeBlock.bml",
@@ -51,8 +56,13 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/ConfigProfile.bml",
-      "mtimeMs": 1795125680354.7168,
-      "size": 33027
+      "mtimeMs": 1795126710166.688,
+      "size": 33155
+    },
+    {
+      "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/ConfigSet.bml",
+      "mtimeMs": 1795129455160.3843,
+      "size": 3118
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/NativeBlock.bml",
@@ -116,18 +126,18 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/AuthoringPatterns.bml",
-      "mtimeMs": 1795125696190.1611,
-      "size": 2812
+      "mtimeMs": 1795126716006.966,
+      "size": 3023
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/DomainModel.bml",
-      "mtimeMs": 1795125693838.2979,
-      "size": 3433
+      "mtimeMs": 1795129422312.1777,
+      "size": 4218
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/MbmlOverview.bml",
-      "mtimeMs": 1795125697722.5051,
-      "size": 2225
+      "mtimeMs": 1795126716562.0393,
+      "size": 2236
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/mbml/TypeSystem.bml",
@@ -136,8 +146,8 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/BlockFileStructure.bml",
-      "mtimeMs": 1795123437841.3071,
-      "size": 6222
+      "mtimeMs": 1795129449177.386,
+      "size": 7195
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/HelperApi.bml",
@@ -146,8 +156,8 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/LegacyConversion.bml",
-      "mtimeMs": 1795125704851.429,
-      "size": 22456
+      "mtimeMs": 1795129456248.9536,
+      "size": 22641
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/MbBlockApi.bml",
@@ -156,8 +166,8 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/ModulePatterns.bml",
-      "mtimeMs": 1795122743478.7183,
-      "size": 38508
+      "mtimeMs": 1795129455543.7417,
+      "size": 39624
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/documentation/scad/ScadDecisionRules.bml",
