@@ -10,11 +10,16 @@
  * Imports
  */
 use <../../../../../lib/block.scad>;
-include <../../../../../config/mb_config.scad>;
+use <../config/DefaultConfigSet.scad>;
 
 /*
  * Customization
  */
+
+/* [Config] */
+
+// Config profile
+configProfile = "fine"; // [fine:Fine, standard:Standard]
 
 /* [Size] */
 
@@ -51,6 +56,8 @@ surfacePattern = "none";
 studIcon = "../../pattern/bolt-solid-full.svg";
 
 /* [Hidden] */
+
+mb_config = mb__com__machineblocks__scad__config__DefaultConfigSet__func__config(configProfile);
 
 /*
  * Main Module Call

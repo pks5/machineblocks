@@ -18,11 +18,16 @@
  * Imports
  */
 use <../../../../../lib/block.scad>;
-include <../../../../../config/mb_config.scad>;
+use <../config/DefaultConfigSet.scad>;
 
 /*
  * Customization
  */
+
+/* [Config] */
+
+// Config profile
+configProfile = "fine"; // [fine:Fine, standard:Standard]
 
 /* [Size] */
 
@@ -43,6 +48,8 @@ colorP4 = "#D65745";  // [#58B99D:Turquoise, #4A9E86:Green Sea, #65C97A:Emerald,
 direction = "west"; // [west, north, east, south]
 
 /* [Hidden] */
+
+mb_config = mb__com__machineblocks__scad__config__DefaultConfigSet__func__config(configProfile);
 
 /*
  * Main Module Call
