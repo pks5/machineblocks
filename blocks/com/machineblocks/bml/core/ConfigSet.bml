@@ -28,11 +28,14 @@
     The function name is mb__ plus the manifestation FQN, dots written as __,
     then __func__config — the same scheme as other functions on a Block.
     
-    The function takes the selected profile. The compiler inserts that call
-    where a Block File references mb_config:
-    mb__com__machineblocks__scad__config__MyConfigSet__func__config(mySelectedProfile)
-    mySelectedProfile is a customizer parameter, so the profile is chosen in the
-    OpenSCAD customizer. The function returns that profile as the config value.
+    A Block File uses the ConfigSet manifestation, for example
+    use ../config/DefaultConfigSet.scad. The customizer parameter configProfile
+    selects a profile by bml:id:
+    configProfile = "fine"; // [fine:Fine, standard:Standard]
+    /* [Hidden] */ resolves that choice once:
+    mb_config = mb__…__func__config(configProfile);
+    The main call passes config = mb_config. Further blocks in the same file reuse
+    mb_config. The function returns the selected profile as the config value.
     
     Compile can name the ConfigSet to use. When it does not, the compiler uses
     the first ConfigSet in the current project blocks folder. When the project
@@ -55,7 +58,7 @@
       One selectable profile. profiles holds these values.
     </see>
     <see type="scad:BlockFileStructure" relation="SeeAlso">
-      The main-call config argument is this function.
+      Block Files use the ConfigSet, set configProfile, and pass mb_config.
     </see>
     <see type="config:DefaultConfigSet" relation="SeeAlso">
       Example set: two profiles, if/else, one function per profile.

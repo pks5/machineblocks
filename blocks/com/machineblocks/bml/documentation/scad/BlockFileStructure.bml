@@ -43,10 +43,11 @@
     /* Optional Global Functions */
     
     Imports are posix-relative from the output file to {mbLibPath}/lib/block.scad (use)
-    and {mbLibPath}/config/mb_config.scad (include). mbLibPath is required. The CLI
+    and to the selected ConfigSet manifestation (use), for example
+    ../config/DefaultConfigSet.scad. mbLibPath is required. The CLI
     takes config.mbLibPath, otherwise targetOptions.machineblocks-v3-scad.mbLibPath,
     otherwise the directory of the installed @machineblocks/core package. There is no
-    fixed ../ depth and no rewrite to machineblocks/lib/block.scad or /mb_config.scad.
+    fixed ../ depth and no rewrite to machineblocks/lib/block.scad.
     A Set also uses each placed type at its manifestation path under srcDir.
     
     Which file is emitted:
@@ -69,10 +70,13 @@
     Customizer lines on leaf and composite files are bare assignments, one per literal
     property: name = value. serializeLiteral accepts a boolean, a number, a quoted string,
     and a SizeXYZ {x, y, z} as [x, y, z]. The target emits no tab, no range comment,
-    no enum annotation, and no /* [Hidden] */ section. It does not apply grid step 0.25
+    no enum annotation, and no /* [Hidden] */ section for geometry parameters. The config
+    profile is the exception: a [Config] tab declares
+    configProfile = "fine"; // [fine:Fine, standard:Standard]
+    and /* [Hidden] */ assigns mb_config once. It does not apply grid step 0.25
     or mbu step 0.125, and it does not clamp ranges to 32, 160, or 64.
     
-    The only customizer annotations this target emits are on a Set:
+    A Set also emits these customizer annotations:
     mode = "total"; // [total:Total, print:3D Print, step:Step, instance:Instance]
     step = 0; // [0:9]
     instanceId = the first placed id, or "00001" when nothing is placed
@@ -90,10 +94,12 @@
     reads size, direction, and offset at indexes 1, 2, and 3 (see HelperApi). A Set
     writes the same four-slot row into STEPS.
     
-    Inside a composite module the config parameter is passed on. The main call passes
-    the selected ConfigSet function instead of the bare mb_config variable:
-    mb__…__func__config(mySelectedProfile). mySelectedProfile is the customizer parameter
-    for the chosen profile. Compile can name the ConfigSet. Otherwise the first ConfigSet
+    Inside a composite module the config parameter is passed on. The file resolves the
+    selected profile once in /* [Hidden] */:
+    mb_config = mb__…__func__config(configProfile);
+    configProfile is the customizer dropdown, a profile bml:id. The main call passes
+    config = mb_config. Further blocks in the same file reuse mb_config and do not call
+    the function again. Compile can name the ConfigSet. Otherwise the first ConfigSet
     in the project blocks folder is used, otherwise a ConfigSet from the machineblocks core.
     Submodules, helper modules, and
     global functions are comment placeholders, except on a Set, which fills Optional

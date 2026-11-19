@@ -23,8 +23,9 @@
     Content blocks do not extend ConfigProfile.
     ConfigSet — abstract collection of ConfigProfile values (baseType Block). A concrete set
     extends ConfigSet and fills profiles. The SCAD target emits that set as
-    mb__…__func__config. The compiler inserts the call where a Block File references
-    mb_config, and a customizer parameter selects the profile. Compile can name the set.
+    mb__…__func__config. A Block File uses that file, offers configProfile in the
+    customizer, and assigns mb_config once in Hidden from that function. The main
+    call passes mb_config. Compile can name the set.
     Otherwise the first ConfigSet in the project blocks folder is used, otherwise a
     ConfigSet from the machineblocks core. The function is an if/else over one
     function per profile (see config:DefaultConfigSet).

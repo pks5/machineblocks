@@ -35,13 +35,15 @@
        and mb__&lt;package>__&lt;Class> naming (e.g. mb__com__machineblocks__scad__examples__Cross).
        Replace V2 import paths
        (machineblocks/lib/block.scad, machineblocks/config/config.scad) with project-relative
-       lib/block.scad and config/mb_config.scad.
+       lib/block.scad and a ConfigSet use, for example use ../config/DefaultConfigSet.scad.
+       Add a [Config] dropdown configProfile and, in Hidden,
+       mb_config = mb__…__func__config(configProfile). Pass config = mb_config.
     2. Replace machineblock(a=…) with mb_block(config, settings=[["a", …]]); use string face ids.
        Pass the shared config object — do not re-pass unitMbuToMm / unitGridToMbu / scale /
        *Adjustment into every call (V2 names were unitMbu / unitGrid).
     3. Remove the entire [Override Config] tab: overrideConfig, all *_ovr customizer variables,
        Hidden ternaries that select ovr vs global, and deprecated *RoundingResolution parameters.
-       Calibration and quality live in mb_config / config profiles only.
+       Calibration and quality live on the selected ConfigProfile only.
     4. Wrap all geometry in a Block Module; read native params via mb_param_* and custom params
        via mb_param. Build a sharedSettings array once; concat per-child overrides.
     5. Multiple machineblock() calls inside union() → one wrapper
