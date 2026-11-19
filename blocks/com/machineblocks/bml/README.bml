@@ -66,6 +66,9 @@
     <see type="scad:MbBlockApi" relation="ReadFirst">
       mb_block() signature and config/settings model.
     </see>
+    <see type="scad:HelperApi" relation="ReadFirst">
+      SCAD composite helpers — assembly, render groups, parameter maps.
+    </see>
     <see type="scad:BlockFileStructure" relation="ReadFirst">
       Mandatory Block File sections.
     </see>

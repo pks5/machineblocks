@@ -1,0 +1,148 @@
+<!--MachineBlocks — SCAD documentation
+
+  FQN: com.machineblocks.bml.documentation.scad.HelperApi-->
+<scad:HelperApi xmlns="http://blockml.org/bml"
+  xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <baseType>
+    core:Documentation
+  </baseType>
+  <is>
+    A guide to MachineBlocks SCAD helper functions
+  </is>
+  <documentation>
+    Composite Block Modules call these library functions. They are not NativeBlock properties
+    and mb_block() does not interpret them. Contracts below follow lib/core/api.scad,
+    lib/core/parameters.scad, and lib/core/utils.scad.
+    
+    assembly and renderGroups are preview/print keys for composite modules only. render and id
+    are NativeBlock properties; mb_block() reads those. mb_param_assembly and
+    mb_param_renderGroups are not native getters: each calls mb_param, then wraps a non-list
+    value in a one-element list. Defaults when the key is absent: assembly → ["assembled"],
+    renderGroups → ["all"].
+    
+    Pass the triple returned by mb_assembly into the assembly helpers. Do not pass the raw
+    settings value. After mb_assembly, slot 0 is the mode string, slot 1 is a size, slot 2 is
+    an integer direction.
+    
+    mb_assembly(config, settings, size, direction) → [mode, sizeOut, directionOut]
+    • direction is converted with mb_direction_to_int. west/north/east/south → 0/1/2/3.
+      A non-string is returned unchanged. An unknown string becomes undef.
+    • mode is assembly[0] after the list wrap.
+    • sizeOut is assembly[1] when that slot is set. Otherwise mb_size_resolve(size, dirInt).
+      An incoming size slot is kept as-is and is not resolved again.
+    • directionOut is dirInt when assembly[2] is undef. Otherwise
+      mb_direction_resolve(assembly[2], dirInt), which is (assembly[2] + dirInt) % 4.
+      Slot 2 is not passed through mb_direction_to_int. Parents that store the integer from
+      their own mb_assembly keep the aggregate numeric. A string in slot 2 is not converted.
+    A top-level string such as "unassembled" therefore becomes
+    ["unassembled", size resolved for this module, this module's direction integer].
+    A child that receives a parent's triple keeps the parent's size slot and adds its own
+    direction integer. Parent north (1) and child east (2) yield (1 + 2) % 4 = 3 (south).
+    
+    The helpers branch only on the mode strings "unassembled" and "merged". Any other mode,
+    including the default "assembled", keeps the authored offset, leaves tongue enabled, and
+    leaves the underside cutout at "groove".
+    
+    mb_group_render(renderGroups, g, solo = false)
+    • solo true: true only when the list has length 1 and that entry equals g.
+      ["all"] does not solo-match a part name.
+    • solo false: true when the list contains "all" or g.
+    
+    mb_assembly_tongue(assembly, renderGroups, g) → boolean
+    • sole rendered group: true
+    • otherwise: true unless mode is "merged"
+    
+    mb_assembly_groove(assembly, renderGroups, g) → baseCutoutType string, not a boolean
+    • sole rendered group: "groove"
+    • mode "merged": "none"
+    • otherwise: "groove"
+    
+    mb_assembly_offset(offset, assembly, renderGroups, g)
+    • sole rendered group: [0, 0, 0]
+    • mode is not "unassembled", or assembly is undef: the offset argument, unchanged
+    • mode "unassembled": the offset argument is ignored. Every caller that shares the same
+      triple gets one shift, derived from assembly[1]:
+      when size[1] &gt; size[0], shift = [size[0] + 0.5, 0, 0]
+      otherwise shift = [0, size[1] + 0.5, 0]
+      The 0.5 is a grid step, not millimetres. The shift is then passed through
+      mb_offset_global_to_local(shift, assembly[2]). This does not walk parts and does not
+      space them along X.
+    
+    mb_offset_global_to_local(offset, direction) — direction is an integer:
+    • 1 north: [-offset[1], offset[0], offset[2]]
+    • 3 south: [offset[1], -offset[0], offset[2]]
+    • 2 east: [-offset[0], -offset[1], offset[2]]
+    • otherwise, including 0 west: [offset[0], offset[1], offset[2]]
+    
+    mb_size_resolve(size, direction) swaps X and Y when direction % 2 == 1 (north, south).
+    It does not convert strings. Pass the integer from mb_direction_to_int or from slot 2.
+    
+    mb_direction_resolve(dir1, dir2) = (dir1 + dir2) % 4. Both arguments are integers.
+    It does not accept direction names and it does not return a name.
+    
+    Parameter-map helpers read one pseudo-map. They do not apply settings → config → default
+    and they do not resolve shortcuts (a value "ccs" stays "ccs"). Inside a Block Module,
+    native and custom parameters still go through mb_param_* / mb_param.
+    
+    mb_params_get(params, key, default) returns the last entry with that key, else default.
+    
+    mb_params_merge(a, b) keeps entries of a whose key is absent from b, then appends b.
+    Duplicate keys take the value from b. The merge is not recursive.
+    
+    mb_params_filter(param, namespace, overrides)
+    • A non-list param yields [].
+    • An entry is kept when its first element is a string starting with namespace + ".".
+      The prefix, including the dot, is removed. Elements after the key are kept, so a
+      wall-gap tuple survives. Numeric keys and keys without that prefix are dropped.
+    • When overrides is passed, the result is mb_params_merge(filtered, overrides):
+      override keys replace filtered keys.
+    Namespaced baseAdjustment on Config is the calibration use of this function. The same
+    contract applies to any [[string, ...], ...] list, including baseWallGaps.
+    
+    Internal faces that only touch do not fuse under OpenSCAD union. Composite modules that
+    need a fused body put a positive millimetre overlap on those faces only.
+    blocks/com/machineblocks/scad/examples/BaseAdjustment.scad passes that overlap (default
+    0.01) as the overrides argument of mb_params_filter, keyed by part name. Faces that should
+    keep the calibration value are omitted from the override list.
+    
+    mb_parts_total_size(parts) returns [max - min] on each axis across the entries.
+    The function body reads size = entry[1], direction = entry[2], offset = entry[3].
+    entry[0] is ignored. The minimum corner is the offset. The maximum corner is the offset
+    plus the size after mb_direction_to_int and mb_size_resolve. The comment in api.scad
+    says each entry is [size, direction, offset]. That comment does not match the indices
+    the function reads. A three-element [size, direction, offset] is not the layout this
+    function consumes. Nothing in this repository calls it. An empty list is not handled.
+    
+    mb_block_id(blockId, part) returns str(blockId, "/", part). How composite modules assign
+    id is documented on NativeBlock.id.
+  </documentation>
+  <references>
+    <see type="scad:BlockFileStructure" relation="ReadNext">
+      Next — mandatory Block File section layout.
+    </see>
+    <see type="scad:MbBlockApi" relation="Requires">
+      mb_block() signature. Native getters versus mb_param(). assembly and renderGroups are outside that inventory.
+    </see>
+    <see type="mbcore:Config" relation="SeeAlso">
+      baseAdjustment — namespaced calibration use of mb_params_filter.
+    </see>
+    <see type="mbcore:NativeBlock" relation="SeeAlso">
+      id and render are native. mb_block_id is specified on id.
+    </see>
+    <see type="scad:ModulePatterns" relation="SeeAlso">
+      Composite Block Files that call these helpers.
+    </see>
+    <see file="lib/core/api.scad" relation="SeeAlso">
+      Assembly, direction, size, and parts-size functions.
+    </see>
+    <see file="lib/core/parameters.scad" relation="SeeAlso">
+      mb_param_assembly, mb_param_renderGroups, mb_params_get, mb_params_merge, mb_params_filter.
+    </see>
+    <see file="blocks/com/machineblocks/scad/examples/BaseAdjustment.scad" relation="SeeAlso">
+      Namespaced baseAdjustment with a 0.01 mm seam override.
+    </see>
+  </references>
+</scad:HelperApi>

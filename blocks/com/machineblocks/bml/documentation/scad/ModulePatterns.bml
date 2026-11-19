@@ -24,7 +24,8 @@
     (com.machineblocks.bml.bricks.Standard) — every NativeBlock property via mb_param_*.
     
     Pattern 3 — Composite Block: outer mb_block(base=false, studs=false) with size = outer bbox;
-    children() hold parts with direction/offset. Examples: Cross, Frame.
+    children() hold parts with direction/offset. Assembly preview, render-group gating, and
+    namespaced parameter maps use the functions in HelperApi. Examples: Cross, Frame.
     
     Pattern 4 — Helper / Form: shared geometry helpers used by other modules, not end-user content
     products.
@@ -795,6 +796,9 @@
     </see>
     <see type="concept:CompositionConcepts" relation="SeeAlso">
       Conceptual composition and assembly model.
+    </see>
+    <see type="scad:HelperApi" relation="Requires">
+      Assembly, render groups, and parameter-map helpers used by composite modules.
     </see>
     <see type="scad:ScadDecisionRules" relation="SeeAlso">
       When to pick Wrapper vs Composite.

@@ -20,8 +20,9 @@
     mb_block(config = undef, settings = undef)
     
     config and settings are optional arrays of [key, value] pairs (pseudo-maps). Resolution order
-    for each parameter: settings → config → default. Merge helpers combine layers; never read the
-    arrays by hand inside Block Modules.
+    for each parameter: settings → config → default. Never read the arrays by hand inside Block
+    Modules. mb_params_merge, mb_params_get, and mb_params_filter do not apply that resolution;
+    their contracts, together with the composite preview helpers, are in HelperApi.
     
     Parameter access rule (mandatory inside every Block Module):
     
@@ -53,8 +54,11 @@
     not redefine the parameter set.
   </documentation>
   <references>
-    <see type="scad:BlockFileStructure" relation="ReadNext">
-      Next — mandatory Block File section layout.
+    <see type="scad:HelperApi" relation="ReadNext">
+      Next — composite preview helpers and parameter-map functions.
+    </see>
+    <see type="scad:BlockFileStructure" relation="SeeAlso">
+      Mandatory Block File section layout.
     </see>
     <see type="mbcore:Config" relation="Defines">
       Config-conventional native parameters. NativeBlock inherits them.

@@ -10,7 +10,8 @@
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
   xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:mbt="com.machineblocks.bml.type"
-  xmlns:mbgroup="com.machineblocks.bml.group">
+  xmlns:mbgroup="com.machineblocks.bml.group"
+  xmlns:scaddoc="com.machineblocks.bml.documentation.scad">
 
   <baseType>
     mbcore:Block
@@ -42,6 +43,9 @@
     </see>
     <see type="mbcore:NativeBlock">
       Final leaf. Inherits this surface and defines the remaining native parameters.
+    </see>
+    <see type="scaddoc:HelperApi" relation="SeeAlso">
+      mb_params_filter contract. Namespaced baseAdjustment is one use of that function.
     </see>
   </references>
   <properties>

@@ -26,13 +26,13 @@
     
     In MBOM, composition fills aggregations (for example _parts on CompositeBlock). There is no
     separate Placement meta-block — placement is properties on the placed instances. There is also
-    no MBOM “assembly mode” property: unassembled / assembled / merged are SCAD preview/print
-    helpers (for example mb_assembly), not domain model concepts — see scad:ModulePatterns /
-    scad-lib docs when targeting OpenSCAD.
+    no MBOM assembly-mode property. Unassembled, assembled, and merged are SCAD preview/print
+    helpers, not domain model concepts — see scad:HelperApi.
     
-    Calibration at internal contacts often uses a tiny namespaced baseAdjustment overlap so parts
-    fuse cleanly when boolean-merged at render time. Derived outer size can be computed from part
-    sizes, directions, and offsets when no explicit shared size exists.
+    Calibration at internal contacts uses a small positive namespaced baseAdjustment so parts
+    overlap when the render target unions them. A derived outer size can be computed from part
+    sizes, directions, and offsets when no explicit shared size exists. The SCAD functions and
+    the entry layout they actually read are in scad:HelperApi.
   </documentation>
   <references>
     <see type="concept:DecisionFramework" relation="ReadNext">
@@ -43,6 +43,9 @@
     </see>
     <see type="mbml:AuthoringPatterns" relation="SeeAlso">
       MBML composition patterns.
+    </see>
+    <see type="scad:HelperApi" relation="SeeAlso">
+      SCAD assembly, render-group, and parameter-map helpers.
     </see>
     <see type="scad:ModulePatterns" relation="SeeAlso">
       SCAD composite Block File patterns and full-file examples.

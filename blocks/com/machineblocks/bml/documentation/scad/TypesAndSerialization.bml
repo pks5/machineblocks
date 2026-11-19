@@ -17,22 +17,102 @@
     Draft
   </status>
   <documentation>
-    Status: Draft — MBOM type shapes are defined in com.machineblocks.bml.type.*; SCAD serialization
-    rules continue to be validated against the V3 library. Prefer BML type definitions over
-    Markdown/YAML for shapes; this block summarizes the serialization strategy only.
+    Status: Draft — MBOM shapes stay in com.machineblocks.bml.type.*. The forms below are the ones
+    the V3 library accepts (lib/core/utils.scad, lib/core/parameters.scad, lib/core/block_model.scad,
+    lib/core/block_dim.scad). Emit the shortest of those forms that round-trips to the same value.
+    Wrap each value as ["paramName", value]. Do not design MBOM around SCAD arrays.
     
-    Strategy: take the canonical MBOM value → validate → normalize → emit the shortest valid SCAD
-    form → wrap as ["paramName", value] in settings/config.
+    Face strings in emit are scad:value literals: "x-" "x+" "y-" "y+" "z-" "z+". mb_face_to_int
+    also accepts the integers 0–5 and the groups "x" "y" "z" "xy" "xz" "yz" "xyz". A namespaced
+    key such as "pbx.x+" is not a face. mb_qc_resolve ignores it until mb_params_filter strips
+    the prefix (see HelperApi).
     
-    Typical SCAD forms (details live on the type Blocks):
-    AxisXYZ — scalar, [xy, z], or [x, y, z]
-    AxisXY — scalar or [x, y]
-    Per-side-4 — scalar, [x, y], or four-value array
-    FaceVector6 — always six values
-    FaceMap — [["face", value], …] (optional namespaced keys)
-    SelectiveGrid — [base, [[rect], value], …] or a scalar broadcast
+    AxisXYZ — mb_params_resolve_xyz, used by holeXYZDiameter and the other holeXYZ* scalars.
+    A number, boolean, or string becomes [v, v, v]. A list of length 2 becomes [xy, xy, z].
+    A list of length 3 is kept. Length 1 is accepted and broadcasts, but a scalar is shorter.
+    • {x:auto, y:auto, z:auto} → ["holeXYZDiameter", "auto"]
+    • {x:3, y:3, z:4} → ["holeXYZDiameter", [3, 4]]
+    • {x:3, y:3.2, z:4} → ["holeXYZDiameter", [3, 3.2, 4]]
     
-    Do not design MBOM around SCAD arrays. Design SCAD arrays as serialization of MBOM.
+    AxisXY — mb_params_resolve_xy, used by holeXYGridOffsetZ and holeXY*.
+    A scalar becomes [v, v]. A list of length 2 is kept.
+    • {x:3.625, y:3.625} → ["holeXYGridOffsetZ", 3.625]
+    • {x:3.5, y:4} → ["holeXYGridOffsetZ", [3.5, 4]]
+    
+    SizeXYZ — mb_resolve_xyz inside mb_block_dim, not mb_params_resolve_xyz.
+    A number becomes a cube. A list uses up to three components and fills a missing axis from
+    [1, 1, 1]. A two-element list is therefore [x, y, 1], not [xy, z]. Emit the triple.
+    • {x:4, y:2, z:3} → ["size", [4, 2, 3]]
+    
+    Four horizontal faces — mb_qc_resolve without cube, order [x-, x+, y-, y+].
+    Used by recessWallThickness, studPadding, and the other side quads.
+    A number becomes four copies. Length 2 becomes [x, x, y, y]. Length 4 is kept.
+    Length 3 is accepted as [a, b, c, 0] and is not a shortest emit: it writes 0 into y+.
+    A list of [face, number] pairs is the sparse form; faces not listed stay at the resolver
+    default, which is 0 unless the caller passes another default.
+    • all 0.333 → ["recessWallThickness", 0.333]
+    • x- = x+ = 0.5, y- = y+ = 0.25 → ["recessWallThickness", [0.5, 0.25]]
+    • 0.5, 0.4, 0.25, 0.2 → ["recessWallThickness", [0.5, 0.4, 0.25, 0.2]]
+    
+    Six faces — mb_qc_resolve with cube, order [x-, x+, y-, y+, z-, z+].
+    Used by sizeMod, baseCrop, and baseAdjustment.
+    A number becomes six copies. Length 3 becomes [x, x, y, y, z, z]. Length 6 is kept.
+    Length 2, 4, and 5 are accepted and fill the missing tail with 0, so they are lossless
+    only when those faces really are 0. Length 2 is [x, x, y, y, 0, 0], not an AxisXYZ pair.
+    [face, number] pairs overwrite the resolver default. For sizeMod and baseCrop that default
+    is 0, so a sparse pair list matches a six-vector of zeros plus those faces.
+    • sizeMod {xPos:0.5} → ["sizeMod", [["x+", 0.5]]]
+      which resolves to the same vector as [0, 0.5, 0, 0, 0, 0]
+    • baseCrop {xNeg:0.5, xPos:0.5} → ["baseCrop", [["x", 0.5]]]
+      "x" writes both x- and x+. The six-vector [0.5, 0.5, 0, 0, 0, 0] is the same value.
+    • baseCrop {zPos:1} → ["baseCrop", [["z+", 1]]]
+    
+    baseAdjustment uses the same resolver, but the default is not 0. block_model passes
+    [sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], sizeAdjustment[0], 0, sizeAdjustment[1]].
+    A pair list overrides only the listed faces and leaves the others on that default.
+    A numeric vector, including a six-vector of explicit zeros, replaces every face and does
+    not inherit sizeAdjustment. sizeAdjustment itself is read as two numbers [sideXY, heightZ],
+    not as a six-face vector.
+    • {xNeg:-0.1, xPos:-0.1, zPos:0.05} →
+      ["baseAdjustment", [["x-", -0.1], ["x+", -0.1], ["z+", 0.05]]]
+      y-, y+, and z- stay on sizeAdjustment.
+    Namespaced entries are a settings transport for composite modules, not a resolved face map:
+    ["baseAdjustment", [["pbx.x+", 0.01], ["pty.z+", 0.1]]]
+    The child passes the filtered map to mb_block().
+    
+    SelectiveGrid — one entry is [[x0, y0], [x1, y1], value]. Both corners are inclusive
+    (in_grid_area). *Areas is an array of those entries. The sibling boolean (studs, holeX, …)
+    is the value for cells that no entry covers. Later entries win. The array does not carry
+    that boolean itself.
+    • studs true, two areas →
+      ["studs", true]
+      ["studAreas", [[[0, 0], [1, 1], false], [[2, 0], [3, 1], "hollow"]]]
+    No areas: emit only the boolean. "hollow" and "pin" select the stud type for that rectangle;
+    any other value falls through to studType.
+    
+    Wall gaps — [face, pos, len] and, for recess only, an optional fourth thickness.
+    face is split onto "x-" "x+" "y-" "y+" , so "x", "y", and "xy" expand.
+    Omitted pos starts at the near end of that wall.
+    Omitted len on recessWallGaps and on tongue gaps runs to the far end.
+    Omitted len on baseWallGaps is 1, not the rest of the wall.
+    The fourth recess slot is a wall-thickness override. undef or "auto" uses recessWallThickness.
+    The V3 library does not read RecessWallGap.padStart or padEnd from this tuple.
+    • ["recessWallGaps", [["x+"], ["y-", 2, 3]]]
+      first gap: whole x+ wall; second: y- from grid 2, length 3
+    • baseWallGaps uses the same three-slot shape, with the length-1 default above.
+    
+    Connectors — [face, axis, gender, align, padStart, padEnd], read by index.
+    axis is "x", "y", or "z". On a side face the direction is forced to Z; on z- or z+ the
+    axis must be 0 or 1 (x or y), otherwise it becomes x.
+    gender omitted, or any string other than "female", is male. align omitted is "start".
+    padStart and padEnd omitted are 0. Omit only the tail.
+    • ["connectors", [["x+", "z", "male", "center", 1, 1], ["z+", "x", "female"]]]
+    
+    Screw holes — the layout reads [face, [a, b]] only (mb_block_part__screw_holes).
+    Diameter, depth, and inset come from screwHoleDiameter, screwHoleDepth,
+    screwHoleInsetThickness, and screwHoleInsetDepth, not from further tuple slots.
+    Extra numbers on an entry are not applied.
+    • ["screwHoles", [["z+", [2, 2]], ["y+", [4, 3]]]]
   </documentation>
   <references>
     <see type="scad:ScadDecisionRules" relation="ReadNext">
@@ -41,17 +121,38 @@
     <see type="mbml:TypeSystem" relation="SeeAlso">
       Domain type package overview.
     </see>
+    <see type="scad:HelperApi" relation="SeeAlso">
+      mb_params_filter — namespaced face keys are stripped before mb_qc_resolve.
+    </see>
     <see type="mbt:SizeXYZ" relation="Defines">
-      Example type — see BML definition for shape.
+      Grid size. Emit a triple; mb_resolve_xyz is not the AxisXYZ compactor.
     </see>
     <see type="mbt:AxisXYZ" relation="Defines">
-      AxisXYZ container type.
+      AxisXYZ container. holeXYZ* uses mb_params_resolve_xyz.
+    </see>
+    <see type="mbt:AxisXY" relation="Defines">
+      AxisXY container. holeXY* uses mb_params_resolve_xy.
     </see>
     <see type="mbt:SelectiveGrid" relation="Defines">
-      SelectiveGrid container type.
+      One inclusive rectangle plus a value. The sibling boolean is not inside the array.
     </see>
-    <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/docs/05_types_and_mapping.md" relation="DeepDive">
-      Historical mapping notes — follow BML types when they diverge.
+    <see type="mbt:WallGap" relation="Defines">
+      face, pos, len. baseWallGaps omits len as 1.
+    </see>
+    <see type="mbt:RecessWallGap" relation="Defines">
+      WallGap plus padStart and padEnd. The V3 tuple's fourth slot is thickness, not pads.
+    </see>
+    <see type="mbt:Connector" relation="Defines">
+      Positional connector tuple. Tail defaults are male-side align start and pads 0.
+    </see>
+    <see type="mbt:ScrewHole" relation="Defines">
+      Canonical struct. The V3 layout reads face and offset only.
+    </see>
+    <see file="lib/core/utils.scad" relation="SeeAlso">
+      mb_qc_resolve, mb_resolve_xyz, mb_face_to_int.
+    </see>
+    <see file="lib/core/parameters.scad" relation="SeeAlso">
+      mb_params_resolve_xyz and mb_params_resolve_xy.
     </see>
   </references>
 </scad:TypesAndSerialization>
