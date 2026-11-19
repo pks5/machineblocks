@@ -19,12 +19,16 @@
  */
 // MachineBlocks Library
 use <../../../../../lib/block.scad>;
-// Global Config
-include <../../../../../config/mb_config.scad>;
+use <../config/DefaultConfigSet.scad>;
 
 /*
  * Customization
  */
+
+/* [Config] */
+
+// Config profile
+configProfile = "fine"; // [fine:Fine, standard:Standard]
 
 // Number of samples per calibration row
 numberOfSamples = 5; // [3:1:9]
@@ -57,6 +61,10 @@ tubeDiameterAdjustmentValueStep  = 0.1;  // [0.05:0.05:0.5]
 pinDiameterAdjustmentValueStart = -0.2; // [-1:0.1:1]
 // pinDiameterAdjustment — step (mm)
 pinDiameterAdjustmentValueStep  = 0.1;  // [0.05:0.05:0.5]
+
+/* [Hidden] */
+
+mb_config = mb__com__machineblocks__scad__config__DefaultConfigSet__func__config(configProfile);
 
 /*
  * Main Module Call
