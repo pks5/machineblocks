@@ -48,9 +48,9 @@
     overrides for one call. Calibration adjustments belong in config profiles — not as routine
     settings on content blocks.
     
-    Parameter inventory, types, defaults, and documentation are defined on Config and NativeBlock —
-    together they are the SSOT. Config holds the config-conventional properties; NativeBlock holds
-    brick and feature properties and inherits Config. SCAD docs explain the call model; they do
+    Parameter inventory, types, defaults, and documentation are defined on ConfigProfile and NativeBlock —
+    together they are the SSOT. ConfigProfile holds the config-conventional properties; NativeBlock holds
+    brick and feature properties and inherits ConfigProfile. SCAD docs explain the call model; they do
     not redefine the parameter set.
   </documentation>
   <references>
@@ -60,11 +60,11 @@
     <see type="scad:BlockFileStructure" relation="SeeAlso">
       Mandatory Block File section layout.
     </see>
-    <see type="mbcore:Config" relation="Defines">
+    <see type="mbcore:ConfigProfile" relation="Defines">
       Config-conventional native parameters. NativeBlock inherits them.
     </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      SSOT together with Config — every property on either Block is a native parameter
+      SSOT together with ConfigProfile — every property on either Block is a native parameter
       with mb_param_[propertyName]().
     </see>
     <see type="scad:ModulePatterns" relation="SeeAlso">

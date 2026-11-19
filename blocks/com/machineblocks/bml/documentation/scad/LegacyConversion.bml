@@ -382,11 +382,11 @@
     <see type="scad:ScadDecisionRules" relation="SeeAlso">
       Cross / L / T shapes require Composite — matches step 5.
     </see>
-    <see type="mbcore:Config" relation="Defines">
+    <see type="mbcore:ConfigProfile" relation="Defines">
       Config-conventional native parameters (calibration, printer profile).
     </see>
     <see type="mbcore:NativeBlock" relation="Defines">
-      Native parameter SSOT together with Config — getters and settings keys.
+      Native parameter SSOT together with ConfigProfile — getters and settings keys.
     </see>
     <see file="domains/machineblocks/machineblocks-v3-scad-target/runtimes/scad-lib/blocks/com/machineblocks/scad/examples/Cross.scad" relation="SeeAlso">
       V3 converted Composite Block File for the same Cross / Corner intent.

@@ -11,7 +11,7 @@
     A Pins parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Pins parameters on Config and NativeBlock
+    MachineBlocks member group for Pins parameters on ConfigProfile and NativeBlock
     (YAML group id: pins).
   </documentation>
 </mbgroup:Pins>

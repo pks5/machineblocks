@@ -4,6 +4,7 @@
 <scad:ModulePatterns xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
   xmlns:concept="com.machineblocks.bml.documentation.concept"
+  xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:scad="com.machineblocks.bml.documentation.scad">
 
   <baseType>
@@ -38,8 +39,9 @@
     Connection uses tongue-and-groove or discrete connectors — see StructureSystems for concepts.
     
     Full Block File examples below are complete OpenSCAD sources (not snippets). Prefer these over
-    inventing new file layouts. Helper / Form examples are not embedded here — follow library
-    helper modules when extending shared geometry.
+    inventing new file layouts. Where an example passes config = mb_config, that is the call
+    site the compiler fills with the selected ConfigSet function (see ConfigSet). Helper / Form
+    examples are not embedded here — follow library helper modules when extending shared geometry.
   </documentation>
   <examples>
     <example title="Standard.scad — Simple / Semantic Block" language="org.blockml.bml.language.OpenSCAD">
@@ -793,6 +795,9 @@
     </see>
     <see type="scad:BlockFileStructure" relation="Requires">
       Mandatory section order for every Block File.
+    </see>
+    <see type="mbcore:ConfigSet" relation="SeeAlso">
+      config = mb_config in the examples is the slot filled by mb__…__func__config.
     </see>
     <see type="concept:CompositionConcepts" relation="SeeAlso">
       Conceptual composition and assembly model.

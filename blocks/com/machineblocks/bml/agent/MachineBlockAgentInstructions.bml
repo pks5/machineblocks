@@ -39,7 +39,7 @@ Start with these references:
 
 - [DecisionFramework](bml:com.machineblocks.bml.documentation.concept.DecisionFramework) — choose the modeling approach.
 - [AuthoringPatterns](bml:com.machineblocks.bml.documentation.mbml.AuthoringPatterns) — implement the model.
-- [Config](bml:com.machineblocks.bml.core.Config) and [NativeBlock](bml:com.machineblocks.bml.core.NativeBlock) — authoritative reference for native parameters, types, and defaults. Config holds the config-conventional properties; NativeBlock inherits them and defines the rest.
+- [ConfigProfile](bml:com.machineblocks.bml.core.ConfigProfile) and [NativeBlock](bml:com.machineblocks.bml.core.NativeBlock) — authoritative reference for native parameters, types, and defaults. ConfigProfile holds the config-conventional properties; NativeBlock inherits them and defines the rest.
 
 Discover additional documentation and model definitions using the BlockML CLI.
           ]]></content>
@@ -59,13 +59,13 @@ Consult DecisionFramework before choosing an implementation.
         <core:AgentInstructions.Rule bml:id="parametersOnNativeBlock">
           <content><![CDATA[
 Never invent native parameters, types, or defaults.
-Inspect Config and NativeBlock for their authoritative definitions.
+Inspect ConfigProfile and NativeBlock for their authoritative definitions.
           ]]></content>
         </core:AgentInstructions.Rule>
 
         <core:AgentInstructions.Rule bml:id="nativeBlockIsFinal">
           <content><![CDATA[
-Do not extend NativeBlock or Config. Extend Block or CompositeBlock.
+Do not extend NativeBlock or ConfigProfile. Extend Block or CompositeBlock.
           ]]></content>
         </core:AgentInstructions.Rule>
 

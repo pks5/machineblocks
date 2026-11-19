@@ -11,7 +11,7 @@
     A Tongue / Groove parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Tongue / Groove parameters on Config and NativeBlock
+    MachineBlocks member group for Tongue / Groove parameters on ConfigProfile and NativeBlock
     (YAML group id: tongue_groove).
   </documentation>
 </mbgroup:TongueGroove>

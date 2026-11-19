@@ -3,6 +3,7 @@
   FQN: com.machineblocks.bml.documentation.scad.BlockFileStructure-->
 <scad:BlockFileStructure xmlns="http://blockml.org/bml"
   xmlns:core="org.blockml.bml.core"
+  xmlns:mbcore="com.machineblocks.bml.core"
   xmlns:scad="com.machineblocks.bml.documentation.scad">
 
   <baseType>
@@ -61,6 +62,8 @@
     • any other parts list → a composite module mb__…(config = undef, settings = undef)
       that calls mb_block(base = false, studs = false) and one child mb_block per part.
     • a Set → module mb__…(config = undef) with no settings parameter.
+    • a ConfigSet → the manifestation file of that set, exporting mb__…__func__config.
+      The body is an if/else that returns one function per profile. See mbcore:ConfigSet.
     bml:each, bml:if, and bml:with are rejected.
     
     Customizer lines on leaf and composite files are bare assignments, one per literal
@@ -87,8 +90,12 @@
     reads size, direction, and offset at indexes 1, 2, and 3 (see HelperApi). A Set
     writes the same four-slot row into STEPS.
     
-    Inside a composite module the config parameter is passed on. The file-level variable
-    mb_config is only the argument of the main call. Submodules, helper modules, and
+    Inside a composite module the config parameter is passed on. The main call passes
+    the selected ConfigSet function instead of the bare mb_config variable:
+    mb__…__func__config(mySelectedProfile). mySelectedProfile is the customizer parameter
+    for the chosen profile. Compile can name the ConfigSet. Otherwise the first ConfigSet
+    in the project blocks folder is used, otherwise a ConfigSet from the machineblocks core.
+    Submodules, helper modules, and
     global functions are comment placeholders, except on a Set, which fills Optional
     Sub Modules with the module name plus __Total, __Print, __Step, __Instance,
     and __Instance_{id}.
@@ -99,6 +106,9 @@
     </see>
     <see type="scad:ScadRenderTarget" relation="Requires">
       Target name machineblocks-v3-scad and the bml-to-scad manifestation summary.
+    </see>
+    <see type="mbcore:ConfigSet" relation="SeeAlso">
+      Profile collection, function name, and which set compile uses.
     </see>
     <see type="scad:HelperApi" relation="SeeAlso">
       mb_parts_total_size reads the composite parts row at indexes 1, 2, and 3.

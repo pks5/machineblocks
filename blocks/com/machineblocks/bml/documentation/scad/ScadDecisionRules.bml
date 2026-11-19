@@ -38,7 +38,7 @@
     
     Implementation rules: design west-local; prefer direction over rotation; calibration members
     are ConfigOnlyAiUsage and stay in config (baseAdjustment, sizeAdjustment, and the other
-    *Adjustment properties on Config). NativeBlock properties use mb_param_[propertyName]();
+    *Adjustment properties on ConfigProfile). NativeBlock properties use mb_param_[propertyName]();
     every other key uses mb_param(). Do not read a settings list by index. In SCAD
     settings/config use Face scad:value strings ("x-", "x+", …). mb_face_to_int also accepts
     an integer 0–12; a single face is emitted as the string. MBML/BOM still authors enum

@@ -18,11 +18,16 @@
  * Imports
  */
 use <../../../../../lib/block.scad>;
-include <../../../../../config/mb_config.scad>;
+use <../config/DefaultConfigSet.scad>;
 
 /*
  * Customization
  */
+
+/* [Config] */
+
+// Config profile
+configProfile = "fine"; // [fine:Fine, standard:Standard]
 
 /* [Size] */
 
@@ -158,6 +163,7 @@ studIcon = "../../pattern/bolt-solid-full.svg"; // [none:None, ../pattern/anchor
 
 /* [Hidden] */
 
+mb_config = mb__com__machineblocks__scad__config__DefaultConfigSet__func__config(configProfile);
 baseRoundingRadius = [baseRoundingRadiusX, baseRoundingRadiusY, baseRoundingRadiusZ];
 bevel = [bevel0, bevel1, bevel2, bevel3];
 // textStyle is customizer-only — NativeBlock has textFont (may include :style=…)

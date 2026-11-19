@@ -11,7 +11,7 @@
     A Technic Holes parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Technic Holes parameters on Config and NativeBlock
+    MachineBlocks member group for Technic Holes parameters on ConfigProfile and NativeBlock
     (YAML group id: technic_holes).
   </documentation>
 </mbgroup:TechnicHoles>

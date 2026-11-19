@@ -11,7 +11,7 @@
     A Studs parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Studs parameters on Config and NativeBlock
+    MachineBlocks member group for Studs parameters on ConfigProfile and NativeBlock
     (YAML group id: studs).
   </documentation>
 </mbgroup:Studs>

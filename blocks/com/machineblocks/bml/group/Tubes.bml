@@ -11,7 +11,7 @@
     A Tubes parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Tubes parameters on Config and NativeBlock
+    MachineBlocks member group for Tubes parameters on ConfigProfile and NativeBlock
     (YAML group id: tubes).
   </documentation>
 </mbgroup:Tubes>

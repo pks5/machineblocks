@@ -1,0 +1,71 @@
+<!--MachineBlocks MBOM — ConfigSet (selectable config profiles)
+
+  FQN: com.machineblocks.bml.core.ConfigSet
+  Abstract — a concrete profile collection extends ConfigSet.-->
+<mbcore:ConfigSet xmlns="http://blockml.org/bml"
+  xmlns:config="com.machineblocks.bml.config"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <baseType>
+    mbcore:Block
+  </baseType>
+  <is>
+    A collection of config profiles
+  </is>
+  <status>
+    Draft
+  </status>
+  <documentation>
+    Abstract collection of ConfigProfile values. A concrete set extends ConfigSet
+    and fills profiles. Geometry blocks extend Block or CompositeBlock, not ConfigSet.
+    The customizer of a generated Block File selects one profile from that set.
+    
+    Manifestation replaces the bml package segment with scad, as for any other Block.
+    com.machineblocks.bml.config.MyConfigSet becomes the file
+    com/machineblocks/scad/config/MyConfigSet.scad and the function
+    mb__com__machineblocks__scad__config__MyConfigSet__func__config.
+    The function name is mb__ plus the manifestation FQN, dots written as __,
+    then __func__config — the same scheme as other functions on a Block.
+    
+    The function takes the selected profile. The compiler inserts that call
+    where a Block File references mb_config:
+    mb__com__machineblocks__scad__config__MyConfigSet__func__config(mySelectedProfile)
+    mySelectedProfile is a customizer parameter, so the profile is chosen in the
+    OpenSCAD customizer. The function returns that profile as the config value.
+    
+    Compile can name the ConfigSet to use. When it does not, the compiler uses
+    the first ConfigSet in the current project blocks folder. When the project
+    has none, it uses a ConfigSet from the machineblocks core.
+    
+    The function body is an if/else on that argument. Each profile has its own
+    function, named with the profile bml:id. The main function returns the
+    matching profile function. config:DefaultConfigSet is the example:
+    fine and standard, each with printerLayerHeight, printerNozzleDiameter,
+    and studDiameterAdjustment.
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+  <references>
+    <see type="mbcore:Block">
+      Domain base. A concrete profile collection extends ConfigSet.
+    </see>
+    <see type="mbcore:ConfigProfile">
+      One selectable profile. profiles holds these values.
+    </see>
+    <see type="scad:BlockFileStructure" relation="SeeAlso">
+      The main-call config argument is this function.
+    </see>
+    <see type="config:DefaultConfigSet" relation="SeeAlso">
+      Example set: two profiles, if/else, one function per profile.
+    </see>
+  </references>
+  <aggregations>
+    <profiles type="mbcore:ConfigProfile[]">
+      <documentation>
+        Config profiles this set offers. The customizer parameter selects one of them.
+      </documentation>
+    </profiles>
+  </aggregations>
+</mbcore:ConfigSet>

@@ -54,7 +54,7 @@
     </see>
     <see type="mbcore:NativeBlock" relation="Defines">
       Feature properties for base, studs, recess, tongue/groove, connectors. Calibration
-      adjustments and printer-following clearances for those features are defined on Config.
+      adjustments and printer-following clearances for those features are defined on ConfigProfile.
     </see>
   </references>
 </concept:StructureSystems>

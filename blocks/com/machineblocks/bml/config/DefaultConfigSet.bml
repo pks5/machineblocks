@@ -1,0 +1,41 @@
+<!--MachineBlocks — default ConfigSet example
+
+  FQN: com.machineblocks.bml.config.DefaultConfigSet-->
+<config:DefaultConfigSet xmlns="http://blockml.org/bml"
+  xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
+  xmlns:config="com.machineblocks.bml.config"
+  xmlns:mbcore="com.machineblocks.bml.core">
+
+  <baseType>
+    mbcore:ConfigSet
+  </baseType>
+  <is>
+    A default config profile set
+  </is>
+  <documentation>
+    Example ConfigSet with two profiles. Each profile sets three ConfigProfile
+    properties: printerLayerHeight, printerNozzleDiameter, and studDiameterAdjustment.
+    The customizer selects a profile by its bml:id (fine or standard).
+    
+    SCAD file com/machineblocks/scad/config/DefaultConfigSet.scad.
+    mb__com__machineblocks__scad__config__DefaultConfigSet__func__config
+    chooses one profile function and returns it:
+    fine → __func__fine, standard → __func__standard, anything else → __func__fine.
+  </documentation>
+  <references>
+    <see type="mbcore:ConfigSet">
+      Abstract profile collection. This set fills profiles.
+    </see>
+    <see type="mbcore:ConfigProfile">
+      Each entry is one ConfigProfile with the three example properties.
+    </see>
+  </references>
+  <aggregations>
+    <profiles override="true">
+      <composition>
+        <mbcore:ConfigProfile bml:id="fine" name="Fine" printerLayerHeight="0.1" printerNozzleDiameter="0.25" studDiameterAdjustment="0.1" />
+        <mbcore:ConfigProfile bml:id="standard" name="Standard" printerLayerHeight="0.2" printerNozzleDiameter="0.4" studDiameterAdjustment="0.2" />
+      </composition>
+    </profiles>
+  </aggregations>
+</config:DefaultConfigSet>

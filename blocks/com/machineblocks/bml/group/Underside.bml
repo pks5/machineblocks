@@ -11,7 +11,7 @@
     A Underside / Base Cutout parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Underside / Base Cutout parameters on Config and NativeBlock
+    MachineBlocks member group for Underside / Base Cutout parameters on ConfigProfile and NativeBlock
     (YAML group id: underside).
   </documentation>
 </mbgroup:Underside>

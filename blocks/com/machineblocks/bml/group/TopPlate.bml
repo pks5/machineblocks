@@ -11,7 +11,7 @@
     A Top Plate parameter group
   </is>
   <documentation>
-    MachineBlocks member group for Top Plate parameters on Config and NativeBlock
+    MachineBlocks member group for Top Plate parameters on ConfigProfile and NativeBlock
     (YAML group id: top_plate).
   </documentation>
 </mbgroup:TopPlate>

@@ -33,7 +33,7 @@
     structural features (walls, recess, tongue) are ignored by the subtraction. SCAD emit form of
     cutouts is a serialization concern — see scad:TypesAndSerialization.
     
-    Parameter names, types, and defaults are defined on Config and NativeBlock — do not treat
+    Parameter names, types, and defaults are defined on ConfigProfile and NativeBlock — do not treat
     external YAML or Markdown tables as authoritative.
   </documentation>
   <references>

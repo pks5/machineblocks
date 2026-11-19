@@ -1,10 +1,10 @@
-<!--MachineBlocks MBOM — Config (conventional config parameter surface)
+<!--MachineBlocks MBOM — ConfigProfile (conventional config parameter surface)
 
-  FQN: com.machineblocks.bml.core.Config
-  Abstract — NativeBlock extends Config. Not a runtime restriction:
+  FQN: com.machineblocks.bml.core.ConfigProfile
+  Abstract — NativeBlock extends ConfigProfile. Not a runtime restriction:
   settings may still override every parameter. Resolution stays
   settings → config → default.-->
-<mbcore:Config xmlns="http://blockml.org/bml"
+<mbcore:ConfigProfile xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
   xmlns:scad="com.machineblocks.bml.annotation.ScadAnnotation"
@@ -24,12 +24,12 @@
     properties whose conventional home is the config profile: calibration adjustments,
     the printer profile, and fit clearances that follow the printer.
     
-    NativeBlock extends Config, so every leaf still carries these properties. Inheritance
+    NativeBlock extends ConfigProfile, so every leaf still carries these properties. Inheritance
     does not change resolution. settings override config, and any parameter may appear
     in either map. This Block records the convention; it does not forbid a settings override.
     Namespaced composite use (for example baseAdjustment via mb_params_filter) stays valid.
     
-    Together with NativeBlock, Config is the SSOT for MachineBlocks native parameters.
+    Together with NativeBlock, ConfigProfile is the SSOT for MachineBlocks native parameters.
     Config-conventional properties are defined here. Brick and feature properties are
     defined on NativeBlock. Type shapes SSOT: com.machineblocks.bml.type.*.
     Markdown and YAML must follow these two files — link only, never redefine the inventory.
@@ -39,13 +39,16 @@
   </abstract>
   <references>
     <see type="mbcore:Block">
-      Domain base. Content blocks still extend Block or CompositeBlock, not Config.
+      Domain base. Content blocks still extend Block or CompositeBlock, not ConfigProfile.
     </see>
     <see type="mbcore:NativeBlock">
       Final leaf. Inherits this surface and defines the remaining native parameters.
     </see>
     <see type="scaddoc:HelperApi" relation="SeeAlso">
       mb_params_filter contract. Namespaced baseAdjustment is one use of that function.
+    </see>
+    <see type="mbcore:ConfigSet">
+      A concrete set collects ConfigProfile values and the customizer selects one.
     </see>
   </references>
   <properties>
@@ -848,4 +851,4 @@
       <scad:value>-0.1</scad:value>
     </tubeDiameterAdjustment>
   </properties>
-</mbcore:Config>
+</mbcore:ConfigProfile>

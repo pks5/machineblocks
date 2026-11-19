@@ -29,7 +29,7 @@
     
     MBOM is the renderer-independent domain model layered on BOM Core — not a second SSOT.
     The BOM Compiler parses BML into an immutable Urmodell (Canonical BOM); MBOM extends that
-    graph with MachineBlocks types, Config and NativeBlock parameters, and SCAD conventions.
+    graph with MachineBlocks types, ConfigProfile and NativeBlock parameters, and SCAD conventions.
     Validation operates on the lossless BOM (Stage 2 pragmatic fork). Composition expansion,
     expression evaluation, and target emit are Stage 3 — the renderer chooses Urmodell,
     the default pragmatic model, or its own forks.
@@ -39,7 +39,7 @@
     3MF. MBOM/BOM is canonical; SCAD is a serialization — not the other way around.
     
     Core principle: one native geometry primitive (NativeBlock → mb_block()) with a large
-    parameter space (SSOT: Config.bml and NativeBlock.bml). Complexity comes from parameter combinations,
+    parameter space (SSOT: ConfigProfile.bml and NativeBlock.bml). Complexity comes from parameter combinations,
     composition of multiple blocks, and nesting — not from many unrelated primitives.
   </documentation>
   <references>

@@ -2,13 +2,13 @@
 
   FQN: com.machineblocks.bml.core.NativeBlock
   Final — cannot be used as baseType on Block definitions
-  Extends Config
+  Extends ConfigProfile
 
-  Parameter SSOT together with Config: property set, types, docs, defaults,
-  and scad:value literals. Config defines the config-conventional properties;
-  NativeBlock defines brick and feature properties and inherits Config.
+  Parameter SSOT together with ConfigProfile: property set, types, docs, defaults,
+  and scad:value literals. ConfigProfile defines the config-conventional properties;
+  NativeBlock defines brick and feature properties and inherits ConfigProfile.
   Type shapes SSOT: com.machineblocks.bml.type.* (Library.bml membership).
-  Markdown / YAML / scad-lib docs must follow Config.bml and this BML —
+  Markdown / YAML / scad-lib docs must follow ConfigProfile.bml and this BML —
   they must not redefine the parameter inventory.-->
 <mbcore:NativeBlock xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
@@ -20,7 +20,7 @@
   xmlns:mbgroup="com.machineblocks.bml.group">
 
   <baseType>
-    mbcore:Config
+    mbcore:ConfigProfile
   </baseType>
   <is>
     A leaf geometry Block
@@ -28,16 +28,16 @@
   <documentation>
     Final leaf Block mapped directly to SCAD mb_block() — the native geometry primitive
     at render time. Uses children aggregation for mb_block() sub-geometry instead of _parts.
-    Extends Config, so the config-conventional properties are part of this leaf.
+    Extends ConfigProfile, so the config-conventional properties are part of this leaf.
     
-    Together with Config, the SSOT for MachineBlocks (MB) native parameters: names, types,
-    documentation, defaults, and scad:value. Config defines the config-conventional properties
+    Together with ConfigProfile, the SSOT for MachineBlocks (MB) native parameters: names, types,
+    documentation, defaults, and scad:value. ConfigProfile defines the config-conventional properties
     (calibration, printer profile, printer-following clearances). This Block defines brick and
     feature properties. Inheritance does not change resolution: settings override config, and
     any parameter may appear in either map.
     
     Markdown, YAML (09_mbom_properties.yml, 09_api_parameters.yml), and scad-lib docs must
-    follow Config and this file — align to them or link only; never redefine the inventory.
+    follow ConfigProfile and this file — align to them or link only; never redefine the inventory.
     
     Type shapes SSOT: com.machineblocks.bml.type.* (Library.bml membership). Extend types there;
     do not invent parallel type tables in Markdown/YAML.
@@ -46,11 +46,11 @@
     true
   </final>
   <references>
-    <see type="mbcore:Config">
-      Extends Config. Config-conventional parameters are defined there and inherited here.
+    <see type="mbcore:ConfigProfile">
+      Extends ConfigProfile. Config-conventional parameters are defined there and inherited here.
     </see>
     <see type="mbcore:Block">
-      Domain base, via Config — not CompositeBlock.
+      Domain base, via ConfigProfile — not CompositeBlock.
     </see>
     <see type="mbcore:CompositeBlock">
       Contrasts with CompositeBlock which uses _parts for composition children.

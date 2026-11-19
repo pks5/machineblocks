@@ -19,7 +19,7 @@
     V1 and V2.
     
     The BOM Compiler parses BML into an immutable Urmodell (Canonical BOM). MBOM is the
-    MachineBlocks domain specialization of that model — types, Config and NativeBlock parameters, and
+    MachineBlocks domain specialization of that model — types, ConfigProfile and NativeBlock parameters, and
     domain block kinds — not a separate compiler product. Render targets interpret the BOM/MBOM
     graph (Urmodell, pragmatic fork, or their own forks); they do not redefine the domain model.
     
@@ -29,7 +29,7 @@
   </documentation>
   <references>
     <see type="mbml:DomainModel" relation="ReadNext">
-      Next — Block, Config, NativeBlock, CompositeBlock, Set, Step.
+      Next — Block, ConfigProfile, ConfigSet, NativeBlock, CompositeBlock, Set, Step.
     </see>
     <see type="concept:Architecture" relation="SeeAlso">
       Layered architecture this authoring path sits in.

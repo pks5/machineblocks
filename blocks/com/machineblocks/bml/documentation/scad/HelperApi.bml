@@ -99,7 +99,7 @@
       wall-gap tuple survives. Numeric keys and keys without that prefix are dropped.
     • When overrides is passed, the result is mb_params_merge(filtered, overrides):
       override keys replace filtered keys.
-    Namespaced baseAdjustment on Config is the calibration use of this function. The same
+    Namespaced baseAdjustment on ConfigProfile is the calibration use of this function. The same
     contract applies to any [[string, ...], ...] list, including baseWallGaps.
     
     Internal faces that only touch do not fuse under OpenSCAD union. Composite modules that
@@ -126,7 +126,7 @@
     <see type="scad:MbBlockApi" relation="Requires">
       mb_block() signature. Native getters versus mb_param(). assembly and renderGroups are outside that inventory.
     </see>
-    <see type="mbcore:Config" relation="SeeAlso">
+    <see type="mbcore:ConfigProfile" relation="SeeAlso">
       baseAdjustment — namespaced calibration use of mb_params_filter.
     </see>
     <see type="mbcore:NativeBlock" relation="SeeAlso">
