@@ -69,7 +69,7 @@ mb_config = mb__com__machineblocks__scad__config__DefaultConfigSet__func__config
 /*
  * Main Module Call
  */
-mb_block__com__machineblocks__calibration__Calibrator(
+mb__com__machineblocks__calibration__Calibrator(
     config = mb_config,
     settings = [
         ["numberOfSamples",                   numberOfSamples],
@@ -100,7 +100,7 @@ mb_block__com__machineblocks__calibration__Calibrator(
  * baseHeight = 0.5 unitGrid[1] (≈ 1 mbu = 1.6 mm) for base strips and labels.
  * Rows are spaced 3 studs apart in Y.
  */
-module mb_block__com__machineblocks__calibration__Calibrator(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator(config = undef, settings = undef) {
     // Native Parameters
     blockId = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator");
     align   = mb_param_align(config, settings);
@@ -143,7 +143,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
         ]
     ) {
         // Row 0 — studDiameterAdjustment
-        mb_block__com__machineblocks__calibration__Calibrator__Base(
+        mb__com__machineblocks__calibration__Calibrator__Base(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "base_stud")],
@@ -157,7 +157,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["offset",        [0, 0, 0]]
             ]
         );
-        mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(
+        mb__com__machineblocks__calibration__Calibrator__StudDiameter(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "samples_stud")],
@@ -169,7 +169,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
         );
 
         // Row 1 — baseWallThicknessAdjustment
-        mb_block__com__machineblocks__calibration__Calibrator__Base(
+        mb__com__machineblocks__calibration__Calibrator__Base(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "base_wall")],
@@ -183,7 +183,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["offset",        [0, -3, 0]]
             ]
         );
-        mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
+        mb__com__machineblocks__calibration__Calibrator__BaseWallThickness(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "samples_wall")],
@@ -195,7 +195,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
         );
 
         // Row 2 — tubeDiameterAdjustment
-        mb_block__com__machineblocks__calibration__Calibrator__Base(
+        mb__com__machineblocks__calibration__Calibrator__Base(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "base_tube")],
@@ -209,7 +209,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["offset",        [0, -6, 0]]
             ]
         );
-        mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(
+        mb__com__machineblocks__calibration__Calibrator__TubeDiameter(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "samples_tube")],
@@ -221,7 +221,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
         );
 
         // Row 3 — pinDiameterAdjustment
-        mb_block__com__machineblocks__calibration__Calibrator__Base(
+        mb__com__machineblocks__calibration__Calibrator__Base(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "base_pin")],
@@ -235,7 +235,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
                 ["offset",        [0, -9, 0]]
             ]
         );
-        mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(
+        mb__com__machineblocks__calibration__Calibrator__PinDiameter(
             config = config,
             settings = [
                 ["id",            mb_block_id(blockId, "samples_pin")],
@@ -256,7 +256,7 @@ module mb_block__com__machineblocks__calibration__Calibrator(config = undef, set
  * All blocks use baseHeight = 0.5 unitGrid[1] (size[2] = 0.5).
  * Positions are relative to the row's vOffset (passed via offset[1]).
  */
-module mb_block__com__machineblocks__calibration__Calibrator__Base(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator__Base(config = undef, settings = undef) {
     blockId       = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator.Base");
     rowOffset     = mb_param_offset(config, settings);
 
@@ -321,7 +321,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
                     rowOffset[1] - 1,
                     rowOffset[2]
                 ]],
-                ["text",          mb_block__com__machineblocks__calibration__Calibrator__func__formatValue(valueStart + i * valueStep)],
+                ["text",          mb__com__machineblocks__calibration__Calibrator__func__formatValue(valueStart + i * valueStep)],
                 ["textFont",      font],
                 ["textSize",      fontSize],
                 ["textFace",      5],
@@ -341,7 +341,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__Base(config = unde
  * here is intentional — this is a calibration tool whose purpose is to
  * vary this value per brick.
  */
-module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator__StudDiameter(config = undef, settings = undef) {
     blockId       = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator.StudDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
@@ -355,7 +355,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(confi
                 ["id",                    mb_block_id(blockId, str("s", i))],
                 ["baseCutoutType",        "none"],
                 ["size",                  [1, 1, 0.4]],  // 0.8 mbu ≈ 0.4 unitGrid[1]
-                ["studDiameterAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
+                ["studDiameterAdjustment", mb__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
                 ["offset",                [
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
                     rowOffset[1],
@@ -376,7 +376,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__StudDiameter(confi
  * No MB3-native alternative exists for a 180° X-axis flip.
  * NOTE: baseWallThicknessAdjustment is config_only in MB3; used here intentionally.
  */
-module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator__BaseWallThickness(config = undef, settings = undef) {
     blockId       = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator.BaseWallThickness");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
@@ -391,7 +391,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
                 ["size",                       [1, 1, 1]],
                 ["studs",                      false],
                 ["rotation",                   [180, 0, 0]],  // CUSTOM SCAD: intentional flip
-                ["baseWallThicknessAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
+                ["baseWallThicknessAdjustment", mb__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
                 ["topPlateHelpers",            false],
                 ["offset",                     [
                     rowOffset[0] + 2 * (i - floor(0.5 * numberOfSamples)),
@@ -413,7 +413,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__BaseWallThickness(
  * NOTE: tubeDiameterAdjustment is config_only in MB3; used here intentionally.
  *       V2 tubeZDiameterAdjustment → V3 tubeDiameterAdjustment (unified).
  */
-module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator__TubeDiameter(config = undef, settings = undef) {
     blockId       = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator.TubeDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
@@ -428,7 +428,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(confi
                 ["size",                  [2, 2, 1]],
                 ["studs",                 false],
                 ["rotation",              [180, 0, 0]],  // CUSTOM SCAD: intentional flip
-                ["tubeDiameterAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
+                ["tubeDiameterAdjustment", mb__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
                 ["baseCrop",              [["xy", -0.5]]],
                 ["baseWallThickness",     0],
                 ["offset",                [
@@ -450,7 +450,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__TubeDiameter(confi
  * CUSTOM SCAD: rotation = [180, 0, 0] is required to flip blocks upside-down.
  * NOTE: pinDiameterAdjustment is config_only in MB3; used here intentionally.
  */
-module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config = undef, settings = undef) {
+module mb__com__machineblocks__calibration__Calibrator__PinDiameter(config = undef, settings = undef) {
     blockId       = mb_param_id(config, settings, "com.machineblocks.scad.calibration.Calibrator.PinDiameter");
     rowOffset     = mb_param_offset(config, settings);
     numberOfSamples = mb_param(config, settings, "numberOfSamples", 5);
@@ -465,7 +465,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config
                 ["size",                [2, 1, 1]],
                 ["studs",               false],
                 ["rotation",            [180, 0, 0]],  // CUSTOM SCAD: intentional flip
-                ["pinDiameterAdjustment", mb_block__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
+                ["pinDiameterAdjustment", mb__com__machineblocks__calibration__Calibrator__func__round1(valueStart + i * valueStep)],
                 ["baseCrop",              [["x", -0.5]]],
                 ["baseWallThickness",     0],
                 ["offset",              [
@@ -485,7 +485,7 @@ module mb_block__com__machineblocks__calibration__Calibrator__PinDiameter(config
  *
  * Rounds x to 1 decimal place.
  */
-function mb_block__com__machineblocks__calibration__Calibrator__func__round1(x) =
+function mb__com__machineblocks__calibration__Calibrator__func__round1(x) =
     round(x * 10) / 10;
 
 /**
@@ -496,25 +496,25 @@ function mb_block__com__machineblocks__calibration__Calibrator__func__round1(x) 
  * the decimal point (e.g. 0.1 → ".1", -0.2 → "-.2").
  * CUSTOM SCAD: String manipulation — no MB3-native equivalent.
  */
-function mb_block__com__machineblocks__calibration__Calibrator__func__formatValue(x) =
-    mb_block__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(
-        str(mb_block__com__machineblocks__calibration__Calibrator__func__round1(x))
+function mb__com__machineblocks__calibration__Calibrator__func__formatValue(x) =
+    mb__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(
+        str(mb__com__machineblocks__calibration__Calibrator__func__round1(x))
     );
 
-function mb_block__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(s, i = 0) =
+function mb__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(s, i = 0) =
     (i >= len(s) - 1) ? s :
     (s[i] == "0" && s[i + 1] == ".")
         ? str(
-            mb_block__com__machineblocks__calibration__Calibrator__func__strPrefix(s, i),
+            mb__com__machineblocks__calibration__Calibrator__func__strPrefix(s, i),
             ".",
-            mb_block__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(
-                mb_block__com__machineblocks__calibration__Calibrator__func__strSuffix(s, i + 2), 0
+            mb__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(
+                mb__com__machineblocks__calibration__Calibrator__func__strSuffix(s, i + 2), 0
             )
           )
-        : mb_block__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(s, i + 1);
+        : mb__com__machineblocks__calibration__Calibrator__func__replaceZeroDot(s, i + 1);
 
-function mb_block__com__machineblocks__calibration__Calibrator__func__strPrefix(s, k, i = 0) =
-    (i >= k) ? "" : str(s[i], mb_block__com__machineblocks__calibration__Calibrator__func__strPrefix(s, k, i + 1));
+function mb__com__machineblocks__calibration__Calibrator__func__strPrefix(s, k, i = 0) =
+    (i >= k) ? "" : str(s[i], mb__com__machineblocks__calibration__Calibrator__func__strPrefix(s, k, i + 1));
 
-function mb_block__com__machineblocks__calibration__Calibrator__func__strSuffix(s, k, i = 0) =
-    (k + i >= len(s)) ? "" : str(s[k + i], mb_block__com__machineblocks__calibration__Calibrator__func__strSuffix(s, k, i + 1));
+function mb__com__machineblocks__calibration__Calibrator__func__strSuffix(s, k, i = 0) =
+    (k + i >= len(s)) ? "" : str(s[k + i], mb__com__machineblocks__calibration__Calibrator__func__strSuffix(s, k, i + 1));
