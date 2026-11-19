@@ -13,9 +13,6 @@
   <is>
     A collection of config profiles
   </is>
-  <status>
-    Draft
-  </status>
   <documentation>
     Abstract collection of ConfigProfile values. A concrete set extends ConfigSet
     and fills profiles. Geometry blocks extend Block or CompositeBlock, not ConfigSet.

@@ -1,9 +1,9 @@
 <!--MachineBlocks MBOM — ConfigProfile (conventional config parameter surface)
 
   FQN: com.machineblocks.bml.core.ConfigProfile
-  Abstract — NativeBlock extends ConfigProfile. Not a runtime restriction:
-  settings may still override every parameter. Resolution stays
-  settings → config → default.-->
+  NativeBlock extends ConfigProfile. ConfigSet profiles are ConfigProfile
+  instances. Not a runtime restriction: settings may still override every
+  parameter. Resolution stays settings → config → default.-->
 <mbcore:ConfigProfile xmlns="http://blockml.org/bml"
   xmlns:type="org.blockml.bml.type"
   xmlns:unit="org.blockml.bml.unit"
@@ -20,9 +20,10 @@
     A conventional config parameter surface
   </is>
   <documentation>
-    Abstract parameter surface between Block and NativeBlock. Defines the native
-    properties whose conventional home is the config profile: calibration adjustments,
-    the printer profile, and fit clearances that follow the printer.
+    Parameter surface between Block and NativeBlock, and the instance type of
+    ConfigSet profiles. Defines the native properties whose conventional home is
+    the config profile: calibration adjustments, the printer profile, and fit
+    clearances that follow the printer.
     
     NativeBlock extends ConfigProfile, so every leaf still carries these properties. Inheritance
     does not change resolution. settings override config, and any parameter may appear
@@ -34,9 +35,6 @@
     defined on NativeBlock. Type shapes SSOT: com.machineblocks.bml.type.*.
     Markdown and YAML must follow these two files — link only, never redefine the inventory.
   </documentation>
-  <abstract>
-    true
-  </abstract>
   <references>
     <see type="mbcore:Block">
       Domain base. Content blocks still extend Block or CompositeBlock, not ConfigProfile.

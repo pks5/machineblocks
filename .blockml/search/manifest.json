@@ -1,8 +1,8 @@
 {
   "version": 1,
   "documents": 587,
-  "packageJsonHash": "dee31490625e296f9feb4670c841d5197a82c9232ba21e91f4ad76ac1185aabe",
-  "lockfileHash": "90279781922af0ad4dd6df067f300e83f4a3c5a1aacc09808c9ebf3c80743d99",
+  "packageJsonHash": "1ea244090f7ff4aa11eb33d5892d9a44dd79ccbf3d14e7b993db742b9c7f77b4",
+  "lockfileHash": "91a9c00f0cbe1edf94069b8a88e30e79f53c949ccdf50a305ffaa8fa77409867",
   "files": [
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/Library.bml",
@@ -61,8 +61,8 @@
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/ConfigSet.bml",
-      "mtimeMs": 1795129455160.3843,
-      "size": 3118
+      "mtimeMs": 1795130549326.2585,
+      "size": 3085
     },
     {
       "path": "/Users/pksoftware/workspace-fh/machineblocks/blocks/com/machineblocks/bml/core/NativeBlock.bml",

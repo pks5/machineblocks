@@ -27,7 +27,8 @@
       Composable sub-type with default _parts aggregation for child block instances.
     </see>
     <see type="mbcore:ConfigProfile">
-      Abstract config-conventional parameter surface. NativeBlock extends ConfigProfile.
+      Config-conventional parameter surface. NativeBlock extends it. ConfigSet
+      profiles are instances of this type.
     </see>
     <see type="mbcore:ConfigSet">
       Collection of ConfigProfile values. The SCAD customizer selects one profile.

@@ -17,10 +17,11 @@
     
     Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
     basePresets association.
-    ConfigProfile — abstract parameter surface (baseType Block). Defines the native properties whose
-    conventional home is the config profile: calibration, printer profile, and clearances that
-    follow the printer. Not a resolver constraint — settings may still override any parameter.
-    Content blocks do not extend ConfigProfile.
+    ConfigProfile — parameter surface (baseType Block) and the instance type of ConfigSet
+    profiles. Defines the native properties whose conventional home is the config profile:
+    calibration, printer profile, and clearances that follow the printer. Not a resolver
+    constraint — settings may still override any parameter. Content blocks do not extend
+    ConfigProfile.
     ConfigSet — abstract collection of ConfigProfile values (baseType Block). A concrete set
     extends ConfigSet and fills profiles. The SCAD target emits that set as
     mb__…__func__config. A Block File uses that file, offers configProfile in the
