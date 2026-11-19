@@ -23,21 +23,42 @@
     4. Helper / Form — shared geometry helpers, not content products
     When in doubt, choose Composite.
     
-    Single mb_block() whitelist (examples): classic bricks/plates; slope and/or bevel (combinable
-    in V3 — V2 disallowed both in one call); round forms; recess; studs; simple cutouts;
-    single-line top text; PCB cavities; straight liftarms.
+    Single mb_block() covers classic bricks and plates, slope and bevel together (V2 disallowed
+    that pair), rounds, recess, studs, one text string on one textFace, a PCB cavity, and a
+    straight liftarm. cutouts is a real aggregation and NeverAiUsage: a generated block does not
+    set it. The subtraction ignores walls, recess, and tongue.
     
-    Requires Composite (blacklist for one call): L/T/cross; Z-brackets; side panels; cable
-    channels; bent liftarms; carriers; multi-line text; multi-body devices.
+    Requires Composite: L/T/cross, Z-brackets, Panel / Corner Panel / Channel / Enclosure intents,
+    bent liftarms, carriers, labels on more than one face, and any other multi-body device.
+    Pattern order and connection choice are in DecisionFramework.
     
-    Device rules: walls/corners/channels as composites; lids as separate blocks; inner cavities
-    often baseCutoutType=none.
+    Device rules: walls, corners, and channels are composites; the lid is a separate block
+    without studs; an embedded part uses baseCutoutType none. Open walls with recessWallGaps
+    and underside passages with baseWallGaps. Leave baseWallThickness at auto.
     
-    Implementation rules: design west-local; prefer direction over rotation; no calibration
-    adjustments in routine settings; NativeBlock properties always via mb_param_[propertyName](),
-    all other parameters via mb_param() (see MbBlockApi; Cross.scad demonstrates both); in SCAD
-    settings/config use Face scad:value strings ("x-", "x+", …) — MBML/BOM still authors enum
-    member ids; no globals inside modules; Hidden section is customizer bridge only.
+    Implementation rules: design west-local; prefer direction over rotation; calibration members
+    are ConfigOnlyAiUsage and stay in config (baseAdjustment, sizeAdjustment, and the other
+    *Adjustment properties on Config). NativeBlock properties use mb_param_[propertyName]();
+    every other key uses mb_param(). Do not read a settings list by index. In SCAD
+    settings/config use Face scad:value strings ("x-", "x+", …). mb_face_to_int also accepts
+    an integer 0–12; a single face is emitted as the string. MBML/BOM still authors enum
+    member ids. No globals inside modules. A hand-authored Hidden section only bridges
+    customizer literals.
+    Read assembly as the triple from mb_assembly; slot 0 is the mode only after that call
+    (see HelperApi).
+    
+    These V2 names have no parameter and no getter. Use the V3 replacement:
+    • cutout, cutoutOffset → aggregation cutouts (NeverAiUsage; do not set it when generating)
+    • baseRoundingResolution, holeRoundingResolution, studRoundingResolution,
+      pillarRoundingResolution → quality and scadQualityProfile
+    • baseWallGapsX, baseWallGapsY → baseWallGaps, one entry per face
+    • connectorPadding → padStart and padEnd on each connector
+    • assemblyParts → render; composite gating is renderGroups via mb_group_render
+    • namedSideAdjustments, mb_named_side_adjustments, mb_named_height_adjustments →
+      baseAdjustment and sizeAdjustment
+    • blockName → id
+    Package, path, and customizer lines follow BlockFileStructure. There is no default user
+    package and no reserved submodule names help or func.
   </documentation>
   <references>
     <see type="scad:LegacyConversion" relation="ReadNext">
@@ -51,6 +72,12 @@
     </see>
     <see type="scad:ModulePatterns" relation="SeeAlso">
       Concrete Block File patterns and examples.
+    </see>
+    <see type="scad:HelperApi" relation="SeeAlso">
+      mb_assembly triple and mb_group_render. Slot 0 is the mode only after mb_assembly.
+    </see>
+    <see type="scad:BlockFileStructure" relation="SeeAlso">
+      Compiler path, package, and customizer contract. No user package, no help or func.
     </see>
   </references>
 </scad:ScadDecisionRules>

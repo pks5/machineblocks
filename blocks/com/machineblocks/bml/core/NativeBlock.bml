@@ -2436,7 +2436,7 @@
       <documentation>
         Whether the block is rendered at all. When false, the block and all
         its children produce no geometry. Used in composite blocks to
-        conditionally show or hide individual parts based on assemblyParts.
+        show or hide this part. There is no assemblyParts parameter.
       </documentation>
       <since>
         3.0.0
