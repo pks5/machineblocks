@@ -1,0 +1,65 @@
+<!--MachineBlocks MBOM — preset catalog for one target Block
+
+  FQN: com.machineblocks.bml.core.BlockPresets
+  Abstract — a concrete catalog extends BlockPresets and closes T.-->
+<mbcore:BlockPresets xmlns="http://blockml.org/bml"
+  xmlns:bricks="com.machineblocks.bml.bricks"
+  xmlns:mbcore="com.machineblocks.bml.core"
+  xmlns:scad="com.machineblocks.bml.documentation.scad">
+
+  <baseType>
+    mbcore:Block
+  </baseType>
+  <is>
+    A preset catalog for one target Block
+  </is>
+  <documentation>
+    Abstract preset catalog. Open generic T (baseType Block) is the target block these
+    presets apply to. A concrete catalog extends BlockPresets and closes T with that
+    target, for example BlockPresets(bricks:Standard). presets is then T[].
+
+    Each presets entry is a named, partial instance of T. basePresets stays on Block
+    and resolves sibling entries in this composition by bml:id. Preset merge walks
+    basePresets in order: a later base overrides an earlier one on the same property,
+    then the entry's own literals override the bases. A cycle is an error.
+
+    The machineblocks-v3-scad target recognizes a closed BlockPresets(T) and writes
+    customizer JSON { fileFormatVersion: "1", parameterSets }. The file name is the
+    manifestation of T with extension .json, beside T's .scad file, so OpenSCAD loads
+    it. The catalog block's own FQN is not the output name. Each parameter set omits
+    name, basePresets, values equal to T's literal default, and values that do not
+    serialize. Strings are stored unquoted; numbers and booleans are stored as text;
+    a SizeXYZ value is stored as [x, y, z].
+  </documentation>
+  <abstract>
+    true
+  </abstract>
+  <references>
+    <see type="mbcore:Block">
+      Domain base. basePresets stays on Block; the presets aggregation does not.
+    </see>
+    <see type="scad:BlockFileStructure" relation="SeeAlso">
+      Customizer JSON is written under the manifestation filename of T.
+    </see>
+    <see type="bricks:StandardPresets" relation="SeeAlso">
+      Concrete catalog — BlockPresets(Standard) for the Standard brick.
+    </see>
+  </references>
+  <genericTypes>
+    <T baseType="mbcore:Block">
+      <documentation>
+        Target block these presets apply to. A concrete catalog binds T in baseType.
+        presets is a collection of that type. The customizer JSON uses T's
+        manifestation filename.
+      </documentation>
+    </T>
+  </genericTypes>
+  <aggregations>
+    <presets type="T[]">
+      <documentation>
+        Named preset instances of T. basePresets on an entry references other entries
+        in this composition by bml:id.
+      </documentation>
+    </presets>
+  </aggregations>
+</mbcore:BlockPresets>

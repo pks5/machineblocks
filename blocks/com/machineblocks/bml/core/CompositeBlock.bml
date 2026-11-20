@@ -21,7 +21,7 @@
   </abstract>
   <references>
     <see type="mbcore:Block">
-      Domain base type — inherits presets and basePresets for preset resolution.
+      Domain base type — inherits basePresets. Preset catalogs are BlockPresets(T).
     </see>
     <see type="mbcore:Set">
       Set specialization uses _parts for placed instances in a LEGO-style build.

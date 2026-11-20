@@ -5,22 +5,25 @@
   FQN: com.machineblocks.bml.bricks.StandardPresets
 
   Named property presets for com.machineblocks.bml.bricks.Standard (Standard.bml).
-  Presets are Block instances in presets — basePresets resolves within this Block.
-  Customizer JSON output is render-target logic (machineblocks-v3-scad).-->
+  Extends BlockPresets(Standard). Preset instances live in presets; basePresets
+  resolves within that composition. Customizer JSON uses Standard's manifestation
+  filename.-->
 <bricks:StandardPresets xmlns="http://blockml.org/bml"
   xmlns:bml="org.blockml.bml.annotation.BmlAnnotation"
   xmlns:bricks="com.machineblocks.bml.bricks"
   xmlns:mbcore="com.machineblocks.bml.core">
 
   <baseType>
-    mbcore:Block
+    mbcore:BlockPresets(bricks:Standard)
   </baseType>
   <is>
     A named brick preset catalog
   </is>
   <documentation>
-    Named property presets for the MachineBlocks Standard brick — sizes, colors, and
-    composite combinations for Customizer and basePresets references.
+    Named property presets for the MachineBlocks Standard brick. Closes BlockPresets
+    on Standard — sizes, colors, and composite combinations. basePresets resolves
+    sibling entries in presets. The customizer JSON uses Standard's manifestation
+    filename.
   </documentation>
   <aggregations>
     <presets override="true">

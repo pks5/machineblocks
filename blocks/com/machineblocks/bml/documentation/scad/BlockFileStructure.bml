@@ -51,12 +51,13 @@
     A Set also uses each placed type at its manifestation path under srcDir.
     
     Which file is emitted:
-    • parts empty and presets non-empty → JSON, same path with .json. Shape
-      { fileFormatVersion: "1", parameterSets }. Each set omits name, basePresets, values
-      equal to that preset type's literal default, and values that do not serialize.
-      Strings are stored unquoted; numbers and booleans are stored as text; a SizeXYZ
-      value is stored as [x, y, z]. Presets are ignored when parts is not empty.
-    • parts empty and presets empty → error. Nothing is written.
+    • a closed BlockPresets(T) → JSON at the manifestation of T, extension .json. The
+      catalog block's own path is not used. OpenSCAD reads that file beside T's .scad.
+      Shape { fileFormatVersion: "1", parameterSets }. Each set omits name, basePresets,
+      values equal to T's literal default, and values that do not serialize. Strings are
+      stored unquoted; numbers and booleans are stored as text; a SizeXYZ value is stored
+      as [x, y, z].
+    • parts empty → error. Nothing is written.
     • exactly one NativeBlock in parts → a leaf .scad file. The main call is mb_block
       at file scope. No wrapper module is emitted. Each NativeBlock parameter must be
       a property reference whose property has a literal default.
@@ -115,6 +116,9 @@
     </see>
     <see type="mbcore:ConfigSet" relation="SeeAlso">
       Profile collection, function name, and which set compile uses.
+    </see>
+    <see type="mbcore:BlockPresets" relation="SeeAlso">
+      Preset catalog. Customizer JSON uses the manifestation filename of T.
     </see>
     <see type="scad:HelperApi" relation="SeeAlso">
       mb_parts_total_size reads the composite parts row at indexes 1, 2, and 3.

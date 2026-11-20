@@ -28,8 +28,9 @@
     
     3. Composite Block — _parts (or nested children) for L/T/cross shapes, enclosures, channels,
     and multi-body devices. Parent size is the outer bbox; parts carry direction and offset.
-    Set is a Composite specialization: palette in presets, placed instances in _parts, optional
-    ordered _steps for assembly instructions.
+    Set is a Composite specialization: placed instances in _parts, optional ordered _steps
+    for assembly instructions. A named preset catalog extends BlockPresets(T) and closes T
+    on the target block. It is not an aggregation on that block.
     
     4. Helper / Form — shared geometry helpers, not content products. Primarily a SCAD Block File
     concern (see ModulePatterns / ScadDecisionRules); rarely published as an MBML product Block.
@@ -56,6 +57,9 @@
     </see>
     <see type="mbcore:Set" relation="Defines">
       Set pattern with _steps.
+    </see>
+    <see type="mbcore:BlockPresets" relation="Defines">
+      Preset catalog closed on the target block. Customizer JSON uses that block's filename.
     </see>
     <see type="scad:ModulePatterns" relation="SeeAlso">
       Parallel SCAD Block File patterns with full-file examples.

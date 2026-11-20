@@ -15,8 +15,12 @@
   <documentation>
     MachineBlocks domain types under com.machineblocks.bml.core:
     
-    Block — abstract domain base (baseType Entity). Carries name, presets aggregation, and
-    basePresets association.
+    Block — abstract domain base (baseType Entity). Carries name and the basePresets
+    association. Preset catalogs are not an aggregation on Block.
+    BlockPresets — abstract catalog (baseType Block) with open generic T (baseType Block).
+    T is the target block. presets is T[]. A concrete catalog extends BlockPresets(Target)
+    and fills presets. The SCAD target writes that catalog as customizer JSON. The file
+    name is the manifestation of T with extension .json, beside T's .scad file.
     ConfigProfile — parameter surface (baseType Block) and the instance type of ConfigSet
     profiles. Defines the native properties whose conventional home is the config profile:
     calibration, printer profile, and clearances that follow the printer. Not a resolver
@@ -36,15 +40,16 @@
       parameters: config-conventional properties are defined on ConfigProfile, brick and feature
       properties on NativeBlock. Uses children for nested native geometry
       instead of _parts. Must not be used as baseType for custom Block definitions.
-    Set — CompositeBlock for LEGO-style builds: palette via presets, placed instances in _parts,
-      assembly order in _steps.
+    Set — CompositeBlock for LEGO-style builds: placed instances in _parts, assembly order
+      in _steps. Preset catalogs are BlockPresets(T), not part of the Set.
     Step — final assembly instruction Block. baseType is org.blockml.bml.core.Block (framework
       Block), not mbcore:Block / Entity — a sibling outside the Entity → mbcore:Block tree.
       part association references a placed _parts instance by bml:id; document order in _steps is
       build order.
     
-    Hierarchy: Entity → mbcore:Block → ConfigProfile → NativeBlock. ConfigSet stays under
-    mbcore:Block. CompositeBlock → Set stays under mbcore:Block. NativeBlock is final.
+    Hierarchy: Entity → mbcore:Block → ConfigProfile → NativeBlock. ConfigSet and
+    BlockPresets stay under mbcore:Block. CompositeBlock → Set stays under mbcore:Block.
+    NativeBlock is final.
     Step sits on org.blockml.bml.core.Block → Step.
     
     Class identity is the Block FQN. Instance identity inside composition uses bml:id (nested paths
@@ -57,6 +62,9 @@
     </see>
     <see type="mbcore:Block" relation="Defines">
       Abstract MachineBlocks domain Block.
+    </see>
+    <see type="mbcore:BlockPresets" relation="Defines">
+      Preset catalog. T is the target block; presets is T[].
     </see>
     <see type="mbcore:ConfigProfile" relation="Defines">
       Config-conventional native parameters. NativeBlock extends ConfigProfile.

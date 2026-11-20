@@ -12,9 +12,14 @@
     A MachineBlocks domain Block
   </is>
   <documentation>
-    MachineBlocks domain base Block. Carries presets aggregation and basePresets
-    association for domain-specific preset resolution. Preset merge is compiler logic; Customizer
-    output is render-target logic.
+    MachineBlocks domain base Block. Carries name and the basePresets association.
+
+    Preset catalogs are BlockPresets(T). T is the target block, and presets holds
+    instances of T. basePresets on those instances resolves sibling presets in that
+    catalog.
+
+    Preset merge is compiler logic. The render target writes customizer JSON under
+    the manifestation filename of T.
   </documentation>
   <abstract>
     true
@@ -37,7 +42,10 @@
       Final leaf sub-type rendered directly as mb_block() SCAD primitive. Inherits ConfigProfile.
     </see>
     <see type="mbcore:Set">
-      LEGO-style build sub-type with palette, placed parts, and assembly steps.
+      LEGO-style build sub-type with placed parts and assembly steps.
+    </see>
+    <see type="mbcore:BlockPresets">
+      Preset catalog. Closes generic T on the target block; presets is T[].
     </see>
   </references>
   <properties>
@@ -47,9 +55,6 @@
       </documentation>
     </name>
   </properties>
-  <aggregations>
-    <presets type="mbcore:Block[]" />
-  </aggregations>
   <associations>
     <basePresets type="org.blockml.bml.type.InstanceReference(bml:Self)[]" />
   </associations>

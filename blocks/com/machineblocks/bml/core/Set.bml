@@ -11,15 +11,16 @@
     A LEGO-style build set
   </is>
   <documentation>
-    Abstract composable Block for LEGO-style Sets — block palette, placed instances,
-    and assembly order. Top-level catalog unit in MachineBlocks.
+    Abstract composable Block for LEGO-style Sets — placed instances and assembly
+    order. Top-level catalog unit in MachineBlocks. Preset catalogs are BlockPresets(T),
+    not an aggregation on the Set.
   </documentation>
   <abstract>
     true
   </abstract>
   <references>
     <see type="mbcore:CompositeBlock">
-      Extends CompositeBlock — inherits _parts for placed instances and presets for block palette.
+      Extends CompositeBlock — inherits _parts for placed instances.
     </see>
     <see type="mbcore:Step">
       Assembly steps in _steps reference placed parts via part association.
