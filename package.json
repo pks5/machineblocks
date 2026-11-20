@@ -26,6 +26,6 @@
     },
     "devDependencies": {
       "@blockml/cli": "^0.9.19",
-      "@machineblocks/cli": "^0.2.0"
+      "@machineblocks/cli": "^0.2.2"
     }
   }
