@@ -22,7 +22,7 @@ function mb_block_part__stud_icon(block_obj, off, top) =
         stud_icon_scale = mb_block_get_stud_icon_scale(block_obj),
         stud_icon_depth = mb_block_get_stud_icon_depth(block_obj),
         height = abs(stud_icon_depth),
-        has_stud_icon = !mb_is_empty_string(stud_icon) && stud_icon != "none" && height != 0,
+        has_stud_icon = !(stud_icon == false || mb_is_empty_string(stud_icon) || stud_icon == "none" || height == 0),
         extruded = stud_icon_depth > 0,
         stud_icon_size = stud_diameter * stud_icon_scale,
 
